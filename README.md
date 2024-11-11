@@ -5,13 +5,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 First, run the development server:
 
 ```bash
-npm run dev
-# or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
@@ -34,4 +28,65 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
 # biru
+
+```bash
+# https://nextjs.org/docs/app/getting-started/installation
+npx create-next-app@latest
+
+What is your project named? biru
+Would you like to use TypeScript? Yes
+Would you like to use ESLint? Yes
+Would you like to use Tailwind CSS? Yes
+Would you like your code inside a `src/` directory? Yes
+Would you like to use App Router? (recommended) Yes
+Would you like to use Turbopack for `next dev`? Yes
+Would you like to customize the import alias (`@/*` by default)? No
+```
+
+## Zustand
+
+```bash
+# https://github.com/pmndrs/zustand
+yarn add zustand
+```
+
+## Prettier
+
+```bash
+# https://prettier.io/docs/en/install.html
+yarn add --dev --exact prettier
+node --eval "fs.writeFileSync('.prettierrc','{}\n')"
+node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
+npx prettier . --write
+npx prettier . --check
+
+# https://prettier.io/docs/en/configuration
+# https://json.schemastore.org/prettierrc
+```
+
+## Git hooks
+
+```bash
+# https://prettier.io/docs/en/install
+yarn add --dev husky lint-staged
+npx husky init
+node --eval "fs.writeFileSync('.husky/pre-commit','npx lint-staged\n')"
+
+# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
+# .lintstagedrc.js
+```
+
+## eslint
+
+```bash
+# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
+yarn add --dev eslint-config-prettier
+
+# https://github.com/lydell/eslint-plugin-simple-import-sort
+yarn add --dev eslint-plugin-simple-import-sort
+
+# https://github.com/sweepline/eslint-plugin-unused-imports
+yarn add --dev eslint-plugin-unused-imports
+```
