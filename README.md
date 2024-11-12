@@ -59,6 +59,13 @@ npx prettier . --check
 # https://json.schemastore.org/prettierrc
 ```
 
+## Set up your editor
+
+```bash
+# https://prettier.io/docs/en/watching-files
+yarn add --dev onchange
+```
+
 ## eslint
 
 ```bash
