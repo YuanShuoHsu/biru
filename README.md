@@ -45,13 +45,6 @@ Would you like to use Turbopack for `next dev`? Yes
 Would you like to customize the import alias (`@/*` by default)? No
 ```
 
-## Zustand
-
-```bash
-# https://github.com/pmndrs/zustand
-yarn add zustand
-```
-
 ## Prettier
 
 ```bash
@@ -66,6 +59,19 @@ npx prettier . --check
 # https://json.schemastore.org/prettierrc
 ```
 
+## eslint
+
+```bash
+# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
+yarn add --dev eslint-config-prettier
+
+# https://github.com/lydell/eslint-plugin-simple-import-sort
+yarn add --dev eslint-plugin-simple-import-sort
+
+# https://github.com/sweepline/eslint-plugin-unused-imports
+yarn add --dev eslint-plugin-unused-imports
+```
+
 ## Git hooks
 
 ```bash
@@ -78,15 +84,9 @@ node --eval "fs.writeFileSync('.husky/pre-commit','npx lint-staged\n')"
 # .lintstagedrc.js
 ```
 
-## eslint
+## Zustand
 
 ```bash
-# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
-yarn add --dev eslint-config-prettier
-
-# https://github.com/lydell/eslint-plugin-simple-import-sort
-yarn add --dev eslint-plugin-simple-import-sort
-
-# https://github.com/sweepline/eslint-plugin-unused-imports
-yarn add --dev eslint-plugin-unused-imports
+# https://github.com/pmndrs/zustand
+yarn add zustand
 ```
