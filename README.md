@@ -68,10 +68,6 @@ npx prettier . --check
 {
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "formattingToggle.statusBarText": {
-    "formattingEnabled": "On $(heart-filled)",
-    "formattingDisabled": "Off $(heart)"
-  }
 }
 ```
 
