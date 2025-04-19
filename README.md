@@ -44,6 +44,35 @@ node --eval "fs.writeFileSync('.prettierrc','{}\n')"
 node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
 pnpm exec prettier . --write
 npx prettier . --check
+
+# https://prettier.io/docs/configuration
+# https://json.schemastore.org/prettierrc
+
+# .prettierrc
+{
+  "trailingComma": "es5",
+  "tabWidth": 4,
+  "semi": false,
+  "singleQuote": true
+}
+```
+
+## Editor
+
+```bash
+# Visual Studio Code
+# https://github.com/prettier/prettier-vscode
+# https://marketplace.visualstudio.com/items?itemName=tombonnike.vscode-status-bar-format-toggle
+
+# .vscode/settings.json
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "formattingToggle.statusBarText": {
+    "formattingEnabled": "On $(heart-filled)",
+    "formattingDisabled": "Off $(heart)"
+  }
+}
 ```
 
 ## eslint
@@ -53,11 +82,17 @@ npx prettier . --check
 pnpm add --save-dev eslint-config-prettier
 
 # eslint.config.mjs
+import { FlatCompat } from '@eslint/eslintrc'
+const compat = new FlatCompat({
+  // import.meta.dirname is available after Node.js v20.11.0
+  baseDirectory: import.meta.dirname,
+})
 const eslintConfig = [
   ...compat.config({
     extends: ['next', 'prettier'],
   }),
 ]
+export default eslintConfig
 
 # .lintstagedrc.js
 import path from "path";
