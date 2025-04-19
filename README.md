@@ -105,18 +105,29 @@ node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
   }
 }
 
-# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
+# https://nextjs.org/docs/app/api-reference/config/eslint
 # .lintstagedrc.js
-import path from "path";
+const path = require('path')
 
 const buildEslintCommand = (filenames) =>
   `next lint --fix --file ${filenames
     .map((f) => path.relative(process.cwd(), f))
-    .join(" --file ")}`;
+    .join(' --file ')}`
 
 module.exports = {
-  "*.{js,jsx,ts,tsx}": [buildEslintCommand],
-};
+  '*.{js,jsx,ts,tsx}': [buildEslintCommand],
+}
+
+# eslint.config.mjs
+const eslintConfig = [
+  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
+  {
+    files: ['.lintstagedrc.js'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+    },
+  },
+];
 ```
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
