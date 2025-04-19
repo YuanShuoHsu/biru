@@ -89,7 +89,23 @@ const eslintConfig = [
   }),
 ]
 export default eslintConfig
+```
 
+## Git hooks
+
+```bash
+# https://prettier.io/docs/install#git-hooks
+pnpm add --save-dev husky lint-staged
+pnpm exec husky init
+node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
+
+{
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}
+
+# https://nextjs.org/docs/pages/building-your-application/configuring/eslint
 # .lintstagedrc.js
 import path from "path";
 
