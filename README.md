@@ -125,6 +125,36 @@ const eslintConfig = [
 ];
 ```
 
+## Material UI
+
+```bash
+# https://mui.com/material-ui/getting-started/installation/
+pnpm add @mui/material @emotion/react @emotion/styled
+pnpm add @mui/icons-material
+
+# https://mui.com/material-ui/integrations/nextjs/
+pnpm add @mui/material-nextjs @emotion/cache
+
+# https://mui.com/material-ui/customization/theme-components/
+
+```
+
+## Swiper
+
+```bash
+# https://swiperjs.com/get-started
+pnpm add swiper
+```
+
+## Zustand
+
+```bash
+# https://zustand.docs.pmnd.rs/getting-started/introduction
+pnpm add zustand
+
+# https://zustand.docs.pmnd.rs/guides/nextjs
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
