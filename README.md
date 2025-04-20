@@ -61,8 +61,13 @@ npx prettier . --check
 
 # .vscode/settings.json
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "always",
+    "source.addMissingImports": "always",
+    "source.organizeImports": "always"
+  },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": true
 }
 ```
 
