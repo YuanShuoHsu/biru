@@ -1,5 +1,18 @@
 # biru
 
+## 主題色
+
+```bash
+# https://mui.com/material-ui/customization/color/
+唇 霞染胭脂 pink[100] (#f8bbd0) 粉
+法令紋 錦夜墨痕 grey[900] (#212121) 黑
+胸毛 凝霜素白 grey[50] (#fafafa) 白
+眼 霧織灰藍 blueGrey[500] (#607d8b) 灰藍
+身側 羽柔暖棕 brown[200] (#bcaaa4) 淺棕
+背毛 焦香摩卡 brown[600] (#6d4c41) 深棕
+大橘為重 暖陽琥珀 orange[300] (#ffb74d) 橘
+```
+
 ```bash
 # https://nextjs.org/docs/app/getting-started/installation
 npx create-next-app@latest
@@ -141,7 +154,6 @@ pnpm add @mui/icons-material
 pnpm add @mui/material-nextjs @emotion/cache
 
 # https://mui.com/material-ui/customization/theme-components/
-
 ```
 
 ## Swiper
