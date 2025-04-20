@@ -2,8 +2,8 @@
 
 import { ShoppingCart } from "@mui/icons-material";
 
-import { Badge, IconButton } from "@mui/material";
 import type { BadgeProps } from "@mui/material";
+import { Badge, IconButton } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
