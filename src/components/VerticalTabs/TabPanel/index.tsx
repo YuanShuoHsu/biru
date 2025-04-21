@@ -6,7 +6,7 @@ interface TabPanelProps {
   value: number;
 }
 
-const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => (
+const TabPanel = ({ children, index, value, ...other }: TabPanelProps) => (
   <Box
     role="tabpanel"
     hidden={value !== index}

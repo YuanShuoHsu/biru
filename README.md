@@ -4,10 +4,10 @@
 
 ```bash
 # https://mui.com/material-ui/customization/color/
-唇 霞染胭脂 pink[100] (#f8bbd0) 淺粉
-大橘為重 暖陽淺橘 orange[100] (#ffe0b2) 淺橘
+唇 霞染胭脂 pink[100] (#f8bbd0) 粉
+大橘為重 暖陽淺橘 orange[100] (#ffe0b2) 橘
 身側 羽柔暖棕 brown[200] (#bcaaa4) 淺棕
-背毛 焦香摩卡 brown[700] (#5d4037) 深棕
+背毛 焦香摩卡 brown[700] (#5d4037) 深棕 // 需要試試 600
 胸毛 凝霜素白 grey[50] (#fafafa) 白
 法令紋 錦夜墨痕 grey[900] (#212121) 黑
 眼 霧織灰藍 blueGrey[500] (#607d8b) 灰藍

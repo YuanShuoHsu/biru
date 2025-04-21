@@ -1,12 +1,13 @@
 "use client";
 
 import VerticalTabs from "@/components/VerticalTabs";
-import { Box } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 
 const Order = () => (
-  <Box>
+  <>
+    <CssBaseline />
     <VerticalTabs />
-  </Box>
+  </>
 );
 
 export default Order;

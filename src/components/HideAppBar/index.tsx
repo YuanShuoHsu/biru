@@ -1,7 +1,7 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
 import CustomizedBadges from "@/components/CustomizedBadges";
-import HideOnScroll from "@/components/ResponsiveDrawer/HideAppBar/HideOnScroll";
+import HideOnScroll from "./HideOnScroll";
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
 

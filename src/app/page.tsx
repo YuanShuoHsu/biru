@@ -1,13 +1,12 @@
 "use client";
 
-import CustomizedDialogs from "@/components/CustomizedDialogs";
-import ResponsiveDrawer from "@/components/ResponsiveDrawer";
+import Layout from "@/components/Layout";
 
 const Home = () => {
   return (
     <>
-      <ResponsiveDrawer />;
-      <CustomizedDialogs />
+      <Layout />
+      {/* <CustomizedDialogs /> */}
     </>
   );
 };
