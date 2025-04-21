@@ -19,9 +19,9 @@ const ContainerBox = styled(Box)({
 const MainBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   width: "100%",
-  height: "100%",
-  minHeight: "100vh",
-  flexGrow: 1,
+  height: "100vh",
+  display: "flex",
+  flexDirection: "column",
 
   [theme.breakpoints.up("sm")]: {
     width: `calc(100% - ${drawerWidth}px)`,

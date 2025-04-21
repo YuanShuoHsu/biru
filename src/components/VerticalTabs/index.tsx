@@ -1,6 +1,8 @@
+import theme from "@/theme";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import TabPanel from "./TabPanel";
 
@@ -14,6 +16,8 @@ const a11yProps = (index: number) => {
 const VerticalTabs = () => {
   const [value, setValue] = useState(0);
 
+  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -21,19 +25,26 @@ const VerticalTabs = () => {
   return (
     <Box
       sx={{
-        flexGrow: 1,
         bgcolor: "background.paper",
-        display: "flex",
         height: "100%",
+        display: "flex",
+        flexDirection: isSmUp ? "column" : "row",
+        overflow: "hidden",
       }}
     >
       <Tabs
-        orientation="vertical"
-        variant="scrollable"
-        value={value}
-        onChange={handleChange}
+        allowScrollButtonsMobile
         aria-label="Vertical tabs example"
-        sx={{ borderRight: 1, borderColor: "divider" }}
+        onChange={handleChange}
+        orientation={isSmUp ? "horizontal" : "vertical"}
+        scrollButtons
+        sx={{
+          borderRight: isSmUp ? 0 : 1,
+          borderBottom: isSmUp ? 1 : 0,
+          borderColor: "divider",
+        }}
+        value={value}
+        variant="scrollable"
       >
         <Tab label="Item One" {...a11yProps(0)} />
         <Tab label="Item Two" {...a11yProps(1)} />
