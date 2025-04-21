@@ -25,7 +25,6 @@ const VerticalTabs = () => {
         bgcolor: "background.paper",
         display: "flex",
         height: "100%",
-        minHeight: "100vh",
       }}
     >
       <Tabs

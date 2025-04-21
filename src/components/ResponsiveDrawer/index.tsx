@@ -14,6 +14,8 @@ import {
   Toolbar,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const NavBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
@@ -48,6 +50,11 @@ const PermanentDrawer = styled(Drawer)(({ theme }) => ({
   },
 }));
 
+const navItems = [
+  { href: "/", text: "Home" },
+  { href: "/order", text: "Order" },
+];
+
 interface ResponsiveDrawerProps {
   mobileOpen: boolean;
   handleDrawerClose: () => void;
@@ -59,14 +66,21 @@ const ResponsiveDrawer = ({
   handleDrawerTransitionEnd,
   mobileOpen,
 }: ResponsiveDrawerProps) => {
+  const pathname = usePathname();
+
   const drawer = (
     <Box>
       <Toolbar />
       <Divider />
       <List>
-        {["Home", "Starred", "Send email", "Drafts"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
+        {navItems.map(({ href, text }, index) => (
+          <ListItem key={href} disablePadding>
+            <ListItemButton
+              component={Link}
+              href={href}
+              selected={pathname === href}
+              onClick={handleDrawerClose}
+            >
               <ListItemIcon>
                 {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
               </ListItemIcon>
