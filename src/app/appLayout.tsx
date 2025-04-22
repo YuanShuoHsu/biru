@@ -36,15 +36,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
+  const handleDrawerClose = () => {
+    setIsClosing(true);
+    setMobileOpen(false);
+  };
+
   const handleDrawerToggle = () => {
     if (!isClosing) {
       setMobileOpen(!mobileOpen);
     }
-  };
-
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
   };
 
   const handleDrawerTransitionEnd = () => setIsClosing(false);
@@ -55,8 +55,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <HideAppBar onDrawerToggle={handleDrawerToggle} />
       <Toolbar disableGutters id="back-to-top-anchor" />
       <ResponsiveDrawer
-        handleDrawerClose={handleDrawerClose}
-        handleDrawerTransitionEnd={handleDrawerTransitionEnd}
+        onDrawerClose={handleDrawerClose}
+        onDrawerToggle={handleDrawerToggle}
+        onDrawerTransitionEnd={handleDrawerTransitionEnd}
         mobileOpen={mobileOpen}
       />
       <MainBox as="main">

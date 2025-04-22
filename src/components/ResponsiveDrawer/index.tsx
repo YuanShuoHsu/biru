@@ -57,13 +57,15 @@ const navItems = [
 
 interface ResponsiveDrawerProps {
   mobileOpen: boolean;
-  handleDrawerClose: () => void;
-  handleDrawerTransitionEnd: () => void;
+  onDrawerClose: () => void;
+  onDrawerToggle: () => void;
+  onDrawerTransitionEnd: () => void;
 }
 
 const ResponsiveDrawer = ({
-  handleDrawerClose,
-  handleDrawerTransitionEnd,
+  onDrawerClose,
+  onDrawerToggle,
+  onDrawerTransitionEnd,
   mobileOpen,
 }: ResponsiveDrawerProps) => {
   const pathname = usePathname();
@@ -79,7 +81,7 @@ const ResponsiveDrawer = ({
               component={Link}
               href={href}
               selected={pathname === href}
-              onClick={handleDrawerClose}
+              onClick={onDrawerToggle}
             >
               <ListItemIcon>
                 {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
@@ -98,8 +100,8 @@ const ResponsiveDrawer = ({
         ModalProps={{
           keepMounted: true,
         }}
-        onClose={handleDrawerClose}
-        onTransitionEnd={handleDrawerTransitionEnd}
+        onClose={onDrawerClose}
+        onTransitionEnd={onDrawerTransitionEnd}
         open={mobileOpen}
         variant="temporary"
       >
