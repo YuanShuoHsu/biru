@@ -1,10 +1,8 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
-import theme from "@/theme";
 import { Stack } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
@@ -19,15 +17,13 @@ const a11yProps = (index: number) => {
 const CustomizedTabs = () => {
   const [value, setValue] = useState(0);
 
-  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   return (
     <Stack
-      direction={isSmUp ? "column" : "row"}
+      direction={{ xs: "row", sm: "column" }}
       spacing={2}
       sx={{
         bgcolor: "background.paper",
@@ -38,31 +34,43 @@ const CustomizedTabs = () => {
         allowScrollButtonsMobile
         aria-label="tabs"
         onChange={handleChange}
-        orientation={isSmUp ? "horizontal" : "vertical"}
-        scrollButtons
+        orientation="horizontal"
         sx={{
-          "& .MuiTabs-indicator": {
-            transition: "left 300ms ease, top 300ms ease",
-          },
-          borderRight: isSmUp ? 0 : 1,
-          borderBottom: isSmUp ? 1 : 0,
+          display: { xs: "none", sm: "flex" },
+          borderBottom: 1,
           borderColor: "divider",
-          flexShrink: 0,
         }}
         value={value}
         variant="scrollable"
       >
-        <Tab label="Item One" {...a11yProps(0)} />
-        <Tab label="Item Two" {...a11yProps(1)} />
-        <Tab label="Item Three" {...a11yProps(2)} />
-        <Tab label="Item Four" {...a11yProps(3)} />
-        <Tab label="Item Five" {...a11yProps(4)} />
-        <Tab label="Item Six" {...a11yProps(5)} />
-        <Tab label="Item Seven" {...a11yProps(6)} />
+        {[...Array(7)].map((_, index) => (
+          <Tab key={index} label={`Item ${index + 1}`} {...a11yProps(index)} />
+        ))}
       </Tabs>
-      {[...Array(7)].map((_, i) => (
-        <TabPanel index={i} key={i} value={value}>
-          <ResponsiveGrid tabIndex={i} />
+      <Tabs
+        allowScrollButtonsMobile
+        aria-label="tabs"
+        onChange={handleChange}
+        orientation="vertical"
+        sx={{
+          display: { xs: "flex", sm: "none" },
+          borderRight: 1,
+          borderColor: "divider",
+          flexShrink: 0,
+          "& .MuiTabs-scroller": {
+            flex: "1 1 0",
+          },
+        }}
+        value={value}
+        variant="scrollable"
+      >
+        {[...Array(7)].map((_, index) => (
+          <Tab key={index} label={`Item ${index + 1}`} {...a11yProps(index)} />
+        ))}
+      </Tabs>
+      {[...Array(7)].map((_, index) => (
+        <TabPanel index={index} key={index} value={value}>
+          <ResponsiveGrid tabIndex={index} />
         </TabPanel>
       ))}
     </Stack>

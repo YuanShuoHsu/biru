@@ -14,10 +14,7 @@ const ResponsiveGrid = ({ tabIndex }: ResponsiveGridProps) => {
   return (
     <Grid container spacing={2}>
       {items.map((label, index) => (
-        <Grid
-          key={index}
-          size={{ tiny: 12, xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
-        >
+        <Grid key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}>
           <ActionAreaCard label={label} />
         </Grid>
       ))}
