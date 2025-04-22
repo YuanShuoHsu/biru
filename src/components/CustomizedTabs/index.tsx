@@ -1,9 +1,12 @@
+// https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
+
 import theme from "@/theme";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useState } from "react";
+import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
 const a11yProps = (index: number) => {
@@ -39,9 +42,13 @@ const CustomizedTabs = () => {
         orientation={isSmUp ? "horizontal" : "vertical"}
         scrollButtons
         sx={{
+          "& .MuiTabs-indicator": {
+            transition: "left 300ms ease, top 300ms ease",
+          },
           borderRight: isSmUp ? 0 : 1,
           borderBottom: isSmUp ? 1 : 0,
           borderColor: "divider",
+          flexShrink: 0,
         }}
         value={value}
         variant="scrollable"
@@ -54,27 +61,11 @@ const CustomizedTabs = () => {
         <Tab label="Item Six" {...a11yProps(5)} />
         <Tab label="Item Seven" {...a11yProps(6)} />
       </Tabs>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        Item Two
-      </TabPanel>
-      <TabPanel value={value} index={2}>
-        Item Three
-      </TabPanel>
-      <TabPanel value={value} index={3}>
-        Item Four
-      </TabPanel>
-      <TabPanel value={value} index={4}>
-        Item Five
-      </TabPanel>
-      <TabPanel value={value} index={5}>
-        Item Six
-      </TabPanel>
-      <TabPanel value={value} index={6}>
-        Item Seven
-      </TabPanel>
+      {[...Array(7)].map((_, i) => (
+        <TabPanel value={value} index={i} key={i}>
+          <ResponsiveGrid tabIndex={i} />
+        </TabPanel>
+      ))}
     </Box>
   );
 };
