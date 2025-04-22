@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import ActionAreaCard from "./ActionAreaCard";
 
 interface ResponsiveGridProps {
@@ -12,19 +12,16 @@ const ResponsiveGrid = ({ tabIndex }: ResponsiveGridProps) => {
   );
 
   return (
-    <Box>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {items.map((label, index) => (
-          <Grid key={index} size={{ xs: 2, sm: 4, md: 5 }}>
-            <ActionAreaCard label={label} />
-          </Grid>
-        ))}
-      </Grid>
-    </Box>
+    <Grid container spacing={2}>
+      {items.map((label, index) => (
+        <Grid
+          key={index}
+          size={{ tiny: 12, xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
+        >
+          <ActionAreaCard label={label} />
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
