@@ -50,7 +50,7 @@ const HideAppBar: React.FC<HideAppBarProps> = ({ onDrawerToggle }) => {
             <Menu />
           </StyledIconButton>
           <Typography component="div" flexGrow="1" noWrap variant="h6">
-            Responsive drawer
+            Biru Coffee
           </Typography>
           <CustomizedBadges />
         </StyledToolbar>
