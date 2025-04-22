@@ -1,7 +1,7 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
 import theme from "@/theme";
-import Box from "@mui/material/Box";
+import { Stack } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -26,12 +26,12 @@ const CustomizedTabs = () => {
   };
 
   return (
-    <Box
+    <Stack
+      direction={isSmUp ? "column" : "row"}
+      spacing={2}
       sx={{
         bgcolor: "background.paper",
         height: "100%",
-        display: "flex",
-        flexDirection: isSmUp ? "column" : "row",
       }}
     >
       <Tabs
@@ -61,11 +61,11 @@ const CustomizedTabs = () => {
         <Tab label="Item Seven" {...a11yProps(6)} />
       </Tabs>
       {[...Array(7)].map((_, i) => (
-        <TabPanel value={value} index={i} key={i}>
+        <TabPanel index={i} key={i} value={value}>
           <ResponsiveGrid tabIndex={i} />
         </TabPanel>
       ))}
-    </Box>
+    </Stack>
   );
 };
 

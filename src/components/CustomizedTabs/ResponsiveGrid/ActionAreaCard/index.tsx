@@ -18,16 +18,16 @@ const ActionAreaCard = ({ label }: ActionAreaCardProps) => {
       <CardActionArea>
         <Box sx={{ position: "relative", height: 140 }}>
           <Image
-            src="/IMG_4590.jpg"
             alt={label}
-            sizes="(min-width: 808px) 50vw, 100vw"
             fill
-            style={{ objectFit: "cover" }}
             priority
+            sizes="(min-width: 808px) 50vw, 100vw"
+            src="/IMG_4590.jpg"
+            style={{ objectFit: "cover" }}
           />
         </Box>
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+          <Typography component="div" gutterBottom variant="h5">
             {label}
           </Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
