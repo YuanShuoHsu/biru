@@ -1,6 +1,7 @@
 // https://mui.com/material-ui/react-drawer/#system-ResponsiveDrawer.tsx
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
+import theme from "@/theme";
 import { Mail, MoveToInbox } from "@mui/icons-material";
 import {
   Box,
@@ -12,6 +13,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  useMediaQuery,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
@@ -68,6 +70,7 @@ const ResponsiveDrawer = ({
   onDrawerTransitionEnd,
   mobileOpen,
 }: ResponsiveDrawerProps) => {
+  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const pathname = usePathname();
 
   const drawer = (
@@ -81,7 +84,7 @@ const ResponsiveDrawer = ({
               component={Link}
               href={href}
               selected={pathname === href}
-              onClick={onDrawerToggle}
+              onClick={isSmUp ? undefined : onDrawerToggle}
             >
               <ListItemIcon>
                 {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
