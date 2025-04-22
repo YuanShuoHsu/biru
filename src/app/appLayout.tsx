@@ -19,7 +19,7 @@ const ContainerBox = styled(Box)({
 const MainBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
   width: "100%",
-  height: "100vh",
+  minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
 

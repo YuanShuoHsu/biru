@@ -32,12 +32,11 @@ const CustomizedTabs = () => {
         height: "100%",
         display: "flex",
         flexDirection: isSmUp ? "column" : "row",
-        overflow: "hidden",
       }}
     >
       <Tabs
         allowScrollButtonsMobile
-        aria-label="Vertical tabs example"
+        aria-label="tabs"
         onChange={handleChange}
         orientation={isSmUp ? "horizontal" : "vertical"}
         scrollButtons
