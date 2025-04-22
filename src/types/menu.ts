@@ -1,4 +1,4 @@
-interface SizeOption {
+interface Size {
   label: string;
   price: number;
 }
@@ -13,13 +13,13 @@ interface Option {
   choices: Choice[];
 }
 
-interface MenuItem {
+export interface MenuItem {
   id: string;
   name: string;
   description?: string;
   imageUrl?: string;
   price?: number;
-  sizes?: SizeOption[];
+  sizes?: Size[];
   tags?: string[];
   options?: Option[];
   inStock?: boolean;

@@ -1,11 +1,15 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
+import { useState } from "react";
+
 import { Stack } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import Tabs from "@mui/material/Tabs";
-import { useState } from "react";
+
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
+
+import { menuData } from "@/utils/menu";
 
 const a11yProps = (index: number) => {
   return {
@@ -32,7 +36,7 @@ const CustomizedTabs = () => {
     >
       <Tabs
         allowScrollButtonsMobile
-        aria-label="tabs"
+        aria-label="Horizontal tabs"
         onChange={handleChange}
         orientation="horizontal"
         sx={{
@@ -43,13 +47,13 @@ const CustomizedTabs = () => {
         value={value}
         variant="scrollable"
       >
-        {[...Array(7)].map((_, index) => (
-          <Tab key={index} label={`Item ${index + 1}`} {...a11yProps(index)} />
+        {menuData.map((category, index) => (
+          <Tab key={category.id} label={category.name} {...a11yProps(index)} />
         ))}
       </Tabs>
       <Tabs
         allowScrollButtonsMobile
-        aria-label="tabs"
+        aria-label="Vertical tabs"
         onChange={handleChange}
         orientation="vertical"
         sx={{
@@ -64,13 +68,13 @@ const CustomizedTabs = () => {
         value={value}
         variant="scrollable"
       >
-        {[...Array(7)].map((_, index) => (
-          <Tab key={index} label={`Item ${index + 1}`} {...a11yProps(index)} />
+        {menuData.map((category, index) => (
+          <Tab key={category.id} label={category.name} {...a11yProps(index)} />
         ))}
       </Tabs>
-      {[...Array(7)].map((_, index) => (
-        <TabPanel index={index} key={index} value={value}>
-          <ResponsiveGrid tabIndex={index} />
+      {menuData.map((category, index) => (
+        <TabPanel index={index} key={category.id} value={value}>
+          <ResponsiveGrid items={category.items} />
         </TabPanel>
       ))}
     </Stack>

@@ -1,4 +1,4 @@
-import { Category } from "@/types/menu";
+import type { Category } from "@/types/menu";
 
 export const menuData: Category[] = [
   {
@@ -9,7 +9,7 @@ export const menuData: Category[] = [
         id: "coffee-1",
         name: "經典拿鐵",
         description: "濃醇的義式濃縮搭配綿密牛奶泡沫。",
-        imageUrl: "/images/menu/coffee/classic-latte.jpg",
+        imageUrl: "/IMG_4590.jpg",
         sizes: [
           { label: "M", price: 120 },
           { label: "L", price: 140 },
@@ -46,7 +46,7 @@ export const menuData: Category[] = [
         id: "coffee-2",
         name: "焦糖瑪奇朵",
         description: "香甜焦糖與香醇濃縮完美結合。",
-        imageUrl: "/images/menu/coffee/caramel-macchiato.jpg",
+        imageUrl: "/IMG_4590.jpg",
         sizes: [
           { label: "M", price: 130 },
           { label: "L", price: 150 },
@@ -74,7 +74,7 @@ export const menuData: Category[] = [
         id: "tea-1",
         name: "茉香綠茶",
         description: "清新茉莉花香與綠茶完美融合。",
-        imageUrl: "/images/menu/tea/jasmine-green-tea.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 80,
         tags: ["低咖啡因"],
         options: [
@@ -93,7 +93,7 @@ export const menuData: Category[] = [
         id: "tea-2",
         name: "伯爵鮮奶茶",
         description: "濃醇伯爵茶搭配鮮奶，口感滑順。",
-        imageUrl: "/images/menu/tea/earl-grey-milk-tea.jpg",
+        imageUrl: "/IMG_4590.jpg",
         sizes: [
           { label: "M", price: 110 },
           { label: "L", price: 130 },
@@ -121,7 +121,7 @@ export const menuData: Category[] = [
         id: "sig-1",
         name: "水果氣泡飲",
         description: "新鮮水果搭配氣泡水，清爽解膩。",
-        imageUrl: "/images/menu/signature/fruit-sparkling.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 140,
         options: [
           {
@@ -138,7 +138,7 @@ export const menuData: Category[] = [
         id: "sig-2",
         name: "抹茶氣泡拿鐵",
         description: "抹茶與牛奶氣泡完美結合。",
-        imageUrl: "/images/menu/signature/matcha-sparkling-latte.jpg",
+        imageUrl: "/IMG_4590.jpg",
         sizes: [{ label: "L", price: 150 }],
         tags: ["新品"],
         inStock: false,
@@ -153,7 +153,7 @@ export const menuData: Category[] = [
         id: "pastry-1",
         name: "經典可頌",
         description: "外酥內軟的法式可頌。",
-        imageUrl: "/images/menu/pastry/croissant.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 60,
         inStock: true,
       },
@@ -161,7 +161,7 @@ export const menuData: Category[] = [
         id: "pastry-2",
         name: "巧克力蛋糕",
         description: "濃郁黑巧克力海綿蛋糕。",
-        imageUrl: "/images/menu/pastry/chocolate-cake.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 90,
         tags: ["新品"],
         inStock: true,
@@ -176,7 +176,7 @@ export const menuData: Category[] = [
         id: "snack-1",
         name: "火腿起司三明治",
         description: "火腿、起司與生菜夾於法式軟包中。",
-        imageUrl: "/images/menu/snack/ham-cheese-sandwich.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 150,
         options: [
           {
@@ -193,7 +193,7 @@ export const menuData: Category[] = [
         id: "snack-2",
         name: "雞肉沙拉",
         description: "新鮮生菜搭配香煎雞肉。",
-        imageUrl: "/images/menu/snack/chicken-salad.jpg",
+        imageUrl: "/IMG_4590.jpg",
         price: 160,
         inStock: true,
       },
