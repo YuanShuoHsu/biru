@@ -13,7 +13,7 @@ const a11yProps = (index: number) => {
   };
 };
 
-const VerticalTabs = () => {
+const CustomizedTabs = () => {
   const [value, setValue] = useState(0);
 
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
@@ -79,4 +79,4 @@ const VerticalTabs = () => {
   );
 };
 
-export default VerticalTabs;
+export default CustomizedTabs;

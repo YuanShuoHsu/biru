@@ -1,10 +1,10 @@
 "use client";
 
-import VerticalTabs from "@/components/VerticalTabs";
+import CustomizedTabs from "@/components/CustomizedTabs";
 
 const Order = () => (
   <>
-    <VerticalTabs />
+    <CustomizedTabs />
   </>
 );
 
