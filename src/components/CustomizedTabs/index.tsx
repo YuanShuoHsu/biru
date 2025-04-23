@@ -32,7 +32,9 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
         name.includes(searchText.trim()),
       ),
     }))
-    .filter(({ items }) => items.length > 0);
+    .filter(
+      ({ items, name }) => name.includes(searchText.trim()) || items.length > 0,
+    );
 
   const currentIndex = filteredMenuData.findIndex(
     ({ id }) => id === selectedId,
