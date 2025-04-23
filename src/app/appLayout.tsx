@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 
-import ScrollTop from "@/components/ScrollTop";
-
-import HideAppBar from "@/components/HideAppBar";
-import { drawerWidth } from "@/constants/ResponsiveDrawer";
-
-import ResponsiveDrawer from "@/components/ResponsiveDrawer";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, CssBaseline, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import HideAppBar from "@/components/HideAppBar";
+import ResponsiveDrawer from "@/components/ResponsiveDrawer";
+import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
+import ScrollTop from "@/components/ScrollTop";
+
+import { drawerWidth } from "@/constants/ResponsiveDrawer";
 
 const ContainerBox = styled(Box)({
   display: "flex",
@@ -62,6 +63,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       />
       <MainBox as="main">
         <Toolbar />
+        <RouterBreadcrumbs />
         {children}
       </MainBox>
       <ScrollTop>
