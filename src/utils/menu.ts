@@ -1,6 +1,6 @@
 import type { Category } from "@/types/menu";
 
-export const menuData: Category[] = [
+export const menu: Category[] = [
   {
     id: "coffee",
     name: "咖啡飲品",
