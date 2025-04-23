@@ -12,7 +12,11 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
   return (
     <Grid container spacing={2}>
       {items.map((item, index) => (
-        <Grid key={index} size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}>
+        <Grid
+          display="flex"
+          key={index}
+          size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
+        >
           <ActionAreaCard
             name={item.name}
             imageUrl={item.imageUrl}

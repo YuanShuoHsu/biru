@@ -30,6 +30,7 @@ const ActionAreaCard = ({
   return (
     <Card
       sx={{
+        flex: 1,
         opacity: inStock ? 1 : 0.5,
         pointerEvents: inStock ? "auto" : "none",
       }}
