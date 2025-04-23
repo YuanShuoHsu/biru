@@ -1,15 +1,11 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
-import { useState } from "react";
-
-import { InputAdornment, Stack, TextField } from "@mui/material";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
-
-import SearchIcon from "@mui/icons-material/Search";
+import { useEffect, useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
+
+import { Stack, Tab, Tabs } from "@mui/material";
 
 import { menuData } from "@/utils/menu";
 
@@ -20,40 +16,49 @@ const a11yProps = (index: number) => {
   };
 };
 
-const CustomizedTabs = () => {
-  const [value, setValue] = useState(0);
-  const [searchText, setSearchText] = useState("");
+interface CustomizedTabsProps {
+  searchText: string;
+}
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
+  const [selectedId, setSelectedId] = useState(
+    menuData.length > 0 ? menuData[0].id : "",
+  );
+
+  const filteredMenuData = menuData
+    .map((category) => ({
+      ...category,
+      items: category.items.filter(({ name }) =>
+        name.includes(searchText.trim()),
+      ),
+    }))
+    .filter(({ items }) => items.length > 0);
+
+  const currentIndex = filteredMenuData.findIndex(
+    ({ id }) => id === selectedId,
+  );
+
+  const displayIndex = currentIndex >= 0 ? currentIndex : 0;
+
+  useEffect(() => {
+    if (
+      filteredMenuData.length > 0 &&
+      !filteredMenuData.some((cat) => cat.id === selectedId)
+    ) {
+      setSelectedId(filteredMenuData[0].id);
+    }
+  }, [filteredMenuData, selectedId]);
+
+  const handleChange = (_: React.SyntheticEvent, newIndex: number) =>
+    setSelectedId(filteredMenuData[newIndex].id);
 
   return (
     <Stack
+      height="100%"
       direction={{ xs: "row", sm: "column" }}
-      spacing={2}
-      sx={{
-        bgcolor: "background.paper",
-        height: "100%",
-      }}
+      gap={2}
+      bgcolor="background.paper"
     >
-      <TextField
-        size="small"
-        placeholder="搜尋菜單…"
-        value={searchText}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          setSearchText(event.target.value)
-        }
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon fontSize="small" />
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
       <Tabs
         allowScrollButtonsMobile
         aria-label="Horizontal tabs"
@@ -64,10 +69,10 @@ const CustomizedTabs = () => {
           borderBottom: 1,
           borderColor: "divider",
         }}
-        value={value}
+        value={displayIndex}
         variant="scrollable"
       >
-        {menuData.map((category, index) => (
+        {filteredMenuData.map((category, index) => (
           <Tab key={category.id} label={category.name} {...a11yProps(index)} />
         ))}
       </Tabs>
@@ -77,24 +82,25 @@ const CustomizedTabs = () => {
         onChange={handleChange}
         orientation="vertical"
         sx={{
-          display: { xs: "flex", sm: "none" },
           borderRight: 1,
           borderColor: "divider",
+          display: { xs: "flex", sm: "none" },
           flexShrink: 0,
+
           "& .MuiTabs-scroller": {
+            width: "90px",
             flex: "1 1 0",
           },
         }}
-        value={value}
+        value={displayIndex}
         variant="scrollable"
       >
-        {menuData.map((category, index) => (
+        {filteredMenuData.map((category, index) => (
           <Tab key={category.id} label={category.name} {...a11yProps(index)} />
         ))}
       </Tabs>
-
-      {menuData.map((category, index) => (
-        <TabPanel index={index} key={category.id} value={value}>
+      {filteredMenuData.map((category, index) => (
+        <TabPanel index={index} key={category.id} value={displayIndex}>
           <ResponsiveGrid items={category.items} />
         </TabPanel>
       ))}

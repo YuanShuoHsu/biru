@@ -1,6 +1,8 @@
-import type { MenuItem } from "@/types/menu";
-import { Grid } from "@mui/material";
 import ActionAreaCard from "./ActionAreaCard";
+
+import { Grid } from "@mui/material";
+
+import type { MenuItem } from "@/types/menu";
 
 interface ResponsiveGridProps {
   items: MenuItem[];

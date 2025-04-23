@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import {
   Box,
   Card,
@@ -7,8 +9,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
-import Image from "next/image";
 
 interface ActionAreaCardProps {
   description?: string;

@@ -8,7 +8,6 @@ import { styled } from "@mui/material/styles";
 
 import HideAppBar from "@/components/HideAppBar";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
-import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 import ScrollTop from "@/components/ScrollTop";
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
@@ -63,7 +62,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       />
       <MainBox as="main">
         <Toolbar />
-        <RouterBreadcrumbs />
         {children}
       </MainBox>
       <ScrollTop>
