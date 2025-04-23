@@ -1,12 +1,13 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-IconBreadcrumbs.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
-import NextLink from "next/link";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { Home, ShoppingCart } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 interface BreadcrumbItem {
   icon: React.ComponentType<SvgIconProps>;
@@ -14,10 +15,6 @@ interface BreadcrumbItem {
 }
 
 const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
-  "/": {
-    icon: Home,
-    label: "Home",
-  },
   "/order": {
     icon: ShoppingCart,
     label: "Order",
@@ -30,27 +27,32 @@ interface LinkRouterProps extends LinkProps {
 }
 
 const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
-  <MuiLink component={NextLink} href={to} {...props} />
+  <MuiLink component={Link} href={to} {...props} />
 );
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+  color: theme.palette.text.primary,
+}));
+
+const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+}));
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const pathnames = pathname.split("/").filter((x) => x);
 
-  const breadcrumbRootItem = breadcrumbMap["/"];
-  const { label: rootLabel, icon: RootIcon } = breadcrumbRootItem;
-
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <LinkRouter
-        underline="hover"
-        color="inherit"
-        to="/"
-        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-      >
-        <RootIcon fontSize="inherit" />
-        {rootLabel}
-      </LinkRouter>
+      <StyledLinkRouter underline="hover" color="inherit" to="/">
+        <Home fontSize="inherit" />
+        Home
+      </StyledLinkRouter>
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
         const to = `/${pathnames.slice(0, index + 1).join("/")}`;
@@ -59,29 +61,15 @@ const RouterBreadcrumbs = () => {
         const { label, icon: Icon } = breadcrumbItem;
 
         return last ? (
-          <Typography
-            key={to}
-            sx={{
-              color: "text.primary",
-              display: "flex",
-              alignItems: "center",
-              gap: 0.5,
-            }}
-          >
+          <StyledTypography color="text.primary" key={to}>
             <Icon fontSize="inherit" />
             {label}
-          </Typography>
+          </StyledTypography>
         ) : (
-          <LinkRouter
-            color="inherit"
-            key={to}
-            sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
-            to={to}
-            underline="hover"
-          >
+          <StyledLinkRouter color="inherit" key={to} to={to} underline="hover">
             <Icon fontSize="inherit" />
             {label}
-          </LinkRouter>
+          </StyledLinkRouter>
         );
       })}
     </Breadcrumbs>
