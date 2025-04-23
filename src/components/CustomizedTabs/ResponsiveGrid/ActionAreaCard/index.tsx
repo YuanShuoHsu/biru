@@ -33,10 +33,14 @@ const ActionAreaCard = ({
         flex: 1,
         opacity: inStock ? 1 : 0.5,
         pointerEvents: inStock ? "auto" : "none",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <CardActionArea>
-        <Box sx={{ position: "relative", height: 140 }}>
+      <CardActionArea
+        sx={{ display: "flex", flexDirection: "column", flex: 1 }}
+      >
+        <Box sx={{ position: "relative", width: "100%", height: 140 }}>
           {imageUrl && (
             <Image
               alt={name}
@@ -48,14 +52,7 @@ const ActionAreaCard = ({
             />
           )}
         </Box>
-        <CardContent>
-          {/* <Typography component="div" gutterBottom variant="h5">
-            {name}
-          </Typography>
-          <Typography variant="body2" sx={{ color: "text.secondary" }}>
-            Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-          </Typography> */}
+        <CardContent sx={{ flex: 1 }}>
           <Typography component="div" variant="h6">
             {name}
           </Typography>

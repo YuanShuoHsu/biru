@@ -9,6 +9,7 @@ interface TabPanelProps {
 const TabPanel = ({ children, index, value, ...other }: TabPanelProps) => (
   <Box
     aria-labelledby={`vertical-tab-${index}`}
+    flex={1}
     hidden={value !== index}
     id={`vertical-tabpanel-${index}`}
     role="tabpanel"
