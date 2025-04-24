@@ -8,8 +8,6 @@ import TabPanel from "./TabPanel";
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { Tag } from "@/types/menu";
-
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
@@ -48,7 +46,7 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
-  const allTags: Tag[] = [
+  const allTags = [
     ...new Set(
       menu.flatMap(({ items }) => items.flatMap(({ tags }) => tags || [])),
     ),
