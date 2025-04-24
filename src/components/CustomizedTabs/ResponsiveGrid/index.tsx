@@ -16,6 +16,7 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
           item.sizes.length > 1
             ? `${Math.min(...item.sizes.map(({ price }) => price))}元起`
             : `${item.sizes[0].price}元`;
+
         const sizes = item.sizes.map(({ label }) => label).filter(Boolean);
 
         return (

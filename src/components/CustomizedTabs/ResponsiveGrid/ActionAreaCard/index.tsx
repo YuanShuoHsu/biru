@@ -5,7 +5,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardHeader,
   Chip,
   Stack,
   Typography,
@@ -43,55 +42,6 @@ const ActionAreaCard = ({
       <CardActionArea
         sx={{ display: "flex", flexDirection: "column", flex: 1 }}
       >
-        <CardHeader
-          sx={{
-            width: "100%",
-            display: "flex",
-            gap: 1,
-
-            "& .MuiCardHeader-avatar": {
-              margin: 0,
-            },
-
-            "& .MuiCardHeader-content": {
-              display: "flex",
-              flexDirection: "column",
-              gap: 1,
-            },
-          }}
-          title={
-            <Typography variant="h6" noWrap>
-              {name}
-            </Typography>
-          }
-          subheader={
-            <Stack
-              direction="row"
-              alignItems="center"
-              gap={0.5}
-              flexWrap="wrap"
-            >
-              {sizes.map((size) => (
-                <Chip
-                  key={size}
-                  label={size}
-                  size="small"
-                  sx={{
-                    "& .MuiChip-label": {
-                      p: 0,
-                      width: 24,
-                      display: "flex",
-                      justifyContent: "center",
-                    },
-                  }}
-                />
-              ))}
-              <Typography variant="subtitle2" color="text.primary">
-                {price}
-              </Typography>
-            </Stack>
-          }
-        />
         <Box sx={{ position: "relative", width: "100%", height: 140 }}>
           {imageUrl && (
             <Image
@@ -107,6 +57,27 @@ const ActionAreaCard = ({
         <CardContent
           sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}
         >
+          <Typography variant="h6">{name}</Typography>
+          <Stack direction="row" alignItems="center" gap={0.5} flexWrap="wrap">
+            {sizes.map((size) => (
+              <Chip
+                key={size}
+                label={size}
+                size="small"
+                sx={{
+                  "& .MuiChip-label": {
+                    p: 0,
+                    width: 24,
+                    display: "flex",
+                    justifyContent: "center",
+                  },
+                }}
+              />
+            ))}
+            <Typography variant="subtitle2" color="text.primary">
+              {price}
+            </Typography>
+          </Stack>
           {description && (
             <Typography variant="body2" color="text.secondary">
               {description}

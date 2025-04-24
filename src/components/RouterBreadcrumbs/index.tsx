@@ -57,8 +57,8 @@ const RouterBreadcrumbs = () => {
         const last = index === pathnames.length - 1;
         const to = `/${pathnames.slice(0, index + 1).join("/")}`;
 
-        const breadcrumbItem = breadcrumbMap[to];
-        const { label, icon: Icon } = breadcrumbItem;
+        const { label = value, icon: Icon = () => null } =
+          breadcrumbMap[to] || {};
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
