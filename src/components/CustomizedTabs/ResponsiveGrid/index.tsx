@@ -25,7 +25,11 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
               imageUrl={item.imageUrl}
               inStock={item.inStock}
               name={item.name}
-              price={firstSize ? `${firstSize.price}元起` : `${item.price}元`}
+              price={
+                item.sizes?.length > 1
+                  ? `${firstSize?.price}元起`
+                  : `${firstSize?.price}元`
+              }
               size={firstSize?.label}
               tags={item.tags}
             />

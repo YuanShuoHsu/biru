@@ -75,7 +75,7 @@ export const menu: Category[] = [
         name: "茉香綠茶",
         description: "清新茉莉花香與綠茶完美融合。",
         imageUrl: "/IMG_4590.jpg",
-        price: 80,
+        sizes: [{ label: "", price: 80 }],
         tags: ["低咖啡因"],
         options: [
           {
@@ -122,7 +122,7 @@ export const menu: Category[] = [
         name: "水果氣泡飲",
         description: "新鮮水果搭配氣泡水，清爽解膩。",
         imageUrl: "/IMG_4590.jpg",
-        price: 140,
+        sizes: [{ label: "", price: 140 }],
         options: [
           {
             name: "加料",
@@ -154,7 +154,7 @@ export const menu: Category[] = [
         name: "經典可頌",
         description: "外酥內軟的法式可頌。",
         imageUrl: "/IMG_4590.jpg",
-        price: 60,
+        sizes: [{ label: "", price: 60 }],
         inStock: true,
       },
       {
@@ -162,7 +162,7 @@ export const menu: Category[] = [
         name: "巧克力蛋糕",
         description: "濃郁黑巧克力海綿蛋糕。",
         imageUrl: "/IMG_4590.jpg",
-        price: 90,
+        sizes: [{ label: "", price: 90 }],
         tags: ["新品"],
         inStock: true,
       },
@@ -177,7 +177,7 @@ export const menu: Category[] = [
         name: "火腿起司三明治",
         description: "火腿、起司與生菜夾於法式軟包中。",
         imageUrl: "/IMG_4590.jpg",
-        price: 150,
+        sizes: [{ label: "", price: 150 }],
         options: [
           {
             name: "加料",
@@ -194,7 +194,7 @@ export const menu: Category[] = [
         name: "雞肉沙拉",
         description: "新鮮生菜搭配香煎雞肉。",
         imageUrl: "/IMG_4590.jpg",
-        price: 160,
+        sizes: [{ label: "", price: 160 }],
         inStock: true,
       },
     ],

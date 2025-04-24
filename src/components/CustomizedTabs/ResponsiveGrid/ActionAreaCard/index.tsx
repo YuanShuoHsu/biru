@@ -1,8 +1,6 @@
 import Image from "next/image";
 
-import { Favorite } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   Card,
   CardActionArea,
@@ -61,11 +59,6 @@ const ActionAreaCard = ({
               gap: 1,
             },
           }}
-          avatar={
-            <Avatar sx={{ width: 24, height: 24, bgcolor: "error.main" }}>
-              <Favorite sx={{ fontSize: "12px" }} />
-            </Avatar>
-          }
           title={
             <Stack
               direction="row"

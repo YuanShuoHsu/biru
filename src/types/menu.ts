@@ -18,11 +18,10 @@ export interface MenuItem {
   name: string;
   description?: string;
   imageUrl?: string;
-  price?: number;
-  sizes?: Size[];
+  sizes: Size[];
   tags?: string[];
   options?: Option[];
-  inStock?: boolean;
+  inStock: boolean;
 }
 
 export interface Category {
