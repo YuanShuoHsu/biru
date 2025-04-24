@@ -38,7 +38,7 @@ const Order = () => {
           }}
         />
       </Stack>
-      <CustomizedTabs searchText={searchText} />
+      <CustomizedTabs searchText={searchText.trim().toLowerCase()} />
     </Stack>
   );
 };

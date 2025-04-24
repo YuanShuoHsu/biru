@@ -14,7 +14,7 @@ export const menu: Category[] = [
           { label: "M", price: 120 },
           { label: "L", price: 140 },
         ],
-        tags: ["人氣"],
+        tags: ["popular"],
         options: [
           {
             name: "甜度",
@@ -51,7 +51,7 @@ export const menu: Category[] = [
           { label: "M", price: 130 },
           { label: "L", price: 150 },
         ],
-        tags: ["新品"],
+        tags: ["new"],
         options: [
           {
             name: "甜度",
@@ -76,7 +76,7 @@ export const menu: Category[] = [
         description: "清新茉莉花香與綠茶完美融合。",
         imageUrl: "/IMG_4590.jpg",
         sizes: [{ label: "", price: 80 }],
-        tags: ["低咖啡因"],
+        tags: ["lowCaffeine"],
         options: [
           {
             name: "冰塊",
@@ -98,7 +98,7 @@ export const menu: Category[] = [
           { label: "M", price: 110 },
           { label: "L", price: 130 },
         ],
-        tags: ["人氣"],
+        tags: ["popular"],
         options: [
           {
             name: "甜度",
@@ -140,7 +140,7 @@ export const menu: Category[] = [
         description: "抹茶與牛奶氣泡完美結合。",
         imageUrl: "/IMG_4590.jpg",
         sizes: [{ label: "L", price: 150 }],
-        tags: ["新品"],
+        tags: ["new"],
         inStock: false,
       },
     ],
@@ -163,7 +163,7 @@ export const menu: Category[] = [
         description: "濃郁黑巧克力海綿蛋糕。",
         imageUrl: "/IMG_4590.jpg",
         sizes: [{ label: "", price: 90 }],
-        tags: ["新品"],
+        tags: ["new"],
         inStock: true,
       },
     ],

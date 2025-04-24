@@ -3,6 +3,8 @@ interface Size {
   price: number;
 }
 
+type Tag = "popular" | "new" | "lowCaffeine";
+
 interface Choice {
   label: string;
   extraCost?: number;
@@ -19,7 +21,7 @@ export interface MenuItem {
   description?: string;
   imageUrl?: string;
   sizes: Size[];
-  tags?: string[];
+  tags?: Tag[];
   options?: Option[];
   inStock: boolean;
 }

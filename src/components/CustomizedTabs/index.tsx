@@ -8,6 +8,8 @@ import TabPanel from "./TabPanel";
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import type { Tag } from "@/types/menu";
+
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
@@ -46,37 +48,58 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
-  const [selectedId, setSelectedId] = useState(
-    menu.length > 0 ? menu[0].id : "",
-  );
+  const allTags: Tag[] = [
+    ...new Set(
+      menu.flatMap(({ items }) => items.flatMap(({ tags }) => tags || [])),
+    ),
+  ];
 
-  const filteredMenu = menu
-    .map((category) => ({
-      ...category,
-      items: category.items.filter(({ name }) =>
-        name.includes(searchText.trim()),
+  const tagGroups = allTags.map((tagKey) => ({
+    id: tagKey,
+    name: tagKey,
+    items: menu.flatMap(({ items }) =>
+      items.filter(({ tags }) => tags?.includes(tagKey)),
+    ),
+  }));
+
+  const categoryGroups = menu.map(({ id, name, items }) => ({
+    id,
+    name,
+    items,
+  }));
+
+  const combinedGroups = [...tagGroups, ...categoryGroups];
+
+  const filteredGroups = combinedGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter(({ name }) =>
+        name.toLowerCase().includes(searchText.trim()),
       ),
     }))
     .filter(
-      ({ items, name }) => name.includes(searchText.trim()) || items.length > 0,
+      ({ name, items }) =>
+        name.toLowerCase().includes(searchText.trim()) || items.length > 0,
     );
 
-  const currentIndex = filteredMenu.findIndex(({ id }) => id === selectedId);
+  const [selectedId, setSelectedId] = useState(filteredGroups[0]?.id || "");
+
+  const currentIndex = filteredGroups.findIndex(({ id }) => id === selectedId);
   const displayIndex = currentIndex >= 0 ? currentIndex : 0;
 
   useEffect(() => {
     if (
-      filteredMenu.length > 0 &&
-      !filteredMenu.some(({ id }) => id === selectedId)
+      filteredGroups.length > 0 &&
+      !filteredGroups.some(({ id }) => id === selectedId)
     ) {
-      setSelectedId(filteredMenu[0].id);
+      setSelectedId(filteredGroups[0].id);
     }
-  }, [filteredMenu, selectedId]);
+  }, [filteredGroups, selectedId]);
 
   const handleChange = (_: React.SyntheticEvent, newIndex: number) =>
-    setSelectedId(filteredMenu[newIndex].id);
+    setSelectedId(filteredGroups[newIndex].id);
 
-  const tabList = filteredMenu.map(({ id, name }, index) => (
+  const tabList = filteredGroups.map(({ id, name }, index) => (
     <Tab key={id} label={name} {...a11yProps(index)} />
   ));
 
@@ -107,7 +130,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
       >
         {tabList}
       </VerticalTabs>
-      {filteredMenu.map(({ id, items }, index) => (
+      {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
           <ResponsiveGrid items={items} />
         </TabPanel>
