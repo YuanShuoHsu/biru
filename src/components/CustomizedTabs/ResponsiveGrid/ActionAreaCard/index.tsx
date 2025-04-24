@@ -9,6 +9,45 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledCard = styled(Card, {
+  shouldForwardProp: (prop) => prop !== "inStock",
+})<{ inStock: boolean }>(({ inStock }) => ({
+  flex: 1,
+  opacity: inStock ? 1 : 0.5,
+  pointerEvents: inStock ? "auto" : "none",
+  display: "flex",
+  flexDirection: "column",
+}));
+
+const StyledCardActionArea = styled(CardActionArea)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  flex: 1,
+}));
+
+const ImageBox = styled(Box)(() => ({
+  position: "relative",
+  width: "100%",
+  height: 140,
+}));
+
+const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  flex: 1,
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+}));
+
+const StyledChip = styled(Chip)(() => ({
+  "& .MuiChip-label": {
+    padding: 0,
+    width: 24,
+    display: "flex",
+    justifyContent: "center",
+  },
+}));
 
 interface ActionAreaCardProps {
   description?: string;
@@ -30,19 +69,9 @@ const ActionAreaCard = ({
   // tags = [],
 }: ActionAreaCardProps) => {
   return (
-    <Card
-      sx={{
-        flex: 1,
-        opacity: inStock ? 1 : 0.5,
-        pointerEvents: inStock ? "auto" : "none",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <CardActionArea
-        sx={{ display: "flex", flexDirection: "column", flex: 1 }}
-      >
-        <Box sx={{ position: "relative", width: "100%", height: 140 }}>
+    <StyledCard inStock={inStock}>
+      <StyledCardActionArea>
+        <ImageBox>
           {imageUrl && (
             <Image
               alt={name}
@@ -53,26 +82,12 @@ const ActionAreaCard = ({
               style={{ objectFit: "cover" }}
             />
           )}
-        </Box>
-        <CardContent
-          sx={{ flex: 1, display: "flex", flexDirection: "column", gap: 1 }}
-        >
+        </ImageBox>
+        <StyledCardContent>
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={0.5} flexWrap="wrap">
             {sizes.map((size) => (
-              <Chip
-                key={size}
-                label={size}
-                size="small"
-                sx={{
-                  "& .MuiChip-label": {
-                    p: 0,
-                    width: 24,
-                    display: "flex",
-                    justifyContent: "center",
-                  },
-                }}
-              />
+              <StyledChip key={size} label={size} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
               {price}
@@ -88,9 +103,9 @@ const ActionAreaCard = ({
               售完
             </Typography>
           )}
-        </CardContent>
-      </CardActionArea>
-    </Card>
+        </StyledCardContent>
+      </StyledCardActionArea>
+    </StyledCard>
   );
 };
 
