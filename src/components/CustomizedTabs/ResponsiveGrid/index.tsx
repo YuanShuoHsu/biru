@@ -12,7 +12,11 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
   return (
     <Grid container spacing={2}>
       {items.map((item, index) => {
-        const firstSize = item.sizes?.[0];
+        const price =
+          item.sizes.length > 1
+            ? `${Math.min(...item.sizes.map(({ price }) => price))}元起`
+            : `${item.sizes[0].price}元`;
+        const sizes = item.sizes.map(({ label }) => label).filter(Boolean);
 
         return (
           <Grid
@@ -25,12 +29,8 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
               imageUrl={item.imageUrl}
               inStock={item.inStock}
               name={item.name}
-              price={
-                item.sizes?.length > 1
-                  ? `${firstSize?.price}元起`
-                  : `${firstSize?.price}元`
-              }
-              size={firstSize?.label}
+              price={price}
+              sizes={sizes}
               tags={item.tags}
             />
           </Grid>

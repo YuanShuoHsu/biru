@@ -14,10 +14,10 @@ import {
 interface ActionAreaCardProps {
   description?: string;
   imageUrl?: string;
-  inStock?: boolean;
+  inStock: boolean;
   name: string;
-  price?: string | number;
-  size?: string;
+  price: string | number;
+  sizes: string[];
   tags?: string[];
 }
 
@@ -27,8 +27,8 @@ const ActionAreaCard = ({
   inStock,
   name,
   price,
-  size,
-  tags = [],
+  sizes,
+  // tags = [],
 }: ActionAreaCardProps) => {
   return (
     <Card
@@ -60,33 +60,35 @@ const ActionAreaCard = ({
             },
           }}
           title={
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              flexWrap="wrap"
-              gap={1}
-            >
-              <Typography variant="h6" noWrap>
-                {name}
-              </Typography>
-              {tags.map((tag) => (
-                <Chip key={tag} label={tag} size="small" variant="outlined" />
-              ))}
-            </Stack>
+            <Typography variant="h6" noWrap>
+              {name}
+            </Typography>
           }
           subheader={
-            <Stack direction="row" spacing={1} alignItems="center">
-              {size && (
-                <Typography variant="caption" color="text.secondary">
-                  {size}
-                </Typography>
-              )}
-              {price && (
-                <Typography variant="subtitle2" color="text.primary">
-                  {price}
-                </Typography>
-              )}
+            <Stack
+              direction="row"
+              alignItems="center"
+              gap={0.5}
+              flexWrap="wrap"
+            >
+              {sizes.map((size) => (
+                <Chip
+                  key={size}
+                  label={size}
+                  size="small"
+                  sx={{
+                    "& .MuiChip-label": {
+                      p: 0,
+                      width: 24,
+                      display: "flex",
+                      justifyContent: "center",
+                    },
+                  }}
+                />
+              ))}
+              <Typography variant="subtitle2" color="text.primary">
+                {price}
+              </Typography>
             </Stack>
           }
         />
