@@ -1,4 +1,5 @@
-// https://nextjs.org/docs/app/building-your-application/routing/internationalization
+// https://nextjs.org/docs/app/building-your-application/routing/internationalization#routing-overview
+// https://nextjs.org/docs/app/building-your-application/routing/middleware
 
 import Negotiator from "negotiator";
 import type { NextRequest } from "next/server";
@@ -34,5 +35,7 @@ export const middleware = (request: NextRequest) => {
 };
 
 export const config = {
-  matcher: ["/((?!_next).*)"],
+  matcher: [
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+  ],
 };
