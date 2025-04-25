@@ -8,10 +8,10 @@ import { styled } from "@mui/material/styles";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   "& .MuiBadge-badge": {
+    padding: "0 4px",
     right: -3,
     top: 13,
     border: `2px solid ${theme.palette.background.paper}`,
-    padding: "0 4px",
   },
 }));
 

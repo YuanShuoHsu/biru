@@ -1,12 +1,13 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
-import CustomizedBadges from "@/components/CustomizedBadges";
 import HideOnScroll from "./HideOnScroll";
+import MenuAppBar from "./MenuAppBar";
+
+import CustomizedBadges from "@/components/HideAppBar/CustomizedBadges";
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
-
 import { Menu } from "@mui/icons-material";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
@@ -52,7 +53,10 @@ const HideAppBar: React.FC<HideAppBarProps> = ({ onDrawerToggle }) => {
           <Typography component="div" flexGrow="1" noWrap variant="h6">
             Biru Coffee
           </Typography>
-          <CustomizedBadges />
+          <Stack direction="row" alignItems="center" gap={0.5}>
+            <MenuAppBar />
+            <CustomizedBadges />
+          </Stack>
         </StyledToolbar>
       </StyledAppBar>
     </HideOnScroll>
