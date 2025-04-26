@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const NavBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
@@ -72,27 +72,32 @@ const ResponsiveDrawer = ({
 }: ResponsiveDrawerProps) => {
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
   const pathname = usePathname();
+  const { lang } = useParams();
 
   const drawer = (
     <Box>
       <Toolbar />
       <Divider />
       <List>
-        {navItems.map(({ href, text }, index) => (
-          <ListItem key={href} disablePadding>
-            <ListItemButton
-              component={Link}
-              href={href}
-              selected={pathname === href}
-              onClick={isSmUp ? undefined : onDrawerToggle}
-            >
-              <ListItemIcon>
-                {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {navItems.map(({ href, text }, index) => {
+          const localizedHref = `/${lang}${href}`;
+
+          return (
+            <ListItem key={href} disablePadding>
+              <ListItemButton
+                component={Link}
+                href={localizedHref}
+                selected={pathname === localizedHref}
+                onClick={isSmUp ? undefined : onDrawerToggle}
+              >
+                <ListItemIcon>
+                  {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
