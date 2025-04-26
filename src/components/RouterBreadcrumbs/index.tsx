@@ -2,7 +2,7 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import { Home, ShoppingCart } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
@@ -45,20 +45,24 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const pathnames = pathname.split("/").filter((x) => x);
+  const { lang } = useParams();
+
+  const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <StyledLinkRouter underline="hover" color="inherit" to="/">
+      <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
         <Home fontSize="inherit" />
         Home
       </StyledLinkRouter>
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
-        const to = `/${pathnames.slice(0, index + 1).join("/")}`;
+        const subPath = pathnames.slice(0, index + 1).join("/");
+        const key = `/${subPath}`;
+        const to = `/${lang}/${subPath}`;
 
         const { label = value, icon: Icon = () => null } =
-          breadcrumbMap[to] || {};
+          breadcrumbMap[key] || {};
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
