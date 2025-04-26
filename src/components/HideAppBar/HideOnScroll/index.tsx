@@ -1,3 +1,5 @@
+// https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
+
 import { Slide, useScrollTrigger } from "@mui/material";
 
 interface HideOnScrollProps {

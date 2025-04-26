@@ -1,5 +1,7 @@
-// https://nextjs.org/docs/app/building-your-application/routing/internationalization#routing-overview
+// https://nextjs.org/docs/app/building-your-application/routing/internationalization
 // https://nextjs.org/docs/app/building-your-application/routing/middleware
+
+// https://next-intl.dev/docs/getting-started/app-router/without-i18n-routing
 
 import Negotiator from "negotiator";
 import type { NextRequest } from "next/server";

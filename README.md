@@ -172,6 +172,20 @@ pnpm add zustand
 # https://zustand.docs.pmnd.rs/guides/nextjs
 ```
 
+## negotiator
+
+```bash
+# https://nextjs.org/docs/app/building-your-application/routing/internationalization
+
+# https://www.npmjs.com/package/negotiator
+# https://github.com/jshttp/negotiator
+pnpm add negotiator
+
+# https://www.npmjs.com/package/@types/negotiator
+# https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/negotiator
+pnpm add -D @types/negotiator
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
