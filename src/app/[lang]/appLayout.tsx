@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
@@ -39,7 +39,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [isClosing, setIsClosing] = useState(false);
 
   const pathname = usePathname();
-  const isOrderPage = pathname === "/order";
+  const { lang } = useParams();
+  const isOrderPage = pathname === `/${lang}/order`;
 
   const handleDrawerClose = () => {
     setIsClosing(true);
