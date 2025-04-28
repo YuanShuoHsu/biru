@@ -2,10 +2,9 @@ import { create } from "zustand";
 
 interface DialogOptions {
   open: boolean;
-  buttonText?: string;
   title?: string;
-  contentText?: string;
   content?: React.ReactNode;
+  contentText?: string;
   cancelText?: string;
   confirmText?: string;
   onCancel?: () => void;
@@ -18,7 +17,6 @@ interface DialogState extends DialogOptions {
 
 export const useDialogStore = create<DialogState>((set) => ({
   open: false,
-  buttonText: "",
   title: "",
   contentText: "",
   content: null,

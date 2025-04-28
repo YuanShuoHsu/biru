@@ -1,7 +1,5 @@
 // https://mui.com/material-ui/react-dialog/#system-CustomizedDialogs.tsx
 
-import { Fragment } from "react";
-
 import Transition from "@/components/CustomizedDialogs/Transition";
 
 import { Close } from "@mui/icons-material";
@@ -41,7 +39,6 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const CustomizedDialogs = () => {
   const {
-    buttonText,
     cancelText,
     confirmText,
     content,
@@ -53,52 +50,46 @@ const CustomizedDialogs = () => {
     title,
   } = useDialogStore();
 
-  const handleClickOpen = () => setDialog({ open: true });
   const handleClose = () => setDialog({ open: false });
 
   const handleCancel = () => {
     onCancel?.();
-    setDialog({ open: false });
+    handleClose();
   };
 
   const handleConfirm = () => {
     onConfirm?.();
-    setDialog({ open: false });
+    handleClose();
   };
 
   return (
-    <Fragment>
-      <Button onClick={handleClickOpen} variant="outlined">
-        {buttonText}
-      </Button>
-      <BootstrapDialog
-        aria-labelledby="customized-dialog-title"
-        aria-describedby="customized-dialog-description"
-        onClose={handleClose}
-        open={open}
-        scroll="body"
-        slots={{ transition: Transition }}
-      >
-        <StyledDialogTitle id="customized-dialog-title">
-          {title}
-        </StyledDialogTitle>
-        <StyledIconButton aria-label="close" onClick={handleClose}>
-          <Close />
-        </StyledIconButton>
-        <DialogContent dividers>
-          <DialogContentText id="customized-dialog-description">
-            {contentText}
-          </DialogContentText>
-          {content}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancel}>{cancelText}</Button>
-          <Button onClick={handleConfirm} autoFocus>
-            {confirmText}
-          </Button>
-        </DialogActions>
-      </BootstrapDialog>
-    </Fragment>
+    <BootstrapDialog
+      aria-labelledby="customized-dialog-title"
+      aria-describedby="customized-dialog-description"
+      onClose={handleClose}
+      open={open}
+      scroll="body"
+      slots={{ transition: Transition }}
+    >
+      <StyledDialogTitle id="customized-dialog-title">
+        {title}
+      </StyledDialogTitle>
+      <StyledIconButton aria-label="close" onClick={handleClose}>
+        <Close />
+      </StyledIconButton>
+      <DialogContent dividers>
+        <DialogContentText id="customized-dialog-description">
+          {contentText}
+        </DialogContentText>
+        {content}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleCancel}>{cancelText}</Button>
+        <Button onClick={handleConfirm} autoFocus>
+          {confirmText}
+        </Button>
+      </DialogActions>
+    </BootstrapDialog>
   );
 };
 

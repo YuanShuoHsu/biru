@@ -91,6 +91,7 @@ const ActionAreaCard = ({
           {imageUrl && (
             <Image
               alt={name}
+              draggable={false}
               fill
               priority
               sizes="(min-width: 808px) 50vw, 100vw"
