@@ -12,26 +12,6 @@ import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
-  display: "none",
-
-  [theme.breakpoints.up("sm")]: {
-    display: "flex",
-  },
-}));
-
-const VerticalTabs = styled(Tabs)(({ theme }) => ({
-  borderRight: `1px solid ${theme.palette.divider}`,
-  display: "flex",
-  flexShrink: 0,
-
-  [theme.breakpoints.up("sm")]: {
-    display: "none",
-  },
-
-  "& .MuiTabs-scroller": {
-    width: "90px",
-    flex: "1 1 0",
-  },
 }));
 
 const a11yProps = (index: number) => {
@@ -102,12 +82,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   ));
 
   return (
-    <Stack
-      height="100%"
-      direction={{ xs: "row", sm: "column" }}
-      gap={2}
-      bgcolor="background.paper"
-    >
+    <Stack height="100%" direction="column" gap={2} bgcolor="background.paper">
       <HorizontalTabs
         allowScrollButtonsMobile
         aria-label="Horizontal tabs"
@@ -118,16 +93,6 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
       >
         {tabList}
       </HorizontalTabs>
-      <VerticalTabs
-        allowScrollButtonsMobile
-        aria-label="Vertical tabs"
-        onChange={handleChange}
-        orientation="vertical"
-        value={displayIndex}
-        variant="scrollable"
-      >
-        {tabList}
-      </VerticalTabs>
       {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
           <ResponsiveGrid items={items} />
