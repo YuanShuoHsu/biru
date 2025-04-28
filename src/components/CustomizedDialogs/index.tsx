@@ -66,6 +66,7 @@ const CustomizedDialogs = () => {
     <BootstrapDialog
       aria-labelledby="customized-dialog-title"
       aria-describedby="customized-dialog-description"
+      fullWidth
       onClose={handleClose}
       open={open}
       scroll="body"
