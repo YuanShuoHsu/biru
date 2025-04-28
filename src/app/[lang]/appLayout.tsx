@@ -7,6 +7,7 @@ import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, CssBaseline, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
@@ -80,6 +81,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           <KeyboardArrowUp />
         </Fab>
       </ScrollTop>
+      <CustomizedDialogs />
     </ContainerBox>
   );
 };

@@ -1,5 +1,6 @@
 import Image from "next/image";
 
+import { useDialogStore } from "@/stores/useDialogStore";
 import {
   Box,
   Card,
@@ -68,9 +69,24 @@ const ActionAreaCard = ({
   sizes,
   // tags = [],
 }: ActionAreaCardProps) => {
+  const { setDialog } = useDialogStore();
+
+  const handleClick = () => {
+    setDialog({
+      open: true,
+      title: name,
+      contentText: `價格：${price}\n尺寸：${sizes.join("、")}`,
+      cancelText: "關閉",
+      confirmText: "加入購物車",
+      onConfirm: () => {
+        console.log("confirmed");
+      },
+    });
+  };
+
   return (
     <StyledCard inStock={inStock}>
-      <StyledCardActionArea>
+      <StyledCardActionArea onClick={handleClick}>
         <ImageBox>
           {imageUrl && (
             <Image

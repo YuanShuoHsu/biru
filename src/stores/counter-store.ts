@@ -1,3 +1,5 @@
+// https://zustand.docs.pmnd.rs/guides/nextjs
+
 import { createStore } from "zustand/vanilla";
 
 export type CounterState = {

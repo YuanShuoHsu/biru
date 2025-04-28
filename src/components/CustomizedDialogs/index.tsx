@@ -1,6 +1,6 @@
 // https://mui.com/material-ui/react-dialog/#system-CustomizedDialogs.tsx
 
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 
 import Transition from "@/components/CustomizedDialogs/Transition";
 
@@ -10,11 +10,13 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  DialogContentText,
   DialogTitle,
   IconButton,
-  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useDialogStore } from "@/stores/useDialogStore";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -38,39 +40,61 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const CustomizedDialogs = () => {
-  const [open, setOpen] = useState(true);
+  const {
+    buttonText,
+    cancelText,
+    confirmText,
+    content,
+    contentText,
+    onCancel,
+    onConfirm,
+    open,
+    setDialog,
+    title,
+  } = useDialogStore();
 
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = () => setDialog({ open: true });
+  const handleClose = () => setDialog({ open: false });
 
-  const handleClose = () => setOpen(false);
+  const handleCancel = () => {
+    onCancel?.();
+    setDialog({ open: false });
+  };
+
+  const handleConfirm = () => {
+    onConfirm?.();
+    setDialog({ open: false });
+  };
 
   return (
     <Fragment>
       <Button onClick={handleClickOpen} variant="outlined">
-        Open dialog
+        {buttonText}
       </Button>
       <BootstrapDialog
         aria-labelledby="customized-dialog-title"
+        aria-describedby="customized-dialog-description"
         onClose={handleClose}
         open={open}
-        TransitionComponent={Transition}
+        scroll="body"
+        slots={{ transition: Transition }}
       >
         <StyledDialogTitle id="customized-dialog-title">
-          Modal title
+          {title}
         </StyledDialogTitle>
         <StyledIconButton aria-label="close" onClick={handleClose}>
           <Close />
         </StyledIconButton>
         <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </Typography>
+          <DialogContentText id="customized-dialog-description">
+            {contentText}
+          </DialogContentText>
+          {content}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Save changes
+          <Button onClick={handleCancel}>{cancelText}</Button>
+          <Button onClick={handleConfirm} autoFocus>
+            {confirmText}
           </Button>
         </DialogActions>
       </BootstrapDialog>
