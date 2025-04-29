@@ -11,17 +11,26 @@ interface ResponsiveGridProps {
 const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
   return (
     <Grid container spacing={2}>
-      {items.map((item, index) => {
-        return (
-          <Grid
-            display="flex"
-            key={index}
-            size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
-          >
-            <ActionAreaCard item={item} />
-          </Grid>
-        );
-      })}
+      {items.map(
+        ({ name, price, options, description, imageUrl, inStock }, index) => {
+          return (
+            <Grid
+              display="flex"
+              key={index}
+              size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
+            >
+              <ActionAreaCard
+                name={name}
+                price={price}
+                options={options}
+                description={description}
+                imageUrl={imageUrl}
+                inStock={inStock}
+              />
+            </Grid>
+          );
+        },
+      )}
     </Grid>
   );
 };

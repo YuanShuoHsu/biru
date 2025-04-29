@@ -31,7 +31,6 @@ const CardDialogContent = ({
   price,
   sizes,
 }: CardDialogContentProps) => {
-  console.log(price, sizes);
   const [selectedSize, setSelectedSize] = useState(sizes ? sizes[0].label : "");
   const [quantity, setQuantity] = useState(1);
 

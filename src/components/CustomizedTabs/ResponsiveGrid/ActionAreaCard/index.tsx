@@ -1,5 +1,7 @@
 import Image from "next/image";
 
+import CardDialogContent from "./CardDialogContent";
+
 import {
   Box,
   Card,
@@ -13,8 +15,7 @@ import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/stores/useDialogStore";
 
-import { MenuItem } from "@/types/menu";
-import CardDialogContent from "./CardDialogContent";
+import { Option } from "@/types/menu";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -55,10 +56,21 @@ const StyledChip = styled(Chip)(() => ({
 }));
 
 interface ActionAreaCardProps {
-  item: MenuItem;
+  description?: string;
+  imageUrl?: string;
+  inStock: boolean;
+  name: string;
+  options?: Option[];
+  price: number;
 }
+
 const ActionAreaCard = ({
-  item: { price, options, name, description, imageUrl, inStock },
+  description,
+  imageUrl,
+  inStock,
+  name,
+  options,
+  price,
 }: ActionAreaCardProps) => {
   const { setDialog } = useDialogStore();
 
@@ -108,7 +120,7 @@ const ActionAreaCard = ({
               <StyledChip key={label} label={label} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
-              {`NT$${price}${sizes ? "起" : ""}`}
+              {`NT$ ${price} ${sizes ? "起" : ""}`}
             </Typography>
           </Stack>
           {description && (

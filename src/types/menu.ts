@@ -5,7 +5,7 @@ export interface Choice {
   extraCost: number;
 }
 
-interface Option {
+export interface Option {
   name: string;
   choices: Choice[];
 }
