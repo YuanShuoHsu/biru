@@ -11,14 +11,7 @@ interface ResponsiveGridProps {
 const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
   return (
     <Grid container spacing={2}>
-      {items.map((item, index) => {
-        const price =
-          item.sizes.length > 1
-            ? `${Math.min(...item.sizes.map(({ price }) => price))}元起`
-            : `${item.sizes[0].price}元`;
-
-        const sizes = item.sizes.map(({ label }) => label).filter(Boolean);
-
+      {items.map(({ description, imageUrl, inStock, name, sizes }, index) => {
         return (
           <Grid
             display="flex"
@@ -26,13 +19,11 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
             size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
           >
             <ActionAreaCard
-              description={item.description}
-              imageUrl={item.imageUrl}
-              inStock={item.inStock}
-              name={item.name}
-              price={price}
+              description={description}
+              imageUrl={imageUrl}
+              inStock={inStock}
+              name={name}
               sizes={sizes}
-              tags={item.tags}
             />
           </Grid>
         );

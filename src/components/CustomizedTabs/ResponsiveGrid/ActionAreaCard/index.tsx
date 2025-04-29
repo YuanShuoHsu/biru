@@ -1,16 +1,23 @@
 import Image from "next/image";
 
-import { useDialogStore } from "@/stores/useDialogStore";
 import {
   Box,
   Card,
   CardActionArea,
   CardContent,
   Chip,
+  FormControl,
+  InputLabel,
+  Select,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useDialogStore } from "@/stores/useDialogStore";
+
+import { Size } from "@/types/menu";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -55,8 +62,7 @@ interface ActionAreaCardProps {
   imageUrl?: string;
   inStock: boolean;
   name: string;
-  price: string | number;
-  sizes: string[];
+  sizes: Size[];
 }
 
 const ActionAreaCard = ({
@@ -64,10 +70,12 @@ const ActionAreaCard = ({
   imageUrl,
   inStock,
   name,
-  price,
   sizes,
 }: ActionAreaCardProps) => {
   const { setDialog } = useDialogStore();
+
+  // const [selectedSize, setSelectedSize] = useState<string>(sizes[0] || "");
+  // const [quantity, setQuantity] = useState<number>(1);
 
   const handleClick = () => {
     setDialog({
@@ -93,26 +101,47 @@ const ActionAreaCard = ({
               />
             )}
           </Box>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <Typography variant="h6">{name}</Typography>
-            <Typography variant="h6" color="primary">
-              NT${price}
-            </Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {sizes.map((size) => (
-              <Chip key={size} label={size} size="small" />
-            ))}
-          </Stack>
+          <FormControl fullWidth size="small">
+            <InputLabel>尺寸</InputLabel>
+            <Select
+              // value={selectedSize}
+              label="尺寸"
+              // onChange={(e) => setSelectedSize(e.target.value)}
+            >
+              {/* {sizes.map((size) => (
+                <MenuItem key={size} value={size}>
+                  {size}
+                </MenuItem>
+              ))} */}
+            </Select>
+          </FormControl>
+          <TextField
+            label="數量"
+            type="number"
+            size="small"
+            // inputProps={{ min: 1 }}
+            // value={quantity}
+            // onChange={(e) =>
+            // setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+            // }
+          />
+          <Typography variant="subtitle1">
+            {/* 小計：
+            {(sizes.find((s) => s.label === selectedSize)?.price || 0) *
+              quantity}
+            元 */}
+          </Typography>
           {description && (
             <Typography variant="body2" color="text.secondary">
               {description}
             </Typography>
           )}
+          {/* <Stack direction="row" spacing={1} flexWrap="wrap">
+            {sizes.map((size) => (
+              <Chip key={size} label={size} size="small" />
+            ))}
+          </Stack>
+        */}
         </Stack>
       ),
       cancelText: "關閉",
@@ -142,11 +171,14 @@ const ActionAreaCard = ({
         <StyledCardContent>
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={0.5} flexWrap="wrap">
-            {sizes.map((size) => (
-              <StyledChip key={size} label={size} size="small" />
-            ))}
+            {sizes
+              .map(({ label }) => label)
+              .filter(Boolean)
+              .map((label) => (
+                <StyledChip key={label} label={label} size="small" />
+              ))}
             <Typography variant="subtitle2" color="text.primary">
-              {price}
+              {`${Math.min(...sizes.map(({ price }) => price))}元${sizes.length > 1 ? "起" : ""}`}
             </Typography>
           </Stack>
           {description && (
