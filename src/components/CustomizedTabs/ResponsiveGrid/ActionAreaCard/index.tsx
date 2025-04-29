@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useState } from "react";
 
 import {
   Box,
@@ -7,8 +8,7 @@ import {
   CardContent,
   Chip,
   FormControl,
-  InputLabel,
-  Select,
+  FormLabel,
   Stack,
   TextField,
   Typography,
@@ -74,15 +74,19 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const { setDialog } = useDialogStore();
 
-  // const [selectedSize, setSelectedSize] = useState<string>(sizes[0] || "");
+  const [selectedSize, setSelectedSize] = useState(sizes[0].label);
   // const [quantity, setQuantity] = useState<number>(1);
 
-  const handleClick = () => {
+  const availableSizes = sizes.filter(({ label }) => Boolean(label));
+
+  // const [quantity, setQuantity] = useState<number>(1);
+
+  const handleDialogClick = () => {
     setDialog({
       open: true,
       title: name,
       content: (
-        <Stack spacing={2}>
+        <Stack direction="column" gap={2}>
           <Box
             sx={{
               position: "relative",
@@ -101,20 +105,22 @@ const ActionAreaCard = ({
               />
             )}
           </Box>
-          <FormControl fullWidth size="small">
-            <InputLabel>尺寸</InputLabel>
-            <Select
-              // value={selectedSize}
-              label="尺寸"
-              // onChange={(e) => setSelectedSize(e.target.value)}
-            >
-              {/* {sizes.map((size) => (
-                <MenuItem key={size} value={size}>
-                  {size}
-                </MenuItem>
-              ))} */}
-            </Select>
-          </FormControl>
+          {availableSizes.length > 0 && (
+            <FormControl component="fieldset">
+              <FormLabel component="legend">尺寸</FormLabel>
+              <Stack direction="row" flexWrap="wrap" gap={1}>
+                {availableSizes.map(({ label, price }) => (
+                  <Chip
+                    clickable
+                    color={selectedSize === label ? "primary" : "default"}
+                    key={label}
+                    label={`${label} (${price}元)`}
+                    onClick={() => setSelectedSize(label)}
+                  />
+                ))}
+              </Stack>
+            </FormControl>
+          )}
           <TextField
             label="數量"
             type="number"
@@ -125,36 +131,29 @@ const ActionAreaCard = ({
             // setQuantity(Math.max(1, parseInt(e.target.value) || 1))
             // }
           />
-          <Typography variant="subtitle1">
-            {/* 小計：
+          {/* <Typography variant="subtitle1">
+            小計：
             {(sizes.find((s) => s.label === selectedSize)?.price || 0) *
               quantity}
-            元 */}
-          </Typography>
+            元
+          </Typography> */}
           {description && (
             <Typography variant="body2" color="text.secondary">
               {description}
             </Typography>
           )}
-          {/* <Stack direction="row" spacing={1} flexWrap="wrap">
-            {sizes.map((size) => (
-              <Chip key={size} label={size} size="small" />
-            ))}
-          </Stack>
-        */}
         </Stack>
       ),
       cancelText: "關閉",
       confirmText: "加入購物車",
       onConfirm: async () => {
         await new Promise((resolve) => setTimeout(resolve, 3000));
-        console.log("confirmed"); // 3 秒後才會執行
       },
     });
   };
 
   return (
-    <StyledCard inStock={inStock} onClick={handleClick}>
+    <StyledCard inStock={inStock} onClick={handleDialogClick}>
       <StyledCardActionArea>
         <ImageBox>
           {imageUrl && (
@@ -172,12 +171,9 @@ const ActionAreaCard = ({
         <StyledCardContent>
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={0.5} flexWrap="wrap">
-            {sizes
-              .map(({ label }) => label)
-              .filter(Boolean)
-              .map((label) => (
-                <StyledChip key={label} label={label} size="small" />
-              ))}
+            {availableSizes.map(({ label }) => (
+              <StyledChip key={label} label={label} size="small" />
+            ))}
             <Typography variant="subtitle2" color="text.primary">
               {`${Math.min(...sizes.map(({ price }) => price))}元${sizes.length > 1 ? "起" : ""}`}
             </Typography>
