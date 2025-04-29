@@ -57,7 +57,6 @@ interface ActionAreaCardProps {
   name: string;
   price: string | number;
   sizes: string[];
-  tags?: string[];
 }
 
 const ActionAreaCard = ({
@@ -67,7 +66,6 @@ const ActionAreaCard = ({
   name,
   price,
   sizes,
-  // tags = [],
 }: ActionAreaCardProps) => {
   const { setDialog } = useDialogStore();
 
@@ -75,7 +73,48 @@ const ActionAreaCard = ({
     setDialog({
       open: true,
       title: name,
-      contentText: `價格：${price}\n尺寸：${sizes.join("、")}`,
+      content: (
+        <Stack spacing={2}>
+          <Box
+            sx={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: "4/3",
+            }}
+          >
+            {imageUrl && (
+              <Image
+                alt={name}
+                fill
+                priority
+                sizes="(min-width: 808px) 50vw, 100vw"
+                src={imageUrl}
+                style={{ objectFit: "cover", borderRadius: 4 }}
+              />
+            )}
+          </Box>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="h6">{name}</Typography>
+            <Typography variant="h6" color="primary">
+              NT${price}
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={1} flexWrap="wrap">
+            {sizes.map((size) => (
+              <Chip key={size} label={size} size="small" />
+            ))}
+          </Stack>
+          {description && (
+            <Typography variant="body2" color="text.secondary">
+              {description}
+            </Typography>
+          )}
+        </Stack>
+      ),
       cancelText: "關閉",
       confirmText: "加入購物車",
       onConfirm: () => {
@@ -85,8 +124,8 @@ const ActionAreaCard = ({
   };
 
   return (
-    <StyledCard inStock={inStock}>
-      <StyledCardActionArea onClick={handleClick}>
+    <StyledCard inStock={inStock} onClick={handleClick}>
+      <StyledCardActionArea>
         <ImageBox>
           {imageUrl && (
             <Image
