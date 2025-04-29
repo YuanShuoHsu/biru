@@ -10,12 +10,15 @@ export const menu: Category[] = [
         name: "經典拿鐵",
         description: "濃醇的義式濃縮搭配綿密牛奶泡沫。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [
-          { label: "M", price: 120 },
-          { label: "L", price: 140 },
-        ],
-        tags: ["popular"],
+        price: 120,
         options: [
+          {
+            name: "size",
+            choices: [
+              { label: "M", extraCost: 0 },
+              { label: "L", extraCost: 20 },
+            ],
+          },
           {
             name: "甜度",
             choices: [
@@ -41,18 +44,22 @@ export const menu: Category[] = [
           },
         ],
         inStock: true,
+        tags: ["popular"],
       },
       {
         id: "coffee-2",
         name: "焦糖瑪奇朵",
         description: "香甜焦糖與香醇濃縮完美結合。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [
-          { label: "M", price: 130 },
-          { label: "L", price: 150 },
-        ],
-        tags: ["new"],
+        price: 130,
         options: [
+          {
+            name: "size",
+            choices: [
+              { label: "M", extraCost: 0 },
+              { label: "L", extraCost: 20 },
+            ],
+          },
           {
             name: "甜度",
             choices: [
@@ -63,6 +70,7 @@ export const menu: Category[] = [
           },
         ],
         inStock: true,
+        tags: ["new"],
       },
     ],
   },
@@ -75,8 +83,7 @@ export const menu: Category[] = [
         name: "茉香綠茶",
         description: "清新茉莉花香與綠茶完美融合。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 80 }],
-        tags: ["lowCaffeine"],
+        price: 80,
         options: [
           {
             name: "冰塊",
@@ -88,18 +95,22 @@ export const menu: Category[] = [
           },
         ],
         inStock: true,
+        tags: ["lowCaffeine"],
       },
       {
         id: "tea-2",
         name: "伯爵鮮奶茶",
         description: "濃醇伯爵茶搭配鮮奶，口感滑順。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [
-          { label: "M", price: 110 },
-          { label: "L", price: 130 },
-        ],
-        tags: ["popular"],
+        price: 110,
         options: [
+          {
+            name: "size",
+            choices: [
+              { label: "M", extraCost: 0 },
+              { label: "L", extraCost: 20 },
+            ],
+          },
           {
             name: "甜度",
             choices: [
@@ -110,6 +121,7 @@ export const menu: Category[] = [
           },
         ],
         inStock: true,
+        tags: ["popular"],
       },
     ],
   },
@@ -122,7 +134,7 @@ export const menu: Category[] = [
         name: "水果氣泡飲",
         description: "新鮮水果搭配氣泡水，清爽解膩。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 140 }],
+        price: 140,
         options: [
           {
             name: "加料",
@@ -139,9 +151,15 @@ export const menu: Category[] = [
         name: "抹茶氣泡拿鐵",
         description: "抹茶與牛奶氣泡完美結合。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "L", price: 150 }],
-        tags: ["new"],
+        price: 150,
+        options: [
+          {
+            name: "size",
+            choices: [{ label: "L", extraCost: 0 }],
+          },
+        ],
         inStock: false,
+        tags: ["new"],
       },
     ],
   },
@@ -154,7 +172,7 @@ export const menu: Category[] = [
         name: "經典可頌",
         description: "外酥內軟的法式可頌。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 60 }],
+        price: 60,
         inStock: true,
       },
       {
@@ -162,9 +180,9 @@ export const menu: Category[] = [
         name: "巧克力蛋糕",
         description: "濃郁黑巧克力海綿蛋糕。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 90 }],
-        tags: ["new"],
+        price: 90,
         inStock: true,
+        tags: ["new"],
       },
     ],
   },
@@ -177,7 +195,7 @@ export const menu: Category[] = [
         name: "火腿起司三明治",
         description: "火腿、起司與生菜夾於法式軟包中。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 150 }],
+        price: 150,
         options: [
           {
             name: "加料",
@@ -194,7 +212,7 @@ export const menu: Category[] = [
         name: "雞肉沙拉",
         description: "新鮮生菜搭配香煎雞肉。",
         imageUrl: "/images/IMG_4590.jpg",
-        sizes: [{ label: "", price: 160 }],
+        price: 160,
         inStock: true,
       },
     ],

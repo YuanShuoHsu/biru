@@ -1,7 +1,5 @@
 import Image from "next/image";
 
-import CardDialogContent from "./CardDialogContent";
-
 import {
   Box,
   Card,
@@ -15,7 +13,8 @@ import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/stores/useDialogStore";
 
-import { Size } from "@/types/menu";
+import { MenuItem } from "@/types/menu";
+import CardDialogContent from "./CardDialogContent";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -56,26 +55,14 @@ const StyledChip = styled(Chip)(() => ({
 }));
 
 interface ActionAreaCardProps {
-  description?: string;
-  imageUrl?: string;
-  inStock: boolean;
-  name: string;
-  sizes: Size[];
+  item: MenuItem;
 }
-
 const ActionAreaCard = ({
-  description,
-  imageUrl,
-  inStock,
-  name,
-  sizes,
+  item: { price, options, name, description, imageUrl, inStock },
 }: ActionAreaCardProps) => {
   const { setDialog } = useDialogStore();
-  // const [quantity, setQuantity] = useState<number>(1);
 
-  const availableSizes = sizes.filter(({ label }) => Boolean(label));
-
-  // const [quantity, setQuantity] = useState<number>(1);
+  const sizes = options?.find(({ name }) => name === "size")?.choices;
 
   const handleDialogClick = () => {
     setDialog({
@@ -83,10 +70,11 @@ const ActionAreaCard = ({
       title: name,
       content: (
         <CardDialogContent
-          availableSizes={availableSizes}
           description={description}
           imageUrl={imageUrl}
           name={name}
+          price={price}
+          sizes={sizes}
         />
       ),
       cancelText: "關閉",
@@ -115,12 +103,12 @@ const ActionAreaCard = ({
         </ImageBox>
         <StyledCardContent>
           <Typography variant="h6">{name}</Typography>
-          <Stack direction="row" alignItems="center" gap={0.5} flexWrap="wrap">
-            {availableSizes.map(({ label }) => (
+          <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
+            {sizes?.map(({ label }) => (
               <StyledChip key={label} label={label} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
-              {`${Math.min(...sizes.map(({ price }) => price))}元${sizes.length > 1 ? "起" : ""}`}
+              {`NT$${price}${sizes ? "起" : ""}`}
             </Typography>
           </Stack>
           {description && (

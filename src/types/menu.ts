@@ -1,13 +1,8 @@
-export interface Size {
-  label: string;
-  price: number;
-}
-
 type Tag = "popular" | "new" | "lowCaffeine";
 
-interface Choice {
+export interface Choice {
   label: string;
-  extraCost?: number;
+  extraCost: number;
 }
 
 interface Option {
@@ -20,7 +15,7 @@ export interface MenuItem {
   name: string;
   description?: string;
   imageUrl?: string;
-  sizes: Size[];
+  price: number;
   tags?: Tag[];
   options?: Option[];
   inStock: boolean;

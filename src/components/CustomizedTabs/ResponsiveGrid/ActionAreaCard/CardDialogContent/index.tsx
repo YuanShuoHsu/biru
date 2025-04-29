@@ -1,32 +1,43 @@
 import Image from "next/image";
 import { useState } from "react";
 
+import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
   Chip,
   FormControl,
   FormLabel,
+  IconButton,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
-import { Size } from "@/types/menu";
+import { Choice } from "@/types/menu";
 
 interface CardDialogContentProps {
-  availableSizes: Size[];
   description?: string;
   imageUrl?: string;
   name: string;
+  price: number;
+  sizes?: Choice[];
 }
 
 const CardDialogContent = ({
-  availableSizes,
   description,
   imageUrl,
   name,
+  price,
+  sizes,
 }: CardDialogContentProps) => {
-  const [selectedSize, setSelectedSize] = useState(availableSizes[0]?.label);
+  console.log(price, sizes);
+  const [selectedSize, setSelectedSize] = useState(sizes ? sizes[0].label : "");
+  const [quantity, setQuantity] = useState(1);
+
+  const extraCost =
+    sizes?.find(({ label }) => label === selectedSize)?.extraCost || 0;
+  const totalPrice = (price + extraCost) * quantity;
 
   return (
     <Stack direction="column" gap={2}>
@@ -48,16 +59,21 @@ const CardDialogContent = ({
           />
         )}
       </Box>
-      {availableSizes.length > 0 && (
+      {description && (
+        <Typography variant="body2" color="text.secondary">
+          {description}
+        </Typography>
+      )}
+      {sizes && (
         <FormControl component="fieldset">
           <FormLabel component="legend">尺寸</FormLabel>
           <Stack direction="row" flexWrap="wrap" gap={1}>
-            {availableSizes.map(({ label, price }) => (
+            {sizes.map(({ label }) => (
               <Chip
                 clickable
                 color={selectedSize === label ? "primary" : "default"}
                 key={label}
-                label={`${label} (${price}元)`}
+                label={`${label}`}
                 onClick={() => setSelectedSize(label)}
               />
             ))}
@@ -66,25 +82,37 @@ const CardDialogContent = ({
       )}
       <TextField
         label="數量"
-        type="number"
         size="small"
-        // inputProps={{ min: 1 }}
-        // value={quantity}
-        // onChange={(e) =>
-        // setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-        // }
+        value={quantity}
+        onChange={(e) =>
+          setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+        }
+        slotProps={{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <IconButton
+                  size="small"
+                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                >
+                  <Remove fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  size="small"
+                  onClick={() => setQuantity((q) => q + 1)}
+                >
+                  <Add fontSize="small" />
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
+        }}
       />
-      {/* <Typography variant="subtitle1">
-            小計：
-            {(sizes.find((s) => s.label === selectedSize)?.price || 0) *
-              quantity}
-            元
-          </Typography> */}
-      {description && (
-        <Typography variant="body2" color="text.secondary">
-          {description}
-        </Typography>
-      )}
+      <Typography variant="subtitle1">小計：{totalPrice} 元</Typography>
     </Stack>
   );
 };
