@@ -146,8 +146,9 @@ const ActionAreaCard = ({
       ),
       cancelText: "關閉",
       confirmText: "加入購物車",
-      onConfirm: () => {
-        console.log("confirmed");
+      onConfirm: async () => {
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+        console.log("confirmed"); // 3 秒後才會執行
       },
     });
   };

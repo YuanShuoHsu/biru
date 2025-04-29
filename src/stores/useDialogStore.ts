@@ -7,8 +7,8 @@ interface DialogOptions {
   contentText?: string;
   cancelText?: string;
   confirmText?: string;
-  onCancel?: () => void;
-  onConfirm?: () => void;
+  onCancel?: () => Promise<void>;
+  onConfirm?: () => Promise<void>;
 }
 
 interface DialogState extends DialogOptions {

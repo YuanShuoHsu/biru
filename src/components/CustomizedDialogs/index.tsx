@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-dialog/#system-CustomizedDialogs.tsx
 
+import { useState } from "react";
+
 import Transition from "@/components/CustomizedDialogs/Transition";
 
 import { Close } from "@mui/icons-material";
@@ -38,6 +40,11 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const CustomizedDialogs = () => {
+  const [cancelLoading, setCancelLoading] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+
+  const loading = cancelLoading || confirmLoading;
+
   const {
     cancelText,
     confirmText,
@@ -50,16 +57,36 @@ const CustomizedDialogs = () => {
     title,
   } = useDialogStore();
 
-  const handleClose = () => setDialog({ open: false });
+  const handleClose = () => {
+    if (loading) return;
 
-  const handleCancel = () => {
-    onCancel?.();
-    handleClose();
+    setDialog({ open: false });
   };
 
-  const handleConfirm = () => {
-    onConfirm?.();
-    handleClose();
+  const handleCancel = async () => {
+    if (loading) return;
+
+    setCancelLoading(true);
+
+    try {
+      await onCancel?.();
+    } finally {
+      setCancelLoading(false);
+      handleClose();
+    }
+  };
+
+  const handleConfirm = async () => {
+    if (loading) return;
+
+    setConfirmLoading(true);
+
+    try {
+      await onConfirm?.();
+    } finally {
+      setConfirmLoading(false);
+      handleClose();
+    }
   };
 
   return (
@@ -85,8 +112,19 @@ const CustomizedDialogs = () => {
         {content}
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleCancel}>{cancelText}</Button>
-        <Button onClick={handleConfirm} autoFocus>
+        <Button
+          loading={cancelLoading}
+          loadingPosition="end"
+          onClick={handleCancel}
+        >
+          {cancelText}
+        </Button>
+        <Button
+          autoFocus
+          loading={confirmLoading}
+          loadingPosition="end"
+          onClick={handleConfirm}
+        >
           {confirmText}
         </Button>
       </DialogActions>
