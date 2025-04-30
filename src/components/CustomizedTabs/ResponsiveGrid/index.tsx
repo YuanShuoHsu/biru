@@ -17,7 +17,7 @@ const ResponsiveGrid = ({ items }: ResponsiveGridProps) => {
             <Grid
               display="flex"
               key={index}
-              size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1 }}
+              size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1.5 }}
             >
               <ActionAreaCard
                 name={name}
