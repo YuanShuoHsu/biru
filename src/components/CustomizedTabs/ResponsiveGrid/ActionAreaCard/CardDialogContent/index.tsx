@@ -12,8 +12,21 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { Choice } from "@/types/menu";
+
+const ImageBox = styled(Box)({
+  position: "relative",
+  width: "100%",
+  aspectRatio: "4/3",
+});
+
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+}));
 
 interface CardDialogContentProps {
   description?: string;
@@ -39,13 +52,7 @@ const CardDialogContent = ({
 
   return (
     <Stack direction="column" gap={2}>
-      <Box
-        sx={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "4/3",
-        }}
-      >
+      <ImageBox>
         {imageUrl && (
           <Image
             alt={name}
@@ -56,15 +63,15 @@ const CardDialogContent = ({
             style={{ objectFit: "cover", borderRadius: 4 }}
           />
         )}
-      </Box>
+      </ImageBox>
       {description && (
         <Typography variant="body2" color="text.secondary">
           {description}
         </Typography>
       )}
       {sizes && (
-        <FormControl component="fieldset">
-          <FormLabel component="legend">尺寸</FormLabel>
+        <StyledFormControl>
+          <FormLabel>尺寸</FormLabel>
           <Stack direction="row" flexWrap="wrap" gap={1}>
             {sizes.map(({ label }) => (
               <Chip
@@ -76,12 +83,10 @@ const CardDialogContent = ({
               />
             ))}
           </Stack>
-        </FormControl>
+        </StyledFormControl>
       )}
-      <FormControl component="fieldset">
-        <FormLabel component="legend" htmlFor="quantity-input">
-          數量
-        </FormLabel>
+      <StyledFormControl>
+        <FormLabel htmlFor="quantity-input">數量</FormLabel>
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -110,7 +115,7 @@ const CardDialogContent = ({
             <Add fontSize="small" />
           </IconButton>
         </Stack>
-      </FormControl>
+      </StyledFormControl>
       <Typography variant="subtitle1">小計：{totalPrice} 元</Typography>
     </Stack>
   );
