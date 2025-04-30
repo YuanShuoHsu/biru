@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { Add, Remove } from "@mui/icons-material";
@@ -44,11 +45,14 @@ const CardDialogContent = ({
   sizes,
 }: CardDialogContentProps) => {
   const [selectedSize, setSelectedSize] = useState(sizes ? sizes[0].label : "");
-  const [quantity, setQuantity] = useState(1);
+  const [count, setCount] = useState(1);
+
+  const { lang } = useParams();
 
   const extraCost =
     sizes?.find(({ label }) => label === selectedSize)?.extraCost || 0;
-  const totalPrice = (price + extraCost) * quantity;
+  const totalPrice = (price + extraCost) * count;
+  const displayPrice = totalPrice.toLocaleString(lang);
 
   return (
     <Stack direction="column" gap={2}>
@@ -89,7 +93,8 @@ const CardDialogContent = ({
         <FormLabel htmlFor="quantity-input">數量</FormLabel>
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            aria-label="reduce"
+            onClick={() => setCount(Math.max(count - 1, 1))}
             size="small"
           >
             <Remove fontSize="small" />
@@ -106,17 +111,28 @@ const CardDialogContent = ({
                 sx: { textAlign: "center" },
               },
             }}
-            value={quantity}
+            value={count}
           />
           <IconButton
-            onClick={() => setQuantity((q) => Math.min(10, q + 1))}
+            aria-label="increase"
+            onClick={() => setCount(Math.min(count + 1, 10))}
             size="small"
           >
             <Add fontSize="small" />
           </IconButton>
         </Stack>
       </StyledFormControl>
-      <Typography variant="subtitle1">小計：{totalPrice} 元</Typography>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+      >
+        <Typography variant="subtitle1">小計</Typography>
+        <Typography variant="h6" fontWeight="bold" color="primary">
+          NT$ {displayPrice}
+        </Typography>
+      </Stack>
     </Stack>
   );
 };
