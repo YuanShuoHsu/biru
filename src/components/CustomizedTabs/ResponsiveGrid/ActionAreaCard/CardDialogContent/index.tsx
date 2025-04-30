@@ -8,7 +8,6 @@ import {
   FormControl,
   FormLabel,
   IconButton,
-  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -79,38 +78,39 @@ const CardDialogContent = ({
           </Stack>
         </FormControl>
       )}
-      <TextField
-        label="數量"
-        size="small"
-        value={quantity}
-        onChange={(e) =>
-          setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-        }
-        slotProps={{
-          input: {
-            startAdornment: (
-              <InputAdornment position="start">
-                <IconButton
-                  size="small"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                >
-                  <Remove fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  size="small"
-                  onClick={() => setQuantity((q) => q + 1)}
-                >
-                  <Add fontSize="small" />
-                </IconButton>
-              </InputAdornment>
-            ),
-          },
-        }}
-      />
+      <FormControl component="fieldset">
+        <FormLabel component="legend" htmlFor="quantity-input">
+          數量
+        </FormLabel>
+        <Stack direction="row" alignItems="center" gap={1}>
+          <IconButton
+            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+            size="small"
+          >
+            <Remove fontSize="small" />
+          </IconButton>
+          <TextField
+            fullWidth
+            id="quantity-input"
+            size="small"
+            slotProps={{
+              input: {
+                readOnly: true,
+              },
+              htmlInput: {
+                sx: { textAlign: "center" },
+              },
+            }}
+            value={quantity}
+          />
+          <IconButton
+            onClick={() => setQuantity((q) => Math.min(10, q + 1))}
+            size="small"
+          >
+            <Add fontSize="small" />
+          </IconButton>
+        </Stack>
+      </FormControl>
       <Typography variant="subtitle1">小計：{totalPrice} 元</Typography>
     </Stack>
   );
