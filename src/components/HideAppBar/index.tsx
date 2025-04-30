@@ -3,10 +3,10 @@
 import HideOnScroll from "./HideOnScroll";
 import MenuAppBar from "./MenuAppBar";
 
-import CustomizedBadges from "@/components/HideAppBar/CustomizedBadges";
+import CustomizedBadges from "@/components/CustomizedBadges";
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
-import { Menu } from "@mui/icons-material";
+import { Menu, ShoppingCart } from "@mui/icons-material";
 import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -34,10 +34,11 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 }));
 
 interface HideAppBarProps {
+  onCartToggle: () => void;
   onDrawerToggle: () => void;
 }
 
-const HideAppBar: React.FC<HideAppBarProps> = ({ onDrawerToggle }) => {
+const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
   return (
     <HideOnScroll>
       <StyledAppBar position="fixed">
@@ -55,7 +56,11 @@ const HideAppBar: React.FC<HideAppBarProps> = ({ onDrawerToggle }) => {
           </Typography>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
-            <CustomizedBadges />
+            <IconButton aria-label="cart" onClick={onCartToggle}>
+              <CustomizedBadges badgeContent={4}>
+                <ShoppingCart />
+              </CustomizedBadges>
+            </IconButton>
           </Stack>
         </StyledToolbar>
       </StyledAppBar>

@@ -4,7 +4,7 @@ import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, CssBaseline, Fab, Stack, Toolbar } from "@mui/material";
+import { Box, CssBaseline, Drawer, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import CustomizedDialogs from "@/components/CustomizedDialogs";
@@ -39,6 +39,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
+  const [cartOpen, setCartOpen] = useState(false);
+
   const pathname = usePathname();
   const { lang } = useParams();
   const isOrderPage = pathname === `/${lang}/order`;
@@ -56,10 +58,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   const handleDrawerTransitionEnd = () => setIsClosing(false);
 
+  const handleCartToggle = () => setCartOpen(!cartOpen);
+
   return (
     <ContainerBox>
       <CssBaseline />
-      <HideAppBar onDrawerToggle={handleDrawerToggle} />
+      <HideAppBar
+        onCartToggle={handleCartToggle}
+        onDrawerToggle={handleDrawerToggle}
+      />
       <Toolbar disableGutters id="back-to-top-anchor" />
       <ResponsiveDrawer
         onDrawerClose={handleDrawerClose}
@@ -67,6 +74,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         onDrawerTransitionEnd={handleDrawerTransitionEnd}
         mobileOpen={mobileOpen}
       />
+      <Drawer
+        anchor="right"
+        open={cartOpen}
+        onClose={handleCartToggle}
+        ModalProps={{ keepMounted: true }}
+      >
+        <Box sx={{ width: 250, p: 2 }}>
+          <h2>Notifications</h2>
+        </Box>
+      </Drawer>
       <MainBox as="main">
         <Toolbar />
         {!isOrderPage && (

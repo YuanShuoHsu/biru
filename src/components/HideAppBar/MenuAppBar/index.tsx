@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { Language } from "@mui/icons-material";
-import { Box, IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
+import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 
 const languages = [
   { label: "繁體中文", lang: "zh-TW" },
@@ -35,7 +35,7 @@ const MenuAppBar = () => {
   const handleCloseLanguageMenu = () => setAnchorElLanguage(null);
 
   return (
-    <Box>
+    <>
       <Tooltip title="切換語系">
         <IconButton
           aria-label="language"
@@ -75,7 +75,7 @@ const MenuAppBar = () => {
           </MenuItem>
         ))}
       </Menu>
-    </Box>
+    </>
   );
 };
 

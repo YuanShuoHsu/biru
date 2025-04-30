@@ -1,9 +1,7 @@
 // https://mui.com/material-ui/react-badge/#system-CustomizedBadges.tsx
 
-import { ShoppingCart } from "@mui/icons-material";
-
 import type { BadgeProps } from "@mui/material";
-import { Badge, IconButton } from "@mui/material";
+import { Badge } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
@@ -15,13 +13,15 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
   },
 }));
 
-const CustomizedBadges = () => {
+interface CustomizedBadgesProps extends BadgeProps {
+  children: React.ReactNode;
+}
+
+const CustomizedBadges = ({ children, ...rest }: CustomizedBadgesProps) => {
   return (
-    <IconButton aria-label="cart">
-      <StyledBadge badgeContent={4} color="secondary">
-        <ShoppingCart />
-      </StyledBadge>
-    </IconButton>
+    <StyledBadge color="secondary" {...rest}>
+      {children}
+    </StyledBadge>
   );
 };
 
