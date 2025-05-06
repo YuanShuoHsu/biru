@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
 import { Add, Remove } from "@mui/icons-material";
 import {
@@ -29,6 +29,15 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+export interface CardDialogContentHandle {
+  getValues: () => {
+    extraCost: number;
+    quantity: number;
+    selectedSize: string;
+    totalPrice: number;
+  };
+}
+
 interface CardDialogContentProps {
   description?: string;
   imageUrl?: string;
@@ -37,22 +46,32 @@ interface CardDialogContentProps {
   sizes?: Choice[];
 }
 
-const CardDialogContent = ({
-  description,
-  imageUrl,
-  name,
-  price,
-  sizes,
-}: CardDialogContentProps) => {
+const CardDialogContent = forwardRef<
+  CardDialogContentHandle,
+  CardDialogContentProps
+>(({ description, imageUrl, name, price, sizes }, ref) => {
+  const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(sizes ? sizes[0].label : "");
-  const [count, setCount] = useState(1);
 
   const { lang } = useParams();
 
   const extraCost =
     sizes?.find(({ label }) => label === selectedSize)?.extraCost || 0;
-  const totalPrice = (price + extraCost) * count;
+  const totalPrice = (price + extraCost) * quantity;
   const displayPrice = totalPrice.toLocaleString(lang);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      getValues: () => ({
+        quantity,
+        extraCost,
+        selectedSize,
+        totalPrice,
+      }),
+    }),
+    [extraCost, quantity, selectedSize, totalPrice],
+  );
 
   return (
     <Stack direction="column" gap={2}>
@@ -94,7 +113,7 @@ const CardDialogContent = ({
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
             aria-label="reduce"
-            onClick={() => setCount(Math.max(count - 1, 1))}
+            onClick={() => setQuantity(Math.max(quantity - 1, 1))}
             size="small"
           >
             <Remove fontSize="small" />
@@ -111,11 +130,11 @@ const CardDialogContent = ({
                 sx: { textAlign: "center" },
               },
             }}
-            value={count}
+            value={quantity}
           />
           <IconButton
             aria-label="increase"
-            onClick={() => setCount(Math.min(count + 1, 10))}
+            onClick={() => setQuantity(Math.min(quantity + 1, 10))}
             size="small"
           >
             <Add fontSize="small" />
@@ -135,6 +154,8 @@ const CardDialogContent = ({
       </Stack>
     </Stack>
   );
-};
+});
+
+CardDialogContent.displayName = "CardDialogContent";
 
 export default CardDialogContent;

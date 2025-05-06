@@ -1,6 +1,10 @@
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useRef } from "react";
 
-import CardDialogContent from "./CardDialogContent";
+import CardDialogContent, {
+  CardDialogContentHandle,
+} from "./CardDialogContent";
 
 import {
   Box,
@@ -15,8 +19,8 @@ import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/stores/useDialogStore";
 
+import { useCartStore } from "@/stores/useCartStore";
 import { Option } from "@/types/menu";
-import { useParams } from "next/navigation";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -57,15 +61,17 @@ const StyledChip = styled(Chip)(() => ({
 }));
 
 interface ActionAreaCardProps {
+  id: string;
+  name: string;
   description?: string;
   imageUrl?: string;
   inStock: boolean;
-  name: string;
   options?: Option[];
   price: number;
 }
 
 const ActionAreaCard = ({
+  id,
   description,
   imageUrl,
   inStock,
@@ -73,9 +79,11 @@ const ActionAreaCard = ({
   options,
   price,
 }: ActionAreaCardProps) => {
-  const { setDialog } = useDialogStore();
-
   const { lang } = useParams();
+  const dialogRef = useRef<CardDialogContentHandle>(null);
+  const { setDialog } = useDialogStore();
+  const { addItem } = useCartStore();
+
   const displayPrice = price.toLocaleString(lang);
 
   const sizes = options?.find(({ name }) => name === "size")?.choices;
@@ -90,13 +98,25 @@ const ActionAreaCard = ({
           imageUrl={imageUrl}
           name={name}
           price={price}
+          ref={dialogRef}
           sizes={sizes}
         />
       ),
       cancelText: "關閉",
       confirmText: "加入購物車",
       onConfirm: async () => {
-        await new Promise((resolve) => setTimeout(resolve, 3000));
+        if (!dialogRef.current) return;
+        const { extraCost, quantity, selectedSize, unitPrice } =
+          dialogRef.current.getValues();
+
+        addItem({
+          id,
+          name,
+          extraCost,
+          quantity,
+          selectedSize,
+          unitPrice,
+        });
       },
     });
   };
