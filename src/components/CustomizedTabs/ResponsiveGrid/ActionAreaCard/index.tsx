@@ -81,8 +81,8 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const { lang } = useParams();
   const dialogRef = useRef<CardDialogContentHandle>(null);
-  const { setDialog } = useDialogStore();
   const { addItem } = useCartStore();
+  const { setDialog } = useDialogStore();
 
   const displayPrice = price.toLocaleString(lang);
 

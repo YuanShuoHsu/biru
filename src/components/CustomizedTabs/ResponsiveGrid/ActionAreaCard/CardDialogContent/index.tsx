@@ -34,7 +34,7 @@ export interface CardDialogContentHandle {
     extraCost: number;
     quantity: number;
     selectedSize: string;
-    totalPrice: number;
+    unitPrice: number;
   };
 }
 
@@ -57,20 +57,20 @@ const CardDialogContent = forwardRef<
 
   const extraCost =
     sizes?.find(({ label }) => label === selectedSize)?.extraCost || 0;
-  const totalPrice = (price + extraCost) * quantity;
-  const displayPrice = totalPrice.toLocaleString(lang);
+  const unitPrice = (price + extraCost) * quantity;
+  const displayPrice = unitPrice.toLocaleString(lang);
 
   useImperativeHandle(
     ref,
     () => ({
       getValues: () => ({
-        quantity,
         extraCost,
+        quantity,
         selectedSize,
-        totalPrice,
+        unitPrice,
       }),
     }),
-    [extraCost, quantity, selectedSize, totalPrice],
+    [extraCost, quantity, selectedSize, unitPrice],
   );
 
   return (
