@@ -1,15 +1,19 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
+import { useParams, usePathname } from "next/navigation";
+
 import HideOnScroll from "./HideOnScroll";
 import MenuAppBar from "./MenuAppBar";
 
 import CustomizedBadges from "@/components/CustomizedBadges";
 
 import { drawerWidth } from "@/constants/responsiveDrawer";
-import { useCartStore } from "@/stores/useCartStore";
+
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useCartStore } from "@/stores/useCartStore";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   width: "100%",
@@ -40,6 +44,10 @@ interface HideAppBarProps {
 }
 
 const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
+  const pathname = usePathname();
+  const { lang } = useParams();
+  const isOrderPage = pathname === `/${lang}/order`;
+
   const { totalQuantity } = useCartStore();
 
   return (
@@ -59,11 +67,13 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
           </Typography>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
-            <IconButton aria-label="cart" onClick={onCartToggle}>
-              <CustomizedBadges badgeContent={totalQuantity}>
-                <ShoppingCart />
-              </CustomizedBadges>
-            </IconButton>
+            {isOrderPage && (
+              <IconButton aria-label="cart" onClick={onCartToggle}>
+                <CustomizedBadges badgeContent={totalQuantity}>
+                  <ShoppingCart />
+                </CustomizedBadges>
+              </IconButton>
+            )}
           </Stack>
         </StyledToolbar>
       </StyledAppBar>
