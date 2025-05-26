@@ -14,7 +14,7 @@ import ResponsiveDrawer from "@/components/ResponsiveDrawer";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 import ScrollTop from "@/components/ScrollTop";
 
-import { drawerWidth } from "@/constants/responsiveDrawers";
+import { drawerWidth } from "@/constants/responsiveDrawer";
 
 const ContainerBox = styled(Box)({
   display: "flex",

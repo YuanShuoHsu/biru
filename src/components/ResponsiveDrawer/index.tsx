@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { drawerWidth } from "@/constants/responsiveDrawers";
+import { drawerWidth } from "@/constants/responsiveDrawer";
 
 import { Mail, MoveToInbox } from "@mui/icons-material";
 import {
