@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { Delete } from "@mui/icons-material";
 import {
   Box,
@@ -42,19 +44,30 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               </IconButton>
             }
           >
-            <ListItemText
-              primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
-              secondary={
-                <>
-                  <Typography variant="body2" component="span">
-                    單價：NT$ {item.price} + 加價：NT$ {item.extraCost}
-                  </Typography>
-                  <Typography variant="body2" component="span">
-                    數量：{item.quantity}，小計：NT$ {item.amount}
-                  </Typography>
-                </>
-              }
-            />
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {item.imageUrl && (
+                <Image
+                  alt={item.name}
+                  height={40}
+                  src={item.imageUrl}
+                  style={{ objectFit: "cover", marginRight: 8 }}
+                  width={40}
+                />
+              )}
+              <ListItemText
+                primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
+                secondary={
+                  <>
+                    <Typography variant="body2" component="span">
+                      單價：NT$ {item.price} + 加價：NT$ {item.extraCost}
+                    </Typography>
+                    <Typography variant="body2" component="span">
+                      數量：{item.quantity}，小計：NT$ {item.amount}
+                    </Typography>
+                  </>
+                }
+              />
+            </Box>
           </ListItem>
         ))}
       </List>

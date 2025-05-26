@@ -6,6 +6,7 @@ export interface CartItem {
   name: string;
   amount: number;
   extraCost: number;
+  imageUrl: string;
   price: number;
   quantity: number;
   size?: string;
@@ -38,12 +39,9 @@ export const useCartStore = create<CartState>()(
               quantity: currentItems[itemKey].quantity + item.quantity,
               amount: currentItems[itemKey].amount + item.amount,
             }
-          : {
-              ...item,
-              id: itemKey,
-            };
+          : item;
 
-        const updatedItemsMap = { [itemKey]: updatedItem, ...currentItems };
+        const updatedItemsMap = { ...currentItems, [itemKey]: updatedItem };
 
         const updatedTotalAmount = Object.values(updatedItemsMap).reduce(
           (sum, item) => sum + item.amount,

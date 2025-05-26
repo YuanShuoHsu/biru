@@ -64,7 +64,7 @@ interface ActionAreaCardProps {
   id: string;
   name: string;
   description?: string;
-  imageUrl?: string;
+  imageUrl: string;
   inStock: boolean;
   options?: Option[];
   price: number;
@@ -116,6 +116,7 @@ const ActionAreaCard = ({
           name,
           amount,
           extraCost,
+          imageUrl,
           price,
           quantity,
           size,

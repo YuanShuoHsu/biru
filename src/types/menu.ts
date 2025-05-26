@@ -14,7 +14,7 @@ export interface MenuItem {
   id: string;
   name: string;
   description?: string;
-  imageUrl?: string;
+  imageUrl: string;
   price: number;
   tags?: Tag[];
   options?: Option[];

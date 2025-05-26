@@ -41,7 +41,7 @@ export interface CardDialogContentImperativeHandle {
 
 interface CardDialogContentProps {
   description?: string;
-  imageUrl?: string;
+  imageUrl: string;
   name: string;
   price: number;
   sizes?: Choice[];

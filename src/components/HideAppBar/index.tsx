@@ -5,7 +5,7 @@ import MenuAppBar from "./MenuAppBar";
 
 import CustomizedBadges from "@/components/CustomizedBadges";
 
-import { drawerWidth } from "@/constants/ResponsiveDrawer";
+import { drawerWidth } from "@/constants/responsiveDrawers";
 import { useCartStore } from "@/stores/useCartStore";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
