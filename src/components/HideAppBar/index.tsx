@@ -60,7 +60,7 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
             <IconButton aria-label="cart" onClick={onCartToggle}>
-              <CustomizedBadges badgeContent={totalQuantity()}>
+              <CustomizedBadges badgeContent={totalQuantity}>
                 <ShoppingCart />
               </CustomizedBadges>
             </IconButton>

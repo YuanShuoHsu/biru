@@ -21,7 +21,6 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   const { itemsList, removeItem, totalAmount } = useCartStore();
-  console.log(itemsList());
 
   const drawer = (
     <Box sx={{ width: 250, p: 2 }}>
@@ -37,7 +36,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               <IconButton
                 edge="end"
                 aria-label="delete"
-                onClick={() => removeItem(item.id)}
+                onClick={() => removeItem(item)}
               >
                 <Delete />
               </IconButton>
@@ -61,7 +60,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
       </List>
       <Divider />
       <Box mt={2}>
-        <Typography variant="subtitle1">總計：NT$ {totalAmount()}</Typography>
+        <Typography variant="subtitle1">總計：NT$ {totalAmount}</Typography>
       </Box>
     </Box>
   );

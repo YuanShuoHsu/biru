@@ -13,41 +13,78 @@ export interface CartItem {
 
 interface CartState {
   itemsMap: Record<string, CartItem>;
+  totalAmount: number;
+  totalQuantity: number;
   itemsList: () => CartItem[];
   addItem: (item: CartItem) => void;
   clearCart: () => void;
-  removeItem: (id: string) => void;
-  totalAmount: () => number;
-  totalQuantity: () => number;
+  removeItem: (item: CartItem) => void;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       itemsMap: {},
+      totalAmount: 0,
+      totalQuantity: 0,
       itemsList: () => Object.values(get().itemsMap),
-      addItem: (item) =>
-        set((state) => ({
-          itemsMap: { ...state.itemsMap, [item.id]: item },
-        })),
-      clearCart: () => set({ itemsMap: {} }),
-      removeItem: (id: string) =>
-        set((state) => {
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          const { [id]: _, ...rest } = state.itemsMap;
+      addItem: (item) => {
+        const currentItems = get().itemsMap;
+        const itemKey = item.id;
 
-          return { itemsMap: rest };
-        }),
-      totalAmount: () =>
-        Object.values(get().itemsMap).reduce(
+        const updatedItem = currentItems[itemKey]
+          ? {
+              ...currentItems[itemKey],
+              quantity: currentItems[itemKey].quantity + item.quantity,
+              amount: currentItems[itemKey].amount + item.amount,
+            }
+          : {
+              ...item,
+              id: itemKey,
+            };
+
+        const updatedItemsMap = { [itemKey]: updatedItem, ...currentItems };
+
+        const updatedTotalAmount = Object.values(updatedItemsMap).reduce(
           (sum, item) => sum + item.amount,
           0,
-        ),
-      totalQuantity: () =>
-        Object.values(get().itemsMap).reduce(
+        );
+
+        const updatedTotalQuantity = Object.values(updatedItemsMap).reduce(
           (sum, item) => sum + item.quantity,
           0,
-        ),
+        );
+
+        set({
+          itemsMap: updatedItemsMap,
+          totalAmount: updatedTotalAmount,
+          totalQuantity: updatedTotalQuantity,
+        });
+      },
+      clearCart: () => set({ itemsMap: {}, totalQuantity: 0, totalAmount: 0 }),
+      removeItem: (item) => {
+        const currentItems = get().itemsMap;
+        const itemKey = item.id;
+
+        const updatedItemsMap = { ...currentItems };
+        delete updatedItemsMap[itemKey];
+
+        const updatedTotalAmount = Object.values(updatedItemsMap).reduce(
+          (sum, item) => sum + item.amount,
+          0,
+        );
+
+        const updatedTotalQuantity = Object.values(updatedItemsMap).reduce(
+          (sum, item) => sum + item.quantity,
+          0,
+        );
+
+        set({
+          itemsMap: updatedItemsMap,
+          totalAmount: updatedTotalAmount,
+          totalQuantity: updatedTotalQuantity,
+        });
+      },
     }),
     {
       name: "biru-cart",
