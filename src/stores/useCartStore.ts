@@ -17,6 +17,7 @@ interface CartState {
   totalAmount: number;
   totalQuantity: number;
   itemsList: () => CartItem[];
+  getItemQuantity: (itemId: string) => number;
   addItem: (item: CartItem) => void;
   clearCart: () => void;
   removeItem: (item: CartItem) => void;
@@ -29,6 +30,11 @@ export const useCartStore = create<CartState>()(
       totalAmount: 0,
       totalQuantity: 0,
       itemsList: () => Object.values(get().itemsMap),
+      getItemQuantity: (itemId) => {
+        const currentItems = get().itemsMap;
+
+        return currentItems[itemId]?.quantity || 0;
+      },
       addItem: (item) => {
         const currentItems = get().itemsMap;
         const itemKey = item.id;

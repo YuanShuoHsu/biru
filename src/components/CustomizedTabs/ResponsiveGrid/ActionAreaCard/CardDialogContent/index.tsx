@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { forwardRef, useImperativeHandle, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+
+import { MAX_QUANTITY } from "@/constants/cart";
 
 import { Add, Remove } from "@mui/icons-material";
 import {
@@ -14,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useCartStore } from "@/stores/useCartStore";
 
 import { Choice } from "@/types/menu";
 
@@ -40,9 +44,10 @@ export interface CardDialogContentImperativeHandle {
 }
 
 interface CardDialogContentProps {
+  id: string;
+  name: string;
   description?: string;
   imageUrl: string;
-  name: string;
   price: number;
   sizes?: Choice[];
 }
@@ -50,11 +55,18 @@ interface CardDialogContentProps {
 const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ description, imageUrl, name, price, sizes }, ref) => {
+>(({ id, name, description, imageUrl, price, sizes }, ref) => {
   const [quantity, setQuantity] = useState(1);
   const [size, setSize] = useState(sizes ? sizes[0].label : "");
 
   const { lang } = useParams();
+
+  const { getItemQuantity } = useCartStore();
+  const maxQuantity = MAX_QUANTITY - getItemQuantity(`${id}_${size}`);
+
+  useEffect(() => {
+    setQuantity(maxQuantity ? 1 : 0);
+  }, [maxQuantity, size]);
 
   const extraCost = sizes?.find(({ label }) => label === size)?.extraCost || 0;
   const amount = (price + extraCost) * quantity;
@@ -114,7 +126,7 @@ const CardDialogContent = forwardRef<
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
             aria-label="reduce"
-            onClick={() => setQuantity(Math.max(quantity - 1, 1))}
+            onClick={() => setQuantity((prev) => Math.max(prev - 1, 0))}
             size="small"
           >
             <Remove fontSize="small" />
@@ -135,7 +147,9 @@ const CardDialogContent = forwardRef<
           />
           <IconButton
             aria-label="increase"
-            onClick={() => setQuantity(Math.min(quantity + 1, 10))}
+            onClick={() =>
+              setQuantity((prev) => Math.min(prev + 1, maxQuantity))
+            }
             size="small"
           >
             <Add fontSize="small" />

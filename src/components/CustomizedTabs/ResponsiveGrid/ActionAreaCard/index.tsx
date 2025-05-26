@@ -96,9 +96,10 @@ const ActionAreaCard = ({
       title: name,
       content: (
         <CardDialogContent
+          id={id}
+          name={name}
           description={description}
           imageUrl={imageUrl}
-          name={name}
           price={price}
           ref={dialogRef}
           sizes={sizes}
