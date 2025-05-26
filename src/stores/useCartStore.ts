@@ -1,21 +1,24 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
-interface CartItem {
+export interface CartItem {
   id: string;
   name: string;
+  amount: number;
   extraCost: number;
+  price: number;
   quantity: number;
-  selectedSize?: string;
-  unitPrice: number;
+  size?: string;
 }
 
 interface CartState {
   itemsMap: Record<string, CartItem>;
   itemsList: () => CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
   clearCart: () => void;
+  removeItem: (id: string) => void;
+  totalAmount: () => number;
+  totalQuantity: () => number;
 }
 
 export const useCartStore = create<CartState>()(
@@ -27,6 +30,7 @@ export const useCartStore = create<CartState>()(
         set((state) => ({
           itemsMap: { ...state.itemsMap, [item.id]: item },
         })),
+      clearCart: () => set({ itemsMap: {} }),
       removeItem: (id: string) =>
         set((state) => {
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -34,7 +38,16 @@ export const useCartStore = create<CartState>()(
 
           return { itemsMap: rest };
         }),
-      clearCart: () => set({ itemsMap: {} }),
+      totalAmount: () =>
+        Object.values(get().itemsMap).reduce(
+          (sum, item) => sum + item.amount,
+          0,
+        ),
+      totalQuantity: () =>
+        Object.values(get().itemsMap).reduce(
+          (sum, item) => sum + item.quantity,
+          0,
+        ),
     }),
     {
       name: "biru-cart",

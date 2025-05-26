@@ -6,6 +6,7 @@ import MenuAppBar from "./MenuAppBar";
 import CustomizedBadges from "@/components/CustomizedBadges";
 
 import { drawerWidth } from "@/constants/ResponsiveDrawer";
+import { useCartStore } from "@/stores/useCartStore";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -39,6 +40,8 @@ interface HideAppBarProps {
 }
 
 const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
+  const { totalQuantity } = useCartStore();
+
   return (
     <HideOnScroll>
       <StyledAppBar position="fixed">
@@ -57,7 +60,7 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
             <IconButton aria-label="cart" onClick={onCartToggle}>
-              <CustomizedBadges badgeContent={4}>
+              <CustomizedBadges badgeContent={totalQuantity()}>
                 <ShoppingCart />
               </CustomizedBadges>
             </IconButton>
@@ -67,4 +70,5 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
     </HideOnScroll>
   );
 };
+
 export default HideAppBar;

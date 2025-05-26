@@ -4,9 +4,10 @@ import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, CssBaseline, Drawer, Fab, Stack, Toolbar } from "@mui/material";
+import { Box, CssBaseline, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import CartDrawer from "@/components/CartDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
@@ -74,16 +75,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         onDrawerTransitionEnd={handleDrawerTransitionEnd}
         mobileOpen={mobileOpen}
       />
-      <Drawer
-        anchor="right"
-        open={cartOpen}
-        onClose={handleCartToggle}
-        ModalProps={{ keepMounted: true }}
-      >
-        <Box sx={{ width: 250, p: 2 }}>
-          <h2>Notifications</h2>
-        </Box>
-      </Drawer>
+      <CartDrawer onClose={handleCartToggle} open={cartOpen} />
       <MainBox as="main">
         <Toolbar />
         {!isOrderPage && (

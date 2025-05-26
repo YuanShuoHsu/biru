@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 import { useRef } from "react";
 
 import CardDialogContent, {
-  CardDialogContentHandle,
+  CardDialogContentImperativeHandle,
 } from "./CardDialogContent";
 
 import {
@@ -80,7 +80,9 @@ const ActionAreaCard = ({
   price,
 }: ActionAreaCardProps) => {
   const { lang } = useParams();
-  const dialogRef = useRef<CardDialogContentHandle>(null);
+
+  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
+
   const { addItem } = useCartStore();
   const { setDialog } = useDialogStore();
 
@@ -106,16 +108,17 @@ const ActionAreaCard = ({
       confirmText: "加入購物車",
       onConfirm: async () => {
         if (!dialogRef.current) return;
-        const { extraCost, quantity, selectedSize, unitPrice } =
+        const { amount, extraCost, price, quantity, size } =
           dialogRef.current.getValues();
 
         addItem({
-          id,
+          id: `${id}_${size}`,
           name,
+          amount,
           extraCost,
+          price,
           quantity,
-          selectedSize,
-          unitPrice,
+          size,
         });
       },
     });

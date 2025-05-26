@@ -29,12 +29,13 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-export interface CardDialogContentHandle {
+export interface CardDialogContentImperativeHandle {
   getValues: () => {
+    amount: number;
     extraCost: number;
+    price: number;
     quantity: number;
-    selectedSize: string;
-    unitPrice: number;
+    size: string;
   };
 }
 
@@ -47,30 +48,30 @@ interface CardDialogContentProps {
 }
 
 const CardDialogContent = forwardRef<
-  CardDialogContentHandle,
+  CardDialogContentImperativeHandle,
   CardDialogContentProps
 >(({ description, imageUrl, name, price, sizes }, ref) => {
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState(sizes ? sizes[0].label : "");
+  const [size, setSize] = useState(sizes ? sizes[0].label : "");
 
   const { lang } = useParams();
 
-  const extraCost =
-    sizes?.find(({ label }) => label === selectedSize)?.extraCost || 0;
-  const unitPrice = (price + extraCost) * quantity;
-  const displayPrice = unitPrice.toLocaleString(lang);
+  const extraCost = sizes?.find(({ label }) => label === size)?.extraCost || 0;
+  const amount = (price + extraCost) * quantity;
+  const displayPrice = amount.toLocaleString(lang);
 
   useImperativeHandle(
     ref,
     () => ({
       getValues: () => ({
+        amount,
         extraCost,
+        price,
         quantity,
-        selectedSize,
-        unitPrice,
+        size,
       }),
     }),
-    [extraCost, quantity, selectedSize, unitPrice],
+    [amount, extraCost, price, quantity, size],
   );
 
   return (
@@ -99,10 +100,10 @@ const CardDialogContent = forwardRef<
             {sizes.map(({ label }) => (
               <Chip
                 clickable
-                color={selectedSize === label ? "primary" : "default"}
+                color={size === label ? "primary" : "default"}
                 key={label}
                 label={`${label}`}
-                onClick={() => setSelectedSize(label)}
+                onClick={() => setSize(label)}
               />
             ))}
           </Stack>
