@@ -106,7 +106,6 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               {/* <FormLabel htmlFor="quantity-input">數量</FormLabel> */}
               <Stack direction="row" alignItems="center" gap={1}>
                 <IconButton
-                  variant="outlined"
                   aria-label="reduce"
                   // disabled={quantity <= minQuantity}
                   // onClick={() =>

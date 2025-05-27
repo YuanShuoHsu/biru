@@ -1,1 +1,1 @@
-export const MAX_QUANTITY = 15;
+export const MAX_QUANTITY = 20;
