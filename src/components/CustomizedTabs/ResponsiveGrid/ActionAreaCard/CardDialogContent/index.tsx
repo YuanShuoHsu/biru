@@ -9,6 +9,7 @@ import {
   Box,
   Chip,
   FormControl,
+  FormHelperText,
   FormLabel,
   IconButton,
   Stack,
@@ -63,10 +64,11 @@ const CardDialogContent = forwardRef<
 
   const { getItemQuantity } = useCartStore();
   const maxQuantity = MAX_QUANTITY - getItemQuantity(`${id}_${size}`);
+  const minQuantity = maxQuantity > 0 ? 1 : 0;
 
   useEffect(() => {
-    setQuantity(maxQuantity ? 1 : 0);
-  }, [maxQuantity, size]);
+    setQuantity(minQuantity);
+  }, [minQuantity, size]);
 
   const extraCost = sizes?.find(({ label }) => label === size)?.extraCost || 0;
   const amount = (price + extraCost) * quantity;
@@ -126,12 +128,16 @@ const CardDialogContent = forwardRef<
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
             aria-label="reduce"
-            onClick={() => setQuantity((prev) => Math.max(prev - 1, 0))}
+            disabled={quantity <= minQuantity}
+            onClick={() =>
+              setQuantity((prev) => Math.max(prev - 1, minQuantity))
+            }
             size="small"
           >
             <Remove fontSize="small" />
           </IconButton>
           <TextField
+            disabled={!quantity}
             fullWidth
             id="quantity-input"
             size="small"
@@ -147,6 +153,7 @@ const CardDialogContent = forwardRef<
           />
           <IconButton
             aria-label="increase"
+            disabled={quantity >= maxQuantity}
             onClick={() =>
               setQuantity((prev) => Math.min(prev + 1, maxQuantity))
             }
@@ -155,6 +162,9 @@ const CardDialogContent = forwardRef<
             <Add fontSize="small" />
           </IconButton>
         </Stack>
+        {!minQuantity && (
+          <FormHelperText error>最多只能購買 {MAX_QUANTITY} 件</FormHelperText>
+        )}
       </StyledFormControl>
       <Stack
         direction="row"
