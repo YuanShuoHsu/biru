@@ -36,57 +36,56 @@ export const useCartStore = create<CartState>()(
         return currentItems[itemId]?.quantity || 0;
       },
       addItem: (item) => {
-        const currentItems = get().itemsMap;
+        const { itemsMap } = get();
         const itemKey = item.id;
+        const existing = itemsMap[itemKey];
 
-        const updatedItem = currentItems[itemKey]
+        const updatedItem = existing
           ? {
-              ...currentItems[itemKey],
-              quantity: currentItems[itemKey].quantity + item.quantity,
-              amount: currentItems[itemKey].amount + item.amount,
+              ...existing,
+              quantity: existing.quantity + item.quantity,
+              amount: existing.amount + item.amount,
             }
-          : item;
+          : { ...item };
 
-        const updatedItemsMap = { ...currentItems, [itemKey]: updatedItem };
+        const newMap = { ...itemsMap, [itemKey]: updatedItem };
 
-        const updatedTotalAmount = Object.values(updatedItemsMap).reduce(
+        const totalAmount = Object.values(newMap).reduce(
           (sum, item) => sum + item.amount,
           0,
         );
 
-        const updatedTotalQuantity = Object.values(updatedItemsMap).reduce(
+        const totalQuantity = Object.values(newMap).reduce(
           (sum, item) => sum + item.quantity,
           0,
         );
 
         set({
-          itemsMap: updatedItemsMap,
-          totalAmount: updatedTotalAmount,
-          totalQuantity: updatedTotalQuantity,
+          itemsMap: newMap,
+          totalAmount,
+          totalQuantity,
         });
       },
       clearCart: () => set({ itemsMap: {}, totalQuantity: 0, totalAmount: 0 }),
       removeItem: (item) => {
-        const currentItems = get().itemsMap;
-        const itemKey = item.id;
+        const { itemsMap } = get();
+        const newMap = { ...itemsMap };
+        delete newMap[item.id];
 
-        const updatedItemsMap = { ...currentItems };
-        delete updatedItemsMap[itemKey];
-
-        const updatedTotalAmount = Object.values(updatedItemsMap).reduce(
+        const totalAmount = Object.values(itemsMap).reduce(
           (sum, item) => sum + item.amount,
           0,
         );
 
-        const updatedTotalQuantity = Object.values(updatedItemsMap).reduce(
+        const totalQuantity = Object.values(itemsMap).reduce(
           (sum, item) => sum + item.quantity,
           0,
         );
 
         set({
-          itemsMap: updatedItemsMap,
-          totalAmount: updatedTotalAmount,
-          totalQuantity: updatedTotalQuantity,
+          itemsMap: itemsMap,
+          totalAmount,
+          totalQuantity,
         });
       },
     }),
