@@ -127,7 +127,7 @@ const CardDialogContent = forwardRef<
         <FormLabel htmlFor="quantity-input">數量</FormLabel>
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
-            aria-label="reduce"
+            aria-label="decrease"
             disabled={quantity <= minQuantity}
             onClick={() =>
               setQuantity((prev) => Math.max(prev - 1, minQuantity))

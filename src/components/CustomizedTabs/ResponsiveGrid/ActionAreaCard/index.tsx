@@ -83,7 +83,7 @@ const ActionAreaCard = ({
 
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { addItem } = useCartStore();
+  const { updateItem } = useCartStore();
   const { setDialog } = useDialogStore();
 
   const displayPrice = price.toLocaleString(lang);
@@ -112,7 +112,7 @@ const ActionAreaCard = ({
         const { amount, extraCost, price, quantity, size } =
           dialogRef.current.getValues();
 
-        addItem({
+        updateItem({
           id: `${id}_${size}`,
           name,
           amount,

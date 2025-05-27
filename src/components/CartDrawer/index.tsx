@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { Add, Remove } from "@mui/icons-material";
+import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
   Divider,
@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useCartStore } from "@/stores/useCartStore";
+import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 const ImageBox = styled(Box)({
   position: "relative",
@@ -30,7 +30,7 @@ const ImageBox = styled(Box)({
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   display: "flex",
-  flexDirection: "column",
+  flexDirection: "row",
   gap: theme.spacing(1),
 }));
 
@@ -40,13 +40,34 @@ interface CartDrawerProps {
 }
 
 const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
-  const { addItem, itemsList, totalAmount } = useCartStore();
+  const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
+
+  console.log(itemsList());
+
+  const handleDecrease = (item: CartItem) => {
+    if (item.quantity > 1) {
+      updateItem({
+        ...item,
+        quantity: -1,
+        amount: -(item.price + item.extraCost),
+      });
+    }
+  };
+
+  const handleIncrease = (item: CartItem) => {
+    if (item.quantity < 10) {
+      updateItem({
+        ...item,
+        quantity: 1,
+        amount: item.price + item.extraCost,
+      });
+    }
+  };
 
   const drawer = (
     <Box sx={{ width: 250 }}>
       <Toolbar>
         <Typography variant="h6">購物車清單</Typography>
-        {/* <Divider /> */}
       </Toolbar>
       <Divider />
       <List
@@ -64,15 +85,6 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               alignItems="flex-start"
               sx={{ display: "flex", gap: 2 }}
               disablePadding
-              // secondaryAction={
-              //   <IconButton
-              //     aria-label="delete"
-              //     edge="end"
-              //     onClick={() => removeItem(item)}
-              //   >
-              //     <Delete />
-              //   </IconButton>
-              // }
             >
               <ListItemAvatar>
                 <ImageBox>
@@ -103,55 +115,47 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               />
             </ListItem>
             <StyledFormControl>
-              {/* <FormLabel htmlFor="quantity-input">數量</FormLabel> */}
-              <Stack direction="row" alignItems="center" gap={1}>
+              {item.quantity === 1 ? (
                 <IconButton
-                  aria-label="reduce"
-                  // disabled={quantity <= minQuantity}
-                  // onClick={() =>
-                  //   setQuantity((prev) =>
-                  //     Math.max(prev - 1, minQuantity),
-                  //   )
-                  // }
+                  aria-label="delete"
+                  onClick={() => deleteItem(item)}
+                  size="small"
+                >
+                  <Delete fontSize="small" />
+                </IconButton>
+              ) : (
+                <IconButton
+                  aria-label="decrease"
+                  disabled={item.quantity <= 1}
+                  onClick={() => handleDecrease(item)}
                   size="small"
                 >
                   <Remove fontSize="small" />
                 </IconButton>
-                <TextField
-                  // disabled={!quantity}
-                  fullWidth
-                  id="quantity-input"
-                  size="small"
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                    htmlInput: {
-                      sx: { textAlign: "center" },
-                    },
-                  }}
-                  value={item.quantity}
-                />
-                <IconButton
-                  aria-label="increase"
-                  // disabled={quantity >= maxQuantity}
-                  // onClick={() =>
-                  //   setQuantity((prev) =>
-                  //     Math.min(prev + 1, maxQuantity),
-                  //   )
-                  // }
-                  onClick={() =>
-                    addItem({
-                      ...item,
-                      quantity: 1,
-                      amount: item.price + item.extraCost,
-                    })
-                  }
-                  size="small"
-                >
-                  <Add fontSize="small" />
-                </IconButton>
-              </Stack>
+              )}
+              <TextField
+                // disabled={!quantity}
+                fullWidth
+                id="quantity-input"
+                size="small"
+                slotProps={{
+                  input: {
+                    readOnly: true,
+                  },
+                  htmlInput: {
+                    sx: { textAlign: "center" },
+                  },
+                }}
+                value={item.quantity}
+              />
+              <IconButton
+                aria-label="increase"
+                // disabled={quantity >= maxQuantity}
+                onClick={() => handleIncrease(item)}
+                size="small"
+              >
+                <Add fontSize="small" />
+              </IconButton>
             </StyledFormControl>
             {index < itemsList().length - 1 && (
               <Divider variant="inset" component="li" />
