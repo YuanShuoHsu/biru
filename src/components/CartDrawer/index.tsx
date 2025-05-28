@@ -22,7 +22,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { MAX_QUANTITY } from "@/constants/cart";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
+import { useParams } from "next/navigation";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -46,6 +48,9 @@ interface CartDrawerProps {
 const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
 
+  const { lang } = useParams();
+  const displayTotalAmount = totalAmount.toLocaleString(lang);
+
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
       updateItem({
@@ -57,7 +62,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   };
 
   const handleIncrease = (item: CartItem) => {
-    if (item.quantity < 10) {
+    if (item.quantity < MAX_QUANTITY) {
       updateItem({
         ...item,
         quantity: 1,
@@ -97,7 +102,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               sx={{ display: "flex", gap: 2 }}
               disablePadding
             >
-              <ListItemAvatar>
+              <ListItemAvatar sx={{ margin: 0 }}>
                 <ImageBox>
                   {item.imageUrl && (
                     <Image
@@ -123,6 +128,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                     </Typography>
                   </>
                 }
+                sx={{ margin: 0 }}
               />
             </ListItem>
             <StyledFormControl>
@@ -145,7 +151,6 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                 </IconButton>
               )}
               <TextField
-                // disabled={!quantity}
                 fullWidth
                 id="quantity-input"
                 size="small"
@@ -161,7 +166,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               />
               <IconButton
                 aria-label="increase"
-                // disabled={quantity >= maxQuantity}
+                disabled={item.quantity >= MAX_QUANTITY}
                 onClick={() => handleIncrease(item)}
                 size="small"
               >
@@ -198,7 +203,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
           >
             <Typography variant="subtitle1">總計</Typography>
             <Typography variant="h6" fontWeight="bold" color="primary">
-              NT$ {totalAmount}
+              NT$ {displayTotalAmount}
             </Typography>
           </Stack>
           <Button
