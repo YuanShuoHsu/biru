@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { Home, ShoppingCart } from "@mui/icons-material";
+import { Home, Payment, ShoppingCart } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -18,6 +18,10 @@ const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
   "/order": {
     icon: ShoppingCart,
     label: "Order",
+  },
+  "/order/checkout": {
+    icon: Payment,
+    label: "Checkout",
   },
 };
 

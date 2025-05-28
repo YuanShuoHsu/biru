@@ -56,7 +56,7 @@ const PermanentDrawer = styled(Drawer)(({ theme }) => ({
 }));
 
 const navItems = [
-  { href: "/", text: "Home" },
+  { href: "", text: "Home" },
   { href: "/order", text: "Order" },
 ];
 
@@ -84,13 +84,19 @@ const ResponsiveDrawer = ({
       <List>
         {navItems.map(({ href, text }, index) => {
           const localizedHref = `/${lang}${href}`;
+          const isHome = href === "";
+
+          const selected = isHome
+            ? pathname === localizedHref
+            : pathname === localizedHref ||
+              pathname.startsWith(`${localizedHref}/`);
 
           return (
             <ListItem key={href} disablePadding>
               <ListItemButton
                 component={Link}
                 href={localizedHref}
-                selected={pathname === localizedHref}
+                selected={selected}
                 onClick={isSmUp ? undefined : onDrawerToggle}
               >
                 <ListItemIcon>
