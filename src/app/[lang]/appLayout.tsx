@@ -79,7 +79,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <MainBox as="main">
         <Toolbar />
         {!isOrderPage && (
-          <Stack height={40} direction="row" alignItems="center">
+          <Stack minHeight={40} direction="row" alignItems="center">
             <RouterBreadcrumbs />
           </Stack>
         )}
