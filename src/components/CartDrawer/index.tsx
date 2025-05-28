@@ -22,11 +22,13 @@ import { styled } from "@mui/material/styles";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
-const ImageBox = styled(Box)({
+const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
-  width: "100%",
-  aspectRatio: "4/3",
-});
+  width: 80,
+  height: 80,
+  borderRadius: theme.shape.borderRadius,
+  overflow: "hidden",
+}));
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   display: "flex",
@@ -66,10 +68,19 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
 
   const drawer = (
     <Box sx={{ width: 250 }}>
-      <Toolbar>
-        <Typography variant="h6">購物車清單</Typography>
-      </Toolbar>
-      <Divider />
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          backgroundColor: "background.paper",
+          zIndex: 1,
+        }}
+      >
+        <Toolbar>
+          <Typography variant="h6">購物車清單</Typography>
+        </Toolbar>
+        <Divider />
+      </Box>
       <List
         disablePadding
         sx={{
@@ -92,10 +103,10 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                     <Image
                       alt={item.name}
                       fill
-                      priority
+                      draggable={false}
                       sizes="(min-width: 808px) 50vw, 100vw"
                       src={item.imageUrl}
-                      style={{ objectFit: "cover", borderRadius: 4 }}
+                      style={{ objectFit: "cover" }}
                     />
                   )}
                 </ImageBox>
@@ -163,13 +174,22 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
           </Stack>
         ))}
       </List>
-      <Divider />
-      <Toolbar sx={{ justifyContent: "space-between" }}>
-        <Typography variant="subtitle1">總計</Typography>
-        <Typography variant="h6" fontWeight="bold" color="primary">
-          NT$ {totalAmount}
-        </Typography>
-      </Toolbar>
+      <Box
+        sx={{
+          position: "sticky",
+          bottom: 0,
+          backgroundColor: "background.paper",
+          zIndex: 1,
+        }}
+      >
+        <Divider />
+        <Toolbar sx={{ justifyContent: "space-between" }}>
+          <Typography variant="subtitle1">總計</Typography>
+          <Typography variant="h6" fontWeight="bold" color="primary">
+            NT$ {totalAmount}
+          </Typography>
+        </Toolbar>
+      </Box>
     </Box>
   );
 

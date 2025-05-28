@@ -22,11 +22,13 @@ import { useCartStore } from "@/stores/useCartStore";
 
 import { Choice } from "@/types/menu";
 
-const ImageBox = styled(Box)({
+const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
   aspectRatio: "4/3",
-});
+  borderRadius: theme.shape.borderRadius,
+  overflow: "hidden",
+}));
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   display: "flex",
@@ -95,10 +97,10 @@ const CardDialogContent = forwardRef<
           <Image
             alt={name}
             fill
-            priority
+            draggable={false}
             sizes="(min-width: 808px) 50vw, 100vw"
             src={imageUrl}
-            style={{ objectFit: "cover", borderRadius: 4 }}
+            style={{ objectFit: "cover" }}
           />
         )}
       </ImageBox>

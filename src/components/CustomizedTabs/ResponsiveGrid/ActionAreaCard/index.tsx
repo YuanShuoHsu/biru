@@ -112,8 +112,10 @@ const ActionAreaCard = ({
         const { amount, extraCost, price, quantity, size } =
           dialogRef.current.getValues();
 
+        const itemId = size ? `${id}_${size}` : id;
+
         updateItem({
-          id: `${id}_${size}`,
+          id: itemId,
           name,
           amount,
           extraCost,
