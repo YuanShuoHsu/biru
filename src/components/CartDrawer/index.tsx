@@ -1,10 +1,12 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   FormControl,
@@ -43,8 +45,6 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
-
-  console.log(itemsList());
 
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
@@ -183,12 +183,34 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
         }}
       >
         <Divider />
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <Typography variant="subtitle1">總計</Typography>
-          <Typography variant="h6" fontWeight="bold" color="primary">
-            NT$ {totalAmount}
-          </Typography>
-        </Toolbar>
+        <Box
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          <Stack
+            flexDirection="row"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Typography variant="subtitle1">總計</Typography>
+            <Typography variant="h6" fontWeight="bold" color="primary">
+              NT$ {totalAmount}
+            </Typography>
+          </Stack>
+          <Button
+            component={Link}
+            fullWidth
+            href="/order/checkout"
+            onClick={onClose}
+            variant="contained"
+          >
+            前往結帳
+          </Button>
+        </Box>
       </Box>
     </Box>
   );
