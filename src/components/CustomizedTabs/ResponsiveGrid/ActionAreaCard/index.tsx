@@ -45,6 +45,7 @@ const ImageBox = styled(Box)(() => ({
 }));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
+  width: "100%",
   flex: 1,
   display: "flex",
   flexDirection: "column",
