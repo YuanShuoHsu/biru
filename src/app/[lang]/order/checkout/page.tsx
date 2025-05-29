@@ -51,9 +51,6 @@ const Checkout = () => {
 
   return (
     <>
-      {/* <Typography variant="h4" align="center" color="textPrimary">
-        結帳
-      </Typography> */}
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
           <Accordion defaultExpanded disableGutters>
@@ -61,11 +58,26 @@ const Checkout = () => {
               aria-controls="panel1-content"
               expandIcon={<ExpandMore />}
               id="panel1-header"
+              sx={{
+                "& .MuiAccordionSummary-content": {
+                  display: "flex",
+                  alignItems: "center",
+                },
+              }}
             >
-              <Typography component="span" sx={{ width: "33%", flexShrink: 0 }}>
+              <Typography
+                component="span"
+                sx={{ width: "33%", flexShrink: 0 }}
+                variant="subtitle1"
+              >
                 總計
               </Typography>
-              <Typography color="primary" component="span" fontWeight="bold">
+              <Typography
+                color="primary"
+                component="span"
+                fontWeight="bold"
+                variant="h6"
+              >
                 NT$ {totalAmount.toLocaleString(lang)}
               </Typography>
             </AccordionSummary>
@@ -141,7 +153,6 @@ const Checkout = () => {
                 value={customerInfo.table}
                 onChange={handleInfoChange}
                 fullWidth
-                InputProps={{ sx: { bgcolor: "white" } }}
               />
               <FormControl component="fieldset" sx={{ mt: 1 }}>
                 <FormLabel component="legend">付款方式</FormLabel>

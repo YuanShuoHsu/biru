@@ -174,8 +174,15 @@ const CardDialogContent = forwardRef<
         alignItems="center"
         flexWrap="wrap"
       >
-        <Typography variant="subtitle1">小計</Typography>
-        <Typography variant="h6" fontWeight="bold" color="primary">
+        <Typography component="span" variant="subtitle1">
+          小計
+        </Typography>
+        <Typography
+          color="primary"
+          component="span"
+          fontWeight="bold"
+          variant="h6"
+        >
           NT$ {displayPrice}
         </Typography>
       </Stack>

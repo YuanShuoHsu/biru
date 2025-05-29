@@ -198,8 +198,15 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Typography variant="subtitle1">總計</Typography>
-            <Typography variant="h6" fontWeight="bold" color="primary">
+            <Typography component="span" variant="subtitle1">
+              總計
+            </Typography>
+            <Typography
+              color="primary"
+              component="span"
+              fontWeight="bold"
+              variant="h6"
+            >
               NT$ {totalAmount.toLocaleString(lang)}
             </Typography>
           </Stack>
