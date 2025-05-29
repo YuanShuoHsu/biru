@@ -49,7 +49,6 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
 
   const { lang } = useParams();
-  const displayTotalAmount = totalAmount.toLocaleString(lang);
 
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
@@ -172,7 +171,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               </Stack>
             </StyledFormControl>
             {index < itemsList().length - 1 && (
-              <Divider variant="inset" component="li" />
+              <Divider component="li" variant="inset" />
             )}
           </Stack>
         ))}
@@ -201,7 +200,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
           >
             <Typography variant="subtitle1">總計</Typography>
             <Typography variant="h6" fontWeight="bold" color="primary">
-              NT$ {displayTotalAmount}
+              NT$ {totalAmount.toLocaleString(lang)}
             </Typography>
           </Stack>
           <Button

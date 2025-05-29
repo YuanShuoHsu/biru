@@ -1,11 +1,15 @@
 "use client";
 
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
+import { ExpandMore } from "@mui/icons-material";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
-  Container,
   Divider,
   FormControl,
   FormControlLabel,
@@ -17,15 +21,17 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 
 import { useCartStore } from "@/stores/useCartStore";
-import { brown } from "@mui/material/colors";
 
 const Checkout = () => {
   const { itemsList, totalAmount } = useCartStore();
+
+  const { lang } = useParams();
 
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -44,52 +50,59 @@ const Checkout = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4, py: 6, borderRadius: 2 }}>
-      <Typography variant="h4" align="center" color="textPrimary">
+    <>
+      {/* <Typography variant="h4" align="center" color="textPrimary">
         結帳
-      </Typography>
+      </Typography> */}
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
-          <Paper
-            sx={{
-              p: 3,
-              bgcolor: "background.paper",
-              borderRadius: 2,
-              boxShadow: 3,
-            }}
-          >
-            <Typography variant="h6" gutterBottom color="textSecondary">
-              訂單摘要
-            </Typography>
-            <List>
-              {itemsList().length > 0 ? (
-                itemsList().map((item) => (
-                  <React.Fragment key={`${item.id}-${item.size ?? "default"}`}>
-                    <ListItem sx={{ py: 1 }}>
+          <Accordion defaultExpanded disableGutters>
+            <AccordionSummary
+              aria-controls="panel1-content"
+              expandIcon={<ExpandMore />}
+              id="panel1-header"
+            >
+              <Typography component="span" sx={{ width: "33%", flexShrink: 0 }}>
+                總計
+              </Typography>
+              <Typography color="primary" component="span" fontWeight="bold">
+                NT$ {totalAmount.toLocaleString(lang)}
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{
+                p: 2,
+                borderTop: "1px solid rgba(0, 0, 0, .125)",
+              }}
+            >
+              <List
+                disablePadding
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                {itemsList().map((item, index) => (
+                  <Stack key={item.id} gap={2}>
+                    <ListItem disablePadding>
                       <ListItemText
-                        primary={`${item.name}${item.size ? ` (${item.size})` : ""}`}
-                        secondary={`數量: ${item.quantity} × $${item.price.toFixed(2)}`}
+                        primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
+                        secondary={`數量: ${item.quantity} x NT$ ${item.price.toLocaleString(lang)}`}
+                        sx={{ m: 0 }}
                       />
-                      <Typography variant="body1" color="textPrimary">
-                        ${(item.price * item.quantity).toFixed(2)}
+                      <Typography variant="body1" color="primary">
+                        NT$ {(item.price * item.quantity).toLocaleString(lang)}
                       </Typography>
                     </ListItem>
-                    <Divider sx={{ bgcolor: brown[200] }} />
-                  </React.Fragment>
-                ))
-              ) : (
-                <ListItem>
-                  <ListItemText primary="購物車內無商品" />
-                </ListItem>
-              )}
-              <ListItem sx={{ py: 1 }}>
-                <ListItemText primary="總計" />
-                <Typography variant="h6" color="textPrimary">
-                  ${totalAmount.toFixed(2)}
-                </Typography>
-              </ListItem>
-            </List>
-          </Paper>
+                    {index < itemsList().length - 1 && (
+                      <Divider component="li" />
+                    )}
+                  </Stack>
+                ))}
+              </List>
+            </AccordionDetails>
+          </Accordion>
         </Grid>
         <Grid size={{ xs: 12, md: 6 }}>
           <Paper
@@ -158,7 +171,7 @@ const Checkout = () => {
           </Paper>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 
