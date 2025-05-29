@@ -91,7 +91,11 @@ const Checkout = () => {
                         secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                         sx={{ m: 0 }}
                       />
-                      <Typography variant="body1" color="primary">
+                      <Typography
+                        color="primary"
+                        fontWeight="bold"
+                        variant="body2"
+                      >
                         NT$ {(item.price * item.quantity).toLocaleString(lang)}
                       </Typography>
                     </ListItem>

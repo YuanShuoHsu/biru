@@ -121,7 +121,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                   secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                   sx={{ margin: 0 }}
                 />
-                <Typography variant="body2" color="primary">
+                <Typography color="primary" fontWeight="bold" variant="body2">
                   NT$ {item.amount.toLocaleString(lang)}
                 </Typography>
               </Box>
