@@ -42,7 +42,6 @@ const MenuAppBar = () => {
           aria-controls="menu-appbar"
           aria-haspopup="true"
           onClick={handleOpenLanguageMenu}
-          //   color="inherit"
         >
           <Language />
         </IconButton>

@@ -1,15 +1,24 @@
 // https://mui.com/material-ui/react-drawer/#system-ResponsiveDrawer.tsx
+// https://mui.com/material-ui/react-list/#NestedList.tsx
 
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { Fragment, useState } from "react";
 
 import { drawerWidth } from "@/constants/responsiveDrawer";
 
-import { Mail, MoveToInbox } from "@mui/icons-material";
+import {
+  ExpandLess,
+  ExpandMore,
+  Home,
+  ShoppingCart,
+} from "@mui/icons-material";
 import {
   Box,
+  Collapse,
   Divider,
   Drawer,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
@@ -55,9 +64,21 @@ const PermanentDrawer = styled(Drawer)(({ theme }) => ({
   },
 }));
 
-const navItems = [
-  { href: "", text: "Home" },
-  { href: "/order", text: "Order" },
+interface NavItem {
+  href: string;
+  icon: React.ComponentType;
+  text: string;
+  children?: NavItem[];
+}
+
+const navItems: NavItem[] = [
+  { href: "", icon: Home, text: "Home" },
+  {
+    // children: [{ href: "/order/checkout", icon: Payment, text: "Checkout" }],
+    href: "/order",
+    icon: ShoppingCart,
+    text: "Order",
+  },
 ];
 
 interface ResponsiveDrawerProps {
@@ -77,37 +98,65 @@ const ResponsiveDrawer = ({
   const pathname = usePathname();
   const { lang } = useParams();
 
+  const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+
+  const handleIconButtonToggle = (href: string) =>
+    setOpenMap((prev) => ({ ...prev, [href]: !prev[href] }));
+
+  const renderItems = (items: NavItem[], depth = 0) =>
+    items.map(({ children, href, icon: Icon, text }) => {
+      const hasChildren = children?.length;
+
+      const fullPath = `/${lang}${href}`;
+      const selected = pathname === fullPath;
+
+      const paddingLeft = 2 + depth * 2;
+
+      return (
+        <Fragment key={href}>
+          <ListItem
+            disablePadding
+            secondaryAction={
+              hasChildren && (
+                <IconButton
+                  edge="end"
+                  onClick={() => handleIconButtonToggle(href)}
+                  size="small"
+                >
+                  {openMap[href] ? <ExpandLess /> : <ExpandMore />}
+                </IconButton>
+              )
+            }
+          >
+            <ListItemButton
+              component={Link}
+              href={fullPath}
+              onClick={isSmUp ? undefined : onDrawerToggle}
+              selected={selected}
+              sx={{ pl: paddingLeft }}
+            >
+              <ListItemIcon>
+                <Icon />
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+          {hasChildren && (
+            <Collapse in={openMap[href]} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                {renderItems(children!, depth + 1)}
+              </List>
+            </Collapse>
+          )}
+        </Fragment>
+      );
+    });
+
   const drawer = (
     <Box>
       <Toolbar />
       <Divider />
-      <List>
-        {navItems.map(({ href, text }, index) => {
-          const localizedHref = `/${lang}${href}`;
-          const isHome = href === "";
-
-          const selected = isHome
-            ? pathname === localizedHref
-            : pathname === localizedHref ||
-              pathname.startsWith(`${localizedHref}/`);
-
-          return (
-            <ListItem key={href} disablePadding>
-              <ListItemButton
-                component={Link}
-                href={localizedHref}
-                selected={selected}
-                onClick={isSmUp ? undefined : onDrawerToggle}
-              >
-                <ListItemIcon>
-                  {index % 2 === 0 ? <MoveToInbox /> : <Mail />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
+      <List>{renderItems(navItems)}</List>
     </Box>
   );
 

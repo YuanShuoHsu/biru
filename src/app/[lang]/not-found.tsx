@@ -1,11 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { useParams } from "next/navigation";
 
 const NotFound = () => {
+  const { lang } = useParams();
+
   return (
     <div>
       <h2>Not Found</h2>
       <p>Could not find requested resource</p>
-      <Link href="/">Return Home</Link>
+      <Link href={`/${lang}`}>Return Home</Link>
     </div>
   );
 };

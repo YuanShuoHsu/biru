@@ -10,7 +10,14 @@ import CustomizedBadges from "@/components/CustomizedBadges";
 import { drawerWidth } from "@/constants/responsiveDrawer";
 
 import { Menu, ShoppingCart } from "@mui/icons-material";
-import { AppBar, IconButton, Stack, Toolbar, Typography } from "@mui/material";
+import {
+  AppBar,
+  IconButton,
+  Stack,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
@@ -45,8 +52,11 @@ interface HideAppBarProps {
 
 const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
-  const { lang } = useParams();
-  const isOrderPage = pathname === `/${lang}/order`;
+  const { lang, tableNumber } = useParams();
+
+  const basePath = `/${lang}/order/${tableNumber}`;
+  const showShoppingCartButton =
+    pathname === basePath || pathname === `${basePath}/checkout`;
 
   const { totalQuantity } = useCartStore();
 
@@ -67,12 +77,14 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
           </Typography>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
-            {isOrderPage && (
-              <IconButton aria-label="cart" onClick={onCartToggle}>
-                <CustomizedBadges badgeContent={totalQuantity}>
-                  <ShoppingCart />
-                </CustomizedBadges>
-              </IconButton>
+            {showShoppingCartButton && (
+              <Tooltip title="購物車">
+                <IconButton aria-label="cart" onClick={onCartToggle}>
+                  <CustomizedBadges badgeContent={totalQuantity}>
+                    <ShoppingCart />
+                  </CustomizedBadges>
+                </IconButton>
+              </Tooltip>
             )}
           </Stack>
         </StyledToolbar>

@@ -48,7 +48,7 @@ interface CartDrawerProps {
 const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
 
-  const { lang } = useParams();
+  const { lang, tableNumber } = useParams();
 
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
@@ -213,7 +213,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
           <Button
             component={Link}
             fullWidth
-            href="/order/checkout"
+            href={`/order/${tableNumber}/checkout`}
             onClick={onClose}
             variant="contained"
           >

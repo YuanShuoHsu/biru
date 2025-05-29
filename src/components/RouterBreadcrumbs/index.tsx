@@ -15,6 +15,10 @@ interface BreadcrumbItem {
 }
 
 const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
+  "/": {
+    icon: Home,
+    label: "Home",
+  },
   "/order": {
     icon: ShoppingCart,
     label: "Order",
@@ -51,13 +55,15 @@ const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang } = useParams();
 
+  const { icon: HomeIcon, label: homeLabel } = breadcrumbMap["/"];
+
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
       <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
-        <Home fontSize="inherit" />
-        Home
+        <HomeIcon fontSize="inherit" />
+        {homeLabel}
       </StyledLinkRouter>
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
