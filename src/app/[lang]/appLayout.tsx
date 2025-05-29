@@ -10,6 +10,7 @@ import { styled } from "@mui/material/styles";
 import CartDrawer from "@/components/CartDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
+import OrderSearch from "@/components/OrderSearch";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 import ScrollTop from "@/components/ScrollTop";
@@ -78,12 +79,19 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       <CartDrawer onClose={handleCartToggle} open={cartOpen} />
       <MainBox as="main">
         <Toolbar />
-        {!isOrderPage && (
-          <Stack minHeight={40} direction="row" alignItems="center">
+        <Stack height="100%" direction="column" spacing={2}>
+          <Stack
+            minHeight={40}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            gap={2}
+          >
             <RouterBreadcrumbs />
+            {isOrderPage && <OrderSearch />}
           </Stack>
-        )}
-        {children}
+          {children}
+        </Stack>
       </MainBox>
       <ScrollTop>
         <Fab aria-label="scroll back to top" size="small">
