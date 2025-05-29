@@ -88,7 +88,7 @@ const Checkout = () => {
                     <ListItem disablePadding>
                       <ListItemText
                         primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                        secondary={`數量: ${item.quantity} x NT$ ${item.price.toLocaleString(lang)}`}
+                        secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                         sx={{ m: 0 }}
                       />
                       <Typography variant="body1" color="primary">
