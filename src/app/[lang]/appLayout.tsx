@@ -44,8 +44,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const [cartOpen, setCartOpen] = useState(false);
 
   const pathname = usePathname();
-  const { lang } = useParams();
-  const isOrderPage = pathname === `/${lang}/order`;
+  const { lang, tableNumber } = useParams();
+  const isOrderPage = pathname === `/${lang}/order/${tableNumber}`;
 
   const handleDrawerClose = () => {
     setIsClosing(true);
