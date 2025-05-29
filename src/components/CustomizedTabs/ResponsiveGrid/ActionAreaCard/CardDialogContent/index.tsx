@@ -164,7 +164,7 @@ const CardDialogContent = forwardRef<
             <Add fontSize="small" />
           </IconButton>
         </Stack>
-        {!minQuantity && (
+        {quantity === maxQuantity && (
           <FormHelperText error>最多只能購買 {MAX_QUANTITY} 件</FormHelperText>
         )}
       </StyledFormControl>

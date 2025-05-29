@@ -28,15 +28,15 @@ import { useParams } from "next/navigation";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
-  width: 80,
-  height: 80,
+  width: 60,
+  height: 60,
   borderRadius: theme.shape.borderRadius,
   overflow: "hidden",
 }));
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   display: "flex",
-  flexDirection: "row",
+  flexDirection: "column",
   gap: theme.spacing(1),
 }));
 
@@ -116,62 +116,60 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                   )}
                 </ImageBox>
               </ListItemAvatar>
-              <ListItemText
-                primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
-                secondary={
-                  <>
-                    <Typography variant="body2" component="span">
-                      單價：NT$ {item.price} + 加價：NT$ {item.extraCost}
-                    </Typography>
-                    <Typography variant="body2" component="span">
-                      數量：{item.quantity}，小計：NT$ {item.amount}
-                    </Typography>
-                  </>
-                }
-                sx={{ margin: 0 }}
-              />
+              <Box display="flex" flexDirection="column">
+                <ListItemText
+                  primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
+                  // secondary={``}
+                  sx={{ margin: 0 }}
+                />
+                <Typography variant="body2" color="primary">
+                  NT$ {item.amount.toLocaleString(lang)}
+                </Typography>
+              </Box>
             </ListItem>
             <StyledFormControl>
-              {item.quantity === 1 ? (
+              <Stack direction="row" alignItems="center" gap={1}>
+                {item.quantity === 1 ? (
+                  <IconButton
+                    aria-label="delete"
+                    onClick={() => deleteItem(item)}
+                    size="small"
+                  >
+                    <Delete fontSize="small" />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    aria-label="decrease"
+                    disabled={item.quantity <= 1}
+                    onClick={() => handleDecrease(item)}
+                    size="small"
+                  >
+                    <Remove fontSize="small" />
+                  </IconButton>
+                )}
+                <TextField
+                  fullWidth
+                  id="quantity-input"
+                  size="small"
+                  slotProps={{
+                    input: {
+                      readOnly: true,
+                    },
+                    htmlInput: {
+                      sx: { textAlign: "center" },
+                    },
+                  }}
+                  value={item.quantity}
+                />
                 <IconButton
-                  aria-label="delete"
-                  onClick={() => deleteItem(item)}
+                  aria-label="increase"
+                  disabled={item.quantity >= MAX_QUANTITY}
+                  onClick={() => handleIncrease(item)}
                   size="small"
                 >
-                  <Delete fontSize="small" />
+                  <Add fontSize="small" />
                 </IconButton>
-              ) : (
-                <IconButton
-                  aria-label="decrease"
-                  disabled={item.quantity <= 1}
-                  onClick={() => handleDecrease(item)}
-                  size="small"
-                >
-                  <Remove fontSize="small" />
-                </IconButton>
-              )}
-              <TextField
-                fullWidth
-                id="quantity-input"
-                size="small"
-                slotProps={{
-                  input: {
-                    readOnly: true,
-                  },
-                  htmlInput: {
-                    sx: { textAlign: "center" },
-                  },
-                }}
-                value={item.quantity}
-              />
-              <IconButton
-                aria-label="increase"
-                disabled={item.quantity >= MAX_QUANTITY}
-                onClick={() => handleIncrease(item)}
-                size="small"
-              >
-                <Add fontSize="small" />
-              </IconButton>
+              </Stack>
             </StyledFormControl>
             {index < itemsList().length - 1 && (
               <Divider variant="inset" component="li" />
