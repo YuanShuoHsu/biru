@@ -22,6 +22,7 @@ const Order = () => {
               <Button
                 fullWidth
                 onClick={() => handleClick(number)}
+                sx={{ minWidth: 0 }}
                 variant="outlined"
               >
                 {number}

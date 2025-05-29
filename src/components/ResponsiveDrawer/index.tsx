@@ -108,7 +108,10 @@ const ResponsiveDrawer = ({
       const hasChildren = children?.length;
 
       const fullPath = `/${lang}${href}`;
-      const selected = pathname === fullPath;
+      const isHome = href === "";
+      const selected = isHome
+        ? pathname === fullPath
+        : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
 
       const paddingLeft = 2 + depth * 2;
 
