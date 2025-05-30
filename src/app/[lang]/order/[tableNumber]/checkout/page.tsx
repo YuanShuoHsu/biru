@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
+import useSWRMutation from "swr/mutation";
 
 import { ExpandMore } from "@mui/icons-material";
 import {
@@ -28,26 +29,47 @@ import {
 
 import { useCartStore } from "@/stores/useCartStore";
 
+const sendRequest = async (
+  url: string,
+  { arg }: { arg: { username: string } },
+) => {
+  return fetch(url, {
+    method: "POST",
+    body: JSON.stringify(arg),
+  }).then((res) => res.json());
+};
+
 const Checkout = () => {
-  const { itemsList, totalAmount } = useCartStore();
-
-  const { lang } = useParams();
-
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     table: "",
     paymentMethod: "現金",
   });
 
+  const { itemsList, totalAmount } = useCartStore();
+
+  const { lang } = useParams();
+
+  const { trigger } = useSWRMutation("/api/user", sendRequest);
+
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setCustomerInfo({ ...customerInfo, [name]: value });
   };
 
-  const handlePlaceOrder = () => {
-    // console.log("訂單已下達", { customerInfo, items });
-    // router.push("/order-success");
+  const handlePlaceOrder = async () => {
+    try {
+      const result = await trigger({ username: "johndoe" });
+      console.log("下單成功，伺服器回應：", result);
+      // 例如：router.push("/order-success");
+    } catch (err) {
+      console.error("下單過程出錯：", err);
+    }
   };
+  //   () => {
+  //   // console.log("訂單已下達", { customerInfo, items });
+  //   // router.push("/order-success");
+  // };
 
   return (
     <>
