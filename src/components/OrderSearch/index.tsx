@@ -11,7 +11,7 @@ const OrderSearch = () => {
   const { orderSearchText, setOrderSearchText } = useOrderSearchStore();
 
   useEffect(() => {
-    setOrderSearchText("");
+    return () => setOrderSearchText("");
   }, [setOrderSearchText]);
 
   return (

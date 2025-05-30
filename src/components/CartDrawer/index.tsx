@@ -118,7 +118,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
               <Box display="flex" flexDirection="column">
                 <ListItemText
                   primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
-                  secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                  // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                   sx={{ margin: 0 }}
                 />
                 <Typography color="primary" fontWeight="bold" variant="body2">
