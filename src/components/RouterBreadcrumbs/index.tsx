@@ -23,7 +23,7 @@ const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
     icon: ShoppingCart,
     label: "Order",
   },
-  "/order/checkout": {
+  "/order/[tableNumber]/checkout": {
     icon: Payment,
     label: "Checkout",
   },
@@ -53,7 +53,7 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang } = useParams();
+  const { lang, tableNumber } = useParams();
 
   const { icon: HomeIcon, label: homeLabel } = breadcrumbMap["/"];
 
@@ -71,8 +71,13 @@ const RouterBreadcrumbs = () => {
         const key = `/${subPath}`;
         const to = `/${lang}/${subPath}`;
 
+        const normalizedKey =
+          key === `/order/${tableNumber}/checkout`
+            ? "/order/[tableNumber]/checkout"
+            : key;
+
         const { label = value, icon: Icon = () => null } =
-          breadcrumbMap[key] || {};
+          breadcrumbMap[normalizedKey] || {};
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
