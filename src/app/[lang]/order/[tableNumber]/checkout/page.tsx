@@ -50,7 +50,7 @@ const Checkout = () => {
 
   const { lang } = useParams();
 
-  const { trigger } = useSWRMutation("/api/user", sendRequest);
+  const { trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -62,8 +62,8 @@ const Checkout = () => {
       const result = await trigger({ username: "johndoe" });
       console.log("下單成功，伺服器回應：", result);
       // 例如：router.push("/order-success");
-    } catch (err) {
-      console.error("下單過程出錯：", err);
+    } catch (error) {
+      console.error("下單過程出錯：", error);
     }
   };
   //   () => {

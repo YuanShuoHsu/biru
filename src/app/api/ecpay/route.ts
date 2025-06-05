@@ -14,19 +14,11 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const contentType = res.headers.get("content-type") || "";
-
-    let data;
-    if (contentType.includes("application/json")) {
-      data = await res.json();
-    } else {
-      const text = await res.text();
-      data = { message: text };
-    }
+    const data = await res.json();
 
     return NextResponse.json({ data }, { status: res.status });
   } catch (error) {
-    console.error("user proxy error:", error);
+    console.error("ecpay proxy error:", error);
 
     return NextResponse.json(
       { error: "Internal Server Error" },
