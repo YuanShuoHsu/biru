@@ -10,10 +10,10 @@ import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 
 const languages = [
   { label: "繁體中文", lang: "zh-TW" },
-  { label: "简体中文", lang: "zh-CN" },
   { label: "English", lang: "en" },
   { label: "日本語", lang: "ja" },
   { label: "한국어", lang: "ko" },
+  { label: "简体中文", lang: "zh-CN" },
 ];
 
 const MenuAppBar = () => {

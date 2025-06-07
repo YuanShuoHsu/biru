@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 
 import { match } from "@formatjs/intl-localematcher";
 
-const locales = ["zh-TW", "zh-CN", "en", "ja", "ko"];
+const locales = ["zh-TW", "en", "ja", "ko", "zh-CN"];
 const defaultLocale = "zh-TW";
 
 const getLocale = (request: NextRequest) => {

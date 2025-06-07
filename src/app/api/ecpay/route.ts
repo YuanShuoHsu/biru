@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
-    const base = process.env.NEST_API_URL;
+    const base = process.env.NEXT_PUBLIC_NEST_API_URL;
     const { pathname } = new URL(request.url);
     const body = await request.json();
 
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
 
-    const data = await res.json();
+    const data = await res.text();
 
     return NextResponse.json({ data }, { status: res.status });
   } catch (error) {

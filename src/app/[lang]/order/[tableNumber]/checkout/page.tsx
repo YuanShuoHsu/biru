@@ -28,11 +28,21 @@ import {
 } from "@mui/material";
 
 import { useCartStore } from "@/stores/useCartStore";
+import { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 
-const sendRequest = async (
-  url: string,
-  { arg }: { arg: { username: string } },
-) => {
+const mapToEcpayLanguage = (() => {
+  const map: Record<string, "" | "ENG" | "KOR" | "JPN" | "CHI"> = {
+    "zh-TW": "",
+    en: "ENG",
+    ja: "JPN",
+    ko: "KOR",
+    "zh-CN": "CHI",
+  };
+
+  return (locale: string): "" | "ENG" | "KOR" | "JPN" | "CHI" => map[locale];
+})();
+
+const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) => {
   return fetch(url, {
     method: "POST",
     body: JSON.stringify(arg),
@@ -58,18 +68,37 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
+    const dto = {
+      base: {
+        TotalAmount: totalAmount,
+        TradeDesc: "餐點付款",
+        ItemName: itemsList()
+          .map(
+            (item) =>
+              `${item.name}${item.size ? `(${item.size})` : ""} x${item.quantity}`,
+          )
+          .join("#"),
+        NeedExtraPaidInfo: "Y" as const,
+        Language: mapToEcpayLanguage(lang as string),
+      },
+    };
+
     try {
-      const result = await trigger({ username: "johndoe" });
-      console.log("下單成功，伺服器回應：", result);
-      // 例如：router.push("/order-success");
+      const { data } = await trigger(dto);
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, "text/html");
+      const form = doc.querySelector("form");
+
+      const newWindow = window.open("", "_blank");
+      if (newWindow && form) {
+        newWindow.document.body.appendChild(form);
+        form.submit();
+      }
+      // router.push("/order-success");
     } catch (error) {
       console.error("下單過程出錯：", error);
     }
   };
-  //   () => {
-  //   // console.log("訂單已下達", { customerInfo, items });
-  //   // router.push("/order-success");
-  // };
 
   return (
     <>
