@@ -75,7 +75,7 @@ const Checkout = () => {
         ItemName: itemsList()
           .map(
             (item) =>
-              `${item.name}${item.size ? `(${item.size})` : ""} x${item.quantity}`,
+              `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,
           )
           .join("#"),
         NeedExtraPaidInfo: "Y" as const,
@@ -85,6 +85,7 @@ const Checkout = () => {
 
     try {
       const { data } = await trigger(dto);
+
       const parser = new DOMParser();
       const doc = parser.parseFromString(data, "text/html");
       const form = doc.querySelector("form");
