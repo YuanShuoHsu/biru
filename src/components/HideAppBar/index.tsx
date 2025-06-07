@@ -25,6 +25,7 @@ import { useCartStore } from "@/stores/useCartStore";
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   width: "100%",
   marginLeft: 0,
+  backgroundColor: "red",
 
   [theme.breakpoints.up("sm")]: {
     width: `calc(100% - ${drawerWidth}px)`,
