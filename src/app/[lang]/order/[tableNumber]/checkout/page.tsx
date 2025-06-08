@@ -21,6 +21,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  NoSsr,
   Paper,
   Radio,
   RadioGroup,
@@ -31,7 +32,6 @@ import {
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import IsClient from "@/components/IsClient";
 import { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 
 type EcpayLanguage = "" | "ENG" | "KOR" | "JPN" | "CHI";
@@ -90,7 +90,7 @@ const OrderTableNumberCheckout = () => {
               `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,
           )
           .join("#"),
-        ChoosePayment: "Credit" as const,
+        // ChoosePayment: "Credit" as const,
         ClientBackURL,
         OrderResultURL,
         NeedExtraPaidInfo: "Y" as const,
@@ -160,7 +160,7 @@ const OrderTableNumberCheckout = () => {
                   gap: 2,
                 }}
               >
-                <IsClient fallback={<Typography>載入中...</Typography>}>
+                <NoSsr defer fallback={<Typography>載入中...</Typography>}>
                   {itemsList().map((item, index) => (
                     <Stack key={item.id} gap={2}>
                       <ListItem disablePadding>
@@ -183,7 +183,7 @@ const OrderTableNumberCheckout = () => {
                       )}
                     </Stack>
                   ))}
-                </IsClient>
+                </NoSsr>
               </List>
             </AccordionDetails>
           </Accordion>
