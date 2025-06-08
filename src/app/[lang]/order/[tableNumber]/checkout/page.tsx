@@ -58,7 +58,7 @@ const Checkout = () => {
 
   const { itemsList, totalAmount } = useCartStore();
 
-  const { lang } = useParams();
+  const { lang, tableNumber } = useParams();
 
   const { trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
@@ -68,6 +68,10 @@ const Checkout = () => {
   };
 
   const handlePlaceOrder = async () => {
+    const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
+    const ClientBackURL = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
+    const OrderResultURL = ClientBackURL;
+
     const dto = {
       base: {
         TotalAmount: totalAmount,
@@ -80,6 +84,8 @@ const Checkout = () => {
           .join("#"),
         NeedExtraPaidInfo: "Y" as const,
         Language: mapToEcpayLanguage(lang as string),
+        ClientBackURL,
+        OrderResultURL,
       },
     };
 
