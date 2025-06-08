@@ -156,6 +156,13 @@ pnpm add @mui/material-nextjs @emotion/cache
 # https://mui.com/material-ui/customization/theme-components/
 ```
 
+## notistack
+
+```bash
+# https://notistack.com/
+pnpm add notistack
+```
+
 ## Swiper
 
 ```bash

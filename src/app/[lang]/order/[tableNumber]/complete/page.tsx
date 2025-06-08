@@ -11,7 +11,6 @@ const OrderTableNumberComplete = () => {
   const router = useRouter();
 
   const status = searchParams.get("status");
-  console.log(status);
   const isSuccess = status === null;
 
   return (

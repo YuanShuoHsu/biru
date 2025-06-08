@@ -2,6 +2,8 @@
 
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
+
+import { useSnackbar } from "notistack";
 import useSWRMutation from "swr/mutation";
 
 import { ExpandMore } from "@mui/icons-material";
@@ -28,10 +30,14 @@ import {
 } from "@mui/material";
 
 import { useCartStore } from "@/stores/useCartStore";
+
+import IsClient from "@/components/IsClient";
 import { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 
+type EcpayLanguage = "" | "ENG" | "KOR" | "JPN" | "CHI";
+
 const mapToEcpayLanguage = (() => {
-  const map: Record<string, "" | "ENG" | "KOR" | "JPN" | "CHI"> = {
+  const map: Record<string, EcpayLanguage> = {
     "zh-TW": "",
     en: "ENG",
     ja: "JPN",
@@ -39,7 +45,7 @@ const mapToEcpayLanguage = (() => {
     "zh-CN": "CHI",
   };
 
-  return (locale: string): "" | "ENG" | "KOR" | "JPN" | "CHI" => map[locale];
+  return (locale: string): EcpayLanguage => map[locale];
 })();
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) => {
@@ -59,6 +65,8 @@ const OrderTableNumberCheckout = () => {
   const { itemsList, totalAmount } = useCartStore();
 
   const { lang, tableNumber } = useParams();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const { trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
@@ -94,16 +102,14 @@ const OrderTableNumberCheckout = () => {
 
       const parser = new DOMParser();
       const doc = parser.parseFromString(data, "text/html");
-      const form = doc.querySelector("form");
+      const form = doc.getElementById("ecpayForm");
 
-      const newWindow = window.open("", "_blank");
-      if (newWindow && form) {
-        newWindow.document.body.appendChild(form);
+      if (form instanceof HTMLFormElement) {
+        document.body.appendChild(form);
         form.submit();
       }
-      // router.push("/order-success");
     } catch (error) {
-      console.error("下單過程出錯：", error);
+      enqueueSnackbar(String(error), { variant: "error" });
     }
   };
 
@@ -153,27 +159,30 @@ const OrderTableNumberCheckout = () => {
                   gap: 2,
                 }}
               >
-                {itemsList().map((item, index) => (
-                  <Stack key={item.id} gap={2}>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                        secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                        sx={{ m: 0 }}
-                      />
-                      <Typography
-                        color="primary"
-                        fontWeight="bold"
-                        variant="body2"
-                      >
-                        NT$ {(item.price * item.quantity).toLocaleString(lang)}
-                      </Typography>
-                    </ListItem>
-                    {index < itemsList().length - 1 && (
-                      <Divider component="li" />
-                    )}
-                  </Stack>
-                ))}
+                <IsClient fallback={<Typography>載入中...</Typography>}>
+                  {itemsList().map((item, index) => (
+                    <Stack key={item.id} gap={2}>
+                      <ListItem disablePadding>
+                        <ListItemText
+                          primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
+                          secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                          sx={{ m: 0 }}
+                        />
+                        <Typography
+                          color="primary"
+                          fontWeight="bold"
+                          variant="body2"
+                        >
+                          NT${" "}
+                          {(item.price * item.quantity).toLocaleString(lang)}
+                        </Typography>
+                      </ListItem>
+                      {index < itemsList().length - 1 && (
+                        <Divider component="li" />
+                      )}
+                    </Stack>
+                  ))}
+                </IsClient>
               </List>
             </AccordionDetails>
           </Accordion>
