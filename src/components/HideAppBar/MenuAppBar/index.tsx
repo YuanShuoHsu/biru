@@ -48,7 +48,12 @@ const MenuAppBar = () => {
         </IconButton>
       </Tooltip>
       <Menu
-        sx={{ mt: "45px" }}
+        sx={{
+          mt: {
+            xs: "48px",
+            sm: "56px",
+          },
+        }}
         id="menu-appbar"
         anchorEl={anchorElLanguage}
         anchorOrigin={{
