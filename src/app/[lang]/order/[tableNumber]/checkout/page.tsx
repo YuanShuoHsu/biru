@@ -49,7 +49,7 @@ const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) => {
   }).then((res) => res.json());
 };
 
-const Checkout = () => {
+const OrderTableNumberCheckout = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     table: "",
@@ -248,4 +248,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default OrderTableNumberCheckout;
