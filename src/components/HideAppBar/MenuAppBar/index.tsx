@@ -2,7 +2,7 @@
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import { Language } from "@mui/icons-material";
@@ -22,11 +22,12 @@ const MenuAppBar = () => {
   );
 
   const pathname = usePathname();
+  const { lang: currentLang } = useParams();
 
   const switchPath = (lang: string) => {
-    const segments = pathname.split("/").slice(2);
-    const rest = segments.join("/");
-    return rest ? `/${lang}/${rest}` : `/${lang}`;
+    const rest = pathname.split("/").slice(2).join("/");
+
+    return `/${lang}${rest ? `/${rest}` : ""}`;
   };
 
   const handleOpenLanguageMenu = (event: React.MouseEvent<HTMLElement>) =>
@@ -69,6 +70,7 @@ const MenuAppBar = () => {
             key={lang}
             onClick={handleCloseLanguageMenu}
             replace
+            selected={lang === currentLang}
           >
             {label}
           </MenuItem>
