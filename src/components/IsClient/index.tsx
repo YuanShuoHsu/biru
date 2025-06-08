@@ -1,3 +1,5 @@
+// https://nextjs.org/docs/messages/react-hydration-error
+
 import { useEffect, useState } from "react";
 
 interface IsClientProps {

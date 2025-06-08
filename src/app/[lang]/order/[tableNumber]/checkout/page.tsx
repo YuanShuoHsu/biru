@@ -90,10 +90,11 @@ const OrderTableNumberCheckout = () => {
               `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,
           )
           .join("#"),
-        NeedExtraPaidInfo: "Y" as const,
-        Language: mapToEcpayLanguage(lang as string),
+        ChoosePayment: "Credit" as const,
         ClientBackURL,
         OrderResultURL,
+        NeedExtraPaidInfo: "Y" as const,
+        Language: mapToEcpayLanguage(lang as string),
       },
     };
 
