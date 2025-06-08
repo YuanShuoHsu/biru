@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { Home, Payment, ShoppingCart } from "@mui/icons-material";
+import { CheckCircle, Home, Payment, ShoppingCart } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -27,6 +27,19 @@ const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
     icon: Payment,
     label: "Checkout",
   },
+  "/order/[tableNumber]/complete": {
+    icon: CheckCircle,
+    label: "Complete",
+  },
+};
+
+const createPathNormalizer = (tableNumber: string | string[]) => {
+  const dynamicMap: Record<string, string> = {
+    [`/order/${tableNumber}/checkout`]: "/order/[tableNumber]/checkout",
+    [`/order/${tableNumber}/complete`]: "/order/[tableNumber]/complete",
+  };
+
+  return (key: string) => dynamicMap[key] || key;
 };
 
 interface LinkRouterProps extends LinkProps {
@@ -55,6 +68,8 @@ const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
+  const normalizedPath = createPathNormalizer(tableNumber!);
+
   const { icon: HomeIcon, label: homeLabel } = breadcrumbMap["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
@@ -71,10 +86,7 @@ const RouterBreadcrumbs = () => {
         const key = `/${subPath}`;
         const to = `/${lang}/${subPath}`;
 
-        const normalizedKey =
-          key === `/order/${tableNumber}/checkout`
-            ? "/order/[tableNumber]/checkout"
-            : key;
+        const normalizedKey = normalizedPath(key);
 
         const { label = value, icon: Icon = () => null } =
           breadcrumbMap[normalizedKey] || {};
