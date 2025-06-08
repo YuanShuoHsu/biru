@@ -14,17 +14,12 @@ import {
   Box,
   Button,
   Divider,
-  FormControl,
-  FormControlLabel,
-  FormLabel,
   Grid,
   List,
   ListItem,
   ListItemText,
   NoSsr,
   Paper,
-  Radio,
-  RadioGroup,
   Stack,
   TextField,
   Typography,
@@ -32,6 +27,7 @@ import {
 
 import { useCartStore } from "@/stores/useCartStore";
 
+import VerticalSpacingToggleButton from "@/components/VerticalSpacingToggleButton";
 import { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 
 type EcpayLanguage = "" | "ENG" | "KOR" | "JPN" | "CHI";
@@ -222,7 +218,8 @@ const OrderTableNumberCheckout = () => {
                 onChange={handleInfoChange}
                 fullWidth
               />
-              <FormControl component="fieldset" sx={{ mt: 1 }}>
+              <VerticalSpacingToggleButton />
+              {/* <FormControl component="fieldset" sx={{ mt: 1 }}>
                 <FormLabel component="legend">付款方式</FormLabel>
                 <RadioGroup
                   row
@@ -241,7 +238,7 @@ const OrderTableNumberCheckout = () => {
                     label="刷卡"
                   />
                 </RadioGroup>
-              </FormControl>
+              </FormControl> */}
               <Button
                 variant="contained"
                 size="large"
