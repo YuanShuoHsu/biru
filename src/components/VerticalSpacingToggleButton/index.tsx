@@ -2,8 +2,6 @@
 // https://mui.com/material-ui/react-toggle-button/#VerticalSpacingToggleButton.tsx
 // https://mui.com/material-ui/react-radio-button/#RadioButtons.tsx
 
-import { forwardRef, useImperativeHandle, useState } from "react";
-
 import {
   CreditCard,
   MarkChatRead,
@@ -88,15 +86,19 @@ const StyledRadio = styled(Radio)({
   pointerEvents: "none",
 });
 
-const VerticalSpacingToggleButton = forwardRef((_, ref) => {
-  const [payment, setPayment] = useState<string | null>(null);
+interface VerticalSpacingToggleButtonProps {
+  payment: string | null;
+  setPayment: React.Dispatch<React.SetStateAction<string | null>>;
+}
 
+const VerticalSpacingToggleButton = ({
+  payment,
+  setPayment,
+}: VerticalSpacingToggleButtonProps) => {
   const handlePaymentChange = (
     event: React.MouseEvent<HTMLElement>,
     newPayment: string | null,
   ) => setPayment(newPayment);
-
-  useImperativeHandle(ref, () => payment, [payment]);
 
   return (
     <StyledPaper elevation={0}>
@@ -131,8 +133,6 @@ const VerticalSpacingToggleButton = forwardRef((_, ref) => {
       </StyledToggleButtonGroup>
     </StyledPaper>
   );
-});
-
-VerticalSpacingToggleButton.displayName = "VerticalSpacingToggleButton";
+};
 
 export default VerticalSpacingToggleButton;
