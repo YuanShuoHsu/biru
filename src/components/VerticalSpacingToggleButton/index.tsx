@@ -44,6 +44,11 @@ const paymentOptions = [
   },
 ];
 
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  border: `1px solid ${theme.palette.action.disabled}`,
+}));
+
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   width: "100%",
   gap: theme.spacing(2),
@@ -79,6 +84,10 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   },
 }));
 
+const StyledRadio = styled(Radio)({
+  pointerEvents: "none",
+});
+
 const CustomizedDividers = () => {
   const [payment, setPayment] = useState<string | null>(null);
 
@@ -88,13 +97,7 @@ const CustomizedDividers = () => {
   ) => setPayment(newPayment);
 
   return (
-    <Paper
-      elevation={0}
-      sx={(theme) => ({
-        p: 2,
-        border: `1px solid ${theme.palette.action.disabled}`,
-      })}
-    >
+    <StyledPaper elevation={0}>
       <StyledToggleButtonGroup
         aria-label="payment method selection"
         exclusive
@@ -114,18 +117,17 @@ const CustomizedDividers = () => {
               <Icon />
               <Typography>{label}</Typography>
             </Stack>
-            <Radio
+            <StyledRadio
               aria-label={label}
               checked={payment === value}
               name="radio-buttons"
               size="small"
-              sx={{ pointerEvents: "none" }}
               value={value}
             />
           </StyledToggleButton>
         ))}
       </StyledToggleButtonGroup>
-    </Paper>
+    </StyledPaper>
   );
 };
 
