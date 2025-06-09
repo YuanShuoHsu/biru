@@ -2,11 +2,11 @@
 // https://mui.com/material-ui/react-toggle-button/#VerticalSpacingToggleButton.tsx
 // https://mui.com/material-ui/react-radio-button/#RadioButtons.tsx
 
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 
 import {
-  ChatBubbleOutline,
   CreditCard,
+  MarkChatRead,
   Payments,
   QrCodeScanner,
 } from "@mui/icons-material";
@@ -38,7 +38,7 @@ const paymentOptions = [
     value: "TWQR",
   },
   {
-    icon: ChatBubbleOutline,
+    icon: MarkChatRead,
     label: "微信支付",
     value: "WeiXin",
   },
@@ -88,13 +88,15 @@ const StyledRadio = styled(Radio)({
   pointerEvents: "none",
 });
 
-const CustomizedDividers = () => {
+const VerticalSpacingToggleButton = forwardRef((_, ref) => {
   const [payment, setPayment] = useState<string | null>(null);
 
   const handlePaymentChange = (
     event: React.MouseEvent<HTMLElement>,
     newPayment: string | null,
   ) => setPayment(newPayment);
+
+  useImperativeHandle(ref, () => payment, [payment]);
 
   return (
     <StyledPaper elevation={0}>
@@ -129,6 +131,8 @@ const CustomizedDividers = () => {
       </StyledToggleButtonGroup>
     </StyledPaper>
   );
-};
+});
 
-export default CustomizedDividers;
+VerticalSpacingToggleButton.displayName = "VerticalSpacingToggleButton";
+
+export default VerticalSpacingToggleButton;
