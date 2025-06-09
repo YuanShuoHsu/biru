@@ -1,5 +1,6 @@
 // https://mui.com/material-ui/react-toggle-button/#CustomizedDividers.tsx
 // https://mui.com/material-ui/react-toggle-button/#VerticalSpacingToggleButton.tsx
+// https://mui.com/material-ui/react-radio-button/#RadioButtons.tsx
 
 import { useState } from "react";
 
@@ -11,6 +12,8 @@ import {
 } from "@mui/icons-material";
 import {
   Paper,
+  Radio,
+  Stack,
   ToggleButton,
   ToggleButtonGroup,
   toggleButtonGroupClasses,
@@ -20,28 +23,24 @@ import { styled } from "@mui/material/styles";
 
 const paymentOptions = [
   {
-    value: "Cash",
-    label: "現金",
-    ariaLabel: "Cash payment",
     icon: AttachMoney,
+    label: "現金",
+    value: "Cash",
   },
   {
-    value: "Credit",
-    label: "信用卡",
-    ariaLabel: "Credit card payment",
     icon: CreditCard,
+    label: "信用卡",
+    value: "Credit",
   },
   {
-    value: "TWQR",
-    label: "行動支付",
-    ariaLabel: "Taiwan QR code payment",
     icon: PhoneIphone,
+    label: "行動支付",
+    value: "TWQR",
   },
   {
-    value: "WeiXin",
-    label: "微信支付",
-    ariaLabel: "WeChat Pay",
     icon: Chat,
+    label: "微信支付",
+    value: "WeiXin",
   },
 ];
 
@@ -51,11 +50,13 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 
   [`& .${toggleButtonGroupClasses.firstButton}, & .${toggleButtonGroupClasses.middleButton}`]:
     {
+      borderColor: theme.palette.action.disabled,
       borderBottomRightRadius: theme.shape.borderRadius,
       borderBottomLeftRadius: theme.shape.borderRadius,
     },
   [`& .${toggleButtonGroupClasses.lastButton}, & .${toggleButtonGroupClasses.middleButton}`]:
     {
+      borderColor: theme.palette.action.disabled,
       borderTopRightRadius: theme.shape.borderRadius,
       borderTopLeftRadius: theme.shape.borderRadius,
       borderTop: `1px solid ${theme.palette.action.disabled}`,
@@ -63,12 +64,10 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 
 const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
-  paddingInline: theme.spacing(1),
+  paddingInline: theme.spacing(2),
   display: "flex",
-  justifyContent: "flex-start",
+  justifyContent: "space-between",
   gap: theme.spacing(2),
-  borderColor: theme.palette.action.disabled,
-  borderRadius: theme.shape.borderRadius,
   transition: theme.transitions.create([
     "background-color",
     "border-color",
@@ -104,10 +103,24 @@ const CustomizedDividers = () => {
         value={payment}
         size="small"
       >
-        {paymentOptions.map(({ ariaLabel, icon: Icon, label, value }) => (
-          <StyledToggleButton aria-label={ariaLabel} key={value} value={value}>
-            <Icon />
-            <Typography>{label}</Typography>
+        {paymentOptions.map(({ icon: Icon, label, value }) => (
+          <StyledToggleButton aria-label={label} key={value} value={value}>
+            <Stack
+              display="flex"
+              flexDirection="row"
+              alignItems="center"
+              gap={2}
+            >
+              <Icon />
+              <Typography>{label}</Typography>
+            </Stack>
+            <Radio
+              aria-label={label}
+              checked={payment === value}
+              name="radio-buttons"
+              size="small"
+              value={value}
+            />
           </StyledToggleButton>
         ))}
       </StyledToggleButtonGroup>
