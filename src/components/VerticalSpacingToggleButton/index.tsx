@@ -5,10 +5,10 @@
 import { useState } from "react";
 
 import {
-  AttachMoney,
-  Chat,
+  ChatBubbleOutline,
   CreditCard,
-  PhoneIphone,
+  Payments,
+  QrCodeScanner,
 } from "@mui/icons-material";
 import {
   Paper,
@@ -23,7 +23,7 @@ import { styled } from "@mui/material/styles";
 
 const paymentOptions = [
   {
-    icon: AttachMoney,
+    icon: Payments,
     label: "現金",
     value: "Cash",
   },
@@ -33,12 +33,12 @@ const paymentOptions = [
     value: "Credit",
   },
   {
-    icon: PhoneIphone,
+    icon: QrCodeScanner,
     label: "行動支付",
     value: "TWQR",
   },
   {
-    icon: Chat,
+    icon: ChatBubbleOutline,
     label: "微信支付",
     value: "WeiXin",
   },
@@ -119,6 +119,7 @@ const CustomizedDividers = () => {
               checked={payment === value}
               name="radio-buttons"
               size="small"
+              sx={{ pointerEvents: "none" }}
               value={value}
             />
           </StyledToggleButton>
