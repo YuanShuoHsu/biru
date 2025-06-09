@@ -6,10 +6,11 @@ import useSWRMutation from "swr/mutation";
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
 import {
-  Box,
   Button,
   Paper,
+  PaperProps,
   Stack,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -38,6 +39,14 @@ const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
     body: JSON.stringify(arg),
   }).then((res) => res.json());
 
+const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
+  ({ theme }) => ({
+    padding: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+  }),
+);
 const CustomerPaymentSection = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
@@ -59,7 +68,9 @@ const CustomerPaymentSection = () => {
     setCustomerInfo({ ...customerInfo, [name]: value });
   };
 
-  const handlePlaceOrder = async () => {
+  const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
     const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
     const ClientBackURL = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
     const OrderResultURL = ClientBackURL;
@@ -99,14 +110,7 @@ const CustomerPaymentSection = () => {
   };
 
   return (
-    <Paper
-      sx={{
-        p: 2,
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-      }}
-    >
+    <StyledPaper component="form" onSubmit={handleSubmit}>
       <Stack
         flexDirection="row"
         justifyContent="space-between"
@@ -122,32 +126,24 @@ const CustomerPaymentSection = () => {
           桌號 {tableNumber}
         </Typography>
       </Stack>
-      <Box
-        component="form"
-        sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+      <TextField
+        fullWidth
+        label="顧客姓名"
+        name="name"
+        onChange={handleInfoChange}
+        required
+        value={customerInfo.name}
+      />
+      <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
+      <Button
+        disabled={!payment}
+        size="large"
+        variant="contained"
+        type="submit"
       >
-        <TextField
-          fullWidth
-          label="顧客姓名"
-          name="name"
-          onChange={handleInfoChange}
-          required
-          value={customerInfo.name}
-        />
-        <VerticalSpacingToggleButton
-          payment={payment}
-          setPayment={setPayment}
-        />
-        <Button
-          disabled={!payment}
-          onClick={handlePlaceOrder}
-          size="large"
-          variant="contained"
-        >
-          下單
-        </Button>
-      </Box>
-    </Paper>
+        下單
+      </Button>
+    </StyledPaper>
   );
 };
 
