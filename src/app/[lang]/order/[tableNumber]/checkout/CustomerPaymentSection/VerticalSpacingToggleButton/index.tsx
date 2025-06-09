@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { PaymentMethod } from "@/types/payment";
+
 const paymentOptions = [
   {
     icon: Payments,
@@ -87,8 +89,8 @@ const StyledRadio = styled(Radio)({
 });
 
 interface VerticalSpacingToggleButtonProps {
-  payment: string | null;
-  setPayment: React.Dispatch<React.SetStateAction<string | null>>;
+  payment: PaymentMethod | null;
+  setPayment: React.Dispatch<React.SetStateAction<PaymentMethod | null>>;
 }
 
 const VerticalSpacingToggleButton = ({
@@ -97,7 +99,7 @@ const VerticalSpacingToggleButton = ({
 }: VerticalSpacingToggleButtonProps) => {
   const handlePaymentChange = (
     event: React.MouseEvent<HTMLElement>,
-    newPayment: string | null,
+    newPayment: PaymentMethod | null,
   ) => setPayment(newPayment);
 
   return (

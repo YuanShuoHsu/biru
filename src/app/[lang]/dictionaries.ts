@@ -2,6 +2,8 @@
 
 import "server-only";
 
+import { LocaleCode } from "@/types/locale";
+
 const dictionaries = {
   "zh-TW": () =>
     import("./dictionaries/zh-TW.json").then((module) => module.default),
@@ -12,6 +14,5 @@ const dictionaries = {
     import("./dictionaries/zh-CN.json").then((module) => module.default),
 };
 
-export const getDictionary = async (
-  locale: "zh-TW" | "en" | "ja" | "ko" | "zh-CN",
-) => dictionaries[locale]();
+export const getDictionary = async (locale: LocaleCode) =>
+  dictionaries[locale]();

@@ -17,12 +17,12 @@ import {
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
-
-type EcpayLanguage = "" | "ENG" | "KOR" | "JPN" | "CHI";
+import { CreateEcpayDto, EcpayLanguage } from "@/types/ecpay/createEcpayDto";
+import { LocaleCode } from "@/types/locale";
+import { PaymentMethod } from "@/types/payment";
 
 const mapToEcpayLanguage = (() => {
-  const map: Record<string, EcpayLanguage> = {
+  const map: Record<LocaleCode, EcpayLanguage> = {
     "zh-TW": "",
     en: "ENG",
     ja: "JPN",
@@ -30,7 +30,7 @@ const mapToEcpayLanguage = (() => {
     "zh-CN": "CHI",
   };
 
-  return (locale: string): EcpayLanguage => map[locale];
+  return (locale: LocaleCode): EcpayLanguage => map[locale];
 })();
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
@@ -47,13 +47,14 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
     gap: theme.spacing(2),
   }),
 );
+
 const CustomerPaymentSection = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     table: "",
   });
 
-  const [payment, setPayment] = useState<string | null>(null);
+  const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
   const { lang, tableNumber } = useParams();
 
@@ -85,11 +86,11 @@ const CustomerPaymentSection = () => {
               `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,
           )
           .join("#"),
-        // ChoosePayment: "Credit" as const,
+        ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],
         ClientBackURL,
         OrderResultURL,
         NeedExtraPaidInfo: "Y" as const,
-        Language: mapToEcpayLanguage(lang as string),
+        Language: mapToEcpayLanguage(lang as LocaleCode),
       },
     };
 
@@ -116,7 +117,9 @@ const CustomerPaymentSection = () => {
         justifyContent="space-between"
         alignItems="center"
       >
-        <Typography variant="subtitle1">顧客資訊與付款</Typography>
+        <Typography component="span" variant="subtitle1">
+          顧客資訊與付款
+        </Typography>
         <Typography
           color="primary"
           component="span"

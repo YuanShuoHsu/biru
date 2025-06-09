@@ -1,3 +1,5 @@
+export type EcpayLanguage = "" | "ENG" | "KOR" | "JPN" | "CHI";
+
 interface BaseEcpayDto {
   MerchantID: string;
   MerchantTradeNo: string;
@@ -33,7 +35,7 @@ interface BaseEcpayDto {
   CustomField2?: string;
   CustomField3?: string;
   CustomField4?: string;
-  Language?: "" | "ENG" | "KOR" | "JPN" | "CHI";
+  Language?: EcpayLanguage;
 }
 
 interface InvoiceEcpayDto {
