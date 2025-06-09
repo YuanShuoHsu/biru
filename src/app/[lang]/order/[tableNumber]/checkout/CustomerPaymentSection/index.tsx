@@ -5,7 +5,14 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
-import { Box, Button, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { useCartStore } from "@/stores/useCartStore";
 
@@ -25,12 +32,11 @@ const mapToEcpayLanguage = (() => {
   return (locale: string): EcpayLanguage => map[locale];
 })();
 
-const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) => {
-  return fetch(url, {
+const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
+  fetch(url, {
     method: "POST",
     body: JSON.stringify(arg),
   }).then((res) => res.json());
-};
 
 const CustomerPaymentSection = () => {
   const [customerInfo, setCustomerInfo] = useState({
@@ -40,9 +46,9 @@ const CustomerPaymentSection = () => {
 
   const [payment, setPayment] = useState<string | null>(null);
 
-  const { itemsList, totalAmount } = useCartStore();
-
   const { lang, tableNumber } = useParams();
+
+  const { itemsList, totalAmount } = useCartStore();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -101,7 +107,21 @@ const CustomerPaymentSection = () => {
         gap: 2,
       }}
     >
-      <Typography variant="h6">顧客資訊與付款</Typography>
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+      >
+        <Typography variant="subtitle1">顧客資訊與付款</Typography>
+        <Typography
+          color="primary"
+          component="span"
+          fontWeight="bold"
+          variant="h6"
+        >
+          桌號 {tableNumber}
+        </Typography>
+      </Stack>
       <Box
         component="form"
         sx={{ display: "flex", flexDirection: "column", gap: 2 }}
@@ -113,15 +133,6 @@ const CustomerPaymentSection = () => {
           onChange={handleInfoChange}
           required
           value={customerInfo.name}
-        />
-        <TextField
-          disabled
-          fullWidth
-          label="桌號"
-          name="table"
-          onChange={handleInfoChange}
-          required
-          value={tableNumber}
         />
         <VerticalSpacingToggleButton
           payment={payment}
