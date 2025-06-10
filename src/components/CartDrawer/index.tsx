@@ -77,6 +77,10 @@ const ImageBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const StyledListItemText = styled(ListItemText)({
+  margin: 0,
+});
+
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -139,10 +143,9 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                 </ImageBox>
               </StyledListItemAvatar>
               <Box>
-                <ListItemText
+                <StyledListItemText
                   primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
                   // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                  sx={{ margin: 0 }}
                 />
                 <Typography color="primary" fontWeight="bold" variant="body2">
                   NT$ {item.amount.toLocaleString(lang)}
