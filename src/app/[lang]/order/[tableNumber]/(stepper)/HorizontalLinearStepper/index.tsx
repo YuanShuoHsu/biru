@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-stepper/#HorizontalLinearStepper.tsx
 
+"use client";
+
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { useParams, usePathname } from "next/navigation";
 
