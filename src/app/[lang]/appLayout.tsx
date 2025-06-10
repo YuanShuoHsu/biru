@@ -2,19 +2,32 @@
 
 import { useState } from "react";
 
-import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, CssBaseline, Fab, Toolbar } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
 import CartDrawer from "@/components/CartDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
 import ScrollTop from "@/components/ScrollTop";
 
+import { drawerWidth } from "@/constants/responsiveDrawer";
+
+import { KeyboardArrowUp } from "@mui/icons-material";
+import { Box, CssBaseline, Fab, Toolbar } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
 const ContainerBox = styled(Box)({
   display: "flex",
 });
+
+const MainBox = styled(Box)(({ theme }) => ({
+  width: "100%",
+  minHeight: "100vh",
+  display: "flex",
+  flexDirection: "column",
+
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(100% - ${drawerWidth}px)`,
+  },
+}));
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -56,7 +69,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         mobileOpen={mobileOpen}
       />
       <CartDrawer onClose={handleCartToggle} open={cartOpen} />
-      {children}
+      <MainBox as="main">
+        <Toolbar />
+        {children}
+      </MainBox>
       <ScrollTop>
         <Fab aria-label="scroll back to top" size="small">
           <KeyboardArrowUp />
