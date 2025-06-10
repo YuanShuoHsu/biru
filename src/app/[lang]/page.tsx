@@ -6,7 +6,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import NavigationButton from "@/components/NavigationButton";
 
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Box, styled } from "@mui/material";
+import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import "swiper/css";
 import "swiper/css/free-mode";

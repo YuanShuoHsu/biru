@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const languages = [
   { label: "繁體中文", lang: "zh-TW" },
@@ -15,6 +16,13 @@ const languages = [
   { label: "한국어", lang: "ko" },
   { label: "简体中文", lang: "zh-CN" },
 ];
+
+const StyledMenu = styled(Menu)(({ theme }) => ({
+  marginTop: 48,
+  [theme.breakpoints.up("sm")]: {
+    marginTop: 56,
+  },
+}));
 
 const MenuAppBar = () => {
   const [anchorElLanguage, setAnchorElLanguage] = useState<null | HTMLElement>(
@@ -47,13 +55,7 @@ const MenuAppBar = () => {
           <Language />
         </IconButton>
       </Tooltip>
-      <Menu
-        sx={{
-          mt: {
-            xs: "48px",
-            sm: "56px",
-          },
-        }}
+      <StyledMenu
         id="menu-appbar"
         anchorEl={anchorElLanguage}
         anchorOrigin={{
@@ -80,7 +82,7 @@ const MenuAppBar = () => {
             {label}
           </MenuItem>
         ))}
-      </Menu>
+      </StyledMenu>
     </>
   );
 };

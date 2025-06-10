@@ -74,7 +74,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { href: "", icon: Home, text: "Home" },
   {
-    // children: [{ href: "/order/checkout", icon: Payment, text: "Checkout" }],
+    // children: [{ href: `/order/${tableNumber}/checkout`, icon: Payment, text: "Checkout" }],
     href: "/order",
     icon: ShoppingCart,
     text: "Order",

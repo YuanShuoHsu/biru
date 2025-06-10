@@ -10,10 +10,10 @@ import {
   Paper,
   PaperProps,
   Stack,
-  styled,
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
