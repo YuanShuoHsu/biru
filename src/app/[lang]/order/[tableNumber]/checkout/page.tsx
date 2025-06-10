@@ -2,12 +2,14 @@
 
 import CustomerPaymentSection from "./CustomerPaymentSection";
 import CustomizedAccordions from "./CustomizedAccordions";
+import HorizontalLinearStepper from "./HorizontalLinearStepper";
 
 import { Grid } from "@mui/material";
 
 const OrderTableNumberCheckout = () => {
   return (
     <>
+      <HorizontalLinearStepper />
       <Grid container spacing={4}>
         <Grid size={{ xs: 12, md: 6 }}>
           <CustomizedAccordions />

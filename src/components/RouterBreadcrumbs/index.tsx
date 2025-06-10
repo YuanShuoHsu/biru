@@ -14,7 +14,9 @@ interface BreadcrumbItem {
   label: string;
 }
 
-const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
+const createBreadcrumbMap = (
+  tableNumber: string,
+): Record<string, BreadcrumbItem> => ({
   "/": {
     icon: Home,
     label: "Home",
@@ -23,24 +25,19 @@ const breadcrumbMap: { [key: string]: BreadcrumbItem } = {
     icon: ShoppingCart,
     label: "Order",
   },
-  "/order/[tableNumber]/checkout": {
+  [`/order/${tableNumber}`]: {
+    icon: ShoppingCart,
+    label: `${tableNumber}`,
+  },
+  [`/order/${tableNumber}/checkout`]: {
     icon: Payment,
     label: "Checkout",
   },
-  "/order/[tableNumber]/complete": {
+  [`/order/${tableNumber}/complete`]: {
     icon: CheckCircle,
     label: "Complete",
   },
-};
-
-const createPathNormalizer = (tableNumber: string | string[]) => {
-  const dynamicMap: Record<string, string> = {
-    [`/order/${tableNumber}/checkout`]: "/order/[tableNumber]/checkout",
-    [`/order/${tableNumber}/complete`]: "/order/[tableNumber]/complete",
-  };
-
-  return (key: string) => dynamicMap[key] || key;
-};
+});
 
 interface LinkRouterProps extends LinkProps {
   to: string;
@@ -68,8 +65,7 @@ const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
-  const normalizedPath = createPathNormalizer(tableNumber!);
-
+  const breadcrumbMap = createBreadcrumbMap(tableNumber as string);
   const { icon: HomeIcon, label: homeLabel } = breadcrumbMap["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
@@ -86,10 +82,7 @@ const RouterBreadcrumbs = () => {
         const key = `/${subPath}`;
         const to = `/${lang}/${subPath}`;
 
-        const normalizedKey = normalizedPath(key);
-
-        const { label = value, icon: Icon = () => null } =
-          breadcrumbMap[normalizedKey] || {};
+        const { label = value, icon: Icon = () => null } = breadcrumbMap[key];
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
