@@ -41,7 +41,18 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
   width: "100%",
   height: "100%",
 
-  ".swiper-pagination-bullet": {},
+  ".swiper-button-prev": {
+    "&::after": {},
+  },
+  ".swiper-button-next": {
+    "&::after": {},
+  },
+
+  ".swiper-pagination-bullet": {
+    backgroundColor: theme.palette.common.white,
+    opacity: 0.5,
+    transition: theme.transitions.create(["background-color"]),
+  },
   ".swiper-pagination-bullet-active": {
     backgroundColor: theme.palette.primary.main,
   },
