@@ -27,7 +27,7 @@ const StyledAccordionSummary = styled(AccordionSummary)({
   },
 });
 
-const LabelTypography = styled(Typography)<TypographyProps>({
+const StyledTypography = styled(Typography)<TypographyProps>({
   width: "33%",
   flexShrink: 0,
 });
@@ -59,9 +59,9 @@ const CustomizedAccordions = () => {
         expandIcon={<ExpandMore />}
         id="panel1-header"
       >
-        <LabelTypography component="span" variant="subtitle1">
+        <StyledTypography component="span" variant="subtitle1">
           總計
-        </LabelTypography>
+        </StyledTypography>
         <Typography
           color="primary"
           component="span"

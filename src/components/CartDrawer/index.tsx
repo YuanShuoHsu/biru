@@ -26,6 +26,47 @@ import { MAX_QUANTITY } from "@/constants/cart";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 import { useParams } from "next/navigation";
 
+const DrawerBox = styled(Box)({
+  width: 250,
+});
+
+const stickyBaseStyles = {
+  position: "sticky" as const,
+  zIndex: 1,
+};
+
+const StickyHeader = styled(Box)(({ theme }) => ({
+  ...stickyBaseStyles,
+  top: 0,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+}));
+
+const StickyFooter = styled(Box)(({ theme }) => ({
+  ...stickyBaseStyles,
+  bottom: 0,
+  padding: theme.spacing(2),
+  borderTop: `1px solid ${theme.palette.divider}`,
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+}));
+
+const StyledList = styled(List)(({ theme }) => ({
+  padding: theme.spacing(2),
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+}));
+
+const StyledListItem = styled(ListItem)(({ theme }) => ({
+  display: "flex",
+  gap: theme.spacing(2),
+}));
+
+const StyledListItemAvatar = styled(ListItemAvatar)({
+  margin: 0,
+});
+
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: 60,
@@ -71,37 +112,17 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   };
 
   const drawer = (
-    <Box sx={{ width: 250 }}>
-      <Box
-        sx={{
-          position: "sticky",
-          top: 0,
-          backgroundColor: "background.paper",
-          zIndex: 1,
-        }}
-      >
+    <DrawerBox>
+      <StickyHeader>
         <Toolbar>
           <Typography variant="h6">購物車清單</Typography>
         </Toolbar>
-        <Divider />
-      </Box>
-      <List
-        disablePadding
-        sx={{
-          p: 2,
-          display: "flex",
-          flexDirection: "column",
-          gap: 2,
-        }}
-      >
+      </StickyHeader>
+      <StyledList disablePadding>
         {itemsList().map((item, index) => (
           <Stack key={item.id} gap={2}>
-            <ListItem
-              alignItems="flex-start"
-              sx={{ display: "flex", gap: 2 }}
-              disablePadding
-            >
-              <ListItemAvatar sx={{ margin: 0 }}>
+            <StyledListItem alignItems="flex-start" disablePadding>
+              <StyledListItemAvatar>
                 <ImageBox>
                   {item.imageUrl && (
                     <Image
@@ -114,8 +135,8 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                     />
                   )}
                 </ImageBox>
-              </ListItemAvatar>
-              <Box display="flex" flexDirection="column">
+              </StyledListItemAvatar>
+              <Box>
                 <ListItemText
                   primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
                   // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
@@ -125,7 +146,7 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                   NT$ {item.amount.toLocaleString(lang)}
                 </Typography>
               </Box>
-            </ListItem>
+            </StyledListItem>
             <StyledFormControl>
               <Stack direction="row" alignItems="center" gap={1}>
                 {item.quantity === 1 ? (
@@ -175,53 +196,36 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
             )}
           </Stack>
         ))}
-      </List>
-      <Box
-        sx={{
-          position: "sticky",
-          bottom: 0,
-          backgroundColor: "background.paper",
-          zIndex: 1,
-        }}
-      >
-        <Divider />
-        <Box
-          sx={{
-            p: 2,
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
+      </StyledList>
+      <StickyFooter>
+        <Stack
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
         >
-          <Stack
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
+          <Typography component="span" variant="subtitle1">
+            總計
+          </Typography>
+          <Typography
+            color="primary"
+            component="span"
+            fontWeight="bold"
+            variant="h6"
           >
-            <Typography component="span" variant="subtitle1">
-              總計
-            </Typography>
-            <Typography
-              color="primary"
-              component="span"
-              fontWeight="bold"
-              variant="h6"
-            >
-              NT$ {totalAmount.toLocaleString(lang)}
-            </Typography>
-          </Stack>
-          <Button
-            component={Link}
-            fullWidth
-            href={`/order/${tableNumber}/checkout`}
-            onClick={onClose}
-            variant="contained"
-          >
-            前往結帳
-          </Button>
-        </Box>
-      </Box>
-    </Box>
+            NT$ {totalAmount.toLocaleString(lang)}
+          </Typography>
+        </Stack>
+        <Button
+          component={Link}
+          fullWidth
+          href={`/order/${tableNumber}/checkout`}
+          onClick={onClose}
+          variant="contained"
+        >
+          前往結帳
+        </Button>
+      </StickyFooter>
+    </DrawerBox>
   );
 
   return (
