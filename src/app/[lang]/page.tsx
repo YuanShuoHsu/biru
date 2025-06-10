@@ -6,7 +6,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import NavigationButton from "@/components/NavigationButton";
 
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -22,9 +22,35 @@ import {
   Pagination,
 } from "swiper/modules";
 
+const StyledBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: "100%",
+  aspectRatio: 4 / 3,
+  maxHeight: "calc(100vh - 48px)",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "center",
+
+  [theme.breakpoints.up("sm")]: {
+    maxHeight: "calc(100vh - 64px)",
+  },
+}));
+
+const StyledSwiper = styled(Swiper)({
+  width: "100%",
+  height: "100%",
+});
+
+const StyledSlide = styled(SwiperSlide)({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+});
+
 const Home = () => (
-  <Box className="relative w-full h-[500px] flex justify-center items-center">
-    <Swiper
+  <StyledBox>
+    <StyledSwiper
       autoplay={{
         delay: 2500,
         disableOnInteraction: false,
@@ -53,10 +79,9 @@ const Home = () => (
         Navigation,
         Pagination,
       ]}
-      className="w-full h-full"
     >
       {Array.from({ length: 9 }, (_, index) => (
-        <SwiperSlide key={index} className="flex justify-center items-center">
+        <StyledSlide key={index}>
           <Image
             alt={`Slide ${index + 1}`}
             fill
@@ -67,12 +92,12 @@ const Home = () => (
               objectFit: "cover",
             }}
           />
-        </SwiperSlide>
+        </StyledSlide>
       ))}
-    </Swiper>
+    </StyledSwiper>
     <NavigationButton direction="next" icon={ChevronRight} />
     <NavigationButton direction="prev" icon={ChevronLeft} />
-  </Box>
+  </StyledBox>
 );
 
 export default Home;
