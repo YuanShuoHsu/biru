@@ -1,6 +1,7 @@
 // https://mui.com/material-ui/react-accordion/#CustomizedAccordions.tsx
 
-import { useCartStore } from "@/stores/useCartStore";
+import { useParams } from "next/navigation";
+
 import { ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
@@ -13,8 +14,38 @@ import {
   NoSsr,
   Stack,
   Typography,
+  TypographyProps,
 } from "@mui/material";
-import { useParams } from "next/navigation";
+import { styled } from "@mui/material/styles";
+
+import { useCartStore } from "@/stores/useCartStore";
+
+const StyledAccordionSummary = styled(AccordionSummary)({
+  "& .MuiAccordionSummary-content": {
+    display: "flex",
+    alignItems: "center",
+  },
+});
+
+const LabelTypography = styled(Typography)<TypographyProps>({
+  width: "33%",
+  flexShrink: 0,
+});
+
+const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: `1px solid ${theme.palette.divider}`,
+}));
+
+const StyledList = styled(List)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+}));
+
+const StyledListItemText = styled(ListItemText)({
+  margin: 0,
+});
 
 const CustomizedAccordions = () => {
   const { lang } = useParams();
@@ -23,24 +54,14 @@ const CustomizedAccordions = () => {
 
   return (
     <Accordion defaultExpanded disableGutters>
-      <AccordionSummary
+      <StyledAccordionSummary
         aria-controls="panel1-content"
         expandIcon={<ExpandMore />}
         id="panel1-header"
-        sx={{
-          "& .MuiAccordionSummary-content": {
-            display: "flex",
-            alignItems: "center",
-          },
-        }}
       >
-        <Typography
-          component="span"
-          sx={{ width: "33%", flexShrink: 0 }}
-          variant="subtitle1"
-        >
+        <LabelTypography component="span" variant="subtitle1">
           總計
-        </Typography>
+        </LabelTypography>
         <Typography
           color="primary"
           component="span"
@@ -49,29 +70,16 @@ const CustomizedAccordions = () => {
         >
           NT$ {totalAmount.toLocaleString(lang)}
         </Typography>
-      </AccordionSummary>
-      <AccordionDetails
-        sx={{
-          p: 2,
-          borderTop: "1px solid rgba(0, 0, 0, .125)",
-        }}
-      >
-        <List
-          disablePadding
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-          }}
-        >
+      </StyledAccordionSummary>
+      <StyledAccordionDetails>
+        <StyledList disablePadding>
           <NoSsr defer fallback={<Typography>載入中...</Typography>}>
             {itemsList().map((item, index) => (
               <Stack key={item.id} gap={2}>
                 <ListItem disablePadding>
-                  <ListItemText
+                  <StyledListItemText
                     primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
                     secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                    sx={{ m: 0 }}
                   />
                   <Typography color="primary" fontWeight="bold" variant="body2">
                     NT$ {(item.price * item.quantity).toLocaleString(lang)}
@@ -81,8 +89,8 @@ const CustomizedAccordions = () => {
               </Stack>
             ))}
           </NoSsr>
-        </List>
-      </AccordionDetails>
+        </StyledList>
+      </StyledAccordionDetails>
     </Accordion>
   );
 };

@@ -54,7 +54,6 @@ const OrderTableNumberComplete = () => {
             </Typography>
           </>
         )}
-
         <Button
           variant="contained"
           sx={{ mt: 4 }}

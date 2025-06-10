@@ -3,7 +3,13 @@
 import { useParams, useRouter } from "next/navigation";
 
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
+
 import { Button, Grid, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledButton = styled(Button)({
+  minWidth: 0,
+});
 
 const Order = () => {
   const router = useRouter();
@@ -19,14 +25,13 @@ const Order = () => {
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
           (number) => (
             <Grid key={number} size={{ xs: 4, sm: 3, md: 2, xl: 1 }}>
-              <Button
+              <StyledButton
                 fullWidth
                 onClick={() => handleClick(number)}
-                sx={{ minWidth: 0 }}
                 variant="outlined"
               >
                 {number}
-              </Button>
+              </StyledButton>
             </Grid>
           ),
         )}
