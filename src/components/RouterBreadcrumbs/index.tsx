@@ -65,8 +65,8 @@ const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
-  const breadcrumbMap = createBreadcrumbMap(tableNumber as string);
-  const { icon: HomeIcon, label: homeLabel } = breadcrumbMap["/"];
+  const breadcrumbs = createBreadcrumbMap(tableNumber as string);
+  const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
@@ -83,7 +83,7 @@ const RouterBreadcrumbs = () => {
         const to = `/${lang}/${subPath}`;
 
         const { label = value, icon: Icon = () => null } =
-          breadcrumbMap[key] || {};
+          breadcrumbs[key] || {};
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
