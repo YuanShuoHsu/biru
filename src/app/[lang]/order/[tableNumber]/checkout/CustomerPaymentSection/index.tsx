@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
@@ -51,18 +51,18 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
 const CustomerPaymentSection = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
-    table: "",
   });
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
   const { lang, tableNumber } = useParams();
+  const router = useRouter();
 
   const { itemsList, totalAmount } = useCartStore();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { trigger } = useSWRMutation("/api/ecpay", sendRequest);
+  const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,8 +73,12 @@ const CustomerPaymentSection = () => {
     event.preventDefault();
 
     const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
-    const ClientBackURL = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
-    const OrderResultURL = ClientBackURL;
+    const completeUrl = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
+
+    if (payment === "Cash") {
+      router.replace(completeUrl);
+      return;
+    }
 
     const dto = {
       base: {
@@ -87,8 +91,8 @@ const CustomerPaymentSection = () => {
           )
           .join("#"),
         ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],
-        ClientBackURL,
-        OrderResultURL,
+        ClientBackURL: completeUrl,
+        OrderResultURL: completeUrl,
         NeedExtraPaidInfo: "Y" as const,
         Language: mapToEcpayLanguage(lang as LocaleCode),
       },
@@ -139,7 +143,10 @@ const CustomerPaymentSection = () => {
       />
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button
-        disabled={!payment}
+        disabled={isMutating || !payment}
+        fullWidth
+        loading={isMutating}
+        loadingPosition="start"
         size="large"
         variant="contained"
         type="submit"
