@@ -106,8 +106,8 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
                   {item.imageUrl && (
                     <Image
                       alt={item.name}
-                      fill
                       draggable={false}
+                      fill
                       sizes="(min-width: 808px) 50vw, 100vw"
                       src={item.imageUrl}
                       style={{ objectFit: "cover" }}

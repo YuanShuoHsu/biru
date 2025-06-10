@@ -96,8 +96,8 @@ const CardDialogContent = forwardRef<
         {imageUrl && (
           <Image
             alt={name}
-            fill
             draggable={false}
+            fill
             sizes="(min-width: 808px) 50vw, 100vw"
             src={imageUrl}
             style={{ objectFit: "cover" }}
