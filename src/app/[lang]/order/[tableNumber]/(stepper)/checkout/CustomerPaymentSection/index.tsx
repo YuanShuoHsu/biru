@@ -72,13 +72,13 @@ const CustomerPaymentSection = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
 
-    const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
-    const completeUrl = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
-
     if (payment === "Cash") {
-      router.replace(completeUrl);
+      router.replace(`/order/${tableNumber}/complete`);
       return;
     }
+
+    const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
+    const completeUrl = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
 
     const dto = {
       base: {
