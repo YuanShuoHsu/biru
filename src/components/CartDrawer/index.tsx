@@ -17,6 +17,7 @@ import {
   ListItemText,
   Stack,
   TextField,
+  Theme,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -30,19 +31,20 @@ const DrawerBox = styled(Box)({
   width: 250,
 });
 
-const stickyBaseStyles = {
+const stickyBaseStyles = (theme: Theme) => ({
   position: "sticky" as const,
+  backgroundColor: theme.palette.background.paper,
   zIndex: 1,
-};
+});
 
 const StickyHeader = styled(Box)(({ theme }) => ({
-  ...stickyBaseStyles,
+  ...stickyBaseStyles(theme),
   top: 0,
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
 const StickyFooter = styled(Box)(({ theme }) => ({
-  ...stickyBaseStyles,
+  ...stickyBaseStyles(theme),
   bottom: 0,
   padding: theme.spacing(2),
   borderTop: `1px solid ${theme.palette.divider}`,
