@@ -4,13 +4,7 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import {
-  Home,
-  Payment,
-  Pets,
-  ShoppingCart,
-  TableBar,
-} from "@mui/icons-material";
+import { Payment, Pets, ShoppingCart, TableBar } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -23,10 +17,10 @@ interface BreadcrumbItem {
 const createBreadcrumbMap = (
   tableNumber: string,
 ): Record<string, BreadcrumbItem> => ({
-  "/": {
-    icon: Home,
-    label: "Home",
-  },
+  // "/": {
+  //   icon: Home,
+  //   label: "Home",
+  // },
   "/order": {
     icon: ShoppingCart,
     label: "Order",
@@ -72,16 +66,16 @@ const RouterBreadcrumbs = () => {
   const { lang, tableNumber } = useParams();
 
   const breadcrumbs = createBreadcrumbMap(tableNumber as string);
-  const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
+  // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
+      {/* <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
         <HomeIcon fontSize="inherit" />
         {homeLabel}
-      </StyledLinkRouter>
+      </StyledLinkRouter> */}
       {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
         const subPath = pathnames.slice(0, index + 1).join("/");
