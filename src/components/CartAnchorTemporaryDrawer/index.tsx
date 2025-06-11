@@ -87,12 +87,15 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-interface CartDrawerProps {
+interface CartAnchorTemporaryDrawerProps {
   onClose: () => void;
   open: boolean;
 }
 
-const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
+const CartAnchorTemporaryDrawer = ({
+  onClose,
+  open,
+}: CartAnchorTemporaryDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
 
   const { lang, tableNumber } = useParams();
@@ -245,4 +248,4 @@ const CartDrawer = ({ onClose, open }: CartDrawerProps) => {
   );
 };
 
-export default CartDrawer;
+export default CartAnchorTemporaryDrawer;

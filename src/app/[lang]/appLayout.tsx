@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import CartDrawer from "@/components/CartDrawer";
+import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import ResponsiveDrawer from "@/components/ResponsiveDrawer";
@@ -68,7 +68,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         onDrawerTransitionEnd={handleDrawerTransitionEnd}
         mobileOpen={mobileOpen}
       />
-      <CartDrawer onClose={handleCartToggle} open={cartOpen} />
+      <CartAnchorTemporaryDrawer onClose={handleCartToggle} open={cartOpen} />
       <MainBox as="main">
         <Toolbar />
         {children}
