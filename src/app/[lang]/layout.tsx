@@ -7,6 +7,8 @@ import "./globals.css";
 import AppLayout from "./appLayout";
 import Providers from "./providers";
 
+import { LocaleCode } from "@/types/locale";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -37,7 +39,7 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang: "zh-TW" | "zh-CN" | "en" | "ja" | "ko" }>;
+  params: Promise<{ lang: LocaleCode }>;
 }>) {
   return (
     <html lang={(await params).lang}>
