@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
+import Image from "next/image";
+import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import HideOnScroll from "./HideOnScroll";
@@ -10,6 +12,7 @@ import CustomizedBadges from "@/components/CustomizedBadges";
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import {
   AppBar,
+  Box,
   IconButton,
   Stack,
   Toolbar,
@@ -24,7 +27,16 @@ import { DrawerType } from "@/types/drawer";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
-  gap: theme.spacing(2),
+  gap: theme.spacing(1),
+}));
+
+const ImageBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: theme.spacing(4),
+  height: theme.spacing(4),
+  borderRadius: theme.shape.borderRadius,
+  flexShrink: 0,
+  overflow: "hidden",
 }));
 
 interface HideAppBarProps {
@@ -56,9 +68,29 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
           >
             <Menu />
           </IconButton>
-          <Typography component="div" flexGrow="1" noWrap variant="h6">
-            Biru Coffee
-          </Typography>
+          <Stack
+            component={Link}
+            href="/"
+            flexDirection="row"
+            alignItems="center"
+            gap={1}
+            flexGrow="1"
+          >
+            <ImageBox>
+              <Image
+                alt="biru coffee"
+                draggable={false}
+                fill
+                priority
+                sizes="(min-width: 808px) 50vw, 100vw"
+                src="/images/IMG_4590.jpg"
+                style={{ objectFit: "cover" }}
+              />
+            </ImageBox>
+            <Typography component="span" variant="h6">
+              Biru Coffee
+            </Typography>
+          </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
             {showShoppingCartButton && (
