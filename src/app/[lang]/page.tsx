@@ -26,8 +26,8 @@ import {
 const StyledBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
-  aspectRatio: 4 / 3,
   maxHeight: "calc(100vh - 48px)",
+  aspectRatio: 4 / 3,
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
@@ -35,6 +35,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 
   [theme.breakpoints.up("sm")]: {
     maxHeight: "calc(100vh - 64px)",
+    aspectRatio: 16 / 9,
   },
 }));
 

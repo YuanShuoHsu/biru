@@ -84,7 +84,6 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   return (
     <Stack height="100%" direction="column" gap={2} bgcolor="background.paper">
       <HorizontalTabs
-        allowScrollButtonsMobile
         aria-label="Horizontal tabs"
         onChange={handleChange}
         orientation="horizontal"

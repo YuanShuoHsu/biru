@@ -130,7 +130,11 @@ const NavTemporaryDrawer = ({
   );
 
   return (
-    <Drawer onClose={onDrawerToggle("nav", false)} open={open}>
+    <Drawer
+      ModalProps={{ keepMounted: true }}
+      onClose={onDrawerToggle("nav", false)}
+      open={open}
+    >
       {drawerList}
     </Drawer>
   );

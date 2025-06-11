@@ -245,9 +245,9 @@ const CartAnchorTemporaryDrawer = ({
   return (
     <Drawer
       anchor="right"
+      ModalProps={{ keepMounted: true }}
       onClose={onDrawerToggle("cart", false)}
       open={open}
-      ModalProps={{ keepMounted: true }}
     >
       {drawerList}
     </Drawer>
