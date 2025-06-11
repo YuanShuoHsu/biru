@@ -1,5 +1,6 @@
 {
-  "Checkout": "Checkout",
-  "Home": "Home",
-  "Order": "Order"
+  "nav": {
+    "home": "Home",
+    "order": "Order"
+  }
 }

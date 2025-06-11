@@ -1,5 +1,6 @@
 {
-  "Checkout": "結帳",
-  "Home": "首頁",
-  "Order": "訂單"
+  "nav": {
+    "home": "首頁",
+    "order": "訂單"
+  }
 }

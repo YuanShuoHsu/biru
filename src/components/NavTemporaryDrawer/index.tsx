@@ -1,6 +1,8 @@
 import { useParams, usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
 
+import { I18nDict, useI18n } from "@/context/i18n";
+
 import {
   ExpandLess,
   ExpandMore,
@@ -36,14 +38,9 @@ interface NavItem {
   children?: NavItem[];
 }
 
-const navItems: NavItem[] = [
-  { href: "", icon: Home, text: "Home" },
-  {
-    // children: [{ href: `/order/${tableNumber}/checkout`, icon: Payment, text: "Checkout" }],
-    href: "/order",
-    icon: ShoppingCart,
-    text: "Order",
-  },
+const getNavItems = (dict: I18nDict): NavItem[] => [
+  { href: "", icon: Home, text: dict.nav.home },
+  { href: "/order", icon: ShoppingCart, text: dict.nav.order },
 ];
 
 interface NavTemporaryDrawerProps {
@@ -60,6 +57,9 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const pathname = usePathname();
   const { lang } = useParams();
+
+  const dict = useI18n();
+  const navItems = getNavItems(dict);
 
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 

@@ -1,5 +1,6 @@
 {
-  "Checkout": "结账",
-  "Home": "首页",
-  "Order": "订单"
+  "nav": {
+    "home": "首页",
+    "order": "订单"
+  }
 }

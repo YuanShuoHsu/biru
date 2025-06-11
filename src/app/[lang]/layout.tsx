@@ -5,6 +5,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import AppLayout from "./appLayout";
+import { getDictionary } from "./dictionaries";
 import Providers from "./providers";
 
 import { LocaleCode } from "@/types/locale";
@@ -41,12 +42,15 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ lang: LocaleCode }>;
 }>) {
+  const { lang } = await params;
+  const dict = await getDictionary(lang);
+
   return (
-    <html lang={(await params).lang}>
+    <html lang={lang}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
+        <Providers dict={dict}>
           <AppLayout>{children}</AppLayout>
         </Providers>
       </body>

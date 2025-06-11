@@ -1,5 +1,6 @@
 {
-  "Checkout": "결제",
-  "Home": "홈",
-  "Order": "주문"
+  "nav": {
+    "home": "홈",
+    "order": "주문"
+  }
 }
