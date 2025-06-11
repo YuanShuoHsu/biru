@@ -5,70 +5,63 @@ import { useState } from "react";
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
-import ResponsiveDrawer from "@/components/ResponsiveDrawer";
+import NavTemporaryDrawer from "@/components/NavTemporaryDrawer";
 import ScrollTop from "@/components/ScrollTop";
-
-import { drawerWidth } from "@/constants/responsiveDrawer";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, CssBaseline, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { DrawerType } from "@/types/drawer";
+
 const ContainerBox = styled(Box)({
   display: "flex",
 });
 
-const MainBox = styled(Box)(({ theme }) => ({
+const MainBox = styled(Box)({
   width: "100%",
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
-
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(100% - ${drawerWidth}px)`,
-  },
-}));
+});
 
 interface AppLayoutProps {
   children: React.ReactNode;
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
+  const [drawerState, setDrawerState] = useState({
+    cart: false,
+    nav: false,
+  });
 
-  const [cartOpen, setCartOpen] = useState(false);
+  const handleDrawerToggle =
+    (type: DrawerType, open: boolean) =>
+    (event: React.KeyboardEvent | React.MouseEvent) => {
+      if (
+        event.type === "keydown" &&
+        ((event as React.KeyboardEvent).key === "Tab" ||
+          (event as React.KeyboardEvent).key === "Shift")
+      ) {
+        return;
+      }
 
-  const handleDrawerClose = () => {
-    setIsClosing(true);
-    setMobileOpen(false);
-  };
-
-  const handleDrawerToggle = () => {
-    if (!isClosing) {
-      setMobileOpen(!mobileOpen);
-    }
-  };
-
-  const handleDrawerTransitionEnd = () => setIsClosing(false);
-
-  const handleCartToggle = () => setCartOpen(!cartOpen);
+      setDrawerState((prev) => ({ ...prev, [type]: open }));
+    };
 
   return (
     <ContainerBox>
       <CssBaseline />
-      <HideAppBar
-        onCartToggle={handleCartToggle}
-        onDrawerToggle={handleDrawerToggle}
-      />
+      <HideAppBar onDrawerToggle={handleDrawerToggle} />
       <Toolbar disableGutters id="back-to-top-anchor" />
-      <ResponsiveDrawer
-        onDrawerClose={handleDrawerClose}
+      <NavTemporaryDrawer
         onDrawerToggle={handleDrawerToggle}
-        onDrawerTransitionEnd={handleDrawerTransitionEnd}
-        mobileOpen={mobileOpen}
+        open={drawerState.nav}
       />
-      <CartAnchorTemporaryDrawer onClose={handleCartToggle} open={cartOpen} />
+      <CartAnchorTemporaryDrawer
+        onDrawerToggle={handleDrawerToggle}
+        open={drawerState.cart}
+      />
       <MainBox as="main">
         <Toolbar />
         {children}

@@ -7,8 +7,6 @@ import MenuAppBar from "./MenuAppBar";
 
 import CustomizedBadges from "@/components/CustomizedBadges";
 
-import { drawerWidth } from "@/constants/responsiveDrawer";
-
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import {
   AppBar,
@@ -22,35 +20,21 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  width: "100%",
-  marginLeft: 0,
-
-  [theme.breakpoints.up("sm")]: {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-  },
-}));
+import { DrawerType } from "@/types/drawer";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   gap: theme.spacing(2),
 }));
 
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  display: "flex",
-
-  [theme.breakpoints.up("sm")]: {
-    display: "none",
-  },
-}));
-
 interface HideAppBarProps {
-  onCartToggle: () => void;
-  onDrawerToggle: () => void;
+  onDrawerToggle: (
+    type: DrawerType,
+    open: boolean,
+  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
 }
 
-const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
+const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
@@ -62,16 +46,16 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
 
   return (
     <HideOnScroll>
-      <StyledAppBar position="fixed">
+      <AppBar position="fixed">
         <StyledToolbar>
-          <StyledIconButton
+          <IconButton
             aria-label="open drawer"
             color="inherit"
             edge="start"
-            onClick={onDrawerToggle}
+            onClick={onDrawerToggle("nav", true)}
           >
             <Menu />
-          </StyledIconButton>
+          </IconButton>
           <Typography component="div" flexGrow="1" noWrap variant="h6">
             Biru Coffee
           </Typography>
@@ -79,7 +63,10 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
             <MenuAppBar />
             {showShoppingCartButton && (
               <Tooltip title="購物車">
-                <IconButton aria-label="cart" onClick={onCartToggle}>
+                <IconButton
+                  aria-label="cart"
+                  onClick={onDrawerToggle("cart", true)}
+                >
                   <CustomizedBadges badgeContent={totalQuantity}>
                     <ShoppingCart />
                   </CustomizedBadges>
@@ -88,7 +75,7 @@ const HideAppBar = ({ onCartToggle, onDrawerToggle }: HideAppBarProps) => {
             )}
           </Stack>
         </StyledToolbar>
-      </StyledAppBar>
+      </AppBar>
     </HideOnScroll>
   );
 };

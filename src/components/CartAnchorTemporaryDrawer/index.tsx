@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useParams } from "next/navigation";
+
+import { MAX_QUANTITY } from "@/constants/cart";
 
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
@@ -11,6 +13,7 @@ import {
   Drawer,
   FormControl,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemAvatar,
@@ -23,9 +26,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { MAX_QUANTITY } from "@/constants/cart";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
-import { useParams } from "next/navigation";
+
+import { DrawerType } from "@/types/drawer";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -88,12 +91,15 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 }));
 
 interface CartAnchorTemporaryDrawerProps {
-  onClose: () => void;
+  onDrawerToggle: (
+    type: DrawerType,
+    open: boolean,
+  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
   open: boolean;
 }
 
 const CartAnchorTemporaryDrawer = ({
-  onClose,
+  onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
@@ -120,8 +126,8 @@ const CartAnchorTemporaryDrawer = ({
     }
   };
 
-  const drawer = (
-    <DrawerBox>
+  const drawerList = (
+    <DrawerBox role="presentation">
       <StickyHeader>
         <Toolbar>
           <Typography variant="h6">購物車清單</Typography>
@@ -227,7 +233,7 @@ const CartAnchorTemporaryDrawer = ({
           component={Link}
           fullWidth
           href={`/order/${tableNumber}/checkout`}
-          onClick={onClose}
+          onClick={onDrawerToggle("cart", false)}
           variant="contained"
         >
           前往結帳
@@ -239,11 +245,11 @@ const CartAnchorTemporaryDrawer = ({
   return (
     <Drawer
       anchor="right"
+      onClose={onDrawerToggle("cart", false)}
       open={open}
-      onClose={onClose}
       ModalProps={{ keepMounted: true }}
     >
-      {drawer}
+      {drawerList}
     </Drawer>
   );
 };

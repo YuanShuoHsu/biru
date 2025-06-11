@@ -1,11 +1,5 @@
-// https://mui.com/material-ui/react-drawer/#system-ResponsiveDrawer.tsx
-// https://mui.com/material-ui/react-list/#NestedList.tsx
-
-import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Fragment, useState } from "react";
-
-import { drawerWidth } from "@/constants/responsiveDrawer";
 
 import {
   ExpandLess,
@@ -19,50 +13,21 @@ import {
   Divider,
   Drawer,
   IconButton,
+  Link,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  styled,
   Toolbar,
-  useMediaQuery,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
-import theme from "@/theme";
+import { DrawerType } from "@/types/drawer";
 
-const NavBox = styled(Box)(({ theme }) => ({
-  [theme.breakpoints.up("sm")]: {
-    width: drawerWidth,
-    flexShrink: 0,
-  },
-}));
-
-const TemporaryDrawer = styled(Drawer)(({ theme }) => ({
-  display: "block",
-
-  [theme.breakpoints.up("sm")]: {
-    display: "none",
-  },
-
-  "& .MuiDrawer-paper": {
-    boxSizing: "border-box",
-    width: drawerWidth,
-  },
-}));
-
-const PermanentDrawer = styled(Drawer)(({ theme }) => ({
-  display: "none",
-
-  [theme.breakpoints.up("sm")]: {
-    display: "block",
-  },
-
-  "& .MuiDrawer-paper": {
-    boxSizing: "border-box",
-    width: drawerWidth,
-  },
-}));
+const DrawerBox = styled(Box)({
+  width: 250,
+});
 
 interface NavItem {
   href: string;
@@ -81,20 +46,18 @@ const navItems: NavItem[] = [
   },
 ];
 
-interface ResponsiveDrawerProps {
-  mobileOpen: boolean;
-  onDrawerClose: () => void;
-  onDrawerToggle: () => void;
-  onDrawerTransitionEnd: () => void;
+interface NavTemporaryDrawerProps {
+  onDrawerToggle: (
+    type: DrawerType,
+    open: boolean,
+  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
+  open: boolean;
 }
 
-const ResponsiveDrawer = ({
-  onDrawerClose,
+const NavTemporaryDrawer = ({
   onDrawerToggle,
-  onDrawerTransitionEnd,
-  mobileOpen,
-}: ResponsiveDrawerProps) => {
-  const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
+  open,
+}: NavTemporaryDrawerProps) => {
   const pathname = usePathname();
   const { lang } = useParams();
 
@@ -134,7 +97,6 @@ const ResponsiveDrawer = ({
             <ListItemButton
               component={Link}
               href={fullPath}
-              onClick={isSmUp ? undefined : onDrawerToggle}
               selected={selected}
               sx={{ pl: paddingLeft }}
             >
@@ -155,32 +117,23 @@ const ResponsiveDrawer = ({
       );
     });
 
-  const drawer = (
-    <Box>
+  const drawerList = (
+    <DrawerBox
+      onClick={onDrawerToggle("nav", false)}
+      // onKeyDown={onDrawerToggle("nav", false)}
+      role="presentation"
+    >
       <Toolbar />
       <Divider />
       <List>{renderItems(navItems)}</List>
-    </Box>
+    </DrawerBox>
   );
 
   return (
-    <NavBox aria-label="folders" as="nav">
-      <TemporaryDrawer
-        ModalProps={{
-          keepMounted: true,
-        }}
-        onClose={onDrawerClose}
-        onTransitionEnd={onDrawerTransitionEnd}
-        open={mobileOpen}
-        variant="temporary"
-      >
-        {drawer}
-      </TemporaryDrawer>
-      <PermanentDrawer open variant="permanent">
-        {drawer}
-      </PermanentDrawer>
-    </NavBox>
+    <Drawer onClose={onDrawerToggle("nav", false)} open={open}>
+      {drawerList}
+    </Drawer>
   );
 };
 
-export default ResponsiveDrawer;
+export default NavTemporaryDrawer;
