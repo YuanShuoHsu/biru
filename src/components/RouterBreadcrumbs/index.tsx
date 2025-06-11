@@ -4,7 +4,13 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
-import { CheckCircle, Home, Payment, ShoppingCart } from "@mui/icons-material";
+import {
+  Home,
+  Payment,
+  Pets,
+  ShoppingCart,
+  TableBar,
+} from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -26,7 +32,7 @@ const createBreadcrumbMap = (
     label: "Order",
   },
   [`/order/${tableNumber}`]: {
-    icon: ShoppingCart,
+    icon: TableBar,
     label: `${tableNumber}`,
   },
   [`/order/${tableNumber}/checkout`]: {
@@ -34,7 +40,7 @@ const createBreadcrumbMap = (
     label: "Checkout",
   },
   [`/order/${tableNumber}/complete`]: {
-    icon: CheckCircle,
+    icon: Pets,
     label: "Complete",
   },
 });
