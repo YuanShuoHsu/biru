@@ -138,7 +138,7 @@ const CartAnchorTemporaryDrawer = ({
         {isEmpty ? (
           <Typography variant="body1">購物車尚未有商品</Typography>
         ) : (
-          itemsList().map((item, index) => (
+          itemsList.map((item, index) => (
             <Stack key={item.id} gap={2}>
               <StyledListItem alignItems="flex-start" disablePadding>
                 <StyledListItemAvatar>
@@ -209,7 +209,7 @@ const CartAnchorTemporaryDrawer = ({
                   </IconButton>
                 </Stack>
               </StyledFormControl>
-              {index < itemsList().length - 1 && (
+              {index < itemsList.length - 1 && (
                 <Divider component="li" variant="inset" />
               )}
             </Stack>

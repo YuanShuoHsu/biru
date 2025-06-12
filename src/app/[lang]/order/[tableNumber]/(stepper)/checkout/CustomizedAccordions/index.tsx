@@ -77,7 +77,7 @@ const CustomizedAccordions = () => {
             {isEmpty ? (
               <Typography variant="body1">購物車尚未有商品</Typography>
             ) : (
-              itemsList().map((item, index) => (
+              itemsList.map((item, index) => (
                 <Stack key={item.id} gap={2}>
                   <ListItem disablePadding>
                     <StyledListItemText
@@ -92,7 +92,7 @@ const CustomizedAccordions = () => {
                       NT$ {(item.price * item.quantity).toLocaleString(lang)}
                     </Typography>
                   </ListItem>
-                  {index < itemsList().length - 1 && <Divider component="li" />}
+                  {index < itemsList.length - 1 && <Divider component="li" />}
                 </Stack>
               ))
             )}

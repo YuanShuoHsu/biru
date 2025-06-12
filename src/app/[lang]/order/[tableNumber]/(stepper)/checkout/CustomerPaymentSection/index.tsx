@@ -84,7 +84,7 @@ const CustomerPaymentSection = () => {
       base: {
         TotalAmount: totalAmount,
         TradeDesc: "餐點付款",
-        ItemName: itemsList()
+        ItemName: itemsList
           .map(
             (item) =>
               `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,

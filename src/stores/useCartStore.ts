@@ -14,10 +14,10 @@ export interface CartItem {
 
 interface CartState {
   itemsMap: Record<string, CartItem>;
+  itemsList: CartItem[];
   totalAmount: number;
   totalQuantity: number;
   isEmpty: boolean;
-  itemsList: () => CartItem[];
   calculateTotal: (map: Record<string, CartItem>) => {
     totalAmount: number;
     totalQuantity: number;
@@ -32,10 +32,10 @@ export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
       itemsMap: {},
+      itemsList: [],
       totalAmount: 0,
       totalQuantity: 0,
       isEmpty: true,
-      itemsList: () => Object.values(get().itemsMap),
       calculateTotal: (map) => {
         const totalAmount = Object.values(map).reduce(
           (sum, item) => sum + item.amount,
@@ -56,11 +56,15 @@ export const useCartStore = create<CartState>()(
 
         const { totalAmount, totalQuantity } = calculateTotal(newMap);
 
+        const itemsList = Object.values(newMap);
+        const isEmpty = totalQuantity === 0;
+
         set({
           itemsMap: newMap,
+          itemsList,
           totalAmount,
           totalQuantity,
-          isEmpty: totalQuantity === 0,
+          isEmpty,
         });
       },
       updateItem: (item) => {
@@ -80,16 +84,26 @@ export const useCartStore = create<CartState>()(
 
         const { totalAmount, totalQuantity } = calculateTotal(newMap);
 
+        const itemsList = Object.values(newMap);
+        const isEmpty = totalQuantity === 0;
+
         set({
           itemsMap: newMap,
+          itemsList,
           totalAmount,
           totalQuantity,
-          isEmpty: totalQuantity === 0,
+          isEmpty,
         });
       },
       getItemQuantity: (itemId) => get().itemsMap[itemId]?.quantity || 0,
       clearCart: () =>
-        set({ itemsMap: {}, totalAmount: 0, totalQuantity: 0, isEmpty: true }),
+        set({
+          itemsMap: {},
+          itemsList: [],
+          totalAmount: 0,
+          totalQuantity: 0,
+          isEmpty: true,
+        }),
     }),
     {
       name: "biru-cart",
