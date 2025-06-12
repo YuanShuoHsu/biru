@@ -27,6 +27,8 @@ import { DrawerType } from "@/types/drawer";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
+  justifyContent: "space-between",
+  alignItems: "center",
   gap: theme.spacing(1),
 }));
 
@@ -60,36 +62,37 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
     <HideOnScroll>
       <AppBar position="fixed">
         <StyledToolbar>
-          <IconButton
-            aria-label="open drawer"
-            color="inherit"
-            edge="start"
-            onClick={onDrawerToggle("nav", true)}
-          >
-            <Menu />
-          </IconButton>
-          <Stack
-            component={Link}
-            href="/"
-            flexDirection="row"
-            alignItems="center"
-            gap={1}
-            flexGrow="1"
-          >
-            <ImageBox>
-              <Image
-                alt="biru coffee"
-                draggable={false}
-                fill
-                priority
-                sizes="(min-width: 808px) 50vw, 100vw"
-                src="/images/IMG_4590.jpg"
-                style={{ objectFit: "cover" }}
-              />
-            </ImageBox>
-            <Typography component="span" variant="h6">
-              Biru Coffee
-            </Typography>
+          <Stack flexDirection="row" alignItems="center" gap={1}>
+            <IconButton
+              aria-label="open drawer"
+              color="inherit"
+              edge="start"
+              onClick={onDrawerToggle("nav", true)}
+            >
+              <Menu />
+            </IconButton>
+            <Stack
+              component={Link}
+              href="/"
+              flexDirection="row"
+              alignItems="center"
+              gap={1}
+            >
+              <ImageBox>
+                <Image
+                  alt="biru coffee"
+                  draggable={false}
+                  fill
+                  priority
+                  sizes="(min-width: 808px) 50vw, 100vw"
+                  src="/images/IMG_4590.jpg"
+                  style={{ objectFit: "cover" }}
+                />
+              </ImageBox>
+              <Typography component="span" variant="h6">
+                Biru Coffee
+              </Typography>
+            </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
