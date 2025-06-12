@@ -2,5 +2,8 @@
   "nav": {
     "home": "Home",
     "order": "Order"
+  },
+  "order": {
+    "selectTable": "Select a table"
   }
 }

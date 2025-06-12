@@ -2,5 +2,8 @@
   "nav": {
     "home": "홈",
     "order": "주문"
+  },
+  "order": {
+    "selectTable": "테이블 선택"
   }
 }

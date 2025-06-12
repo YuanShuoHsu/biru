@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
+import { useI18n } from "@/context/i18n";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -15,12 +16,14 @@ const Order = () => {
   const router = useRouter();
   const { lang } = useParams();
 
+  const dict = useI18n();
+
   const handleClick = (number: number) =>
     router.push(`/${lang}/order/${number}`);
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">選擇桌號</Typography>
+      <Typography variant="h6">{dict.order.selectTable}</Typography>
       <Grid container spacing={2}>
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
           (number) => (

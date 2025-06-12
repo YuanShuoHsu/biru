@@ -2,5 +2,8 @@
   "nav": {
     "home": "首頁",
     "order": "訂單"
+  },
+  "order": {
+    "selectTable": "選擇桌號"
   }
 }
