@@ -51,6 +51,7 @@ const CustomizedAccordions = () => {
   const { lang } = useParams();
 
   const { itemsList, totalAmount } = useCartStore();
+  const isEmpty = itemsList().length === 0;
 
   return (
     <Accordion defaultExpanded disableGutters>
@@ -74,20 +75,28 @@ const CustomizedAccordions = () => {
       <StyledAccordionDetails>
         <StyledList disablePadding>
           <NoSsr defer fallback={<Typography>載入中...</Typography>}>
-            {itemsList().map((item, index) => (
-              <Stack key={item.id} gap={2}>
-                <ListItem disablePadding>
-                  <StyledListItemText
-                    primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                    secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                  />
-                  <Typography color="primary" fontWeight="bold" variant="body2">
-                    NT$ {(item.price * item.quantity).toLocaleString(lang)}
-                  </Typography>
-                </ListItem>
-                {index < itemsList().length - 1 && <Divider component="li" />}
-              </Stack>
-            ))}
+            {isEmpty ? (
+              <Typography variant="body1">購物車尚未有商品</Typography>
+            ) : (
+              itemsList().map((item, index) => (
+                <Stack key={item.id} gap={2}>
+                  <ListItem disablePadding>
+                    <StyledListItemText
+                      primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
+                      secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                    />
+                    <Typography
+                      color="primary"
+                      fontWeight="bold"
+                      variant="body2"
+                    >
+                      NT$ {(item.price * item.quantity).toLocaleString(lang)}
+                    </Typography>
+                  </ListItem>
+                  {index < itemsList().length - 1 && <Divider component="li" />}
+                </Stack>
+              ))
+            )}
           </NoSsr>
         </StyledList>
       </StyledAccordionDetails>

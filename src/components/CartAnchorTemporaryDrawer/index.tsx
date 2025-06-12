@@ -103,6 +103,7 @@ const CartAnchorTemporaryDrawer = ({
   open,
 }: CartAnchorTemporaryDrawerProps) => {
   const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
+  const isEmpty = itemsList().length === 0;
 
   const { lang, tableNumber } = useParams();
 
@@ -134,82 +135,86 @@ const CartAnchorTemporaryDrawer = ({
         </Toolbar>
       </StickyHeader>
       <StyledList disablePadding>
-        {itemsList().map((item, index) => (
-          <Stack key={item.id} gap={2}>
-            <StyledListItem alignItems="flex-start" disablePadding>
-              <StyledListItemAvatar>
-                <ImageBox>
-                  {item.imageUrl && (
-                    <Image
-                      alt={item.name}
-                      draggable={false}
-                      fill
-                      sizes="(min-width: 808px) 50vw, 100vw"
-                      src={item.imageUrl}
-                      style={{ objectFit: "cover" }}
-                    />
+        {isEmpty ? (
+          <Typography variant="body1">購物車尚未有商品</Typography>
+        ) : (
+          itemsList().map((item, index) => (
+            <Stack key={item.id} gap={2}>
+              <StyledListItem alignItems="flex-start" disablePadding>
+                <StyledListItemAvatar>
+                  <ImageBox>
+                    {item.imageUrl && (
+                      <Image
+                        alt={item.name}
+                        draggable={false}
+                        fill
+                        sizes="(min-width: 808px) 50vw, 100vw"
+                        src={item.imageUrl}
+                        style={{ objectFit: "cover" }}
+                      />
+                    )}
+                  </ImageBox>
+                </StyledListItemAvatar>
+                <Box>
+                  <StyledListItemText
+                    primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
+                    // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                  />
+                  <Typography color="primary" fontWeight="bold" variant="body2">
+                    NT$ {item.amount.toLocaleString(lang)}
+                  </Typography>
+                </Box>
+              </StyledListItem>
+              <StyledFormControl>
+                <Stack direction="row" alignItems="center" gap={1}>
+                  {item.quantity === 1 ? (
+                    <IconButton
+                      aria-label="delete"
+                      onClick={() => deleteItem(item)}
+                      size="small"
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      aria-label="decrease"
+                      disabled={item.quantity <= 1}
+                      onClick={() => handleDecrease(item)}
+                      size="small"
+                    >
+                      <Remove fontSize="small" />
+                    </IconButton>
                   )}
-                </ImageBox>
-              </StyledListItemAvatar>
-              <Box>
-                <StyledListItemText
-                  primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
-                  // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                />
-                <Typography color="primary" fontWeight="bold" variant="body2">
-                  NT$ {item.amount.toLocaleString(lang)}
-                </Typography>
-              </Box>
-            </StyledListItem>
-            <StyledFormControl>
-              <Stack direction="row" alignItems="center" gap={1}>
-                {item.quantity === 1 ? (
+                  <TextField
+                    fullWidth
+                    id="quantity-input"
+                    size="small"
+                    slotProps={{
+                      input: {
+                        readOnly: true,
+                      },
+                      htmlInput: {
+                        sx: { textAlign: "center" },
+                      },
+                    }}
+                    value={item.quantity}
+                  />
                   <IconButton
-                    aria-label="delete"
-                    onClick={() => deleteItem(item)}
+                    aria-label="increase"
+                    disabled={item.quantity >= MAX_QUANTITY}
+                    onClick={() => handleIncrease(item)}
                     size="small"
                   >
-                    <Delete fontSize="small" />
+                    <Add fontSize="small" />
                   </IconButton>
-                ) : (
-                  <IconButton
-                    aria-label="decrease"
-                    disabled={item.quantity <= 1}
-                    onClick={() => handleDecrease(item)}
-                    size="small"
-                  >
-                    <Remove fontSize="small" />
-                  </IconButton>
-                )}
-                <TextField
-                  fullWidth
-                  id="quantity-input"
-                  size="small"
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                    htmlInput: {
-                      sx: { textAlign: "center" },
-                    },
-                  }}
-                  value={item.quantity}
-                />
-                <IconButton
-                  aria-label="increase"
-                  disabled={item.quantity >= MAX_QUANTITY}
-                  onClick={() => handleIncrease(item)}
-                  size="small"
-                >
-                  <Add fontSize="small" />
-                </IconButton>
-              </Stack>
-            </StyledFormControl>
-            {index < itemsList().length - 1 && (
-              <Divider component="li" variant="inset" />
-            )}
-          </Stack>
-        ))}
+                </Stack>
+              </StyledFormControl>
+              {index < itemsList().length - 1 && (
+                <Divider component="li" variant="inset" />
+              )}
+            </Stack>
+          ))
+        )}
       </StyledList>
       <StickyFooter>
         <Stack
@@ -230,6 +235,7 @@ const CartAnchorTemporaryDrawer = ({
           </Typography>
         </Stack>
         <Button
+          disabled={isEmpty}
           component={Link}
           fullWidth
           href={`/order/${tableNumber}/checkout`}
