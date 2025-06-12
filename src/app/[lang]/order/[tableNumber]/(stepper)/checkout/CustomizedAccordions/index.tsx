@@ -75,7 +75,7 @@ const CustomizedAccordions = () => {
         <StyledList disablePadding>
           <NoSsr defer fallback={<Typography>載入中...</Typography>}>
             {isEmpty ? (
-              <Typography variant="body1">購物車尚未有商品</Typography>
+              <Typography variant="body1">尚未有商品</Typography>
             ) : (
               itemsList.map((item, index) => (
                 <Stack key={item.id} gap={2}>

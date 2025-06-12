@@ -32,10 +32,10 @@ const DrawerBox = styled(Box)({
 });
 
 interface NavItem {
+  children?: NavItem[];
   href: string;
   icon: React.ComponentType;
   text: string;
-  children?: NavItem[];
 }
 
 const getNavItems = (dict: I18nDict): NavItem[] => [
