@@ -1,4 +1,9 @@
 {
+  "breadcrumb": {
+    "checkout": "お会計",
+    "complete": "完了",
+    "order": "注文"
+  },
   "nav": {
     "home": "ホーム",
     "order": "注文"

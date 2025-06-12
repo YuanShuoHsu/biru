@@ -1,4 +1,9 @@
 {
+  "breadcrumb": {
+    "checkout": "Checkout",
+    "complete": "Complete",
+    "order": "Order"
+  },
   "nav": {
     "home": "Home",
     "order": "Order"

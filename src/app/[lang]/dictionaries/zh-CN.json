@@ -1,4 +1,9 @@
 {
+  "breadcrumb": {
+    "checkout": "结账",
+    "complete": "完成",
+    "order": "点餐"
+  },
   "nav": {
     "home": "首页",
     "order": "订单"

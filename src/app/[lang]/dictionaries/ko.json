@@ -1,4 +1,9 @@
 {
+  "breadcrumb": {
+    "checkout": "결제",
+    "complete": "완료",
+    "order": "주문"
+  },
   "nav": {
     "home": "홈",
     "order": "주문"

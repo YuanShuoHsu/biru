@@ -4,6 +4,8 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
+import { I18nDict, useI18n } from "@/context/i18n";
+
 import { Payment, Pets, ShoppingCart, TableBar } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
@@ -15,6 +17,7 @@ interface BreadcrumbItem {
 }
 
 const createBreadcrumbMap = (
+  dict: I18nDict,
   tableNumber: string,
 ): Record<string, BreadcrumbItem> => ({
   // "/": {
@@ -23,7 +26,7 @@ const createBreadcrumbMap = (
   // },
   "/order": {
     icon: ShoppingCart,
-    label: "Order",
+    label: dict.breadcrumb.order,
   },
   [`/order/${tableNumber}`]: {
     icon: TableBar,
@@ -31,11 +34,11 @@ const createBreadcrumbMap = (
   },
   [`/order/${tableNumber}/checkout`]: {
     icon: Payment,
-    label: "Checkout",
+    label: dict.breadcrumb.checkout,
   },
   [`/order/${tableNumber}/complete`]: {
     icon: Pets,
-    label: "Complete",
+    label: dict.breadcrumb.complete,
   },
 });
 
@@ -65,7 +68,8 @@ const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
-  const breadcrumbs = createBreadcrumbMap(tableNumber as string);
+  const dict = useI18n();
+  const breadcrumbs = createBreadcrumbMap(dict, tableNumber as string);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
