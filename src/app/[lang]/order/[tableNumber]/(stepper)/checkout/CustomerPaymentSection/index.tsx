@@ -58,7 +58,7 @@ const CustomerPaymentSection = () => {
   const { lang, tableNumber } = useParams();
   const router = useRouter();
 
-  const { itemsList, totalAmount } = useCartStore();
+  const { isEmpty, itemsList, totalAmount } = useCartStore();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -143,7 +143,7 @@ const CustomerPaymentSection = () => {
       />
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button
-        disabled={isMutating || !payment}
+        disabled={isMutating || isEmpty || !payment}
         fullWidth
         loading={isMutating}
         loadingPosition="start"
