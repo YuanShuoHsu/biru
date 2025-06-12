@@ -1,7 +1,7 @@
 "use client";
 
-import CustomerPaymentSection from "./CustomerPaymentSection";
-import CustomizedAccordions from "./CustomizedAccordions";
+import CustomerPaymentSection from "@/components/CustomerPaymentSection";
+import CustomizedAccordions from "@/components/CustomizedAccordions";
 
 import { Grid } from "@mui/material";
 

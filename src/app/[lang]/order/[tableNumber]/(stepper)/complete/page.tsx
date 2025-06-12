@@ -1,9 +1,9 @@
 "use client";
 
-import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { Box, Button, Paper, Typography } from "@mui/material";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
+
+import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
+import { Box, Button, Paper, Typography } from "@mui/material";
 
 const OrderTableNumberComplete = () => {
   const { tableNumber, lang } = useParams();
@@ -31,7 +31,7 @@ const OrderTableNumberComplete = () => {
       >
         {isSuccess ? (
           <>
-            <CheckCircleOutlineIcon
+            <CheckCircleOutline
               sx={{ fontSize: 64, color: "success.main", mb: 2 }}
             />
             <Typography variant="h5" fontWeight="bold" gutterBottom>
@@ -43,9 +43,7 @@ const OrderTableNumberComplete = () => {
           </>
         ) : (
           <>
-            <ErrorOutlineIcon
-              sx={{ fontSize: 64, color: "error.main", mb: 2 }}
-            />
+            <ErrorOutline sx={{ fontSize: 64, color: "error.main", mb: 2 }} />
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               付款失敗
             </Typography>

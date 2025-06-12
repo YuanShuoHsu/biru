@@ -1,4 +1,4 @@
-import HorizontalLinearStepper from "./HorizontalLinearStepper";
+import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
 
 export default function TableLayout({
   children,
