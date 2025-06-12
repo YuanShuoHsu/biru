@@ -51,6 +51,7 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
 const CustomerPaymentSection = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
+    notes: "",
   });
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
@@ -135,11 +136,24 @@ const CustomerPaymentSection = () => {
       </Stack>
       <TextField
         fullWidth
-        label="顧客姓名"
+        label="姓名"
         name="name"
         onChange={handleInfoChange}
         required
         value={customerInfo.name}
+      />
+      <TextField
+        fullWidth
+        label="備註"
+        multiline
+        name="notes"
+        onChange={handleInfoChange}
+        slotProps={{
+          htmlInput: {
+            maxLength: 50,
+          },
+        }}
+        value={customerInfo.notes}
       />
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button

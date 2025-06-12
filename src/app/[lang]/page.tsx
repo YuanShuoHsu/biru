@@ -53,10 +53,12 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
   ".swiper-pagination-bullet": {
     backgroundColor: theme.palette.common.white,
     opacity: 0.5,
-    transition: theme.transitions.create(["background-color"]),
+    transition: theme.transitions.create(["width", "background-color"]),
   },
   ".swiper-pagination-bullet-active": {
+    width: theme.spacing(2),
     backgroundColor: theme.palette.primary.main,
+    borderRadius: theme.shape.borderRadius,
   },
 }));
 
