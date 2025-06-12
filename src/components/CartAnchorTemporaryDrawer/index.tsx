@@ -102,8 +102,8 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { updateItem, itemsList, deleteItem, totalAmount } = useCartStore();
-  const isEmpty = itemsList().length === 0;
+  const { isEmpty, updateItem, itemsList, deleteItem, totalAmount } =
+    useCartStore();
 
   const { lang, tableNumber } = useParams();
 

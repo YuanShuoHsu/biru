@@ -50,8 +50,7 @@ const StyledListItemText = styled(ListItemText)({
 const CustomizedAccordions = () => {
   const { lang } = useParams();
 
-  const { itemsList, totalAmount } = useCartStore();
-  const isEmpty = itemsList().length === 0;
+  const { isEmpty, itemsList, totalAmount } = useCartStore();
 
   return (
     <Accordion defaultExpanded disableGutters>

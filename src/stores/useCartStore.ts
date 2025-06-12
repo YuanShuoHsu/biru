@@ -16,6 +16,7 @@ interface CartState {
   itemsMap: Record<string, CartItem>;
   totalAmount: number;
   totalQuantity: number;
+  isEmpty: boolean;
   itemsList: () => CartItem[];
   calculateTotal: (map: Record<string, CartItem>) => {
     totalAmount: number;
@@ -33,6 +34,7 @@ export const useCartStore = create<CartState>()(
       itemsMap: {},
       totalAmount: 0,
       totalQuantity: 0,
+      isEmpty: true,
       itemsList: () => Object.values(get().itemsMap),
       calculateTotal: (map) => {
         const totalAmount = Object.values(map).reduce(
@@ -58,6 +60,7 @@ export const useCartStore = create<CartState>()(
           itemsMap: newMap,
           totalAmount,
           totalQuantity,
+          isEmpty: totalQuantity === 0,
         });
       },
       updateItem: (item) => {
@@ -81,10 +84,12 @@ export const useCartStore = create<CartState>()(
           itemsMap: newMap,
           totalAmount,
           totalQuantity,
+          isEmpty: totalQuantity === 0,
         });
       },
       getItemQuantity: (itemId) => get().itemsMap[itemId]?.quantity || 0,
-      clearCart: () => set({ itemsMap: {}, totalAmount: 0, totalQuantity: 0 }),
+      clearCart: () =>
+        set({ itemsMap: {}, totalAmount: 0, totalQuantity: 0, isEmpty: true }),
     }),
     {
       name: "biru-cart",
