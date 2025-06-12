@@ -4,6 +4,12 @@
     "complete": "完成",
     "order": "點餐"
   },
+  "dialog": {
+    "addToCart": "加入購物車",
+    "close": "關閉",
+    "from": "起",
+    "soldOut": "售完"
+  },
   "nav": {
     "home": "首頁",
     "order": "訂單"

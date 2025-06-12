@@ -6,6 +6,8 @@ import CardDialogContent, {
   CardDialogContentImperativeHandle,
 } from "./CardDialogContent";
 
+import { useI18n } from "@/context/i18n";
+
 import {
   Box,
   Card,
@@ -80,9 +82,11 @@ const ActionAreaCard = ({
   options,
   price,
 }: ActionAreaCardProps) => {
+  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
+
   const { lang } = useParams();
 
-  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
+  const dict = useI18n();
 
   const { updateItem } = useCartStore();
   const { setDialog } = useDialogStore();
@@ -106,8 +110,8 @@ const ActionAreaCard = ({
           sizes={sizes}
         />
       ),
-      cancelText: "關閉",
-      confirmText: "加入購物車",
+      cancelText: dict.dialog.close,
+      confirmText: dict.dialog.addToCart,
       onConfirm: async () => {
         if (!dialogRef.current) return;
         const { amount, extraCost, price, quantity, size } =
@@ -152,7 +156,7 @@ const ActionAreaCard = ({
               <StyledChip key={label} label={label} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
-              {`NT$ ${displayPrice} ${sizes ? "起" : ""}`}
+              {`NT$ ${displayPrice} ${sizes ? dict.dialog.from : ""}`}
             </Typography>
           </Stack>
           {description && (
@@ -162,7 +166,7 @@ const ActionAreaCard = ({
           )}
           {!inStock && (
             <Typography variant="caption" color="error">
-              售完
+              {dict.dialog.soldOut}
             </Typography>
           )}
         </StyledCardContent>

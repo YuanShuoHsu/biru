@@ -4,6 +4,12 @@
     "complete": "完了",
     "order": "注文"
   },
+  "dialog": {
+    "addToCart": "カートに追加",
+    "close": "閉じる",
+    "from": "〜",
+    "soldOut": "売り切れ"
+  },
   "nav": {
     "home": "ホーム",
     "order": "注文"

@@ -4,6 +4,12 @@
     "complete": "完成",
     "order": "点餐"
   },
+  "dialog": {
+    "addToCart": "加入购物车",
+    "close": "关闭",
+    "from": "起",
+    "soldOut": "售罄"
+  },
   "nav": {
     "home": "首页",
     "order": "订单"

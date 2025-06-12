@@ -4,6 +4,12 @@
     "complete": "완료",
     "order": "주문"
   },
+  "dialog": {
+    "addToCart": "장바구니에 추가",
+    "close": "닫기",
+    "from": "부터",
+    "soldOut": "품절"
+  },
   "nav": {
     "home": "홈",
     "order": "주문"

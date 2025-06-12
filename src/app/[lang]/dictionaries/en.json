@@ -4,6 +4,12 @@
     "complete": "Complete",
     "order": "Order"
   },
+  "dialog": {
+    "addToCart": "Add to cart",
+    "close": "Close",
+    "from": "from",
+    "soldOut": "Sold out"
+  },
   "nav": {
     "home": "Home",
     "order": "Order"
