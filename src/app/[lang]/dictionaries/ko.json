@@ -9,6 +9,11 @@
     "order": "주문"
   },
   "order": {
-    "selectTable": "테이블 선택"
+    "selectTable": "테이블 선택",
+    "tableNumber": {
+      "search": {
+        "placeholder": "메뉴 검색"
+      }
+    }
   }
 }

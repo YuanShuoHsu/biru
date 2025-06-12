@@ -5,9 +5,13 @@ import { useEffect } from "react";
 import { Search } from "@mui/icons-material";
 import { InputAdornment, TextField } from "@mui/material";
 
+import { useI18n } from "@/context/i18n";
+
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 
 const OrderSearch = () => {
+  const dict = useI18n();
+
   const { orderSearchText, setOrderSearchText } = useOrderSearchStore();
 
   useEffect(() => {
@@ -17,7 +21,7 @@ const OrderSearch = () => {
   return (
     <TextField
       onChange={(e) => setOrderSearchText(e.target.value)}
-      placeholder="搜尋菜單"
+      placeholder={dict.order.tableNumber.search.placeholder}
       slotProps={{
         input: {
           startAdornment: (

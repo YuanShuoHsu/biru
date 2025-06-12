@@ -9,6 +9,11 @@
     "order": "注文"
   },
   "order": {
-    "selectTable": "テーブルを選択"
+    "selectTable": "テーブルを選択",
+    "tableNumber": {
+      "search": {
+        "placeholder": "メニューを検索"
+      }
+    }
   }
 }

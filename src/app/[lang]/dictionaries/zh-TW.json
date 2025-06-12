@@ -9,6 +9,11 @@
     "order": "訂單"
   },
   "order": {
-    "selectTable": "選擇桌號"
+    "selectTable": "選擇桌號",
+    "tableNumber": {
+      "search": {
+        "placeholder": "搜尋菜單"
+      }
+    }
   }
 }

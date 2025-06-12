@@ -9,6 +9,11 @@
     "order": "Order"
   },
   "order": {
-    "selectTable": "Select a table"
+    "selectTable": "Select a table",
+    "tableNumber": {
+      "search": {
+        "placeholder": "Search menu"
+      }
+    }
   }
 }
