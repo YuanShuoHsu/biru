@@ -26,18 +26,24 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
-  const allTags = [
-    ...new Set(
-      menu.flatMap(({ items }) => items.flatMap(({ tags }) => tags || [])),
-    ),
-  ];
+  const allItems = menu.flatMap(({ items }) => items);
+
+  const topSoldItems = [...allItems]
+    .sort((a, b) => b.sold - a.sold)
+    .slice(0, 5);
+
+  const topSoldGroup = {
+    id: "top-sold",
+    name: "人氣排行",
+    items: topSoldItems,
+  };
+
+  const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
 
   const tagGroups = allTags.map((tagKey) => ({
     id: tagKey,
     name: tagKey,
-    items: menu.flatMap(({ items }) =>
-      items.filter(({ tags }) => tags?.includes(tagKey)),
-    ),
+    items: allItems.filter(({ tags }) => tags?.includes(tagKey)),
   }));
 
   const categoryGroups = menu.map(({ id, name, items }) => ({
@@ -46,7 +52,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     items,
   }));
 
-  const combinedGroups = [...tagGroups, ...categoryGroups];
+  const combinedGroups = [topSoldGroup, ...tagGroups, ...categoryGroups];
 
   const filteredGroups = combinedGroups
     .map((group) => ({
@@ -94,7 +100,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
       </HorizontalTabs>
       {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
-          <ResponsiveGrid items={items} />
+          <ResponsiveGrid items={items} showTopSold={id === "top-sold"} />
         </TabPanel>
       ))}
     </Stack>

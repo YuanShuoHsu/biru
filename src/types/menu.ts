@@ -1,4 +1,4 @@
-type Tag = "popular" | "new" | "lowCaffeine";
+type Tag = "new" | "lowCaffeine";
 
 export interface Choice {
   label: string;
@@ -15,10 +15,11 @@ export interface MenuItem {
   name: string;
   description?: string;
   imageUrl: string;
-  price: number;
-  tags?: Tag[];
-  options?: Option[];
   inStock: boolean;
+  options?: Option[];
+  price: number;
+  sold: number;
+  tags?: Tag[];
 }
 
 export interface Category {

@@ -1,3 +1,5 @@
+// https://nextjs.org/docs/app/api-reference/file-conventions/not-found
+
 "use client";
 
 import Link from "next/link";

@@ -8,6 +8,7 @@ import CardDialogContent, {
 
 import { useI18n } from "@/context/i18n";
 
+import { FavoriteBorder } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -71,6 +72,7 @@ interface ActionAreaCardProps {
   inStock: boolean;
   options?: Option[];
   price: number;
+  topSoldRank?: number;
 }
 
 const ActionAreaCard = ({
@@ -81,6 +83,7 @@ const ActionAreaCard = ({
   name,
   options,
   price,
+  topSoldRank,
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
@@ -137,6 +140,33 @@ const ActionAreaCard = ({
     <StyledCard inStock={inStock} onClick={handleDialogClick}>
       <StyledCardActionArea>
         <ImageBox>
+          {topSoldRank !== undefined && (
+            <Box
+              sx={{
+                position: "absolute",
+                top: 8,
+                right: 8,
+                bgcolor:
+                  topSoldRank === 0
+                    ? "gold"
+                    : topSoldRank === 1
+                      ? "silver"
+                      : topSoldRank === 2
+                        ? "peru"
+                        : "grey.600",
+                color: "white",
+                borderRadius: "100%",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 0.5,
+                zIndex: 1,
+              }}
+            >
+              <Typography fontWeight="bold">TOP {topSoldRank + 1}</Typography>
+              <FavoriteBorder fontSize="small" />
+            </Box>
+          )}
           {imageUrl && (
             <Image
               alt={name}
