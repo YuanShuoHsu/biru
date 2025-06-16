@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
+import { TOP_SOLD } from "@/constants/tab";
+
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -33,7 +35,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     .slice(0, 5);
 
   const topSoldGroup = {
-    id: "top-sold",
+    id: TOP_SOLD,
     name: "人氣排行",
     items: topSoldItems,
   };
@@ -100,7 +102,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
       </HorizontalTabs>
       {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
-          <ResponsiveGrid items={items} showTopSold={id === "top-sold"} />
+          <ResponsiveGrid items={items} showTopSold={id === TOP_SOLD} />
         </TabPanel>
       ))}
     </Stack>
