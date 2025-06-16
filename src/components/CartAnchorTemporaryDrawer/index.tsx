@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
+import { useI18n } from "@/context/i18n";
+
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
@@ -107,6 +109,8 @@ const CartAnchorTemporaryDrawer = ({
 
   const { lang, tableNumber } = useParams();
 
+  const dict = useI18n();
+
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
       updateItem({
@@ -131,12 +135,12 @@ const CartAnchorTemporaryDrawer = ({
     <DrawerBox role="presentation">
       <StickyHeader>
         <Toolbar>
-          <Typography variant="h6">購物車清單</Typography>
+          <Typography variant="h6">{dict.cart.title}</Typography>
         </Toolbar>
       </StickyHeader>
       <StyledList disablePadding>
         {isEmpty ? (
-          <Typography variant="body1">尚未有商品</Typography>
+          <Typography variant="body1">{dict.cart.empty}</Typography>
         ) : (
           itemsList.map((item, index) => (
             <Stack key={item.id} gap={2}>
@@ -161,7 +165,7 @@ const CartAnchorTemporaryDrawer = ({
                     // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                   />
                   <Typography color="primary" fontWeight="bold" variant="body2">
-                    NT$ {item.amount.toLocaleString(lang)}
+                    {dict.common.currency} {item.amount.toLocaleString(lang)}
                   </Typography>
                 </Box>
               </StyledListItem>
@@ -223,7 +227,7 @@ const CartAnchorTemporaryDrawer = ({
           alignItems="center"
         >
           <Typography component="span" variant="subtitle1">
-            總計
+            {dict.cart.totalAmount}
           </Typography>
           <Typography
             color="primary"
@@ -231,7 +235,7 @@ const CartAnchorTemporaryDrawer = ({
             fontWeight="bold"
             variant="h6"
           >
-            NT$ {totalAmount.toLocaleString(lang)}
+            {dict.common.currency} {totalAmount.toLocaleString(lang)}
           </Typography>
         </Stack>
         <Button
@@ -242,7 +246,7 @@ const CartAnchorTemporaryDrawer = ({
           onClick={onDrawerToggle("cart", false)}
           variant="contained"
         >
-          前往結帳
+          {dict.cart.checkout}
         </Button>
       </StickyFooter>
     </DrawerBox>

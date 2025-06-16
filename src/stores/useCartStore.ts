@@ -18,7 +18,7 @@ interface CartState {
   totalAmount: number;
   totalQuantity: number;
   isEmpty: boolean;
-  calculateTotal: (map: Record<string, CartItem>) => {
+  computeTotals: (map: Record<string, CartItem>) => {
     totalAmount: number;
     totalQuantity: number;
   };
@@ -36,7 +36,7 @@ export const useCartStore = create<CartState>()(
       totalAmount: 0,
       totalQuantity: 0,
       isEmpty: true,
-      calculateTotal: (map) => {
+      computeTotals: (map) => {
         const totalAmount = Object.values(map).reduce(
           (sum, item) => sum + item.amount,
           0,
@@ -50,11 +50,11 @@ export const useCartStore = create<CartState>()(
         return { totalAmount, totalQuantity };
       },
       deleteItem: (item) => {
-        const { calculateTotal, itemsMap } = get();
+        const { computeTotals, itemsMap } = get();
         const newMap = { ...itemsMap };
         delete newMap[item.id];
 
-        const { totalAmount, totalQuantity } = calculateTotal(newMap);
+        const { totalAmount, totalQuantity } = computeTotals(newMap);
 
         const itemsList = Object.values(newMap);
         const isEmpty = totalQuantity === 0;
@@ -68,7 +68,7 @@ export const useCartStore = create<CartState>()(
         });
       },
       updateItem: (item) => {
-        const { calculateTotal, itemsMap } = get();
+        const { computeTotals, itemsMap } = get();
         const itemKey = item.id;
         const existing = itemsMap[itemKey];
 
@@ -82,7 +82,7 @@ export const useCartStore = create<CartState>()(
 
         const newMap = { ...itemsMap, [itemKey]: updatedItem };
 
-        const { totalAmount, totalQuantity } = calculateTotal(newMap);
+        const { totalAmount, totalQuantity } = computeTotals(newMap);
 
         const itemsList = Object.values(newMap);
         const isEmpty = totalQuantity === 0;

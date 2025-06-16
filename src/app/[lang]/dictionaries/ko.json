@@ -4,6 +4,12 @@
     "complete": "완료",
     "order": "주문"
   },
+  "cart": {
+    "checkout": "결제하기",
+    "empty": "상품이 없습니다",
+    "title": "장바구니",
+    "totalAmount": "합계"
+  },
   "common": {
     "currency": "NT$"
   },

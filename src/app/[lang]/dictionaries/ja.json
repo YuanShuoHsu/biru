@@ -4,6 +4,12 @@
     "complete": "完了",
     "order": "注文"
   },
+  "cart": {
+    "checkout": "レジに進む",
+    "empty": "商品がありません",
+    "title": "カート",
+    "totalAmount": "合計"
+  },
   "common": {
     "currency": "NT$"
   },

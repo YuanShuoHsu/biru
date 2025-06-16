@@ -4,12 +4,18 @@
     "complete": "Complete",
     "order": "Order"
   },
+  "cart": {
+    "checkout": "Proceed to Checkout",
+    "empty": "No items yet",
+    "title": "Shopping Cart",
+    "totalAmount": "Total"
+  },
   "common": {
     "currency": "NT$"
   },
   "dialog": {
     "addToCart": "Add to cart",
-    "amount": "Amount",
+    "amount": "SubTotal",
     "close": "Close",
     "from": "from",
     "maxQuantity": "You can only purchase up to {max} items",

@@ -4,6 +4,12 @@
     "complete": "完成",
     "order": "點餐"
   },
+  "cart": {
+    "checkout": "前往結帳",
+    "empty": "尚未有商品",
+    "title": "購物車清單",
+    "totalAmount": "總計"
+  },
   "common": {
     "currency": "NT$"
   },
