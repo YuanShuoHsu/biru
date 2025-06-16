@@ -4,11 +4,18 @@
     "complete": "Complete",
     "order": "Order"
   },
+  "common": {
+    "currency": "NT$"
+  },
   "dialog": {
     "addToCart": "Add to cart",
+    "amount": "Amount",
     "close": "Close",
     "from": "from",
-    "soldOut": "Sold out"
+    "maxQuantity": "You can only purchase up to {max} items",
+    "size": "Size",
+    "soldOut": "Sold out",
+    "quantity": "Quantity"
   },
   "nav": {
     "home": "Home",

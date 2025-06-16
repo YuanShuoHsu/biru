@@ -4,11 +4,18 @@
     "complete": "完成",
     "order": "点餐"
   },
+  "common": {
+    "currency": "NT$"
+  },
   "dialog": {
     "addToCart": "加入购物车",
+    "amount": "小计",
     "close": "关闭",
     "from": "起",
-    "soldOut": "售罄"
+    "maxQuantity": "最多只能购买 {max} 件",
+    "size": "尺寸",
+    "soldOut": "售罄",
+    "quantity": "数量"
   },
   "nav": {
     "home": "首页",

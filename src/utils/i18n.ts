@@ -3,10 +3,13 @@ type ExtractKeys<T extends string> =
     ? K | ExtractKeys<Rest>
     : never;
 
-export const interpolate = <T extends string>(
+export const interpolate = <
+  T extends string,
+  V extends Record<ExtractKeys<T>, string | number>,
+>(
   template: T,
-  values: { [K in ExtractKeys<T>]: string | number },
+  values: V,
 ): string =>
   template.replace(/\{(\w+)\}/g, (_, key) =>
-    key in values ? String(values[key as ExtractKeys<T>]) : `{${key}}`,
+    key in values ? String(values[key as keyof V]) : `{${key}}`,
   );

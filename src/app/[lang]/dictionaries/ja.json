@@ -4,11 +4,18 @@
     "complete": "完了",
     "order": "注文"
   },
+  "common": {
+    "currency": "NT$"
+  },
   "dialog": {
     "addToCart": "カートに追加",
+    "amount": "小計",
     "close": "閉じる",
     "from": "〜",
-    "soldOut": "売り切れ"
+    "maxQuantity": "最大 {max} 個まで購入できます",
+    "size": "サイズ",
+    "soldOut": "売り切れ",
+    "quantity": "数量"
   },
   "nav": {
     "home": "ホーム",

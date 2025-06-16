@@ -4,6 +4,8 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
+import { useI18n } from "@/context/i18n";
+
 import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
@@ -21,6 +23,8 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 
 import { Choice } from "@/types/menu";
+
+import { interpolate } from "@/utils/i18n";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -63,6 +67,8 @@ const CardDialogContent = forwardRef<
   const [size, setSize] = useState(sizes ? sizes[0].label : "");
 
   const { lang } = useParams();
+
+  const dict = useI18n();
 
   const { getItemQuantity } = useCartStore();
   const maxQuantity = MAX_QUANTITY - getItemQuantity(`${id}_${size}`);
@@ -111,7 +117,7 @@ const CardDialogContent = forwardRef<
       )}
       {sizes && (
         <StyledFormControl>
-          <FormLabel>尺寸</FormLabel>
+          <FormLabel>{dict.dialog.size}</FormLabel>
           <Stack direction="row" flexWrap="wrap" gap={1}>
             {sizes.map(({ label }) => (
               <Chip
@@ -126,7 +132,7 @@ const CardDialogContent = forwardRef<
         </StyledFormControl>
       )}
       <StyledFormControl>
-        <FormLabel htmlFor="quantity-input">數量</FormLabel>
+        <FormLabel htmlFor="quantity-input">{dict.dialog.quantity}</FormLabel>
         <Stack direction="row" alignItems="center" gap={1}>
           <IconButton
             aria-label="decrease"
@@ -165,7 +171,11 @@ const CardDialogContent = forwardRef<
           </IconButton>
         </Stack>
         {quantity === maxQuantity && (
-          <FormHelperText error>最多只能購買 {MAX_QUANTITY} 件</FormHelperText>
+          <FormHelperText error>
+            {interpolate(dict.dialog.maxQuantity, {
+              max: MAX_QUANTITY,
+            })}
+          </FormHelperText>
         )}
       </StyledFormControl>
       <Stack
@@ -175,7 +185,7 @@ const CardDialogContent = forwardRef<
         flexWrap="wrap"
       >
         <Typography component="span" variant="subtitle1">
-          小計
+          {dict.dialog.amount}
         </Typography>
         <Typography
           color="primary"
@@ -183,7 +193,7 @@ const CardDialogContent = forwardRef<
           fontWeight="bold"
           variant="h6"
         >
-          NT$ {displayPrice}
+          {dict.common.currency} {displayPrice}
         </Typography>
       </Stack>
     </Stack>

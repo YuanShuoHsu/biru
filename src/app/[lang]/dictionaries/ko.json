@@ -4,11 +4,18 @@
     "complete": "완료",
     "order": "주문"
   },
+  "common": {
+    "currency": "NT$"
+  },
   "dialog": {
     "addToCart": "장바구니에 추가",
+    "amount": "소계",
     "close": "닫기",
     "from": "부터",
-    "soldOut": "품절"
+    "maxQuantity": "최대 {max}개까지 구매할 수 있습니다",
+    "size": "사이즈",
+    "soldOut": "품절",
+    "quantity": "수량"
   },
   "nav": {
     "home": "홈",

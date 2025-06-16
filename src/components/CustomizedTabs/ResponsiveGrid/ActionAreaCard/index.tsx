@@ -156,7 +156,7 @@ const ActionAreaCard = ({
               <StyledChip key={label} label={label} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
-              {`NT$ ${displayPrice} ${sizes ? dict.dialog.from : ""}`}
+              {`${dict.common.currency} ${displayPrice} ${sizes ? dict.dialog.from : ""}`}
             </Typography>
           </Stack>
           {description && (
