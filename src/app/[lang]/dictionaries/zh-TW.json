@@ -7,11 +7,11 @@
   "cart": {
     "checkout": "前往結帳",
     "empty": "尚未有商品",
-    "title": "購物車清單",
-    "totalAmount": "總計"
+    "title": "購物車清單"
   },
   "common": {
-    "currency": "NT$"
+    "currency": "NT$",
+    "totalAmount": "總計"
   },
   "dialog": {
     "addToCart": "加入購物車",
@@ -19,9 +19,9 @@
     "close": "關閉",
     "from": "起",
     "maxQuantity": "最多只能購買 {max} 件",
+    "quantity": "數量",
     "size": "尺寸",
-    "soldOut": "售完",
-    "quantity": "數量"
+    "soldOut": "售完"
   },
   "nav": {
     "home": "首頁",

@@ -2,6 +2,8 @@
 
 import { useParams } from "next/navigation";
 
+import { useI18n } from "@/context/i18n";
+
 import { ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
@@ -50,6 +52,8 @@ const StyledListItemText = styled(ListItemText)({
 const CustomizedAccordions = () => {
   const { lang } = useParams();
 
+  const dict = useI18n();
+
   const { isEmpty, itemsList, totalAmount } = useCartStore();
 
   return (
@@ -60,7 +64,7 @@ const CustomizedAccordions = () => {
         id="panel1-header"
       >
         <StyledTypography component="span" variant="subtitle1">
-          總計
+          {dict.common.totalAmount}
         </StyledTypography>
         <Typography
           color="primary"
@@ -68,7 +72,7 @@ const CustomizedAccordions = () => {
           fontWeight="bold"
           variant="h6"
         >
-          NT$ {totalAmount.toLocaleString(lang)}
+          {dict.common.currency} {totalAmount.toLocaleString(lang)}
         </Typography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
@@ -82,14 +86,15 @@ const CustomizedAccordions = () => {
                   <ListItem disablePadding>
                     <StyledListItemText
                       primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                      secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                      secondary={`${dict.common.currency} ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
                     />
                     <Typography
                       color="primary"
                       fontWeight="bold"
                       variant="body2"
                     >
-                      NT$ {(item.price * item.quantity).toLocaleString(lang)}
+                      {dict.common.currency}{" "}
+                      {(item.price * item.quantity).toLocaleString(lang)}
                     </Typography>
                   </ListItem>
                   {index < itemsList.length - 1 && <Divider component="li" />}

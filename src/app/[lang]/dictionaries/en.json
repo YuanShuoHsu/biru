@@ -7,11 +7,11 @@
   "cart": {
     "checkout": "Proceed to Checkout",
     "empty": "No items yet",
-    "title": "Shopping Cart",
-    "totalAmount": "Total"
+    "title": "Shopping Cart"
   },
   "common": {
-    "currency": "NT$"
+    "currency": "NT$",
+    "totalAmount": "Total"
   },
   "dialog": {
     "addToCart": "Add to cart",
@@ -19,9 +19,9 @@
     "close": "Close",
     "from": "from",
     "maxQuantity": "You can only purchase up to {max} items",
+    "quantity": "Quantity",
     "size": "Size",
-    "soldOut": "Sold out",
-    "quantity": "Quantity"
+    "soldOut": "Sold out"
   },
   "nav": {
     "home": "Home",

@@ -7,11 +7,11 @@
   "cart": {
     "checkout": "レジに進む",
     "empty": "商品がありません",
-    "title": "カート",
-    "totalAmount": "合計"
+    "title": "カート"
   },
   "common": {
-    "currency": "NT$"
+    "currency": "NT$",
+    "totalAmount": "合計"
   },
   "dialog": {
     "addToCart": "カートに追加",
@@ -19,9 +19,9 @@
     "close": "閉じる",
     "from": "〜",
     "maxQuantity": "最大 {max} 個まで購入できます",
+    "quantity": "数量",
     "size": "サイズ",
-    "soldOut": "売り切れ",
-    "quantity": "数量"
+    "soldOut": "売り切れ"
   },
   "nav": {
     "home": "ホーム",

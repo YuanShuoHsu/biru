@@ -227,7 +227,7 @@ const CartAnchorTemporaryDrawer = ({
           alignItems="center"
         >
           <Typography component="span" variant="subtitle1">
-            {dict.cart.totalAmount}
+            {dict.common.totalAmount}
           </Typography>
           <Typography
             color="primary"
