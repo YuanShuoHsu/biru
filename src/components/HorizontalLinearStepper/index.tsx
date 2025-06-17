@@ -2,10 +2,11 @@
 
 "use client";
 
-import { Step, StepLabel, Stepper } from "@mui/material";
 import { useParams, usePathname } from "next/navigation";
 
-const steps = ["點餐", "結帳", "完成"];
+import { useI18n } from "@/context/i18n";
+
+import { Step, StepLabel, Stepper } from "@mui/material";
 
 const createStepPathMap = (tableNumber: string): string[] => [
   `/order/${tableNumber}`,
@@ -17,10 +18,18 @@ const HorizontalLinearStepper = () => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
-  const stepPaths = createStepPathMap(tableNumber as string);
+  const dict = useI18n();
+
+  const stepPaths = createStepPathMap(String(tableNumber));
   const activeStep = stepPaths.findIndex(
     (path) => pathname === `/${lang}${path}`,
   );
+
+  const steps = [
+    dict.breadcrumb.order,
+    dict.breadcrumb.checkout,
+    dict.breadcrumb.complete,
+  ];
 
   return (
     <Stepper activeStep={activeStep}>

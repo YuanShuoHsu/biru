@@ -69,7 +69,7 @@ const RouterBreadcrumbs = () => {
   const { lang, tableNumber } = useParams();
 
   const dict = useI18n();
-  const breadcrumbs = createBreadcrumbMap(dict, tableNumber as string);
+  const breadcrumbs = createBreadcrumbMap(dict, String(tableNumber));
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
