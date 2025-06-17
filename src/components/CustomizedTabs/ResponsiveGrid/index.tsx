@@ -6,10 +6,15 @@ import type { MenuItem } from "@/types/menu";
 
 interface ResponsiveGridProps {
   items: MenuItem[];
+  showLatest: boolean;
   showTopSold: boolean;
 }
 
-const ResponsiveGrid = ({ items, showTopSold }: ResponsiveGridProps) => (
+const ResponsiveGrid = ({
+  items,
+  showLatest,
+  showTopSold,
+}: ResponsiveGridProps) => (
   <Grid container spacing={2}>
     {items.map(
       ({ id, name, description, imageUrl, inStock, options, price }, index) => (
@@ -26,6 +31,7 @@ const ResponsiveGrid = ({ items, showTopSold }: ResponsiveGridProps) => (
             inStock={inStock}
             options={options}
             price={price}
+            showLatest={showLatest}
             {...(showTopSold ? { topSoldRank: index } : {})}
           />
         </Grid>

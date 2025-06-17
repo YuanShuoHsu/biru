@@ -200,6 +200,13 @@ pnpm add negotiator
 pnpm add -D @types/negotiator
 ```
 
+## dayjs
+
+```bash
+# https://day.js.org/
+pnpm add dayjs
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

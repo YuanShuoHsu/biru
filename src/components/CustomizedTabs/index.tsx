@@ -1,11 +1,12 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
-import { TOP_SOLD } from "@/constants/tab";
+import { LATEST, TOP_SOLD } from "@/constants/tab";
 
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -36,8 +37,18 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const topSoldGroup = {
     id: TOP_SOLD,
-    name: "人氣排行",
+    name: "人氣商品",
     items: topSoldItems,
+  };
+
+  const latestItems = [...allItems]
+    .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
+    .slice(0, 5);
+
+  const latestGroup = {
+    id: LATEST,
+    name: "新品上架",
+    items: latestItems,
   };
 
   const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
@@ -54,7 +65,12 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     items,
   }));
 
-  const combinedGroups = [topSoldGroup, ...tagGroups, ...categoryGroups];
+  const combinedGroups = [
+    topSoldGroup,
+    latestGroup,
+    ...tagGroups,
+    ...categoryGroups,
+  ];
 
   const filteredGroups = combinedGroups
     .map((group) => ({
@@ -102,7 +118,11 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
       </HorizontalTabs>
       {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
-          <ResponsiveGrid items={items} showTopSold={id === TOP_SOLD} />
+          <ResponsiveGrid
+            items={items}
+            showLatest={id === LATEST}
+            showTopSold={id === TOP_SOLD}
+          />
         </TabPanel>
       ))}
     </Stack>

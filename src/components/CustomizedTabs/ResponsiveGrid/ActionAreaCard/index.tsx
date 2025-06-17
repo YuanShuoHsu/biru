@@ -8,7 +8,7 @@ import CardDialogContent, {
 
 import { useI18n } from "@/context/i18n";
 
-import { FavoriteBorder } from "@mui/icons-material";
+import { AutoAwesome, FavoriteBorder } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -18,11 +18,11 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-
-import { useDialogStore } from "@/stores/useDialogStore";
+import { alpha, styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
+import { useDialogStore } from "@/stores/useDialogStore";
+
 import { Option } from "@/types/menu";
 
 const StyledCard = styled(Card, {
@@ -52,12 +52,12 @@ const TopSoldChip = styled(Chip, {
 })<{ rank: number }>(({ rank, theme }) => {
   const backgroundColor =
     rank === 0
-      ? "gold"
+      ? "rgba(255, 215, 0, 0.5)"
       : rank === 1
-        ? "silver"
+        ? "rgba(192, 192, 192, 0.5)"
         : rank === 2
-          ? "peru"
-          : theme.palette.primary.main;
+          ? "rgba(205, 133, 63, 0.5)"
+          : alpha(theme.palette.primary.main, 0.5);
 
   return {
     position: "absolute",
@@ -73,6 +73,20 @@ const TopSoldChip = styled(Chip, {
     },
   };
 });
+
+const LatestChip = styled(Chip)(({ theme }) => ({
+  position: "absolute",
+  top: theme.spacing(1),
+  right: theme.spacing(1),
+  backgroundColor: alpha(theme.palette.primary.main, 0.5),
+  color: theme.palette.common.white,
+  fontWeight: theme.typography.fontWeightBold,
+  zIndex: 1,
+
+  "& .MuiChip-icon": {
+    color: theme.palette.common.white,
+  },
+}));
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   width: "100%",
@@ -99,6 +113,7 @@ interface ActionAreaCardProps {
   inStock: boolean;
   options?: Option[];
   price: number;
+  showLatest: boolean;
   topSoldRank?: number;
 }
 
@@ -110,6 +125,7 @@ const ActionAreaCard = ({
   name,
   options,
   price,
+  showLatest,
   topSoldRank,
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
@@ -174,6 +190,9 @@ const ActionAreaCard = ({
               rank={topSoldRank}
               size="small"
             />
+          )}
+          {showLatest && (
+            <LatestChip label="新品" icon={<AutoAwesome />} size="small" />
           )}
           {imageUrl && (
             <Image

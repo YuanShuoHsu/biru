@@ -8,6 +8,7 @@ export const menu: Category[] = [
       {
         id: "coffee-1",
         name: "經典拿鐵",
+        createdAt: "2024-05-04T22:50:00",
         description: "濃醇的義式濃縮搭配綿密牛奶泡沫。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -49,6 +50,7 @@ export const menu: Category[] = [
       {
         id: "coffee-2",
         name: "焦糖瑪奇朵",
+        createdAt: "2024-05-30T04:00:00",
         description: "香甜焦糖與香醇濃縮完美結合。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -71,7 +73,6 @@ export const menu: Category[] = [
         ],
         price: 130,
         sold: 5,
-        tags: ["new"],
       },
     ],
   },
@@ -82,6 +83,7 @@ export const menu: Category[] = [
       {
         id: "tea-1",
         name: "茉香綠茶",
+        createdAt: "2024-04-18T10:15:00",
         description: "清新茉莉花香與綠茶完美融合。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -102,6 +104,7 @@ export const menu: Category[] = [
       {
         id: "tea-2",
         name: "伯爵鮮奶茶",
+        createdAt: "2024-05-10T16:30:00",
         description: "濃醇伯爵茶搭配鮮奶，口感滑順。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -134,6 +137,7 @@ export const menu: Category[] = [
       {
         id: "sig-1",
         name: "水果氣泡飲",
+        createdAt: "2024-06-01T09:00:00",
         description: "新鮮水果搭配氣泡水，清爽解膩。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -152,6 +156,7 @@ export const menu: Category[] = [
       {
         id: "sig-2",
         name: "抹茶氣泡拿鐵",
+        createdAt: "2024-06-05T14:30:00",
         description: "抹茶與牛奶氣泡完美結合。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: false,
@@ -163,7 +168,6 @@ export const menu: Category[] = [
         ],
         price: 150,
         sold: 7,
-        tags: ["new"],
       },
     ],
   },
@@ -174,6 +178,7 @@ export const menu: Category[] = [
       {
         id: "pastry-1",
         name: "經典可頌",
+        createdAt: "2024-04-28T08:10:00",
         description: "外酥內軟的法式可頌。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -183,12 +188,12 @@ export const menu: Category[] = [
       {
         id: "pastry-2",
         name: "巧克力蛋糕",
+        createdAt: "2024-05-15T12:00:00",
         description: "濃郁黑巧克力海綿蛋糕。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
         price: 90,
         sold: 4,
-        tags: ["new"],
       },
     ],
   },
@@ -199,6 +204,7 @@ export const menu: Category[] = [
       {
         id: "snack-1",
         name: "火腿起司三明治",
+        createdAt: "2024-06-03T11:45:00",
         description: "火腿、起司與生菜夾於法式軟包中。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
@@ -217,6 +223,7 @@ export const menu: Category[] = [
       {
         id: "snack-2",
         name: "雞肉沙拉",
+        createdAt: "2024-05-27T18:20:00",
         description: "新鮮生菜搭配香煎雞肉。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,
