@@ -30,9 +30,11 @@
   "order": {
     "selectTable": "테이블 선택",
     "tableNumber": {
+      "latest": "신상품",
       "search": {
         "placeholder": "메뉴 검색"
-      }
+      },
+      "topSold": "인기 상품"
     }
   }
 }

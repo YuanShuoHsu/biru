@@ -30,9 +30,11 @@
   "order": {
     "selectTable": "选择桌号",
     "tableNumber": {
+      "latest": "新品上架",
       "search": {
         "placeholder": "搜索菜单"
-      }
+      },
+      "topSold": "人气商品"
     }
   }
 }

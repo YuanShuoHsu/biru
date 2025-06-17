@@ -30,9 +30,11 @@
   "order": {
     "selectTable": "テーブルを選択",
     "tableNumber": {
+      "latest": "新着商品",
       "search": {
         "placeholder": "メニューを検索"
-      }
+      },
+      "topSold": "人気商品"
     }
   }
 }

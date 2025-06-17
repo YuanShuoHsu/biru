@@ -11,6 +11,7 @@ import { LATEST, TOP_SOLD } from "@/constants/tab";
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useI18n } from "@/context/i18n";
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
@@ -29,6 +30,8 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
+  const dict = useI18n();
+
   const allItems = menu.flatMap(({ items }) => items);
 
   const topSoldItems = [...allItems]
@@ -37,7 +40,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const topSoldGroup = {
     id: TOP_SOLD,
-    name: "人氣商品",
+    name: dict.order.tableNumber.topSold,
     items: topSoldItems,
   };
 
@@ -47,7 +50,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const latestGroup = {
     id: LATEST,
-    name: "新品上架",
+    name: dict.order.tableNumber.latest,
     items: latestItems,
   };
 
