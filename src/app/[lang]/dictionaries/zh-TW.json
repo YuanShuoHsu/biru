@@ -11,6 +11,7 @@
   },
   "common": {
     "currency": "NT$",
+    "multiply": "×",
     "totalAmount": "總計"
   },
   "dialog": {

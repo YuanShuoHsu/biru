@@ -5,6 +5,8 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
+import { useI18n } from "@/context/i18n";
+
 import {
   Button,
   Paper,
@@ -59,6 +61,8 @@ const CustomerPaymentSection = () => {
   const { lang, tableNumber } = useParams();
   const router = useRouter();
 
+  const dict = useI18n();
+
   const { isEmpty, itemsList, totalAmount } = useCartStore();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -88,7 +92,7 @@ const CustomerPaymentSection = () => {
         ItemName: itemsList
           .map(
             (item) =>
-              `${item.name}${item.size ? `(${item.size})` : ""} x ${item.quantity}`,
+              `${item.name}${item.size ? `(${item.size})` : ""} ${dict.common.multiply} ${item.quantity}`,
           )
           .join("#"),
         ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],

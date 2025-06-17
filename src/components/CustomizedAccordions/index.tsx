@@ -86,7 +86,7 @@ const CustomizedAccordions = () => {
                   <ListItem disablePadding>
                     <StyledListItemText
                       primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                      secondary={`${dict.common.currency} ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
+                      secondary={`${dict.common.currency} ${(item.price + item.extraCost).toLocaleString(lang)} ${dict.common.multiply} ${item.quantity}`}
                     />
                     <Typography
                       color="primary"
