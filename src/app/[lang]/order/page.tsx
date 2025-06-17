@@ -1,26 +1,23 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
 import { useI18n } from "@/context/i18n";
 
-import { Button, Grid, Stack, Typography } from "@mui/material";
+import { Button, ButtonProps, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledButton = styled(Button)({
+const StyledButton = styled(Button)<ButtonProps>({
   minWidth: 0,
 });
 
 const Order = () => {
-  const router = useRouter();
   const { lang } = useParams();
 
   const dict = useI18n();
-
-  const handleClick = (number: number) =>
-    router.push(`/${lang}/order/${number}`);
 
   return (
     <Stack gap={2}>
@@ -30,8 +27,9 @@ const Order = () => {
           (number) => (
             <Grid key={number} size={{ xs: 4, sm: 3, md: 2, xl: 1 }}>
               <StyledButton
+                component={Link}
                 fullWidth
-                onClick={() => handleClick(number)}
+                href={`/${lang}/order/${number}`}
                 variant="outlined"
               >
                 {number}
