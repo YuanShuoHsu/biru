@@ -8,7 +8,7 @@ export const menu: Category[] = [
       {
         id: "coffee-1",
         name: "經典拿鐵",
-        createdAt: "2024-05-04T22:50:00",
+        createdAt: "2025-05-04T22:50:00",
         description: "濃醇的義式濃縮搭配綿密牛奶泡沫。",
         imageUrl: "/images/IMG_4590.jpg",
         inStock: true,

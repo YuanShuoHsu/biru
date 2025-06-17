@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
-import { LATEST, TOP_SOLD } from "@/constants/tab";
+import {
+  LATEST,
+  NEW_PRODUCT_DAYS,
+  TOP_SOLD,
+  TOP_SOLD_LIMIT,
+} from "@/constants/tab";
 
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -36,23 +41,27 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const topSoldItems = [...allItems]
     .sort((a, b) => b.sold - a.sold)
-    .slice(0, 5);
+    .slice(0, TOP_SOLD_LIMIT);
 
-  const topSoldGroup = {
+  const topSoldGroups = {
     id: TOP_SOLD,
     name: dict.order.tableNumber.topSold,
     items: topSoldItems,
   };
 
-  const latestItems = [...allItems]
-    .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
-    .slice(0, 5);
+  const latestItems = allItems.filter(
+    ({ createdAt }) =>
+      dayjs().diff(dayjs(createdAt), "day") <= NEW_PRODUCT_DAYS,
+  );
 
-  const latestGroup = {
-    id: LATEST,
-    name: dict.order.tableNumber.latest,
-    items: latestItems,
-  };
+  const latestGroups =
+    latestItems.length > 0
+      ? {
+          id: LATEST,
+          name: dict.order.tableNumber.latest,
+          items: latestItems,
+        }
+      : null;
 
   const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
 
@@ -69,8 +78,8 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   }));
 
   const combinedGroups = [
-    topSoldGroup,
-    latestGroup,
+    topSoldGroups,
+    ...(latestGroups ? [latestGroups] : []),
     ...tagGroups,
     ...categoryGroups,
   ];
