@@ -242,7 +242,7 @@ const CartAnchorTemporaryDrawer = ({
           disabled={isEmpty}
           component={Link}
           fullWidth
-          href={`/order/${tableNumber}/checkout`}
+          href={`/${lang}/order/${tableNumber}/checkout`}
           onClick={onDrawerToggle("cart", false)}
           variant="contained"
         >
