@@ -110,10 +110,10 @@ interface ActionAreaCardProps {
   name: string;
   description?: string;
   imageUrl: string;
-  inStock: boolean;
   options?: Option[];
   price: number;
   showLatest: boolean;
+  stock: number | null;
   topSoldRank?: number;
 }
 
@@ -121,11 +121,11 @@ const ActionAreaCard = ({
   id,
   description,
   imageUrl,
-  inStock,
   name,
   options,
   price,
   showLatest,
+  stock,
   topSoldRank,
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
@@ -140,6 +140,8 @@ const ActionAreaCard = ({
   const displayPrice = price.toLocaleString(lang);
 
   const sizes = options?.find(({ name }) => name === "size")?.choices;
+
+  const inStock = stock === null || stock > 0;
 
   const handleDialogClick = () => {
     setDialog({

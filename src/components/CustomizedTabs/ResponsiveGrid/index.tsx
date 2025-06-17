@@ -17,7 +17,7 @@ const ResponsiveGrid = ({
 }: ResponsiveGridProps) => (
   <Grid container spacing={2}>
     {items.map(
-      ({ id, name, description, imageUrl, inStock, options, price }, index) => (
+      ({ id, name, description, imageUrl, options, price, stock }, index) => (
         <Grid
           display="flex"
           key={id}
@@ -28,10 +28,10 @@ const ResponsiveGrid = ({
             name={name}
             description={description}
             imageUrl={imageUrl}
-            inStock={inStock}
             options={options}
             price={price}
             showLatest={showLatest}
+            stock={stock}
             {...(showTopSold ? { topSoldRank: index } : {})}
           />
         </Grid>

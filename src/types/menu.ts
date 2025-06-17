@@ -16,10 +16,10 @@ export interface MenuItem {
   createdAt: string;
   description?: string;
   imageUrl: string;
-  inStock: boolean;
   options?: Option[];
   price: number;
   sold: number;
+  stock: number | null;
   tags?: Tag[];
 }
 
