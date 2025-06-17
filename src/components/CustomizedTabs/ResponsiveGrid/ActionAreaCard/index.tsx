@@ -47,6 +47,33 @@ const ImageBox = styled(Box)(() => ({
   height: 140,
 }));
 
+const TopSoldChip = styled(Chip, {
+  shouldForwardProp: (prop) => prop !== "rank",
+})<{ rank: number }>(({ rank, theme }) => {
+  const backgroundColor =
+    rank === 0
+      ? "gold"
+      : rank === 1
+        ? "silver"
+        : rank === 2
+          ? "peru"
+          : theme.palette.primary.main;
+
+  return {
+    position: "absolute",
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+    backgroundColor,
+    color: theme.palette.common.white,
+    fontWeight: theme.typography.fontWeightBold,
+    zIndex: 1,
+
+    "& .MuiChip-icon": {
+      color: theme.palette.common.white,
+    },
+  };
+});
+
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   width: "100%",
   flex: 1,
@@ -55,7 +82,7 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const StyledChip = styled(Chip)(() => ({
+const SizeOptionChip = styled(Chip)(() => ({
   "& .MuiChip-label": {
     padding: 0,
     width: 24,
@@ -141,31 +168,12 @@ const ActionAreaCard = ({
       <StyledCardActionArea>
         <ImageBox>
           {topSoldRank !== undefined && (
-            <Box
-              sx={{
-                position: "absolute",
-                top: 8,
-                right: 8,
-                bgcolor:
-                  topSoldRank === 0
-                    ? "gold"
-                    : topSoldRank === 1
-                      ? "silver"
-                      : topSoldRank === 2
-                        ? "peru"
-                        : "grey.600",
-                color: "white",
-                borderRadius: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 0.5,
-                zIndex: 1,
-              }}
-            >
-              <Typography fontWeight="bold">TOP {topSoldRank + 1}</Typography>
-              <FavoriteBorder fontSize="small" />
-            </Box>
+            <TopSoldChip
+              label={`TOP ${topSoldRank + 1}`}
+              icon={<FavoriteBorder />}
+              rank={topSoldRank}
+              size="small"
+            />
           )}
           {imageUrl && (
             <Image
@@ -183,7 +191,7 @@ const ActionAreaCard = ({
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {sizes?.map(({ label }) => (
-              <StyledChip key={label} label={label} size="small" />
+              <SizeOptionChip key={label} label={label} size="small" />
             ))}
             <Typography variant="subtitle2" color="text.primary">
               {`${dict.common.currency} ${displayPrice} ${sizes ? dict.dialog.from : ""}`}
