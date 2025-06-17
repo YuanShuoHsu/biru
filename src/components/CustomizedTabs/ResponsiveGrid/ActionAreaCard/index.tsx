@@ -185,14 +185,18 @@ const ActionAreaCard = ({
         <ImageBox>
           {topSoldRank !== undefined && (
             <TopSoldChip
-              label={`TOP ${topSoldRank + 1}`}
+              label={`${dict.order.tableNumber.top} ${topSoldRank + 1}`}
               icon={<FavoriteBorder />}
               rank={topSoldRank}
               size="small"
             />
           )}
           {showLatest && (
-            <LatestChip label="新品" icon={<AutoAwesome />} size="small" />
+            <LatestChip
+              label={dict.order.tableNumber.new}
+              icon={<AutoAwesome />}
+              size="small"
+            />
           )}
           {imageUrl && (
             <Image

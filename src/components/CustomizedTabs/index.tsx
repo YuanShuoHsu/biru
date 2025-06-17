@@ -13,10 +13,11 @@ import {
   TOP_SOLD_LIMIT,
 } from "@/constants/tab";
 
+import { useI18n } from "@/context/i18n";
+
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useI18n } from "@/context/i18n";
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({

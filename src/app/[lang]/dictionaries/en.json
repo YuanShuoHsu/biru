@@ -31,9 +31,11 @@
     "selectTable": "Select a table",
     "tableNumber": {
       "latest": "New Arrivals",
+      "new": "New",
       "search": {
         "placeholder": "Search menu"
       },
+      "top": "TOP",
       "topSold": "Best Sellers"
     }
   }
