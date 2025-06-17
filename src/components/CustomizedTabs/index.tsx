@@ -64,13 +64,13 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
         }
       : null;
 
-  const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
+  // const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
 
-  const tagGroups = allTags.map((tagKey) => ({
-    id: tagKey,
-    name: tagKey,
-    items: allItems.filter(({ tags }) => tags?.includes(tagKey)),
-  }));
+  // const tagGroups = allTags.map((tagKey) => ({
+  //   id: tagKey,
+  //   name: tagKey,
+  //   items: allItems.filter(({ tags }) => tags?.includes(tagKey)),
+  // }));
 
   const categoryGroups = menu.map(({ id, name, items }) => ({
     id,
@@ -81,7 +81,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   const combinedGroups = [
     topSoldGroups,
     ...(latestGroups ? [latestGroups] : []),
-    ...tagGroups,
+    // ...tagGroups,
     ...categoryGroups,
   ];
 

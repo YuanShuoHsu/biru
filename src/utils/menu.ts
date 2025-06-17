@@ -99,7 +99,7 @@ export const menu: Category[] = [
         price: 80,
         sold: 9,
         stock: 20,
-        tags: ["lowCaffeine"],
+        // tags: ["lowCaffeine"],
       },
       {
         id: "tea-2",
