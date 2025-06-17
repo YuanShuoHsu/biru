@@ -1,4 +1,8 @@
 {
+  "appBar": {
+    "cart": "Cart",
+    "languageSwitcher": "Change Language"
+  },
   "breadcrumb": {
     "checkout": "Checkout",
     "complete": "Complete",

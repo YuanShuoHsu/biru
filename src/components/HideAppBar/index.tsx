@@ -9,6 +9,8 @@ import MenuAppBar from "./MenuAppBar";
 
 import CustomizedBadges from "@/components/CustomizedBadges";
 
+import { useI18n } from "@/context/i18n";
+
 import { Menu, ShoppingCart } from "@mui/icons-material";
 import {
   AppBar,
@@ -51,6 +53,8 @@ interface HideAppBarProps {
 const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
+
+  const dict = useI18n();
 
   const basePath = `/${lang}/order/${tableNumber}`;
   const showShoppingCartButton =
@@ -97,7 +101,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
           <Stack direction="row" alignItems="center" gap={0.5}>
             <MenuAppBar />
             {showShoppingCartButton && (
-              <Tooltip title="購物車">
+              <Tooltip title={dict.appBar.cart}>
                 <IconButton
                   aria-label="cart"
                   onClick={onDrawerToggle("cart", true)}

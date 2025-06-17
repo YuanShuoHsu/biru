@@ -1,4 +1,8 @@
 {
+  "appBar": {
+    "cart": "カート",
+    "languageSwitcher": "言語を変更"
+  },
   "breadcrumb": {
     "checkout": "お会計",
     "complete": "完了",

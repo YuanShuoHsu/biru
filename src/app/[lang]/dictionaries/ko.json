@@ -1,4 +1,8 @@
 {
+  "appBar": {
+    "cart": "장바구니",
+    "languageSwitcher": "언어 변경"
+  },
   "breadcrumb": {
     "checkout": "결제",
     "complete": "완료",

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
+import { useI18n } from "@/context/i18n";
+
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -32,6 +34,8 @@ const MenuAppBar = () => {
   const pathname = usePathname();
   const { lang: currentLang } = useParams();
 
+  const dict = useI18n();
+
   const switchPath = (lang: string) => {
     const rest = pathname.split("/").slice(2).join("/");
 
@@ -45,7 +49,7 @@ const MenuAppBar = () => {
 
   return (
     <>
-      <Tooltip title="切換語系">
+      <Tooltip title={dict.appBar.languageSwitcher}>
         <IconButton
           aria-label="language"
           aria-controls="menu-appbar"

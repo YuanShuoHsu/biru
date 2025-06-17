@@ -1,4 +1,8 @@
 {
+  "appBar": {
+    "cart": "購物車",
+    "languageSwitcher": "切換語言"
+  },
   "breadcrumb": {
     "checkout": "結帳",
     "complete": "完成",
