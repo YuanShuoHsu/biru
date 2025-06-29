@@ -13,6 +13,8 @@
 眼 霧織灰藍 blueGrey[500] (#607d8b) 灰藍
 ```
 
+## Next.js
+
 ```bash
 # https://nextjs.org/docs/app/getting-started/installation
 npx create-next-app@latest
@@ -92,15 +94,18 @@ pnpm add --save-dev eslint-config-prettier
 
 # eslint.config.mjs
 import { FlatCompat } from '@eslint/eslintrc'
+
 const compat = new FlatCompat({
   // import.meta.dirname is available after Node.js v20.11.0
   baseDirectory: import.meta.dirname,
 })
+
 const eslintConfig = [
   ...compat.config({
     extends: ['next', 'prettier'],
   }),
 ]
+
 export default eslintConfig
 ```
 

@@ -45,7 +45,7 @@ export const menu: Category[] = [
         ],
         price: 120,
         sold: 1,
-        stock: 0,
+        stock: 22,
       },
       {
         id: "coffee-2",
@@ -72,7 +72,7 @@ export const menu: Category[] = [
         ],
         price: 130,
         sold: 5,
-        stock: null,
+        stock: 0,
       },
     ],
   },
