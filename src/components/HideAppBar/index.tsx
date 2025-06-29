@@ -77,7 +77,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             </IconButton>
             <Stack
               component={Link}
-              href="/"
+              href={`/${lang}`}
               flexDirection="row"
               alignItems="center"
               gap={1}
