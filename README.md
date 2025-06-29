@@ -32,7 +32,6 @@ Using npm.
 
 Initializing project with template: app-tw
 
-
 Installing dependencies:
 - react
 - react-dom
@@ -189,6 +188,13 @@ pnpm add swr
 pnpm add zustand
 
 # https://zustand.docs.pmnd.rs/guides/nextjs
+```
+
+## match
+
+```bash
+# https://nextjs.org/docs/app/building-your-application/routing/internationalization
+pnpm add @formatjs/intl-localematcher
 ```
 
 ## negotiator
