@@ -2,7 +2,7 @@
 
 import "server-only";
 
-import { LocaleCode } from "@/types/locale";
+import type { LocaleCode } from "@/types/locale";
 
 const dictionaries = {
   "zh-TW": () =>

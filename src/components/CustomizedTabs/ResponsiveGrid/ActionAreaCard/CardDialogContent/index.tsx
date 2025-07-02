@@ -22,9 +22,11 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { Choice } from "@/types/menu";
+import type { LangParam } from "@/types/locale";
+import type { Option } from "@/types/menu";
 
 import { interpolate } from "@/utils/i18n";
+import { getItemKey } from "@/utils/itemKey";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -46,39 +48,74 @@ export interface CardDialogContentImperativeHandle {
     extraCost: number;
     price: number;
     quantity: number;
-    size: string;
+    choices: Record<string, string | string[] | null>;
   };
 }
 
 interface CardDialogContentProps {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   imageUrl: string;
+  options: Option[];
   price: number;
-  sizes?: Choice[];
 }
 
 const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, name, description, imageUrl, price, sizes }, ref) => {
+>(({ id, name, description, imageUrl, options, price }, ref) => {
   const [quantity, setQuantity] = useState(1);
-  const [size, setSize] = useState(sizes ? sizes[0].label : "");
+  const [choices, setChoices] = useState<
+    Record<string, string | string[] | null>
+  >(() =>
+    Object.fromEntries(
+      options.map(({ name, choices, multiple, required }) => {
+        if (multiple) return [name, []];
+        if (required) return [name, choices[0].value];
 
-  const { lang } = useParams();
+        return [name, null];
+      }),
+    ),
+  );
+
+  const { lang } = useParams() as LangParam;
 
   const dict = useI18n();
 
   const { getItemQuantity } = useCartStore();
-  const maxQuantity = MAX_QUANTITY - getItemQuantity(`${id}_${size}`);
-  const minQuantity = maxQuantity > 0 ? 1 : 0;
+
+  const itemKey = getItemKey(id, choices);
+  const maxQuantity = Math.max(0, MAX_QUANTITY - getItemQuantity(itemKey));
+  const minQuantity = maxQuantity === 0 ? 0 : 1;
 
   useEffect(() => {
-    setQuantity(minQuantity);
-  }, [minQuantity, size]);
+    setQuantity((prev) => {
+      if (prev < minQuantity) return minQuantity;
+      if (prev > maxQuantity) return maxQuantity;
 
-  const extraCost = sizes?.find(({ label }) => label === size)?.extraCost || 0;
+      return prev;
+    });
+  }, [minQuantity, maxQuantity]);
+
+  const extraCost = options.reduce(
+    (total, { name, choices: optionChoices }) => {
+      const selected = choices[name];
+      const values = Array.isArray(selected)
+        ? selected
+        : selected
+          ? [selected]
+          : [];
+
+      const cost = optionChoices
+        .filter(({ value }) => values.includes(value))
+        .reduce((sum, { extraCost }) => sum + extraCost, 0);
+
+      return total + cost;
+    },
+    0,
+  );
+
   const amount = (price + extraCost) * quantity;
   const displayPrice = amount.toLocaleString(lang);
 
@@ -90,10 +127,10 @@ const CardDialogContent = forwardRef<
         extraCost,
         price,
         quantity,
-        size,
+        choices,
       }),
     }),
-    [amount, extraCost, price, quantity, size],
+    [amount, extraCost, price, quantity, choices],
   );
 
   return (
@@ -115,21 +152,61 @@ const CardDialogContent = forwardRef<
           {description}
         </Typography>
       )}
-      {sizes && (
-        <StyledFormControl>
-          <FormLabel>{dict.dialog.size}</FormLabel>
-          <Stack direction="row" flexWrap="wrap" gap={1}>
-            {sizes.map(({ label }) => (
-              <Chip
-                clickable
-                color={size === label ? "primary" : "default"}
-                key={label}
-                label={`${label}`}
-                onClick={() => setSize(label)}
-              />
-            ))}
-          </Stack>
-        </StyledFormControl>
+      {options.map(
+        ({ name, label: optionLabel, choices: optionChoices, multiple }) => (
+          <StyledFormControl key={name}>
+            <FormLabel>{optionLabel[lang]}</FormLabel>
+            <Stack direction="row" flexWrap="wrap" gap={1}>
+              {optionChoices.map(({ label: choiceLabel, value, extraCost }) => {
+                const selected = choices[name];
+                const isSelected = multiple
+                  ? Array.isArray(selected) && selected.includes(value)
+                  : selected === value;
+
+                const handleClick = () => {
+                  setChoices((prev) => {
+                    const current = prev[name];
+
+                    if (multiple) {
+                      const currentArr = Array.isArray(current) ? current : [];
+                      const next = currentArr.includes(value)
+                        ? currentArr.filter((v) => v !== value)
+                        : [...currentArr, value];
+
+                      return { ...prev, [name]: next };
+                    }
+
+                    return { ...prev, [name]: value };
+                  });
+                };
+
+                return (
+                  <Chip
+                    clickable
+                    color={isSelected ? "primary" : "default"}
+                    key={value}
+                    label={
+                      <Stack flexDirection="row" alignItems="center" gap={1}>
+                        <Typography variant="body2">
+                          {choiceLabel[lang]}
+                        </Typography>
+                        {extraCost > 0 && (
+                          <>
+                            <Typography variant="body2">/</Typography>
+                            <Typography variant="caption">
+                              {dict.common.currency} {extraCost}
+                            </Typography>
+                          </>
+                        )}
+                      </Stack>
+                    }
+                    onClick={handleClick}
+                  />
+                );
+              })}
+            </Stack>
+          </StyledFormControl>
+        ),
       )}
       <StyledFormControl>
         <FormLabel htmlFor="quantity-input">{dict.dialog.quantity}</FormLabel>

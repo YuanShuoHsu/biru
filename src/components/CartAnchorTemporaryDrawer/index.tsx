@@ -30,7 +30,7 @@ import { styled } from "@mui/material/styles";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
-import { DrawerType } from "@/types/drawer";
+import type { DrawerType } from "@/types/drawer";
 
 const DrawerBox = styled(Box)({
   width: 250,

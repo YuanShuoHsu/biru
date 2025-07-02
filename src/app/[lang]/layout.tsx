@@ -8,7 +8,7 @@ import AppLayout from "./appLayout";
 import { getDictionary } from "./dictionaries";
 import Providers from "./providers";
 
-import { LocaleCode } from "@/types/locale";
+import type { LocaleCode } from "@/types/locale";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

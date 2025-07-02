@@ -19,9 +19,12 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { CreateEcpayDto, EcpayLanguage } from "@/types/ecpay/createEcpayDto";
-import { LocaleCode } from "@/types/locale";
-import { PaymentMethod } from "@/types/payment";
+import type {
+  CreateEcpayDto,
+  EcpayLanguage,
+} from "@/types/ecpay/createEcpayDto";
+import type { LocaleCode } from "@/types/locale";
+import type { PaymentMethod } from "@/types/payment";
 
 const mapToEcpayLanguage = (() => {
   const map: Record<LocaleCode, EcpayLanguage> = {

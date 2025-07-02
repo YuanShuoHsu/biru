@@ -1,6 +1,7 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
 import dayjs from "dayjs";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
@@ -18,11 +19,22 @@ import { useI18n } from "@/context/i18n";
 import { Stack, Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import type { LangParam } from "@/types/locale";
+import type { LocalizedText } from "@/types/menu";
+
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
+
+const toLocalizedText = (text: string): LocalizedText => ({
+  "zh-TW": text,
+  en: text,
+  ja: text,
+  ko: text,
+  "zh-CN": text,
+});
 
 const a11yProps = (index: number) => {
   return {
@@ -36,6 +48,8 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
+  const { lang } = useParams() as LangParam;
+
   const dict = useI18n();
 
   const allItems = menu.flatMap(({ items }) => items);
@@ -46,7 +60,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const topSoldGroups = {
     id: TOP_SOLD,
-    name: dict.order.tableNumber.topSold,
+    name: toLocalizedText(dict.order.tableNumber.topSold),
     items: topSoldItems,
   };
 
@@ -59,7 +73,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     latestItems.length > 0
       ? {
           id: LATEST,
-          name: dict.order.tableNumber.latest,
+          name: toLocalizedText(dict.order.tableNumber.latest),
           items: latestItems,
         }
       : null;
@@ -89,12 +103,13 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     .map((group) => ({
       ...group,
       items: group.items.filter(({ name }) =>
-        name.toLowerCase().includes(searchText.trim()),
+        name[lang].toLowerCase().includes(searchText.trim()),
       ),
     }))
     .filter(
       ({ name, items }) =>
-        name.toLowerCase().includes(searchText.trim()) || items.length > 0,
+        name[lang].toLowerCase().includes(searchText.trim()) ||
+        items.length > 0,
     );
 
   const [selectedId, setSelectedId] = useState(filteredGroups[0]?.id || "");
@@ -115,7 +130,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     setSelectedId(filteredGroups[newIndex].id);
 
   const tabList = filteredGroups.map(({ id, name }, index) => (
-    <Tab key={id} label={name} {...a11yProps(index)} />
+    <Tab key={id} label={name[lang]} {...a11yProps(index)} />
   ));
 
   return (

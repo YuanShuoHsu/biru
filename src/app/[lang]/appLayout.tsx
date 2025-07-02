@@ -12,7 +12,7 @@ import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, CssBaseline, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { DrawerType } from "@/types/drawer";
+import type { DrawerType } from "@/types/drawer";
 
 const ContainerBox = styled(Box)({
   display: "flex",

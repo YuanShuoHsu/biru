@@ -25,7 +25,7 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { DrawerType } from "@/types/drawer";
+import type { DrawerType } from "@/types/drawer";
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",

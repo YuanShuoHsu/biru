@@ -1,22 +1,32 @@
 // type Tag = "lowCaffeine";
 
+import { LocaleCode } from "./locale";
+
+export type LocalizedText = {
+  [key in LocaleCode]: string;
+};
+
 export interface Choice {
-  label: string;
+  label: LocalizedText;
+  value: string;
   extraCost: number;
 }
 
 export interface Option {
   name: string;
+  label: LocalizedText;
   choices: Choice[];
+  multiple: boolean;
+  required: boolean;
 }
 
 export interface MenuItem {
   id: string;
-  name: string;
+  name: LocalizedText;
   createdAt: string;
-  description?: string;
+  description: LocalizedText;
   imageUrl: string;
-  options?: Option[];
+  options: Option[];
   price: number;
   sold: number;
   stock: number | null;
@@ -25,6 +35,6 @@ export interface MenuItem {
 
 export interface Category {
   id: string;
-  name: string;
+  name: LocalizedText;
   items: MenuItem[];
 }

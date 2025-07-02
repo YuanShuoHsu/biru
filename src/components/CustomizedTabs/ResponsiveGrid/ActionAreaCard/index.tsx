@@ -23,7 +23,10 @@ import { alpha, styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
 
-import { Option } from "@/types/menu";
+import type { LangParam } from "@/types/locale";
+import type { Option } from "@/types/menu";
+
+import { getItemKey } from "@/utils/itemKey";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -105,15 +108,15 @@ const SizeOptionChip = styled(Chip)(() => ({
   },
 }));
 
-interface ActionAreaCardProps {
+export interface ActionAreaCardProps {
   id: string;
   name: string;
-  description?: string;
+  description: string;
   imageUrl: string;
-  options?: Option[];
+  options: Option[];
   price: number;
-  showLatest: boolean;
   stock: number | null;
+  showLatest: boolean;
   topSoldRank?: number;
 }
 
@@ -130,7 +133,7 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { lang } = useParams();
+  const { lang } = useParams() as LangParam;
 
   const dict = useI18n();
 
@@ -140,6 +143,10 @@ const ActionAreaCard = ({
   const displayPrice = price.toLocaleString(lang);
 
   const sizes = options?.find(({ name }) => name === "size")?.choices;
+
+  const hasExtraCost = options?.some(({ choices }) =>
+    choices.some(({ extraCost }) => extraCost > 0),
+  );
 
   const inStock = stock === null || stock > 0;
 
@@ -153,29 +160,29 @@ const ActionAreaCard = ({
           name={name}
           description={description}
           imageUrl={imageUrl}
+          options={options}
           price={price}
           ref={dialogRef}
-          sizes={sizes}
         />
       ),
       cancelText: dict.dialog.close,
       confirmText: dict.dialog.addToCart,
       onConfirm: async () => {
         if (!dialogRef.current) return;
-        const { amount, extraCost, price, quantity, size } =
+        const { amount, extraCost, price, quantity, choices } =
           dialogRef.current.getValues();
 
-        const itemId = size ? `${id}_${size}` : id;
+        const itemKey = getItemKey(id, choices);
 
         updateItem({
-          id: itemId,
+          id: itemKey,
           name,
           amount,
           extraCost,
           imageUrl,
           price,
           quantity,
-          size,
+          choices,
         });
       },
     });
@@ -216,10 +223,14 @@ const ActionAreaCard = ({
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {sizes?.map(({ label }) => (
-              <SizeOptionChip key={label} label={label} size="small" />
+              <SizeOptionChip
+                key={label[lang]}
+                label={label[lang]}
+                size="small"
+              />
             ))}
             <Typography variant="subtitle2" color="text.primary">
-              {`${dict.common.currency} ${displayPrice} ${sizes ? dict.dialog.from : ""}`}
+              {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.dialog.from : ""}`}
             </Typography>
           </Stack>
           {description && (

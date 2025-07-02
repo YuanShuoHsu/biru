@@ -9,7 +9,7 @@ export interface CartItem {
   imageUrl: string;
   price: number;
   quantity: number;
-  size?: string;
+  choices: Record<string, string | string[] | null>;
 }
 
 interface CartState {
