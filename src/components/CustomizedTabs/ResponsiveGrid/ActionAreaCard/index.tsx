@@ -26,8 +26,6 @@ import { useDialogStore } from "@/stores/useDialogStore";
 import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 
-import { getItemKey } from "@/utils/itemKey";
-
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
 })<{ inStock: boolean }>(({ inStock }) => ({
@@ -172,11 +170,8 @@ const ActionAreaCard = ({
         const { amount, extraCost, price, quantity, choices } =
           dialogRef.current.getValues();
 
-        const itemKey = getItemKey(id, choices);
-
         updateItem({
-          id: itemKey,
-          name,
+          id,
           amount,
           extraCost,
           imageUrl,

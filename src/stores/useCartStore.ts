@@ -1,9 +1,9 @@
+import { getItemKey } from "@/utils/itemKey";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 export interface CartItem {
   id: string;
-  name: string;
   amount: number;
   extraCost: number;
   imageUrl: string;
@@ -24,7 +24,10 @@ interface CartState {
   };
   deleteItem: (item: CartItem) => void;
   updateItem: (item: CartItem) => void;
-  getItemQuantity: (itemId: string) => number;
+  getItemQuantity: (
+    id: string,
+    choices: Record<string, string | string[] | null>,
+  ) => number;
   clearCart: () => void;
 }
 
@@ -50,9 +53,12 @@ export const useCartStore = create<CartState>()(
         return { totalAmount, totalQuantity };
       },
       deleteItem: (item) => {
+        const { id, choices } = item;
+
         const { computeTotals, itemsMap } = get();
         const newMap = { ...itemsMap };
-        delete newMap[item.id];
+        const itemKey = getItemKey(id, choices);
+        delete newMap[itemKey];
 
         const { totalAmount, totalQuantity } = computeTotals(newMap);
 
@@ -68,15 +74,17 @@ export const useCartStore = create<CartState>()(
         });
       },
       updateItem: (item) => {
+        const { id, amount, choices, quantity } = item;
+
         const { computeTotals, itemsMap } = get();
-        const itemKey = item.id;
+        const itemKey = getItemKey(id, choices);
         const existing = itemsMap[itemKey];
 
         const updatedItem = existing
           ? {
               ...existing,
-              amount: existing.amount + item.amount,
-              quantity: existing.quantity + item.quantity,
+              amount: existing.amount + amount,
+              quantity: existing.quantity + quantity,
             }
           : { ...item };
 
@@ -95,7 +103,8 @@ export const useCartStore = create<CartState>()(
           isEmpty,
         });
       },
-      getItemQuantity: (itemId) => get().itemsMap[itemId]?.quantity || 0,
+      getItemQuantity: (id, choices) =>
+        get().itemsMap[getItemKey(id, choices)]?.quantity || 0,
       clearCart: () =>
         set({
           itemsMap: {},

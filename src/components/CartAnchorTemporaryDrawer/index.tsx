@@ -31,6 +31,9 @@ import { styled } from "@mui/material/styles";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
+import { LocaleCode } from "@/types/locale";
+
+import { menu } from "@/utils/menu";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -107,7 +110,10 @@ const CartAnchorTemporaryDrawer = ({
   const { isEmpty, updateItem, itemsList, deleteItem, totalAmount } =
     useCartStore();
 
-  const { lang, tableNumber } = useParams();
+  const { lang, tableNumber } = useParams() as {
+    lang: LocaleCode;
+    tableNumber: string;
+  };
 
   const dict = useI18n();
 
@@ -142,82 +148,107 @@ const CartAnchorTemporaryDrawer = ({
         {isEmpty ? (
           <Typography variant="body1">{dict.cart.empty}</Typography>
         ) : (
-          itemsList.map((item, index) => (
-            <Stack key={item.id} gap={2}>
-              <StyledListItem alignItems="flex-start" disablePadding>
-                <StyledListItemAvatar>
-                  <ImageBox>
-                    {item.imageUrl && (
-                      <Image
-                        alt={item.name}
-                        draggable={false}
-                        fill
-                        sizes="(min-width: 808px) 50vw, 100vw"
-                        src={item.imageUrl}
-                        style={{ objectFit: "cover" }}
-                      />
+          itemsList.map((item, index) => {
+            const { id, amount, choices, imageUrl, quantity } = item;
+
+            const name =
+              menu
+                .flatMap(({ items }) => items)
+                .find(({ id: itemId }) => itemId === id)?.name[lang] || "";
+
+            const choiceLabels = Object.entries(choices)
+              .map(([key, value]) => {
+                const label = Array.isArray(value)
+                  ? `${key}: ${value.join(", ")}`
+                  : value
+                    ? `${key}: ${value}`
+                    : null;
+                return label;
+              })
+              .filter(Boolean)
+              .join(" / ");
+
+            return (
+              <Stack key={id} gap={2}>
+                <StyledListItem alignItems="flex-start" disablePadding>
+                  <StyledListItemAvatar>
+                    <ImageBox>
+                      {imageUrl && (
+                        <Image
+                          alt={name}
+                          draggable={false}
+                          fill
+                          sizes="(min-width: 808px) 50vw, 100vw"
+                          src={imageUrl}
+                          style={{ objectFit: "cover" }}
+                        />
+                      )}
+                    </ImageBox>
+                  </StyledListItemAvatar>
+                  <Box>
+                    <StyledListItemText
+                      primary={name}
+                      secondary={choiceLabels}
+                    />
+                    <Typography
+                      color="primary"
+                      fontWeight="bold"
+                      variant="body2"
+                    >
+                      {dict.common.currency} {amount.toLocaleString(lang)}
+                    </Typography>
+                  </Box>
+                </StyledListItem>
+                <StyledFormControl>
+                  <Stack direction="row" alignItems="center" gap={1}>
+                    {quantity === 1 ? (
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => deleteItem(item)}
+                        size="small"
+                      >
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        aria-label="decrease"
+                        disabled={quantity <= 1}
+                        onClick={() => handleDecrease(item)}
+                        size="small"
+                      >
+                        <Remove fontSize="small" />
+                      </IconButton>
                     )}
-                  </ImageBox>
-                </StyledListItemAvatar>
-                <Box>
-                  <StyledListItemText
-                    primary={`${item.name}${item.size ? `（${item.size}）` : ""}`}
-                    // secondary={`NT$ ${(item.price + item.extraCost).toLocaleString(lang)} x ${item.quantity}`}
-                  />
-                  <Typography color="primary" fontWeight="bold" variant="body2">
-                    {dict.common.currency} {item.amount.toLocaleString(lang)}
-                  </Typography>
-                </Box>
-              </StyledListItem>
-              <StyledFormControl>
-                <Stack direction="row" alignItems="center" gap={1}>
-                  {item.quantity === 1 ? (
+                    <TextField
+                      fullWidth
+                      id="quantity-input"
+                      size="small"
+                      slotProps={{
+                        input: {
+                          readOnly: true,
+                        },
+                        htmlInput: {
+                          sx: { textAlign: "center" },
+                        },
+                      }}
+                      value={quantity}
+                    />
                     <IconButton
-                      aria-label="delete"
-                      onClick={() => deleteItem(item)}
+                      aria-label="increase"
+                      disabled={quantity >= MAX_QUANTITY}
+                      onClick={() => handleIncrease(item)}
                       size="small"
                     >
-                      <Delete fontSize="small" />
+                      <Add fontSize="small" />
                     </IconButton>
-                  ) : (
-                    <IconButton
-                      aria-label="decrease"
-                      disabled={item.quantity <= 1}
-                      onClick={() => handleDecrease(item)}
-                      size="small"
-                    >
-                      <Remove fontSize="small" />
-                    </IconButton>
-                  )}
-                  <TextField
-                    fullWidth
-                    id="quantity-input"
-                    size="small"
-                    slotProps={{
-                      input: {
-                        readOnly: true,
-                      },
-                      htmlInput: {
-                        sx: { textAlign: "center" },
-                      },
-                    }}
-                    value={item.quantity}
-                  />
-                  <IconButton
-                    aria-label="increase"
-                    disabled={item.quantity >= MAX_QUANTITY}
-                    onClick={() => handleIncrease(item)}
-                    size="small"
-                  >
-                    <Add fontSize="small" />
-                  </IconButton>
-                </Stack>
-              </StyledFormControl>
-              {index < itemsList.length - 1 && (
-                <Divider component="li" variant="inset" />
-              )}
-            </Stack>
-          ))
+                  </Stack>
+                </StyledFormControl>
+                {index < itemsList.length - 1 && (
+                  <Divider component="li" variant="inset" />
+                )}
+              </Stack>
+            );
+          })
         )}
       </StyledList>
       <StickyFooter>

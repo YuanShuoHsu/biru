@@ -26,7 +26,6 @@ import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 
 import { interpolate } from "@/utils/i18n";
-import { getItemKey } from "@/utils/itemKey";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -84,9 +83,7 @@ const CardDialogContent = forwardRef<
   const dict = useI18n();
 
   const { getItemQuantity } = useCartStore();
-
-  const itemKey = getItemKey(id, choices);
-  const maxQuantity = Math.max(0, MAX_QUANTITY - getItemQuantity(itemKey));
+  const maxQuantity = Math.max(0, MAX_QUANTITY - getItemQuantity(id, choices));
   const minQuantity = maxQuantity === 0 ? 0 : 1;
 
   useEffect(() => {
@@ -115,6 +112,8 @@ const CardDialogContent = forwardRef<
     },
     0,
   );
+
+  console.log(choices);
 
   const amount = (price + extraCost) * quantity;
   const displayPrice = amount.toLocaleString(lang);
