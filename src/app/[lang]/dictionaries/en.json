@@ -14,7 +14,9 @@
     "title": "Shopping Cart"
   },
   "common": {
+    "colon": ": ",
     "currency": "NT$",
+    "delimiter": ", ",
     "multiply": "×",
     "totalAmount": "Total"
   },

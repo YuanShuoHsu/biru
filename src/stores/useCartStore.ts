@@ -1,6 +1,9 @@
-import { getItemKey } from "@/utils/itemKey";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+
+import { getItemKey } from "@/utils/itemKey";
+
+export type CartItemChoices = Record<string, string | string[] | null>;
 
 export interface CartItem {
   id: string;
@@ -9,7 +12,7 @@ export interface CartItem {
   imageUrl: string;
   price: number;
   quantity: number;
-  choices: Record<string, string | string[] | null>;
+  choices: CartItemChoices;
 }
 
 interface CartState {
@@ -24,10 +27,7 @@ interface CartState {
   };
   deleteItem: (item: CartItem) => void;
   updateItem: (item: CartItem) => void;
-  getItemQuantity: (
-    id: string,
-    choices: Record<string, string | string[] | null>,
-  ) => number;
+  getItemQuantity: (id: string, choices: CartItemChoices) => number;
   clearCart: () => void;
 }
 

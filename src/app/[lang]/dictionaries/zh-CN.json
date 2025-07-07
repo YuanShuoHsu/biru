@@ -14,7 +14,9 @@
     "title": "购物车"
   },
   "common": {
+    "colon": "：",
     "currency": "NT$",
+    "delimiter": "、",
     "multiply": "×",
     "totalAmount": "总计"
   },

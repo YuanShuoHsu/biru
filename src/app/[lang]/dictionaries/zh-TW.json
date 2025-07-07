@@ -14,7 +14,9 @@
     "title": "購物車清單"
   },
   "common": {
+    "colon": "：",
     "currency": "NT$",
+    "delimiter": "、",
     "multiply": "×",
     "totalAmount": "總計"
   },

@@ -14,7 +14,9 @@
     "title": "장바구니"
   },
   "common": {
+    "colon": ": ",
     "currency": "NT$",
+    "delimiter": ", ",
     "multiply": "×",
     "totalAmount": "합계"
   },

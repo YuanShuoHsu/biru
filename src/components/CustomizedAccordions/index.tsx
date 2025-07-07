@@ -22,6 +22,11 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
+import { LangParam } from "@/types/locale";
+
+import { getItemKey } from "@/utils/itemKey";
+import { getChoiceLabels, getItemName } from "@/utils/menu";
+
 const StyledAccordionSummary = styled(AccordionSummary)({
   "& .MuiAccordionSummary-content": {
     display: "flex",
@@ -50,7 +55,7 @@ const StyledListItemText = styled(ListItemText)({
 });
 
 const CustomizedAccordions = () => {
-  const { lang } = useParams();
+  const { lang } = useParams() as LangParam;
 
   const dict = useI18n();
 
@@ -81,25 +86,48 @@ const CustomizedAccordions = () => {
             {isEmpty ? (
               <Typography variant="body1">尚未有商品</Typography>
             ) : (
-              itemsList.map((item, index) => (
-                <Stack key={item.id} gap={2}>
-                  <ListItem disablePadding>
-                    <StyledListItemText
-                      primary={`${item.name} ${item.size ? `(${item.size})` : ""}`}
-                      secondary={`${dict.common.currency} ${(item.price + item.extraCost).toLocaleString(lang)} ${dict.common.multiply} ${item.quantity}`}
-                    />
-                    <Typography
-                      color="primary"
-                      fontWeight="bold"
-                      variant="body2"
-                    >
-                      {dict.common.currency}{" "}
-                      {(item.price * item.quantity).toLocaleString(lang)}
-                    </Typography>
-                  </ListItem>
-                  {index < itemsList.length - 1 && <Divider component="li" />}
-                </Stack>
-              ))
+              itemsList.map((item, index) => {
+                const { id, amount, choices, extraCost, price, quantity } =
+                  item;
+
+                const name = getItemName(id, lang);
+                const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+
+                return (
+                  <Stack key={getItemKey(id, choices)} gap={2}>
+                    <ListItem disablePadding>
+                      <StyledListItemText
+                        primary={name}
+                        secondary={
+                          <Stack component="span">
+                            <Typography variant="body2" component="span">
+                              {dict.common.currency}{" "}
+                              {(price + extraCost).toLocaleString(lang)}{" "}
+                              {dict.common.multiply} {quantity}
+                            </Typography>
+                            <Typography
+                              color="text.secondary"
+                              component="span"
+                              variant="caption"
+                              whiteSpace="pre-line"
+                            >
+                              {choiceLabels}
+                            </Typography>
+                          </Stack>
+                        }
+                      />
+                      <Typography
+                        color="primary"
+                        fontWeight="bold"
+                        variant="body2"
+                      >
+                        {dict.common.currency} {amount.toLocaleString(lang)}
+                      </Typography>
+                    </ListItem>
+                    {index < itemsList.length - 1 && <Divider component="li" />}
+                  </Stack>
+                );
+              })
             )}
           </NoSsr>
         </StyledList>

@@ -20,7 +20,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useCartStore } from "@/stores/useCartStore";
+import { CartItemChoices, useCartStore } from "@/stores/useCartStore";
 
 import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
@@ -47,7 +47,7 @@ export interface CardDialogContentImperativeHandle {
     extraCost: number;
     price: number;
     quantity: number;
-    choices: Record<string, string | string[] | null>;
+    choices: CartItemChoices;
   };
 }
 
@@ -65,9 +65,7 @@ const CardDialogContent = forwardRef<
   CardDialogContentProps
 >(({ id, name, description, imageUrl, options, price }, ref) => {
   const [quantity, setQuantity] = useState(1);
-  const [choices, setChoices] = useState<
-    Record<string, string | string[] | null>
-  >(() =>
+  const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
       options.map(({ name, choices, multiple, required }) => {
         if (multiple) return [name, []];
@@ -112,8 +110,6 @@ const CardDialogContent = forwardRef<
     },
     0,
   );
-
-  console.log(choices);
 
   const amount = (price + extraCost) * quantity;
   const displayPrice = amount.toLocaleString(lang);

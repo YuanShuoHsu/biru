@@ -14,7 +14,9 @@
     "title": "カート"
   },
   "common": {
+    "colon": "：",
     "currency": "NT$",
+    "delimiter": "、",
     "multiply": "×",
     "totalAmount": "合計"
   },

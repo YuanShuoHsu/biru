@@ -1,4 +1,53 @@
-import type { Category } from "@/types/menu";
+import { I18nDict } from "@/context/i18n";
+import type { CartItemChoices } from "@/stores/useCartStore";
+
+import type { LocaleCode } from "@/types/locale";
+import type { Category, MenuItem, Option } from "@/types/menu";
+
+const findMenuItemById = (id: string): MenuItem | undefined =>
+  menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
+
+export const getItemName = (id: string, lang: LocaleCode): string =>
+  findMenuItemById(id)?.name[lang] || "";
+
+const findChoiceLabel = (
+  option: Option,
+  value: string,
+  lang: LocaleCode,
+): string => {
+  const match = option.choices.find(
+    ({ value: choiceValue }) => choiceValue === value,
+  );
+
+  return match?.label[lang] || "";
+};
+
+export const getChoiceLabels = (
+  id: string,
+  lang: LocaleCode,
+  choices: CartItemChoices,
+  { common: { colon, delimiter } }: I18nDict,
+): string => {
+  const item = findMenuItemById(id);
+  if (!item) return "";
+
+  return Object.entries(choices)
+    .flatMap(([key, value]) => {
+      if (!value) return [];
+
+      const option = item.options.find(({ name }) => name === key);
+      if (!option) return [];
+
+      const values = Array.isArray(value) ? value : [value];
+      const valueLabels = values
+        .map((choiceValue) => findChoiceLabel(option, choiceValue, lang))
+        .filter(Boolean)
+        .join(delimiter);
+
+      return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
+    })
+    .join("\n");
+};
 
 export const menu: Category[] = [
   {
@@ -173,9 +222,9 @@ export const menu: Category[] = [
               {
                 label: {
                   "zh-TW": "珍珠",
-                  en: "Tapioca Pearls",
+                  en: "Pearls",
                   ja: "タピオカ",
-                  ko: "타피오카 펄",
+                  ko: "타피오카",
                   "zh-CN": "珍珠",
                 },
                 value: "pearls",

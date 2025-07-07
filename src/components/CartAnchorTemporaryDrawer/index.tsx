@@ -33,7 +33,8 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { DrawerType } from "@/types/drawer";
 import { LocaleCode } from "@/types/locale";
 
-import { menu } from "@/utils/menu";
+import { getItemKey } from "@/utils/itemKey";
+import { getChoiceLabels, getItemName } from "@/utils/menu";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -87,6 +88,7 @@ const ImageBox = styled(Box)(({ theme }) => ({
 
 const StyledListItemText = styled(ListItemText)({
   margin: 0,
+  whiteSpace: "pre-line",
 });
 
 const StyledFormControl = styled(FormControl)(({ theme }) => ({
@@ -151,25 +153,11 @@ const CartAnchorTemporaryDrawer = ({
           itemsList.map((item, index) => {
             const { id, amount, choices, imageUrl, quantity } = item;
 
-            const name =
-              menu
-                .flatMap(({ items }) => items)
-                .find(({ id: itemId }) => itemId === id)?.name[lang] || "";
-
-            const choiceLabels = Object.entries(choices)
-              .map(([key, value]) => {
-                const label = Array.isArray(value)
-                  ? `${key}: ${value.join(", ")}`
-                  : value
-                    ? `${key}: ${value}`
-                    : null;
-                return label;
-              })
-              .filter(Boolean)
-              .join(" / ");
+            const name = getItemName(id, lang);
+            const choiceLabels = getChoiceLabels(id, lang, choices, dict);
 
             return (
-              <Stack key={id} gap={2}>
+              <Stack key={getItemKey(id, choices)} gap={2}>
                 <StyledListItem alignItems="flex-start" disablePadding>
                   <StyledListItemAvatar>
                     <ImageBox>
