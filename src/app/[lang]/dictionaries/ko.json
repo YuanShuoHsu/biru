@@ -10,13 +10,14 @@
   },
   "cart": {
     "checkout": "결제하기",
-    "empty": "상품이 없습니다",
     "title": "장바구니"
   },
   "common": {
     "colon": ": ",
     "currency": "NT$",
     "delimiter": ", ",
+    "empty": "상품이 없습니다",
+    "loading": "로딩 중...",
     "multiply": "×",
     "totalAmount": "합계"
   },

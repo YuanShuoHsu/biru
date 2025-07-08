@@ -1,40 +1,30 @@
 "use client";
 
-import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import { MAX_QUANTITY } from "@/constants/cart";
+import CartItemList from "@/components/CartItemList";
 
 import { useI18n } from "@/context/i18n";
 
-import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Divider,
   Drawer,
-  FormControl,
-  IconButton,
   Link,
   List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Stack,
-  TextField,
   Theme,
   Toolbar,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { CartItem, useCartStore } from "@/stores/useCartStore";
+import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
-import { LocaleCode } from "@/types/locale";
+import { LangTableNumberParam } from "@/types/locale";
 
 import { getItemKey } from "@/utils/itemKey";
-import { getChoiceLabels, getItemName } from "@/utils/menu";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -69,34 +59,6 @@ const StyledList = styled(List)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const StyledListItem = styled(ListItem)(({ theme }) => ({
-  display: "flex",
-  gap: theme.spacing(2),
-}));
-
-const StyledListItemAvatar = styled(ListItemAvatar)({
-  margin: 0,
-});
-
-const ImageBox = styled(Box)(({ theme }) => ({
-  position: "relative",
-  width: 60,
-  height: 60,
-  borderRadius: theme.shape.borderRadius,
-  overflow: "hidden",
-}));
-
-const StyledListItemText = styled(ListItemText)({
-  margin: 0,
-  whiteSpace: "pre-line",
-});
-
-const StyledFormControl = styled(FormControl)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(1),
-}));
-
 interface CartAnchorTemporaryDrawerProps {
   onDrawerToggle: (
     type: DrawerType,
@@ -109,35 +71,11 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { isEmpty, updateItem, itemsList, deleteItem, totalAmount } =
-    useCartStore();
-
-  const { lang, tableNumber } = useParams() as {
-    lang: LocaleCode;
-    tableNumber: string;
-  };
+  const { lang, tableNumber } = useParams<LangTableNumberParam>();
 
   const dict = useI18n();
 
-  const handleDecrease = (item: CartItem) => {
-    if (item.quantity > 1) {
-      updateItem({
-        ...item,
-        quantity: -1,
-        amount: -(item.price + item.extraCost),
-      });
-    }
-  };
-
-  const handleIncrease = (item: CartItem) => {
-    if (item.quantity < MAX_QUANTITY) {
-      updateItem({
-        ...item,
-        quantity: 1,
-        amount: item.price + item.extraCost,
-      });
-    }
-  };
+  const { isEmpty, itemsList, totalAmount } = useCartStore();
 
   const drawerList = (
     <DrawerBox role="presentation">
@@ -148,93 +86,20 @@ const CartAnchorTemporaryDrawer = ({
       </StickyHeader>
       <StyledList disablePadding>
         {isEmpty ? (
-          <Typography variant="body1">{dict.cart.empty}</Typography>
+          <Typography variant="body1">{dict.common.empty}</Typography>
         ) : (
           itemsList.map((item, index) => {
-            const { id, amount, choices, imageUrl, quantity } = item;
-
-            const name = getItemName(id, lang);
-            const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+            const { id, choices } = item;
 
             return (
-              <Stack key={getItemKey(id, choices)} gap={2}>
-                <StyledListItem alignItems="flex-start" disablePadding>
-                  <StyledListItemAvatar>
-                    <ImageBox>
-                      {imageUrl && (
-                        <Image
-                          alt={name}
-                          draggable={false}
-                          fill
-                          sizes="(min-width: 808px) 50vw, 100vw"
-                          src={imageUrl}
-                          style={{ objectFit: "cover" }}
-                        />
-                      )}
-                    </ImageBox>
-                  </StyledListItemAvatar>
-                  <Box>
-                    <StyledListItemText
-                      primary={name}
-                      secondary={choiceLabels}
-                    />
-                    <Typography
-                      color="primary"
-                      fontWeight="bold"
-                      variant="body2"
-                    >
-                      {dict.common.currency} {amount.toLocaleString(lang)}
-                    </Typography>
-                  </Box>
-                </StyledListItem>
-                <StyledFormControl>
-                  <Stack direction="row" alignItems="center" gap={1}>
-                    {quantity === 1 ? (
-                      <IconButton
-                        aria-label="delete"
-                        onClick={() => deleteItem(item)}
-                        size="small"
-                      >
-                        <Delete fontSize="small" />
-                      </IconButton>
-                    ) : (
-                      <IconButton
-                        aria-label="decrease"
-                        disabled={quantity <= 1}
-                        onClick={() => handleDecrease(item)}
-                        size="small"
-                      >
-                        <Remove fontSize="small" />
-                      </IconButton>
-                    )}
-                    <TextField
-                      fullWidth
-                      id="quantity-input"
-                      size="small"
-                      slotProps={{
-                        input: {
-                          readOnly: true,
-                        },
-                        htmlInput: {
-                          sx: { textAlign: "center" },
-                        },
-                      }}
-                      value={quantity}
-                    />
-                    <IconButton
-                      aria-label="increase"
-                      disabled={quantity >= MAX_QUANTITY}
-                      onClick={() => handleIncrease(item)}
-                      size="small"
-                    >
-                      <Add fontSize="small" />
-                    </IconButton>
-                  </Stack>
-                </StyledFormControl>
-                {index < itemsList.length - 1 && (
-                  <Divider component="li" variant="inset" />
-                )}
-              </Stack>
+              <CartItemList
+                dict={dict}
+                forceXsLayout
+                item={item}
+                key={getItemKey(id, choices)}
+                lang={lang}
+                showDivider={index < itemsList.length - 1}
+              />
             );
           })
         )}

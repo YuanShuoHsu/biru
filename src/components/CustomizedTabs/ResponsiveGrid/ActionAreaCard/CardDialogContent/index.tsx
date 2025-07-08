@@ -76,7 +76,7 @@ const CardDialogContent = forwardRef<
     ),
   );
 
-  const { lang } = useParams() as LangParam;
+  const { lang } = useParams<LangParam>();
 
   const dict = useI18n();
 

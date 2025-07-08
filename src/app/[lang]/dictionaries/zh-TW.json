@@ -10,13 +10,14 @@
   },
   "cart": {
     "checkout": "前往結帳",
-    "empty": "尚未有商品",
     "title": "購物車清單"
   },
   "common": {
     "colon": "：",
     "currency": "NT$",
     "delimiter": "、",
+    "empty": "尚未有商品",
+    "loading": "載入中...",
     "multiply": "×",
     "totalAmount": "總計"
   },

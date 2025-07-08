@@ -48,7 +48,7 @@ interface CustomizedTabsProps {
 }
 
 const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
-  const { lang } = useParams() as LangParam;
+  const { lang } = useParams<LangParam>();
 
   const dict = useI18n();
 

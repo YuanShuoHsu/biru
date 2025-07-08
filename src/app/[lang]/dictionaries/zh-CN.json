@@ -10,13 +10,14 @@
   },
   "cart": {
     "checkout": "前往结算",
-    "empty": "尚无商品",
     "title": "购物车"
   },
   "common": {
     "colon": "：",
     "currency": "NT$",
     "delimiter": "、",
+    "empty": "尚无商品",
+    "loading": "加载中...",
     "multiply": "×",
     "totalAmount": "总计"
   },

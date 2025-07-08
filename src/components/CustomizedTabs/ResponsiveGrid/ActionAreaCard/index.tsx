@@ -131,7 +131,7 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { lang } = useParams() as LangParam;
+  const { lang } = useParams<LangParam>();
 
   const dict = useI18n();
 

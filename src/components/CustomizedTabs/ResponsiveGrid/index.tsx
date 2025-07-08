@@ -18,7 +18,7 @@ const ResponsiveGrid = ({
   showLatest,
   showTopSold,
 }: ResponsiveGridProps) => {
-  const { lang } = useParams() as LangParam;
+  const { lang } = useParams<LangParam>();
 
   return (
     <Grid container spacing={2}>

@@ -10,13 +10,14 @@
   },
   "cart": {
     "checkout": "Proceed to Checkout",
-    "empty": "No items yet",
     "title": "Shopping Cart"
   },
   "common": {
     "colon": ": ",
     "currency": "NT$",
     "delimiter": ", ",
+    "empty": "No items yet",
+    "loading": "Loading...",
     "multiply": "×",
     "totalAmount": "Total"
   },
