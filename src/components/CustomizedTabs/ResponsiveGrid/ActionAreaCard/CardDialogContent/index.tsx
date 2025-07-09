@@ -10,6 +10,7 @@ import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
   Chip,
+  Divider,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -215,6 +216,7 @@ const CardDialogContent = forwardRef<
           </StyledFormControl>
         ),
       )}
+      <Divider variant="inset" />
       <Grid container spacing={2}>
         <Grid size={{ xs: 5 }} height={40} display="flex" alignItems="center">
           <Typography
