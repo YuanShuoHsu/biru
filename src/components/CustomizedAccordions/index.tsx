@@ -65,30 +65,6 @@ const CustomizedAccordions = () => {
       </StyledAccordionSummary>
       <StyledAccordionDetails>
         <CartItemList />
-        {/* <StyledList disablePadding>
-          <NoSsr
-            defer
-            fallback={<Typography>{dict.common.loading}</Typography>}
-          >
-            {isEmpty ? (
-              <Typography variant="body1">{dict.common.empty}</Typography>
-            ) : (
-              itemsList.map((item, index) => {
-                const { id, choices } = item;
-
-                return (
-                  <CartItemList
-                    dict={dict}
-                    item={item}
-                    key={getItemKey(id, choices)}
-                    lang={lang}
-                    showDivider={index < itemsList.length - 1}
-                  />
-                );
-              })
-            )}
-          </NoSsr>
-        </StyledList> */}
       </StyledAccordionDetails>
     </Accordion>
   );

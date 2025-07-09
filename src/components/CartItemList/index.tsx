@@ -17,6 +17,7 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
+  NoSsr,
   TextField,
   Typography,
 } from "@mui/material";
@@ -96,136 +97,138 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
 
   return (
     <StyledList disablePadding>
-      {isEmpty ? (
-        <Typography variant="body1">{dict.common.empty}</Typography>
-      ) : (
-        itemsList.map((item, index) => {
-          const { id, amount, choices, imageUrl, quantity } = item;
+      <NoSsr defer fallback={<Typography>{dict.common.loading}</Typography>}>
+        {isEmpty ? (
+          <Typography variant="body1">{dict.common.empty}</Typography>
+        ) : (
+          itemsList.map((item, index) => {
+            const { id, amount, choices, imageUrl, quantity } = item;
 
-          const name = getItemName(id, lang);
-          const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+            const name = getItemName(id, lang);
+            const choiceLabels = getChoiceLabels(id, lang, choices, dict);
 
-          return (
-            <Fragment key={getItemKey(id, choices)}>
-              <StyledListItem alignItems="flex-start" disablePadding>
-                <Grid
-                  width="100%"
-                  container
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  spacing={2}
-                >
+            return (
+              <Fragment key={getItemKey(id, choices)}>
+                <StyledListItem alignItems="flex-start" disablePadding>
                   <Grid
-                    size={{
-                      xs: 12,
-                      ...(forceXsLayout ? {} : { sm: 6 }),
-                    }}
+                    width="100%"
+                    container
                     display="flex"
-                    gap={2}
+                    justifyContent="space-between"
+                    alignItems="center"
+                    spacing={2}
                   >
-                    <StyledListItemAvatar>
-                      <ImageBox>
-                        {imageUrl && (
-                          <Image
-                            alt={name}
-                            draggable={false}
-                            fill
-                            sizes="(min-width: 808px) 50vw, 100vw"
-                            src={imageUrl}
-                            style={{ objectFit: "cover" }}
-                          />
-                        )}
-                      </ImageBox>
-                    </StyledListItemAvatar>
-                    <StyledListItemText
-                      primary={name}
-                      secondary={choiceLabels}
-                    />
-                  </Grid>
-                  <Grid
-                    size={{
-                      xs: 5,
-                      ...(forceXsLayout ? {} : { sm: 2 }),
-                    }}
-                  >
-                    <Typography
-                      color="primary"
-                      component="span"
-                      fontWeight="bold"
-                      variant="body2"
-                    >
-                      {dict.common.currency} {amount.toLocaleString(lang)}
-                    </Typography>
-                  </Grid>
-                  <Grid
-                    size={{
-                      xs: 7,
-                      ...(forceXsLayout ? {} : { sm: 4 }),
-                    }}
-                    textAlign="right"
-                  >
-                    <TextField
-                      disabled={!quantity}
-                      fullWidth
-                      size="small"
-                      slotProps={{
-                        input: {
-                          startAdornment: (
-                            <StyledInputAdornment position="start">
-                              {quantity === 1 ? (
-                                <IconButton
-                                  aria-label="delete"
-                                  onClick={() => deleteItem(item)}
-                                  size="small"
-                                >
-                                  <Delete fontSize="small" />
-                                </IconButton>
-                              ) : (
-                                <IconButton
-                                  aria-label="decrease"
-                                  disabled={quantity <= 1}
-                                  onClick={() => handleDecrease(item)}
-                                  size="small"
-                                >
-                                  <Remove fontSize="small" />
-                                </IconButton>
-                              )}
-                            </StyledInputAdornment>
-                          ),
-                          endAdornment: (
-                            <StyledInputAdornment position="end">
-                              <IconButton
-                                aria-label="increase"
-                                disabled={quantity >= MAX_QUANTITY}
-                                onClick={() => handleIncrease(item)}
-                                size="small"
-                              >
-                                <Add fontSize="small" />
-                              </IconButton>
-                            </StyledInputAdornment>
-                          ),
-                          readOnly: true,
-                          sx: {
-                            paddingInline: 1,
-                          },
-                        },
-                        htmlInput: {
-                          sx: { textAlign: "center" },
-                        },
+                    <Grid
+                      size={{
+                        xs: 12,
+                        ...(forceXsLayout ? {} : { sm: 6 }),
                       }}
-                      value={quantity}
-                    />
+                      display="flex"
+                      gap={2}
+                    >
+                      <StyledListItemAvatar>
+                        <ImageBox>
+                          {imageUrl && (
+                            <Image
+                              alt={name}
+                              draggable={false}
+                              fill
+                              sizes="(min-width: 808px) 50vw, 100vw"
+                              src={imageUrl}
+                              style={{ objectFit: "cover" }}
+                            />
+                          )}
+                        </ImageBox>
+                      </StyledListItemAvatar>
+                      <StyledListItemText
+                        primary={name}
+                        secondary={choiceLabels}
+                      />
+                    </Grid>
+                    <Grid
+                      size={{
+                        xs: 5,
+                        ...(forceXsLayout ? {} : { sm: 2 }),
+                      }}
+                    >
+                      <Typography
+                        color="primary"
+                        component="span"
+                        fontWeight="bold"
+                        variant="body2"
+                      >
+                        {dict.common.currency} {amount.toLocaleString(lang)}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      size={{
+                        xs: 7,
+                        ...(forceXsLayout ? {} : { sm: 4 }),
+                      }}
+                      textAlign="right"
+                    >
+                      <TextField
+                        disabled={!quantity}
+                        fullWidth
+                        size="small"
+                        slotProps={{
+                          input: {
+                            startAdornment: (
+                              <StyledInputAdornment position="start">
+                                {quantity === 1 ? (
+                                  <IconButton
+                                    aria-label="delete"
+                                    onClick={() => deleteItem(item)}
+                                    size="small"
+                                  >
+                                    <Delete fontSize="small" />
+                                  </IconButton>
+                                ) : (
+                                  <IconButton
+                                    aria-label="decrease"
+                                    disabled={quantity <= 1}
+                                    onClick={() => handleDecrease(item)}
+                                    size="small"
+                                  >
+                                    <Remove fontSize="small" />
+                                  </IconButton>
+                                )}
+                              </StyledInputAdornment>
+                            ),
+                            endAdornment: (
+                              <StyledInputAdornment position="end">
+                                <IconButton
+                                  aria-label="increase"
+                                  disabled={quantity >= MAX_QUANTITY}
+                                  onClick={() => handleIncrease(item)}
+                                  size="small"
+                                >
+                                  <Add fontSize="small" />
+                                </IconButton>
+                              </StyledInputAdornment>
+                            ),
+                            readOnly: true,
+                            sx: {
+                              paddingInline: 1,
+                            },
+                          },
+                          htmlInput: {
+                            sx: { textAlign: "center" },
+                          },
+                        }}
+                        value={quantity}
+                      />
+                    </Grid>
                   </Grid>
-                </Grid>
-              </StyledListItem>
-              {index < itemsList.length - 1 && (
-                <Divider component="li" variant="inset" />
-              )}
-            </Fragment>
-          );
-        })
-      )}
+                </StyledListItem>
+                {index < itemsList.length - 1 && (
+                  <Divider component="li" variant="inset" />
+                )}
+              </Fragment>
+            );
+          })
+        )}
+      </NoSsr>
     </StyledList>
   );
 };
