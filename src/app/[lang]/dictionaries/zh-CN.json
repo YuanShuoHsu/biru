@@ -27,7 +27,6 @@
     "close": "关闭",
     "from": "起",
     "maxQuantity": "最多只能购买 {max} 件",
-    "quantity": "数量",
     "size": "尺寸",
     "soldOut": "售罄"
   },

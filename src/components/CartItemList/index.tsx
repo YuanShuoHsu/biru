@@ -49,6 +49,10 @@ const StyledListItemText = styled(ListItemText)({
   whiteSpace: "pre-line",
 });
 
+const StyledInputAdornment = styled(InputAdornment)({
+  margin: 0,
+});
+
 interface CartItemListProps {
   dict: I18nDict;
   forceXsLayout?: boolean;
@@ -128,17 +132,34 @@ const CartItemList = ({
           </Grid>
           <Grid
             size={{
+              xs: 5,
+              ...(forceXsLayout ? {} : { sm: 2 }),
+            }}
+          >
+            <Typography
+              color="primary"
+              component="span"
+              fontWeight="bold"
+              variant="body2"
+            >
+              {dict.common.currency} {amount.toLocaleString(lang)}
+            </Typography>
+          </Grid>
+          <Grid
+            size={{
               xs: 7,
               ...(forceXsLayout ? {} : { sm: 4 }),
             }}
+            textAlign="right"
           >
             <TextField
+              disabled={!quantity}
               fullWidth
               size="small"
               slotProps={{
                 input: {
                   startAdornment: (
-                    <InputAdornment position="start">
+                    <StyledInputAdornment position="start">
                       {quantity === 1 ? (
                         <IconButton
                           aria-label="delete"
@@ -157,10 +178,10 @@ const CartItemList = ({
                           <Remove fontSize="small" />
                         </IconButton>
                       )}
-                    </InputAdornment>
+                    </StyledInputAdornment>
                   ),
                   endAdornment: (
-                    <InputAdornment position="end">
+                    <StyledInputAdornment position="end">
                       <IconButton
                         aria-label="increase"
                         disabled={quantity >= MAX_QUANTITY}
@@ -169,7 +190,7 @@ const CartItemList = ({
                       >
                         <Add fontSize="small" />
                       </IconButton>
-                    </InputAdornment>
+                    </StyledInputAdornment>
                   ),
                   readOnly: true,
                   sx: {
@@ -182,17 +203,6 @@ const CartItemList = ({
               }}
               value={quantity}
             />
-          </Grid>
-          <Grid
-            size={{
-              xs: 5,
-              ...(forceXsLayout ? {} : { sm: 2 }),
-            }}
-            textAlign="right"
-          >
-            <Typography color="primary" fontWeight="bold" variant="body2">
-              {dict.common.currency} {amount.toLocaleString(lang)}
-            </Typography>
           </Grid>
         </Grid>
       </StyledListItem>

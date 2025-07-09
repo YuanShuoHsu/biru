@@ -27,7 +27,6 @@
     "close": "閉じる",
     "from": "〜",
     "maxQuantity": "最大 {max} 個まで購入できます",
-    "quantity": "数量",
     "size": "サイズ",
     "soldOut": "売り切れ"
   },

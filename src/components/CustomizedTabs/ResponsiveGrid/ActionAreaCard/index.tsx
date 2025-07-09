@@ -224,17 +224,17 @@ const ActionAreaCard = ({
                 size="small"
               />
             ))}
-            <Typography variant="subtitle2" color="text.primary">
+            <Typography color="text.primary" variant="subtitle2">
               {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.dialog.from : ""}`}
             </Typography>
           </Stack>
           {description && (
-            <Typography variant="body2" color="text.secondary">
+            <Typography color="text.secondary" variant="body2">
               {description}
             </Typography>
           )}
           {!inStock && (
-            <Typography variant="caption" color="error">
+            <Typography color="error" variant="caption">
               {dict.dialog.soldOut}
             </Typography>
           )}

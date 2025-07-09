@@ -27,7 +27,6 @@
     "close": "Close",
     "from": "from",
     "maxQuantity": "You can only purchase up to {max} items",
-    "quantity": "Quantity",
     "size": "Size",
     "soldOut": "Sold out"
   },

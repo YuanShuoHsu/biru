@@ -13,7 +13,9 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Grid,
   IconButton,
+  InputAdornment,
   Stack,
   TextField,
   Typography,
@@ -128,6 +130,14 @@ const CardDialogContent = forwardRef<
     [amount, extraCost, price, quantity, choices],
   );
 
+  const handleDecreaseQuantity = () => {
+    setQuantity((prev) => Math.max(prev - 1, minQuantity));
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity((prev) => Math.min(prev + 1, maxQuantity));
+  };
+
   return (
     <Stack direction="column" gap={2}>
       <ImageBox>
@@ -143,7 +153,7 @@ const CardDialogContent = forwardRef<
         )}
       </ImageBox>
       {description && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography color="text.secondary" variant="body2">
           {description}
         </Typography>
       )}
@@ -182,13 +192,15 @@ const CardDialogContent = forwardRef<
                     key={value}
                     label={
                       <Stack flexDirection="row" alignItems="center" gap={1}>
-                        <Typography variant="body2">
+                        <Typography component="span" variant="body2">
                           {choiceLabel[lang]}
                         </Typography>
                         {extraCost > 0 && (
                           <>
-                            <Typography variant="body2">/</Typography>
-                            <Typography variant="caption">
+                            <Typography component="span" variant="body2">
+                              /
+                            </Typography>
+                            <Typography component="span" variant="caption">
                               {dict.common.currency} {extraCost}
                             </Typography>
                           </>
@@ -203,71 +215,70 @@ const CardDialogContent = forwardRef<
           </StyledFormControl>
         ),
       )}
-      <StyledFormControl>
-        <FormLabel htmlFor="quantity-input">{dict.dialog.quantity}</FormLabel>
-        <Stack direction="row" alignItems="center" gap={1}>
-          <IconButton
-            aria-label="decrease"
-            disabled={quantity <= minQuantity}
-            onClick={() =>
-              setQuantity((prev) => Math.max(prev - 1, minQuantity))
-            }
-            size="small"
+      <Grid container spacing={2}>
+        <Grid size={{ xs: 5 }} height={40} display="flex" alignItems="center">
+          <Typography
+            color="primary"
+            component="span"
+            fontWeight="bold"
+            variant="h6"
           >
-            <Remove fontSize="small" />
-          </IconButton>
-          <TextField
-            disabled={!quantity}
-            fullWidth
-            id="quantity-input"
-            size="small"
-            slotProps={{
-              input: {
-                readOnly: true,
-              },
-              htmlInput: {
-                sx: { textAlign: "center" },
-              },
-            }}
-            value={quantity}
-          />
-          <IconButton
-            aria-label="increase"
-            disabled={quantity >= maxQuantity}
-            onClick={() =>
-              setQuantity((prev) => Math.min(prev + 1, maxQuantity))
-            }
-            size="small"
-          >
-            <Add fontSize="small" />
-          </IconButton>
-        </Stack>
-        {quantity === maxQuantity && (
-          <FormHelperText error>
-            {interpolate(dict.dialog.maxQuantity, {
-              max: MAX_QUANTITY,
-            })}
-          </FormHelperText>
-        )}
-      </StyledFormControl>
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        flexWrap="wrap"
-      >
-        <Typography component="span" variant="subtitle1">
-          {dict.dialog.amount}
-        </Typography>
-        <Typography
-          color="primary"
-          component="span"
-          fontWeight="bold"
-          variant="h6"
-        >
-          {dict.common.currency} {displayPrice}
-        </Typography>
-      </Stack>
+            {dict.common.currency} {displayPrice}
+          </Typography>
+        </Grid>
+        <Grid size={{ xs: 7 }}>
+          <StyledFormControl>
+            <TextField
+              disabled={!quantity}
+              fullWidth
+              size="small"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton
+                        aria-label="decrease"
+                        disabled={quantity <= minQuantity}
+                        onClick={handleDecreaseQuantity}
+                        size="small"
+                      >
+                        <Remove fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="increase"
+                        disabled={quantity >= maxQuantity}
+                        onClick={handleIncreaseQuantity}
+                        size="small"
+                      >
+                        <Add fontSize="small" />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  readOnly: true,
+                  sx: {
+                    paddingInline: 1,
+                  },
+                },
+                htmlInput: {
+                  sx: { textAlign: "center" },
+                },
+              }}
+              value={quantity}
+            />
+            {quantity === maxQuantity && (
+              <FormHelperText error>
+                {interpolate(dict.dialog.maxQuantity, {
+                  max: MAX_QUANTITY,
+                })}
+              </FormHelperText>
+            )}
+          </StyledFormControl>
+        </Grid>
+      </Grid>
     </Stack>
   );
 });
