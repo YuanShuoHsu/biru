@@ -11,8 +11,6 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  List,
-  NoSsr,
   Typography,
   TypographyProps,
 } from "@mui/material";
@@ -21,8 +19,6 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 
 import { LangParam } from "@/types/locale";
-
-import { getItemKey } from "@/utils/itemKey";
 
 const StyledAccordionSummary = styled(AccordionSummary)({
   "& .MuiAccordionSummary-content": {
@@ -37,14 +33,8 @@ const StyledTypography = styled(Typography)<TypographyProps>({
 });
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: 0,
   borderTop: `1px solid ${theme.palette.divider}`,
-}));
-
-const StyledList = styled(List)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(2),
 }));
 
 const CustomizedAccordions = () => {
@@ -52,7 +42,7 @@ const CustomizedAccordions = () => {
 
   const dict = useI18n();
 
-  const { isEmpty, itemsList, totalAmount } = useCartStore();
+  const { totalAmount } = useCartStore();
 
   return (
     <Accordion defaultExpanded disableGutters>
@@ -74,7 +64,8 @@ const CustomizedAccordions = () => {
         </Typography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
-        <StyledList disablePadding>
+        <CartItemList />
+        {/* <StyledList disablePadding>
           <NoSsr
             defer
             fallback={<Typography>{dict.common.loading}</Typography>}
@@ -97,7 +88,7 @@ const CustomizedAccordions = () => {
               })
             )}
           </NoSsr>
-        </StyledList>
+        </StyledList> */}
       </StyledAccordionDetails>
     </Accordion>
   );

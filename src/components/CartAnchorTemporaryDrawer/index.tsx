@@ -11,7 +11,6 @@ import {
   Button,
   Drawer,
   Link,
-  List,
   Stack,
   Theme,
   Toolbar,
@@ -23,8 +22,6 @@ import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
 import { LangTableNumberParam } from "@/types/locale";
-
-import { getItemKey } from "@/utils/itemKey";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -52,13 +49,6 @@ const StickyFooter = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const StyledList = styled(List)(({ theme }) => ({
-  padding: theme.spacing(2),
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(2),
-}));
-
 interface CartAnchorTemporaryDrawerProps {
   onDrawerToggle: (
     type: DrawerType,
@@ -75,7 +65,7 @@ const CartAnchorTemporaryDrawer = ({
 
   const dict = useI18n();
 
-  const { isEmpty, itemsList, totalAmount } = useCartStore();
+  const { isEmpty, totalAmount } = useCartStore();
 
   const drawerList = (
     <DrawerBox role="presentation">
@@ -84,26 +74,7 @@ const CartAnchorTemporaryDrawer = ({
           <Typography variant="h6">{dict.cart.title}</Typography>
         </Toolbar>
       </StickyHeader>
-      <StyledList disablePadding>
-        {isEmpty ? (
-          <Typography variant="body1">{dict.common.empty}</Typography>
-        ) : (
-          itemsList.map((item, index) => {
-            const { id, choices } = item;
-
-            return (
-              <CartItemList
-                dict={dict}
-                forceXsLayout
-                item={item}
-                key={getItemKey(id, choices)}
-                lang={lang}
-                showDivider={index < itemsList.length - 1}
-              />
-            );
-          })
-        )}
-      </StyledList>
+      <CartItemList forceXsLayout />
       <StickyFooter>
         <Stack
           flexDirection="row"

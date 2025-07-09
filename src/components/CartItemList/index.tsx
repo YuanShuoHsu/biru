@@ -1,8 +1,10 @@
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { Fragment } from "react";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
-import { I18nDict } from "@/context/i18n";
+import { useI18n } from "@/context/i18n";
 
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
@@ -11,10 +13,10 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -22,9 +24,17 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore, type CartItem } from "@/stores/useCartStore";
 
-import type { LocaleCode } from "@/types/locale";
+import type { LangParam } from "@/types/locale";
 
+import { getItemKey } from "@/utils/itemKey";
 import { getChoiceLabels, getItemName } from "@/utils/menu";
+
+const StyledList = styled(List)(({ theme }) => ({
+  padding: theme.spacing(2),
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(2),
+}));
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   display: "flex",
@@ -54,26 +64,15 @@ const StyledInputAdornment = styled(InputAdornment)({
 });
 
 interface CartItemListProps {
-  dict: I18nDict;
   forceXsLayout?: boolean;
-  item: CartItem;
-  lang: LocaleCode;
-  showDivider: boolean;
 }
 
-const CartItemList = ({
-  dict,
-  forceXsLayout = false,
-  item,
-  lang,
-  showDivider,
-}: CartItemListProps) => {
-  const { id, amount, choices, imageUrl, quantity } = item;
+const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
+  const { lang } = useParams<LangParam>();
 
-  const name = getItemName(id, lang);
-  const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+  const dict = useI18n();
 
-  const { updateItem, deleteItem } = useCartStore();
+  const { isEmpty, itemsList, deleteItem, updateItem } = useCartStore();
 
   const handleDecrease = (item: CartItem) => {
     if (item.quantity > 1) {
@@ -96,118 +95,138 @@ const CartItemList = ({
   };
 
   return (
-    <Stack gap={2}>
-      <StyledListItem alignItems="flex-start" disablePadding>
-        <Grid
-          width="100%"
-          container
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid
-            size={{
-              xs: 12,
-              ...(forceXsLayout ? {} : { sm: 6 }),
-            }}
-            display="flex"
-            gap={2}
-          >
-            <StyledListItemAvatar>
-              <ImageBox>
-                {imageUrl && (
-                  <Image
-                    alt={name}
-                    draggable={false}
-                    fill
-                    sizes="(min-width: 808px) 50vw, 100vw"
-                    src={imageUrl}
-                    style={{ objectFit: "cover" }}
-                  />
-                )}
-              </ImageBox>
-            </StyledListItemAvatar>
-            <StyledListItemText primary={name} secondary={choiceLabels} />
-          </Grid>
-          <Grid
-            size={{
-              xs: 5,
-              ...(forceXsLayout ? {} : { sm: 2 }),
-            }}
-          >
-            <Typography
-              color="primary"
-              component="span"
-              fontWeight="bold"
-              variant="body2"
-            >
-              {dict.common.currency} {amount.toLocaleString(lang)}
-            </Typography>
-          </Grid>
-          <Grid
-            size={{
-              xs: 7,
-              ...(forceXsLayout ? {} : { sm: 4 }),
-            }}
-            textAlign="right"
-          >
-            <TextField
-              disabled={!quantity}
-              fullWidth
-              size="small"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <StyledInputAdornment position="start">
-                      {quantity === 1 ? (
-                        <IconButton
-                          aria-label="delete"
-                          onClick={() => deleteItem(item)}
-                          size="small"
-                        >
-                          <Delete fontSize="small" />
-                        </IconButton>
-                      ) : (
-                        <IconButton
-                          aria-label="decrease"
-                          disabled={quantity <= 1}
-                          onClick={() => handleDecrease(item)}
-                          size="small"
-                        >
-                          <Remove fontSize="small" />
-                        </IconButton>
-                      )}
-                    </StyledInputAdornment>
-                  ),
-                  endAdornment: (
-                    <StyledInputAdornment position="end">
-                      <IconButton
-                        aria-label="increase"
-                        disabled={quantity >= MAX_QUANTITY}
-                        onClick={() => handleIncrease(item)}
-                        size="small"
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
-                    </StyledInputAdornment>
-                  ),
-                  readOnly: true,
-                  sx: {
-                    paddingInline: 1,
-                  },
-                },
-                htmlInput: {
-                  sx: { textAlign: "center" },
-                },
-              }}
-              value={quantity}
-            />
-          </Grid>
-        </Grid>
-      </StyledListItem>
-      {showDivider && <Divider component="li" variant="inset" />}
-    </Stack>
+    <StyledList disablePadding>
+      {isEmpty ? (
+        <Typography variant="body1">{dict.common.empty}</Typography>
+      ) : (
+        itemsList.map((item, index) => {
+          const { id, amount, choices, imageUrl, quantity } = item;
+
+          const name = getItemName(id, lang);
+          const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+
+          return (
+            <Fragment key={getItemKey(id, choices)}>
+              <StyledListItem alignItems="flex-start" disablePadding>
+                <Grid
+                  width="100%"
+                  container
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  spacing={2}
+                >
+                  <Grid
+                    size={{
+                      xs: 12,
+                      ...(forceXsLayout ? {} : { sm: 6 }),
+                    }}
+                    display="flex"
+                    gap={2}
+                  >
+                    <StyledListItemAvatar>
+                      <ImageBox>
+                        {imageUrl && (
+                          <Image
+                            alt={name}
+                            draggable={false}
+                            fill
+                            sizes="(min-width: 808px) 50vw, 100vw"
+                            src={imageUrl}
+                            style={{ objectFit: "cover" }}
+                          />
+                        )}
+                      </ImageBox>
+                    </StyledListItemAvatar>
+                    <StyledListItemText
+                      primary={name}
+                      secondary={choiceLabels}
+                    />
+                  </Grid>
+                  <Grid
+                    size={{
+                      xs: 5,
+                      ...(forceXsLayout ? {} : { sm: 2 }),
+                    }}
+                  >
+                    <Typography
+                      color="primary"
+                      component="span"
+                      fontWeight="bold"
+                      variant="body2"
+                    >
+                      {dict.common.currency} {amount.toLocaleString(lang)}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    size={{
+                      xs: 7,
+                      ...(forceXsLayout ? {} : { sm: 4 }),
+                    }}
+                    textAlign="right"
+                  >
+                    <TextField
+                      disabled={!quantity}
+                      fullWidth
+                      size="small"
+                      slotProps={{
+                        input: {
+                          startAdornment: (
+                            <StyledInputAdornment position="start">
+                              {quantity === 1 ? (
+                                <IconButton
+                                  aria-label="delete"
+                                  onClick={() => deleteItem(item)}
+                                  size="small"
+                                >
+                                  <Delete fontSize="small" />
+                                </IconButton>
+                              ) : (
+                                <IconButton
+                                  aria-label="decrease"
+                                  disabled={quantity <= 1}
+                                  onClick={() => handleDecrease(item)}
+                                  size="small"
+                                >
+                                  <Remove fontSize="small" />
+                                </IconButton>
+                              )}
+                            </StyledInputAdornment>
+                          ),
+                          endAdornment: (
+                            <StyledInputAdornment position="end">
+                              <IconButton
+                                aria-label="increase"
+                                disabled={quantity >= MAX_QUANTITY}
+                                onClick={() => handleIncrease(item)}
+                                size="small"
+                              >
+                                <Add fontSize="small" />
+                              </IconButton>
+                            </StyledInputAdornment>
+                          ),
+                          readOnly: true,
+                          sx: {
+                            paddingInline: 1,
+                          },
+                        },
+                        htmlInput: {
+                          sx: { textAlign: "center" },
+                        },
+                      }}
+                      value={quantity}
+                    />
+                  </Grid>
+                </Grid>
+              </StyledListItem>
+              {index < itemsList.length - 1 && (
+                <Divider component="li" variant="inset" />
+              )}
+            </Fragment>
+          );
+        })
+      )}
+    </StyledList>
   );
 };
 
