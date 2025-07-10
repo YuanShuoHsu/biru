@@ -4,6 +4,7 @@ import { useParams, usePathname } from "next/navigation";
 
 import OrderSearch from "@/components/OrderSearch";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
+import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { Stack } from "@mui/material";
 
@@ -18,16 +19,20 @@ const OrderLayout = ({ children }: OrderLayoutProps) => {
   const isOrderPage = pathname === `/${lang}/order/${tableNumber}`;
 
   return (
-    <Stack height="100%" direction="column" spacing={2} padding={2}>
+    <Stack padding={2} height="100%" gap={2}>
       <Stack
-        minHeight={40}
         direction="row"
         justifyContent="space-between"
         alignItems="center"
         gap={2}
       >
         <RouterBreadcrumbs />
-        {isOrderPage && <OrderSearch />}
+        {isOrderPage && (
+          <Stack direction="row" alignItems="center" gap={2}>
+            <OrderSearch />
+            <ViewToggleButtons />
+          </Stack>
+        )}
       </Stack>
       {children}
     </Stack>

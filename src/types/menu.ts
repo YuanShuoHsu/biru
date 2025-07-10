@@ -10,6 +10,7 @@ export interface Choice {
   label: LocalizedText;
   value: string;
   extraCost: number;
+  available: boolean;
 }
 
 export interface Option {
