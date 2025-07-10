@@ -1,4 +1,5 @@
 import { I18nDict } from "@/context/i18n";
+
 import type { CartItemChoices } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
@@ -99,6 +100,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -110,6 +112,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                available: true,
               },
             ],
             multiple: false,
@@ -135,6 +138,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -146,6 +150,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -157,6 +162,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -182,6 +188,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -193,6 +200,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -204,6 +212,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -229,6 +238,7 @@ export const menu: Category[] = [
                 },
                 value: "pearls",
                 extraCost: 10,
+                available: false,
               },
               {
                 label: {
@@ -240,6 +250,7 @@ export const menu: Category[] = [
                 },
                 value: "pudding",
                 extraCost: 15,
+                available: true,
               },
             ],
             multiple: true,
@@ -289,6 +300,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -300,6 +312,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                available: true,
               },
             ],
             multiple: false,
@@ -325,6 +338,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -336,6 +350,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -347,6 +362,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -408,6 +424,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -419,6 +436,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -430,6 +448,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -480,6 +499,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -491,6 +511,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                available: true,
               },
             ],
             multiple: false,
@@ -516,6 +537,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -527,6 +549,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                available: true,
               },
               {
                 label: {
@@ -538,6 +561,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -599,6 +623,7 @@ export const menu: Category[] = [
                 },
                 value: "chia_seeds",
                 extraCost: 10,
+                available: true,
               },
               {
                 label: {
@@ -610,6 +635,7 @@ export const menu: Category[] = [
                 },
                 value: "mint",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: true,
@@ -659,6 +685,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: false,
@@ -778,6 +805,7 @@ export const menu: Category[] = [
                 },
                 value: "tomato",
                 extraCost: 5,
+                available: true,
               },
               {
                 label: {
@@ -789,6 +817,7 @@ export const menu: Category[] = [
                 },
                 value: "lettuce",
                 extraCost: 0,
+                available: true,
               },
             ],
             multiple: true,

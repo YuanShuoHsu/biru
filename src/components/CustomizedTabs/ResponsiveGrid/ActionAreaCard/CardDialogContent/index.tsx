@@ -163,55 +163,60 @@ const CardDialogContent = forwardRef<
           <StyledFormControl key={name}>
             <FormLabel>{optionLabel[lang]}</FormLabel>
             <Stack direction="row" flexWrap="wrap" gap={1}>
-              {optionChoices.map(({ label: choiceLabel, value, extraCost }) => {
-                const selected = choices[name];
-                const isSelected = multiple
-                  ? Array.isArray(selected) && selected.includes(value)
-                  : selected === value;
+              {optionChoices.map(
+                ({ label: choiceLabel, value, extraCost, available }) => {
+                  const selected = choices[name];
+                  const isSelected = multiple
+                    ? Array.isArray(selected) && selected.includes(value)
+                    : selected === value;
 
-                const handleClick = () => {
-                  setChoices((prev) => {
-                    const current = prev[name];
+                  const handleClick = () => {
+                    setChoices((prev) => {
+                      const current = prev[name];
 
-                    if (multiple) {
-                      const currentArr = Array.isArray(current) ? current : [];
-                      const next = currentArr.includes(value)
-                        ? currentArr.filter((v) => v !== value)
-                        : [...currentArr, value];
+                      if (multiple) {
+                        const currentArr = Array.isArray(current)
+                          ? current
+                          : [];
+                        const next = currentArr.includes(value)
+                          ? currentArr.filter((v) => v !== value)
+                          : [...currentArr, value];
 
-                      return { ...prev, [name]: next };
-                    }
+                        return { ...prev, [name]: next };
+                      }
 
-                    return { ...prev, [name]: value };
-                  });
-                };
+                      return { ...prev, [name]: value };
+                    });
+                  };
 
-                return (
-                  <Chip
-                    clickable
-                    color={isSelected ? "primary" : "default"}
-                    key={value}
-                    label={
-                      <Stack flexDirection="row" alignItems="center" gap={1}>
-                        <Typography component="span" variant="body2">
-                          {choiceLabel[lang]}
-                        </Typography>
-                        {extraCost > 0 && (
-                          <>
-                            <Typography component="span" variant="body2">
-                              /
-                            </Typography>
-                            <Typography component="span" variant="caption">
-                              {dict.common.currency} {extraCost}
-                            </Typography>
-                          </>
-                        )}
-                      </Stack>
-                    }
-                    onClick={handleClick}
-                  />
-                );
-              })}
+                  return (
+                    <Chip
+                      clickable
+                      color={isSelected ? "primary" : "default"}
+                      disabled={!available}
+                      key={value}
+                      label={
+                        <Stack flexDirection="row" alignItems="center" gap={1}>
+                          <Typography component="span" variant="body2">
+                            {choiceLabel[lang]}
+                          </Typography>
+                          {extraCost > 0 && (
+                            <>
+                              <Typography component="span" variant="body2">
+                                /
+                              </Typography>
+                              <Typography component="span" variant="caption">
+                                {dict.common.currency} {extraCost}
+                              </Typography>
+                            </>
+                          )}
+                        </Stack>
+                      }
+                      onClick={handleClick}
+                    />
+                  );
+                },
+              )}
             </Stack>
           </StyledFormControl>
         ),
