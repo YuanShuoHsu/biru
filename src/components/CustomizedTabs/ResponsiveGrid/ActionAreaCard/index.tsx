@@ -22,9 +22,11 @@ import { alpha, styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
+import { useViewStore } from "@/stores/useViewStore";
 
 import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
+import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -36,16 +38,20 @@ const StyledCard = styled(Card, {
   flexDirection: "column",
 }));
 
-const StyledCardActionArea = styled(CardActionArea)(() => ({
+const StyledCardActionArea = styled(CardActionArea, {
+  shouldForwardProp: (prop) => prop !== "viewDirection",
+})<{ viewDirection: ViewDirection }>(({ viewDirection }) => ({
   display: "flex",
-  flexDirection: "column",
+  flexDirection: viewDirection,
   flex: 1,
 }));
 
-const ImageBox = styled(Box)(() => ({
+const ImageBox = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "viewDirection",
+})<{ viewDirection: ViewDirection }>(({ viewDirection }) => ({
   position: "relative",
-  width: "100%",
-  height: 140,
+  width: viewDirection === "column" ? "100%" : 140,
+  height: viewDirection === "column" ? 140 : "100%",
 }));
 
 const TopSoldChip = styled(Chip, {
@@ -137,6 +143,8 @@ const ActionAreaCard = ({
 
   const { updateItem } = useCartStore();
   const { setDialog } = useDialogStore();
+  const { view } = useViewStore();
+  const viewDirection = ViewDirections[view];
 
   const displayPrice = price.toLocaleString(lang);
 
@@ -185,8 +193,8 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard inStock={inStock} onClick={handleDialogClick}>
-      <StyledCardActionArea>
-        <ImageBox>
+      <StyledCardActionArea viewDirection={viewDirection}>
+        <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip
               label={`${dict.order.tableNumber.top} ${topSoldRank + 1}`}

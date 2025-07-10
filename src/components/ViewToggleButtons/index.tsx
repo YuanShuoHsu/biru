@@ -1,16 +1,18 @@
-import { useState } from "react";
-
 import { ViewList, ViewModule } from "@mui/icons-material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 
+import { useViewStore } from "@/stores/useViewStore";
+
+import { ViewMode } from "@/types/view";
+
 const ViewToggleButtons = () => {
-  const [view, setView] = useState("list");
+  const { view, setView } = useViewStore();
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    nextView: string,
+    nextView: ViewMode | null,
   ) => {
-    setView(nextView);
+    if (nextView !== null) setView(nextView);
   };
 
   return (
@@ -21,9 +23,6 @@ const ViewToggleButtons = () => {
       <ToggleButton aria-label="module" size="small" value="module">
         <ViewModule />
       </ToggleButton>
-      {/* <ToggleButton aria-label="quilt" size="small" value="quilt">
-        <ViewQuilt />
-      </ToggleButton> */}
     </ToggleButtonGroup>
   );
 };

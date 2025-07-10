@@ -4,8 +4,11 @@ import ActionAreaCard from "./ActionAreaCard";
 
 import { Grid } from "@mui/material";
 
+import { useViewStore } from "@/stores/useViewStore";
+
 import type { LangParam } from "@/types/locale";
 import type { MenuItem } from "@/types/menu";
+import { ViewGridSizes } from "@/types/view";
 
 interface ResponsiveGridProps {
   items: MenuItem[];
@@ -20,15 +23,14 @@ const ResponsiveGrid = ({
 }: ResponsiveGridProps) => {
   const { lang } = useParams<LangParam>();
 
+  const { view } = useViewStore();
+  const viewGridSizes = ViewGridSizes[view];
+
   return (
     <Grid container spacing={2}>
       {items.map(
         ({ id, name, description, imageUrl, options, price, stock }, index) => (
-          <Grid
-            display="flex"
-            key={id}
-            size={{ xs: 6, sm: 4, md: 3, lg: 2, xl: 1.5 }}
-          >
+          <Grid display="flex" key={id} size={viewGridSizes}>
             <ActionAreaCard
               id={id}
               name={name[lang]}
