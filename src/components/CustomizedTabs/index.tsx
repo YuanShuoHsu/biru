@@ -25,7 +25,11 @@ import type { LocalizedText } from "@/types/menu";
 import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
+  position: "sticky",
+  top: 0,
+  backgroundColor: theme.palette.background.paper,
   borderBottom: `1px solid ${theme.palette.divider}`,
+  zIndex: theme.zIndex.appBar - 1,
 }));
 
 const toLocalizedText = (text: string): LocalizedText => ({
