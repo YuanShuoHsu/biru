@@ -1,14 +1,16 @@
 import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
 
-export default function TableLayout({
-  children,
-}: {
+interface OrderTableNumberStepperLayoutProps {
   children: React.ReactNode;
-}) {
-  return (
-    <>
-      <HorizontalLinearStepper />
-      {children}
-    </>
-  );
 }
+
+const OrderTableNumberStepperLayout = ({
+  children,
+}: OrderTableNumberStepperLayoutProps) => (
+  <>
+    <HorizontalLinearStepper />
+    {children}
+  </>
+);
+
+export default OrderTableNumberStepperLayout;

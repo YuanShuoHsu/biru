@@ -7,6 +7,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
   position: "fixed",
   bottom: theme.spacing(2),
   right: theme.spacing(2),
+  zIndex: theme.zIndex.appBar - 1,
 }));
 
 interface ScrollTopProps {
