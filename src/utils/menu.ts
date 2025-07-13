@@ -100,7 +100,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
-                available: true,
+                available: false,
               },
               {
                 label: {

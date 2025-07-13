@@ -64,7 +64,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
 
   return (
     <HideOnScroll>
-      <AppBar position="fixed">
+      <AppBar>
         <StyledToolbar>
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <IconButton

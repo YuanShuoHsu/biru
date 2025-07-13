@@ -72,7 +72,11 @@ const CardDialogContent = forwardRef<
     Object.fromEntries(
       options.map(({ name, choices, multiple, required }) => {
         if (multiple) return [name, []];
-        if (required) return [name, choices[0].value];
+
+        if (required) {
+          const firstAvailable = choices.find(({ available }) => available);
+          return [name, firstAvailable?.value];
+        }
 
         return [name, null];
       }),
@@ -192,7 +196,7 @@ const CardDialogContent = forwardRef<
                   return (
                     <Chip
                       clickable
-                      color={isSelected ? "primary" : "default"}
+                      color={available && isSelected ? "primary" : "default"}
                       disabled={!available}
                       key={value}
                       label={
