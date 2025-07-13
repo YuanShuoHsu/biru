@@ -21,10 +21,7 @@ interface NavigationButtonProps {
   icon: React.ComponentType<SvgIconProps>;
 }
 
-const NavigationButton: React.FC<NavigationButtonProps> = ({
-  direction,
-  icon: Icon,
-}) => (
+const NavigationButton = ({ direction, icon: Icon }: NavigationButtonProps) => (
   <StyledButton
     className={`custom-swiper-button-${direction}`}
     direction={direction}
