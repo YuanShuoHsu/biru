@@ -1,10 +1,17 @@
 // https://mui.com/material-ui/customization/breakpoints/
+// https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
 
 "use client";
 
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
+  cssVariables: {
+    colorSchemeSelector: "class",
+  },
   palette: {
     primary: {
       main: "#607d8b", // blueGrey[500]

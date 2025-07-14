@@ -6,6 +6,7 @@ import { useParams, usePathname } from "next/navigation";
 
 import HideOnScroll from "./HideOnScroll";
 import MenuAppBar from "./MenuAppBar";
+import ModeToggle from "./ModeToggle";
 
 import CustomizedBadges from "@/components/CustomizedBadges";
 
@@ -99,6 +100,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             </Stack>
           </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
+            <ModeToggle />
             <MenuAppBar />
             {showShoppingCartButton && (
               <Tooltip title={dict.appBar.cart}>
