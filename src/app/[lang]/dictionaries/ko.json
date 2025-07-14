@@ -10,7 +10,8 @@
   },
   "cart": {
     "checkout": "결제하기",
-    "title": "장바구니"
+    "title": "장바구니",
+    "totalQuantity": "총 {quantity} 개"
   },
   "common": {
     "colon": ": ",

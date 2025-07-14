@@ -10,7 +10,8 @@
   },
   "cart": {
     "checkout": "前往結帳",
-    "title": "購物車清單"
+    "title": "購物車清單",
+    "totalQuantity": "共 {quantity} 件"
   },
   "common": {
     "colon": "：",

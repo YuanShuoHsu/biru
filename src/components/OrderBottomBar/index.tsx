@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import { useI18n } from "@/context/i18n";
+
 import {
   Box,
   Button,
@@ -14,6 +15,8 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
+
+import { interpolate } from "@/utils/i18n";
 
 const StyledBox = styled(Box)({
   pointerEvents: "none",
@@ -63,7 +66,9 @@ const OrderBottomBar = () => {
         >
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <Typography component="span" fontWeight="bold" variant="subtitle1">
-              共 {totalQuantity} 件
+              {interpolate(dict.cart.totalQuantity, {
+                quantity: totalQuantity,
+              })}
             </Typography>
             <Typography component="span" variant="body2">
               /

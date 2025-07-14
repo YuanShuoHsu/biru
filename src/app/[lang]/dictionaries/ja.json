@@ -10,7 +10,8 @@
   },
   "cart": {
     "checkout": "レジに進む",
-    "title": "カート"
+    "title": "カート",
+    "totalQuantity": "合計 {quantity} 点"
   },
   "common": {
     "colon": "：",

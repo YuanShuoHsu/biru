@@ -10,7 +10,8 @@
   },
   "cart": {
     "checkout": "Proceed to Checkout",
-    "title": "Shopping Cart"
+    "title": "Shopping Cart",
+    "totalQuantity": "{quantity} items"
   },
   "common": {
     "colon": ": ",
