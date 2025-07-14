@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
@@ -10,7 +11,6 @@ import {
   Box,
   Button,
   Drawer,
-  Link,
   Stack,
   Theme,
   Toolbar,
