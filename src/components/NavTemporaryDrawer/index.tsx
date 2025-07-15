@@ -27,10 +27,9 @@ import {
 
 import type { DrawerType } from "@/types/drawer";
 
-const DrawerBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)({
   width: 250,
-  backgroundColor: theme.vars.palette.background.paper,
-}));
+});
 
 interface NavItem {
   children?: NavItem[];
@@ -119,7 +118,7 @@ const NavTemporaryDrawer = ({
     });
 
   const drawerList = (
-    <DrawerBox
+    <StyledBox
       onClick={onDrawerToggle("nav", false)}
       // onKeyDown={onDrawerToggle("nav", false)}
       role="presentation"
@@ -127,7 +126,7 @@ const NavTemporaryDrawer = ({
       <Toolbar />
       <Divider />
       <List>{renderItems(navItems)}</List>
-    </DrawerBox>
+    </StyledBox>
   );
 
   return (

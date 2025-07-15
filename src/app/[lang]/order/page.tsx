@@ -10,9 +10,10 @@ import { useI18n } from "@/context/i18n";
 import { Button, ButtonProps, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledButton = styled(Button)<ButtonProps>({
+const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   minWidth: 0,
-});
+  backgroundColor: theme.vars.palette.background.paper,
+}));
 
 const Order = () => {
   const { lang } = useParams();
