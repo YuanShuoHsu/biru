@@ -114,6 +114,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <Tooltip title={dict.appBar.cart}>
                 <StyledIconButton
                   aria-label="cart"
+                  color="inherit"
                   onClick={onDrawerToggle("cart", true)}
                 >
                   <CustomizedBadges badgeContent={totalQuantity}>
