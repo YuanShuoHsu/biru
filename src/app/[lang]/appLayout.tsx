@@ -11,6 +11,7 @@ import ScrollTop from "@/components/ScrollTop";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, BoxProps, CssBaseline, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import type {} from "@mui/material/themeCssVarsAugmentation";
 
 import type { DrawerType } from "@/types/drawer";
 
@@ -23,9 +24,8 @@ const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
   minHeight: "100vh",
   display: "flex",
   flexDirection: "column",
-  transition: theme.transitions.create(["background-color"], {
-    duration: 2000,
-  }),
+  backgroundColor: theme.vars.palette.background.default,
+  transition: theme.transitions.create(["background-color"]),
 }));
 
 interface AppLayoutProps {

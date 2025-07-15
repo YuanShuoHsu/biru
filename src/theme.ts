@@ -25,11 +25,11 @@ const theme = createTheme({
           main: "#bcaaa4", // brown[200]
         },
         background: {
-          default: "#000000",
+          default: "#000",
           paper: "#212121", // grey[900]
         },
         text: {
-          primary: "#fafafa",
+          primary: "#fafafa", // grey[50]
           secondary: "#b0bec5", // blueGrey[200]
         },
       },
@@ -53,7 +53,7 @@ const theme = createTheme({
         },
         background: {
           default: "#fafafa", // grey[50]
-          paper: "#ffffff",
+          paper: "#fff",
         },
         text: {
           primary: "#212121", // grey[900]
@@ -65,31 +65,6 @@ const theme = createTheme({
   cssVariables: {
     colorSchemeSelector: "class",
   },
-  // palette: {
-  //   primary: {
-  //     main: "#607d8b", // blueGrey[500]
-  //   },
-  // secondary: {
-  //   main: "#f8bbd0", // pink[100]
-  // },
-  // warning: {
-  //   main: "#ffe0b2", // orange[100]
-  // },
-  // info: {
-  //   main: "#bcaaa4", // brown[200]
-  // },
-  // success: {
-  //   main: "#5d4037", // brown[700]
-  // },
-  // background: {
-  //   default: "#fafafa", // grey[50]
-  //   paper: "#fafafa",
-  // },
-  // text: {
-  //   primary: "#212121", // grey[900]
-  //   secondary: "#607d8b", // blueGrey[500]
-  // },
-  // },
 });
 
 export default theme;
