@@ -33,12 +33,7 @@ const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   zIndex: theme.zIndex.appBar - 1,
 
   "& .MuiTab-root": {
-    color: theme.vars.palette.text.primary,
     transition: theme.transitions.create("color"),
-
-    "&.Mui-selected": {
-      color: theme.vars.palette.primary.main,
-    },
   },
 }));
 

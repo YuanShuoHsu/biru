@@ -32,7 +32,7 @@ const theme = createTheme({
         },
         text: {
           primary: "#fafafa", // grey[50]
-          secondary: "#b0bec5", // blueGrey[200]
+          secondary: "#eee", // grey[200]
         },
       },
     },
@@ -59,7 +59,7 @@ const theme = createTheme({
         },
         text: {
           primary: "#212121", // grey[900]
-          secondary: "#607d8b", // blueGrey[500]
+          secondary: "#616161", // grey[700]
         },
       },
     },

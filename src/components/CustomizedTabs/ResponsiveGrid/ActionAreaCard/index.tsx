@@ -30,12 +30,13 @@ import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock }) => ({
+})<{ inStock: boolean }>(({ inStock, theme }) => ({
   flex: 1,
   opacity: inStock ? 1 : 0.5,
   pointerEvents: inStock ? "auto" : "none",
   display: "flex",
   flexDirection: "column",
+  transition: theme.transitions.create(["background-color"]),
 }));
 
 const StyledCardActionArea = styled(CardActionArea, {
