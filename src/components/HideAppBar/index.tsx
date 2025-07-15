@@ -28,6 +28,10 @@ import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
 
+const StyledAppBar = styled(AppBar)(({ theme }) => ({
+  transition: theme.transitions.create(["background-color"]),
+}));
+
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
@@ -42,6 +46,10 @@ const ImageBox = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   flexShrink: 0,
   overflow: "hidden",
+}));
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  transition: theme.transitions.create(["color"]),
 }));
 
 interface HideAppBarProps {
@@ -65,7 +73,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
 
   return (
     <HideOnScroll>
-      <AppBar>
+      <StyledAppBar>
         <StyledToolbar>
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <IconButton
@@ -104,19 +112,19 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             <MenuAppBar />
             {showShoppingCartButton && (
               <Tooltip title={dict.appBar.cart}>
-                <IconButton
+                <StyledIconButton
                   aria-label="cart"
                   onClick={onDrawerToggle("cart", true)}
                 >
                   <CustomizedBadges badgeContent={totalQuantity}>
                     <ShoppingCart />
                   </CustomizedBadges>
-                </IconButton>
+                </StyledIconButton>
               </Tooltip>
             )}
           </Stack>
         </StyledToolbar>
-      </AppBar>
+      </StyledAppBar>
     </HideOnScroll>
   );
 };

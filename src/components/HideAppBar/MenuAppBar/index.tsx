@@ -19,6 +19,10 @@ const languages = [
   { label: "简体中文", lang: "zh-CN" },
 ];
 
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  transition: theme.transitions.create(["color"]),
+}));
+
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: 48,
   [theme.breakpoints.up("sm")]: {
@@ -50,14 +54,14 @@ const MenuAppBar = () => {
   return (
     <>
       <Tooltip title={dict.appBar.languageSwitcher}>
-        <IconButton
+        <StyledIconButton
           aria-label="language"
           aria-controls="menu-appbar"
           aria-haspopup="true"
           onClick={handleOpenLanguageMenu}
         >
           <Language />
-        </IconButton>
+        </StyledIconButton>
       </Tooltip>
       <StyledMenu
         id="menu-appbar"

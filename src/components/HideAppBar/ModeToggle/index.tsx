@@ -4,7 +4,11 @@ import { useI18n } from "@/context/i18n";
 
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
-import { useColorScheme } from "@mui/material/styles";
+import { styled, useColorScheme } from "@mui/material/styles";
+
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  transition: theme.transitions.create(["color"]),
+}));
 
 const ModeToggle = () => {
   const { mode, setMode } = useColorScheme();
@@ -19,9 +23,9 @@ const ModeToggle = () => {
 
   return (
     <Tooltip title={tooltipTitle}>
-      <IconButton onClick={handleModeToggle}>
+      <StyledIconButton aria-label={tooltipTitle} onClick={handleModeToggle}>
         {isLight ? <DarkMode /> : <LightMode />}
-      </IconButton>
+      </StyledIconButton>
     </Tooltip>
   );
 };

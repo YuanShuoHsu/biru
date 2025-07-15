@@ -10,6 +10,7 @@ const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
     right: -3,
     top: 13,
     border: `2px solid ${theme.palette.background.paper}`,
+    transition: theme.transitions.create(["background-color"]),
   },
 }));
 
