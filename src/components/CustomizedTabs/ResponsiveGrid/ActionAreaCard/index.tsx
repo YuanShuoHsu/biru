@@ -104,13 +104,18 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const SizeOptionChip = styled(Chip)(() => ({
+const SizeOptionChip = styled(Chip)(({ theme }) => ({
   "& .MuiChip-label": {
     padding: 0,
     width: 24,
     display: "flex",
     justifyContent: "center",
+    transition: theme.transitions.create(["color"]),
   },
+}));
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  transition: theme.transitions.create(["color"]),
 }));
 
 export interface ActionAreaCardProps {
@@ -224,7 +229,7 @@ const ActionAreaCard = ({
           )}
         </ImageBox>
         <StyledCardContent>
-          <Typography variant="h6">{name}</Typography>
+          <StyledTypography variant="h6">{name}</StyledTypography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {sizes?.map(({ label }) => (
               <SizeOptionChip
@@ -233,19 +238,19 @@ const ActionAreaCard = ({
                 size="small"
               />
             ))}
-            <Typography color="text.primary" variant="subtitle2">
+            <StyledTypography color="text.primary" variant="subtitle2">
               {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.dialog.from : ""}`}
-            </Typography>
+            </StyledTypography>
           </Stack>
           {description && (
-            <Typography color="text.secondary" variant="body2">
+            <StyledTypography color="text.secondary" variant="body2">
               {description}
-            </Typography>
+            </StyledTypography>
           )}
           {!inStock && (
-            <Typography color="error" variant="caption">
+            <StyledTypography color="error" variant="caption">
               {dict.dialog.soldOut}
-            </Typography>
+            </StyledTypography>
           )}
         </StyledCardContent>
       </StyledCardActionArea>
