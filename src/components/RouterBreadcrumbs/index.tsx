@@ -7,7 +7,7 @@ import { useParams, usePathname } from "next/navigation";
 import { I18nDict, useI18n } from "@/context/i18n";
 
 import { Payment, Pets, ShoppingCart, TableBar } from "@mui/icons-material";
-import type { LinkProps, SvgIconProps } from "@mui/material";
+import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -51,17 +51,18 @@ const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
   <MuiLink component={Link} href={to} {...props} />
 );
 
-const StyledTypography = styled(Typography)(({ theme }) => ({
+const iconTextBaseStyles = (theme: Theme) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(0.5),
-  color: theme.palette.text.primary,
+});
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  ...iconTextBaseStyles(theme),
 }));
 
 const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(0.5),
+  ...iconTextBaseStyles(theme),
 }));
 
 const RouterBreadcrumbs = () => {
@@ -95,7 +96,12 @@ const RouterBreadcrumbs = () => {
             {label}
           </StyledTypography>
         ) : (
-          <StyledLinkRouter color="inherit" key={to} to={to} underline="hover">
+          <StyledLinkRouter
+            color="text.secondary"
+            key={to}
+            to={to}
+            underline="hover"
+          >
             <Icon fontSize="inherit" />
             {label}
           </StyledLinkRouter>
