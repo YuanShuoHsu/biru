@@ -3,7 +3,6 @@
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
@@ -27,9 +26,20 @@ import { menu } from "@/utils/menu";
 const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   position: "sticky",
   top: 0,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.vars.palette.background.paper,
   borderBottom: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  transition: theme.transitions.create(["background-color"]),
   zIndex: theme.zIndex.appBar - 1,
+
+  "& .MuiTab-root": {
+    color: theme.vars.palette.text.primary,
+    transition: theme.transitions.create("color"),
+
+    "&.Mui-selected": {
+      color: theme.vars.palette.primary.main,
+    },
+  },
 }));
 
 const toLocalizedText = (text: string): LocalizedText => ({
@@ -138,7 +148,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   ));
 
   return (
-    <Stack height="100%" direction="column" gap={2} bgcolor="background.paper">
+    <Stack height="100%" direction="column" gap={2}>
       <HorizontalTabs
         aria-label="Horizontal tabs"
         onChange={handleChange}

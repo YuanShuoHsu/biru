@@ -27,7 +27,7 @@ const theme = createTheme({
           main: "#bcaaa4", // brown[200]
         },
         background: {
-          default: "#000",
+          default: "#212121", // grey[900]
           paper: "#263238", // blueGrey[900]
         },
         text: {

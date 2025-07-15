@@ -2,12 +2,23 @@
 
 import { useEffect } from "react";
 
-import { Search } from "@mui/icons-material";
-import { InputAdornment, TextField } from "@mui/material";
-
 import { useI18n } from "@/context/i18n";
 
+import { Search } from "@mui/icons-material";
+import { InputAdornment, styled, TextField } from "@mui/material";
+
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  "& .MuiOutlinedInput-root": {
+    backgroundColor: theme.vars.palette.background.paper,
+    transition: theme.transitions.create(["background-color", "color"]),
+
+    "& .MuiInputAdornment-root svg": {
+      transition: theme.transitions.create("color"),
+    },
+  },
+}));
 
 const OrderSearch = () => {
   const dict = useI18n();
@@ -19,7 +30,7 @@ const OrderSearch = () => {
   }, [setOrderSearchText]);
 
   return (
-    <TextField
+    <StyledTextField
       onChange={(e) => setOrderSearchText(e.target.value)}
       placeholder={dict.order.tableNumber.search.placeholder}
       slotProps={{
