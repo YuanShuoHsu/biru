@@ -27,9 +27,10 @@ import {
 
 import type { DrawerType } from "@/types/drawer";
 
-const DrawerBox = styled(Box)({
+const DrawerBox = styled(Box)(({ theme }) => ({
   width: 250,
-});
+  backgroundColor: theme.vars.palette.background.paper,
+}));
 
 interface NavItem {
   children?: NavItem[];

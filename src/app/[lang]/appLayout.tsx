@@ -11,7 +11,6 @@ import ScrollTop from "@/components/ScrollTop";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, BoxProps, CssBaseline, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import type {} from "@mui/material/themeCssVarsAugmentation";
 
 import type { DrawerType } from "@/types/drawer";
 

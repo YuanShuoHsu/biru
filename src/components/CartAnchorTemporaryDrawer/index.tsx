@@ -29,7 +29,7 @@ const DrawerBox = styled(Box)({
 
 const stickyBaseStyles = (theme: Theme) => ({
   position: "sticky" as const,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: theme.vars.palette.background.paper,
   zIndex: 1,
 });
 

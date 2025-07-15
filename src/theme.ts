@@ -1,9 +1,11 @@
 // https://mui.com/material-ui/customization/breakpoints/
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
+// https://mui.com/material-ui/customization/css-theme-variables/usage/#typescript
 
 "use client";
 
 import { createTheme } from "@mui/material/styles";
+import type {} from "@mui/material/themeCssVarsAugmentation";
 
 const theme = createTheme({
   colorSchemes: {
@@ -26,7 +28,7 @@ const theme = createTheme({
         },
         background: {
           default: "#000",
-          paper: "#212121", // grey[900]
+          paper: "#263238", // blueGrey[900]
         },
         text: {
           primary: "#fafafa", // grey[50]
@@ -52,7 +54,7 @@ const theme = createTheme({
           main: "#5d4037", // brown[700]
         },
         background: {
-          default: "#fafafa", // grey[50]
+          default: "#eceff1", // blueGrey[50]
           paper: "#fff",
         },
         text: {
