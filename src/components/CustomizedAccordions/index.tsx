@@ -20,17 +20,30 @@ import { useCartStore } from "@/stores/useCartStore";
 
 import { LangParam } from "@/types/locale";
 
-const StyledAccordionSummary = styled(AccordionSummary)({
+const StyledAccordion = styled(Accordion)(({ theme }) => ({
+  transition: theme.transitions.create("background-color"),
+}));
+
+const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
   "& .MuiAccordionSummary-content": {
     display: "flex",
     alignItems: "center",
   },
-});
 
-const StyledTypography = styled(Typography)<TypographyProps>({
+  "& .MuiSvgIcon-root": {
+    transition: theme.transitions.create(["color", "fill"]),
+  },
+}));
+
+const LabelTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
   width: "33%",
   flexShrink: 0,
-});
+  transition: theme.transitions.create("color"),
+}));
+
+const AmountTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
+  transition: theme.transitions.create("color"),
+}));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   padding: 0,
@@ -45,28 +58,28 @@ const CustomizedAccordions = () => {
   const { totalAmount } = useCartStore();
 
   return (
-    <Accordion defaultExpanded disableGutters>
+    <StyledAccordion defaultExpanded disableGutters>
       <StyledAccordionSummary
         aria-controls="panel1-content"
         expandIcon={<ExpandMore />}
         id="panel1-header"
       >
-        <StyledTypography component="span" variant="subtitle1">
+        <LabelTypography component="span" variant="subtitle1">
           {dict.common.totalAmount}
-        </StyledTypography>
-        <Typography
+        </LabelTypography>
+        <AmountTypography
           color="primary"
           component="span"
           fontWeight="bold"
           variant="h6"
         >
           {dict.common.currency} {totalAmount.toLocaleString(lang)}
-        </Typography>
+        </AmountTypography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
         <CartItemList />
       </StyledAccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 };
 

@@ -12,7 +12,11 @@ import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 const StyledTextField = styled(TextField)(({ theme }) => ({
   "& .MuiOutlinedInput-root": {
     backgroundColor: theme.vars.palette.background.paper,
-    transition: theme.transitions.create(["background-color", "color"]),
+    transition: theme.transitions.create(["background-color"]),
+
+    "& input": {
+      transition: theme.transitions.create("color"),
+    },
 
     "& .MuiOutlinedInput-notchedOutline": {
       transition: theme.transitions.create("border-color"),

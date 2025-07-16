@@ -20,6 +20,7 @@ import {
   NoSsr,
   TextField,
   Typography,
+  TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -35,6 +36,10 @@ const StyledList = styled(List)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
+  transition: theme.transitions.create("color"),
 }));
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -54,11 +59,15 @@ const ImageBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const StyledListItemText = styled(ListItemText)({
+const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   margin: 0,
   wordBreak: "break-word",
   whiteSpace: "pre-line",
-});
+
+  "& .MuiTypography-root": {
+    transition: theme.transitions.create("color"),
+  },
+}));
 
 const StyledInputAdornment = styled(InputAdornment)({
   margin: 0,
@@ -97,9 +106,14 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
 
   return (
     <StyledList disablePadding>
-      <NoSsr defer fallback={<Typography>{dict.common.loading}</Typography>}>
+      <NoSsr
+        defer
+        fallback={<StyledTypography>{dict.common.loading}</StyledTypography>}
+      >
         {isEmpty ? (
-          <Typography variant="body1">{dict.common.empty}</Typography>
+          <StyledTypography variant="body1">
+            {dict.common.empty}
+          </StyledTypography>
         ) : (
           itemsList.map((item, index) => {
             const { id, amount, choices, imageUrl, quantity } = item;
@@ -151,14 +165,14 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
                         ...(forceXsLayout ? {} : { sm: 2 }),
                       }}
                     >
-                      <Typography
+                      <StyledTypography
                         color="primary"
                         component="span"
                         fontWeight="bold"
                         variant="body2"
                       >
                         {dict.common.currency} {amount.toLocaleString(lang)}
-                      </Typography>
+                      </StyledTypography>
                     </Grid>
                     <Grid
                       size={{
