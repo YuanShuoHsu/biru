@@ -30,11 +30,17 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
   pointerEvents: "auto",
+  transition: theme.transitions.create(["background-color", "color"]),
 }));
 
 const StyledChip = styled(Chip)(({ theme }) => ({
-  color: theme.palette.background.paper,
-  borderColor: theme.palette.background.paper,
+  color: theme.vars.palette.background.paper,
+  borderColor: theme.vars.palette.background.paper,
+  transition: theme.transitions.create([
+    "background-color",
+    "color",
+    "border-color",
+  ]),
 }));
 
 const OrderBottomBar = () => {
@@ -45,17 +51,17 @@ const OrderBottomBar = () => {
   const { isEmpty, totalAmount, totalQuantity } = useCartStore();
 
   return (
-    <StyledBox
-      position="fixed"
-      padding={2}
-      left={0}
-      bottom={(theme) => theme.spacing(7)}
-      width="100%"
-      display="flex"
-      justifyContent="center"
-      zIndex={(theme) => theme.zIndex.appBar - 1}
-    >
-      <Fade in={!isEmpty}>
+    <Fade in={!isEmpty}>
+      <StyledBox
+        position="fixed"
+        padding={2}
+        left={0}
+        bottom={(theme) => theme.spacing(7)}
+        width="100%"
+        display="flex"
+        justifyContent="center"
+        zIndex={(theme) => theme.zIndex.appBar - 1}
+      >
         <StyledButton
           component={Link}
           disabled={isEmpty}
@@ -79,8 +85,8 @@ const OrderBottomBar = () => {
           </Stack>
           <StyledChip label={dict.cart.checkout} variant="outlined" />
         </StyledButton>
-      </Fade>
-    </StyledBox>
+      </StyledBox>
+    </Fade>
   );
 };
 
