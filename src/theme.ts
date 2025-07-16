@@ -65,6 +65,17 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+            "color",
+          ]),
+        }),
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: ({ theme }) => ({

@@ -104,15 +104,14 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const SizeOptionChip = styled(Chip)(({ theme }) => ({
+const SizeOptionChip = styled(Chip)({
   "& .MuiChip-label": {
     padding: 0,
     width: 24,
     display: "flex",
     justifyContent: "center",
-    transition: theme.transitions.create(["color"]),
   },
-}));
+});
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   transition: theme.transitions.create(["color"]),
