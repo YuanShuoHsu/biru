@@ -92,13 +92,16 @@ const theme = createTheme({
         root: ({ theme }) => ({
           "& .MuiOutlinedInput-root": {
             backgroundColor: theme.vars.palette.background.paper,
-            transition: theme.transitions.create(["background-color"]),
+            transition: theme.transitions.create("background-color"),
+
             "& input": {
               transition: theme.transitions.create("color"),
             },
+
             "& .MuiOutlinedInput-notchedOutline": {
               transition: theme.transitions.create("border-color"),
             },
+
             "& .MuiInputAdornment-root svg": {
               transition: theme.transitions.create("color"),
             },

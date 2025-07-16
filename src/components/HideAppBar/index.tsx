@@ -29,7 +29,7 @@ import { useCartStore } from "@/stores/useCartStore";
 import type { DrawerType } from "@/types/drawer";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  transition: theme.transitions.create(["background-color"]),
+  transition: theme.transitions.create("background-color"),
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -46,10 +46,6 @@ const ImageBox = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   flexShrink: 0,
   overflow: "hidden",
-}));
-
-const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  transition: theme.transitions.create(["color"]),
 }));
 
 interface HideAppBarProps {
@@ -112,7 +108,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             <MenuAppBar />
             {showShoppingCartButton && (
               <Tooltip title={dict.appBar.cart}>
-                <StyledIconButton
+                <IconButton
                   aria-label="cart"
                   color="inherit"
                   onClick={onDrawerToggle("cart", true)}
@@ -120,7 +116,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
                   <CustomizedBadges badgeContent={totalQuantity}>
                     <ShoppingCart />
                   </CustomizedBadges>
-                </StyledIconButton>
+                </IconButton>
               </Tooltip>
             )}
           </Stack>

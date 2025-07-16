@@ -36,7 +36,7 @@ const StyledCard = styled(Card, {
   pointerEvents: inStock ? "auto" : "none",
   display: "flex",
   flexDirection: "column",
-  transition: theme.transitions.create(["background-color"]),
+  transition: theme.transitions.create("background-color"),
 }));
 
 const StyledCardActionArea = styled(CardActionArea, {

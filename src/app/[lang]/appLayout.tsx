@@ -24,7 +24,7 @@ const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   backgroundColor: theme.vars.palette.background.default,
-  transition: theme.transitions.create(["background-color"]),
+  transition: theme.transitions.create("background-color"),
 }));
 
 interface AppLayoutProps {

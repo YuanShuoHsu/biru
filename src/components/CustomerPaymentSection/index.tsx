@@ -50,6 +50,7 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(2),
+    transition: theme.transitions.create("background-color"),
   }),
 );
 
