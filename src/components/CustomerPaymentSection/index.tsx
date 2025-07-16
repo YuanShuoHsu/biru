@@ -5,6 +5,8 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
+import zhTW from "@/app/[lang]/dictionaries/zh-TW.json";
+
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -25,6 +27,8 @@ import type {
 } from "@/types/ecpay/createEcpayDto";
 import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
+
+import { getChoiceLabels, getItemName } from "@/utils/menu";
 
 const mapToEcpayLanguage = (() => {
   const map: Record<LocaleCode, EcpayLanguage> = {
@@ -78,6 +82,24 @@ const CustomerPaymentSection = () => {
     setCustomerInfo({ ...customerInfo, [name]: value });
   };
 
+  console.log(
+    itemsList
+      .map(({ id, choices, quantity }) => {
+        const name = getItemName(id, "zh-TW");
+        const choiceLabels = getChoiceLabels(
+          id,
+          choices,
+          "zh-TW",
+          zhTW,
+          zhTW.common.delimiter,
+        );
+        const formattedChoices = choiceLabels ? `[${choiceLabels}]` : "";
+
+        return `${name}${formattedChoices} ${dict.common.multiply} ${quantity}`;
+      })
+      .join("#"),
+  );
+
   const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
 
@@ -94,10 +116,19 @@ const CustomerPaymentSection = () => {
         TotalAmount: totalAmount,
         TradeDesc: "餐點付款",
         ItemName: itemsList
-          .map(
-            (item) =>
-              `${item.name}${item.size ? `(${item.size})` : ""} ${dict.common.multiply} ${item.quantity}`,
-          )
+          .map(({ id, choices, quantity }) => {
+            const name = getItemName(id, "zh-TW");
+            const choiceLabels = getChoiceLabels(
+              id,
+              choices,
+              "zh-TW",
+              zhTW,
+              zhTW.common.delimiter,
+            );
+            const formattedChoices = choiceLabels ? `[${choiceLabels}]` : "";
+
+            return `${name} ${formattedChoices} ${dict.common.multiply} ${quantity}`;
+          })
           .join("#"),
         ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],
         ClientBackURL: completeUrl,
@@ -106,6 +137,8 @@ const CustomerPaymentSection = () => {
         Language: mapToEcpayLanguage(lang as LocaleCode),
       },
     };
+
+    console.log(dto);
 
     try {
       const { data } = await trigger(dto);

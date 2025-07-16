@@ -1,5 +1,4 @@
 import { I18nDict } from "@/context/i18n";
-
 import type { CartItemChoices } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
@@ -25,9 +24,10 @@ const findChoiceLabel = (
 
 export const getChoiceLabels = (
   id: string,
-  lang: LocaleCode,
   choices: CartItemChoices,
+  lang: LocaleCode,
   { common: { colon, delimiter } }: I18nDict,
+  joinWith: string = "\n",
 ): string => {
   const item = findMenuItemById(id);
   if (!item) return "";
@@ -47,7 +47,7 @@ export const getChoiceLabels = (
 
       return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
     })
-    .join("\n");
+    .join(joinWith);
 };
 
 export const menu: Category[] = [

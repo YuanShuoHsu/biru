@@ -4,7 +4,7 @@ import "server-only";
 
 import type { LocaleCode } from "@/types/locale";
 
-const dictionaries = {
+export const dictionaries = {
   "zh-TW": () =>
     import("./dictionaries/zh-TW.json").then((module) => module.default),
   en: () => import("./dictionaries/en.json").then((module) => module.default),

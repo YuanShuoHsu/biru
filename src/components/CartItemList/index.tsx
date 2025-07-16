@@ -109,7 +109,7 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
             const { id, amount, choices, imageUrl, quantity } = item;
 
             const name = getItemName(id, lang);
-            const choiceLabels = getChoiceLabels(id, lang, choices, dict);
+            const choiceLabels = getChoiceLabels(id, choices, lang, dict);
 
             return (
               <Fragment key={getItemKey(id, choices)}>
