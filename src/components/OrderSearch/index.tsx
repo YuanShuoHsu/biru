@@ -14,6 +14,10 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
     backgroundColor: theme.vars.palette.background.paper,
     transition: theme.transitions.create(["background-color", "color"]),
 
+    "& .MuiOutlinedInput-notchedOutline": {
+      transition: theme.transitions.create("border-color"),
+    },
+
     "& .MuiInputAdornment-root svg": {
       transition: theme.transitions.create("color"),
     },

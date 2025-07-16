@@ -51,10 +51,17 @@ const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
   <MuiLink component={Link} href={to} {...props} />
 );
 
+const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  "& .MuiBreadcrumbs-separator": {
+    transition: theme.transitions.create("color"),
+  },
+}));
+
 const iconTextBaseStyles = (theme: Theme) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(0.5),
+  transition: theme.transitions.create(["color"]),
 });
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
@@ -76,7 +83,7 @@ const RouterBreadcrumbs = () => {
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <StyledBreadcrumbs aria-label="breadcrumb">
       {/* <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
         <HomeIcon fontSize="inherit" />
         {homeLabel}
@@ -107,7 +114,7 @@ const RouterBreadcrumbs = () => {
           </StyledLinkRouter>
         );
       })}
-    </Breadcrumbs>
+    </StyledBreadcrumbs>
   );
 };
 
