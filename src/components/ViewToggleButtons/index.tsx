@@ -9,6 +9,14 @@ import { ViewMode } from "@/types/view";
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.paper,
   transition: theme.transitions.create(["background-color"]),
+
+  "& .MuiToggleButton-root": {
+    transition: theme.transitions.create(["border-color"]),
+  },
+
+  "& .MuiToggleButton-root svg": {
+    transition: theme.transitions.create(["color"]),
+  },
 }));
 
 const ViewToggleButtons = () => {
