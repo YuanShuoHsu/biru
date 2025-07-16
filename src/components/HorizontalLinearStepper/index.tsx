@@ -7,12 +7,33 @@ import { useParams, usePathname } from "next/navigation";
 import { useI18n } from "@/context/i18n";
 
 import { Step, StepLabel, Stepper } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 const createStepPathMap = (tableNumber: string): string[] => [
   `/order/${tableNumber}`,
   `/order/${tableNumber}/checkout`,
   `/order/${tableNumber}/complete`,
 ];
+
+const StyledStepper = styled(Stepper)(({ theme }) => ({
+  "& .MuiStepConnector-line": {
+    transition: theme.transitions.create("border-color"),
+  },
+}));
+
+const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
+  "& .MuiStepIcon-root": {
+    transition: theme.transitions.create("color"),
+
+    "& .MuiStepIcon-text": {
+      transition: theme.transitions.create("fill"),
+    },
+  },
+
+  "& .MuiStepLabel-label": {
+    transition: theme.transitions.create("color"),
+  },
+}));
 
 const HorizontalLinearStepper = () => {
   const pathname = usePathname();
@@ -32,13 +53,13 @@ const HorizontalLinearStepper = () => {
   ];
 
   return (
-    <Stepper activeStep={activeStep}>
+    <StyledStepper activeStep={activeStep}>
       {steps.map((label, index) => (
         <Step key={label} completed={activeStep > index}>
-          <StepLabel>{label}</StepLabel>
+          <StyledStepLabel>{label}</StyledStepLabel>
         </Step>
       ))}
-    </Stepper>
+    </StyledStepper>
   );
 };
 
