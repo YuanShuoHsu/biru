@@ -21,9 +21,9 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  styled,
   Toolbar,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
 
