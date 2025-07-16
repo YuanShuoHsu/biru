@@ -13,11 +13,6 @@ import { styled } from "@mui/material/styles";
 const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   minWidth: 0,
   backgroundColor: theme.vars.palette.background.paper,
-  transition: theme.transitions.create([
-    "background-color",
-    "color",
-    "border-color",
-  ]),
 }));
 
 const Order = () => {

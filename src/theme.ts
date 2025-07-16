@@ -65,46 +65,54 @@ const theme = createTheme({
     },
   },
   components: {
-    MuiChip: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          transition: theme.transitions.create([
-            "background-color",
-            "border-color",
-            "color",
-          ]),
-        }),
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          "& .MuiOutlinedInput-root": {
-            backgroundColor: theme.vars.palette.background.paper,
-            transition: theme.transitions.create(["background-color"]),
-
-            "& input": {
-              transition: theme.transitions.create("color"),
-            },
-
-            "& .MuiOutlinedInput-notchedOutline": {
-              transition: theme.transitions.create("border-color"),
-            },
-
-            "& .MuiInputAdornment-root svg": {
-              transition: theme.transitions.create("color"),
-            },
-          },
-        }),
-      },
-    },
-    MuiTypography: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          transition: theme.transitions.create("color"),
-        }),
-      },
-    },
+    // MuiButton: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       transition: theme.transitions.create([
+    //         "background-color",
+    //         "color",
+    //         "border-color",
+    //       ]),
+    //     }),
+    //   },
+    // },
+    // MuiChip: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       transition: theme.transitions.create([
+    //         "background-color",
+    //         "border-color",
+    //         "color",
+    //       ]),
+    //     }),
+    //   },
+    // },
+    // MuiTextField: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       "& .MuiOutlinedInput-root": {
+    //         backgroundColor: theme.vars.palette.background.paper,
+    //         transition: theme.transitions.create(["background-color"]),
+    //         "& input": {
+    //           transition: theme.transitions.create("color"),
+    //         },
+    //         "& .MuiOutlinedInput-notchedOutline": {
+    //           transition: theme.transitions.create("border-color"),
+    //         },
+    //         "& .MuiInputAdornment-root svg": {
+    //           transition: theme.transitions.create("color"),
+    //         },
+    //       },
+    //     }),
+    //   },
+    // },
+    // MuiTypography: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       transition: theme.transitions.create("color"),
+    //     }),
+    //   },
+    // },
   },
   cssVariables: {
     colorSchemeSelector: "class",

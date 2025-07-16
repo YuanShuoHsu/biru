@@ -30,7 +30,6 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
   pointerEvents: "auto",
-  transition: theme.transitions.create(["background-color", "color"]),
 }));
 
 const StyledChip = styled(Chip)(({ theme }) => ({
