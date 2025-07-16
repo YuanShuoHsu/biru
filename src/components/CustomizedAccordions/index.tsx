@@ -35,15 +35,10 @@ const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
   },
 }));
 
-const LabelTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
+const StyledTypography = styled(Typography)<TypographyProps>({
   width: "33%",
   flexShrink: 0,
-  transition: theme.transitions.create("color"),
-}));
-
-const AmountTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
-  transition: theme.transitions.create("color"),
-}));
+});
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   padding: 0,
@@ -64,17 +59,17 @@ const CustomizedAccordions = () => {
         expandIcon={<ExpandMore />}
         id="panel1-header"
       >
-        <LabelTypography component="span" variant="subtitle1">
+        <StyledTypography component="span" variant="subtitle1">
           {dict.common.totalAmount}
-        </LabelTypography>
-        <AmountTypography
+        </StyledTypography>
+        <Typography
           color="primary"
           component="span"
           fontWeight="bold"
           variant="h6"
         >
           {dict.common.currency} {totalAmount.toLocaleString(lang)}
-        </AmountTypography>
+        </Typography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
         <CartItemList />

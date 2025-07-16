@@ -10,10 +10,6 @@ import { useI18n } from "@/context/i18n";
 import { Button, ButtonProps, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledTypography = styled(Typography)(({ theme }) => ({
-  transition: theme.transitions.create("color"),
-}));
-
 const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   minWidth: 0,
   backgroundColor: theme.vars.palette.background.paper,
@@ -31,7 +27,7 @@ const Order = () => {
 
   return (
     <Stack gap={2}>
-      <StyledTypography variant="h6">{dict.order.selectTable}</StyledTypography>
+      <Typography variant="h6">{dict.order.selectTable}</Typography>
       <Grid container spacing={2}>
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
           (number) => (

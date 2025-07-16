@@ -36,11 +36,6 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
 const StyledChip = styled(Chip)(({ theme }) => ({
   borderColor: theme.vars.palette.background.paper,
   color: theme.vars.palette.background.paper,
-  transition: theme.transitions.create([
-    "background-color",
-    "border-color",
-    "color",
-  ]),
 }));
 
 const OrderBottomBar = () => {

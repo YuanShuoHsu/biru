@@ -113,10 +113,6 @@ const SizeOptionChip = styled(Chip)({
   },
 });
 
-const StyledTypography = styled(Typography)(({ theme }) => ({
-  transition: theme.transitions.create(["color"]),
-}));
-
 export interface ActionAreaCardProps {
   id: string;
   name: string;
@@ -228,7 +224,7 @@ const ActionAreaCard = ({
           )}
         </ImageBox>
         <StyledCardContent>
-          <StyledTypography variant="h6">{name}</StyledTypography>
+          <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {sizes?.map(({ label }) => (
               <SizeOptionChip
@@ -237,19 +233,19 @@ const ActionAreaCard = ({
                 size="small"
               />
             ))}
-            <StyledTypography color="text.primary" variant="subtitle2">
+            <Typography color="text.primary" variant="subtitle2">
               {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.dialog.from : ""}`}
-            </StyledTypography>
+            </Typography>
           </Stack>
           {description && (
-            <StyledTypography color="text.secondary" variant="body2">
+            <Typography color="text.secondary" variant="body2">
               {description}
-            </StyledTypography>
+            </Typography>
           )}
           {!inStock && (
-            <StyledTypography color="error" variant="caption">
+            <Typography color="error" variant="caption">
               {dict.dialog.soldOut}
-            </StyledTypography>
+            </Typography>
           )}
         </StyledCardContent>
       </StyledCardActionArea>

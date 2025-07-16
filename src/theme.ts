@@ -98,6 +98,13 @@ const theme = createTheme({
         }),
       },
     },
+    MuiTypography: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
   },
   cssVariables: {
     colorSchemeSelector: "class",

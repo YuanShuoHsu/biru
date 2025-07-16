@@ -20,7 +20,6 @@ import {
   NoSsr,
   TextField,
   Typography,
-  TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -36,10 +35,6 @@ const StyledList = styled(List)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
-}));
-
-const StyledTypography = styled(Typography)<TypographyProps>(({ theme }) => ({
-  transition: theme.transitions.create("color"),
 }));
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -106,14 +101,9 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
 
   return (
     <StyledList disablePadding>
-      <NoSsr
-        defer
-        fallback={<StyledTypography>{dict.common.loading}</StyledTypography>}
-      >
+      <NoSsr defer fallback={<Typography>{dict.common.loading}</Typography>}>
         {isEmpty ? (
-          <StyledTypography variant="body1">
-            {dict.common.empty}
-          </StyledTypography>
+          <Typography variant="body1">{dict.common.empty}</Typography>
         ) : (
           itemsList.map((item, index) => {
             const { id, amount, choices, imageUrl, quantity } = item;
@@ -165,14 +155,14 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
                         ...(forceXsLayout ? {} : { sm: 2 }),
                       }}
                     >
-                      <StyledTypography
+                      <Typography
                         color="primary"
                         component="span"
                         fontWeight="bold"
                         variant="body2"
                       >
                         {dict.common.currency} {amount.toLocaleString(lang)}
-                      </StyledTypography>
+                      </Typography>
                     </Grid>
                     <Grid
                       size={{
