@@ -82,24 +82,6 @@ const CustomerPaymentSection = () => {
     setCustomerInfo({ ...customerInfo, [name]: value });
   };
 
-  console.log(
-    itemsList
-      .map(({ id, choices, quantity }) => {
-        const name = getItemName(id, "zh-TW");
-        const choiceLabels = getChoiceLabels(
-          id,
-          choices,
-          "zh-TW",
-          zhTW,
-          zhTW.common.delimiter,
-        );
-        const formattedChoices = choiceLabels ? `[${choiceLabels}]` : "";
-
-        return `${name}${formattedChoices} ${dict.common.multiply} ${quantity}`;
-      })
-      .join("#"),
-  );
-
   const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
     event.preventDefault();
 
@@ -137,8 +119,6 @@ const CustomerPaymentSection = () => {
         Language: mapToEcpayLanguage(lang as LocaleCode),
       },
     };
-
-    console.log(dto);
 
     try {
       const { data } = await trigger(dto);
