@@ -76,8 +76,8 @@ const theme = createTheme({
         root: ({ theme }) => ({
           transition: theme.transitions.create([
             "background-color",
-            "color",
             "border-color",
+            "color",
           ]),
         }),
       },
