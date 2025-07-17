@@ -30,22 +30,39 @@ import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock, theme }) => ({
+})<{ inStock: boolean }>(({ inStock }) => ({
   flex: 1,
-  opacity: inStock ? 1 : 0.5,
   pointerEvents: inStock ? "auto" : "none",
   display: "flex",
   flexDirection: "column",
-  transition: theme.transitions.create("background-color"),
 }));
 
 const StyledCardActionArea = styled(CardActionArea, {
   shouldForwardProp: (prop) => prop !== "viewDirection",
 })<{ viewDirection: ViewDirection }>(({ viewDirection }) => ({
+  position: "relative",
   display: "flex",
   flexDirection: viewDirection,
   flex: 1,
 }));
+
+const SoldOutBox = styled(Box, {
+  shouldForwardProp: (prop) => prop !== "inStock",
+})<{ inStock: boolean }>(({ inStock, theme }) => ({
+  position: "absolute",
+  inset: 0,
+  backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.5)`,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  opacity: inStock ? 0 : 1,
+  transition: theme.transitions.create(["background-color", "opacity"]),
+  zIndex: 1,
+}));
+
+const SoldOutTypography = styled(Typography)({
+  transform: "rotate(-30deg)",
+});
 
 const ImageBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "viewDirection",
@@ -195,6 +212,11 @@ const ActionAreaCard = ({
   return (
     <StyledCard inStock={inStock} onClick={handleDialogClick}>
       <StyledCardActionArea viewDirection={viewDirection}>
+        <SoldOutBox inStock={inStock}>
+          <SoldOutTypography color="error" fontWeight="bold" variant="h2">
+            {dict.dialog.soldOut}
+          </SoldOutTypography>
+        </SoldOutBox>
         <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip
@@ -240,11 +262,6 @@ const ActionAreaCard = ({
           {description && (
             <Typography color="text.secondary" variant="body2">
               {description}
-            </Typography>
-          )}
-          {!inStock && (
-            <Typography color="error" variant="caption">
-              {dict.dialog.soldOut}
             </Typography>
           )}
         </StyledCardContent>
