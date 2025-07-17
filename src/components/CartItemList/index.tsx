@@ -111,6 +111,8 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
             const name = getItemName(id, lang);
             const choiceLabels = getChoiceLabels(id, choices, lang, dict);
 
+            const shouldDelete = quantity === 1;
+
             return (
               <Fragment key={getItemKey(id, choices)}>
                 <StyledListItem alignItems="flex-start" disablePadding>
@@ -179,24 +181,23 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
                           input: {
                             startAdornment: (
                               <StyledInputAdornment position="start">
-                                {quantity === 1 ? (
-                                  <IconButton
-                                    aria-label="delete"
-                                    onClick={() => deleteItem(item)}
-                                    size="small"
-                                  >
+                                <IconButton
+                                  aria-label={
+                                    shouldDelete ? "delete" : "decrease"
+                                  }
+                                  onClick={() =>
+                                    shouldDelete
+                                      ? deleteItem(item)
+                                      : handleDecrease(item)
+                                  }
+                                  size="small"
+                                >
+                                  {shouldDelete ? (
                                     <Delete fontSize="small" />
-                                  </IconButton>
-                                ) : (
-                                  <IconButton
-                                    aria-label="decrease"
-                                    disabled={quantity <= 1}
-                                    onClick={() => handleDecrease(item)}
-                                    size="small"
-                                  >
+                                  ) : (
                                     <Remove fontSize="small" />
-                                  </IconButton>
-                                )}
+                                  )}
+                                </IconButton>
                               </StyledInputAdornment>
                             ),
                             endAdornment: (
