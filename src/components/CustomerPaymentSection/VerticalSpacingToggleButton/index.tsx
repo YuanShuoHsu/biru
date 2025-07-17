@@ -73,11 +73,6 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   display: "flex",
   justifyContent: "space-between",
   gap: theme.spacing(2),
-  transition: theme.transitions.create([
-    "background-color",
-    "border-color",
-    "color",
-  ]),
 
   "&.Mui-selected": {
     borderColor: theme.palette.primary.main,
@@ -125,6 +120,7 @@ const VerticalSpacingToggleButton = ({
             </Stack>
             <StyledRadio
               aria-label={label}
+              key={value}
               checked={payment === value}
               name="radio-buttons"
               size="small"

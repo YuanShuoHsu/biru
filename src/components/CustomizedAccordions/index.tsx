@@ -24,16 +24,12 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
 }));
 
-const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
+const StyledAccordionSummary = styled(AccordionSummary)({
   "& .MuiAccordionSummary-content": {
     display: "flex",
     alignItems: "center",
   },
-
-  "& .MuiSvgIcon-root": {
-    transition: theme.transitions.create(["color", "fill"]),
-  },
-}));
+});
 
 const StyledTypography = styled(Typography)<TypographyProps>({
   width: "33%",

@@ -87,6 +87,24 @@ const theme = createTheme({
         }),
       },
     },
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+            "box-shadow",
+          ]),
+        }),
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -101,11 +119,17 @@ const theme = createTheme({
             "& .MuiOutlinedInput-notchedOutline": {
               transition: theme.transitions.create("border-color"),
             },
-
-            "& .MuiInputAdornment-root svg": {
-              transition: theme.transitions.create("color"),
-            },
           },
+        }),
+      },
+    },
+    MuiToggleButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+          ]),
         }),
       },
     },
