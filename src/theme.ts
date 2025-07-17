@@ -93,6 +93,13 @@ const theme = createTheme({
         }),
       },
     },
+    MuiInputLabel: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: ({ theme }) => ({
