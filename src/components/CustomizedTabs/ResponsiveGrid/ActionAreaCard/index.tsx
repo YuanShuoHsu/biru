@@ -57,7 +57,7 @@ const SoldOutBox = styled(Box, {
   alignItems: "center",
   opacity: inStock ? 0 : 1,
   transition: theme.transitions.create(["background-color", "opacity"]),
-  zIndex: 1,
+  zIndex: 2,
 }));
 
 const SoldOutTypography = styled(Typography)({
