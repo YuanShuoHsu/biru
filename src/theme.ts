@@ -26,6 +26,9 @@ const theme = createTheme({
         success: {
           main: "#bcaaa4", // brown[200]
         },
+        error: {
+          main: "#f44336", // red[500]
+        },
         background: {
           default: "#212121", // grey[900]
           paper: "#263238", // blueGrey[900]
@@ -52,6 +55,9 @@ const theme = createTheme({
         },
         success: {
           main: "#5d4037", // brown[700]
+        },
+        error: {
+          main: "#e57373", // red[300]
         },
         background: {
           default: "#eceff1", // blueGrey[50]
