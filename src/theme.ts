@@ -12,7 +12,7 @@ const theme = createTheme({
     dark: {
       palette: {
         primary: {
-          main: "#b0bec5", // blueGrey[200]
+          main: "#cfd8dc", // blueGrey[100]
         },
         secondary: {
           main: "#f48fb1", // pink[200]
@@ -96,7 +96,11 @@ const theme = createTheme({
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
-          transition: theme.transitions.create("color"),
+          transition: theme.transitions.create([
+            "max-width",
+            "color",
+            "transform",
+          ]),
         }),
       },
     },
