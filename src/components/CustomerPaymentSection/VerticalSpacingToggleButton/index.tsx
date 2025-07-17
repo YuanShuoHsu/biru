@@ -46,7 +46,7 @@ const paymentOptions = [
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
-  border: `1px solid ${theme.palette.action.disabled}`,
+  border: `1px solid rgba(${theme.vars.palette.common.onBackgroundChannel} / 0.23)`,
 }));
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
@@ -55,16 +55,16 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 
   [`& .${toggleButtonGroupClasses.firstButton}, & .${toggleButtonGroupClasses.middleButton}`]:
     {
-      borderColor: theme.palette.action.disabled,
+      borderColor: `rgba(${theme.vars.palette.common.onBackgroundChannel} / 0.23)`,
       borderBottomRightRadius: theme.shape.borderRadius,
       borderBottomLeftRadius: theme.shape.borderRadius,
     },
   [`& .${toggleButtonGroupClasses.lastButton}, & .${toggleButtonGroupClasses.middleButton}`]:
     {
-      borderColor: theme.palette.action.disabled,
+      borderColor: `rgba(${theme.vars.palette.common.onBackgroundChannel} / 0.23)`,
       borderTopRightRadius: theme.shape.borderRadius,
       borderTopLeftRadius: theme.shape.borderRadius,
-      borderTop: `1px solid ${theme.palette.action.disabled}`,
+      borderTop: `1px solid rgba(${theme.vars.palette.common.onBackgroundChannel} / 0.23)`,
     },
 }));
 
@@ -75,7 +75,7 @@ const StyledToggleButton = styled(ToggleButton)(({ theme }) => ({
   gap: theme.spacing(2),
 
   "&.Mui-selected": {
-    borderColor: theme.palette.primary.main,
+    borderColor: theme.vars.palette.primary.main,
   },
 }));
 
