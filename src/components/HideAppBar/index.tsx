@@ -28,9 +28,9 @@ import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  transition: theme.transitions.create("background-color"),
-}));
+const StyledAppBar = styled(AppBar)({
+  backgroundImage: "none",
+});
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   display: "flex",
