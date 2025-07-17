@@ -59,6 +59,10 @@ const iconTextBaseStyles = (theme: Theme) => ({
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
+
+  "& .MuiSvgIcon-root": {
+    transition: "none",
+  },
 }));
 
 const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
