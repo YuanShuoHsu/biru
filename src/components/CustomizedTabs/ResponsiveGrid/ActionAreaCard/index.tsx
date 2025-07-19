@@ -43,6 +43,7 @@ const StyledCardActionArea = styled(CardActionArea, {
     display: "flex",
     flexDirection: viewDirection,
     pointerEvents: inStock ? "auto" : "none",
+    cursor: inStock ? "pointer" : "default",
   }),
 );
 
