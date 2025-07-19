@@ -93,6 +93,13 @@ const theme = createTheme({
         }),
       },
     },
+    MuiIconButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("background-color"),
+        }),
+      },
+    },
     MuiInputLabel: {
       styleOverrides: {
         root: ({ theme }) => ({
