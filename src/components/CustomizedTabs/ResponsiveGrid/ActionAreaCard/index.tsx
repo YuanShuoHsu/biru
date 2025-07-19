@@ -6,6 +6,8 @@ import CardDialogContent, {
   CardDialogContentImperativeHandle,
 } from "./CardDialogContent";
 
+import SoldOut from "@/components/SoldOut";
+
 import { useI18n } from "@/context/i18n";
 
 import { AutoAwesome, FavoriteBorder } from "@mui/icons-material";
@@ -28,41 +30,21 @@ import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 import { ViewDirection, ViewDirections } from "@/types/view";
 
-const StyledCard = styled(Card, {
-  shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock }) => ({
-  flex: 1,
-  pointerEvents: inStock ? "auto" : "none",
-  display: "flex",
-  flexDirection: "column",
-}));
+const StyledCard = styled(Card)({
+  width: "100%",
+});
 
 const StyledCardActionArea = styled(CardActionArea, {
-  shouldForwardProp: (prop) => prop !== "viewDirection",
-})<{ viewDirection: ViewDirection }>(({ viewDirection }) => ({
-  position: "relative",
-  display: "flex",
-  flexDirection: viewDirection,
-  flex: 1,
-}));
-
-const SoldOutBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock, theme }) => ({
-  position: "absolute",
-  inset: 0,
-  backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.5)`,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  opacity: inStock ? 0 : 1,
-  transition: theme.transitions.create(["background-color", "opacity"]),
-  zIndex: 2,
-}));
-
-const SoldOutTypography = styled(Typography)({
-  transform: "rotate(-30deg)",
-});
+  shouldForwardProp: (prop) => prop !== "inStock" && prop !== "viewDirection",
+})<{ inStock: boolean; viewDirection: ViewDirection }>(
+  ({ inStock, viewDirection }) => ({
+    position: "relative",
+    height: "100%",
+    display: "flex",
+    flexDirection: viewDirection,
+    pointerEvents: inStock ? "auto" : "none",
+  }),
+);
 
 const ImageBox = styled(Box, {
   shouldForwardProp: (prop) => prop !== "viewDirection",
@@ -175,6 +157,8 @@ const ActionAreaCard = ({
   const inStock = stock === null || stock > 0;
 
   const handleDialogClick = () => {
+    if (!inStock) return;
+
     setDialog({
       open: true,
       title: name,
@@ -210,13 +194,14 @@ const ActionAreaCard = ({
   };
 
   return (
-    <StyledCard inStock={inStock} onClick={handleDialogClick}>
-      <StyledCardActionArea viewDirection={viewDirection}>
-        <SoldOutBox inStock={inStock}>
-          <SoldOutTypography color="error" fontWeight="bold" variant="h2">
-            {dict.dialog.soldOut}
-          </SoldOutTypography>
-        </SoldOutBox>
+    <StyledCard>
+      <StyledCardActionArea
+        disableRipple={!inStock}
+        inStock={inStock}
+        onClick={handleDialogClick}
+        viewDirection={viewDirection}
+      >
+        <SoldOut inStock={inStock} />
         <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip

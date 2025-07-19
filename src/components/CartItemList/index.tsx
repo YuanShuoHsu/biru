@@ -2,6 +2,8 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Fragment } from "react";
 
+import SoldOut from "@/components/SoldOut";
+
 import { MAX_QUANTITY } from "@/constants/cart";
 
 import { useI18n } from "@/context/i18n";
@@ -28,16 +30,11 @@ import { useCartStore, type CartItem } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { getItemKey } from "@/utils/itemKey";
-import { getChoiceLabels, getItemName } from "@/utils/menu";
-
-const StyledList = styled(List)(({ theme }) => ({
-  padding: theme.spacing(2),
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(2),
-}));
+import { getChoiceLabels, getItemName, isItemInStock } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
+  position: "relative",
+  padding: theme.spacing(2),
   display: "flex",
   gap: theme.spacing(2),
 }));
@@ -100,7 +97,7 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
   };
 
   return (
-    <StyledList disablePadding>
+    <List disablePadding>
       <NoSsr defer fallback={<Typography>{dict.common.loading}</Typography>}>
         {isEmpty ? (
           <Typography variant="body1">{dict.common.empty}</Typography>
@@ -111,11 +108,14 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
             const name = getItemName(id, lang);
             const choiceLabels = getChoiceLabels(id, choices, lang, dict);
 
+            const inStock = isItemInStock(id);
+
             const shouldDelete = quantity === 1;
 
             return (
               <Fragment key={getItemKey(id, choices)}>
                 <StyledListItem alignItems="flex-start" disablePadding>
+                  <SoldOut inStock={inStock} />
                   <Grid
                     width="100%"
                     container
@@ -234,7 +234,7 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
           })
         )}
       </NoSsr>
-    </StyledList>
+    </List>
   );
 };
 

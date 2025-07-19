@@ -10,6 +10,13 @@ const findMenuItemById = (id: string): MenuItem | undefined =>
 export const getItemName = (id: string, lang: LocaleCode): string =>
   findMenuItemById(id)?.name[lang] || "";
 
+export const isItemInStock = (id: string): boolean => {
+  const item = findMenuItemById(id);
+  if (!item) return false;
+
+  return item.stock === null || item.stock > 0;
+};
+
 const findChoiceLabel = (
   option: Option,
   value: string,
