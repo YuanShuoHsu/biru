@@ -12,6 +12,8 @@
   },
   "cart": {
     "checkout": "前往结算",
+    "quantityExceedsStock": "剩 {stock} 件",
+    "soldOut": "售罄",
     "title": "购物车",
     "totalQuantity": "共 {quantity} 件"
   },
@@ -20,6 +22,7 @@
     "currency": "NT$",
     "delimiter": "、",
     "empty": "尚无商品",
+    "from": "起",
     "loading": "加载中...",
     "multiply": "×",
     "totalAmount": "总计"
@@ -28,10 +31,8 @@
     "addToCart": "加入购物车",
     "amount": "小计",
     "close": "关闭",
-    "from": "起",
-    "maxQuantity": "最多只能购买 {max} 件",
-    "size": "尺寸",
-    "soldOut": "售罄"
+    "maxQuantity": "最多只能购买 {quantity} 件",
+    "remainingStock": "仅剩 {quantity} 件库存"
   },
   "nav": {
     "home": "首页",

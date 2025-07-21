@@ -1,4 +1,5 @@
 import { I18nDict } from "@/context/i18n";
+
 import type { CartItemChoices } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
@@ -7,14 +8,18 @@ import type { Category, MenuItem, Option } from "@/types/menu";
 const findMenuItemById = (id: string): MenuItem | undefined =>
   menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
 
-export const getItemName = (id: string, lang: LocaleCode): string =>
-  findMenuItemById(id)?.name[lang] || "";
-
-export const isItemInStock = (id: string): boolean => {
+export const getItemName = (id: string, lang: LocaleCode): string => {
   const item = findMenuItemById(id);
-  if (!item) return false;
+  if (!item) return "";
 
-  return item.stock === null || item.stock > 0;
+  return item.name[lang];
+};
+
+export const getItemStock = (id: string): number | null => {
+  const item = findMenuItemById(id);
+  if (!item) return 0;
+
+  return item.stock;
 };
 
 const findChoiceLabel = (
@@ -266,7 +271,7 @@ export const menu: Category[] = [
         ],
         price: 120,
         sold: 1,
-        stock: 22,
+        stock: null,
       },
       {
         id: "coffee-2",
@@ -833,7 +838,7 @@ export const menu: Category[] = [
         ],
         price: 150,
         sold: 8,
-        stock: 30,
+        stock: 2,
       },
       {
         id: "snack-2",

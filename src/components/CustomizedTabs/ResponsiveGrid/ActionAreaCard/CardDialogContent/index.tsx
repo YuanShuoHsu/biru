@@ -29,6 +29,7 @@ import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 
 import { interpolate } from "@/utils/i18n";
+import { getItemStock } from "@/utils/menu";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -88,7 +89,12 @@ const CardDialogContent = forwardRef<
   const dict = useI18n();
 
   const { getItemQuantity } = useCartStore();
-  const maxQuantity = Math.max(0, MAX_QUANTITY - getItemQuantity(id, choices));
+
+  const stock = getItemStock(id);
+  const cartQuantity = getItemQuantity(id, choices);
+
+  const remainingStock = stock === null ? MAX_QUANTITY : stock - cartQuantity;
+  const maxQuantity = Math.max(0, Math.min(MAX_QUANTITY, remainingStock));
   const minQuantity = maxQuantity === 0 ? 0 : 1;
 
   useEffect(() => {
@@ -282,9 +288,12 @@ const CardDialogContent = forwardRef<
             />
             {quantity === maxQuantity && (
               <FormHelperText error>
-                {interpolate(dict.dialog.maxQuantity, {
-                  max: MAX_QUANTITY,
-                })}
+                {interpolate(
+                  maxQuantity < MAX_QUANTITY
+                    ? dict.dialog.remainingStock
+                    : dict.dialog.maxQuantity,
+                  { quantity: maxQuantity },
+                )}
               </FormHelperText>
             )}
           </StyledFormControl>

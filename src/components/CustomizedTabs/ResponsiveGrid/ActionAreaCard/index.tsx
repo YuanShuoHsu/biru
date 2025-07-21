@@ -196,7 +196,7 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard>
-      <SoldOut inStock={inStock} />
+      <SoldOut stock={stock} />
       <StyledCardActionArea
         disableRipple={!inStock}
         inStock={inStock}
@@ -242,7 +242,7 @@ const ActionAreaCard = ({
               />
             ))}
             <Typography color="text.primary" variant="subtitle2">
-              {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.dialog.from : ""}`}
+              {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.common.from : ""}`}
             </Typography>
           </Stack>
           {description && (

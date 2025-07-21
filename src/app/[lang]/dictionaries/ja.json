@@ -12,6 +12,8 @@
   },
   "cart": {
     "checkout": "レジに進む",
+    "quantityExceedsStock": "残り {stock} 個",
+    "soldOut": "売り切れ",
     "title": "カート",
     "totalQuantity": "合計 {quantity} 点"
   },
@@ -20,6 +22,7 @@
     "currency": "NT$",
     "delimiter": "、",
     "empty": "商品がありません",
+    "from": "〜",
     "loading": "読み込み中...",
     "multiply": "×",
     "totalAmount": "合計"
@@ -28,10 +31,8 @@
     "addToCart": "カートに追加",
     "amount": "小計",
     "close": "閉じる",
-    "from": "〜",
-    "maxQuantity": "最大 {max} 個まで購入できます",
-    "size": "サイズ",
-    "soldOut": "売り切れ"
+    "maxQuantity": "最大 {quantity} 個まで購入できます",
+    "remainingStock": "在庫は残り {quantity} 個です"
   },
   "nav": {
     "home": "ホーム",

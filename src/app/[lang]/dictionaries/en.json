@@ -12,6 +12,8 @@
   },
   "cart": {
     "checkout": "Proceed to Checkout",
+    "quantityExceedsStock": "{stock} left",
+    "soldOut": "Sold out",
     "title": "Shopping Cart",
     "totalQuantity": "{quantity} items"
   },
@@ -20,6 +22,7 @@
     "currency": "NT$",
     "delimiter": ", ",
     "empty": "No items yet",
+    "from": "from",
     "loading": "Loading...",
     "multiply": "×",
     "totalAmount": "Total"
@@ -28,10 +31,8 @@
     "addToCart": "Add to cart",
     "amount": "SubTotal",
     "close": "Close",
-    "from": "from",
-    "maxQuantity": "You can only purchase up to {max} items",
-    "size": "Size",
-    "soldOut": "Sold out"
+    "maxQuantity": "You can only purchase up to {quantity} items",
+    "remainingStock": "Only {quantity} left in stock"
   },
   "nav": {
     "home": "Home",

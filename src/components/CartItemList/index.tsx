@@ -30,7 +30,7 @@ import { useCartStore, type CartItem } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { getItemKey } from "@/utils/itemKey";
-import { getChoiceLabels, getItemName, isItemInStock } from "@/utils/menu";
+import { getChoiceLabels, getItemName, getItemStock } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   position: "relative",
@@ -105,10 +105,10 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
           itemsList.map((item, index) => {
             const { id, amount, choices, imageUrl, quantity } = item;
 
+            const stock = getItemStock(id);
+
             const name = getItemName(id, lang);
             const choiceLabels = getChoiceLabels(id, choices, lang, dict);
-
-            const inStock = isItemInStock(id);
 
             const shouldDelete = quantity === 1;
 
@@ -116,7 +116,8 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
               <Fragment key={getItemKey(id, choices)}>
                 <StyledListItem alignItems="flex-start" disablePadding>
                   <SoldOut
-                    inStock={inStock}
+                    stock={stock}
+                    quantity={quantity}
                     onDelete={() => deleteItem(item)}
                   />
                   <Grid

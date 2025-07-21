@@ -4,6 +4,8 @@ import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { interpolate } from "@/utils/i18n";
+
 const StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "inStock",
 })<{ inStock: boolean }>(({ inStock, theme }) => ({
@@ -29,18 +31,31 @@ const StyledTypography = styled(Typography)({
 });
 
 interface SoldOutProps {
-  inStock: boolean;
   onDelete?: () => void;
+  quantity?: number;
+  stock: number | null;
 }
 
-const SoldOut = ({ inStock, onDelete }: SoldOutProps) => {
+const SoldOut = ({ onDelete, quantity, stock }: SoldOutProps) => {
   const dict = useI18n();
+
+  const isSoldOut = stock === 0;
+  const isOverOrdered =
+    stock !== null && typeof quantity === "number" && quantity > stock;
+
+  const isUnavailable = isSoldOut || isOverOrdered;
+
+  const message = isSoldOut
+    ? dict.cart.soldOut
+    : isOverOrdered
+      ? interpolate(dict.cart.quantityExceedsStock, { stock })
+      : "";
 
   return (
     <StyledButton
       color="error"
-      inStock={inStock}
-      disabled={inStock || !onDelete}
+      inStock={!isUnavailable}
+      disabled={!isUnavailable || !onDelete}
       onClick={(e) => {
         e.stopPropagation();
         onDelete?.();
@@ -49,8 +64,8 @@ const SoldOut = ({ inStock, onDelete }: SoldOutProps) => {
       variant="outlined"
     >
       {onDelete && <StyledDelete fontSize="small" />}
-      <StyledTypography color="error" fontWeight="bold" variant="h2">
-        {dict.dialog.soldOut}
+      <StyledTypography color="error" fontWeight="bold" variant="h3">
+        {message}
       </StyledTypography>
     </StyledButton>
   );

@@ -12,6 +12,8 @@
   },
   "cart": {
     "checkout": "결제하기",
+    "quantityExceedsStock": "{stock} 개 남음",
+    "soldOut": "품절",
     "title": "장바구니",
     "totalQuantity": "총 {quantity} 개"
   },
@@ -20,6 +22,7 @@
     "currency": "NT$",
     "delimiter": ", ",
     "empty": "상품이 없습니다",
+    "from": "부터",
     "loading": "로딩 중...",
     "multiply": "×",
     "totalAmount": "합계"
@@ -28,10 +31,8 @@
     "addToCart": "장바구니에 추가",
     "amount": "소계",
     "close": "닫기",
-    "from": "부터",
-    "maxQuantity": "최대 {max}개까지 구매할 수 있습니다",
-    "size": "사이즈",
-    "soldOut": "품절"
+    "maxQuantity": "최대 {quantity}개까지 구매할 수 있습니다",
+    "remainingStock": "재고는 {quantity}개 남았습니다"
   },
   "nav": {
     "home": "홈",
