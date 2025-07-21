@@ -1,10 +1,10 @@
 import { useI18n } from "@/context/i18n";
 
 import { Delete } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const SoldOutBox = styled(Box, {
+const StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "inStock",
 })<{ inStock: boolean }>(({ inStock, theme }) => ({
   position: "absolute",
@@ -14,21 +14,17 @@ const SoldOutBox = styled(Box, {
   justifyContent: "center",
   alignItems: "center",
   opacity: inStock ? 0 : 1,
-  pointerEvents: inStock ? "none" : "auto",
   transition: theme.transitions.create(["background-color", "opacity"]),
   zIndex: 2,
 }));
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledDelete = styled(Delete)(({ theme }) => ({
   position: "absolute",
   top: theme.spacing(1),
   right: theme.spacing(1),
-  padding: theme.spacing(1),
-  minWidth: 0,
-  borderRadius: "50%",
 }));
 
-const SoldOutTypography = styled(Typography)({
+const StyledTypography = styled(Typography)({
   transform: "rotate(-30deg)",
 });
 
@@ -41,28 +37,22 @@ const SoldOut = ({ inStock, onDelete }: SoldOutProps) => {
   const dict = useI18n();
 
   return (
-    <SoldOutBox
+    <StyledButton
+      color="error"
       inStock={inStock}
-      onClick={(e) => e.stopPropagation()}
+      disabled={inStock || !onDelete}
+      onClick={(e) => {
+        e.stopPropagation();
+        onDelete?.();
+      }}
       onMouseDown={(e) => e.stopPropagation()}
+      variant="outlined"
     >
-      {!inStock && onDelete && (
-        <StyledButton
-          color="error"
-          onClick={(e) => {
-            e.stopPropagation();
-            onDelete?.();
-          }}
-          size="large"
-          variant="outlined"
-        >
-          <Delete fontSize="small" />
-        </StyledButton>
-      )}
-      <SoldOutTypography color="error" fontWeight="bold" variant="h2">
+      {onDelete && <StyledDelete fontSize="small" />}
+      <StyledTypography color="error" fontWeight="bold" variant="h2">
         {dict.dialog.soldOut}
-      </SoldOutTypography>
-    </SoldOutBox>
+      </StyledTypography>
+    </StyledButton>
   );
 };
 

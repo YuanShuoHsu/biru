@@ -31,6 +31,7 @@ import type { Option } from "@/types/menu";
 import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card)({
+  position: "relative",
   width: "100%",
 });
 
@@ -38,7 +39,6 @@ const StyledCardActionArea = styled(CardActionArea, {
   shouldForwardProp: (prop) => prop !== "inStock" && prop !== "viewDirection",
 })<{ inStock: boolean; viewDirection: ViewDirection }>(
   ({ inStock, viewDirection }) => ({
-    position: "relative",
     height: "100%",
     display: "flex",
     flexDirection: viewDirection,
@@ -196,13 +196,13 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard>
+      <SoldOut inStock={inStock} />
       <StyledCardActionArea
         disableRipple={!inStock}
         inStock={inStock}
         onClick={handleDialogClick}
         viewDirection={viewDirection}
       >
-        <SoldOut inStock={inStock} />
         <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip
