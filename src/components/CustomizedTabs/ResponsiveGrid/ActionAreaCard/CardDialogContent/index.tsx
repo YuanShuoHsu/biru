@@ -90,7 +90,11 @@ const CardDialogContent = forwardRef<
 
   const { getItemQuantity } = useCartStore();
 
-  const cartQuantity = getItemQuantity(id);
+  const isStockSufficient = stock === null || stock > MAX_QUANTITY;
+  const cartQuantity = getItemQuantity(
+    id,
+    isStockSufficient ? choices : undefined,
+  );
   const remainingStock = stock === null ? Infinity : stock;
   const availableToAdd = Math.min(MAX_QUANTITY, remainingStock) - cartQuantity;
   const minQuantity = availableToAdd > 0 ? 1 : 0;
@@ -286,15 +290,15 @@ const CardDialogContent = forwardRef<
             />
             {quantity === availableToAdd && (
               <FormHelperText error>
-                {stock !== null && stock <= MAX_QUANTITY
-                  ? availableToAdd <= 0
+                {isStockSufficient
+                  ? interpolate(dict.dialog.maxQuantity, {
+                      quantity: MAX_QUANTITY,
+                    })
+                  : availableToAdd <= 0
                     ? dict.dialog.outOfStock
                     : interpolate(dict.dialog.maxStock, {
                         quantity: availableToAdd,
-                      })
-                  : interpolate(dict.dialog.maxQuantity, {
-                      quantity: MAX_QUANTITY,
-                    })}
+                      })}
               </FormHelperText>
             )}
           </StyledFormControl>
