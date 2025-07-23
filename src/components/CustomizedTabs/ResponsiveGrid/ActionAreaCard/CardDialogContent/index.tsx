@@ -91,18 +91,18 @@ const CardDialogContent = forwardRef<
   const { getItemQuantity } = useCartStore();
 
   const cartQuantity = getItemQuantity(id, choices);
-  const availableToAdd = stock === null ? MAX_QUANTITY : stock - cartQuantity;
-  const maxQuantity = Math.max(0, Math.min(MAX_QUANTITY, availableToAdd));
-  const minQuantity = maxQuantity === 0 ? 0 : 1;
+  const availableToAdd =
+    stock === null ? MAX_QUANTITY - cartQuantity : stock - cartQuantity;
+  const minQuantity = availableToAdd > 0 ? 1 : 0;
 
   useEffect(() => {
     setQuantity((prev) => {
+      if (prev > availableToAdd) return availableToAdd;
       if (prev < minQuantity) return minQuantity;
-      if (prev > maxQuantity) return maxQuantity;
 
       return prev;
     });
-  }, [minQuantity, maxQuantity]);
+  }, [availableToAdd, minQuantity]);
 
   const extraCost = options.reduce(
     (total, { name, choices: optionChoices }) => {
@@ -144,7 +144,7 @@ const CardDialogContent = forwardRef<
   };
 
   const handleIncreaseQuantity = () => {
-    setQuantity((prev) => Math.min(prev + 1, maxQuantity));
+    setQuantity((prev) => Math.min(prev + 1, availableToAdd));
   };
 
   return (
@@ -265,7 +265,7 @@ const CardDialogContent = forwardRef<
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="increase"
-                        disabled={quantity >= maxQuantity}
+                        disabled={quantity >= availableToAdd}
                         onClick={handleIncreaseQuantity}
                         size="small"
                       >
@@ -284,11 +284,11 @@ const CardDialogContent = forwardRef<
               }}
               value={quantity}
             />
-            {quantity === maxQuantity && (
+            {quantity === availableToAdd && (
               <FormHelperText error>
-                {availableToAdd <= 0
+                {stock !== null && availableToAdd <= 0
                   ? dict.dialog.outOfStock
-                  : stock !== null && maxQuantity < MAX_QUANTITY
+                  : stock !== null && availableToAdd < MAX_QUANTITY
                     ? interpolate(dict.dialog.maxStock, {
                         quantity: availableToAdd,
                       })
