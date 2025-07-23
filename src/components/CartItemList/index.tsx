@@ -115,11 +115,7 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
             return (
               <Fragment key={getItemKey(id, choices)}>
                 <StyledListItem alignItems="flex-start" disablePadding>
-                  <SoldOut
-                    stock={stock}
-                    quantity={quantity}
-                    onDelete={() => deleteItem(item)}
-                  />
+                  <SoldOut item={item} stock={stock} />
                   <Grid
                     width="100%"
                     container

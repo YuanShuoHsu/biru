@@ -4,6 +4,8 @@ import { Delete } from "@mui/icons-material";
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { CartItem, useCartStore } from "@/stores/useCartStore";
+
 import { interpolate } from "@/utils/i18n";
 
 const StyledButton = styled(Button, {
@@ -31,17 +33,19 @@ const StyledTypography = styled(Typography)({
 });
 
 interface SoldOutProps {
-  onDelete?: () => void;
-  quantity?: number;
+  item?: CartItem;
   stock: number | null;
 }
 
-const SoldOut = ({ onDelete, quantity, stock }: SoldOutProps) => {
+const SoldOut = ({ item, stock }: SoldOutProps) => {
+  const { quantity = 0, price = 0, extraCost = 0 } = item || {};
+
   const dict = useI18n();
 
+  const { deleteItem, updateItem } = useCartStore();
+
   const isSoldOut = stock === 0;
-  const isOverOrdered =
-    stock !== null && typeof quantity === "number" && quantity > stock;
+  const isOverOrdered = stock !== null && quantity > stock;
 
   const isUnavailable = isSoldOut || isOverOrdered;
 
@@ -51,22 +55,38 @@ const SoldOut = ({ onDelete, quantity, stock }: SoldOutProps) => {
       ? interpolate(dict.cart.quantityExceedsStock, { stock })
       : "";
 
+  const handleClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!item) return;
+
+    if (isSoldOut) {
+      deleteItem(item);
+    } else if (isOverOrdered) {
+      const diff = stock - quantity;
+
+      updateItem({
+        ...item,
+        quantity: diff,
+        amount: (price + extraCost) * diff,
+      });
+    }
+  };
+
   return (
     <StyledButton
       color="error"
       inStock={!isUnavailable}
-      disabled={!isUnavailable || !onDelete}
-      onClick={(e) => {
-        e.stopPropagation();
-        onDelete?.();
-      }}
+      disabled={!item || !isUnavailable}
+      onClick={handleClick}
       onMouseDown={(e) => e.stopPropagation()}
       variant="outlined"
     >
-      {onDelete && <StyledDelete fontSize="small" />}
-      <StyledTypography color="error" fontWeight="bold" variant="h3">
-        {message}
-      </StyledTypography>
+      {item && <StyledDelete fontSize="small" />}
+      {message && (
+        <StyledTypography color="error" fontWeight="bold" variant="h3">
+          {message}
+        </StyledTypography>
+      )}
     </StyledButton>
   );
 };
