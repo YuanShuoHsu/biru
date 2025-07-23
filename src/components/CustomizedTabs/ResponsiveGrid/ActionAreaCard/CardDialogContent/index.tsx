@@ -29,7 +29,6 @@ import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 
 import { interpolate } from "@/utils/i18n";
-import { getItemStock } from "@/utils/menu";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -62,12 +61,13 @@ interface CardDialogContentProps {
   imageUrl: string;
   options: Option[];
   price: number;
+  stock: number | null;
 }
 
 const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, name, description, imageUrl, options, price }, ref) => {
+>(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
   const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
@@ -90,11 +90,9 @@ const CardDialogContent = forwardRef<
 
   const { getItemQuantity } = useCartStore();
 
-  const stock = getItemStock(id);
   const cartQuantity = getItemQuantity(id, choices);
-
-  const remainingStock = stock === null ? MAX_QUANTITY : stock - cartQuantity;
-  const maxQuantity = Math.max(0, Math.min(MAX_QUANTITY, remainingStock));
+  const availableToAdd = stock === null ? MAX_QUANTITY : stock - cartQuantity;
+  const maxQuantity = Math.max(0, Math.min(MAX_QUANTITY, availableToAdd));
   const minQuantity = maxQuantity === 0 ? 0 : 1;
 
   useEffect(() => {
@@ -288,12 +286,15 @@ const CardDialogContent = forwardRef<
             />
             {quantity === maxQuantity && (
               <FormHelperText error>
-                {interpolate(
-                  maxQuantity < MAX_QUANTITY
-                    ? dict.dialog.remainingStock
-                    : dict.dialog.maxQuantity,
-                  { quantity: maxQuantity },
-                )}
+                {availableToAdd <= 0
+                  ? dict.dialog.outOfStock
+                  : stock !== null && maxQuantity < MAX_QUANTITY
+                    ? interpolate(dict.dialog.maxStock, {
+                        quantity: availableToAdd,
+                      })
+                    : interpolate(dict.dialog.maxQuantity, {
+                        quantity: MAX_QUANTITY,
+                      })}
               </FormHelperText>
             )}
           </StyledFormControl>

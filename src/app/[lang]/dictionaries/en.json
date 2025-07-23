@@ -31,8 +31,9 @@
     "addToCart": "Add to cart",
     "amount": "SubTotal",
     "close": "Close",
-    "maxQuantity": "You can only purchase up to {quantity} items",
-    "remainingStock": "Only {quantity} left in stock"
+    "maxQuantity": "You can buy up to {quantity} per item",
+    "maxStock": "Only {quantity} left in stock",
+    "outOfStock": "Out of stock"
   },
   "nav": {
     "home": "Home",

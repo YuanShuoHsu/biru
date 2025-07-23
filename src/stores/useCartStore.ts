@@ -41,12 +41,12 @@ export const useCartStore = create<CartState>()(
       isEmpty: true,
       computeTotals: (map) => {
         const totalAmount = Object.values(map).reduce(
-          (sum, item) => sum + item.amount,
+          (sum, { amount }) => sum + amount,
           0,
         );
 
         const totalQuantity = Object.values(map).reduce(
-          (sum, item) => sum + item.quantity,
+          (sum, { quantity }) => sum + quantity,
           0,
         );
 

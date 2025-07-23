@@ -31,8 +31,9 @@
     "addToCart": "장바구니에 추가",
     "amount": "소계",
     "close": "닫기",
-    "maxQuantity": "최대 {quantity}개까지 구매할 수 있습니다",
-    "remainingStock": "재고는 {quantity}개 남았습니다"
+    "maxQuantity": "각 상품은 최대 {quantity} 개까지 구매할 수 있습니다",
+    "maxStock": "재고가 {quantity} 개 남았습니다",
+    "outOfStock": "재고 없음"
   },
   "nav": {
     "home": "홈",

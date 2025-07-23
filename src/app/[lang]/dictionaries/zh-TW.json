@@ -31,8 +31,9 @@
     "addToCart": "加入購物車",
     "amount": "小計",
     "close": "關閉",
-    "maxQuantity": "最多只能購買 {quantity} 件",
-    "remainingStock": "僅剩 {quantity} 件庫存"
+    "maxQuantity": "每項商品最多只能購買 {quantity} 件",
+    "maxStock": "庫存僅剩 {quantity} 件",
+    "outOfStock": "無庫存"
   },
   "nav": {
     "home": "首頁",

@@ -31,8 +31,9 @@
     "addToCart": "カートに追加",
     "amount": "小計",
     "close": "閉じる",
-    "maxQuantity": "最大 {quantity} 個まで購入できます",
-    "remainingStock": "在庫は残り {quantity} 個です"
+    "maxQuantity": "各商品は最大 {quantity} 個まで購入できます",
+    "maxStock": "在庫は残り {quantity} 個です",
+    "outOfStock": "在庫なし"
   },
   "nav": {
     "home": "ホーム",

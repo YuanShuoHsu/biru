@@ -171,6 +171,7 @@ const ActionAreaCard = ({
           imageUrl={imageUrl}
           options={options}
           price={price}
+          stock={stock}
           ref={dialogRef}
         />
       ),
