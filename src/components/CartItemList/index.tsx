@@ -29,8 +29,12 @@ import { useCartStore, type CartItem } from "@/stores/useCartStore";
 
 import type { LangParam } from "@/types/locale";
 
-import { getItemKey } from "@/utils/itemKey";
-import { getChoiceLabels, getItemName, getItemStock } from "@/utils/menu";
+import {
+  getChoiceLabels,
+  getItemKey,
+  getItemName,
+  getItemStock,
+} from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   position: "relative",

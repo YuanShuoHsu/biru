@@ -5,6 +5,16 @@ import type { CartItemChoices } from "@/stores/useCartStore";
 import type { LocaleCode } from "@/types/locale";
 import type { Category, MenuItem, Option } from "@/types/menu";
 
+export const getItemKey = (id: string, choices: CartItemChoices): string => {
+  const parts = Object.entries(choices).flatMap(([key, value]) => {
+    if (Array.isArray(value)) return value.sort().map((v) => `${key}:${v}`);
+
+    return value ? [`${key}:${value}`] : [];
+  });
+
+  return `${id}_${parts.join("_")}`;
+};
+
 const findMenuItemById = (id: string): MenuItem | undefined =>
   menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
 
@@ -469,7 +479,7 @@ export const menu: Category[] = [
         ],
         price: 80,
         sold: 9,
-        stock: 20,
+        stock: 50,
         // tags: ["lowCaffeine"],
       },
       {
