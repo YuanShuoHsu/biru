@@ -91,8 +91,8 @@ const CardDialogContent = forwardRef<
   const { getItemQuantity } = useCartStore();
 
   const cartQuantity = getItemQuantity(id);
-  const remainingStock = stock === null ? Infinity : stock - cartQuantity;
-  const availableToAdd = Math.min(MAX_QUANTITY - cartQuantity, remainingStock);
+  const remainingStock = stock === null ? Infinity : stock;
+  const availableToAdd = Math.min(MAX_QUANTITY, remainingStock) - cartQuantity;
   const minQuantity = availableToAdd > 0 ? 1 : 0;
 
   useEffect(() => {

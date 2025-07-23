@@ -110,6 +110,9 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
             const { id, amount, choices, imageUrl, quantity } = item;
 
             const stock = getItemStock(id);
+            const remainingStock = stock === null ? Infinity : stock;
+            const availableToAdd =
+              Math.min(MAX_QUANTITY, remainingStock) - quantity;
 
             const name = getItemName(id, lang);
             const choiceLabels = getChoiceLabels(id, choices, lang, dict);
@@ -208,7 +211,7 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
                               <StyledInputAdornment position="end">
                                 <IconButton
                                   aria-label="increase"
-                                  disabled={quantity >= MAX_QUANTITY}
+                                  disabled={availableToAdd <= 0}
                                   onClick={() => handleIncrease(item)}
                                   size="small"
                                 >
