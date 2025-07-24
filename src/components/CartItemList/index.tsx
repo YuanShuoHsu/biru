@@ -21,9 +21,14 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
 
   return (
     <List disablePadding>
-      <NoSsr defer fallback={<Typography>{dict.common.loading}</Typography>}>
+      <NoSsr
+        defer
+        fallback={<Typography padding={2}>{dict.common.loading}</Typography>}
+      >
         {isEmpty ? (
-          <Typography variant="body1">{dict.common.empty}</Typography>
+          <Typography padding={2} variant="body1">
+            {dict.common.empty}
+          </Typography>
         ) : (
           itemsList.map((item, index) => {
             const { id, choices } = item;
