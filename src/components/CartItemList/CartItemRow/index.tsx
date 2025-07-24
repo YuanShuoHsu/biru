@@ -9,6 +9,8 @@ import { useI18n } from "@/context/i18n";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
+  FormControl,
+  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -24,6 +26,7 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import { LangParam } from "@/types/locale";
 
+import { interpolate } from "@/utils/i18n";
 import { getChoiceLabels, getItemName, getItemStock } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -55,6 +58,12 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   },
 }));
 
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+}));
+
 const StyledInputAdornment = styled(InputAdornment)({
   margin: 0,
 });
@@ -71,20 +80,14 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const dict = useI18n();
 
-  const {
-    deleteItem,
-    getItemSelectedQuantity,
-    getItemTotalQuantity,
-    updateItem,
-  } = useCartStore();
+  const { deleteItem, getItemTotalQuantity, updateItem } = useCartStore();
 
   const stock = getItemStock(id);
   const stockLeft = stock === null ? Infinity : stock;
-  const selectedQuantity = getItemSelectedQuantity(id, choices);
   const totalQuantity = getItemTotalQuantity(id);
   const availableToAdd = Math.max(
     0,
-    Math.min(MAX_QUANTITY - selectedQuantity, stockLeft - totalQuantity),
+    Math.min(MAX_QUANTITY - quantity, stockLeft - totalQuantity),
   );
 
   const name = getItemName(id, lang);
@@ -170,52 +173,63 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
           }}
           textAlign="right"
         >
-          <TextField
-            disabled={!quantity}
-            fullWidth
-            size="small"
-            slotProps={{
-              input: {
-                startAdornment: (
-                  <StyledInputAdornment position="start">
-                    <IconButton
-                      aria-label={canDecrease ? "decrease" : "delete"}
-                      onClick={() =>
-                        canDecrease ? handleDecrease() : deleteItem(item)
-                      }
-                      size="small"
-                    >
-                      {canDecrease ? (
-                        <Remove fontSize="small" />
-                      ) : (
-                        <Delete fontSize="small" />
-                      )}
-                    </IconButton>
-                  </StyledInputAdornment>
-                ),
-                endAdornment: (
-                  <StyledInputAdornment position="end">
-                    <IconButton
-                      aria-label="increase"
-                      disabled={!canIncrease}
-                      onClick={handleIncrease}
-                      size="small"
-                    >
-                      <Add fontSize="small" />
-                    </IconButton>
-                  </StyledInputAdornment>
-                ),
-                readOnly: true,
-                sx: {
-                  paddingInline: 1,
+          <StyledFormControl>
+            <TextField
+              disabled={!quantity}
+              fullWidth
+              size="small"
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <StyledInputAdornment position="start">
+                      <IconButton
+                        aria-label={canDecrease ? "decrease" : "delete"}
+                        onClick={() =>
+                          canDecrease ? handleDecrease() : deleteItem(item)
+                        }
+                        size="small"
+                      >
+                        {canDecrease ? (
+                          <Remove fontSize="small" />
+                        ) : (
+                          <Delete fontSize="small" />
+                        )}
+                      </IconButton>
+                    </StyledInputAdornment>
+                  ),
+                  endAdornment: (
+                    <StyledInputAdornment position="end">
+                      <IconButton
+                        aria-label="increase"
+                        disabled={!canIncrease}
+                        onClick={handleIncrease}
+                        size="small"
+                      >
+                        <Add fontSize="small" />
+                      </IconButton>
+                    </StyledInputAdornment>
+                  ),
+                  readOnly: true,
+                  sx: {
+                    paddingInline: 1,
+                  },
                 },
-              },
-              htmlInput: {
-                sx: { textAlign: "center" },
-              },
-            }}
-            value={quantity}
-          />
+                htmlInput: {
+                  sx: { textAlign: "center" },
+                },
+              }}
+              value={quantity}
+            />
+            {availableToAdd <= 0 && (
+              <FormHelperText error>
+                {MAX_QUANTITY - quantity < stockLeft - totalQuantity
+                  ? interpolate(dict.dialog.maxQuantity, {
+                      quantity: MAX_QUANTITY,
+                    })
+                  : dict.dialog.outOfStock}
+              </FormHelperText>
+            )}
+          </StyledFormControl>
         </Grid>
       </Grid>
     </StyledListItem>

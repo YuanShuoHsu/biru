@@ -287,7 +287,7 @@ const CardDialogContent = forwardRef<
               }}
               value={quantity}
             />
-            {quantity === availableToAdd && (
+            {quantity >= availableToAdd && (
               <FormHelperText error>
                 {stock === null ||
                 MAX_QUANTITY - selectedQuantity < stockLeft - totalQuantity
