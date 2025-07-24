@@ -19,7 +19,7 @@ const StyledButton = styled(Button, {
   zIndex: 2,
 
   "&:hover": {
-    backgroundColor: `rgba(${theme.vars.palette.error.mainChannel} / ${theme.palette.action.hoverOpacity})`,
+    backgroundColor: `rgba(${theme.vars.palette.error.mainChannel} / 0.2)`,
   },
 }));
 
