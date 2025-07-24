@@ -14,12 +14,13 @@ const StyledButton = styled(Button, {
   position: "absolute",
   inset: 0,
   backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  borderRadius: 0,
   opacity: inStock ? 0 : 1,
-  transition: theme.transitions.create(["background-color", "opacity"]),
   zIndex: 2,
+
+  "&:hover": {
+    backgroundColor: `rgba(${theme.vars.palette.error.mainChannel} / ${theme.palette.action.hoverOpacity})`,
+  },
 }));
 
 const StyledBox = styled(Box)(({ theme }) => ({
@@ -55,8 +56,8 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
       ? interpolate(dict.cart.quantityExceedsStock, { stock })
       : "";
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
     if (!item) return;
 
     if (isSoldOut) {
@@ -78,7 +79,7 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
       inStock={!isUnavailable}
       disabled={!item || !isUnavailable}
       onClick={handleClick}
-      onMouseDown={(e) => e.stopPropagation()}
+      onMouseDown={(event) => event.stopPropagation()}
       variant="outlined"
     >
       {item && (

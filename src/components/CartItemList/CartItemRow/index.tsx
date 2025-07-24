@@ -4,6 +4,7 @@ import { useParams } from "next/navigation";
 import SoldOut from "@/components/SoldOut";
 
 import { MAX_QUANTITY } from "@/constants/cart";
+
 import { useI18n } from "@/context/i18n";
 
 import { Add, Delete, Remove } from "@mui/icons-material";
@@ -117,11 +118,11 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   };
 
   return (
-    <StyledListItem alignItems="flex-start" disablePadding>
+    <StyledListItem disablePadding>
       <SoldOut item={item} stock={stock} />
       <Grid
-        width="100%"
         container
+        width="100%"
         display="flex"
         justifyContent="space-between"
         alignItems="center"
@@ -171,7 +172,6 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             xs: 7,
             ...(forceXsLayout ? {} : { sm: 4 }),
           }}
-          textAlign="right"
         >
           <StyledFormControl>
             <TextField

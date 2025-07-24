@@ -233,8 +233,8 @@ const CardDialogContent = forwardRef<
         ),
       )}
       <Divider variant="inset" />
-      <Grid container spacing={2}>
-        <Grid size={{ xs: 5 }} height={40} display="flex" alignItems="center">
+      <Grid container display="flex" alignItems="center" spacing={2}>
+        <Grid size={{ xs: 5 }}>
           <Typography
             color="primary"
             component="span"
