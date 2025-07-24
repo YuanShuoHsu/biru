@@ -27,6 +27,15 @@ const StyledBox = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: theme.spacing(1),
   right: theme.spacing(1),
+  width: theme.spacing(4),
+  height: theme.spacing(4),
+  backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
+  border: `1px solid ${theme.vars.palette.error.main}`,
+  borderRadius: "50%",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  transition: theme.transitions.create("background-color"),
 }));
 
 const StyledTypography = styled(Typography)({
