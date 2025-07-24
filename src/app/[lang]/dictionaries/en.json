@@ -13,7 +13,6 @@
   "cart": {
     "checkout": "Proceed to Checkout",
     "quantityExceedsStock": "{stock} left",
-    "soldOut": "Sold out",
     "title": "Shopping Cart",
     "totalQuantity": "{quantity} items"
   },
@@ -25,6 +24,7 @@
     "from": "from",
     "loading": "Loading...",
     "multiply": "×",
+    "soldOut": "Sold out",
     "totalAmount": "Total"
   },
   "dialog": {

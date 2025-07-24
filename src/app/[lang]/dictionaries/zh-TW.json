@@ -13,7 +13,6 @@
   "cart": {
     "checkout": "前往結帳",
     "quantityExceedsStock": "剩 {stock} 件",
-    "soldOut": "售完",
     "title": "購物車清單",
     "totalQuantity": "共 {quantity} 件"
   },
@@ -25,6 +24,7 @@
     "from": "起",
     "loading": "載入中...",
     "multiply": "×",
+    "soldOut": "售完",
     "totalAmount": "總計"
   },
   "dialog": {

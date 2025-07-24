@@ -1,7 +1,7 @@
 import { useI18n } from "@/context/i18n";
 
-import { Delete } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
@@ -22,7 +22,7 @@ const StyledButton = styled(Button, {
   zIndex: 2,
 }));
 
-const StyledDelete = styled(Delete)(({ theme }) => ({
+const StyledBox = styled(Box)(({ theme }) => ({
   position: "absolute",
   top: theme.spacing(1),
   right: theme.spacing(1),
@@ -50,7 +50,7 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
   const isUnavailable = isSoldOut || isOverOrdered;
 
   const message = isSoldOut
-    ? dict.cart.soldOut
+    ? dict.common.soldOut
     : isOverOrdered
       ? interpolate(dict.cart.quantityExceedsStock, { stock })
       : "";
@@ -81,7 +81,11 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
       onMouseDown={(e) => e.stopPropagation()}
       variant="outlined"
     >
-      {item && <StyledDelete fontSize="small" />}
+      {item && (
+        <StyledBox>
+          {isSoldOut ? <Delete fontSize="small" /> : <Edit fontSize="small" />}
+        </StyledBox>
+      )}
       {message && (
         <StyledTypography color="error" fontWeight="bold" variant="h3">
           {message}

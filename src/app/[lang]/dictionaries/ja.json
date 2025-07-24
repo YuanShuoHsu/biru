@@ -13,7 +13,6 @@
   "cart": {
     "checkout": "レジに進む",
     "quantityExceedsStock": "残り {stock} 個",
-    "soldOut": "売り切れ",
     "title": "カート",
     "totalQuantity": "合計 {quantity} 点"
   },
@@ -25,6 +24,7 @@
     "from": "〜",
     "loading": "読み込み中...",
     "multiply": "×",
+    "soldOut": "売り切れ",
     "totalAmount": "合計"
   },
   "dialog": {

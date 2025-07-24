@@ -13,7 +13,6 @@
   "cart": {
     "checkout": "결제하기",
     "quantityExceedsStock": "{stock} 개 남음",
-    "soldOut": "품절",
     "title": "장바구니",
     "totalQuantity": "총 {quantity} 개"
   },
@@ -25,6 +24,7 @@
     "from": "부터",
     "loading": "로딩 중...",
     "multiply": "×",
+    "soldOut": "품절",
     "totalAmount": "합계"
   },
   "dialog": {
