@@ -446,7 +446,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: true,
+                available: false,
               },
               {
                 label: {
@@ -479,7 +479,7 @@ export const menu: Category[] = [
         ],
         price: 80,
         sold: 9,
-        stock: 50,
+        stock: 20,
         // tags: ["lowCaffeine"],
       },
       {

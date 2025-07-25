@@ -179,8 +179,11 @@ const ActionAreaCard = ({
       confirmText: dict.dialog.addToCart,
       onConfirm: async () => {
         if (!dialogRef.current) return;
+
         const { amount, extraCost, price, quantity, choices } =
           dialogRef.current.getValues();
+
+        if (quantity <= 0) return;
 
         updateItem({
           id,

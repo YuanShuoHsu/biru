@@ -47,20 +47,21 @@ const CustomizedDialogs = () => {
 
   const {
     cancelText,
+    confirmDisabled,
     confirmText,
     content,
     contentText,
     onCancel,
     onConfirm,
     open,
-    setDialog,
+    resetDialog,
     title,
   } = useDialogStore();
 
   const handleClose = () => {
     if (loading) return;
 
-    setDialog({ open: false });
+    resetDialog();
   };
 
   const handleCancel = async () => {
@@ -70,9 +71,11 @@ const CustomizedDialogs = () => {
 
     try {
       await onCancel?.();
+      handleClose();
+    } catch (error) {
+      console.log(error);
     } finally {
       setCancelLoading(false);
-      handleClose();
     }
   };
 
@@ -83,9 +86,11 @@ const CustomizedDialogs = () => {
 
     try {
       await onConfirm?.();
+      handleClose();
+    } catch (error) {
+      console.log(error);
     } finally {
       setConfirmLoading(false);
-      handleClose();
     }
   };
 
@@ -121,6 +126,7 @@ const CustomizedDialogs = () => {
         </Button>
         <Button
           autoFocus
+          disabled={confirmDisabled}
           loading={confirmLoading}
           loadingPosition="end"
           onClick={handleConfirm}
