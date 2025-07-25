@@ -161,8 +161,8 @@ const ActionAreaCard = ({
     if (!inStock) return;
 
     setDialog({
-      open: true,
-      title: name,
+      cancelText: dict.dialog.close,
+      confirmText: dict.dialog.addToCart,
       content: (
         <CardDialogContent
           id={id}
@@ -175,8 +175,6 @@ const ActionAreaCard = ({
           ref={dialogRef}
         />
       ),
-      cancelText: dict.dialog.close,
-      confirmText: dict.dialog.addToCart,
       onConfirm: async () => {
         if (!dialogRef.current) return;
 
@@ -195,6 +193,8 @@ const ActionAreaCard = ({
           choices,
         });
       },
+      open: true,
+      title: name,
     });
   };
 
