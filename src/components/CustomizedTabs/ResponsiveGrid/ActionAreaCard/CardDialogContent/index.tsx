@@ -291,7 +291,7 @@ const CardDialogContent = forwardRef<
               <FormHelperText error>
                 {stock === null ||
                 MAX_QUANTITY - selectedQuantity < stockLeft - totalQuantity
-                  ? interpolate(dict.dialog.maxQuantity, {
+                  ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
                   : availableToAdd > 0

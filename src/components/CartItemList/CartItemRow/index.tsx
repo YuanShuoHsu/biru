@@ -223,7 +223,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             {availableToAdd <= 0 && (
               <FormHelperText error>
                 {MAX_QUANTITY - quantity < stockLeft - totalQuantity
-                  ? interpolate(dict.dialog.maxQuantity, {
+                  ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
                   : dict.common.reachStockLimit}

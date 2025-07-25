@@ -23,6 +23,7 @@
     "empty": "尚无商品",
     "from": "起",
     "loading": "加载中...",
+    "maxQuantity": "每项商品最多只能购买 {quantity} 件",
     "multiply": "×",
     "reachStockLimit": "已达库存上限",
     "soldOut": "售罄",
@@ -32,7 +33,6 @@
     "addToCart": "加入购物车",
     "amount": "小计",
     "close": "关闭",
-    "maxQuantity": "每项商品最多只能购买 {quantity} 件",
     "maxStock": "库存仅剩 {quantity} 件"
   },
   "nav": {

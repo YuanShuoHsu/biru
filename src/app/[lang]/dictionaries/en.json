@@ -23,6 +23,7 @@
     "empty": "No items yet",
     "from": "from",
     "loading": "Loading...",
+    "maxQuantity": "You can buy up to {quantity} per item",
     "multiply": "×",
     "reachStockLimit": "Reached stock limit",
     "soldOut": "Sold out",
@@ -32,7 +33,6 @@
     "addToCart": "Add to cart",
     "amount": "SubTotal",
     "close": "Close",
-    "maxQuantity": "You can buy up to {quantity} per item",
     "maxStock": "Only {quantity} left in stock"
   },
   "nav": {
