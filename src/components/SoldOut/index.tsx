@@ -16,6 +16,7 @@ const StyledButton = styled(Button, {
   backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
   borderRadius: 0,
   opacity: inStock ? 0 : 1,
+  transition: theme.transitions.create("opacity"),
   zIndex: 2,
 
   "&:hover": {
