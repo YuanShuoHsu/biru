@@ -298,7 +298,7 @@ const CardDialogContent = forwardRef<
                     ? interpolate(dict.dialog.maxStock, {
                         quantity: availableToAdd,
                       })
-                    : dict.dialog.outOfStock}
+                    : dict.common.reachStockLimit}
               </FormHelperText>
             )}
           </StyledFormControl>

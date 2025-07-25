@@ -24,6 +24,7 @@
     "from": "from",
     "loading": "Loading...",
     "multiply": "×",
+    "reachStockLimit": "Reached stock limit",
     "soldOut": "Sold out",
     "totalAmount": "Total"
   },
@@ -32,8 +33,7 @@
     "amount": "SubTotal",
     "close": "Close",
     "maxQuantity": "You can buy up to {quantity} per item",
-    "maxStock": "Only {quantity} left in stock",
-    "outOfStock": "Out of stock"
+    "maxStock": "Only {quantity} left in stock"
   },
   "nav": {
     "home": "Home",

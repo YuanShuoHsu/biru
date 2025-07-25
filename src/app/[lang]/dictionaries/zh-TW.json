@@ -24,6 +24,7 @@
     "from": "起",
     "loading": "載入中...",
     "multiply": "×",
+    "reachStockLimit": "已達庫存上限",
     "soldOut": "售完",
     "totalAmount": "總計"
   },
@@ -32,8 +33,7 @@
     "amount": "小計",
     "close": "關閉",
     "maxQuantity": "每項商品最多只能購買 {quantity} 件",
-    "maxStock": "庫存僅剩 {quantity} 件",
-    "outOfStock": "無庫存"
+    "maxStock": "庫存僅剩 {quantity} 件"
   },
   "nav": {
     "home": "首頁",

@@ -226,7 +226,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
                   ? interpolate(dict.dialog.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
-                  : dict.dialog.outOfStock}
+                  : dict.common.reachStockLimit}
               </FormHelperText>
             )}
           </StyledFormControl>
