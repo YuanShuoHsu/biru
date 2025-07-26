@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 interface DialogOptions {
   cancelText: string;
-  confirmDisabled?: boolean;
+  confirmDisabled: boolean;
   confirmText: string;
   content?: React.ReactNode;
   contentText?: string;
@@ -26,7 +26,7 @@ const initialState: DialogOptions = {
 
 interface DialogState extends DialogOptions {
   resetDialog: () => void;
-  setDialog: (options: DialogOptions) => void;
+  setDialog: (options: Partial<DialogOptions>) => void;
 }
 
 export const useDialogStore = create<DialogState>((set) => ({

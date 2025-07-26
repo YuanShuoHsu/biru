@@ -24,6 +24,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { CartItemChoices, useCartStore } from "@/stores/useCartStore";
+import { useDialogStore } from "@/stores/useDialogStore";
 
 import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
@@ -97,6 +98,12 @@ const CardDialogContent = forwardRef<
     Math.min(MAX_QUANTITY - selectedQuantity, stockLeft - totalQuantity),
   );
   const minQuantity = availableToAdd > 0 ? 1 : 0;
+
+  const { setDialog } = useDialogStore();
+
+  useEffect(() => {
+    setDialog({ confirmDisabled: quantity <= 0 });
+  }, [quantity, setDialog]);
 
   useEffect(() => {
     setQuantity((prev) => {
