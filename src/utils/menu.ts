@@ -3,7 +3,7 @@ import { I18nDict } from "@/context/i18n";
 import type { CartItemChoices } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
-import type { Category, MenuItem, Option } from "@/types/menu";
+import type { Category, Choice, MenuItem, Option } from "@/types/menu";
 
 export const getItemKey = (id: string, choices: CartItemChoices): string => {
   const parts = Object.entries(choices).flatMap(([key, value]) => {
@@ -15,34 +15,43 @@ export const getItemKey = (id: string, choices: CartItemChoices): string => {
   return `${id}_${parts.join("_")}`;
 };
 
-const findMenuItemById = (id: string): MenuItem | undefined =>
+const findItemById = (id: string): MenuItem | undefined =>
   menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
 
 export const getItemName = (id: string, lang: LocaleCode): string => {
-  const item = findMenuItemById(id);
+  const item = findItemById(id);
   if (!item) return "";
 
   return item.name[lang];
 };
 
 export const getItemStock = (id: string): number | null => {
-  const item = findMenuItemById(id);
+  const item = findItemById(id);
   if (!item) return 0;
 
   return item.stock;
 };
 
-const findChoiceLabel = (
+const findOptionChoiceByValue = (
+  option: Option,
+  value: string,
+): Choice | undefined =>
+  option.choices.find(({ value: choiceValue }) => choiceValue === value);
+
+const getOptionChoiceLabel = (
   option: Option,
   value: string,
   lang: LocaleCode,
 ): string => {
-  const match = option.choices.find(
-    ({ value: choiceValue }) => choiceValue === value,
-  );
+  const choice = findOptionChoiceByValue(option, value);
 
-  return match?.label[lang] || "";
+  return choice?.label[lang] || "";
 };
+
+const findItemOptionByName = (
+  item: MenuItem,
+  key: string,
+): Option | undefined => item.options.find(({ name }) => name === key);
 
 export const getChoiceLabels = (
   id: string,
@@ -51,25 +60,78 @@ export const getChoiceLabels = (
   { common: { colon, delimiter } }: I18nDict,
   joinWith: string = "\n",
 ): string => {
-  const item = findMenuItemById(id);
+  const item = findItemById(id);
   if (!item) return "";
 
   return Object.entries(choices)
     .flatMap(([key, value]) => {
       if (!value) return [];
 
-      const option = item.options.find(({ name }) => name === key);
+      const option = findItemOptionByName(item, key);
       if (!option) return [];
 
       const values = Array.isArray(value) ? value : [value];
       const valueLabels = values
-        .map((choiceValue) => findChoiceLabel(option, choiceValue, lang))
+        .map((choiceValue) => getOptionChoiceLabel(option, choiceValue, lang))
         .filter(Boolean)
         .join(delimiter);
 
       return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
     })
     .join(joinWith);
+};
+
+export const getUnavailableChoicesLabels = (
+  id: string,
+  choices: CartItemChoices,
+  lang: LocaleCode,
+  { common: { colon, delimiter } }: I18nDict,
+  joinWith: string = "\n",
+): string => {
+  const item = findItemById(id);
+  if (!item) return "";
+
+  return Object.entries(choices)
+    .flatMap(([key, value]) => {
+      if (!value) return [];
+
+      const option = findItemOptionByName(item, key);
+      if (!option) return [];
+
+      const values = Array.isArray(value) ? value : [value];
+      const valueLabels = values
+        .map((choiceValue) => {
+          const choice = findOptionChoiceByValue(option, choiceValue);
+          return choice?.available === false ? choice.label[lang] : null;
+        })
+        .filter(Boolean)
+        .join(delimiter);
+
+      return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
+    })
+    .join(joinWith);
+};
+
+export const hasUnavailableChoices = (
+  id: string,
+  choices: CartItemChoices,
+): boolean => {
+  const item = findItemById(id);
+  if (!item) return false;
+
+  return Object.entries(choices).some(([key, value]) => {
+    if (!value) return false;
+
+    const option = findItemOptionByName(item, key);
+    if (!option) return false;
+
+    const values = Array.isArray(value) ? value : [value];
+
+    return values.some((value) => {
+      const choice = findOptionChoiceByValue(option, value);
+      return choice?.available === false;
+    });
+  });
 };
 
 export const menu: Category[] = [
@@ -222,7 +284,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: true,
+                available: false,
               },
               {
                 label: {
@@ -272,7 +334,7 @@ export const menu: Category[] = [
                 },
                 value: "pudding",
                 extraCost: 15,
-                available: true,
+                available: false,
               },
             ],
             multiple: true,
@@ -458,7 +520,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: true,
+                available: false,
               },
               {
                 label: {
