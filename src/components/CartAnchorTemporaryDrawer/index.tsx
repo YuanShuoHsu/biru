@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
 
@@ -67,6 +67,17 @@ const CartAnchorTemporaryDrawer = ({
 
   const { isEmpty, totalAmount } = useCartStore();
 
+  const pathname = usePathname();
+  const orderPath = `/${lang}/order/${tableNumber}`;
+  const checkoutPath = `${orderPath}/checkout`;
+  const isCheckoutPage = pathname === checkoutPath;
+
+  const actionDisabled = !isCheckoutPage && isEmpty;
+  const actionHref = isCheckoutPage ? orderPath : checkoutPath;
+  const actionLabel = isCheckoutPage
+    ? dict.cart.backToOrder
+    : dict.cart.checkout;
+
   const drawerList = (
     <DrawerBox role="presentation">
       <StickyHeader>
@@ -94,14 +105,14 @@ const CartAnchorTemporaryDrawer = ({
           </Typography>
         </Stack>
         <Button
-          disabled={isEmpty}
+          disabled={actionDisabled}
           component={Link}
           fullWidth
-          href={`/${lang}/order/${tableNumber}/checkout`}
+          href={actionHref}
           onClick={onDrawerToggle("cart", false)}
           variant="contained"
         >
-          {dict.cart.checkout}
+          {actionLabel}
         </Button>
       </StickyFooter>
     </DrawerBox>

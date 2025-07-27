@@ -11,6 +11,7 @@
     "order": "注文"
   },
   "cart": {
+    "backToOrder": "メニューに戻る",
     "checkout": "レジに進む",
     "choiceUnavailable": "{label}\nは売切れです",
     "quantityExceedsStock": "残り {stock} 個",

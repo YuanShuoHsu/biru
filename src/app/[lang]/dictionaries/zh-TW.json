@@ -11,6 +11,7 @@
     "order": "點餐"
   },
   "cart": {
+    "backToOrder": "返回點餐",
     "checkout": "前往結帳",
     "choiceUnavailable": "{label}\n已售完",
     "quantityExceedsStock": "剩 {stock} 件",
