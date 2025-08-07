@@ -52,5 +52,11 @@
       "top": "TOP",
       "topSold": "人氣商品"
     }
+  },
+  "signIn": {
+    "title": "登入",
+    "email": "電子郵件",
+    "password": "密碼",
+    "submit": "登入"
   }
 }

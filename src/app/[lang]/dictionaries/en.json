@@ -52,5 +52,11 @@
       "top": "TOP",
       "topSold": "Best Sellers"
     }
+  },
+  "signIn": {
+    "title": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Login"
   }
 }

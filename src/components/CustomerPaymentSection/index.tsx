@@ -182,8 +182,8 @@ const CustomerPaymentSection = () => {
         loading={isMutating}
         loadingPosition="start"
         size="large"
-        variant="contained"
         type="submit"
+        variant="contained"
       >
         下單
       </Button>

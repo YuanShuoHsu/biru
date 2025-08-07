@@ -52,5 +52,11 @@
       "top": "TOP",
       "topSold": "人気商品"
     }
+  },
+  "signIn": {
+    "title": "ログイン",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "submit": "ログイン"
   }
 }

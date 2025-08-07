@@ -21,8 +21,8 @@ const Providers = ({ children, dict }: ProvidersProps) => (
     <AppRouterCacheProvider>
       <ThemeProvider theme={theme}>
         <SnackbarProvider
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           maxSnack={3}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
         >
           {children}
         </SnackbarProvider>

@@ -4,27 +4,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
+import AccountMenu from "./AccountMenu";
+import CartIconButton from "./CartIconButton";
 import HideOnScroll from "./HideOnScroll";
-import MenuAppBar from "./MenuAppBar";
+import LanguageMenu from "./LanguageMenu";
 import ModeToggle from "./ModeToggle";
 
-import CustomizedBadges from "@/components/CustomizedBadges";
-
-import { useI18n } from "@/context/i18n";
-
-import { Menu, ShoppingCart } from "@mui/icons-material";
+import { Menu } from "@mui/icons-material";
 import {
   AppBar,
   Box,
   IconButton,
   Stack,
   Toolbar,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
 
@@ -59,13 +54,9 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
   const { lang, tableNumber } = useParams();
 
-  const dict = useI18n();
-
   const basePath = `/${lang}/order/${tableNumber}`;
   const showShoppingCartButton =
     pathname === basePath || pathname === `${basePath}/checkout`;
-
-  const { totalQuantity } = useCartStore();
 
   return (
     <HideOnScroll>
@@ -105,20 +96,11 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
           </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <ModeToggle />
-            <MenuAppBar />
+            <LanguageMenu />
             {showShoppingCartButton && (
-              <Tooltip title={dict.appBar.cart}>
-                <IconButton
-                  aria-label="cart"
-                  color="inherit"
-                  onClick={onDrawerToggle("cart", true)}
-                >
-                  <CustomizedBadges badgeContent={totalQuantity}>
-                    <ShoppingCart />
-                  </CustomizedBadges>
-                </IconButton>
-              </Tooltip>
+              <CartIconButton onDrawerToggle={onDrawerToggle} />
             )}
+            <AccountMenu />
           </Stack>
         </StyledToolbar>
       </StyledAppBar>

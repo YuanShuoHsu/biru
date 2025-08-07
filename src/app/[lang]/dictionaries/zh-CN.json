@@ -52,5 +52,11 @@
       "top": "TOP",
       "topSold": "人气商品"
     }
+  },
+  "signIn": {
+    "title": "登录",
+    "email": "电子邮件",
+    "password": "密码",
+    "submit": "登录"
   }
 }

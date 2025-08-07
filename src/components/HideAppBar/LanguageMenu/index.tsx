@@ -20,16 +20,18 @@ const languages = [
 ];
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
-  marginTop: 48,
+  marginTop: theme.spacing(6),
+
   [theme.breakpoints.up("sm")]: {
-    marginTop: 56,
+    marginTop: theme.spacing(7),
   },
 }));
 
-const MenuAppBar = () => {
+const LanguageMenu = () => {
   const [anchorElLanguage, setAnchorElLanguage] = useState<null | HTMLElement>(
     null,
   );
+  const open = Boolean(anchorElLanguage);
 
   const pathname = usePathname();
   const { lang: currentLang } = useParams();
@@ -42,45 +44,47 @@ const MenuAppBar = () => {
     return `/${lang}${rest ? `/${rest}` : ""}`;
   };
 
-  const handleOpenLanguageMenu = (event: React.MouseEvent<HTMLElement>) =>
+  const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorElLanguage(event.currentTarget);
 
-  const handleCloseLanguageMenu = () => setAnchorElLanguage(null);
+  const handleClose = () => setAnchorElLanguage(null);
 
   return (
     <>
       <Tooltip title={dict.appBar.languageSwitcher}>
         <IconButton
-          aria-label="language"
-          aria-controls="menu-appbar"
+          aria-controls={open ? "language-menu" : undefined}
+          aria-expanded={open ? "true" : undefined}
           aria-haspopup="true"
+          aria-label="language"
           color="inherit"
-          onClick={handleOpenLanguageMenu}
+          onClick={handleClick}
         >
           <Language />
         </IconButton>
       </Tooltip>
       <StyledMenu
-        id="menu-appbar"
         anchorEl={anchorElLanguage}
         anchorOrigin={{
-          vertical: "top",
           horizontal: "right",
+          vertical: "top",
         }}
+        id="menu-appbar"
         keepMounted
+        onClick={handleClose}
+        onClose={handleClose}
+        open={open}
         transformOrigin={{
-          vertical: "top",
           horizontal: "right",
+          vertical: "top",
         }}
-        open={Boolean(anchorElLanguage)}
-        onClose={handleCloseLanguageMenu}
       >
         {languages.map(({ label, lang }) => (
           <MenuItem
             component={Link}
             href={switchPath(lang)}
             key={lang}
-            onClick={handleCloseLanguageMenu}
+            onClick={handleClose}
             replace
             selected={lang === currentLang}
           >
@@ -92,4 +96,4 @@ const MenuAppBar = () => {
   );
 };
 
-export default MenuAppBar;
+export default LanguageMenu;

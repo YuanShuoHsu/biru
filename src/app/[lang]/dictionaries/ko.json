@@ -52,5 +52,11 @@
       "top": "TOP",
       "topSold": "인기 상품"
     }
+  },
+  "signIn": {
+    "title": "로그인",
+    "email": "이메일",
+    "password": "비밀번호",
+    "submit": "로그인"
   }
 }
