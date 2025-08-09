@@ -93,6 +93,18 @@ const theme = createTheme({
         }),
       },
     },
+    MuiDivider: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "&::before, &::after": {
+            transition: theme.transitions.create(["border-color"]),
+          },
+        }),
+        wrapper: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
     MuiIconButton: {
       styleOverrides: {
         root: ({ theme }) => ({
