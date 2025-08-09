@@ -14,6 +14,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useParams, useRouter } from "next/navigation";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -27,13 +28,13 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  // const { lang } = useParams();
-  // const router = useRouter();
+  const { lang } = useParams();
+  const router = useRouter();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     // if (!user) {
-    // router.push(`/${lang}/sign-in`);
-    // return;
+    router.push(`/${lang}/sign-in`);
+    return;
     // }
 
     setAnchorEl(event.currentTarget);

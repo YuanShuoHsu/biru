@@ -54,9 +54,16 @@
     }
   },
   "signIn": {
-    "title": "Sign In",
+    "createAccount": "Create account",
     "email": "Email",
+    "forgotPassword": "Forgot password",
+    "hidePassword": "Hide the password",
+    "noAccount": "Don't have an account?",
+    "or": "or",
+    "remember": "Remember me",
     "password": "Password",
-    "submit": "Login"
+    "showPassword": "Display the password",
+    "submit": "Login",
+    "title": "Sign In"
   }
 }

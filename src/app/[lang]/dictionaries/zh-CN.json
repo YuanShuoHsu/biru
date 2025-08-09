@@ -54,9 +54,16 @@
     }
   },
   "signIn": {
-    "title": "登录",
+    "createAccount": "创建账号",
     "email": "电子邮件",
+    "forgotPassword": "忘记密码",
+    "hidePassword": "隐藏密码",
+    "noAccount": "还没有账号？",
+    "or": "或",
+    "remember": "记住我",
     "password": "密码",
-    "submit": "登录"
+    "showPassword": "显示密码",
+    "submit": "登录",
+    "title": "登录"
   }
 }

@@ -54,9 +54,16 @@
     }
   },
   "signIn": {
-    "title": "로그인",
+    "createAccount": "계정 만들기",
     "email": "이메일",
+    "forgotPassword": "비밀번호 찾기",
+    "hidePassword": "비밀번호 숨기기",
+    "noAccount": "아직 계정이 없으신가요?",
+    "or": "또는",
+    "remember": "로그인 상태 유지",
     "password": "비밀번호",
-    "submit": "로그인"
+    "showPassword": "비밀번호 표시",
+    "submit": "로그인",
+    "title": "로그인"
   }
 }

@@ -9,7 +9,7 @@ import React, { useState } from "react";
 
 import { useI18n } from "@/context/i18n";
 
-import { CloudUpload } from "@mui/icons-material";
+import { CloudUpload, Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -21,12 +21,15 @@ import {
   Container,
   Divider,
   FormControlLabel,
+  IconButton,
+  InputAdornment,
   Link as MuiLink,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { useParams } from "next/navigation";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
 
@@ -87,8 +90,10 @@ const SignIn = () => {
     remember: false,
   });
 
-  // const { lang } = useParams();
+  const [showPassword, setShowPassword] = useState(false);
   // const router = useRouter();
+
+  const { lang } = useParams();
 
   const dict = useI18n();
 
@@ -98,6 +103,15 @@ const SignIn = () => {
   //   "/api/auth/login",
   //   sendRequest,
   // );
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => event.preventDefault();
+
+  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
+    event.preventDefault();
 
   const handleChange = ({
     target: { checked, name, type, value },
@@ -154,7 +168,7 @@ const SignIn = () => {
               multiple
             />
           </Button>
-          <Divider>或</Divider>
+          <Divider>{dict.signIn.or}</Divider>
           <TextField
             // error={!!state?.errors?.email}
             fullWidth
@@ -179,11 +193,31 @@ const SignIn = () => {
             name="password"
             onChange={handleChange}
             required
-            type="password"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton
+                      aria-label={
+                        showPassword
+                          ? dict.signIn.hidePassword
+                          : dict.signIn.showPassword
+                      }
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                      onMouseUp={handleMouseUpPassword}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+            type={showPassword ? "text" : "password"}
             value={form.password}
           />
           <Stack
-            // display="flex"
             flexDirection="row"
             justifyContent="space-between"
             alignItems="center"
@@ -198,15 +232,16 @@ const SignIn = () => {
                   size="small"
                 />
               }
-              label={<Typography variant="body2">記住我</Typography>}
+              label={
+                <Typography variant="body2">{dict.signIn.remember}</Typography>
+              }
             />
             <MuiLink
               component={NextLink}
-              href=""
-              // href={`/${dict.lang}/forgot-password`}
+              href={`/${lang}/forgot-password`}
               variant="body2"
             >
-              {"忘記密碼"}
+              {dict.signIn.forgotPassword}
             </MuiLink>
           </Stack>
         </StyledCardContent>
@@ -222,9 +257,13 @@ const SignIn = () => {
             {dict.signIn.submit}
           </Button>
           <Stack flexDirection="row" alignItems="center" gap={1}>
-            <Typography variant="body2">還沒有帳號？</Typography>
-            <MuiLink component={NextLink} href="/signup" variant="body2">
-              註冊
+            <Typography variant="body2">{dict.signIn.noAccount}</Typography>
+            <MuiLink
+              component={NextLink}
+              href={`/${lang}/signup`}
+              variant="body2"
+            >
+              {dict.signIn.createAccount}
             </MuiLink>
           </Stack>
         </StyledCardActions>

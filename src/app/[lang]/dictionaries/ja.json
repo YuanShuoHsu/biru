@@ -54,9 +54,16 @@
     }
   },
   "signIn": {
-    "title": "ログイン",
+    "createAccount": "アカウント作成",
     "email": "メールアドレス",
+    "forgotPassword": "パスワードをお忘れですか",
+    "hidePassword": "パスワードを非表示",
+    "noAccount": "アカウントをお持ちでない方",
+    "or": "または",
+    "remember": "ログイン状態を保持",
     "password": "パスワード",
-    "submit": "ログイン"
+    "showPassword": "パスワードを表示",
+    "submit": "ログイン",
+    "title": "ログイン"
   }
 }

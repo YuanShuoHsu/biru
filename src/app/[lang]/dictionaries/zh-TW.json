@@ -54,9 +54,16 @@
     }
   },
   "signIn": {
-    "title": "登入",
+    "createAccount": "建立帳號",
     "email": "電子郵件",
+    "forgotPassword": "忘記密碼",
+    "hidePassword": "隱藏密碼",
+    "noAccount": "還沒有帳號？",
+    "or": "或",
+    "remember": "記住我",
     "password": "密碼",
-    "submit": "登入"
+    "showPassword": "顯示密碼",
+    "submit": "登入",
+    "title": "登入"
   }
 }
