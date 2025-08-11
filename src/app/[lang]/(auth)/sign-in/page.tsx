@@ -133,8 +133,6 @@ const SignIn = () => {
   //   }
   // };
 
-  console.log(form);
-
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (

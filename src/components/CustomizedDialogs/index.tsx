@@ -1,5 +1,6 @@
 // https://mui.com/material-ui/react-dialog/#system-CustomizedDialogs.tsx
 
+import { useSnackbar } from "notistack";
 import { useState } from "react";
 
 import Transition from "@/components/CustomizedDialogs/Transition";
@@ -17,6 +18,8 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/stores/useDialogStore";
+
+import { getErrorMessage } from "@/utils/errors";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -58,6 +61,8 @@ const CustomizedDialogs = () => {
     title,
   } = useDialogStore();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleClose = () => {
     if (loading) return;
 
@@ -73,7 +78,7 @@ const CustomizedDialogs = () => {
       await onCancel?.();
       handleClose();
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     } finally {
       setCancelLoading(false);
     }
@@ -88,7 +93,7 @@ const CustomizedDialogs = () => {
       await onConfirm?.();
       handleClose();
     } catch (error) {
-      console.log(error);
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     } finally {
       setConfirmLoading(false);
     }

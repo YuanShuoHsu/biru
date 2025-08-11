@@ -28,6 +28,7 @@ import type {
 import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 
+import { getErrorMessage } from "@/utils/errors";
 import { getChoiceLabels, getItemName } from "@/utils/menu";
 
 const mapToEcpayLanguage = (() => {
@@ -131,7 +132,7 @@ const CustomerPaymentSection = () => {
         form.submit();
       }
     } catch (error) {
-      enqueueSnackbar(String(error), { variant: "error" });
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
   };
 

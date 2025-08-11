@@ -6,6 +6,8 @@ import type { LocaleCode } from "@/types/locale";
 import type { Category, Choice, MenuItem, Option } from "@/types/menu";
 
 export const getItemKey = (id: string, choices: CartItemChoices): string => {
+  if (!choices) return id;
+
   const parts = Object.entries(choices).flatMap(([key, value]) => {
     if (Array.isArray(value)) return value.sort().map((v) => `${key}:${v}`);
 
