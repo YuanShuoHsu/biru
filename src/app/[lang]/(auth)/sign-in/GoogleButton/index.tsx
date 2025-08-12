@@ -45,6 +45,7 @@ const GoogleButton = ({ redirectPath = "/" }: { redirectPath?: string }) => {
       component={Link}
       fullWidth
       href={href}
+      size="large"
       startIcon={<GoogleIcon />}
       variant="outlined"
     >
