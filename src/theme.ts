@@ -74,6 +74,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
+          textTransform: "none",
           transition: theme.transitions.create([
             "background-color",
             "border-color",
