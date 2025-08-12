@@ -4,6 +4,7 @@ import { SnackbarProvider } from "notistack";
 
 import { I18nDict } from "@/context/i18n";
 
+import { CssBaseline } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 
@@ -17,18 +18,19 @@ interface ProvidersProps {
 }
 
 const Providers = ({ children, dict }: ProvidersProps) => (
-  <I18nProvider dict={dict}>
-    <AppRouterCacheProvider>
-      <ThemeProvider theme={theme}>
+  <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <I18nProvider dict={dict}>
         <SnackbarProvider
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           maxSnack={3}
         >
           {children}
         </SnackbarProvider>
-      </ThemeProvider>
-    </AppRouterCacheProvider>
-  </I18nProvider>
+      </I18nProvider>
+    </ThemeProvider>
+  </AppRouterCacheProvider>
 );
 
 export default Providers;

@@ -9,7 +9,7 @@ import NavTemporaryDrawer from "@/components/NavTemporaryDrawer";
 import ScrollTop from "@/components/ScrollTop";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, BoxProps, CssBaseline, Fab, Toolbar } from "@mui/material";
+import { Box, BoxProps, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
@@ -53,7 +53,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   return (
     <ContainerBox>
-      <CssBaseline />
       <HideAppBar onDrawerToggle={handleDrawerToggle} />
       <Toolbar disableGutters id="back-to-top-anchor" />
       <NavTemporaryDrawer
