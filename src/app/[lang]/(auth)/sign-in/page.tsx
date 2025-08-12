@@ -3,13 +3,15 @@
 "use client";
 
 import NextLink from "next/link";
+import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
 // import { signup } from "./actions/auth";
+import GoogleButton from "./GoogleButton";
 
 import { useI18n } from "@/context/i18n";
 
-import { CloudUpload, Visibility, VisibilityOff } from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -29,7 +31,6 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useParams } from "next/navigation";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
 
@@ -70,18 +71,6 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 //     method: "POST",
 //     body: JSON.stringify(arg),
 //   }).then((res) => res.json());
-
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 
 const SignIn = () => {
   const [form, setForm] = useState({
@@ -152,20 +141,7 @@ const SignIn = () => {
           }
         />
         <StyledCardContent>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUpload />}
-          >
-            Upload files
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(event) => console.log(event.target.files)}
-              multiple
-            />
-          </Button>
+          <GoogleButton />
           <Divider>{dict.signIn.or}</Divider>
           <TextField
             // error={!!state?.errors?.email}
