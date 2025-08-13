@@ -222,7 +222,7 @@ const SignIn = () => {
             </MuiLink>
           </Stack>
         </StyledCardContent>
-        <StyledCardActions>
+        <StyledCardActions disableSpacing>
           <Button
             // disabled={isMutating}
             fullWidth
@@ -233,16 +233,12 @@ const SignIn = () => {
           >
             {dict.auth.signIn}
           </Button>
-          <Stack flexDirection="row" alignItems="center" gap={1}>
-            <Typography variant="body2">{dict.auth.noAccount}</Typography>
-            <MuiLink
-              component={NextLink}
-              href={`/${lang}/sign-up`}
-              variant="body2"
-            >
+          <Typography variant="body2">
+            {dict.auth.noAccount}{" "}
+            <MuiLink component={NextLink} href={`/${lang}/sign-up`}>
               {dict.auth.signUp}
             </MuiLink>
-          </Stack>
+          </Typography>
         </StyledCardActions>
       </StyledCard>
     </StyledContainer>

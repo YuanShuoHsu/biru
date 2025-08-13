@@ -15,6 +15,7 @@ import { useI18n } from "@/context/i18n";
 import GoogleButton from "@/components/GoogleButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -213,7 +214,7 @@ const SignUp = () => {
             value={form.password}
           />
         </StyledCardContent>
-        <StyledCardActions>
+        <StyledCardActions disableSpacing>
           <Button
             // disabled={isMutating}
             fullWidth
@@ -224,6 +225,19 @@ const SignUp = () => {
           >
             {dict.auth.signUp}
           </Button>
+          <Typography variant="caption" color="text.secondary" align="center">
+            By clicking «{dict.auth.signUp}», you agree to Biru Coffee&rsquo;s
+            <Box component="br" />
+            <MuiLink component={NextLink} href={`/${lang}/terms`}>
+              Terms of Service
+            </MuiLink>{" "}
+            and{" "}
+            <MuiLink component={NextLink} href={`/${lang}/privacy`}>
+              Privacy Policy
+            </MuiLink>
+            .
+          </Typography>
+          <Divider flexItem />
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <Typography variant="body2">{dict.auth.hasAccount}</Typography>
             <MuiLink
