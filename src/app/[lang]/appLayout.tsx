@@ -20,7 +20,7 @@ const ContainerBox = styled(Box)({
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
   width: "100%",
-  minHeight: "100vh",
+  minHeight: "100dvh",
   display: "flex",
   flexDirection: "column",
   backgroundColor: theme.vars.palette.background.default,
