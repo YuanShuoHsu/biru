@@ -1,4 +1,6 @@
 // https://nextjs.org/docs/app/guides/authentication
+// https://mui.com/toolpad/core/react-sign-in-page/
+// https://mui.com/store/sign-in/
 
 "use client";
 
@@ -7,7 +9,8 @@ import { useParams } from "next/navigation";
 import React, { useState } from "react";
 
 // import { signup } from "./actions/auth";
-import GoogleButton from "./GoogleButton";
+
+import GoogleButton from "@/components/GoogleButton";
 
 import { useI18n } from "@/context/i18n";
 
@@ -136,18 +139,18 @@ const SignIn = () => {
               textAlign="center"
               variant="h6"
             >
-              {dict.signIn.title}
+              {dict.auth.signIn}
             </Typography>
           }
         />
         <StyledCardContent>
           <GoogleButton />
-          <Divider>{dict.signIn.or}</Divider>
+          <Divider>{dict.auth.or}</Divider>
           <TextField
             // error={!!state?.errors?.email}
             fullWidth
             // helperText={state?.errors?.email}
-            label={dict.signIn.email}
+            label={dict.auth.email}
             name="email"
             onChange={handleChange}
             required
@@ -163,7 +166,7 @@ const SignIn = () => {
             //     ? `Password must: ${state.errors.password.join(", ")}`
             //     : ""
             // }
-            label={dict.signIn.password}
+            label={dict.auth.password}
             name="password"
             onChange={handleChange}
             required
@@ -174,8 +177,8 @@ const SignIn = () => {
                     <IconButton
                       aria-label={
                         showPassword
-                          ? dict.signIn.hidePassword
-                          : dict.signIn.showPassword
+                          ? dict.auth.hidePassword
+                          : dict.auth.showPassword
                       }
                       onClick={handleClickShowPassword}
                       onMouseDown={handleMouseDownPassword}
@@ -207,7 +210,7 @@ const SignIn = () => {
                 />
               }
               label={
-                <Typography variant="body2">{dict.signIn.remember}</Typography>
+                <Typography variant="body2">{dict.auth.remember}</Typography>
               }
             />
             <MuiLink
@@ -215,7 +218,7 @@ const SignIn = () => {
               href={`/${lang}/forgot-password`}
               variant="body2"
             >
-              {dict.signIn.forgotPassword}
+              {dict.auth.forgotPassword}
             </MuiLink>
           </Stack>
         </StyledCardContent>
@@ -228,16 +231,16 @@ const SignIn = () => {
             type="submit"
             variant="contained"
           >
-            {dict.signIn.submit}
+            {dict.auth.signIn}
           </Button>
           <Stack flexDirection="row" alignItems="center" gap={1}>
-            <Typography variant="body2">{dict.signIn.noAccount}</Typography>
+            <Typography variant="body2">{dict.auth.noAccount}</Typography>
             <MuiLink
               component={NextLink}
               href={`/${lang}/sign-up`}
               variant="body2"
             >
-              {dict.signIn.createAccount}
+              {dict.auth.signUp}
             </MuiLink>
           </Stack>
         </StyledCardActions>

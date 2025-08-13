@@ -5,6 +5,19 @@
     "languageSwitcher": "Change Language",
     "lightMode": "Light mode"
   },
+  "auth": {
+    "email": "Email",
+    "forgotPassword": "Forgot password",
+    "hasAccount": "Already have an account?",
+    "hidePassword": "Hide the password",
+    "noAccount": "Don't have an account?",
+    "or": "or",
+    "password": "Password",
+    "remember": "Remember me",
+    "showPassword": "Display the password",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
+  },
   "breadcrumb": {
     "checkout": "Checkout",
     "complete": "Complete",
@@ -52,18 +65,5 @@
       "top": "TOP",
       "topSold": "Best Sellers"
     }
-  },
-  "signIn": {
-    "createAccount": "Create account",
-    "email": "Email",
-    "forgotPassword": "Forgot password",
-    "hidePassword": "Hide the password",
-    "noAccount": "Don't have an account?",
-    "or": "or",
-    "remember": "Remember me",
-    "password": "Password",
-    "showPassword": "Display the password",
-    "submit": "Sign in",
-    "title": "Sign In"
   }
 }

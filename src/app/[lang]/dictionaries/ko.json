@@ -5,6 +5,19 @@
     "languageSwitcher": "언어 변경",
     "lightMode": "라이트 모드"
   },
+  "auth": {
+    "email": "이메일",
+    "forgotPassword": "비밀번호 찾기",
+    "hasAccount": "이미 계정이 있으신가요?",
+    "hidePassword": "비밀번호 숨기기",
+    "noAccount": "아직 계정이 없으신가요?",
+    "or": "또는",
+    "password": "비밀번호",
+    "remember": "로그인 상태 유지",
+    "showPassword": "비밀번호 표시",
+    "signIn": "로그인",
+    "signUp": "가입하기"
+  },
   "breadcrumb": {
     "checkout": "결제",
     "complete": "완료",
@@ -52,18 +65,5 @@
       "top": "TOP",
       "topSold": "인기 상품"
     }
-  },
-  "signIn": {
-    "createAccount": "계정 만들기",
-    "email": "이메일",
-    "forgotPassword": "비밀번호 찾기",
-    "hidePassword": "비밀번호 숨기기",
-    "noAccount": "아직 계정이 없으신가요?",
-    "or": "또는",
-    "remember": "로그인 상태 유지",
-    "password": "비밀번호",
-    "showPassword": "비밀번호 표시",
-    "submit": "로그인",
-    "title": "로그인"
   }
 }

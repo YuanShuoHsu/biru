@@ -5,6 +5,19 @@
     "languageSwitcher": "切換語言",
     "lightMode": "亮色模式"
   },
+  "auth": {
+    "email": "電子郵件",
+    "forgotPassword": "忘記密碼",
+    "hasAccount": "已經有帳號？",
+    "hidePassword": "隱藏密碼",
+    "noAccount": "還沒有帳號？",
+    "or": "或",
+    "password": "密碼",
+    "remember": "記住我",
+    "showPassword": "顯示密碼",
+    "signIn": "登入",
+    "signUp": "註冊"
+  },
   "breadcrumb": {
     "checkout": "結帳",
     "complete": "完成",
@@ -52,18 +65,5 @@
       "top": "TOP",
       "topSold": "人氣商品"
     }
-  },
-  "signIn": {
-    "createAccount": "建立帳號",
-    "email": "電子郵件",
-    "forgotPassword": "忘記密碼",
-    "hidePassword": "隱藏密碼",
-    "noAccount": "還沒有帳號？",
-    "or": "或",
-    "remember": "記住我",
-    "password": "密碼",
-    "showPassword": "顯示密碼",
-    "submit": "登入",
-    "title": "登入"
   }
 }

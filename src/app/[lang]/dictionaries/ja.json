@@ -5,6 +5,19 @@
     "languageSwitcher": "言語を変更",
     "lightMode": "ライトモード"
   },
+  "auth": {
+    "email": "メールアドレス",
+    "forgotPassword": "パスワードをお忘れですか",
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "hidePassword": "パスワードを非表示",
+    "noAccount": "アカウントをお持ちでない方",
+    "or": "または",
+    "password": "パスワード",
+    "remember": "ログイン状態を保持",
+    "showPassword": "パスワードを表示",
+    "signIn": "ログイン",
+    "signUp": "サインアップ"
+  },
   "breadcrumb": {
     "checkout": "お会計",
     "complete": "完了",
@@ -52,18 +65,5 @@
       "top": "TOP",
       "topSold": "人気商品"
     }
-  },
-  "signIn": {
-    "createAccount": "アカウント作成",
-    "email": "メールアドレス",
-    "forgotPassword": "パスワードをお忘れですか",
-    "hidePassword": "パスワードを非表示",
-    "noAccount": "アカウントをお持ちでない方",
-    "or": "または",
-    "remember": "ログイン状態を保持",
-    "password": "パスワード",
-    "showPassword": "パスワードを表示",
-    "submit": "ログイン",
-    "title": "ログイン"
   }
 }
