@@ -50,7 +50,7 @@ const OrderBottomBar = () => {
         position="fixed"
         padding={2}
         left={0}
-        bottom={(theme) => theme.spacing(7)}
+        bottom={0}
         width="100%"
         display="flex"
         justifyContent="center"
