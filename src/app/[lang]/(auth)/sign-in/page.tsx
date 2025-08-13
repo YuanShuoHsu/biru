@@ -144,7 +144,7 @@ const SignIn = () => {
           }
         />
         <StyledCardContent>
-          <GoogleButton />
+          <GoogleButton action="signIn" href="" />
           <Divider>{dict.auth.or}</Divider>
           <TextField
             // error={!!state?.errors?.email}

@@ -7,9 +7,11 @@
   },
   "auth": {
     "email": "電子郵件",
+    "firstName": "名字",
     "forgotPassword": "忘記密碼",
     "hasAccount": "已經有帳號？",
     "hidePassword": "隱藏密碼",
+    "lastName": "姓氏",
     "noAccount": "還沒有帳號？",
     "or": "或",
     "password": "密碼",

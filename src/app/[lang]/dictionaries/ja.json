@@ -7,9 +7,11 @@
   },
   "auth": {
     "email": "メールアドレス",
+    "firstName": "名",
     "forgotPassword": "パスワードをお忘れですか",
     "hasAccount": "すでにアカウントをお持ちですか？",
     "hidePassword": "パスワードを非表示",
+    "lastName": "姓",
     "noAccount": "アカウントをお持ちでない方",
     "or": "または",
     "password": "パスワード",

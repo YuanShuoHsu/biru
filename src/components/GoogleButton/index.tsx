@@ -4,8 +4,6 @@ import Link from "next/link";
 
 import { Button } from "@mui/material";
 
-const API_BASE = process.env.NEXT_PUBLIC_NEST_API_URL!;
-
 const GoogleIcon = () => (
   <svg
     height={24}
@@ -36,12 +34,25 @@ const GoogleIcon = () => (
   </svg>
 );
 
-const GoogleButton = ({ redirectPath = "/" }: { redirectPath?: string }) => {
-  const href = `${API_BASE}/auth/google?redirect=${encodeURIComponent(redirectPath)}`;
+type GoogleAction = "signIn" | "signUp" | "continue";
+
+const ACTION_LABEL: Record<GoogleAction, string> = {
+  signIn: "Sign in",
+  signUp: "Sign up",
+  continue: "Continue",
+};
+
+interface GoogleButtonProps {
+  action: GoogleAction;
+  href: string;
+}
+
+const GoogleButton = ({ action, href }: GoogleButtonProps) => {
+  const label = `${ACTION_LABEL[action]} with Google`;
 
   return (
     <Button
-      aria-label="Sign in with Google"
+      aria-label={label}
       component={Link}
       fullWidth
       href={href}
@@ -49,7 +60,7 @@ const GoogleButton = ({ redirectPath = "/" }: { redirectPath?: string }) => {
       startIcon={<GoogleIcon />}
       variant="outlined"
     >
-      Sign in with Google
+      {label}
     </Button>
   );
 };

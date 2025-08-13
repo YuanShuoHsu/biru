@@ -7,9 +7,11 @@
   },
   "auth": {
     "email": "이메일",
+    "firstName": "이름",
     "forgotPassword": "비밀번호 찾기",
     "hasAccount": "이미 계정이 있으신가요?",
     "hidePassword": "비밀번호 숨기기",
+    "lastName": "성",
     "noAccount": "아직 계정이 없으신가요?",
     "or": "또는",
     "password": "비밀번호",

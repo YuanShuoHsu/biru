@@ -12,6 +12,7 @@ import React, { useState } from "react";
 
 import { useI18n } from "@/context/i18n";
 
+import GoogleButton from "@/components/GoogleButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -21,6 +22,7 @@ import {
   CardHeader,
   CardProps,
   Container,
+  Divider,
   IconButton,
   InputAdornment,
   Link as MuiLink,
@@ -72,15 +74,18 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 const SignUp = () => {
   const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
-    remember: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
   // const router = useRouter();
 
   const { lang } = useParams();
+  const langNameDirection: "row" | "row-reverse" =
+    lang === "en" ? "row" : "row-reverse";
 
   const dict = useI18n();
 
@@ -139,6 +144,26 @@ const SignUp = () => {
           }
         />
         <StyledCardContent>
+          <GoogleButton action="signUp" href="" />
+          <Divider>{dict.auth.or}</Divider>
+          <Stack direction={langNameDirection} spacing={2}>
+            <TextField
+              fullWidth
+              label={dict.auth.firstName}
+              name="firstName"
+              onChange={handleChange}
+              required
+              value={form.firstName}
+            />
+            <TextField
+              fullWidth
+              label={dict.auth.lastName}
+              name="lastName"
+              onChange={handleChange}
+              required
+              value={form.lastName}
+            />
+          </Stack>
           <TextField
             // error={!!state?.errors?.email}
             fullWidth
@@ -210,8 +235,6 @@ const SignUp = () => {
             </MuiLink>
           </Stack>
         </StyledCardActions>
-        {/* <Divider>{dict.auth.or}</Divider>
-        <GoogleButton /> */}
       </StyledCard>
     </StyledContainer>
   );

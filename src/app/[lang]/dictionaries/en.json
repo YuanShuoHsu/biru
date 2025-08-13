@@ -7,9 +7,11 @@
   },
   "auth": {
     "email": "Email",
+    "firstName": "First Name",
     "forgotPassword": "Forgot password",
     "hasAccount": "Already have an account?",
     "hidePassword": "Hide the password",
+    "lastName": "Last Name",
     "noAccount": "Don't have an account?",
     "or": "or",
     "password": "Password",

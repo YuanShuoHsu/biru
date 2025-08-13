@@ -7,9 +7,11 @@
   },
   "auth": {
     "email": "电子邮件",
+    "firstName": "名字",
     "forgotPassword": "忘记密码",
     "hasAccount": "已经有账号？",
     "hidePassword": "隐藏密码",
+    "lastName": "姓氏",
     "noAccount": "还没有账号？",
     "or": "或",
     "password": "密码",
