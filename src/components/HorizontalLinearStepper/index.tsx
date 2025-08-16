@@ -9,6 +9,8 @@ import { useI18n } from "@/context/i18n";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { LangTableNumberParam } from "@/types/locale";
+
 const createStepPathMap = (tableNumber: string): string[] => [
   `/order/${tableNumber}`,
   `/order/${tableNumber}/checkout`,
@@ -37,11 +39,11 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
 
 const HorizontalLinearStepper = () => {
   const pathname = usePathname();
-  const { lang, tableNumber } = useParams();
+  const { lang, tableNumber } = useParams<LangTableNumberParam>();
 
   const dict = useI18n();
 
-  const stepPaths = createStepPathMap(String(tableNumber));
+  const stepPaths = createStepPathMap(tableNumber);
   const activeStep = stepPaths.findIndex(
     (path) => pathname === `/${lang}${path}`,
   );

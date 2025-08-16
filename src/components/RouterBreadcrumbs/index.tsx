@@ -11,6 +11,10 @@ import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { LangTableNumberParam } from "@/types/locale";
+
+import { interpolate } from "@/utils/i18n";
+
 interface BreadcrumbItem {
   icon: React.ComponentType<SvgIconProps>;
   label: string;
@@ -30,7 +34,10 @@ const createBreadcrumbMap = (
   },
   [`/order/${tableNumber}`]: {
     icon: TableBar,
-    label: `${tableNumber}`,
+    label:
+      tableNumber === "0"
+        ? interpolate(dict.order.takeout, { number: 0 })
+        : tableNumber,
   },
   [`/order/${tableNumber}/checkout`]: {
     icon: Payment,
@@ -71,10 +78,10 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang, tableNumber } = useParams();
+  const { lang, tableNumber } = useParams<LangTableNumberParam>();
 
   const dict = useI18n();
-  const breadcrumbs = createBreadcrumbMap(dict, String(tableNumber));
+  const breadcrumbs = createBreadcrumbMap(dict, tableNumber);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
