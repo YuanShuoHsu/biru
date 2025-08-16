@@ -76,10 +76,10 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             >
               <Menu />
             </IconButton>
-            <Stack
+            <Box
               component={Link}
               href={`/${lang}`}
-              flexDirection="row"
+              display="flex"
               alignItems="center"
               gap={1}
               overflow="hidden"
@@ -98,7 +98,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <Typography component="span" noWrap variant="h6">
                 Biru Coffee
               </Typography>
-            </Stack>
+            </Box>
           </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <ModeToggle />
