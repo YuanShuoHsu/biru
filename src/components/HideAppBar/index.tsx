@@ -1,7 +1,7 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
 import Image from "next/image";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import AccountMenu from "./AccountMenu";
@@ -15,6 +15,7 @@ import {
   AppBar,
   Box,
   IconButton,
+  Link as MuiLink,
   Stack,
   Toolbar,
   Typography,
@@ -76,13 +77,15 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
             >
               <Menu />
             </IconButton>
-            <Box
-              component={Link}
+            <MuiLink
+              color="inherit"
+              component={NextLink}
               href={`/${lang}`}
               display="flex"
               alignItems="center"
               gap={1}
               overflow="hidden"
+              underline="none"
             >
               <ImageBox>
                 <Image
@@ -98,7 +101,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <Typography component="span" noWrap variant="h6">
                 Biru Coffee
               </Typography>
-            </Box>
+            </MuiLink>
           </Stack>
           <Stack direction="row" alignItems="center" gap={0.5}>
             <ModeToggle />
