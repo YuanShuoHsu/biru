@@ -1,4 +1,4 @@
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 
 import { I18nDict, useI18n } from "@/context/i18n";
@@ -15,10 +15,10 @@ import {
   Divider,
   Drawer,
   IconButton,
-  Link,
   List,
   ListItem,
   ListItemButton,
+  ListItemButtonProps,
   ListItemIcon,
   ListItemText,
   Toolbar,
@@ -30,6 +30,16 @@ import type { DrawerType } from "@/types/drawer";
 const StyledBox = styled(Box)({
   width: 250,
 });
+
+interface StyledListItemButtonProps extends ListItemButtonProps {
+  depth: number;
+}
+
+const StyledListItemButton = styled(ListItemButton, {
+  shouldForwardProp: (prop) => prop !== "depth",
+})<StyledListItemButtonProps>(({ depth, theme }) => ({
+  paddingLeft: theme.spacing(2 + depth * 2),
+}));
 
 interface NavItem {
   children?: NavItem[];
@@ -57,6 +67,7 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const pathname = usePathname();
   const { lang } = useParams();
+  const router = useRouter();
 
   const dict = useI18n();
   const navItems = getNavItems(dict);
@@ -76,8 +87,6 @@ const NavTemporaryDrawer = ({
         ? pathname === fullPath
         : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
 
-      const paddingLeft = 2 + depth * 2;
-
       return (
         <Fragment key={href}>
           <ListItem
@@ -94,17 +103,16 @@ const NavTemporaryDrawer = ({
               )
             }
           >
-            <ListItemButton
-              component={Link}
-              href={fullPath}
+            <StyledListItemButton
+              depth={depth}
+              onClick={() => router.push(fullPath)}
               selected={selected}
-              sx={{ pl: paddingLeft }}
             >
               <ListItemIcon>
                 <Icon />
               </ListItemIcon>
               <ListItemText primary={text} />
-            </ListItemButton>
+            </StyledListItemButton>
           </ListItem>
           {hasChildren && (
             <Collapse in={openMap[href]} timeout="auto" unmountOnExit>
@@ -120,7 +128,7 @@ const NavTemporaryDrawer = ({
   const drawerList = (
     <StyledBox
       onClick={onDrawerToggle("nav", false)}
-      // onKeyDown={onDrawerToggle("nav", false)}
+      onKeyDown={onDrawerToggle("nav", false)}
       role="presentation"
     >
       <Toolbar />
