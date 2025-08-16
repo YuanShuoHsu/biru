@@ -27,7 +27,7 @@
     "showNewPassword": "새 비밀번호 표시",
     "showPassword": "비밀번호 표시",
     "signIn": "로그인",
-    "signUp": "가입하기"
+    "signUp": "회원가입"
   },
   "breadcrumb": {
     "checkout": "결제",
@@ -63,7 +63,10 @@
   },
   "nav": {
     "home": "홈",
-    "order": "주문"
+    "member": "회원",
+    "order": "주문",
+    "signIn": "로그인",
+    "signUp": "회원가입"
   },
   "order": {
     "selectTable": "테이블 선택",

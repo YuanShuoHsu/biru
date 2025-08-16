@@ -63,7 +63,10 @@
   },
   "nav": {
     "home": "Home",
-    "order": "Order"
+    "member": "Member",
+    "order": "Order",
+    "signIn": "Sign in",
+    "signUp": "Sign up"
   },
   "order": {
     "selectTable": "Select a table",

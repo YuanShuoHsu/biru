@@ -63,7 +63,10 @@
   },
   "nav": {
     "home": "首頁",
-    "order": "訂單"
+    "member": "會員",
+    "order": "訂單",
+    "signIn": "登入",
+    "signUp": "註冊"
   },
   "order": {
     "selectTable": "選擇桌號",

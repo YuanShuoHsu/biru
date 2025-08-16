@@ -63,7 +63,10 @@
   },
   "nav": {
     "home": "首页",
-    "order": "订单"
+    "member": "会员",
+    "order": "订单",
+    "signIn": "登录",
+    "signUp": "注册"
   },
   "order": {
     "selectTable": "选择桌号",

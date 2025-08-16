@@ -1,12 +1,18 @@
+// https://mui.com/material-ui/react-drawer/#AnchorTemporaryDrawer.tsx
+// https://mui.com/material-ui/react-list/#NestedList.tsx
+
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 
 import { I18nDict, useI18n } from "@/context/i18n";
 
 import {
+  AccountCircle,
   ExpandLess,
   ExpandMore,
   Home,
+  Login,
+  Person,
   ShoppingCart,
 } from "@mui/icons-material";
 import {
@@ -14,9 +20,7 @@ import {
   Collapse,
   Divider,
   Drawer,
-  IconButton,
   List,
-  ListItem,
   ListItemButton,
   ListItemButtonProps,
   ListItemIcon,
@@ -51,6 +55,26 @@ interface NavItem {
 const getNavItems = (dict: I18nDict): NavItem[] => [
   { href: "", icon: Home, text: dict.nav.home },
   { href: "/order", icon: ShoppingCart, text: dict.nav.order },
+  {
+    children: [
+      {
+        // auth: "guest",
+        href: "/sign-in",
+        icon: Login,
+        text: dict.nav.signIn,
+      },
+      {
+        // auth: "guest",
+        href: "/sign-up",
+        icon: Person,
+        text: dict.nav.signUp,
+      },
+    ],
+    href: "/member",
+    icon: AccountCircle,
+    text: dict.nav.member,
+    // auth: "any",
+  },
 ];
 
 interface NavTemporaryDrawerProps {
@@ -80,6 +104,7 @@ const NavTemporaryDrawer = ({
   const renderItems = (items: NavItem[], depth = 0) =>
     items.map(({ children, href, icon: Icon, text }) => {
       const hasChildren = children?.length;
+      const open = openMap[href];
 
       const fullPath = `/${lang}${href}`;
       const isHome = href === "";
@@ -87,35 +112,31 @@ const NavTemporaryDrawer = ({
         ? pathname === fullPath
         : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
 
+      const handleListItemButtonClick = (event: React.MouseEvent) => {
+        if (hasChildren) {
+          event.stopPropagation();
+          handleIconButtonToggle(href);
+          return;
+        }
+
+        router.push(fullPath);
+      };
+
       return (
         <Fragment key={href}>
-          <ListItem
-            disablePadding
-            secondaryAction={
-              hasChildren && (
-                <IconButton
-                  edge="end"
-                  onClick={() => handleIconButtonToggle(href)}
-                  size="small"
-                >
-                  {openMap[href] ? <ExpandLess /> : <ExpandMore />}
-                </IconButton>
-              )
-            }
+          <StyledListItemButton
+            depth={depth}
+            onClick={handleListItemButtonClick}
+            selected={selected}
           >
-            <StyledListItemButton
-              depth={depth}
-              onClick={() => router.push(fullPath)}
-              selected={selected}
-            >
-              <ListItemIcon>
-                <Icon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </StyledListItemButton>
-          </ListItem>
+            <ListItemIcon>
+              <Icon />
+            </ListItemIcon>
+            <ListItemText primary={text} />
+            {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
+          </StyledListItemButton>
           {hasChildren && (
-            <Collapse in={openMap[href]} timeout="auto" unmountOnExit>
+            <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {renderItems(children!, depth + 1)}
               </List>
@@ -133,7 +154,7 @@ const NavTemporaryDrawer = ({
     >
       <Toolbar />
       <Divider />
-      <List>{renderItems(navItems)}</List>
+      <List component="nav">{renderItems(navItems)}</List>
     </StyledBox>
   );
 

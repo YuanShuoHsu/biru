@@ -27,7 +27,7 @@
     "showNewPassword": "新しいパスワードを表示",
     "showPassword": "パスワードを表示",
     "signIn": "ログイン",
-    "signUp": "サインアップ"
+    "signUp": "新規登録"
   },
   "breadcrumb": {
     "checkout": "お会計",
@@ -63,7 +63,10 @@
   },
   "nav": {
     "home": "ホーム",
-    "order": "注文"
+    "member": "会員",
+    "order": "注文",
+    "signIn": "ログイン",
+    "signUp": "新規登録"
   },
   "order": {
     "selectTable": "テーブルを選択",
