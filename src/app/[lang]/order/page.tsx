@@ -12,7 +12,10 @@ import { styled } from "@mui/material/styles";
 
 const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   minWidth: 0,
+  height: "100%",
   backgroundColor: theme.vars.palette.background.paper,
+  flexWrap: "wrap",
+  wordBreak: "break-word",
 }));
 
 const Order = () => {
@@ -22,7 +25,9 @@ const Order = () => {
 
   return (
     <Stack gap={2}>
-      <Typography variant="h6">{dict.order.selectTable}</Typography>
+      <Typography color="text.primary" variant="h6">
+        {dict.order.selectTable}
+      </Typography>
       <Grid container spacing={2}>
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
           (number) => (
@@ -33,7 +38,18 @@ const Order = () => {
                 href={`/${lang}/order/${number}`}
                 variant="outlined"
               >
-                {number}
+                {number === 0 ? (
+                  <>
+                    <Typography component="span" variant="inherit">
+                      {number}
+                    </Typography>
+                    <Typography component="span" variant="inherit">
+                      {dict.order.takeout}
+                    </Typography>
+                  </>
+                ) : (
+                  number
+                )}
               </StyledButton>
             </Grid>
           ),
