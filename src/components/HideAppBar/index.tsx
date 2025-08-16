@@ -62,7 +62,12 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
     <HideOnScroll>
       <StyledAppBar>
         <StyledToolbar>
-          <Stack flexDirection="row" alignItems="center" gap={1}>
+          <Stack
+            flexDirection="row"
+            alignItems="center"
+            gap={1}
+            overflow="hidden"
+          >
             <IconButton
               aria-label="open drawer"
               color="inherit"
@@ -77,6 +82,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               flexDirection="row"
               alignItems="center"
               gap={1}
+              overflow="hidden"
             >
               <ImageBox>
                 <Image
@@ -89,7 +95,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
                   style={{ objectFit: "cover" }}
                 />
               </ImageBox>
-              <Typography component="span" variant="h6">
+              <Typography component="span" noWrap variant="h6">
                 Biru Coffee
               </Typography>
             </Stack>
