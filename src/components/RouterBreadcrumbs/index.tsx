@@ -36,7 +36,7 @@ const createBreadcrumbMap = (
     icon: TableBar,
     label:
       tableNumber === "0"
-        ? interpolate(dict.order.takeout, { number: 0 })
+        ? interpolate(dict.order.takeout, { number: tableNumber })
         : tableNumber,
   },
   [`/order/${tableNumber}/checkout`]: {
@@ -66,6 +66,8 @@ const iconTextBaseStyles = (theme: Theme) => ({
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
+  textAlign: "center",
+  wordBreak: "keep-all",
 
   "& .MuiSvgIcon-root": {
     transition: "none",
