@@ -12,7 +12,7 @@ import {
   ExpandMore,
   Home,
   Login,
-  Person,
+  PersonAdd,
   ShoppingCart,
 } from "@mui/icons-material";
 import {
@@ -56,6 +56,7 @@ const getNavItems = (dict: I18nDict): NavItem[] => [
   { href: "", icon: Home, text: dict.nav.home },
   { href: "/order", icon: ShoppingCart, text: dict.nav.order },
   {
+    // auth: "any",
     children: [
       {
         // auth: "guest",
@@ -66,14 +67,13 @@ const getNavItems = (dict: I18nDict): NavItem[] => [
       {
         // auth: "guest",
         href: "/sign-up",
-        icon: Person,
+        icon: PersonAdd,
         text: dict.nav.signUp,
       },
     ],
     href: "/member",
     icon: AccountCircle,
     text: dict.nav.member,
-    // auth: "any",
   },
 ];
 
