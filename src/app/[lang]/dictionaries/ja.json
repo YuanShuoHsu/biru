@@ -76,6 +76,6 @@
       "top": "TOP",
       "topSold": "人気商品"
     },
-    "takeout": "{number}（持ち帰り）"
+    "takeout": "{tableNumber}（持ち帰り）"
   }
 }

@@ -76,6 +76,6 @@
       "top": "TOP",
       "topSold": "人气商品"
     },
-    "takeout": "{number}（外卖）"
+    "takeout": "{tableNumber}（外卖）"
   }
 }

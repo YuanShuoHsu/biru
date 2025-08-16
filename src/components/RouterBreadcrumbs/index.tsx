@@ -6,7 +6,13 @@ import { useParams, usePathname } from "next/navigation";
 
 import { I18nDict, useI18n } from "@/context/i18n";
 
-import { Payment, Pets, ShoppingCart, TableBar } from "@mui/icons-material";
+import {
+  LocalMall,
+  Payment,
+  Pets,
+  ShoppingCart,
+  TableBar,
+} from "@mui/icons-material";
 import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -23,31 +29,34 @@ interface BreadcrumbItem {
 const createBreadcrumbMap = (
   dict: I18nDict,
   tableNumber: string,
-): Record<string, BreadcrumbItem> => ({
-  // "/": {
-  //   icon: Home,
-  //   label: "Home",
-  // },
-  "/order": {
-    icon: ShoppingCart,
-    label: dict.breadcrumb.order,
-  },
-  [`/order/${tableNumber}`]: {
-    icon: TableBar,
-    label:
-      tableNumber === "0"
-        ? interpolate(dict.order.takeout, { number: tableNumber })
+): Record<string, BreadcrumbItem> => {
+  const isTakeout = tableNumber === "0";
+
+  return {
+    // "/": {
+    //   icon: Home,
+    //   label: "Home",
+    // },
+    "/order": {
+      icon: ShoppingCart,
+      label: dict.breadcrumb.order,
+    },
+    [`/order/${tableNumber}`]: {
+      icon: isTakeout ? LocalMall : TableBar,
+      label: isTakeout
+        ? interpolate(dict.order.takeout, { tableNumber })
         : tableNumber,
-  },
-  [`/order/${tableNumber}/checkout`]: {
-    icon: Payment,
-    label: dict.breadcrumb.checkout,
-  },
-  [`/order/${tableNumber}/complete`]: {
-    icon: Pets,
-    label: dict.breadcrumb.complete,
-  },
-});
+    },
+    [`/order/${tableNumber}/checkout`]: {
+      icon: Payment,
+      label: dict.breadcrumb.checkout,
+    },
+    [`/order/${tableNumber}/complete`]: {
+      icon: Pets,
+      label: dict.breadcrumb.complete,
+    },
+  };
+};
 
 interface LinkRouterProps extends LinkProps {
   to: string;

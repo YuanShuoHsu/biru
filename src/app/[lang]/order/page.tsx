@@ -32,19 +32,19 @@ const Order = () => {
       </Typography>
       <Grid container spacing={2}>
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
-          (number) => (
-            <Grid key={number} size={{ xs: 4, sm: 3, md: 2, xl: 1 }}>
+          (tableNumber) => (
+            <Grid key={tableNumber} size={{ xs: 4, sm: 3, md: 2, xl: 1 }}>
               <StyledButton
                 component={Link}
                 fullWidth
-                href={`/${lang}/order/${number}`}
+                href={`/${lang}/order/${tableNumber}`}
                 variant="outlined"
               >
-                {number === 0
+                {tableNumber === 0
                   ? interpolate(dict.order.takeout, {
-                      number,
+                      tableNumber,
                     })
-                  : number}
+                  : tableNumber}
               </StyledButton>
             </Grid>
           ),

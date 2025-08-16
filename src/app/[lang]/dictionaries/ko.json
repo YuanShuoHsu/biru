@@ -76,6 +76,6 @@
       "top": "TOP",
       "topSold": "인기 상품"
     },
-    "takeout": "{number} (테이크아웃)"
+    "takeout": "{tableNumber} (테이크아웃)"
   }
 }
