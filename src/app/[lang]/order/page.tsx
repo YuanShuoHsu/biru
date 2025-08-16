@@ -10,12 +10,14 @@ import { useI18n } from "@/context/i18n";
 import { Button, ButtonProps, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { interpolate } from "@/utils/i18n";
+
 const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
   minWidth: 0,
   height: "100%",
   backgroundColor: theme.vars.palette.background.paper,
-  flexWrap: "wrap",
-  wordBreak: "break-word",
+  textAlign: "center",
+  wordBreak: "keep-all",
 }));
 
 const Order = () => {
@@ -38,18 +40,11 @@ const Order = () => {
                 href={`/${lang}/order/${number}`}
                 variant="outlined"
               >
-                {number === 0 ? (
-                  <>
-                    <Typography component="span" variant="inherit">
-                      {number}
-                    </Typography>
-                    <Typography component="span" variant="inherit">
-                      {dict.order.takeout}
-                    </Typography>
-                  </>
-                ) : (
-                  number
-                )}
+                {number === 0
+                  ? interpolate(dict.order.takeout, {
+                      number,
+                    })
+                  : number}
               </StyledButton>
             </Grid>
           ),

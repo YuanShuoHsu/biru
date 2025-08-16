@@ -76,6 +76,6 @@
       "top": "TOP",
       "topSold": "Best Sellers"
     },
-    "takeout": "(Takeout)"
+    "takeout": "{number} (Takeout)"
   }
 }

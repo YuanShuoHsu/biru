@@ -76,6 +76,6 @@
       "top": "TOP",
       "topSold": "人氣商品"
     },
-    "takeout": "（外帶）"
+    "takeout": "{number}（外帶）"
   }
 }
