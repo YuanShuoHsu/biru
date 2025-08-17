@@ -37,44 +37,44 @@ const StyledBox = styled(Box)({
 });
 
 interface StyledListItemButtonProps extends ListItemButtonProps {
-  depth: number;
+  level: number;
 }
 
 const StyledListItemButton = styled(ListItemButton, {
-  shouldForwardProp: (prop) => prop !== "depth",
-})<StyledListItemButtonProps>(({ depth, theme }) => ({
-  paddingLeft: theme.spacing(2 + depth * 2),
+  shouldForwardProp: (prop) => prop !== "level",
+})<StyledListItemButtonProps>(({ level, theme }) => ({
+  paddingLeft: theme.spacing(2 + level * 2),
 }));
 
 interface NavItem {
   children?: NavItem[];
-  href: string;
   icon: React.ComponentType;
   label: string;
+  to: string;
 }
 
 const navItemsMap = (dict: I18nDict): NavItem[] => [
-  { href: "", icon: Home, label: dict.nav.home },
-  { href: "/order", icon: ShoppingCart, label: dict.nav.order },
+  { icon: Home, label: dict.nav.home, to: "" },
+  { icon: ShoppingCart, label: dict.nav.order, to: "/order" },
   {
     // auth: "any",
     children: [
       {
         // auth: "guest",
-        href: "/member/sign-in",
         icon: Login,
         label: dict.nav.signIn,
+        to: "/member/sign-in",
       },
       {
         // auth: "guest",
-        href: "/member/sign-up",
         icon: PersonAdd,
         label: dict.nav.signUp,
+        to: "/member/sign-up",
       },
     ],
-    href: "/member",
     icon: AccountCircle,
     label: dict.nav.member,
+    to: "/member",
   },
 ];
 
@@ -99,16 +99,16 @@ const NavTemporaryDrawer = ({
 
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
-  const handleIconButtonToggle = (href: string) =>
-    setOpenMap((prev) => ({ ...prev, [href]: !prev[href] }));
+  const handleIconButtonToggle = (to: string) =>
+    setOpenMap((prev) => ({ ...prev, [to]: !prev[to] }));
 
-  const renderItems = (items: NavItem[], depth = 0) =>
-    items.map(({ children, href, icon: Icon, label }) => {
+  const renderItems = (items: NavItem[], level = 0) =>
+    items.map(({ children, icon: Icon, label, to }) => {
       const hasChildren = children?.length;
-      const open = openMap[href];
+      const open = openMap[to];
 
-      const fullPath = `/${lang}${href}`;
-      const isHome = href === "";
+      const fullPath = `/${lang}${to}`;
+      const isHome = to === "";
       const selected = isHome
         ? pathname === fullPath
         : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
@@ -116,7 +116,7 @@ const NavTemporaryDrawer = ({
       const handleListItemButtonClick = (event: React.MouseEvent) => {
         if (hasChildren) {
           event.stopPropagation();
-          handleIconButtonToggle(href);
+          handleIconButtonToggle(to);
           return;
         }
 
@@ -124,9 +124,9 @@ const NavTemporaryDrawer = ({
       };
 
       return (
-        <Fragment key={href}>
+        <Fragment key={to}>
           <StyledListItemButton
-            depth={depth}
+            level={level}
             onClick={handleListItemButtonClick}
             selected={selected}
           >
@@ -139,7 +139,7 @@ const NavTemporaryDrawer = ({
           {hasChildren && (
             <Collapse component="li" in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                {renderItems(children!, depth + 1)}
+                {renderItems(children!, level + 1)}
               </List>
             </Collapse>
           )}
