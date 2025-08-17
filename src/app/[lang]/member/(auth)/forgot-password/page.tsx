@@ -19,7 +19,6 @@ import {
   CardContent,
   CardHeader,
   CardProps,
-  Container,
   Link as MuiLink,
   TextField,
   Typography,
@@ -27,14 +26,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
-
-const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 const StyledCard = styled(Card)<CardProps<"form">>({
   width: "100%",
@@ -108,54 +99,52 @@ const ForgortPassword = () => {
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledContainer maxWidth="sm" disableGutters>
-      <StyledCard component="form">
-        {/* action={action} */}
-        <StyledCardHeader
-          title={
-            <Typography
-              color="primary"
-              fontWeight="bold"
-              textAlign="center"
-              variant="h6"
-            >
-              {dict.auth.forgotPassword}
-            </Typography>
-          }
-        />
-        <StyledCardContent>
-          <TextField
-            // error={!!state?.errors?.email}
-            fullWidth
-            // helperText={state?.errors?.email}
-            label={dict.auth.email}
-            name="email"
-            onChange={handleChange}
-            required
-            type="email"
-            value={form.email}
-          />
-        </StyledCardContent>
-        <StyledCardActions disableSpacing>
-          <Button
-            // disabled={isMutating}
-            fullWidth
-            // loading={isMutating}
-            size="large"
-            type="submit"
-            variant="contained"
+    <StyledCard component="form">
+      {/* action={action} */}
+      <StyledCardHeader
+        title={
+          <Typography
+            color="primary"
+            fontWeight="bold"
+            textAlign="center"
+            variant="h6"
           >
-            {dict.auth.sendPasswordResetLink}
-          </Button>
-          <Typography variant="body2">
-            {dict.auth.rememberedPassword}{" "}
-            <MuiLink component={NextLink} href={`/${lang}/member/sign-in`}>
-              {dict.auth.signIn}
-            </MuiLink>
+            {dict.auth.forgotPassword}
           </Typography>
-        </StyledCardActions>
-      </StyledCard>
-    </StyledContainer>
+        }
+      />
+      <StyledCardContent>
+        <TextField
+          // error={!!state?.errors?.email}
+          fullWidth
+          // helperText={state?.errors?.email}
+          label={dict.auth.email}
+          name="email"
+          onChange={handleChange}
+          required
+          type="email"
+          value={form.email}
+        />
+      </StyledCardContent>
+      <StyledCardActions disableSpacing>
+        <Button
+          // disabled={isMutating}
+          fullWidth
+          // loading={isMutating}
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          {dict.auth.sendPasswordResetLink}
+        </Button>
+        <Typography variant="body2">
+          {dict.auth.rememberedPassword}{" "}
+          <MuiLink component={NextLink} href={`/${lang}/member/sign-in`}>
+            {dict.auth.signIn}
+          </MuiLink>
+        </Typography>
+      </StyledCardActions>
+    </StyledCard>
   );
 };
 

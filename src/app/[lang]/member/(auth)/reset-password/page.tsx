@@ -20,7 +20,6 @@ import {
   CardContent,
   CardHeader,
   CardProps,
-  Container,
   IconButton,
   InputAdornment,
   Link as MuiLink,
@@ -30,14 +29,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
-
-const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 const StyledCard = styled(Card)<CardProps<"form">>({
   width: "100%",
@@ -127,136 +118,134 @@ const ResetPassword = () => {
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledContainer maxWidth="sm" disableGutters>
-      <StyledCard component="form">
-        {/* action={action} */}
-        <StyledCardHeader
-          title={
-            <Typography
-              color="primary"
-              fontWeight="bold"
-              textAlign="center"
-              variant="h6"
-            >
-              {dict.auth.resetPassword}
-            </Typography>
-          }
-        />
-        <StyledCardContent>
-          <TextField
-            // error={!!state?.errors?.email}
-            fullWidth
-            // helperText={state?.errors?.email}
-            label={dict.auth.email}
-            name="email"
-            onChange={handleChange}
-            required
-            type="email"
-            value={form.email}
-          />
-          <TextField
-            // error={!!state?.errors?.newPassword}
-            fullWidth
-            // 這邊可能會需要修正
-            // helperText={
-            //   state?.errors?.newPassword?.length
-            //     ? `Password must: ${state.errors.newPassword.join(", ")}`
-            //     : ""
-            // }
-            label={dict.auth.newPassword}
-            name="newPassword"
-            onChange={handleChange}
-            required
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label={
-                        showPassword.newPassword
-                          ? dict.auth.hideNewPassword
-                          : dict.auth.showNewPassword
-                      }
-                      onClick={handleClickShowPassword("newPassword")}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
-                    >
-                      {showPassword.newPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-            type={showPassword.newPassword ? "text" : "password"}
-            value={form.newPassword}
-          />
-          <TextField
-            // error={!!state?.errors?.newPassword}
-            fullWidth
-            // 這邊可能會需要修正
-            // helperText={
-            //   state?.errors?.newPassword?.length
-            //     ? `Password must: ${state.errors.newPassword.join(", ")}`
-            //     : ""
-            // }
-            label={dict.auth.confirmNewPassword}
-            name="confirmNewPassword"
-            onChange={handleChange}
-            required
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label={
-                        showPassword.confirmNewPassword
-                          ? dict.auth.hideConfirmNewPassword
-                          : dict.auth.showConfirmNewPassword
-                      }
-                      onClick={handleClickShowPassword("confirmNewPassword")}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
-                    >
-                      {showPassword.confirmNewPassword ? (
-                        <VisibilityOff />
-                      ) : (
-                        <Visibility />
-                      )}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-            type={showPassword.confirmNewPassword ? "text" : "password"}
-            value={form.confirmNewPassword}
-          />
-        </StyledCardContent>
-        <StyledCardActions disableSpacing>
-          <Button
-            // disabled={isMutating}
-            fullWidth
-            // loading={isMutating}
-            size="large"
-            type="submit"
-            variant="contained"
+    <StyledCard component="form">
+      {/* action={action} */}
+      <StyledCardHeader
+        title={
+          <Typography
+            color="primary"
+            fontWeight="bold"
+            textAlign="center"
+            variant="h6"
           >
             {dict.auth.resetPassword}
-          </Button>
-          <Typography variant="body2">
-            {dict.auth.noAccount}{" "}
-            <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-              {dict.auth.signUp}
-            </MuiLink>
           </Typography>
-        </StyledCardActions>
-      </StyledCard>
-    </StyledContainer>
+        }
+      />
+      <StyledCardContent>
+        <TextField
+          // error={!!state?.errors?.email}
+          fullWidth
+          // helperText={state?.errors?.email}
+          label={dict.auth.email}
+          name="email"
+          onChange={handleChange}
+          required
+          type="email"
+          value={form.email}
+        />
+        <TextField
+          // error={!!state?.errors?.newPassword}
+          fullWidth
+          // 這邊可能會需要修正
+          // helperText={
+          //   state?.errors?.newPassword?.length
+          //     ? `Password must: ${state.errors.newPassword.join(", ")}`
+          //     : ""
+          // }
+          label={dict.auth.newPassword}
+          name="newPassword"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword.newPassword
+                        ? dict.auth.hideNewPassword
+                        : dict.auth.showNewPassword
+                    }
+                    onClick={handleClickShowPassword("newPassword")}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword.newPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword.newPassword ? "text" : "password"}
+          value={form.newPassword}
+        />
+        <TextField
+          // error={!!state?.errors?.newPassword}
+          fullWidth
+          // 這邊可能會需要修正
+          // helperText={
+          //   state?.errors?.newPassword?.length
+          //     ? `Password must: ${state.errors.newPassword.join(", ")}`
+          //     : ""
+          // }
+          label={dict.auth.confirmNewPassword}
+          name="confirmNewPassword"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword.confirmNewPassword
+                        ? dict.auth.hideConfirmNewPassword
+                        : dict.auth.showConfirmNewPassword
+                    }
+                    onClick={handleClickShowPassword("confirmNewPassword")}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword.confirmNewPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword.confirmNewPassword ? "text" : "password"}
+          value={form.confirmNewPassword}
+        />
+      </StyledCardContent>
+      <StyledCardActions disableSpacing>
+        <Button
+          // disabled={isMutating}
+          fullWidth
+          // loading={isMutating}
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          {dict.auth.resetPassword}
+        </Button>
+        <Typography variant="body2">
+          {dict.auth.noAccount}{" "}
+          <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
+            {dict.auth.signUp}
+          </MuiLink>
+        </Typography>
+      </StyledCardActions>
+    </StyledCard>
   );
 };
 

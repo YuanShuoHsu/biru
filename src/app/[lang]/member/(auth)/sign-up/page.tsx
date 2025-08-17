@@ -22,7 +22,6 @@ import {
   CardContent,
   CardHeader,
   CardProps,
-  Container,
   Divider,
   IconButton,
   InputAdornment,
@@ -34,14 +33,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
-
-const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 const StyledCard = styled(Card)<CardProps<"form">>({
   width: "100%",
@@ -129,128 +120,126 @@ const SignUp = () => {
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledContainer maxWidth="sm" disableGutters>
-      <StyledCard component="form">
-        {/* action={action} */}
-        <StyledCardHeader
-          title={
-            <Typography
-              color="primary"
-              fontWeight="bold"
-              textAlign="center"
-              variant="h6"
-            >
-              {dict.auth.signUp}
-            </Typography>
-          }
-        />
-        <StyledCardContent>
-          <GoogleButton action="signUp" href="" />
-          <Divider>{dict.auth.or}</Divider>
-          <Stack direction={langNameDirection} spacing={2}>
-            <TextField
-              fullWidth
-              label={dict.auth.firstName}
-              name="firstName"
-              onChange={handleChange}
-              required
-              value={form.firstName}
-            />
-            <TextField
-              fullWidth
-              label={dict.auth.lastName}
-              name="lastName"
-              onChange={handleChange}
-              required
-              value={form.lastName}
-            />
-          </Stack>
-          <TextField
-            // error={!!state?.errors?.email}
-            fullWidth
-            // helperText={state?.errors?.email}
-            label={dict.auth.email}
-            name="email"
-            onChange={handleChange}
-            required
-            type="email"
-            value={form.email}
-          />
-          <TextField
-            // error={!!state?.errors?.password}
-            fullWidth
-            // 這邊可能會需要修正
-            // helperText={
-            //   state?.errors?.password?.length
-            //     ? `Password must: ${state.errors.password.join(", ")}`
-            //     : ""
-            // }
-            label={dict.auth.password}
-            name="password"
-            onChange={handleChange}
-            required
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label={
-                        showPassword
-                          ? dict.auth.hidePassword
-                          : dict.auth.showPassword
-                      }
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-            type={showPassword ? "text" : "password"}
-            value={form.password}
-          />
-        </StyledCardContent>
-        <StyledCardActions disableSpacing>
-          <Button
-            // disabled={isMutating}
-            fullWidth
-            // loading={isMutating}
-            size="large"
-            type="submit"
-            variant="contained"
+    <StyledCard component="form">
+      {/* action={action} */}
+      <StyledCardHeader
+        title={
+          <Typography
+            color="primary"
+            fontWeight="bold"
+            textAlign="center"
+            variant="h6"
           >
             {dict.auth.signUp}
-          </Button>
-          <Typography variant="caption" color="text.secondary" align="center">
-            By clicking «{dict.auth.signUp}», you agree to Biru Coffee&rsquo;s
-            <Box component="br" />
-            <MuiLink component={NextLink} href={`/${lang}/terms`}>
-              Terms of Service
-            </MuiLink>{" "}
-            and{" "}
-            <MuiLink component={NextLink} href={`/${lang}/privacy`}>
-              Privacy Policy
-            </MuiLink>
-            .
           </Typography>
-          <Divider flexItem />
-          <Stack flexDirection="row" alignItems="center" gap={1}>
-            <Typography variant="body2">{dict.auth.hasAccount}</Typography>
-            <MuiLink
-              component={NextLink}
-              href={`/${lang}/member/sign-in`}
-              variant="body2"
-            >
-              {dict.auth.signIn}
-            </MuiLink>
-          </Stack>
-        </StyledCardActions>
-      </StyledCard>
-    </StyledContainer>
+        }
+      />
+      <StyledCardContent>
+        <GoogleButton action="signUp" href="" />
+        <Divider>{dict.auth.or}</Divider>
+        <Stack direction={langNameDirection} spacing={2}>
+          <TextField
+            fullWidth
+            label={dict.auth.firstName}
+            name="firstName"
+            onChange={handleChange}
+            required
+            value={form.firstName}
+          />
+          <TextField
+            fullWidth
+            label={dict.auth.lastName}
+            name="lastName"
+            onChange={handleChange}
+            required
+            value={form.lastName}
+          />
+        </Stack>
+        <TextField
+          // error={!!state?.errors?.email}
+          fullWidth
+          // helperText={state?.errors?.email}
+          label={dict.auth.email}
+          name="email"
+          onChange={handleChange}
+          required
+          type="email"
+          value={form.email}
+        />
+        <TextField
+          // error={!!state?.errors?.password}
+          fullWidth
+          // 這邊可能會需要修正
+          // helperText={
+          //   state?.errors?.password?.length
+          //     ? `Password must: ${state.errors.password.join(", ")}`
+          //     : ""
+          // }
+          label={dict.auth.password}
+          name="password"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword
+                        ? dict.auth.hidePassword
+                        : dict.auth.showPassword
+                    }
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword ? "text" : "password"}
+          value={form.password}
+        />
+      </StyledCardContent>
+      <StyledCardActions disableSpacing>
+        <Button
+          // disabled={isMutating}
+          fullWidth
+          // loading={isMutating}
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          {dict.auth.signUp}
+        </Button>
+        <Typography variant="caption" color="text.secondary" align="center">
+          By clicking «{dict.auth.signUp}», you agree to Biru Coffee&rsquo;s
+          <Box component="br" />
+          <MuiLink component={NextLink} href={`/${lang}/terms`}>
+            Terms of Service
+          </MuiLink>{" "}
+          and{" "}
+          <MuiLink component={NextLink} href={`/${lang}/privacy`}>
+            Privacy Policy
+          </MuiLink>
+          .
+        </Typography>
+        <Divider flexItem />
+        <Stack flexDirection="row" alignItems="center" gap={1}>
+          <Typography variant="body2">{dict.auth.hasAccount}</Typography>
+          <MuiLink
+            component={NextLink}
+            href={`/${lang}/member/sign-in`}
+            variant="body2"
+          >
+            {dict.auth.signIn}
+          </MuiLink>
+        </Stack>
+      </StyledCardActions>
+    </StyledCard>
   );
 };
 

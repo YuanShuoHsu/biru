@@ -23,7 +23,6 @@ import {
   CardHeader,
   CardProps,
   Checkbox,
-  Container,
   Divider,
   FormControlLabel,
   IconButton,
@@ -36,14 +35,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
-
-const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
-  height: "100%",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-}));
 
 const StyledCard = styled(Card)<CardProps<"form">>({
   width: "100%",
@@ -128,120 +119,118 @@ const SignIn = () => {
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledContainer maxWidth="sm" disableGutters>
-      <StyledCard component="form">
-        {/* action={action} */}
-        <StyledCardHeader
-          title={
-            <Typography
-              color="primary"
-              fontWeight="bold"
-              textAlign="center"
-              variant="h6"
-            >
-              {dict.auth.signIn}
-            </Typography>
-          }
-        />
-        <StyledCardContent>
-          <GoogleButton action="signIn" href="" />
-          <Divider>{dict.auth.or}</Divider>
-          <TextField
-            // error={!!state?.errors?.email}
-            fullWidth
-            // helperText={state?.errors?.email}
-            label={dict.auth.email}
-            name="email"
-            onChange={handleChange}
-            required
-            type="email"
-            value={form.email}
-          />
-          <TextField
-            // error={!!state?.errors?.password}
-            fullWidth
-            // 這邊可能會需要修正
-            // helperText={
-            //   state?.errors?.password?.length
-            //     ? `Password must: ${state.errors.password.join(", ")}`
-            //     : ""
-            // }
-            label={dict.auth.password}
-            name="password"
-            onChange={handleChange}
-            required
-            slotProps={{
-              input: {
-                endAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label={
-                        showPassword
-                          ? dict.auth.hidePassword
-                          : dict.auth.showPassword
-                      }
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      onMouseUp={handleMouseUpPassword}
-                      edge="end"
-                    >
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              },
-            }}
-            type={showPassword ? "text" : "password"}
-            value={form.password}
-          />
-          <Stack
-            flexDirection="row"
-            justifyContent="space-between"
-            alignItems="center"
-            gap={1}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={form.remember}
-                  name="remember"
-                  onChange={handleChange}
-                  size="small"
-                />
-              }
-              label={
-                <Typography variant="body2">{dict.auth.remember}</Typography>
-              }
-            />
-            <MuiLink
-              component={NextLink}
-              href={`/${lang}/member/forgot-password`}
-              variant="body2"
-            >
-              {dict.auth.forgotPassword}
-            </MuiLink>
-          </Stack>
-        </StyledCardContent>
-        <StyledCardActions disableSpacing>
-          <Button
-            // disabled={isMutating}
-            fullWidth
-            // loading={isMutating}
-            size="large"
-            type="submit"
-            variant="contained"
+    <StyledCard component="form">
+      {/* action={action} */}
+      <StyledCardHeader
+        title={
+          <Typography
+            color="primary"
+            fontWeight="bold"
+            textAlign="center"
+            variant="h6"
           >
             {dict.auth.signIn}
-          </Button>
-          <Typography variant="body2">
-            {dict.auth.noAccount}{" "}
-            <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-              {dict.auth.signUp}
-            </MuiLink>
           </Typography>
-        </StyledCardActions>
-      </StyledCard>
-    </StyledContainer>
+        }
+      />
+      <StyledCardContent>
+        <GoogleButton action="signIn" href="" />
+        <Divider>{dict.auth.or}</Divider>
+        <TextField
+          // error={!!state?.errors?.email}
+          fullWidth
+          // helperText={state?.errors?.email}
+          label={dict.auth.email}
+          name="email"
+          onChange={handleChange}
+          required
+          type="email"
+          value={form.email}
+        />
+        <TextField
+          // error={!!state?.errors?.password}
+          fullWidth
+          // 這邊可能會需要修正
+          // helperText={
+          //   state?.errors?.password?.length
+          //     ? `Password must: ${state.errors.password.join(", ")}`
+          //     : ""
+          // }
+          label={dict.auth.password}
+          name="password"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword
+                        ? dict.auth.hidePassword
+                        : dict.auth.showPassword
+                    }
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword ? "text" : "password"}
+          value={form.password}
+        />
+        <Stack
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={1}
+        >
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={form.remember}
+                name="remember"
+                onChange={handleChange}
+                size="small"
+              />
+            }
+            label={
+              <Typography variant="body2">{dict.auth.remember}</Typography>
+            }
+          />
+          <MuiLink
+            component={NextLink}
+            href={`/${lang}/member/forgot-password`}
+            variant="body2"
+          >
+            {dict.auth.forgotPassword}
+          </MuiLink>
+        </Stack>
+      </StyledCardContent>
+      <StyledCardActions disableSpacing>
+        <Button
+          // disabled={isMutating}
+          fullWidth
+          // loading={isMutating}
+          size="large"
+          type="submit"
+          variant="contained"
+        >
+          {dict.auth.signIn}
+        </Button>
+        <Typography variant="body2">
+          {dict.auth.noAccount}{" "}
+          <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
+            {dict.auth.signUp}
+          </MuiLink>
+        </Typography>
+      </StyledCardActions>
+    </StyledCard>
   );
 };
 
