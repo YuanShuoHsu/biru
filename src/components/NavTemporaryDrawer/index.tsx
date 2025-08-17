@@ -26,6 +26,7 @@ import {
   ListItemButtonProps,
   ListItemIcon,
   ListItemText,
+  SvgIconProps,
   Toolbar,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -78,6 +79,38 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
   },
 ];
 
+interface ListItemLinkProps extends ListItemButtonProps {
+  hasChildren?: boolean;
+  icon: React.ComponentType<SvgIconProps>;
+  label: string;
+  level: number;
+  open?: boolean;
+}
+
+const ListItemLink = ({
+  hasChildren,
+  icon: Icon,
+  label,
+  level,
+  onClick,
+  open,
+  selected,
+  ...other
+}: ListItemLinkProps) => (
+  <StyledListItemButton
+    level={level}
+    selected={selected}
+    onClick={onClick}
+    {...other}
+  >
+    <ListItemIcon>
+      <Icon />
+    </ListItemIcon>
+    <ListItemText primary={label} />
+    {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
+  </StyledListItemButton>
+);
+
 interface NavTemporaryDrawerProps {
   onDrawerToggle: (
     type: DrawerType,
@@ -103,8 +136,8 @@ const NavTemporaryDrawer = ({
     setOpenMap((prev) => ({ ...prev, [to]: !prev[to] }));
 
   const renderItems = (items: NavItem[], level = 0) =>
-    items.map(({ children, icon: Icon, label, to }) => {
-      const hasChildren = children?.length;
+    items.map(({ children, icon, label, to }) => {
+      const hasChildren = !!children?.length;
       const open = openMap[to];
 
       const fullPath = `/${lang}${to}`;
@@ -113,7 +146,7 @@ const NavTemporaryDrawer = ({
         ? pathname === fullPath
         : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
 
-      const handleListItemButtonClick = (event: React.MouseEvent) => {
+      const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
           event.stopPropagation();
           handleIconButtonToggle(to);
@@ -125,17 +158,15 @@ const NavTemporaryDrawer = ({
 
       return (
         <Fragment key={to}>
-          <StyledListItemButton
+          <ListItemLink
+            hasChildren={hasChildren}
+            icon={icon}
+            label={label}
             level={level}
-            onClick={handleListItemButtonClick}
+            onClick={handleClick}
+            open={open}
             selected={selected}
-          >
-            <ListItemIcon>
-              <Icon />
-            </ListItemIcon>
-            <ListItemText primary={label} />
-            {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
-          </StyledListItemButton>
+          />
           {hasChildren && (
             <Collapse component="li" in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
