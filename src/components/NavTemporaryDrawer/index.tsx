@@ -1,5 +1,6 @@
 // https://mui.com/material-ui/react-drawer/#AnchorTemporaryDrawer.tsx
 // https://mui.com/material-ui/react-list/#NestedList.tsx
+// https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -49,31 +50,31 @@ interface NavItem {
   children?: NavItem[];
   href: string;
   icon: React.ComponentType;
-  text: string;
+  label: string;
 }
 
-const getNavItems = (dict: I18nDict): NavItem[] => [
-  { href: "", icon: Home, text: dict.nav.home },
-  { href: "/order", icon: ShoppingCart, text: dict.nav.order },
+const navItemsMap = (dict: I18nDict): NavItem[] => [
+  { href: "", icon: Home, label: dict.nav.home },
+  { href: "/order", icon: ShoppingCart, label: dict.nav.order },
   {
     // auth: "any",
     children: [
       {
         // auth: "guest",
-        href: "/sign-in",
+        href: "/member/sign-in",
         icon: Login,
-        text: dict.nav.signIn,
+        label: dict.nav.signIn,
       },
       {
         // auth: "guest",
-        href: "/sign-up",
+        href: "/member/sign-up",
         icon: PersonAdd,
-        text: dict.nav.signUp,
+        label: dict.nav.signUp,
       },
     ],
     href: "/member",
     icon: AccountCircle,
-    text: dict.nav.member,
+    label: dict.nav.member,
   },
 ];
 
@@ -94,7 +95,7 @@ const NavTemporaryDrawer = ({
   const router = useRouter();
 
   const dict = useI18n();
-  const navItems = getNavItems(dict);
+  const navItems = navItemsMap(dict);
 
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
@@ -102,7 +103,7 @@ const NavTemporaryDrawer = ({
     setOpenMap((prev) => ({ ...prev, [href]: !prev[href] }));
 
   const renderItems = (items: NavItem[], depth = 0) =>
-    items.map(({ children, href, icon: Icon, text }) => {
+    items.map(({ children, href, icon: Icon, label }) => {
       const hasChildren = children?.length;
       const open = openMap[href];
 
@@ -132,11 +133,11 @@ const NavTemporaryDrawer = ({
             <ListItemIcon>
               <Icon />
             </ListItemIcon>
-            <ListItemText primary={text} />
+            <ListItemText primary={label} />
             {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
           </StyledListItemButton>
           {hasChildren && (
-            <Collapse in={open} timeout="auto" unmountOnExit>
+            <Collapse component="li" in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {renderItems(children!, depth + 1)}
               </List>
@@ -146,7 +147,7 @@ const NavTemporaryDrawer = ({
       );
     });
 
-  const drawerList = (
+  const list = (
     <StyledBox
       onClick={onDrawerToggle("nav", false)}
       onKeyDown={onDrawerToggle("nav", false)}
@@ -164,7 +165,7 @@ const NavTemporaryDrawer = ({
       onClose={onDrawerToggle("nav", false)}
       open={open}
     >
-      {drawerList}
+      {list}
     </Drawer>
   );
 };

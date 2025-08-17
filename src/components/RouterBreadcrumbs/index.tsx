@@ -26,7 +26,7 @@ interface BreadcrumbItem {
   label: string;
 }
 
-const createBreadcrumbMap = (
+const breadcrumbMap = (
   dict: I18nDict,
   tableNumber: string,
 ): Record<string, BreadcrumbItem> => {
@@ -92,7 +92,7 @@ const RouterBreadcrumbs = () => {
   const { lang, tableNumber } = useParams<LangTableNumberParam>();
 
   const dict = useI18n();
-  const breadcrumbs = createBreadcrumbMap(dict, tableNumber);
+  const breadcrumbs = breadcrumbMap(dict, tableNumber);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
