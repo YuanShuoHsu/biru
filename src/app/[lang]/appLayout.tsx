@@ -77,7 +77,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         {isHome ? (
           children
         ) : (
-          <Stack padding={2} gap={2}>
+          <Stack padding={2} height="100%" gap={2}>
             <Stack
               direction="row"
               justifyContent="space-between"

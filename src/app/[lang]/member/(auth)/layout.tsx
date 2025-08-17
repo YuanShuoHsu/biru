@@ -3,13 +3,12 @@
 import { Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
+const StyledContainer = styled(Container)({
   height: "100%",
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-}));
+});
 
 interface MemberAuthLayoutProps {
   children: React.ReactNode;
