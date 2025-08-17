@@ -45,6 +45,14 @@ const StyledListItemButton = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== "level",
 })<StyledListItemButtonProps>(({ level, theme }) => ({
   paddingLeft: theme.spacing(2 + level * 2),
+
+  "&.Mui-selected": {
+    backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${level * 0.04}))`,
+
+    "&:hover": {
+      backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${theme.vars.palette.action.hoverOpacity} + ${level * 0.04}))`,
+    },
+  },
 }));
 
 interface NavItem {
@@ -55,7 +63,7 @@ interface NavItem {
 }
 
 const navItemsMap = (dict: I18nDict): NavItem[] => [
-  { icon: Home, label: dict.nav.home, to: "" },
+  { icon: Home, label: dict.nav.home, to: "/" },
   { icon: ShoppingCart, label: dict.nav.order, to: "/order" },
   {
     // auth: "any",
@@ -140,11 +148,11 @@ const NavTemporaryDrawer = ({
       const hasChildren = !!children?.length;
       const open = openMap[to];
 
-      const fullPath = `/${lang}${to}`;
-      const isHome = to === "";
-      const selected = isHome
-        ? pathname === fullPath
-        : pathname === fullPath || pathname.startsWith(`${fullPath}/`);
+      const isHome = to === "/";
+      const fullPath = `/${lang}${isHome ? "" : to}`;
+      const selected =
+        pathname === fullPath ||
+        (!isHome && pathname.startsWith(`${fullPath}/`));
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
