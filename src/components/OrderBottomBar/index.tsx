@@ -47,10 +47,9 @@ const OrderBottomBar = () => {
   return (
     <Fade in={!isEmpty}>
       <StyledBox
-        position="fixed"
-        padding={2}
+        position="sticky"
         left={0}
-        bottom={0}
+        bottom={(theme) => theme.spacing(2)}
         width="100%"
         display="flex"
         justifyContent="center"
