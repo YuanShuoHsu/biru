@@ -1,15 +1,19 @@
 "use client";
 
+import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import NavTemporaryDrawer from "@/components/NavTemporaryDrawer";
+import OrderSearch from "@/components/OrderSearch";
+import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 import ScrollTop from "@/components/ScrollTop";
+import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, BoxProps, Fab, Toolbar } from "@mui/material";
+import { Box, BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
@@ -36,6 +40,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     cart: false,
     nav: false,
   });
+
+  const pathname = usePathname();
+  const { lang, tableNumber } = useParams();
+
+  const isHome = pathname === `/${lang}`;
+  const isOrderPage = pathname === `/${lang}/order/${tableNumber}`;
 
   const handleDrawerToggle =
     (type: DrawerType, open: boolean) =>
@@ -64,7 +74,27 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       />
       <MainBox component="main">
         <Toolbar id="back-to-top-anchor" />
-        {children}
+        {isHome ? (
+          children
+        ) : (
+          <Stack padding={2} gap={2}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              gap={2}
+            >
+              <RouterBreadcrumbs />
+              {isOrderPage && (
+                <Stack direction="row" alignItems="center" gap={2}>
+                  <OrderSearch />
+                  <ViewToggleButtons />
+                </Stack>
+              )}
+            </Stack>
+            {children}
+          </Stack>
+        )}
       </MainBox>
       <ScrollTop>
         <Fab aria-label="scroll back to top" size="small">
