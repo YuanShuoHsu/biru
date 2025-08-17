@@ -54,7 +54,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <ContainerBox>
       <HideAppBar onDrawerToggle={handleDrawerToggle} />
-      <Toolbar disableGutters id="back-to-top-anchor" />
       <NavTemporaryDrawer
         onDrawerToggle={handleDrawerToggle}
         open={drawerState.nav}
@@ -64,7 +63,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         open={drawerState.cart}
       />
       <MainBox component="main">
-        <Toolbar />
+        <Toolbar id="back-to-top-anchor" />
         {children}
       </MainBox>
       <ScrollTop>
