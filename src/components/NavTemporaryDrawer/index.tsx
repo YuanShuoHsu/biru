@@ -9,7 +9,6 @@ import { I18nDict, useI18n } from "@/context/i18n";
 
 import {
   AccountCircle,
-  ExpandLess,
   ExpandMore,
   Home,
   Login,
@@ -53,6 +52,13 @@ const StyledListItemButton = styled(ListItemButton, {
       backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${theme.vars.palette.action.hoverOpacity} + ${level * 0.04}))`,
     },
   },
+}));
+
+const StyledExpandMore = styled(ExpandMore, {
+  shouldForwardProp: (prop) => prop !== "open",
+})<{ open?: boolean }>(({ open, theme }) => ({
+  transform: open ? "rotate(180deg)" : "rotate(0deg)",
+  transition: theme.transitions.create("transform"),
 }));
 
 interface NavItem {
@@ -115,7 +121,7 @@ const ListItemLink = ({
       <Icon />
     </ListItemIcon>
     <ListItemText primary={label} />
-    {hasChildren && (open ? <ExpandLess /> : <ExpandMore />)}
+    {hasChildren && <StyledExpandMore open={open} />}
   </StyledListItemButton>
 );
 
