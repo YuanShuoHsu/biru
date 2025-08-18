@@ -20,7 +20,7 @@ const OrderSearch = () => {
 
   return (
     <TextField
-      onChange={(e) => setOrderSearchText(e.target.value)}
+      onChange={(event) => setOrderSearchText(event.target.value)}
       placeholder={dict.order.tableNumber.search.placeholder}
       slotProps={{
         input: {

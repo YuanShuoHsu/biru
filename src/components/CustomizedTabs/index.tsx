@@ -3,6 +3,7 @@
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
@@ -15,11 +16,12 @@ import {
 
 import { useI18n } from "@/context/i18n";
 
-import { Stack, Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
+
 import type { LangParam } from "@/types/locale";
-import type { LocalizedText } from "@/types/menu";
 
 import { menu } from "@/utils/menu";
 
@@ -36,29 +38,20 @@ const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
-const toLocalizedText = (text: string): LocalizedText => ({
-  "zh-TW": text,
-  en: text,
-  ja: text,
-  ko: text,
-  "zh-CN": text,
-});
-
 const a11yProps = (index: number) => {
   return {
-    id: `vertical-tab-${index}`,
-    "aria-controls": `vertical-tabpanel-${index}`,
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 };
 
-interface CustomizedTabsProps {
-  searchText: string;
-}
-
-const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
+const CustomizedTabs = () => {
   const { lang } = useParams<LangParam>();
 
   const dict = useI18n();
+
+  const { orderSearchText } = useOrderSearchStore();
+  const searchText = orderSearchText.trim().toLowerCase();
 
   const allItems = menu.flatMap(({ items }) => items);
 
@@ -68,8 +61,8 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const topSoldGroups = {
     id: TOP_SOLD,
-    name: toLocalizedText(dict.order.tableNumber.topSold),
     items: topSoldItems,
+    label: dict.order.tableNumber.topSold,
   };
 
   const latestItems = allItems.filter(
@@ -81,8 +74,8 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     latestItems.length > 0
       ? {
           id: LATEST,
-          name: toLocalizedText(dict.order.tableNumber.latest),
           items: latestItems,
+          label: dict.order.tableNumber.latest,
         }
       : null;
 
@@ -96,8 +89,8 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
 
   const categoryGroups = menu.map(({ id, name, items }) => ({
     id,
-    name,
     items,
+    label: name[lang],
   }));
 
   const combinedGroups = [
@@ -111,13 +104,12 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
     .map((group) => ({
       ...group,
       items: group.items.filter(({ name }) =>
-        name[lang].toLowerCase().includes(searchText.trim()),
+        name[lang].toLowerCase().includes(searchText),
       ),
     }))
     .filter(
-      ({ name, items }) =>
-        name[lang].toLowerCase().includes(searchText.trim()) ||
-        items.length > 0,
+      ({ items, label }) =>
+        label.toLowerCase().includes(searchText) || items.length > 0,
     );
 
   const [selectedId, setSelectedId] = useState(filteredGroups[0]?.id || "");
@@ -137,12 +129,12 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
   const handleChange = (_: React.SyntheticEvent, newIndex: number) =>
     setSelectedId(filteredGroups[newIndex].id);
 
-  const tabList = filteredGroups.map(({ id, name }, index) => (
-    <Tab key={id} label={name[lang]} {...a11yProps(index)} />
+  const tabList = filteredGroups.map(({ id, label }, index) => (
+    <Tab key={id} label={label} {...a11yProps(index)} />
   ));
 
   return (
-    <Stack height="100%" direction="column" gap={2}>
+    <>
       <HorizontalTabs
         aria-label="Horizontal tabs"
         onChange={handleChange}
@@ -161,7 +153,7 @@ const CustomizedTabs = ({ searchText }: CustomizedTabsProps) => {
           />
         </TabPanel>
       ))}
-    </Stack>
+    </>
   );
 };
 

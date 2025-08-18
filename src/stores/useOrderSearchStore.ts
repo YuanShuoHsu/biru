@@ -7,6 +7,5 @@ interface OrderSearchState {
 
 export const useOrderSearchStore = create<OrderSearchState>((set) => ({
   orderSearchText: "",
-  setOrderSearchText: (text) =>
-    set({ orderSearchText: text.trim().toLowerCase() }),
+  setOrderSearchText: (text) => set({ orderSearchText: text }),
 }));
