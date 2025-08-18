@@ -38,12 +38,10 @@ const HorizontalTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
-const a11yProps = (index: number) => {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-};
+const a11yProps = (index: number) => ({
+  id: `simple-tab-${index}`,
+  "aria-controls": `simple-tabpanel-${index}`,
+});
 
 const CustomizedTabs = () => {
   const { lang } = useParams<LangParam>();
@@ -59,11 +57,14 @@ const CustomizedTabs = () => {
     .sort((a, b) => b.sold - a.sold)
     .slice(0, TOP_SOLD_LIMIT);
 
-  const topSoldGroups = {
-    id: TOP_SOLD,
-    items: topSoldItems,
-    label: dict.order.tableNumber.topSold,
-  };
+  const topSoldGroups =
+    topSoldItems.length > 0
+      ? {
+          id: TOP_SOLD,
+          items: topSoldItems,
+          label: dict.order.tableNumber.topSold,
+        }
+      : null;
 
   const latestItems = allItems.filter(
     ({ createdAt }) =>
@@ -79,14 +80,6 @@ const CustomizedTabs = () => {
         }
       : null;
 
-  // const allTags = [...new Set(allItems.flatMap(({ tags }) => tags || []))];
-
-  // const tagGroups = allTags.map((tagKey) => ({
-  //   id: tagKey,
-  //   name: tagKey,
-  //   items: allItems.filter(({ tags }) => tags?.includes(tagKey)),
-  // }));
-
   const categoryGroups = menu.map(({ id, name, items }) => ({
     id,
     items,
@@ -94,9 +87,8 @@ const CustomizedTabs = () => {
   }));
 
   const combinedGroups = [
-    topSoldGroups,
+    ...(topSoldGroups ? [topSoldGroups] : []),
     ...(latestGroups ? [latestGroups] : []),
-    // ...tagGroups,
     ...categoryGroups,
   ];
 
