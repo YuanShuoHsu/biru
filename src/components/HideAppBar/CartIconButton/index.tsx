@@ -7,7 +7,7 @@ import { IconButton, Tooltip } from "@mui/material";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { DrawerType } from "@/types/drawer";
+import type { DrawerType } from "@/types/drawer";
 
 interface CartIconButtonProps {
   onDrawerToggle: (

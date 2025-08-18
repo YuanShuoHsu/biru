@@ -8,7 +8,7 @@ import { styled } from "@mui/material/styles";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
-import { LangParam } from "@/types/locale";
+import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 import {

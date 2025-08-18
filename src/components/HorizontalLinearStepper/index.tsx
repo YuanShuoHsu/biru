@@ -9,7 +9,7 @@ import { useI18n } from "@/context/i18n";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { LangTableNumberParam } from "@/types/locale";
+import type { LangTableNumberParam } from "@/types/locale";
 
 const createStepPathMap = (tableNumber: string): string[] => [
   `/order/${tableNumber}`,

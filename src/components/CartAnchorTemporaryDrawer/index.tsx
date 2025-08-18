@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
-import { LangTableNumberParam } from "@/types/locale";
+import type { LangTableNumberParam } from "@/types/locale";
 
 const DrawerBox = styled(Box)({
   width: 250,

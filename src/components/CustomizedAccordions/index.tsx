@@ -18,7 +18,7 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import { LangParam } from "@/types/locale";
+import type { LangParam } from "@/types/locale";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),

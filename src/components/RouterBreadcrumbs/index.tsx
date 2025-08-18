@@ -17,7 +17,7 @@ import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { LangTableNumberParam } from "@/types/locale";
+import type { LangTableNumberParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 
