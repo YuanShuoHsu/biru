@@ -63,12 +63,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
     <HideOnScroll>
       <StyledAppBar position="fixed">
         <StyledToolbar>
-          <Stack
-            flexDirection="row"
-            alignItems="center"
-            gap={1}
-            overflow="hidden"
-          >
+          <Stack minWidth={0} flexDirection="row" alignItems="center" gap={1}>
             <IconButton
               aria-label="open drawer"
               color="inherit"
@@ -78,13 +73,13 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <Menu />
             </IconButton>
             <MuiLink
+              minWidth={0}
               color="inherit"
               component={NextLink}
               href={`/${lang}`}
               display="flex"
               alignItems="center"
               gap={1}
-              overflow="hidden"
               underline="none"
             >
               <ImageBox>

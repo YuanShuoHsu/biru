@@ -1,3 +1,5 @@
+// https://mui.com/material-ui/integrations/nextjs/
+
 "use client";
 
 import { SnackbarProvider } from "notistack";
