@@ -20,6 +20,7 @@ import type { DrawerType } from "@/types/drawer";
 
 const ContainerBox = styled(Box)({
   display: "flex",
+  flexDirection: "column",
 });
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
