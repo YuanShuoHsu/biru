@@ -18,17 +18,7 @@ import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
 
-const ContainerBox = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-});
-
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
-  width: "100%",
-  minHeight: "100dvh",
-  display: "flex",
-  flexDirection: "column",
-  backgroundColor: theme.vars.palette.background.default,
   transition: theme.transitions.create("background-color"),
 }));
 
@@ -63,7 +53,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     };
 
   return (
-    <ContainerBox>
+    <Box display="flex">
       <HideAppBar onDrawerToggle={handleDrawerToggle} />
       <NavTemporaryDrawer
         onDrawerToggle={handleDrawerToggle}
@@ -73,7 +63,14 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         onDrawerToggle={handleDrawerToggle}
         open={drawerState.cart}
       />
-      <MainBox component="main">
+      <MainBox
+        component="main"
+        width="100%"
+        minHeight="100dvh"
+        display="flex"
+        flexDirection="column"
+        bgcolor="background.default"
+      >
         <Toolbar id="back-to-top-anchor" />
         {isHome ? (
           children
@@ -103,7 +100,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </Fab>
       </ScrollTop>
       <CustomizedDialogs />
-    </ContainerBox>
+    </Box>
   );
 };
 
