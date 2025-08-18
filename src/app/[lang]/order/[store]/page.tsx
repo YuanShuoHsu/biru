@@ -1,7 +1,20 @@
-"use client";
+import { notFound } from "next/navigation";
+
+import { stores } from "@/constants/stores";
 
 import OrderSelect from "../OrderSelect";
 
-const OrderStore = () => <OrderSelect showTable />;
+interface OrderStorePageProps {
+  params: Promise<{ store: string }>;
+}
 
-export default OrderStore;
+const OrderStorePage = async ({ params }: OrderStorePageProps) => {
+  const { store } = await params;
+
+  const hasStore = stores.some(({ value }) => value === store);
+  if (!hasStore) return notFound();
+
+  return <OrderSelect showTable />;
+};
+
+export default OrderStorePage;
