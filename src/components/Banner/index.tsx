@@ -49,18 +49,19 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
   },
 
   ".swiper-pagination-bullet": {
-    backgroundColor: theme.palette.common.white,
-    opacity: 0.5,
+    backgroundColor: `${theme.palette.common.white} !important`,
+    opacity: "0.5 !important",
     transition: theme.transitions.create([
       "width",
       "background-color",
-      "borderRadius",
+      "border-radius",
     ]),
   },
+
   ".swiper-pagination-bullet-active": {
-    width: theme.spacing(2),
-    backgroundColor: theme.palette.primary.main,
-    borderRadius: theme.shape.borderRadius,
+    width: `${theme.spacing(2)} !important`,
+    borderRadius: `${theme.shape.borderRadius}px !important`,
+    backgroundColor: `${theme.palette.primary.main} !important`,
   },
 }));
 

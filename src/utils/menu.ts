@@ -156,7 +156,7 @@ export const menu: Category[] = [
           ko: "클래식 라떼",
           "zh-CN": "经典拿铁",
         },
-        createdAt: "2025-05-04T22:50:00",
+        createdAt: "2025-08-04T22:50:00",
         description: {
           "zh-TW": "濃醇的義式濃縮搭配綿密牛奶泡沫。",
           en: "Rich espresso with velvety milk foam.",
