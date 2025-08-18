@@ -4,6 +4,10 @@ export type LangParam = {
   lang: LocaleCode;
 };
 
+export type LangStoreParam = LangParam & {
+  store: string;
+};
+
 export type LangTableNumberParam = LangParam & {
   tableNumber: string;
 };

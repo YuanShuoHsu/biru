@@ -8,5 +8,5 @@ export const ViewDirections = {
   module: "column",
 } as const;
 
-export type ViewMode = keyof typeof ViewDirections;
+export type ViewMode = keyof typeof ViewGridSizes;
 export type ViewDirection = (typeof ViewDirections)[ViewMode];
