@@ -14,8 +14,10 @@ interface OrderTableNumberPageProps {
 const OrderTableNumberPage = async ({ params }: OrderTableNumberPageProps) => {
   const { tableNumber } = await params;
 
-  const tableId = Number(tableNumber);
-  if (Number.isNaN(tableId) || tableId < 0 || tableId > TABLE_NUMBERS)
+  if (
+    !/^(0|[1-9]\d*)$/.test(tableNumber) ||
+    Number(tableNumber) > TABLE_NUMBERS
+  )
     return notFound();
 
   return <OrderTableNumber />;
