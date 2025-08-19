@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -71,60 +73,58 @@ const StyledSlide = styled(SwiperSlide)({
   alignItems: "center",
 });
 
-const Banner = () => {
-  return (
-    <StyledBox>
-      <StyledSwiper
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
-        grabCursor={true}
-        freeMode={{
-          sticky: true,
-        }}
-        keyboard={{
-          enabled: true,
-        }}
-        loop={true}
-        mousewheel={true}
-        navigation={{
-          nextEl: ".custom-swiper-button-next",
-          prevEl: ".custom-swiper-button-prev",
-        }}
-        pagination={{
-          clickable: true,
-        }}
-        slidesPerView={1}
-        spaceBetween={0}
-        modules={[
-          Autoplay,
-          FreeMode,
-          Keyboard,
-          Mousewheel,
-          Navigation,
-          Pagination,
-        ]}
-      >
-        {Array.from({ length: 9 }, (_, index) => (
-          <StyledSlide key={index}>
-            <Image
-              alt={`Slide ${index + 1}`}
-              fill
-              priority
-              sizes="(min-width: 808px) 50vw, 100vw"
-              src="/images/IMG_4590.jpg"
-              style={{
-                objectFit: "cover",
-              }}
-            />
-          </StyledSlide>
-        ))}
-      </StyledSwiper>
-      <NavigationButton direction="next" icon={ChevronRight} />
-      <NavigationButton direction="prev" icon={ChevronLeft} />
-    </StyledBox>
-  );
-};
+const Banner = () => (
+  <StyledBox>
+    <StyledSwiper
+      autoplay={{
+        delay: 2500,
+        disableOnInteraction: false,
+      }}
+      grabCursor={true}
+      freeMode={{
+        sticky: true,
+      }}
+      keyboard={{
+        enabled: true,
+      }}
+      loop={true}
+      mousewheel={true}
+      navigation={{
+        nextEl: ".custom-swiper-button-next",
+        prevEl: ".custom-swiper-button-prev",
+      }}
+      pagination={{
+        clickable: true,
+      }}
+      slidesPerView={1}
+      spaceBetween={0}
+      modules={[
+        Autoplay,
+        FreeMode,
+        Keyboard,
+        Mousewheel,
+        Navigation,
+        Pagination,
+      ]}
+    >
+      {Array.from({ length: 9 }, (_, index) => (
+        <StyledSlide key={index}>
+          <Image
+            alt={`Slide ${index + 1}`}
+            fill
+            priority
+            sizes="(min-width: 808px) 50vw, 100vw"
+            src="/images/IMG_4590.jpg"
+            style={{
+              objectFit: "cover",
+            }}
+          />
+        </StyledSlide>
+      ))}
+    </StyledSwiper>
+    <NavigationButton direction="next" icon={ChevronRight} />
+    <NavigationButton direction="prev" icon={ChevronLeft} />
+  </StyledBox>
+);
 
 export default Banner;

@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-accordion/#CustomizedAccordions.tsx
 
+"use client";
+
 import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";

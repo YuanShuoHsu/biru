@@ -2,8 +2,6 @@
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
 // https://mui.com/material-ui/customization/css-theme-variables/usage/#typescript
 
-"use client";
-
 import { createTheme } from "@mui/material/styles";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 

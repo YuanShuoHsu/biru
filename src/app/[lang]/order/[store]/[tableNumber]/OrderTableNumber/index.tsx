@@ -1,5 +1,3 @@
-"use client";
-
 import CustomizedTabs from "@/components/CustomizedTabs";
 import OrderBottomBar from "@/components/OrderBottomBar";
 

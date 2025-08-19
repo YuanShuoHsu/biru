@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
 
+"use client";
+
 import dayjs from "dayjs";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
