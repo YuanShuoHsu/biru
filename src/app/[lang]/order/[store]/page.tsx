@@ -1,11 +1,11 @@
 import { notFound } from "next/navigation";
 
-import { stores } from "@/constants/stores";
-
 import OrderSelect from "../OrderSelect";
 
+import { stores, type StoreValue } from "@/utils/stores";
+
 interface OrderStorePageProps {
-  params: Promise<{ store: string }>;
+  params: Promise<{ store: StoreValue }>;
 }
 
 const OrderStorePage = async ({ params }: OrderStorePageProps) => {

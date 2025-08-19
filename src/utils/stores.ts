@@ -25,3 +25,12 @@ export const stores: {
     value: "dayuan",
   },
 ] as const;
+
+export type StoreValue = (typeof stores)[number]["value"];
+
+export const getStoreLabel = (lang: LocaleCode, store: StoreValue) => {
+  const found = stores.find(({ value }) => value === store);
+  if (!found) return;
+
+  return found.label[lang];
+};

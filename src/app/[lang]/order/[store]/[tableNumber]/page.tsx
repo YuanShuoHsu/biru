@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 
 import OrderTableNumber from "./OrderTableNumber";
 
-import { stores } from "@/constants/stores";
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
+import { stores, type StoreValue } from "@/utils/stores";
+
 interface OrderTableNumberPageProps {
-  params: Promise<{ store: string; tableNumber: string }>;
+  params: Promise<{ store: StoreValue; tableNumber: string }>;
 }
 
 const OrderTableNumberPage = async ({ params }: OrderTableNumberPageProps) => {

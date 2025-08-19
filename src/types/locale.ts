@@ -1,3 +1,5 @@
+import { StoreValue } from "@/utils/stores";
+
 export type LocaleCode = "zh-TW" | "en" | "ja" | "ko" | "zh-CN";
 
 export type LangParam = {
@@ -5,7 +7,7 @@ export type LangParam = {
 };
 
 export type LangStoreParam = LangParam & {
-  store: string;
+  store: StoreValue;
 };
 
 export type LangTableNumberParam = LangParam & {
@@ -13,6 +15,6 @@ export type LangTableNumberParam = LangParam & {
 };
 
 export type LangStoreTableNumberParam = LangParam & {
-  store: string;
+  store: StoreValue;
   tableNumber: string;
 };

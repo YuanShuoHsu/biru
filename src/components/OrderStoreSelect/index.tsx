@@ -2,11 +2,11 @@
 
 import { useParams, useRouter } from "next/navigation";
 
-import { stores } from "@/constants/stores";
-
 import { MenuItem, TextField } from "@mui/material";
 
 import { LangStoreParam } from "@/types/locale";
+
+import { stores } from "@/utils/stores";
 
 const OrderStoreSelect = () => {
   const { lang, store } = useParams<LangStoreParam>();
