@@ -11,3 +11,8 @@ export type LangStoreParam = LangParam & {
 export type LangTableNumberParam = LangParam & {
   tableNumber: string;
 };
+
+export type LangStoreTableNumberParam = LangParam & {
+  store: string;
+  tableNumber: string;
+};

@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
-import type { LangTableNumberParam } from "@/types/locale";
+import type { LangStoreTableNumberParam } from "@/types/locale";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -61,14 +61,14 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { lang, tableNumber } = useParams<LangTableNumberParam>();
+  const { lang, store, tableNumber } = useParams<LangStoreTableNumberParam>();
 
   const dict = useI18n();
 
   const { isEmpty, totalAmount } = useCartStore();
 
   const pathname = usePathname();
-  const orderPath = `/${lang}/order/${tableNumber}`;
+  const orderPath = `/${lang}/order/${store}/${tableNumber}`;
   const checkoutPath = `${orderPath}/checkout`;
   const isCheckoutPage = pathname === checkoutPath;
 

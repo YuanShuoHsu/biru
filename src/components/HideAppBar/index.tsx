@@ -53,9 +53,9 @@ interface HideAppBarProps {
 
 const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
-  const { lang, tableNumber } = useParams();
+  const { lang, store, tableNumber } = useParams();
 
-  const basePath = `/${lang}/order/${tableNumber}`;
+  const basePath = `/${lang}/order/${store}/${tableNumber}`;
   const showShoppingCartButton =
     pathname === basePath || pathname === `${basePath}/checkout`;
 

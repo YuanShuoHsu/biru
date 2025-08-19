@@ -21,7 +21,7 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 const OrderTableSelect = () => {
-  const { lang } = useParams();
+  const { lang, store } = useParams();
 
   const dict = useI18n();
 
@@ -37,7 +37,7 @@ const OrderTableSelect = () => {
               <StyledButton
                 component={Link}
                 fullWidth
-                href={`/${lang}/order/${tableNumber}`}
+                href={`/${lang}/order/${store}/${tableNumber}`}
                 variant="outlined"
               >
                 {tableNumber === 0
