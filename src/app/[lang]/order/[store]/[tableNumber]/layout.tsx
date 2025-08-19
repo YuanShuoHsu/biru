@@ -1,23 +1,25 @@
 import { notFound } from "next/navigation";
 
-import OrderTableNumber from "./OrderTableNumber";
-
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
 import type { StoreValue } from "@/types/stores";
 
-interface OrderTableNumberPageProps {
+interface OrderTableNumberLayoutProps {
+  children: React.ReactNode;
   params: Promise<{ store: StoreValue; tableNumber: string }>;
 }
 
-const OrderTableNumberPage = async ({ params }: OrderTableNumberPageProps) => {
+const OrderTableNumberLayout = async ({
+  children,
+  params,
+}: OrderTableNumberLayoutProps) => {
   const { tableNumber } = await params;
 
   const tableId = Number(tableNumber);
   if (Number.isNaN(tableId) || tableId < 0 || tableId > TABLE_NUMBERS)
     return notFound();
 
-  return <OrderTableNumber />;
+  return <>{children}</>;
 };
 
-export default OrderTableNumberPage;
+export default OrderTableNumberLayout;
