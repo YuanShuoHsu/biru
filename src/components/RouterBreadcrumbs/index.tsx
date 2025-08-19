@@ -11,13 +11,14 @@ import {
   Payment,
   Pets,
   ShoppingCart,
+  Storefront,
   TableBar,
 } from "@mui/icons-material";
 import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { LangTableNumberParam } from "@/types/locale";
+import type { LangStoreTableNumberParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 
@@ -28,6 +29,7 @@ interface BreadcrumbItem {
 
 const breadcrumbMap = (
   dict: I18nDict,
+  store: string,
   tableNumber: string,
 ): Record<string, BreadcrumbItem> => {
   const isTakeout = tableNumber === "0";
@@ -41,17 +43,21 @@ const breadcrumbMap = (
       icon: ShoppingCart,
       label: dict.breadcrumb.order,
     },
-    [`/order/${tableNumber}`]: {
+    [`/order/${store}`]: {
+      icon: Storefront,
+      label: store,
+    },
+    [`/order/${store}/${tableNumber}`]: {
       icon: isTakeout ? LocalMall : TableBar,
       label: isTakeout
         ? interpolate(dict.order.takeout, { tableNumber })
         : tableNumber,
     },
-    [`/order/${tableNumber}/checkout`]: {
+    [`/order/${store}/${tableNumber}/checkout`]: {
       icon: Payment,
       label: dict.breadcrumb.checkout,
     },
-    [`/order/${tableNumber}/complete`]: {
+    [`/order/${store}/${tableNumber}/complete`]: {
       icon: Pets,
       label: dict.breadcrumb.complete,
     },
@@ -89,10 +95,10 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang, tableNumber } = useParams<LangTableNumberParam>();
+  const { lang, store, tableNumber } = useParams<LangStoreTableNumberParam>();
 
   const dict = useI18n();
-  const breadcrumbs = breadcrumbMap(dict, tableNumber);
+  const breadcrumbs = breadcrumbMap(dict, store, tableNumber);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
