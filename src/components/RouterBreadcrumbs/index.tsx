@@ -22,6 +22,9 @@ import type { LangStoreTableNumberParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 
+import type { StoreValue } from "@/types/stores";
+import type { TableNumberParam } from "@/types/tableNumbers";
+
 interface BreadcrumbItem {
   icon: React.ComponentType<SvgIconProps>;
   label: string;
@@ -29,8 +32,8 @@ interface BreadcrumbItem {
 
 const breadcrumbMap = (
   dict: I18nDict,
-  store: string,
-  tableNumber: string,
+  store: StoreValue,
+  tableNumber: TableNumberParam,
 ): Record<string, BreadcrumbItem> => {
   const isTakeout = tableNumber === "0";
 

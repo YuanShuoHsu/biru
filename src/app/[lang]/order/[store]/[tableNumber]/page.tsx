@@ -5,9 +5,10 @@ import OrderTableNumber from "./OrderTableNumber";
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
 import type { StoreValue } from "@/types/stores";
+import type { TableNumberParam } from "@/types/tableNumbers";
 
 interface OrderTableNumberPageProps {
-  params: Promise<{ store: StoreValue; tableNumber: string }>;
+  params: Promise<{ store: StoreValue; tableNumber: TableNumberParam }>;
 }
 
 const OrderTableNumberPage = async ({ params }: OrderTableNumberPageProps) => {

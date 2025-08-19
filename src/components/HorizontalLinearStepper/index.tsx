@@ -10,8 +10,9 @@ import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { LangTableNumberParam } from "@/types/locale";
+import type { TableNumberParam } from "@/types/tableNumbers";
 
-const createStepPathMap = (tableNumber: string): string[] => [
+const createStepPathMap = (tableNumber: TableNumberParam): string[] => [
   `/order/${tableNumber}`,
   `/order/${tableNumber}/checkout`,
   `/order/${tableNumber}/complete`,

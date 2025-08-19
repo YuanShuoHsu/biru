@@ -3,10 +3,11 @@ import { notFound } from "next/navigation";
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
 import type { StoreValue } from "@/types/stores";
+import type { TableNumberParam } from "@/types/tableNumbers";
 
 interface OrderTableNumberLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ store: StoreValue; tableNumber: string }>;
+  params: Promise<{ store: StoreValue; tableNumber: TableNumberParam }>;
 }
 
 const OrderTableNumberLayout = async ({
