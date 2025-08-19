@@ -32,7 +32,13 @@
   "breadcrumb": {
     "checkout": "お会計",
     "complete": "完了",
-    "order": "注文"
+    "forgotPassword": "パスワードをお忘れですか",
+    "order": "注文",
+    "privacy": "プライバシーポリシー",
+    "resetPassword": "パスワードをリセット",
+    "signIn": "ログイン",
+    "signUp": "新規登録",
+    "terms": "利用規約"
   },
   "cart": {
     "backToOrder": "メニューに戻る",

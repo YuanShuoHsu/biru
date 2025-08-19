@@ -232,7 +232,7 @@ const SignUp = () => {
           <Typography variant="body2">{dict.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
-            href={`/${lang}/member/sign-in`}
+            href={`/${lang}/sign-in`}
             variant="body2"
           >
             {dict.auth.signIn}

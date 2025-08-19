@@ -32,7 +32,13 @@
   "breadcrumb": {
     "checkout": "結帳",
     "complete": "完成",
-    "order": "點餐"
+    "forgotPassword": "忘記密碼",
+    "order": "點餐",
+    "privacy": "隱私權政策",
+    "resetPassword": "重設密碼",
+    "signIn": "登入",
+    "signUp": "註冊",
+    "terms": "服務條款"
   },
   "cart": {
     "backToOrder": "返回點餐",

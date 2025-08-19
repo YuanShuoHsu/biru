@@ -10,11 +10,8 @@ import React, { useState } from "react";
 
 // import { signup } from "./actions/auth";
 
-import GoogleButton from "@/components/GoogleButton";
-
 import { useI18n } from "@/context/i18n";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -22,13 +19,7 @@ import {
   CardContent,
   CardHeader,
   CardProps,
-  Checkbox,
-  Divider,
-  FormControlLabel,
-  IconButton,
-  InputAdornment,
   Link as MuiLink,
-  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -66,14 +57,12 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 //     body: JSON.stringify(arg),
 //   }).then((res) => res.json());
 
-const SignIn = () => {
+const ForgortPassword = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    remember: false,
   });
 
-  const [showPassword, setShowPassword] = useState(false);
   // const router = useRouter();
 
   const { lang } = useParams();
@@ -86,15 +75,6 @@ const SignIn = () => {
   //   "/api/auth/login",
   //   sendRequest,
   // );
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => event.preventDefault();
-
-  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
-    event.preventDefault();
 
   const handleChange = ({
     target: { checked, name, type, value },
@@ -129,13 +109,11 @@ const SignIn = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.auth.signIn}
+            {dict.auth.forgotPassword}
           </Typography>
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signIn" href="" />
-        <Divider>{dict.auth.or}</Divider>
         <TextField
           // error={!!state?.errors?.email}
           fullWidth
@@ -147,70 +125,6 @@ const SignIn = () => {
           type="email"
           value={form.email}
         />
-        <TextField
-          // error={!!state?.errors?.password}
-          fullWidth
-          // 這邊可能會需要修正
-          // helperText={
-          //   state?.errors?.password?.length
-          //     ? `Password must: ${state.errors.password.join(", ")}`
-          //     : ""
-          // }
-          label={dict.auth.password}
-          name="password"
-          onChange={handleChange}
-          required
-          slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="start">
-                  <IconButton
-                    aria-label={
-                      showPassword
-                        ? dict.auth.hidePassword
-                        : dict.auth.showPassword
-                    }
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
-          type={showPassword ? "text" : "password"}
-          value={form.password}
-        />
-        <Stack
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={1}
-        >
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={form.remember}
-                name="remember"
-                onChange={handleChange}
-                size="small"
-              />
-            }
-            label={
-              <Typography variant="body2">{dict.auth.remember}</Typography>
-            }
-          />
-          <MuiLink
-            component={NextLink}
-            href={`/${lang}/member/forgot-password`}
-            variant="body2"
-          >
-            {dict.auth.forgotPassword}
-          </MuiLink>
-        </Stack>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
@@ -221,12 +135,12 @@ const SignIn = () => {
           type="submit"
           variant="contained"
         >
-          {dict.auth.signIn}
+          {dict.auth.sendPasswordResetLink}
         </Button>
         <Typography variant="body2">
-          {dict.auth.noAccount}{" "}
-          <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-            {dict.auth.signUp}
+          {dict.auth.rememberedPassword}{" "}
+          <MuiLink component={NextLink} href={`/${lang}/sign-in`}>
+            {dict.auth.signIn}
           </MuiLink>
         </Typography>
       </StyledCardActions>
@@ -234,4 +148,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default ForgortPassword;

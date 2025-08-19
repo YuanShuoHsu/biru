@@ -78,18 +78,18 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
         // auth: "guest",
         icon: Login,
         label: dict.nav.signIn,
-        to: "/member/sign-in",
+        to: "/sign-in",
       },
       {
         // auth: "guest",
         icon: PersonAdd,
         label: dict.nav.signUp,
-        to: "/member/sign-up",
+        to: "/sign-up",
       },
     ],
     icon: AccountCircle,
     label: dict.nav.member,
-    to: "/member",
+    to: "/(auth)",
   },
 ];
 

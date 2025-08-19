@@ -32,7 +32,13 @@
   "breadcrumb": {
     "checkout": "결제",
     "complete": "완료",
-    "order": "주문"
+    "forgotPassword": "비밀번호 찾기",
+    "order": "주문",
+    "privacy": "개인정보 처리방침",
+    "resetPassword": "비밀번호 재설정",
+    "signIn": "로그인",
+    "signUp": "회원가입",
+    "terms": "서비스 이용약관"
   },
   "cart": {
     "backToOrder": "메뉴로 돌아가기",

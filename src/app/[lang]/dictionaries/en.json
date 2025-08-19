@@ -32,7 +32,13 @@
   "breadcrumb": {
     "checkout": "Checkout",
     "complete": "Complete",
-    "order": "Order"
+    "forgotPassword": "Forgot password",
+    "order": "Order",
+    "privacy": "Privacy Policy",
+    "resetPassword": "Reset password",
+    "signIn": "Sign in",
+    "signUp": "Sign up",
+    "terms": "Terms of Service"
   },
   "cart": {
     "backToOrder": "Back to Order",

@@ -7,9 +7,15 @@ import { useParams, usePathname } from "next/navigation";
 import { I18nDict, useI18n } from "@/context/i18n";
 
 import {
+  Gavel,
+  HelpOutline,
   LocalMall,
+  LockReset,
+  Login,
   Payment,
+  PersonAdd,
   Pets,
+  Policy,
   ShoppingCart,
   Storefront,
   TableBar,
@@ -64,6 +70,18 @@ const breadcrumbMap = (
       icon: Pets,
       label: dict.breadcrumb.complete,
     },
+    "/forgot-password": {
+      icon: HelpOutline,
+      label: dict.breadcrumb.forgotPassword,
+    },
+    "/reset-password": {
+      icon: LockReset,
+      label: dict.breadcrumb.resetPassword,
+    },
+    "/sign-in": { icon: Login, label: dict.breadcrumb.signIn },
+    "/sign-up": { icon: PersonAdd, label: dict.breadcrumb.signUp },
+    "/privacy": { icon: Policy, label: dict.breadcrumb.privacy },
+    "/terms": { icon: Gavel, label: dict.breadcrumb.terms },
   };
 };
 

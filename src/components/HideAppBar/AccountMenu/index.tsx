@@ -33,7 +33,7 @@ const AccountMenu = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     // if (!user) {
-    router.push(`/${lang}/member/sign-in`);
+    router.push(`/${lang}/sign-in`);
     return;
     // }
 

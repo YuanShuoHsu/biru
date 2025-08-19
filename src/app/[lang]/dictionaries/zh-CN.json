@@ -32,7 +32,13 @@
   "breadcrumb": {
     "checkout": "结账",
     "complete": "完成",
-    "order": "点餐"
+    "forgotPassword": "忘记密码",
+    "order": "点餐",
+    "privacy": "隐私政策",
+    "resetPassword": "重置密码",
+    "signIn": "登录",
+    "signUp": "注册",
+    "terms": "服务条款"
   },
   "cart": {
     "backToOrder": "返回点餐",
