@@ -1,4 +1,5 @@
-import { LocaleCode } from "@/types/locale";
+import type { LocaleCode } from "@/types/locale";
+import type { StoreValue } from "@/types/stores";
 
 export const stores: {
   value: string;
@@ -25,8 +26,6 @@ export const stores: {
     value: "dayuan",
   },
 ] as const;
-
-export type StoreValue = (typeof stores)[number]["value"];
 
 export const getStoreLabel = (lang: LocaleCode, store: StoreValue) => {
   const found = stores.find(({ value }) => value === store);

@@ -1,4 +1,4 @@
-import { StoreValue } from "@/utils/stores";
+import type { StoreValue } from "./stores";
 
 export type LocaleCode = "zh-TW" | "en" | "ja" | "ko" | "zh-CN";
 

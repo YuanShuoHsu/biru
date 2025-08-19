@@ -4,7 +4,9 @@ import OrderTableNumber from "./OrderTableNumber";
 
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
-import { stores, type StoreValue } from "@/utils/stores";
+import type { StoreValue } from "@/types/stores";
+
+import { stores } from "@/utils/stores";
 
 interface OrderTableNumberPageProps {
   params: Promise<{ store: StoreValue; tableNumber: string }>;

@@ -2,7 +2,9 @@ import { notFound } from "next/navigation";
 
 import OrderSelect from "../OrderSelect";
 
-import { stores, type StoreValue } from "@/utils/stores";
+import type { StoreValue } from "@/types/stores";
+
+import { stores } from "@/utils/stores";
 
 interface OrderStorePageProps {
   params: Promise<{ store: StoreValue }>;
