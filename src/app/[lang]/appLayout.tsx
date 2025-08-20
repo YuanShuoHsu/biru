@@ -33,10 +33,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   });
 
   const pathname = usePathname();
-  const { lang, tableNumber } = useParams();
+  const { lang, store, tableNumber } = useParams();
 
   const isHome = pathname === `/${lang}`;
-  const isOrderPage = pathname === `/${lang}/order/${tableNumber}`;
+  const isOrderPage = pathname === `/${lang}/order/${store}/${tableNumber}`;
 
   const handleDrawerToggle =
     (type: DrawerType, open: boolean) =>
