@@ -77,6 +77,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         ) : (
           <Stack padding={2} height="100%" gap={2}>
             <Stack
+              flexWrap={{ xs: "wrap", sm: "nowrap" }}
               direction="row"
               justifyContent="space-between"
               alignItems="center"
@@ -84,7 +85,13 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             >
               <RouterBreadcrumbs />
               {isOrderPage && (
-                <Stack direction="row" alignItems="center" gap={2}>
+                <Stack
+                  width={{ xs: "100%", sm: "auto" }}
+                  direction="row"
+                  justifyContent={{ xs: "space-between" }}
+                  alignItems="center"
+                  gap={2}
+                >
                   <OrderSearch />
                   <ViewToggleButtons />
                 </Stack>
