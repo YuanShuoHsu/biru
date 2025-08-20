@@ -1,5 +1,3 @@
-// type Tag = "lowCaffeine";
-
 import { LocaleCode } from "./locale";
 
 export type LocalizedText = {
@@ -31,7 +29,6 @@ export interface MenuItem {
   price: number;
   sold: number;
   stock: number | null;
-  // tags?: Tag[];
 }
 
 export interface Category {
