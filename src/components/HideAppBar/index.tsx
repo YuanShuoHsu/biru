@@ -101,10 +101,10 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
           <Stack direction="row" alignItems="center" gap={0.5}>
             <ModeToggle />
             <LanguageMenu />
+            <AccountMenu />
             {showShoppingCartButton && (
               <CartIconButton onDrawerToggle={onDrawerToggle} />
             )}
-            <AccountMenu />
           </Stack>
         </StyledToolbar>
       </StyledAppBar>
