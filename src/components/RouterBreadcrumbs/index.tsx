@@ -1,7 +1,7 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-IconBreadcrumbs.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
-import Link from "next/link";
+import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
 import { I18nDict, useI18n } from "@/context/i18n";
@@ -91,7 +91,7 @@ interface LinkRouterProps extends LinkProps {
 }
 
 const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
-  <MuiLink component={Link} href={to} {...props} />
+  <MuiLink component={NextLink} href={to} {...props} />
 );
 
 const iconTextBaseStyles = (theme: Theme) => ({

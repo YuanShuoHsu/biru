@@ -2,18 +2,26 @@
 
 "use client";
 
-import Link from "next/link";
+import NextLink from "next/link";
 import { useParams } from "next/navigation";
+
+import { Box, Link as MuiLink, Typography } from "@mui/material";
 
 const NotFound = () => {
   const { lang } = useParams();
 
   return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href={`/${lang}`}>Return Home</Link>
-    </div>
+    <Box>
+      <Typography color="text.primary" variant="h2">
+        Not Found
+      </Typography>
+      <Typography color="text.primary" variant="body1">
+        Could not find requested resource
+      </Typography>
+      <MuiLink color="text.primary" component={NextLink} href={`/${lang}`}>
+        Return Home
+      </MuiLink>
+    </Box>
   );
 };
 
