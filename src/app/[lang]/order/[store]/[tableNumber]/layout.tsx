@@ -5,22 +5,24 @@ import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 import type { StoreValue } from "@/types/stores";
 import type { TableNumberParam } from "@/types/tableNumbers";
 
-interface OrderTableNumberLayoutProps {
+interface OrderStoreTableNumberLayoutProps {
   children: React.ReactNode;
   params: Promise<{ store: StoreValue; tableNumber: TableNumberParam }>;
 }
 
-const OrderTableNumberLayout = async ({
+const OrderStoreTableNumberLayout = async ({
   children,
   params,
-}: OrderTableNumberLayoutProps) => {
+}: OrderStoreTableNumberLayoutProps) => {
   const { tableNumber } = await params;
 
-  const tableId = Number(tableNumber);
-  if (Number.isNaN(tableId) || tableId < 0 || tableId > TABLE_NUMBERS)
+  if (
+    !/^(0|[1-9]\d*)$/.test(tableNumber) ||
+    Number(tableNumber) > TABLE_NUMBERS
+  )
     return notFound();
 
   return <>{children}</>;
 };
 
-export default OrderTableNumberLayout;
+export default OrderStoreTableNumberLayout;
