@@ -20,7 +20,7 @@ import {
 
 import { useI18n } from "@/context/i18n";
 
-import { Tab, Tabs, useScrollTrigger } from "@mui/material";
+import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
@@ -147,7 +147,8 @@ const CustomizedTabs = () => {
   ));
 
   return (
-    <>
+    <Stack gap={2}>
+      {/* hook.js:608 Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element */}
       <HorizontalTabs
         aria-label="Horizontal tabs"
         onChange={handleChange}
@@ -167,7 +168,7 @@ const CustomizedTabs = () => {
           />
         </TabPanel>
       ))}
-    </>
+    </Stack>
   );
 };
 
