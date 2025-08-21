@@ -31,6 +31,9 @@ import { menu } from "@/utils/menu";
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
 })<{ trigger: boolean }>(({ theme, trigger }) => {
+  const backgroundColorTransition =
+    theme.transitions.create("background-color");
+
   const easing = {
     enter: theme.transitions.easing.easeOut,
     exit: theme.transitions.easing.sharp,
@@ -41,28 +44,26 @@ const HorizontalTabs = styled(Tabs, {
     exit: theme.transitions.duration.leavingScreen,
   };
 
-  const topTransition = `top ${trigger ? duration.exit : duration.enter}ms ${
-    trigger ? easing.exit : easing.enter
-  }`;
-
-  const backgroundColorTransition =
-    theme.transitions.create("background-color");
+  const transformTransition = `transform ${
+    trigger ? duration.exit : duration.enter
+  }ms ${trigger ? easing.exit : easing.enter}`;
 
   return {
     position: "sticky",
 
-    top: trigger ? 0 : 56,
+    top: 0,
+    transform: trigger ? "translateY(0)" : "translateY(56px)",
     [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-      top: trigger ? 0 : 48,
+      transform: trigger ? "translateY(0)" : "translateY(48px)",
     },
     [theme.breakpoints.up("sm")]: {
-      top: trigger ? 0 : 64,
+      transform: trigger ? "translateY(0)" : "translateY(64px)",
     },
 
     backgroundColor: theme.vars.palette.background.paper,
     borderBottom: `1px solid ${theme.palette.divider}`,
 
-    transition: `${topTransition}, ${backgroundColorTransition}`,
+    transition: `${backgroundColorTransition}, ${transformTransition}`,
 
     zIndex: theme.zIndex.appBar - 1,
 
