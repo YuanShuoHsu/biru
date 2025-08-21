@@ -27,7 +27,7 @@ const OrderTableSelect = () => {
 
   return (
     <>
-      <Typography color="text.primary" variant="h6">
+      <Typography color="text.primary" variant="subtitle1">
         {dict.order.store.selectTable}
       </Typography>
       <Grid container spacing={2}>
