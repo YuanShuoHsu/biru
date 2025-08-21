@@ -51,13 +51,15 @@ const HorizontalTabs = styled(Tabs, {
   return {
     position: "sticky",
 
-    top: 0,
-    transform: trigger ? "translateY(0)" : "translateY(56px)",
+    top: 56,
+    transform: trigger ? "translateY(-56px)" : "translateY(0)",
     [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-      transform: trigger ? "translateY(0)" : "translateY(48px)",
+      top: 48,
+      transform: trigger ? "translateY(-48px)" : "translateY(0)",
     },
     [theme.breakpoints.up("sm")]: {
-      transform: trigger ? "translateY(0)" : "translateY(64px)",
+      top: 64,
+      transform: trigger ? "translateY(-64px)" : "translateY(0)",
     },
 
     backgroundColor: theme.vars.palette.background.paper,
