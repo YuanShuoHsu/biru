@@ -33,20 +33,17 @@ const HorizontalTabs = styled(Tabs, {
 })<{ trigger: boolean }>(({ theme, trigger }) => ({
   position: "sticky",
 
-  top: 56,
-  transform: trigger ? "translateY(-56px)" : "translateY(0)",
+  top: trigger ? 0 : 56,
   [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-    top: 48,
-    transform: trigger ? "translateY(-48px)" : "translateY(0)",
+    top: trigger ? 0 : 48,
   },
   [theme.breakpoints.up("sm")]: {
-    top: 64,
-    transform: trigger ? "translateY(-64px)" : "translateY(0)",
+    top: trigger ? 0 : 64,
   },
 
   backgroundColor: theme.vars.palette.background.paper,
   borderBottom: `1px solid ${theme.palette.divider}`,
-  transition: theme.transitions.create(["background-color", "transform"]),
+  transition: theme.transitions.create(["background-color", "top"]),
   zIndex: theme.zIndex.appBar - 1,
 
   "& .MuiTab-root": {
