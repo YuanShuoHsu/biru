@@ -27,16 +27,10 @@ import type { DrawerType } from "@/types/drawer";
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "trigger",
 })<{ trigger: boolean }>(({ theme, trigger }) => ({
-  top: trigger ? -56 : 0,
-  [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-    top: trigger ? -48 : 0,
-  },
-  [theme.breakpoints.up("sm")]: {
-    top: trigger ? -64 : 0,
-  },
-
   backgroundImage: "none",
-  transition: theme.transitions.create("top"),
+  transform: trigger ? "translateY(-100%)" : "translateY(0)",
+  transition: theme.transitions.create("transform"),
+  willChange: "transform",
 }));
 
 const StyledToolbar = styled(Toolbar)(({ theme }) => ({
@@ -66,7 +60,9 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
   const { lang, store, tableNumber } = useParams();
 
-  const trigger = useScrollTrigger();
+  const trigger = useScrollTrigger({
+    threshold: 150,
+  });
 
   const basePath = `/${lang}/order/${store}/${tableNumber}`;
   const showShoppingCartButton =
