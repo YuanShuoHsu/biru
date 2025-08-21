@@ -1,4 +1,5 @@
 // https://mui.com/material-ui/react-tabs/#system-VerticalTabs.tsx
+// https://github.com/mui/material-ui/issues/10739
 
 "use client";
 
@@ -18,7 +19,7 @@ import {
 
 import { useI18n } from "@/context/i18n";
 
-import { Tab, Tabs } from "@mui/material";
+import { Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
@@ -27,18 +28,49 @@ import type { LangParam } from "@/types/locale";
 
 import { menu } from "@/utils/menu";
 
-const HorizontalTabs = styled(Tabs)(({ theme }) => ({
-  position: "sticky",
-  top: 0,
-  backgroundColor: theme.vars.palette.background.paper,
-  borderBottom: `1px solid ${theme.palette.divider}`,
-  transition: theme.transitions.create("background-color"),
-  zIndex: theme.zIndex.appBar - 1,
+const HorizontalTabs = styled(Tabs, {
+  shouldForwardProp: (prop) => prop !== "trigger",
+})<{ trigger: boolean }>(({ theme, trigger }) => {
+  const easing = {
+    enter: theme.transitions.easing.easeOut,
+    exit: theme.transitions.easing.sharp,
+  };
 
-  "& .MuiTab-root": {
-    transition: theme.transitions.create("color"),
-  },
-}));
+  const duration = {
+    enter: theme.transitions.duration.enteringScreen,
+    exit: theme.transitions.duration.leavingScreen,
+  };
+
+  const topTransition = `top ${trigger ? duration.exit : duration.enter}ms ${
+    trigger ? easing.exit : easing.enter
+  }`;
+
+  const backgroundColorTransition =
+    theme.transitions.create("background-color");
+
+  return {
+    position: "sticky",
+
+    top: trigger ? 0 : 56,
+    [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+      top: trigger ? 0 : 48,
+    },
+    [theme.breakpoints.up("sm")]: {
+      top: trigger ? 0 : 64,
+    },
+
+    backgroundColor: theme.vars.palette.background.paper,
+    borderBottom: `1px solid ${theme.palette.divider}`,
+
+    transition: `${topTransition}, ${backgroundColorTransition}`,
+
+    zIndex: theme.zIndex.appBar - 1,
+
+    "& .MuiTab-root": {
+      transition: theme.transitions.create("color"),
+    },
+  };
+});
 
 const a11yProps = (index: number) => ({
   id: `simple-tab-${index}`,
@@ -52,6 +84,8 @@ const CustomizedTabs = () => {
 
   const { orderSearchText } = useOrderSearchStore();
   const searchText = orderSearchText.trim().toLowerCase();
+
+  const trigger = useScrollTrigger();
 
   const allItems = menu.flatMap(({ items }) => items);
 
@@ -133,6 +167,7 @@ const CustomizedTabs = () => {
         aria-label="Horizontal tabs"
         onChange={handleChange}
         orientation="horizontal"
+        trigger={trigger}
         value={displayIndex}
         variant="scrollable"
       >
