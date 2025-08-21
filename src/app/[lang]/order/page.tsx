@@ -1,5 +1,5 @@
-import OrderSelect from "./OrderSelect";
+import OrderStoreSelect from "@/components/OrderStoreSelect";
 
-const Order = () => <OrderSelect />;
+const Order = () => <OrderStoreSelect />;
 
 export default Order;
