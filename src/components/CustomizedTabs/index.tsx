@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
+import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 import {
   LATEST,
   NEW_PRODUCT_DAYS,
@@ -68,7 +69,7 @@ const CustomizedTabs = () => {
   const searchText = orderSearchText.trim().toLowerCase();
 
   const trigger = useScrollTrigger({
-    threshold: 150,
+    threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
   const allItems = menu.flatMap(({ items }) => items);

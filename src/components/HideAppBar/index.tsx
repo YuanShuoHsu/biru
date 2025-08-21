@@ -9,6 +9,8 @@ import CartIconButton from "./CartIconButton";
 import LanguageMenu from "./LanguageMenu";
 import ModeToggle from "./ModeToggle";
 
+import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
+
 import { Menu } from "@mui/icons-material";
 import {
   AppBar,
@@ -61,7 +63,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const { lang, store, tableNumber } = useParams();
 
   const trigger = useScrollTrigger({
-    threshold: 150,
+    threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
   const basePath = `/${lang}/order/${store}/${tableNumber}`;
