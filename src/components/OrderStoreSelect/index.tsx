@@ -20,16 +20,16 @@ const OrderStoreSelect = () => {
 
   return (
     <TextField
-      // error={!!state?.errors?.email}
+      // error={!!state?.errors?.store}
       fullWidth
-      // helperText={state?.errors?.email}
+      // helperText={state?.errors?.store}
       label={dict.order.selectStore}
       name="store"
       onChange={handleChange}
       required
       select
       size="small"
-      value={store}
+      value={store || ""}
     >
       {stores.map(({ label, value }) => (
         <MenuItem key={value} value={value}>
