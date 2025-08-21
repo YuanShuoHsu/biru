@@ -28,10 +28,10 @@ const OrderTableSelect = () => {
   return (
     <>
       <Typography color="text.primary" variant="h6">
-        {dict.order.selectTable}
+        {dict.order.store.selectTable}
       </Typography>
       <Grid container spacing={2}>
-        {Array.from({ length: TABLE_NUMBERS + 1 }, (_, i) => i).map(
+        {Array.from({ length: TABLE_NUMBERS + 1 }, (_, index) => index).map(
           (tableNumber) => (
             <Grid key={tableNumber} size={{ xs: 4, sm: 3, md: 2, xl: 1 }}>
               <StyledButton
@@ -41,7 +41,7 @@ const OrderTableSelect = () => {
                 variant="outlined"
               >
                 {tableNumber === 0
-                  ? interpolate(dict.order.takeout, {
+                  ? interpolate(dict.order.store.tableNumber.takeout, {
                       tableNumber,
                     })
                   : tableNumber}

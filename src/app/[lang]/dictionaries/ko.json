@@ -75,16 +75,19 @@
     "signUp": "회원가입"
   },
   "order": {
-    "selectTable": "테이블 선택",
-    "tableNumber": {
-      "latest": "신상품",
-      "new": "신상품",
-      "search": {
-        "placeholder": "메뉴 검색"
-      },
-      "top": "TOP",
-      "topSold": "인기 상품"
-    },
-    "takeout": "{tableNumber} (테이크아웃)"
+    "selectStore": "지점 선택",
+    "store": {
+      "selectTable": "테이블 선택",
+      "tableNumber": {
+        "latest": "신상품",
+        "new": "신상품",
+        "search": {
+          "placeholder": "메뉴 검색"
+        },
+        "takeout": "{tableNumber} (테이크아웃)",
+        "top": "TOP",
+        "topSold": "인기 상품"
+      }
+    }
   }
 }

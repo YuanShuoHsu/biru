@@ -59,7 +59,7 @@ const breadcrumbMap = (
     [`/order/${store}/${tableNumber}`]: {
       icon: isTakeout ? LocalMall : TableBar,
       label: isTakeout
-        ? interpolate(dict.order.takeout, { tableNumber })
+        ? interpolate(dict.order.store.tableNumber.takeout, { tableNumber })
         : tableNumber,
     },
     [`/order/${store}/${tableNumber}/checkout`]: {

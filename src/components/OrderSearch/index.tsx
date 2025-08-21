@@ -22,7 +22,7 @@ const OrderSearch = () => {
     <TextField
       fullWidth
       onChange={(event) => setOrderSearchText(event.target.value)}
-      placeholder={dict.order.tableNumber.search.placeholder}
+      placeholder={dict.order.store.tableNumber.search.placeholder}
       slotProps={{
         input: {
           startAdornment: (

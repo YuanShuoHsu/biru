@@ -75,16 +75,19 @@
     "signUp": "注册"
   },
   "order": {
-    "selectTable": "选择桌号",
-    "tableNumber": {
-      "latest": "新品上架",
-      "new": "新品",
-      "search": {
-        "placeholder": "搜索菜单"
-      },
-      "top": "TOP",
-      "topSold": "人气商品"
-    },
-    "takeout": "{tableNumber}（外卖）"
+    "selectStore": "选择门店",
+    "store": {
+      "selectTable": "选择桌号",
+      "tableNumber": {
+        "latest": "新品上架",
+        "new": "新品",
+        "search": {
+          "placeholder": "搜索菜单"
+        },
+        "takeout": "{tableNumber}（外卖）",
+        "top": "TOP",
+        "topSold": "人气商品"
+      }
+    }
   }
 }

@@ -75,16 +75,19 @@
     "signUp": "註冊"
   },
   "order": {
-    "selectTable": "選擇桌號",
-    "tableNumber": {
-      "latest": "新品上架",
-      "new": "新品",
-      "search": {
-        "placeholder": "搜尋菜單"
-      },
-      "top": "TOP",
-      "topSold": "人氣商品"
-    },
-    "takeout": "{tableNumber}（外帶）"
+    "selectStore": "選擇門市",
+    "store": {
+      "selectTable": "選擇桌號",
+      "tableNumber": {
+        "latest": "新品上架",
+        "new": "新品",
+        "search": {
+          "placeholder": "搜尋菜單"
+        },
+        "takeout": "{tableNumber}（外帶）",
+        "top": "TOP",
+        "topSold": "人氣商品"
+      }
+    }
   }
 }

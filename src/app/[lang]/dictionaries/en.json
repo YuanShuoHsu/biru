@@ -75,16 +75,19 @@
     "signUp": "Sign up"
   },
   "order": {
-    "selectTable": "Select a table",
-    "tableNumber": {
-      "latest": "New Arrivals",
-      "new": "New",
-      "search": {
-        "placeholder": "Search menu"
-      },
-      "top": "TOP",
-      "topSold": "Best Sellers"
-    },
-    "takeout": "{tableNumber} (Takeout)"
+    "selectStore": "Select a store",
+    "store": {
+      "selectTable": "Select a table",
+      "tableNumber": {
+        "latest": "New Arrivals",
+        "new": "New",
+        "search": {
+          "placeholder": "Search menu"
+        },
+        "takeout": "{tableNumber} (Takeout)",
+        "top": "TOP",
+        "topSold": "Best Sellers"
+      }
+    }
   }
 }
