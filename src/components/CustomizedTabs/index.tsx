@@ -30,50 +30,29 @@ import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
-})<{ trigger: boolean }>(({ theme, trigger }) => {
-  const backgroundColorTransition =
-    theme.transitions.create("background-color");
+})<{ trigger: boolean }>(({ theme, trigger }) => ({
+  position: "sticky",
 
-  const easing = {
-    enter: theme.transitions.easing.easeOut,
-    exit: theme.transitions.easing.sharp,
-  };
+  top: 56,
+  transform: trigger ? "translateY(-56px)" : "translateY(0)",
+  [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+    top: 48,
+    transform: trigger ? "translateY(-48px)" : "translateY(0)",
+  },
+  [theme.breakpoints.up("sm")]: {
+    top: 64,
+    transform: trigger ? "translateY(-64px)" : "translateY(0)",
+  },
 
-  const duration = {
-    enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen,
-  };
+  backgroundColor: theme.vars.palette.background.paper,
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  transition: theme.transitions.create(["background-color", "transform"]),
+  zIndex: theme.zIndex.appBar - 1,
 
-  const transformTransition = `transform ${
-    trigger ? duration.exit : duration.enter
-  }ms ${trigger ? easing.exit : easing.enter}`;
-
-  return {
-    position: "sticky",
-
-    top: 56,
-    transform: trigger ? "translateY(-56px)" : "translateY(0)",
-    [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-      top: 48,
-      transform: trigger ? "translateY(-48px)" : "translateY(0)",
-    },
-    [theme.breakpoints.up("sm")]: {
-      top: 64,
-      transform: trigger ? "translateY(-64px)" : "translateY(0)",
-    },
-
-    backgroundColor: theme.vars.palette.background.paper,
-    borderBottom: `1px solid ${theme.palette.divider}`,
-
-    transition: `${backgroundColorTransition}, ${transformTransition}`,
-
-    zIndex: theme.zIndex.appBar - 1,
-
-    "& .MuiTab-root": {
-      transition: theme.transitions.create("color"),
-    },
-  };
-});
+  "& .MuiTab-root": {
+    transition: theme.transitions.create("color"),
+  },
+}));
 
 const a11yProps = (index: number) => ({
   id: `simple-tab-${index}`,
