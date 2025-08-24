@@ -155,10 +155,10 @@ const ActionAreaCard = ({
     choices.some(({ extraCost }) => extraCost > 0),
   );
 
-  const inStock = stock === null || stock > 0;
+  const isItemOutOfStock = stock === 0;
 
   const handleDialogClick = () => {
-    if (!inStock) return;
+    if (isItemOutOfStock) return;
 
     setDialog({
       cancelText: dict.dialog.close,
@@ -202,8 +202,8 @@ const ActionAreaCard = ({
     <StyledCard>
       <SoldOut stock={stock} />
       <StyledCardActionArea
-        disableRipple={!inStock}
-        inStock={inStock}
+        disableRipple={isItemOutOfStock}
+        inStock={!isItemOutOfStock}
         onClick={handleDialogClick}
         viewDirection={viewDirection}
       >

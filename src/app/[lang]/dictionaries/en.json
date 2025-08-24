@@ -43,7 +43,7 @@
   "cart": {
     "backToOrder": "Back to Order",
     "checkout": "Proceed to Checkout",
-    "choiceUnavailable": "{label}\nis sold out",
+    "choiceOutOfStock": "{label}\nis sold out",
     "quantityExceedsStock": "{stock} left",
     "title": "Shopping Cart",
     "totalQuantity": "{quantity} items"

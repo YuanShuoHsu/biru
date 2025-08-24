@@ -83,7 +83,7 @@ export const getChoiceLabels = (
     .join(joinWith);
 };
 
-export const getUnavailableChoicesLabels = (
+export const getOutOfStockChoiceLabels = (
   id: string,
   choices: CartItemChoices,
   lang: LocaleCode,
@@ -104,7 +104,7 @@ export const getUnavailableChoicesLabels = (
       const valueLabels = values
         .map((choiceValue) => {
           const choice = findOptionChoiceByValue(option, choiceValue);
-          return choice?.available === false ? choice.label[lang] : null;
+          return choice?.stock === 0 ? choice.label[lang] : null;
         })
         .filter(Boolean)
         .join(delimiter);
@@ -114,7 +114,7 @@ export const getUnavailableChoicesLabels = (
     .join(joinWith);
 };
 
-export const hasUnavailableChoices = (
+export const hasOutOfStockChoices = (
   id: string,
   choices: CartItemChoices,
 ): boolean => {
@@ -131,7 +131,7 @@ export const hasUnavailableChoices = (
 
     return values.some((value) => {
       const choice = findOptionChoiceByValue(option, value);
-      return choice?.available === false;
+      return choice?.stock === 0;
     });
   });
 };
@@ -186,7 +186,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
-                available: false,
+                stock: 1,
               },
               {
                 label: {
@@ -198,7 +198,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -224,7 +224,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -236,7 +236,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -248,7 +248,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -274,7 +274,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -286,7 +286,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: false,
+                stock: 0,
               },
               {
                 label: {
@@ -298,7 +298,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -324,7 +324,7 @@ export const menu: Category[] = [
                 },
                 value: "pearls",
                 extraCost: 10,
-                available: false,
+                stock: 0,
               },
               {
                 label: {
@@ -336,7 +336,7 @@ export const menu: Category[] = [
                 },
                 value: "pudding",
                 extraCost: 15,
-                available: false,
+                stock: 0,
               },
             ],
             multiple: true,
@@ -386,7 +386,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -398,7 +398,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -424,7 +424,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -436,7 +436,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -448,7 +448,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -510,7 +510,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: false,
+                stock: 0,
               },
               {
                 label: {
@@ -522,7 +522,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: false,
+                stock: 0,
               },
               {
                 label: {
@@ -534,7 +534,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -585,7 +585,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -597,7 +597,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -623,7 +623,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -635,7 +635,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -647,7 +647,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -709,7 +709,7 @@ export const menu: Category[] = [
                 },
                 value: "chia_seeds",
                 extraCost: 10,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -721,7 +721,7 @@ export const menu: Category[] = [
                 },
                 value: "mint",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: true,
@@ -771,7 +771,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: false,
@@ -891,7 +891,7 @@ export const menu: Category[] = [
                 },
                 value: "tomato",
                 extraCost: 5,
-                available: true,
+                stock: null,
               },
               {
                 label: {
@@ -903,7 +903,7 @@ export const menu: Category[] = [
                 },
                 value: "lettuce",
                 extraCost: 0,
-                available: true,
+                stock: null,
               },
             ],
             multiple: true,

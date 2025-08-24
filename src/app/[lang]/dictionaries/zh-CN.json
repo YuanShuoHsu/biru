@@ -43,7 +43,7 @@
   "cart": {
     "backToOrder": "返回点餐",
     "checkout": "前往结算",
-    "choiceUnavailable": "{label}\n已售罄",
+    "choiceOutOfStock": "{label}\n已售罄",
     "quantityExceedsStock": "剩 {stock} 件",
     "title": "购物车",
     "totalQuantity": "共 {quantity} 件"

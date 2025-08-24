@@ -43,7 +43,7 @@
   "cart": {
     "backToOrder": "메뉴로 돌아가기",
     "checkout": "결제하기",
-    "choiceUnavailable": "{label}\n품절되었습니다",
+    "choiceOutOfStock": "{label}\n품절되었습니다",
     "quantityExceedsStock": "{stock} 개 남음",
     "title": "장바구니",
     "totalQuantity": "총 {quantity} 개"

@@ -11,10 +11,7 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
-import {
-  getUnavailableChoicesLabels,
-  hasUnavailableChoices,
-} from "@/utils/menu";
+import { getOutOfStockChoiceLabels, hasOutOfStockChoices } from "@/utils/menu";
 
 const StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -24,6 +21,7 @@ const StyledButton = styled(Button, {
   backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
   borderRadius: 0,
   opacity: inStock ? 0 : 1,
+  pointerEvents: inStock ? "none" : "auto",
   transition: theme.transitions.create([
     "background-color",
     "border-color",
@@ -77,13 +75,18 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
 
   const { deleteItem, updateItem } = useCartStore();
 
-  const isSoldOut = stock === 0;
-  const isOverOrdered = stock !== null && quantity > stock;
-  const isChoiceUnavailable = hasUnavailableChoices(id, choices);
+  const isItemOutOfStock = stock === 0;
+  const isItemOverOrdered = stock !== null && quantity > stock;
+  const isChoiceOutOfStock = hasOutOfStockChoices(id, choices);
 
-  const shouldDeleteItem = isSoldOut || isChoiceUnavailable;
-  const isUnavailable = shouldDeleteItem || isOverOrdered;
-  const labels = getUnavailableChoicesLabels(id, choices, lang, dict);
+  const shouldDeleteItem = isItemOutOfStock || isChoiceOutOfStock;
+  const isOutOfStock = shouldDeleteItem || isItemOverOrdered;
+  const outOfStockChoiceLabels = getOutOfStockChoiceLabels(
+    id,
+    choices,
+    lang,
+    dict,
+  );
 
   const getTypographyVariant = (
     message: string,
@@ -99,13 +102,13 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
     return "body2";
   };
 
-  const message = isSoldOut
+  const message = isItemOutOfStock
     ? dict.common.soldOut
-    : isChoiceUnavailable
-      ? interpolate(dict.cart.choiceUnavailable, {
-          label: labels,
+    : isChoiceOutOfStock
+      ? interpolate(dict.cart.choiceOutOfStock, {
+          label: outOfStockChoiceLabels,
         })
-      : isOverOrdered
+      : isItemOverOrdered
         ? interpolate(dict.cart.quantityExceedsStock, { stock })
         : "";
 
@@ -115,7 +118,10 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
 
     if (shouldDeleteItem) {
       deleteItem(item);
-    } else if (isOverOrdered) {
+      return;
+    }
+
+    if (isItemOverOrdered) {
       const diff = stock - quantity;
 
       updateItem({
@@ -128,11 +134,11 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
 
   return (
     <StyledButton
+      aria-label={message}
       color="error"
-      inStock={!isUnavailable}
-      disabled={!item || !isUnavailable}
+      disabled={!item || !isOutOfStock}
+      inStock={!isOutOfStock}
       onClick={handleClick}
-      onMouseDown={(event) => event.stopPropagation()}
       variant="outlined"
     >
       {item && (

@@ -43,7 +43,7 @@
   "cart": {
     "backToOrder": "メニューに戻る",
     "checkout": "レジに進む",
-    "choiceUnavailable": "{label}\nは売切れです",
+    "choiceOutOfStock": "{label}\nは売切れです",
     "quantityExceedsStock": "残り {stock} 個",
     "title": "カート",
     "totalQuantity": "合計 {quantity} 点"

@@ -8,7 +8,7 @@ export interface Choice {
   label: LocalizedText;
   value: string;
   extraCost: number;
-  available: boolean;
+  stock: number | null;
 }
 
 export interface Option {

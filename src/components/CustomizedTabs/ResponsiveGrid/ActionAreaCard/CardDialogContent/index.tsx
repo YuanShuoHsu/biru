@@ -76,8 +76,8 @@ const CardDialogContent = forwardRef<
         if (multiple) return [name, []];
 
         if (required) {
-          const firstAvailable = choices.find(({ available }) => available);
-          return [name, firstAvailable?.value];
+          const firstInStockChoice = choices.find(({ stock }) => stock !== 0);
+          return [name, firstInStockChoice?.value];
         }
 
         return [name, null];
@@ -182,13 +182,17 @@ const CardDialogContent = forwardRef<
             <FormLabel>{optionLabel[lang]}</FormLabel>
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {optionChoices.map(
-                ({ label: choiceLabel, value, extraCost, available }) => {
+                ({ label: choiceLabel, value, extraCost, stock }) => {
                   const selected = choices[name];
                   const isSelected = multiple
                     ? Array.isArray(selected) && selected.includes(value)
                     : selected === value;
 
+                  const isChoiceOutOfStock = stock === 0;
+
                   const handleClick = () => {
+                    if (isChoiceOutOfStock) return;
+
                     setChoices((prev) => {
                       const current = prev[name];
 
@@ -210,8 +214,12 @@ const CardDialogContent = forwardRef<
                   return (
                     <Chip
                       clickable
-                      color={available && isSelected ? "primary" : "default"}
-                      disabled={!available}
+                      color={
+                        !isChoiceOutOfStock && isSelected
+                          ? "primary"
+                          : "default"
+                      }
+                      disabled={isChoiceOutOfStock}
                       key={value}
                       label={
                         <Stack flexDirection="row" alignItems="center" gap={1}>
