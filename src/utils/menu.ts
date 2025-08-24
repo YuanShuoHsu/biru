@@ -186,6 +186,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                sold: 2,
                 stock: 1,
               },
               {
@@ -198,6 +199,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                sold: 5,
                 stock: null,
               },
             ],
@@ -224,6 +226,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                sold: 5,
                 stock: null,
               },
               {
@@ -236,6 +239,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                sold: 6,
                 stock: null,
               },
               {
@@ -248,6 +252,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                sold: 10,
                 stock: null,
               },
             ],
@@ -274,6 +279,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                sold: 5,
                 stock: null,
               },
               {
@@ -286,6 +292,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                sold: 2,
                 stock: 0,
               },
               {
@@ -298,6 +305,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
+                sold: 6,
                 stock: null,
               },
             ],
@@ -324,6 +332,7 @@ export const menu: Category[] = [
                 },
                 value: "pearls",
                 extraCost: 10,
+                sold: 8,
                 stock: 0,
               },
               {
@@ -336,6 +345,7 @@ export const menu: Category[] = [
                 },
                 value: "pudding",
                 extraCost: 15,
+                sold: 10,
                 stock: 0,
               },
             ],
@@ -386,6 +396,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                sold: 10,
                 stock: null,
               },
               {
@@ -398,6 +409,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                sold: 5,
                 stock: null,
               },
             ],
@@ -424,6 +436,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                sold: 10,
                 stock: null,
               },
               {
@@ -436,6 +449,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                sold: 8,
                 stock: null,
               },
               {
@@ -448,6 +462,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                sold: 6,
                 stock: null,
               },
             ],
@@ -510,6 +525,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                sold: 4,
                 stock: 0,
               },
               {
@@ -522,6 +538,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                sold: 8,
                 stock: 0,
               },
               {
@@ -534,6 +551,7 @@ export const menu: Category[] = [
                 },
                 value: "hot",
                 extraCost: 0,
+                sold: 9,
                 stock: null,
               },
             ],
@@ -585,6 +603,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
+                sold: 7,
                 stock: null,
               },
               {
@@ -597,6 +616,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 20,
+                sold: 9,
                 stock: null,
               },
             ],
@@ -623,6 +643,7 @@ export const menu: Category[] = [
                 },
                 value: "regular",
                 extraCost: 0,
+                sold: 2,
                 stock: null,
               },
               {
@@ -635,6 +656,7 @@ export const menu: Category[] = [
                 },
                 value: "less",
                 extraCost: 0,
+                sold: 10,
                 stock: null,
               },
               {
@@ -647,6 +669,7 @@ export const menu: Category[] = [
                 },
                 value: "none",
                 extraCost: 0,
+                sold: 8,
                 stock: null,
               },
             ],
@@ -709,6 +732,7 @@ export const menu: Category[] = [
                 },
                 value: "chia_seeds",
                 extraCost: 10,
+                sold: 10,
                 stock: null,
               },
               {
@@ -721,6 +745,7 @@ export const menu: Category[] = [
                 },
                 value: "mint",
                 extraCost: 0,
+                sold: 6,
                 stock: null,
               },
             ],
@@ -771,6 +796,7 @@ export const menu: Category[] = [
                 },
                 value: "l",
                 extraCost: 0,
+                sold: 4,
                 stock: null,
               },
             ],
@@ -891,6 +917,7 @@ export const menu: Category[] = [
                 },
                 value: "tomato",
                 extraCost: 5,
+                sold: 3,
                 stock: null,
               },
               {
@@ -903,6 +930,7 @@ export const menu: Category[] = [
                 },
                 value: "lettuce",
                 extraCost: 0,
+                sold: 7,
                 stock: null,
               },
             ],

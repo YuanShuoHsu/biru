@@ -8,6 +8,7 @@ export interface Choice {
   label: LocalizedText;
   value: string;
   extraCost: number;
+  sold: number;
   stock: number | null;
 }
 
