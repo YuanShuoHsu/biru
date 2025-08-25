@@ -26,6 +26,7 @@ export interface MenuItem {
   createdAt: string;
   description: LocalizedText;
   imageUrl: string;
+  isActive: boolean;
   options: Option[];
   price: number;
   sold: number;

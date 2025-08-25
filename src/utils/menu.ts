@@ -165,6 +165,7 @@ export const menu: Category[] = [
           "zh-CN": "浓郁的意式浓缩配绵密奶泡。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [
           {
             name: "size",
@@ -375,6 +376,7 @@ export const menu: Category[] = [
           "zh-CN": "香甜焦糖与浓郁浓缩完美结合。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: false,
         options: [
           {
             name: "size",
@@ -504,6 +506,7 @@ export const menu: Category[] = [
           "zh-CN": "清新茉莉花香与绿茶完美融合。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: false,
         options: [
           {
             name: "ice",
@@ -582,6 +585,7 @@ export const menu: Category[] = [
           "zh-CN": "浓醇伯爵茶搭配鲜奶，口感顺滑。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [
           {
             name: "size",
@@ -711,6 +715,7 @@ export const menu: Category[] = [
           "zh-CN": "新鲜水果搭配气泡水，清爽解腻。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [
           {
             name: "topping",
@@ -775,6 +780,7 @@ export const menu: Category[] = [
           "zh-CN": "抹茶与牛奶气泡完美结合。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [
           {
             name: "size",
@@ -838,6 +844,7 @@ export const menu: Category[] = [
           "zh-CN": "外酥内软的法式可颂。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [],
         price: 60,
         sold: 2,
@@ -861,6 +868,7 @@ export const menu: Category[] = [
           "zh-CN": "浓郁黑巧克力海绵蛋糕。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [],
         price: 90,
         sold: 4,
@@ -896,6 +904,7 @@ export const menu: Category[] = [
           "zh-CN": "火腿、起司与生菜夹于法式软包中。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [
           {
             name: "topping",
@@ -960,6 +969,7 @@ export const menu: Category[] = [
           "zh-CN": "新鲜生菜搭配香煎鸡肉。",
         },
         imageUrl: "/images/IMG_4590.jpg",
+        isActive: true,
         options: [],
         price: 160,
         sold: 6,

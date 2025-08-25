@@ -72,7 +72,15 @@ const CustomizedTabs = () => {
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
-  const allItems = menu.flatMap(({ items }) => items);
+  const categoryGroups = menu
+    .map(({ id, name, items }) => ({
+      id,
+      label: name[lang],
+      items: items.filter(({ isActive }) => isActive),
+    }))
+    .filter(({ items }) => items.length > 0);
+
+  const allItems = categoryGroups.flatMap(({ items }) => items);
 
   const topSoldItems = [...allItems]
     .sort((a, b) => b.sold - a.sold)
@@ -100,12 +108,6 @@ const CustomizedTabs = () => {
           label: dict.order.store.tableNumber.latest,
         }
       : null;
-
-  const categoryGroups = menu.map(({ id, name, items }) => ({
-    id,
-    items,
-    label: name[lang],
-  }));
 
   const combinedGroups = [
     ...(topSoldGroups ? [topSoldGroups] : []),
