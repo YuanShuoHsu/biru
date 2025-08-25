@@ -8,6 +8,7 @@ export interface Choice {
   label: LocalizedText;
   value: string;
   extraCost: number;
+  isActive: boolean;
   sold: number;
   stock: number | null;
 }
@@ -22,7 +23,7 @@ export interface Option {
 
 export interface MenuItem {
   id: string;
-  name: LocalizedText;
+  label: LocalizedText;
   createdAt: string;
   description: LocalizedText;
   imageUrl: string;
@@ -35,6 +36,6 @@ export interface MenuItem {
 
 export interface Category {
   id: string;
-  name: LocalizedText;
+  label: LocalizedText;
   items: MenuItem[];
 }

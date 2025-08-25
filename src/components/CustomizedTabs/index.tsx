@@ -73,9 +73,9 @@ const CustomizedTabs = () => {
   });
 
   const categoryGroups = menu
-    .map(({ id, name, items }) => ({
+    .map(({ id, label, items }) => ({
       id,
-      label: name[lang],
+      label: label[lang],
       items: items.filter(({ isActive }) => isActive),
     }))
     .filter(({ items }) => items.length > 0);
@@ -118,8 +118,8 @@ const CustomizedTabs = () => {
   const filteredGroups = combinedGroups
     .map((group) => ({
       ...group,
-      items: group.items.filter(({ name }) =>
-        name[lang].toLowerCase().includes(searchText),
+      items: group.items.filter(({ label }) =>
+        label[lang].toLowerCase().includes(searchText),
       ),
     }))
     .filter(

@@ -115,7 +115,7 @@ const SizeOptionChip = styled(Chip)({
 
 export interface ActionAreaCardProps {
   id: string;
-  name: string;
+  label: string;
   description: string;
   imageUrl: string;
   options: Option[];
@@ -129,7 +129,7 @@ const ActionAreaCard = ({
   id,
   description,
   imageUrl,
-  name,
+  label,
   options,
   price,
   showLatest,
@@ -166,7 +166,7 @@ const ActionAreaCard = ({
       content: (
         <CardDialogContent
           id={id}
-          name={name}
+          label={label}
           description={description}
           imageUrl={imageUrl}
           options={options}
@@ -194,7 +194,7 @@ const ActionAreaCard = ({
         });
       },
       open: true,
-      title: name,
+      title: label,
     });
   };
 
@@ -225,7 +225,7 @@ const ActionAreaCard = ({
           )}
           {imageUrl && (
             <Image
-              alt={name}
+              alt={label}
               draggable={false}
               fill
               priority
@@ -236,7 +236,7 @@ const ActionAreaCard = ({
           )}
         </ImageBox>
         <StyledCardContent>
-          <Typography variant="h6">{name}</Typography>
+          <Typography variant="h6">{label}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {sizes?.map(({ label }) => (
               <SizeOptionChip

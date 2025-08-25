@@ -57,7 +57,7 @@ export interface CardDialogContentImperativeHandle {
 
 interface CardDialogContentProps {
   id: string;
-  name: string;
+  label: string;
   description: string;
   imageUrl: string;
   options: Option[];
@@ -68,7 +68,7 @@ interface CardDialogContentProps {
 const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, name, description, imageUrl, options, price, stock }, ref) => {
+>(({ id, label, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
   const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
@@ -162,7 +162,7 @@ const CardDialogContent = forwardRef<
       <ImageBox>
         {imageUrl && (
           <Image
-            alt={name}
+            alt={label}
             draggable={false}
             fill
             sizes="(min-width: 808px) 50vw, 100vw"

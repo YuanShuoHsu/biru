@@ -31,7 +31,7 @@ import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 
 import { getErrorMessage } from "@/utils/errors";
-import { getChoiceLabels, getItemName } from "@/utils/menu";
+import { getChoiceLabels, getItemLabel } from "@/utils/menu";
 
 const mapToEcpayLanguage = (() => {
   const map: Record<LocaleCode, EcpayLanguage> = {
@@ -101,7 +101,7 @@ const CustomerPaymentSection = () => {
         TradeDesc: "餐點付款",
         ItemName: itemsList
           .map(({ id, choices, quantity }) => {
-            const name = getItemName(id, "zh-TW");
+            const itemLabel = getItemLabel(id, "zh-TW");
             const choiceLabels = getChoiceLabels(
               id,
               choices,
@@ -111,7 +111,7 @@ const CustomerPaymentSection = () => {
             );
             const formattedChoices = choiceLabels ? `[${choiceLabels}]` : "";
 
-            return `${name} ${formattedChoices} ${dict.common.multiply} ${quantity}`;
+            return `${itemLabel} ${formattedChoices} ${dict.common.multiply} ${quantity}`;
           })
           .join("#"),
         ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],

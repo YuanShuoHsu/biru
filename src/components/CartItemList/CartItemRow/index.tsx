@@ -28,7 +28,7 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
-import { getChoiceLabels, getItemName, getItemStock } from "@/utils/menu";
+import { getChoiceLabels, getItemLabel, getItemStock } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   position: "relative",
@@ -83,15 +83,15 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const { deleteItem, getItemTotalQuantity, updateItem } = useCartStore();
 
-  const stock = getItemStock(id);
-  const stockLeft = stock === null ? Infinity : stock;
+  const itemStock = getItemStock(id);
+  const itemStockLeft = itemStock === null ? Infinity : itemStock;
   const totalQuantity = getItemTotalQuantity(id);
   const availableToAdd = Math.max(
     0,
-    Math.min(MAX_QUANTITY - quantity, stockLeft - totalQuantity),
+    Math.min(MAX_QUANTITY - quantity, itemStockLeft - totalQuantity),
   );
 
-  const name = getItemName(id, lang);
+  const itemLabel = getItemLabel(id, lang);
   const choiceLabels = getChoiceLabels(id, choices, lang, dict);
 
   const canDecrease = quantity > 1;
@@ -119,7 +119,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   return (
     <StyledListItem disablePadding>
-      <SoldOut item={item} stock={stock} />
+      <SoldOut item={item} stock={itemStock} />
       <Grid
         container
         width="100%"
@@ -140,7 +140,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             <ImageBox>
               {imageUrl && (
                 <Image
-                  alt={name}
+                  alt={itemLabel}
                   draggable={false}
                   fill
                   sizes="(min-width: 808px) 50vw, 100vw"
@@ -150,7 +150,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
               )}
             </ImageBox>
           </StyledListItemAvatar>
-          <StyledListItemText primary={name} secondary={choiceLabels} />
+          <StyledListItemText primary={itemLabel} secondary={choiceLabels} />
         </Grid>
         <Grid
           size={{
@@ -222,7 +222,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             />
             {availableToAdd <= 0 && (
               <FormHelperText error>
-                {MAX_QUANTITY - quantity < stockLeft - totalQuantity
+                {MAX_QUANTITY - quantity < itemStockLeft - totalQuantity
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
