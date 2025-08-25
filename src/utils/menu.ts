@@ -187,7 +187,7 @@ export const menu: Category[] = [
                 },
                 value: "m",
                 extraCost: 0,
-                isActive: true,
+                isActive: false,
                 sold: 2,
                 stock: 1,
               },

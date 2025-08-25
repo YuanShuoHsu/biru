@@ -186,8 +186,9 @@ const CardDialogContent = forwardRef<
           <StyledFormControl key={optionValue}>
             <FormLabel>{optionLabel[lang]}</FormLabel>
             <Stack direction="row" flexWrap="wrap" gap={1}>
-              {optionChoices.map(
-                ({ label: choiceLabel, value, extraCost, stock }) => {
+              {optionChoices
+                .filter(({ isActive }) => isActive)
+                .map(({ label: choiceLabel, value, extraCost, stock }) => {
                   const selected = choices[optionValue];
                   const isSelected = multiple
                     ? Array.isArray(selected) && selected.includes(value)
@@ -246,8 +247,7 @@ const CardDialogContent = forwardRef<
                       onClick={handleClick}
                     />
                   );
-                },
-              )}
+                })}
             </Stack>
           </StyledFormControl>
         ),
