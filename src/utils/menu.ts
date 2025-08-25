@@ -50,10 +50,10 @@ const getOptionChoiceLabel = (
   return choice?.label[lang] || "";
 };
 
-const findItemOptionByName = (
+const findItemOptionByValue = (
   item: MenuItem,
   key: string,
-): Option | undefined => item.options.find(({ name }) => name === key);
+): Option | undefined => item.options.find(({ value }) => value === key);
 
 export const getChoiceLabels = (
   id: string,
@@ -69,7 +69,7 @@ export const getChoiceLabels = (
     .flatMap(([key, value]) => {
       if (!value) return [];
 
-      const option = findItemOptionByName(item, key);
+      const option = findItemOptionByValue(item, key);
       if (!option) return [];
 
       const values = Array.isArray(value) ? value : [value];
@@ -97,7 +97,7 @@ export const getOutOfStockChoiceLabels = (
     .flatMap(([key, value]) => {
       if (!value) return [];
 
-      const option = findItemOptionByName(item, key);
+      const option = findItemOptionByValue(item, key);
       if (!option) return [];
 
       const values = Array.isArray(value) ? value : [value];
@@ -124,7 +124,7 @@ export const hasOutOfStockChoices = (
   return Object.entries(choices).some(([key, value]) => {
     if (!value) return false;
 
-    const option = findItemOptionByName(item, key);
+    const option = findItemOptionByValue(item, key);
     if (!option) return false;
 
     const values = Array.isArray(value) ? value : [value];
@@ -168,7 +168,6 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            name: "size",
             label: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -176,6 +175,7 @@ export const menu: Category[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            value: "size",
             choices: [
               {
                 label: {
@@ -210,7 +210,6 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            name: "sweetness",
             label: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -218,6 +217,7 @@ export const menu: Category[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            value: "sweetness",
             choices: [
               {
                 label: {
@@ -266,7 +266,6 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            name: "ice",
             label: {
               "zh-TW": "冰塊",
               en: "Ice Level",
@@ -274,6 +273,7 @@ export const menu: Category[] = [
               ko: "얼음량",
               "zh-CN": "冰块",
             },
+            value: "ice",
             choices: [
               {
                 label: {
@@ -322,7 +322,6 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            name: "topping",
             label: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -330,6 +329,7 @@ export const menu: Category[] = [
               ko: "토핑",
               "zh-CN": "加料",
             },
+            value: "topping",
             choices: [
               {
                 label: {
@@ -389,7 +389,6 @@ export const menu: Category[] = [
         isActive: false,
         options: [
           {
-            name: "size",
             label: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -397,6 +396,7 @@ export const menu: Category[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            value: "size",
             choices: [
               {
                 label: {
@@ -431,7 +431,6 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            name: "sweetness",
             label: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -439,6 +438,7 @@ export const menu: Category[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            value: "sweetness",
             choices: [
               {
                 label: {
@@ -524,7 +524,6 @@ export const menu: Category[] = [
         isActive: false,
         options: [
           {
-            name: "ice",
             label: {
               "zh-TW": "冰塊",
               en: "Ice Level",
@@ -532,6 +531,7 @@ export const menu: Category[] = [
               ko: "얼음량",
               "zh-CN": "冰块",
             },
+            value: "ice",
             choices: [
               {
                 label: {
@@ -606,7 +606,6 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            name: "size",
             label: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -614,6 +613,7 @@ export const menu: Category[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            value: "size",
             choices: [
               {
                 label: {
@@ -648,7 +648,6 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            name: "sweetness",
             label: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -656,6 +655,7 @@ export const menu: Category[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            value: "sweetness",
             choices: [
               {
                 label: {
@@ -741,7 +741,6 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            name: "topping",
             label: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -749,6 +748,7 @@ export const menu: Category[] = [
               ko: "토핑",
               "zh-CN": "加料",
             },
+            value: "topping",
             choices: [
               {
                 label: {
@@ -808,7 +808,6 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            name: "size",
             label: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -816,6 +815,7 @@ export const menu: Category[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            value: "size",
             choices: [
               {
                 label: {
@@ -933,7 +933,6 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            name: "topping",
             label: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -941,6 +940,7 @@ export const menu: Category[] = [
               ko: "추가재료",
               "zh-CN": "加料",
             },
+            value: "topping",
             choices: [
               {
                 label: {

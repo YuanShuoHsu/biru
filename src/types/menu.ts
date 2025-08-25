@@ -14,8 +14,8 @@ export interface Choice {
 }
 
 export interface Option {
-  name: string;
   label: LocalizedText;
+  value: string;
   choices: Choice[];
   multiple: boolean;
   required: boolean;

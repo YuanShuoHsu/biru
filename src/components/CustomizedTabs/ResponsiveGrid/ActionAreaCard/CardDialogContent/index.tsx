@@ -72,15 +72,15 @@ const CardDialogContent = forwardRef<
   const [quantity, setQuantity] = useState(1);
   const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
-      options.map(({ name, choices, multiple, required }) => {
-        if (multiple) return [name, []];
+      options.map(({ value, choices, multiple, required }) => {
+        if (multiple) return [value, []];
 
         if (required) {
           const firstInStockChoice = choices.find(({ stock }) => stock !== 0);
-          return [name, firstInStockChoice?.value];
+          return [value, firstInStockChoice?.value];
         }
 
-        return [name, null];
+        return [value, null];
       }),
     ),
   );
@@ -115,8 +115,8 @@ const CardDialogContent = forwardRef<
   }, [availableToAdd, minQuantity]);
 
   const extraCost = options.reduce(
-    (total, { name, choices: optionChoices }) => {
-      const selected = choices[name];
+    (total, { value: optionValue, choices: optionChoices }) => {
+      const selected = choices[optionValue];
       const values = Array.isArray(selected)
         ? selected
         : selected
@@ -177,13 +177,18 @@ const CardDialogContent = forwardRef<
         </Typography>
       )}
       {options.map(
-        ({ name, label: optionLabel, choices: optionChoices, multiple }) => (
-          <StyledFormControl key={name}>
+        ({
+          label: optionLabel,
+          value: optionValue,
+          choices: optionChoices,
+          multiple,
+        }) => (
+          <StyledFormControl key={optionValue}>
             <FormLabel>{optionLabel[lang]}</FormLabel>
             <Stack direction="row" flexWrap="wrap" gap={1}>
               {optionChoices.map(
                 ({ label: choiceLabel, value, extraCost, stock }) => {
-                  const selected = choices[name];
+                  const selected = choices[optionValue];
                   const isSelected = multiple
                     ? Array.isArray(selected) && selected.includes(value)
                     : selected === value;
@@ -194,7 +199,7 @@ const CardDialogContent = forwardRef<
                     if (isChoiceOutOfStock) return;
 
                     setChoices((prev) => {
-                      const current = prev[name];
+                      const current = prev[optionValue];
 
                       if (multiple) {
                         const currentArr = Array.isArray(current)
@@ -204,10 +209,10 @@ const CardDialogContent = forwardRef<
                           ? currentArr.filter((v) => v !== value)
                           : [...currentArr, value];
 
-                        return { ...prev, [name]: next };
+                        return { ...prev, [optionValue]: next };
                       }
 
-                      return { ...prev, [name]: value };
+                      return { ...prev, [optionValue]: value };
                     });
                   };
 

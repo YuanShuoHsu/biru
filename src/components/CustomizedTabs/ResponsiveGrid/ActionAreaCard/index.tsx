@@ -149,7 +149,7 @@ const ActionAreaCard = ({
 
   const displayPrice = price.toLocaleString(lang);
 
-  const sizes = options?.find(({ name }) => name === "size")?.choices;
+  const sizes = options?.find(({ value }) => value === "size")?.choices;
 
   const hasExtraCost = options?.some(({ choices }) =>
     choices.some(({ extraCost }) => extraCost > 0),
