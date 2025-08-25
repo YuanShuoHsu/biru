@@ -176,82 +176,88 @@ const CardDialogContent = forwardRef<
           {description}
         </Typography>
       )}
-      {options.map(
-        ({
-          label: optionLabel,
-          value: optionValue,
-          choices: optionChoices,
-          multiple,
-        }) => (
-          <StyledFormControl key={optionValue}>
-            <FormLabel>{optionLabel[lang]}</FormLabel>
-            <Stack direction="row" flexWrap="wrap" gap={1}>
-              {optionChoices
-                .filter(({ isActive }) => isActive)
-                .map(({ label: choiceLabel, value, extraCost, stock }) => {
-                  const selected = choices[optionValue];
-                  const isSelected = multiple
-                    ? Array.isArray(selected) && selected.includes(value)
-                    : selected === value;
+      {options
+        .filter(({ choices }) => choices.some(({ isActive }) => isActive))
+        .map(
+          ({
+            label: optionLabel,
+            value: optionValue,
+            choices: optionChoices,
+            multiple,
+          }) => (
+            <StyledFormControl key={optionValue}>
+              <FormLabel>{optionLabel[lang]}</FormLabel>
+              <Stack direction="row" flexWrap="wrap" gap={1}>
+                {optionChoices
+                  .filter(({ isActive }) => isActive)
+                  .map(({ label: choiceLabel, value, extraCost, stock }) => {
+                    const selected = choices[optionValue];
+                    const isSelected = multiple
+                      ? Array.isArray(selected) && selected.includes(value)
+                      : selected === value;
 
-                  const isChoiceOutOfStock = stock === 0;
+                    const isChoiceOutOfStock = stock === 0;
 
-                  const handleClick = () => {
-                    if (isChoiceOutOfStock) return;
+                    const handleClick = () => {
+                      if (isChoiceOutOfStock) return;
 
-                    setChoices((prev) => {
-                      const current = prev[optionValue];
+                      setChoices((prev) => {
+                        const current = prev[optionValue];
 
-                      if (multiple) {
-                        const currentArr = Array.isArray(current)
-                          ? current
-                          : [];
-                        const next = currentArr.includes(value)
-                          ? currentArr.filter((v) => v !== value)
-                          : [...currentArr, value];
+                        if (multiple) {
+                          const currentArr = Array.isArray(current)
+                            ? current
+                            : [];
+                          const next = currentArr.includes(value)
+                            ? currentArr.filter((v) => v !== value)
+                            : [...currentArr, value];
 
-                        return { ...prev, [optionValue]: next };
-                      }
+                          return { ...prev, [optionValue]: next };
+                        }
 
-                      return { ...prev, [optionValue]: value };
-                    });
-                  };
+                        return { ...prev, [optionValue]: value };
+                      });
+                    };
 
-                  return (
-                    <Chip
-                      clickable
-                      color={
-                        !isChoiceOutOfStock && isSelected
-                          ? "primary"
-                          : "default"
-                      }
-                      disabled={isChoiceOutOfStock}
-                      key={value}
-                      label={
-                        <Stack flexDirection="row" alignItems="center" gap={1}>
-                          <Typography component="span" variant="body2">
-                            {choiceLabel[lang]}
-                          </Typography>
-                          {extraCost > 0 && (
-                            <>
-                              <Typography component="span" variant="body2">
-                                /
-                              </Typography>
-                              <Typography component="span" variant="caption">
-                                {dict.common.currency} {extraCost}
-                              </Typography>
-                            </>
-                          )}
-                        </Stack>
-                      }
-                      onClick={handleClick}
-                    />
-                  );
-                })}
-            </Stack>
-          </StyledFormControl>
-        ),
-      )}
+                    return (
+                      <Chip
+                        clickable
+                        color={
+                          !isChoiceOutOfStock && isSelected
+                            ? "primary"
+                            : "default"
+                        }
+                        disabled={isChoiceOutOfStock}
+                        key={value}
+                        label={
+                          <Stack
+                            flexDirection="row"
+                            alignItems="center"
+                            gap={1}
+                          >
+                            <Typography component="span" variant="body2">
+                              {choiceLabel[lang]}
+                            </Typography>
+                            {extraCost > 0 && (
+                              <>
+                                <Typography component="span" variant="body2">
+                                  /
+                                </Typography>
+                                <Typography component="span" variant="caption">
+                                  {dict.common.currency} {extraCost}
+                                </Typography>
+                              </>
+                            )}
+                          </Stack>
+                        }
+                        onClick={handleClick}
+                      />
+                    );
+                  })}
+              </Stack>
+            </StyledFormControl>
+          ),
+        )}
       <Divider variant="inset" />
       <Grid container display="flex" alignItems="center" spacing={2}>
         <Grid size={{ xs: 5 }}>
