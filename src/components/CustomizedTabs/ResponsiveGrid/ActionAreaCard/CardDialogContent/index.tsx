@@ -176,27 +176,31 @@ const CardDialogContent = forwardRef<
           {description}
         </Typography>
       )}
-      {options
-        .filter(({ choices }) => choices.some(({ isActive }) => isActive))
-        .map(
-          ({
-            label: optionLabel,
-            value: optionValue,
-            choices: optionChoices,
-            multiple,
-          }) => (
+      {options.map(
+        ({
+          label: optionLabel,
+          value: optionValue,
+          choices: optionChoices,
+          multiple,
+        }) => {
+          const filteredOptionChoices = optionChoices.filter(
+            ({ isActive }) => isActive,
+          );
+          if (filteredOptionChoices.length === 0) return null;
+
+          const selected = choices[optionValue];
+
+          return (
             <StyledFormControl key={optionValue}>
               <FormLabel>{optionLabel[lang]}</FormLabel>
               <Stack direction="row" flexWrap="wrap" gap={1}>
-                {optionChoices
-                  .filter(({ isActive }) => isActive)
-                  .map(({ label: choiceLabel, value, extraCost, stock }) => {
-                    const selected = choices[optionValue];
+                {filteredOptionChoices.map(
+                  ({ label: choiceLabel, value, extraCost, stock }) => {
+                    const isChoiceOutOfStock = stock === 0;
+
                     const isSelected = multiple
                       ? Array.isArray(selected) && selected.includes(value)
                       : selected === value;
-
-                    const isChoiceOutOfStock = stock === 0;
 
                     const handleClick = () => {
                       if (isChoiceOutOfStock) return;
@@ -253,11 +257,13 @@ const CardDialogContent = forwardRef<
                         onClick={handleClick}
                       />
                     );
-                  })}
+                  },
+                )}
               </Stack>
             </StyledFormControl>
-          ),
-        )}
+          );
+        },
+      )}
       <Divider variant="inset" />
       <Grid container display="flex" alignItems="center" spacing={2}>
         <Grid size={{ xs: 5 }}>
