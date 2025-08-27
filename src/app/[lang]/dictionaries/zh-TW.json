@@ -76,7 +76,7 @@
   },
   "order": {
     "selectStore": "選擇門市",
-    "store": {
+    "storeId": {
       "selectTable": "選擇桌號",
       "tableNumber": {
         "latest": "新品上架",

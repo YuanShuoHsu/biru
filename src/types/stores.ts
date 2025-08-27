@@ -1,3 +1,3 @@
 import { stores } from "@/utils/stores";
 
-export type StoreValue = (typeof stores)[number]["value"];
+export type StoreId = (typeof stores)[number]["id"];

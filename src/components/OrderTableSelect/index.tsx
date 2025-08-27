@@ -21,14 +21,14 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme }) => ({
 }));
 
 const OrderTableSelect = () => {
-  const { lang, store } = useParams();
+  const { lang, storeId } = useParams();
 
   const dict = useI18n();
 
   return (
     <>
       <Typography color="text.primary" variant="subtitle1">
-        {dict.order.store.selectTable}
+        {dict.order.storeId.selectTable}
       </Typography>
       <Grid container spacing={2}>
         {Array.from({ length: TABLE_NUMBERS + 1 }, (_, index) => index).map(
@@ -37,11 +37,11 @@ const OrderTableSelect = () => {
               <StyledButton
                 component={Link}
                 fullWidth
-                href={`/${lang}/order/${store}/${tableNumber}`}
+                href={`/${lang}/order/${storeId}/${tableNumber}`}
                 variant="outlined"
               >
                 {tableNumber === 0
-                  ? interpolate(dict.order.store.tableNumber.takeout, {
+                  ? interpolate(dict.order.storeId.tableNumber.takeout, {
                       tableNumber,
                     })
                   : tableNumber}

@@ -57,7 +57,7 @@ export interface CardDialogContentImperativeHandle {
 
 interface CardDialogContentProps {
   id: string;
-  label: string;
+  name: string;
   description: string;
   imageUrl: string;
   options: Option[];
@@ -68,19 +68,19 @@ interface CardDialogContentProps {
 const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, label, description, imageUrl, options, price, stock }, ref) => {
+>(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
   const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
-      options.map(({ value, choices, multiple, required }) => {
-        if (multiple) return [value, []];
+      options.map(({ id, choices, multiple, required }) => {
+        if (multiple) return [id, []];
 
         if (required) {
           const firstInStockChoice = choices.find(({ stock }) => stock !== 0);
-          return [value, firstInStockChoice?.value];
+          return [id, firstInStockChoice?.id];
         }
 
-        return [value, null];
+        return [id, null];
       }),
     ),
   );
@@ -115,16 +115,16 @@ const CardDialogContent = forwardRef<
   }, [availableToAdd, minQuantity]);
 
   const extraCost = options.reduce(
-    (total, { value: optionValue, choices: optionChoices }) => {
-      const selected = choices[optionValue];
-      const values = Array.isArray(selected)
+    (total, { id: optionId, choices: optionChoices }) => {
+      const selected = choices[optionId];
+      const choiceIds = Array.isArray(selected)
         ? selected
         : selected
           ? [selected]
           : [];
 
       const cost = optionChoices
-        .filter(({ value }) => values.includes(value))
+        .filter(({ id: choiceId }) => choiceIds.includes(choiceId))
         .reduce((sum, { extraCost }) => sum + extraCost, 0);
 
       return total + cost;
@@ -162,7 +162,7 @@ const CardDialogContent = forwardRef<
       <ImageBox>
         {imageUrl && (
           <Image
-            alt={label}
+            alt={name}
             draggable={false}
             fill
             sizes="(min-width: 808px) 50vw, 100vw"
@@ -178,8 +178,8 @@ const CardDialogContent = forwardRef<
       )}
       {options.map(
         ({
-          label: optionLabel,
-          value: optionValue,
+          id: optionId,
+          name: optionName,
           choices: optionChoices,
           multiple,
         }) => {
@@ -188,38 +188,40 @@ const CardDialogContent = forwardRef<
           );
           if (filteredOptionChoices.length === 0) return null;
 
-          const selected = choices[optionValue];
+          const selected = choices[optionId];
+          const choiceIds = Array.isArray(selected)
+            ? selected
+            : selected
+              ? [selected]
+              : [];
 
           return (
-            <StyledFormControl key={optionValue}>
-              <FormLabel>{optionLabel[lang]}</FormLabel>
+            <StyledFormControl key={optionId}>
+              <FormLabel>{optionName[lang]}</FormLabel>
               <Stack direction="row" flexWrap="wrap" gap={1}>
                 {filteredOptionChoices.map(
-                  ({ label: choiceLabel, value, extraCost, stock }) => {
+                  ({ id: choiceId, name: choiceName, extraCost, stock }) => {
                     const isChoiceOutOfStock = stock === 0;
-
-                    const isSelected = multiple
-                      ? Array.isArray(selected) && selected.includes(value)
-                      : selected === value;
+                    const isSelected = choiceIds.includes(choiceId);
 
                     const handleClick = () => {
                       if (isChoiceOutOfStock) return;
 
                       setChoices((prev) => {
-                        const current = prev[optionValue];
+                        const current = prev[optionId];
 
                         if (multiple) {
                           const currentArr = Array.isArray(current)
                             ? current
                             : [];
-                          const next = currentArr.includes(value)
-                            ? currentArr.filter((v) => v !== value)
-                            : [...currentArr, value];
+                          const next = currentArr.includes(choiceId)
+                            ? currentArr.filter((id) => id !== choiceId)
+                            : [...currentArr, choiceId];
 
-                          return { ...prev, [optionValue]: next };
+                          return { ...prev, [optionId]: next };
                         }
 
-                        return { ...prev, [optionValue]: value };
+                        return { ...prev, [optionId]: choiceId };
                       });
                     };
 
@@ -232,7 +234,7 @@ const CardDialogContent = forwardRef<
                             : "default"
                         }
                         disabled={isChoiceOutOfStock}
-                        key={value}
+                        key={choiceId}
                         label={
                           <Stack
                             flexDirection="row"
@@ -240,7 +242,7 @@ const CardDialogContent = forwardRef<
                             gap={1}
                           >
                             <Typography component="span" variant="body2">
-                              {choiceLabel[lang]}
+                              {choiceName[lang]}
                             </Typography>
                             {extraCost > 0 && (
                               <>
@@ -320,7 +322,7 @@ const CardDialogContent = forwardRef<
               value={quantity}
             />
             {quantity >= availableToAdd && (
-              <FormHelperText error>
+              <FormHelperText error sx={{ textAlign: "right" }}>
                 {stock === null ||
                 MAX_QUANTITY - selectedQuantity < stockLeft - totalQuantity
                   ? interpolate(dict.common.maxQuantity, {

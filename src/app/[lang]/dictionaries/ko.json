@@ -76,7 +76,7 @@
   },
   "order": {
     "selectStore": "지점 선택",
-    "store": {
+    "storeId": {
       "selectTable": "테이블 선택",
       "tableNumber": {
         "latest": "신상품",

@@ -5,8 +5,8 @@ export type LocalizedText = {
 };
 
 export interface Choice {
-  label: LocalizedText;
-  value: string;
+  id: string;
+  name: LocalizedText;
   extraCost: number;
   isActive: boolean;
   sold: number;
@@ -14,8 +14,8 @@ export interface Choice {
 }
 
 export interface Option {
-  label: LocalizedText;
-  value: string;
+  id: string;
+  name: LocalizedText;
   choices: Choice[];
   multiple: boolean;
   required: boolean;
@@ -23,7 +23,7 @@ export interface Option {
 
 export interface MenuItem {
   id: string;
-  label: LocalizedText;
+  name: LocalizedText;
   createdAt: string;
   description: LocalizedText;
   imageUrl: string;
@@ -36,6 +36,6 @@ export interface MenuItem {
 
 export interface Category {
   id: string;
-  label: LocalizedText;
+  name: LocalizedText;
   items: MenuItem[];
 }

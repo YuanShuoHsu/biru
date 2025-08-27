@@ -28,7 +28,7 @@ import type { LangStoreTableNumberParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 
-import type { StoreValue } from "@/types/stores";
+import type { StoreId } from "@/types/stores";
 import type { TableNumberParam } from "@/types/tableNumbers";
 
 interface BreadcrumbItem {
@@ -38,7 +38,7 @@ interface BreadcrumbItem {
 
 const breadcrumbMap = (
   dict: I18nDict,
-  store: StoreValue,
+  storeId: StoreId,
   tableNumber: TableNumberParam,
 ): Record<string, BreadcrumbItem> => {
   const isTakeout = tableNumber === "0";
@@ -52,21 +52,21 @@ const breadcrumbMap = (
       icon: ShoppingCart,
       label: dict.breadcrumb.order,
     },
-    [`/order/${store}`]: {
+    [`/order/${storeId}`]: {
       icon: Storefront,
-      label: store,
+      label: storeId,
     },
-    [`/order/${store}/${tableNumber}`]: {
+    [`/order/${storeId}/${tableNumber}`]: {
       icon: isTakeout ? LocalMall : TableBar,
       label: isTakeout
-        ? interpolate(dict.order.store.tableNumber.takeout, { tableNumber })
+        ? interpolate(dict.order.storeId.tableNumber.takeout, { tableNumber })
         : tableNumber,
     },
-    [`/order/${store}/${tableNumber}/checkout`]: {
+    [`/order/${storeId}/${tableNumber}/checkout`]: {
       icon: Payment,
       label: dict.breadcrumb.checkout,
     },
-    [`/order/${store}/${tableNumber}/complete`]: {
+    [`/order/${storeId}/${tableNumber}/complete`]: {
       icon: Pets,
       label: dict.breadcrumb.complete,
     },
@@ -116,10 +116,10 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang, store, tableNumber } = useParams<LangStoreTableNumberParam>();
+  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
 
   const dict = useI18n();
-  const breadcrumbs = breadcrumbMap(dict, store, tableNumber);
+  const breadcrumbs = breadcrumbMap(dict, storeId, tableNumber);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);

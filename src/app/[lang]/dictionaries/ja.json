@@ -76,7 +76,7 @@
   },
   "order": {
     "selectStore": "店舗を選択",
-    "store": {
+    "storeId": {
       "selectTable": "テーブルを選択",
       "tableNumber": {
         "latest": "新着商品",

@@ -23,24 +23,24 @@ import type { PaymentMethod } from "@/types/payment";
 
 const paymentOptions = [
   {
+    id: "Cash",
     icon: Payments,
     label: "現金",
-    value: "Cash",
   },
   {
+    id: "Credit",
     icon: CreditCard,
     label: "信用卡",
-    value: "Credit",
   },
   {
+    id: "TWQR",
     icon: QrCodeScanner,
     label: "行動支付",
-    value: "TWQR",
   },
   {
+    id: "WeiXin",
     icon: MarkChatRead,
     label: "微信支付",
-    value: "WeiXin",
   },
 ];
 
@@ -107,8 +107,8 @@ const VerticalSpacingToggleButton = ({
         value={payment}
         size="small"
       >
-        {paymentOptions.map(({ icon: Icon, label, value }) => (
-          <StyledToggleButton aria-label={label} key={value} value={value}>
+        {paymentOptions.map(({ id, icon: Icon, label }) => (
+          <StyledToggleButton aria-label={label} key={id} value={id}>
             <Stack
               display="flex"
               flexDirection="row"
@@ -120,11 +120,11 @@ const VerticalSpacingToggleButton = ({
             </Stack>
             <StyledRadio
               aria-label={label}
-              key={value}
-              checked={payment === value}
+              key={id}
+              checked={payment === id}
               name="radio-buttons"
               size="small"
-              value={value}
+              value={id}
             />
           </StyledToggleButton>
         ))}

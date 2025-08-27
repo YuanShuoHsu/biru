@@ -28,7 +28,7 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
-import { getChoiceLabels, getItemLabel, getItemStock } from "@/utils/menu";
+import { getChoiceNames, getItemName, getItemStock } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   position: "relative",
@@ -91,8 +91,8 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
     Math.min(MAX_QUANTITY - quantity, itemStockLeft - totalQuantity),
   );
 
-  const itemLabel = getItemLabel(id, lang);
-  const choiceLabels = getChoiceLabels(id, choices, lang, dict);
+  const itemName = getItemName(id, lang);
+  const choiceNames = getChoiceNames(id, choices, lang, dict);
 
   const canDecrease = quantity > 1;
   const canIncrease = availableToAdd > 0;
@@ -140,7 +140,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             <ImageBox>
               {imageUrl && (
                 <Image
-                  alt={itemLabel}
+                  alt={itemName}
                   draggable={false}
                   fill
                   sizes="(min-width: 808px) 50vw, 100vw"
@@ -150,7 +150,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
               )}
             </ImageBox>
           </StyledListItemAvatar>
-          <StyledListItemText primary={itemLabel} secondary={choiceLabels} />
+          <StyledListItemText primary={itemName} secondary={choiceNames} />
         </Grid>
         <Grid
           size={{

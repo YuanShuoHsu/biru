@@ -1,21 +1,21 @@
 import { notFound } from "next/navigation";
 
-import type { StoreValue } from "@/types/stores";
+import type { StoreId } from "@/types/stores";
 
 import { stores } from "@/utils/stores";
 
 interface OrderStoreLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ store: StoreValue }>;
+  params: Promise<{ storeId: StoreId }>;
 }
 
 const OrderStoreLayout = async ({
   children,
   params,
 }: OrderStoreLayoutProps) => {
-  const { store } = await params;
+  const { storeId } = await params;
 
-  const hasStore = stores.some(({ value }) => value === store);
+  const hasStore = stores.some(({ id }) => id === storeId);
   if (!hasStore) return notFound();
 
   return <>{children}</>;

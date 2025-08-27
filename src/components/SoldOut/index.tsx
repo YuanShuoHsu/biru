@@ -11,7 +11,7 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
-import { getOutOfStockChoiceLabels, hasOutOfStockChoices } from "@/utils/menu";
+import { getOutOfStockChoiceNames, hasOutOfStockChoices } from "@/utils/menu";
 
 const StyledButton = styled(Button, {
   shouldForwardProp: (prop) => prop !== "inStock",
@@ -81,7 +81,7 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
 
   const shouldDeleteItem = isItemOutOfStock || isChoiceOutOfStock;
   const isOutOfStock = shouldDeleteItem || isItemOverOrdered;
-  const outOfStockChoiceLabels = getOutOfStockChoiceLabels(
+  const outOfStockChoiceNames = getOutOfStockChoiceNames(
     id,
     choices,
     lang,
@@ -106,7 +106,7 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
     ? dict.common.soldOut
     : isChoiceOutOfStock
       ? interpolate(dict.cart.choiceOutOfStock, {
-          label: outOfStockChoiceLabels,
+          label: outOfStockChoiceNames,
         })
       : isItemOverOrdered
         ? interpolate(dict.cart.quantityExceedsStock, { stock })

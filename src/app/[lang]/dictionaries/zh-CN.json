@@ -76,7 +76,7 @@
   },
   "order": {
     "selectStore": "选择门店",
-    "store": {
+    "storeId": {
       "selectTable": "选择桌号",
       "tableNumber": {
         "latest": "新品上架",

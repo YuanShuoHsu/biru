@@ -73,9 +73,9 @@ const CustomizedTabs = () => {
   });
 
   const categoryGroups = menu
-    .map(({ id, label, items }) => ({
+    .map(({ id, name, items }) => ({
       id,
-      label: label[lang],
+      label: name[lang],
       items: items.filter(({ isActive }) => isActive),
     }))
     .filter(({ items }) => items.length > 0);
@@ -91,7 +91,7 @@ const CustomizedTabs = () => {
       ? {
           id: TOP_SOLD,
           items: topSoldItems,
-          label: dict.order.store.tableNumber.topSold,
+          label: dict.order.storeId.tableNumber.topSold,
         }
       : null;
 
@@ -105,7 +105,7 @@ const CustomizedTabs = () => {
       ? {
           id: LATEST,
           items: latestItems,
-          label: dict.order.store.tableNumber.latest,
+          label: dict.order.storeId.tableNumber.latest,
         }
       : null;
 
@@ -118,8 +118,8 @@ const CustomizedTabs = () => {
   const filteredGroups = combinedGroups
     .map((group) => ({
       ...group,
-      items: group.items.filter(({ label }) =>
-        label[lang].toLowerCase().includes(searchText),
+      items: group.items.filter(({ name }) =>
+        name[lang].toLowerCase().includes(searchText),
       ),
     }))
     .filter(

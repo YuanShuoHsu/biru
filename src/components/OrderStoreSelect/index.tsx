@@ -10,7 +10,7 @@ import { useI18n } from "@/context/i18n";
 import { stores } from "@/utils/stores";
 
 const OrderStoreSelect = () => {
-  const { lang, store } = useParams<LangStoreParam>();
+  const { lang, storeId } = useParams<LangStoreParam>();
   const router = useRouter();
 
   const dict = useI18n();
@@ -20,20 +20,20 @@ const OrderStoreSelect = () => {
 
   return (
     <TextField
-      // error={!!state?.errors?.store}
+      // error={!!state?.errors?.storeId}
       fullWidth
-      // helperText={state?.errors?.store}
+      // helperText={state?.errors?.storeId}
       label={dict.order.selectStore}
-      name="store"
+      name="storeId"
       onChange={handleChange}
       required
       select
       size="small"
-      value={store || ""}
+      value={storeId || ""}
     >
-      {stores.map(({ label, value }) => (
-        <MenuItem key={value} value={value}>
-          {label[lang]}
+      {stores.map(({ id, name }) => (
+        <MenuItem key={id} value={id}>
+          {name[lang]}
         </MenuItem>
       ))}
     </TextField>

@@ -29,14 +29,11 @@ const ResponsiveGrid = ({
   return (
     <Grid container spacing={2}>
       {items.map(
-        (
-          { id, label, description, imageUrl, options, price, stock },
-          index,
-        ) => (
+        ({ id, name, description, imageUrl, options, price, stock }, index) => (
           <Grid display="flex" key={id} size={viewGridSizes}>
             <ActionAreaCard
               id={id}
-              label={label[lang]}
+              name={name[lang]}
               description={description[lang]}
               imageUrl={imageUrl}
               options={options}

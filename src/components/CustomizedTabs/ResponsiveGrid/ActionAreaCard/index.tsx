@@ -115,7 +115,7 @@ const SizeOptionChip = styled(Chip)({
 
 export interface ActionAreaCardProps {
   id: string;
-  label: string;
+  name: string;
   description: string;
   imageUrl: string;
   options: Option[];
@@ -127,13 +127,13 @@ export interface ActionAreaCardProps {
 
 const ActionAreaCard = ({
   id,
+  name,
   description,
   imageUrl,
-  label,
   options,
   price,
-  showLatest,
   stock,
+  showLatest,
   topSoldRank,
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
@@ -149,7 +149,7 @@ const ActionAreaCard = ({
 
   const displayPrice = price.toLocaleString(lang);
 
-  const sizes = options?.find(({ value }) => value === "size")?.choices;
+  const sizes = options?.find(({ id }) => id === "size")?.choices;
 
   const hasExtraCost = options?.some(({ choices }) =>
     choices.some(({ extraCost }) => extraCost > 0),
@@ -166,7 +166,7 @@ const ActionAreaCard = ({
       content: (
         <CardDialogContent
           id={id}
-          label={label}
+          name={name}
           description={description}
           imageUrl={imageUrl}
           options={options}
@@ -194,7 +194,7 @@ const ActionAreaCard = ({
         });
       },
       open: true,
-      title: label,
+      title: name,
     });
   };
 
@@ -210,7 +210,7 @@ const ActionAreaCard = ({
         <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip
-              label={`${dict.order.store.tableNumber.top} ${topSoldRank + 1}`}
+              label={`${dict.order.storeId.tableNumber.top} ${topSoldRank + 1}`}
               icon={<FavoriteBorder />}
               rank={topSoldRank}
               size="small"
@@ -218,14 +218,14 @@ const ActionAreaCard = ({
           )}
           {showLatest && (
             <LatestChip
-              label={dict.order.store.tableNumber.new}
+              label={dict.order.storeId.tableNumber.new}
               icon={<AutoAwesome />}
               size="small"
             />
           )}
           {imageUrl && (
             <Image
-              alt={label}
+              alt={name}
               draggable={false}
               fill
               priority
@@ -236,12 +236,12 @@ const ActionAreaCard = ({
           )}
         </ImageBox>
         <StyledCardContent>
-          <Typography variant="h6">{label}</Typography>
+          <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
-            {sizes?.map(({ label }) => (
+            {sizes?.map(({ name }) => (
               <SizeOptionChip
-                key={label[lang]}
-                label={label[lang]}
+                key={name[lang]}
+                label={name[lang]}
                 size="small"
               />
             ))}

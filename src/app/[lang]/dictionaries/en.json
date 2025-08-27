@@ -76,7 +76,7 @@
   },
   "order": {
     "selectStore": "Select a store",
-    "store": {
+    "storeId": {
       "selectTable": "Select a table",
       "tableNumber": {
         "latest": "New Arrivals",

@@ -8,23 +8,25 @@ import type { Category, Choice, MenuItem, Option } from "@/types/menu";
 export const getItemKey = (id: string, choices: CartItemChoices): string => {
   if (!choices) return id;
 
-  const parts = Object.entries(choices).flatMap(([key, value]) => {
-    if (Array.isArray(value)) return value.sort().map((v) => `${key}:${v}`);
+  const parts = Object.entries(choices).flatMap(([optionId, selected]) => {
+    if (Array.isArray(selected))
+      return [...selected].sort().map((choiceId) => `${optionId}:${choiceId}`);
 
-    return value ? [`${key}:${value}`] : [];
+    return selected ? [`${optionId}:${selected}`] : [];
   });
 
-  return `${id}_${parts.join("_")}`;
+  console.log(`${id}_${parts.join("_")}`);
+  return parts.length > 0 ? `${id}_${parts.join("_")}` : id;
 };
 
 const findItemById = (id: string): MenuItem | undefined =>
   menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
 
-export const getItemLabel = (id: string, lang: LocaleCode): string => {
+export const getItemName = (id: string, lang: LocaleCode): string => {
   const item = findItemById(id);
   if (!item) return "";
 
-  return item.label[lang];
+  return item.name[lang];
 };
 
 export const getItemStock = (id: string): number | null => {
@@ -34,28 +36,27 @@ export const getItemStock = (id: string): number | null => {
   return item.stock;
 };
 
-const findOptionChoiceByValue = (
+const findOptionChoiceById = (
   option: Option,
-  value: string,
-): Choice | undefined =>
-  option.choices.find(({ value: choiceValue }) => choiceValue === value);
+  choiceId: string,
+): Choice | undefined => option.choices.find(({ id }) => id === choiceId);
 
-const getOptionChoiceLabel = (
+const getOptionChoiceName = (
   option: Option,
-  value: string,
+  choiceId: string,
   lang: LocaleCode,
 ): string => {
-  const choice = findOptionChoiceByValue(option, value);
+  const choice = findOptionChoiceById(option, choiceId);
 
-  return choice?.label[lang] || "";
+  return choice?.name[lang] || "";
 };
 
-const findItemOptionByValue = (
+const findItemOptionById = (
   item: MenuItem,
-  key: string,
-): Option | undefined => item.options.find(({ value }) => value === key);
+  optionId: string,
+): Option | undefined => item.options.find(({ id }) => id === optionId);
 
-export const getChoiceLabels = (
+export const getChoiceNames = (
   id: string,
   choices: CartItemChoices,
   lang: LocaleCode,
@@ -66,24 +67,24 @@ export const getChoiceLabels = (
   if (!item) return "";
 
   return Object.entries(choices)
-    .flatMap(([key, value]) => {
-      if (!value) return [];
+    .flatMap(([optionId, selected]) => {
+      if (!selected) return [];
 
-      const option = findItemOptionByValue(item, key);
+      const option = findItemOptionById(item, optionId);
       if (!option) return [];
 
-      const values = Array.isArray(value) ? value : [value];
-      const valueLabels = values
-        .map((choiceValue) => getOptionChoiceLabel(option, choiceValue, lang))
+      const choiceIds = Array.isArray(selected) ? selected : [selected];
+      const choiceNames = choiceIds
+        .map((choiceId) => getOptionChoiceName(option, choiceId, lang))
         .filter(Boolean)
         .join(delimiter);
 
-      return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
+      return choiceNames ? [`${option.name[lang]}${colon}${choiceNames}`] : [];
     })
     .join(joinWith);
 };
 
-export const getOutOfStockChoiceLabels = (
+export const getOutOfStockChoiceNames = (
   id: string,
   choices: CartItemChoices,
   lang: LocaleCode,
@@ -94,22 +95,22 @@ export const getOutOfStockChoiceLabels = (
   if (!item) return "";
 
   return Object.entries(choices)
-    .flatMap(([key, value]) => {
-      if (!value) return [];
+    .flatMap(([optionId, selected]) => {
+      if (!selected) return [];
 
-      const option = findItemOptionByValue(item, key);
+      const option = findItemOptionById(item, optionId);
       if (!option) return [];
 
-      const values = Array.isArray(value) ? value : [value];
-      const valueLabels = values
-        .map((choiceValue) => {
-          const choice = findOptionChoiceByValue(option, choiceValue);
-          return choice?.stock === 0 ? choice.label[lang] : null;
+      const choiceIds = Array.isArray(selected) ? selected : [selected];
+      const choiceNames = choiceIds
+        .map((choiceId) => {
+          const choice = findOptionChoiceById(option, choiceId);
+          return choice?.stock === 0 ? choice.name[lang] : null;
         })
         .filter(Boolean)
         .join(delimiter);
 
-      return valueLabels ? [`${option.label[lang]}${colon}${valueLabels}`] : [];
+      return choiceNames ? [`${option.name[lang]}${colon}${choiceNames}`] : [];
     })
     .join(joinWith);
 };
@@ -121,16 +122,16 @@ export const hasOutOfStockChoices = (
   const item = findItemById(id);
   if (!item) return false;
 
-  return Object.entries(choices).some(([key, value]) => {
-    if (!value) return false;
+  return Object.entries(choices).some(([optionId, selected]) => {
+    if (!selected) return false;
 
-    const option = findItemOptionByValue(item, key);
+    const option = findItemOptionById(item, optionId);
     if (!option) return false;
 
-    const values = Array.isArray(value) ? value : [value];
+    const choiceIds = Array.isArray(selected) ? selected : [selected];
 
-    return values.some((value) => {
-      const choice = findOptionChoiceByValue(option, value);
+    return choiceIds.some((choiceId) => {
+      const choice = findOptionChoiceById(option, choiceId);
       return choice?.stock === 0;
     });
   });
@@ -139,7 +140,7 @@ export const hasOutOfStockChoices = (
 export const menu: Category[] = [
   {
     id: "coffee",
-    label: {
+    name: {
       "zh-TW": "咖啡",
       en: "Coffee",
       ja: "コーヒー",
@@ -149,7 +150,7 @@ export const menu: Category[] = [
     items: [
       {
         id: "coffee-1",
-        label: {
+        name: {
           "zh-TW": "經典拿鐵",
           en: "Classic Latte",
           ja: "クラシックラテ",
@@ -168,38 +169,38 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            label: {
+            id: "size",
+            name: {
               "zh-TW": "尺寸",
               en: "Size",
               ja: "サイズ",
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
-            value: "size",
             choices: [
               {
-                label: {
+                id: "m",
+                name: {
                   "zh-TW": "M",
                   en: "M",
                   ja: "M",
                   ko: "M",
                   "zh-CN": "M",
                 },
-                value: "m",
                 extraCost: 0,
                 isActive: true,
                 sold: 2,
                 stock: 1,
               },
               {
-                label: {
+                id: "l",
+                name: {
                   "zh-TW": "L",
                   en: "L",
                   ja: "L",
                   ko: "L",
                   "zh-CN": "L",
                 },
-                value: "l",
                 extraCost: 20,
                 isActive: false,
                 sold: 5,
@@ -210,52 +211,52 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            label: {
+            id: "sweetness",
+            name: {
               "zh-TW": "甜度",
               en: "Sweetness",
               ja: "甘さ",
               ko: "당도",
               "zh-CN": "甜度",
             },
-            value: "sweetness",
             choices: [
               {
-                label: {
+                id: "regular",
+                name: {
                   "zh-TW": "正常",
                   en: "Regular",
                   ja: "通常",
                   ko: "기본",
                   "zh-CN": "正常",
                 },
-                value: "regular",
                 extraCost: 0,
                 isActive: true,
                 sold: 5,
                 stock: null,
               },
               {
-                label: {
+                id: "less",
+                name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
                   ja: "少なめ",
                   ko: "적당히",
                   "zh-CN": "少糖",
                 },
-                value: "less",
                 extraCost: 0,
                 isActive: true,
                 sold: 6,
                 stock: null,
               },
               {
-                label: {
+                id: "none",
+                name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
                   ja: "無糖",
                   ko: "무가당",
                   "zh-CN": "无糖",
                 },
-                value: "none",
                 extraCost: 0,
                 isActive: true,
                 sold: 10,
@@ -266,52 +267,52 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            label: {
+            id: "ice",
+            name: {
               "zh-TW": "冰塊",
               en: "Ice Level",
               ja: "氷の量",
               ko: "얼음량",
               "zh-CN": "冰块",
             },
-            value: "ice",
             choices: [
               {
-                label: {
+                id: "regular",
+                name: {
                   "zh-TW": "正常",
                   en: "Regular Ice",
                   ja: "普通",
                   ko: "기본",
                   "zh-CN": "正常",
                 },
-                value: "regular",
                 extraCost: 0,
                 isActive: true,
                 sold: 5,
                 stock: null,
               },
               {
-                label: {
+                id: "less",
+                name: {
                   "zh-TW": "去冰",
                   en: "Less Ice",
                   ja: "氷なし",
                   ko: "얼음 없음",
                   "zh-CN": "去冰",
                 },
-                value: "less",
                 extraCost: 0,
                 isActive: true,
                 sold: 2,
                 stock: 0,
               },
               {
-                label: {
+                id: "hot",
+                name: {
                   "zh-TW": "熱飲",
                   en: "Hot",
                   ja: "ホット",
                   ko: "따뜻하게",
                   "zh-CN": "热饮",
                 },
-                value: "hot",
                 extraCost: 0,
                 isActive: true,
                 sold: 6,
@@ -322,38 +323,38 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            label: {
+            id: "topping",
+            name: {
               "zh-TW": "加料",
               en: "Toppings",
               ja: "トッピング",
               ko: "토핑",
               "zh-CN": "加料",
             },
-            value: "topping",
             choices: [
               {
-                label: {
+                id: "pearls",
+                name: {
                   "zh-TW": "珍珠",
                   en: "Pearls",
                   ja: "タピオカ",
                   ko: "타피오카",
                   "zh-CN": "珍珠",
                 },
-                value: "pearls",
                 extraCost: 10,
                 isActive: true,
                 sold: 8,
                 stock: 0,
               },
               {
-                label: {
+                id: "pudding",
+                name: {
                   "zh-TW": "布丁",
                   en: "Pudding",
                   ja: "プリン",
                   ko: "푸딩",
                   "zh-CN": "布丁",
                 },
-                value: "pudding",
                 extraCost: 15,
                 isActive: true,
                 sold: 10,
@@ -370,7 +371,7 @@ export const menu: Category[] = [
       },
       {
         id: "coffee-2",
-        label: {
+        name: {
           "zh-TW": "焦糖瑪奇朵",
           en: "Caramel Macchiato",
           ja: "キャラメルマキアート",
@@ -389,38 +390,38 @@ export const menu: Category[] = [
         isActive: false,
         options: [
           {
-            label: {
+            id: "size",
+            name: {
               "zh-TW": "尺寸",
               en: "Size",
               ja: "サイズ",
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
-            value: "size",
             choices: [
               {
-                label: {
+                id: "m",
+                name: {
                   "zh-TW": "M",
                   en: "M",
                   ja: "M",
                   ko: "M",
                   "zh-CN": "M",
                 },
-                value: "m",
                 extraCost: 0,
                 isActive: true,
                 sold: 10,
                 stock: null,
               },
               {
-                label: {
+                id: "l",
+                name: {
                   "zh-TW": "L",
                   en: "L",
                   ja: "L",
                   ko: "L",
                   "zh-CN": "L",
                 },
-                value: "l",
                 extraCost: 20,
                 isActive: true,
                 sold: 5,
@@ -431,52 +432,52 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            label: {
+            id: "sweetness",
+            name: {
               "zh-TW": "甜度",
               en: "Sweetness",
               ja: "甘さ",
               ko: "당도",
               "zh-CN": "甜度",
             },
-            value: "sweetness",
             choices: [
               {
-                label: {
+                id: "regular",
+                name: {
                   "zh-TW": "正常",
                   en: "Regular",
                   ja: "通常",
                   ko: "기본",
                   "zh-CN": "正常",
                 },
-                value: "regular",
                 extraCost: 0,
                 isActive: true,
                 sold: 10,
                 stock: null,
               },
               {
-                label: {
+                id: "less",
+                name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
                   ja: "少なめ",
                   ko: "적당히",
                   "zh-CN": "少糖",
                 },
-                value: "less",
                 extraCost: 0,
                 isActive: true,
                 sold: 8,
                 stock: null,
               },
               {
-                label: {
+                id: "none",
+                name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
                   ja: "無糖",
                   ko: "무가당",
                   "zh-CN": "无糖",
                 },
-                value: "none",
                 extraCost: 0,
                 isActive: true,
                 sold: 6,
@@ -495,7 +496,7 @@ export const menu: Category[] = [
   },
   {
     id: "tea",
-    label: {
+    name: {
       "zh-TW": "茶飲",
       en: "Tea",
       ja: "お茶",
@@ -505,7 +506,7 @@ export const menu: Category[] = [
     items: [
       {
         id: "tea-1",
-        label: {
+        name: {
           "zh-TW": "茉香綠茶",
           en: "Jasmine Green Tea",
           ja: "ジャスミン緑茶",
@@ -524,52 +525,52 @@ export const menu: Category[] = [
         isActive: false,
         options: [
           {
-            label: {
+            id: "ice",
+            name: {
               "zh-TW": "冰塊",
               en: "Ice Level",
               ja: "氷の量",
               ko: "얼음량",
               "zh-CN": "冰块",
             },
-            value: "ice",
             choices: [
               {
-                label: {
+                id: "regular",
+                name: {
                   "zh-TW": "正常",
                   en: "Regular Ice",
                   ja: "普通",
                   ko: "기본",
                   "zh-CN": "正常",
                 },
-                value: "regular",
                 extraCost: 0,
                 isActive: true,
                 sold: 4,
                 stock: 0,
               },
               {
-                label: {
+                id: "less",
+                name: {
                   "zh-TW": "去冰",
                   en: "Less Ice",
                   ja: "氷なし",
                   ko: "얼음 없음",
                   "zh-CN": "去冰",
                 },
-                value: "less",
                 extraCost: 0,
                 isActive: true,
                 sold: 8,
                 stock: 0,
               },
               {
-                label: {
+                id: "hot",
+                name: {
                   "zh-TW": "熱飲",
                   en: "Hot",
                   ja: "ホット",
                   ko: "따뜻하게",
                   "zh-CN": "热饮",
                 },
-                value: "hot",
                 extraCost: 0,
                 isActive: true,
                 sold: 9,
@@ -587,7 +588,7 @@ export const menu: Category[] = [
       },
       {
         id: "tea-2",
-        label: {
+        name: {
           "zh-TW": "伯爵鮮奶茶",
           en: "Earl Grey Milk Tea",
           ja: "アールグレイミルクティー",
@@ -606,38 +607,38 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            label: {
+            id: "size",
+            name: {
               "zh-TW": "尺寸",
               en: "Size",
               ja: "サイズ",
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
-            value: "size",
             choices: [
               {
-                label: {
+                id: "m",
+                name: {
                   "zh-TW": "M",
                   en: "M",
                   ja: "M",
                   ko: "M",
                   "zh-CN": "M",
                 },
-                value: "m",
                 extraCost: 0,
                 isActive: true,
                 sold: 7,
                 stock: null,
               },
               {
-                label: {
+                id: "l",
+                name: {
                   "zh-TW": "L",
                   en: "L",
                   ja: "L",
                   ko: "L",
                   "zh-CN": "L",
                 },
-                value: "l",
                 extraCost: 20,
                 isActive: true,
                 sold: 9,
@@ -648,52 +649,52 @@ export const menu: Category[] = [
             required: true,
           },
           {
-            label: {
+            id: "sweetness",
+            name: {
               "zh-TW": "甜度",
               en: "Sweetness",
               ja: "甘さ",
               ko: "당도",
               "zh-CN": "甜度",
             },
-            value: "sweetness",
             choices: [
               {
-                label: {
+                id: "regular",
+                name: {
                   "zh-TW": "正常",
                   en: "Regular",
                   ja: "通常",
                   ko: "기본",
                   "zh-CN": "正常",
                 },
-                value: "regular",
                 extraCost: 0,
                 isActive: true,
                 sold: 2,
                 stock: null,
               },
               {
-                label: {
+                id: "less",
+                name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
                   ja: "少なめ",
                   ko: "적당히",
                   "zh-CN": "少糖",
                 },
-                value: "less",
                 extraCost: 0,
                 isActive: true,
                 sold: 10,
                 stock: null,
               },
               {
-                label: {
+                id: "none",
+                name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
                   ja: "無糖",
                   ko: "무가당",
                   "zh-CN": "无糖",
                 },
-                value: "none",
                 extraCost: 0,
                 isActive: true,
                 sold: 8,
@@ -712,7 +713,7 @@ export const menu: Category[] = [
   },
   {
     id: "signature",
-    label: {
+    name: {
       "zh-TW": "招牌特調",
       en: "Signature Drinks",
       ja: "シグネチャードリンク",
@@ -722,7 +723,7 @@ export const menu: Category[] = [
     items: [
       {
         id: "sig-1",
-        label: {
+        name: {
           "zh-TW": "水果氣泡飲",
           en: "Fruit Sparkling Drink",
           ja: "フルーツスパークリング",
@@ -741,42 +742,56 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            label: {
+            id: "topping",
+            name: {
               "zh-TW": "加料",
               en: "Toppings",
               ja: "トッピング",
               ko: "토핑",
               "zh-CN": "加料",
             },
-            value: "topping",
             choices: [
               {
-                label: {
+                id: "chia_seeds",
+                name: {
                   "zh-TW": "奇亞籽",
                   en: "Chia Seeds",
                   ja: "チアシード",
                   ko: "치아시드",
                   "zh-CN": "奇亚籽",
                 },
-                value: "chia_seeds",
                 extraCost: 10,
                 isActive: true,
                 sold: 10,
                 stock: null,
               },
               {
-                label: {
+                id: "mint",
+                name: {
                   "zh-TW": "薄荷",
                   en: "Mint",
                   ja: "ミント",
                   ko: "민트",
                   "zh-CN": "薄荷",
                 },
-                value: "mint",
                 extraCost: 0,
                 isActive: true,
                 sold: 6,
                 stock: null,
+              },
+              {
+                id: "pudding",
+                name: {
+                  "zh-TW": "布丁",
+                  en: "Pudding",
+                  ja: "プリン",
+                  ko: "푸딩",
+                  "zh-CN": "布丁",
+                },
+                extraCost: 15,
+                isActive: true,
+                sold: 10,
+                stock: 0,
               },
             ],
             multiple: true,
@@ -789,7 +804,7 @@ export const menu: Category[] = [
       },
       {
         id: "sig-2",
-        label: {
+        name: {
           "zh-TW": "抹茶氣泡拿鐵",
           en: "Matcha Sparkling Latte",
           ja: "抹茶スパークリングラテ",
@@ -808,24 +823,24 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            label: {
+            id: "size",
+            name: {
               "zh-TW": "尺寸",
               en: "Size",
               ja: "サイズ",
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
-            value: "size",
             choices: [
               {
-                label: {
+                id: "l",
+                name: {
                   "zh-TW": "L",
                   en: "L",
                   ja: "L",
                   ko: "L",
                   "zh-CN": "L",
                 },
-                value: "l",
                 extraCost: 0,
                 isActive: true,
                 sold: 4,
@@ -844,7 +859,7 @@ export const menu: Category[] = [
   },
   {
     id: "pastry",
-    label: {
+    name: {
       "zh-TW": "甜點",
       en: "Pastries",
       ja: "ペストリー",
@@ -854,7 +869,7 @@ export const menu: Category[] = [
     items: [
       {
         id: "pastry-1",
-        label: {
+        name: {
           "zh-TW": "經典可頌",
           en: "Classic Croissant",
           ja: "クラシッククロワッサン",
@@ -878,7 +893,7 @@ export const menu: Category[] = [
       },
       {
         id: "pastry-2",
-        label: {
+        name: {
           "zh-TW": "巧克力蛋糕",
           en: "Chocolate Cake",
           ja: "チョコレートケーキ",
@@ -904,7 +919,7 @@ export const menu: Category[] = [
   },
   {
     id: "snack",
-    label: {
+    name: {
       "zh-TW": "輕食",
       en: "Snacks",
       ja: "軽食",
@@ -914,7 +929,7 @@ export const menu: Category[] = [
     items: [
       {
         id: "snack-1",
-        label: {
+        name: {
           "zh-TW": "火腿起司三明治",
           en: "Ham & Cheese Sandwich",
           ja: "ハムチーズサンドイッチ",
@@ -933,38 +948,38 @@ export const menu: Category[] = [
         isActive: true,
         options: [
           {
-            label: {
+            id: "topping",
+            name: {
               "zh-TW": "加料",
               en: "Toppings",
               ja: "トッピング",
               ko: "추가재료",
               "zh-CN": "加料",
             },
-            value: "topping",
             choices: [
               {
-                label: {
+                id: "tomato",
+                name: {
                   "zh-TW": "番茄",
                   en: "Tomato",
                   ja: "トマト",
                   ko: "토마토",
                   "zh-CN": "番茄",
                 },
-                value: "tomato",
                 extraCost: 5,
                 isActive: true,
                 sold: 3,
                 stock: null,
               },
               {
-                label: {
+                id: "lettuce",
+                name: {
                   "zh-TW": "生菜",
                   en: "Lettuce",
                   ja: "レタス",
                   ko: "상추",
                   "zh-CN": "生菜",
                 },
-                value: "lettuce",
                 extraCost: 0,
                 isActive: true,
                 sold: 7,
@@ -981,7 +996,7 @@ export const menu: Category[] = [
       },
       {
         id: "snack-2",
-        label: {
+        name: {
           "zh-TW": "雞肉沙拉",
           en: "Chicken Salad",
           ja: "チキンサラダ",
@@ -1001,7 +1016,7 @@ export const menu: Category[] = [
         options: [],
         price: 160,
         sold: 6,
-        stock: 20,
+        stock: null,
       },
     ],
   },
