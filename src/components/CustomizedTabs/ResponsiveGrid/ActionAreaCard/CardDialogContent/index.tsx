@@ -189,11 +189,9 @@ const CardDialogContent = forwardRef<
           if (filteredOptionChoices.length === 0) return null;
 
           const selected = choices[optionId];
-          const choiceIds = Array.isArray(selected)
-            ? selected
-            : selected
-              ? [selected]
-              : [];
+          const selectedSet = Array.isArray(selected)
+            ? new Set(selected)
+            : null;
 
           return (
             <StyledFormControl key={optionId}>
@@ -202,7 +200,9 @@ const CardDialogContent = forwardRef<
                 {filteredOptionChoices.map(
                   ({ id: choiceId, name: choiceName, extraCost, stock }) => {
                     const isChoiceOutOfStock = stock === 0;
-                    const isSelected = choiceIds.includes(choiceId);
+                    const isSelected = selectedSet
+                      ? selectedSet.has(choiceId)
+                      : selected === choiceId;
 
                     const handleClick = () => {
                       if (isChoiceOutOfStock) return;
