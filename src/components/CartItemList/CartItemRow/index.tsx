@@ -69,6 +69,10 @@ const StyledInputAdornment = styled(InputAdornment)({
   margin: 0,
 });
 
+const StyledFormHelperText = styled(FormHelperText)({
+  textAlign: "right",
+});
+
 interface CartItemRowProps {
   forceXsLayout: boolean;
   item: CartItem;
@@ -221,13 +225,13 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
               value={quantity}
             />
             {availableToAdd <= 0 && (
-              <FormHelperText error>
+              <StyledFormHelperText error>
                 {MAX_QUANTITY - quantity < itemStockLeft - totalQuantity
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
                   : dict.common.reachStockLimit}
-              </FormHelperText>
+              </StyledFormHelperText>
             )}
           </StyledFormControl>
         </Grid>

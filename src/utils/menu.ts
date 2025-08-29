@@ -969,7 +969,7 @@ export const menu: Category[] = [
                 extraCost: 5,
                 isActive: true,
                 sold: 3,
-                stock: null,
+                stock: 4,
               },
               {
                 id: "lettuce",
@@ -983,7 +983,7 @@ export const menu: Category[] = [
                 extraCost: 0,
                 isActive: true,
                 sold: 7,
-                stock: null,
+                stock: 5,
               },
             ],
             multiple: true,

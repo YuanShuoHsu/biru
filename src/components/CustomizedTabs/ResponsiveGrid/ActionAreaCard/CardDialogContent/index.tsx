@@ -45,6 +45,10 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const StyledFormHelperText = styled(FormHelperText)({
+  textAlign: "right",
+});
+
 export interface CardDialogContentImperativeHandle {
   getValues: () => {
     amount: number;
@@ -322,7 +326,7 @@ const CardDialogContent = forwardRef<
               value={quantity}
             />
             {quantity >= availableToAdd && (
-              <FormHelperText error sx={{ textAlign: "right" }}>
+              <StyledFormHelperText error>
                 {stock === null ||
                 MAX_QUANTITY - selectedQuantity < stockLeft - totalQuantity
                   ? interpolate(dict.common.maxQuantity, {
@@ -333,7 +337,7 @@ const CardDialogContent = forwardRef<
                         quantity: availableToAdd,
                       })
                     : dict.common.reachStockLimit}
-              </FormHelperText>
+              </StyledFormHelperText>
             )}
           </StyledFormControl>
         </Grid>
