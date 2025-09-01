@@ -17,7 +17,7 @@ interface CartItemListProps {
 const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
   const dict = useI18n();
 
-  const { isEmpty, itemsList } = useCartStore();
+  const { isCartEmpty, cartItemsList } = useCartStore();
 
   return (
     <List disablePadding>
@@ -25,18 +25,18 @@ const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
         defer
         fallback={<Typography padding={2}>{dict.common.loading}</Typography>}
       >
-        {isEmpty ? (
+        {isCartEmpty ? (
           <Typography padding={2} variant="body1">
             {dict.common.empty}
           </Typography>
         ) : (
-          itemsList.map((item, index) => {
+          cartItemsList.map((item, index) => {
             const { id, choices } = item;
 
             return (
               <Fragment key={getItemKey(id, choices)}>
                 <CartItemRow forceXsLayout={forceXsLayout} item={item} />
-                {index < itemsList.length - 1 && (
+                {index < cartItemsList.length - 1 && (
                   <Divider component="li" variant="inset" />
                 )}
               </Fragment>

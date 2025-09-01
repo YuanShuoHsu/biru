@@ -16,70 +16,83 @@ export interface CartItem {
 }
 
 interface CartState {
-  itemsMap: Record<string, CartItem>;
-  itemsList: CartItem[];
-  totalAmount: number;
-  totalQuantity: number;
-  isEmpty: boolean;
-  computeTotals: (map: Record<string, CartItem>) => {
-    totalAmount: number;
-    totalQuantity: number;
+  cartItemsMap: Record<string, CartItem>;
+  cartItemsList: CartItem[];
+  cartTotalAmount: number;
+  cartTotalQuantity: number;
+  isCartEmpty: boolean;
+  computeCartTotals: (map: Record<string, CartItem>) => {
+    cartTotalAmount: number;
+    cartTotalQuantity: number;
   };
-  deleteItem: (item: CartItem) => void;
-  updateItem: (item: CartItem) => void;
-  getItemTotalQuantity: (id: string) => number;
-  getItemSelectedQuantity: (id: string, choices: CartItemChoices) => number;
-  clearCart: () => void;
+  clearCartItem: () => void;
+  deleteCartItem: (item: CartItem) => void;
+  updateCartItem: (item: CartItem) => void;
+  getCartChoiceTotalQuantity: (choiceId: string) => number;
+  getCartItemChoicesTotalQuantity: (
+    itemId: string,
+    choices: CartItemChoices,
+  ) => number;
+  getCartItemTotalQuantity: (itemId: string) => number;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
-      itemsMap: {},
-      itemsList: [],
-      totalAmount: 0,
-      totalQuantity: 0,
-      isEmpty: true,
-      computeTotals: (map) => {
-        const totalAmount = Object.values(map).reduce(
+      cartItemsMap: {},
+      cartItemsList: [],
+      cartTotalAmount: 0,
+      cartTotalQuantity: 0,
+      isCartEmpty: true,
+      computeCartTotals: (map) => {
+        const cartTotalAmount = Object.values(map).reduce(
           (sum, { amount }) => sum + amount,
           0,
         );
 
-        const totalQuantity = Object.values(map).reduce(
+        const cartTotalQuantity = Object.values(map).reduce(
           (sum, { quantity }) => sum + quantity,
           0,
         );
 
-        return { totalAmount, totalQuantity };
+        return { cartTotalAmount, cartTotalQuantity };
       },
-      deleteItem: (item) => {
+      clearCartItem: () =>
+        set({
+          cartItemsMap: {},
+          cartItemsList: [],
+          cartTotalAmount: 0,
+          cartTotalQuantity: 0,
+          isCartEmpty: true,
+        }),
+      deleteCartItem: (item) => {
         const { id, choices } = item;
 
-        const { computeTotals, itemsMap } = get();
-        const newMap = { ...itemsMap };
+        const { computeCartTotals, cartItemsMap } = get();
+        const newMap = { ...cartItemsMap };
         const itemKey = getItemKey(id, choices);
         delete newMap[itemKey];
 
-        const { totalAmount, totalQuantity } = computeTotals(newMap);
+        const { cartTotalAmount, cartTotalQuantity } =
+          computeCartTotals(newMap);
 
-        const itemsList = Object.values(newMap);
-        const isEmpty = totalQuantity === 0;
+        const cartItemsList = Object.values(newMap);
+        const isCartEmpty = cartTotalQuantity === 0;
 
         set({
-          itemsMap: newMap,
-          itemsList,
-          totalAmount,
-          totalQuantity,
-          isEmpty,
+          cartItemsMap: newMap,
+          cartItemsList,
+          cartTotalAmount,
+          cartTotalQuantity,
+          isCartEmpty,
         });
       },
-      updateItem: (item) => {
+      updateCartItem: (item) => {
         const { id, amount, choices, quantity } = item;
 
-        const { computeTotals, itemsMap } = get();
+        const { computeCartTotals, cartItemsMap } = get();
         const itemKey = getItemKey(id, choices);
-        const existing = itemsMap[itemKey];
+        const existing = cartItemsMap[itemKey];
 
         const updatedItem = existing
           ? {
@@ -89,37 +102,43 @@ export const useCartStore = create<CartState>()(
             }
           : { ...item };
 
-        const newMap = { ...itemsMap, [itemKey]: updatedItem };
+        const newMap = { ...cartItemsMap, [itemKey]: updatedItem };
 
-        const { totalAmount, totalQuantity } = computeTotals(newMap);
+        const { cartTotalAmount, cartTotalQuantity } =
+          computeCartTotals(newMap);
 
-        const itemsList = Object.values(newMap);
-        const isEmpty = totalQuantity === 0;
+        const cartItemsList = Object.values(newMap);
+        const isCartEmpty = cartTotalQuantity === 0;
 
         set({
-          itemsMap: newMap,
-          itemsList,
-          totalAmount,
-          totalQuantity,
-          isEmpty,
+          cartItemsMap: newMap,
+          cartItemsList,
+          cartTotalAmount,
+          cartTotalQuantity,
+          isCartEmpty,
         });
       },
-      getItemSelectedQuantity: (id, choices) =>
-        get().itemsMap[getItemKey(id, choices)]?.quantity || 0,
-      getItemTotalQuantity: (id) =>
-        Object.values(get().itemsMap).reduce(
-          (sum, { id: itemId, quantity }) =>
-            itemId === id ? sum + quantity : sum,
+      getCartChoiceTotalQuantity: (choiceId) => {
+        return Object.values(get().cartItemsMap).reduce(
+          (sum, { choices, quantity }) => {
+            const hasChoice = Object.values(choices).some((selected) =>
+              Array.isArray(selected)
+                ? selected.includes(choiceId)
+                : selected === choiceId,
+            );
+
+            return sum + (hasChoice ? quantity : 0);
+          },
+          0,
+        );
+      },
+      getCartItemChoicesTotalQuantity: (itemId, choices) =>
+        get().cartItemsMap[getItemKey(itemId, choices)]?.quantity || 0,
+      getCartItemTotalQuantity: (itemId) =>
+        Object.values(get().cartItemsMap).reduce(
+          (sum, { id, quantity }) => (id === itemId ? sum + quantity : sum),
           0,
         ),
-      clearCart: () =>
-        set({
-          itemsMap: {},
-          itemsList: [],
-          totalAmount: 0,
-          totalQuantity: 0,
-          isEmpty: true,
-        }),
     }),
     {
       name: "biru-cart",

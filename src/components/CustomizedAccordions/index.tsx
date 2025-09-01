@@ -48,7 +48,7 @@ const CustomizedAccordions = () => {
 
   const dict = useI18n();
 
-  const { totalAmount } = useCartStore();
+  const { cartTotalAmount } = useCartStore();
 
   return (
     <StyledAccordion defaultExpanded disableGutters>
@@ -66,7 +66,7 @@ const CustomizedAccordions = () => {
           fontWeight="bold"
           variant="h6"
         >
-          {dict.common.currency} {totalAmount.toLocaleString(lang)}
+          {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
         </Typography>
       </StyledAccordionSummary>
       <StyledAccordionDetails>

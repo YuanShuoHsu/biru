@@ -44,10 +44,10 @@ const OrderBottomBar = () => {
 
   const { lang, storeId, tableNumber } = useParams();
 
-  const { isEmpty, totalAmount, totalQuantity } = useCartStore();
+  const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore();
 
   return (
-    <Fade in={!isEmpty}>
+    <Fade in={!isCartEmpty}>
       <StyledBox
         position="sticky"
         left={0}
@@ -59,7 +59,7 @@ const OrderBottomBar = () => {
       >
         <StyledButton
           component={Link}
-          disabled={isEmpty}
+          disabled={isCartEmpty}
           fullWidth
           href={`/${lang}/order/${storeId}/${tableNumber}/checkout`}
           size="large"
@@ -68,14 +68,14 @@ const OrderBottomBar = () => {
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <Typography component="span" fontWeight="bold" variant="subtitle1">
               {interpolate(dict.cart.totalQuantity, {
-                quantity: totalQuantity,
+                quantity: cartTotalQuantity,
               })}
             </Typography>
             <Typography component="span" variant="body2">
               /
             </Typography>
             <Typography component="span" fontWeight="bold" variant="subtitle1">
-              {dict.common.currency} {totalAmount.toLocaleString(lang)}
+              {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
             </Typography>
           </Stack>
           <StyledChip label={dict.cart.checkout} variant="outlined" />

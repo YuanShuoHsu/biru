@@ -73,7 +73,7 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
 
   const dict = useI18n();
 
-  const { deleteItem, updateItem } = useCartStore();
+  const { deleteCartItem, updateCartItem } = useCartStore();
 
   const isItemOutOfStock = stock === 0;
   const isItemOverOrdered = stock !== null && quantity > stock;
@@ -117,14 +117,14 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
     if (!item) return;
 
     if (shouldDeleteItem) {
-      deleteItem(item);
+      deleteCartItem(item);
       return;
     }
 
     if (isItemOverOrdered) {
       const diff = stock - quantity;
 
-      updateItem({
+      updateCartItem({
         ...item,
         quantity: diff,
         amount: (price + extraCost) * diff,

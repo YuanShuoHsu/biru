@@ -65,14 +65,14 @@ const CartAnchorTemporaryDrawer = ({
 
   const dict = useI18n();
 
-  const { isEmpty, totalAmount } = useCartStore();
+  const { isCartEmpty, cartTotalAmount } = useCartStore();
 
   const pathname = usePathname();
   const orderPath = `/${lang}/order/${storeId}/${tableNumber}`;
   const checkoutPath = `${orderPath}/checkout`;
   const isCheckoutPage = pathname === checkoutPath;
 
-  const actionDisabled = !isCheckoutPage && isEmpty;
+  const actionDisabled = !isCheckoutPage && isCartEmpty;
   const actionHref = isCheckoutPage ? orderPath : checkoutPath;
   const actionLabel = isCheckoutPage
     ? dict.cart.backToOrder
@@ -101,7 +101,7 @@ const CartAnchorTemporaryDrawer = ({
             fontWeight="bold"
             variant="h6"
           >
-            {dict.common.currency} {totalAmount.toLocaleString(lang)}
+            {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
           </Typography>
         </Stack>
         <Button

@@ -74,13 +74,39 @@ const CardDialogContent = forwardRef<
   CardDialogContentProps
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
+
+  const {
+    getCartChoiceTotalQuantity,
+    getCartItemChoicesTotalQuantity,
+    getCartItemTotalQuantity,
+  } = useCartStore();
+
+  const getChoiceAvailableQuantity = (
+    choiceId: string,
+    choiceStock: number | null,
+  ) => {
+    const cartChoiceTotalQuantity = getCartChoiceTotalQuantity(choiceId);
+    const choiceStockLeft = choiceStock == null ? Infinity : choiceStock;
+
+    return Math.max(0, choiceStockLeft - cartChoiceTotalQuantity);
+  };
+
   const [choices, setChoices] = useState<CartItemChoices>(() =>
     Object.fromEntries(
       options.map(({ id, choices, multiple, required }) => {
         if (multiple) return [id, []];
 
         if (required) {
-          const firstInStockChoice = choices.find(({ stock }) => stock !== 0);
+          const firstInStockChoice = choices.find(
+            ({ id: choiceId, stock: choiceStock }) => {
+              const choiceAvailableQuantity = getChoiceAvailableQuantity(
+                choiceId,
+                choiceStock,
+              );
+
+              return choiceAvailableQuantity > 0;
+            },
+          );
           return [id, firstInStockChoice?.id];
         }
 
@@ -93,13 +119,47 @@ const CardDialogContent = forwardRef<
 
   const dict = useI18n();
 
-  const { getItemSelectedQuantity, getItemTotalQuantity } = useCartStore();
-  const selectedQuantity = getItemSelectedQuantity(id, choices);
-  const totalQuantity = getItemTotalQuantity(id);
-  const stockLeft = stock === null ? Infinity : stock;
+  const cartItemChoicesTotalQuantity = getCartItemChoicesTotalQuantity(
+    id,
+    choices,
+  );
+  const cartItemTotalQuantity = getCartItemTotalQuantity(id);
+  const itemStockLeft = stock === null ? Infinity : stock;
+
+  const optionsAvailableQuantity = options.reduce(
+    (overallMin, { id: optionId, choices: optionChoices }) => {
+      const selected = choices[optionId];
+      if (Array.isArray(selected) && !selected.length) return overallMin;
+
+      const selectedIds = Array.isArray(selected) ? selected : [selected];
+      const choiceIdSet = new Set(selectedIds);
+
+      const optionAvailableQuantity = optionChoices.reduce(
+        (min, { id: choiceId, stock: choiceStock }) => {
+          if (min === 0) return 0;
+          if (!choiceIdSet.has(choiceId)) return min;
+
+          const choiceAvailableQuantity = getChoiceAvailableQuantity(
+            choiceId,
+            choiceStock,
+          );
+
+          return Math.min(min, choiceAvailableQuantity);
+        },
+        Infinity,
+      );
+
+      return Math.min(overallMin, optionAvailableQuantity);
+    },
+    Infinity,
+  );
   const availableToAdd = Math.max(
     0,
-    Math.min(MAX_QUANTITY - selectedQuantity, stockLeft - totalQuantity),
+    Math.min(
+      MAX_QUANTITY - cartItemChoicesTotalQuantity,
+      itemStockLeft - cartItemTotalQuantity,
+      optionsAvailableQuantity,
+    ),
   );
   const minQuantity = availableToAdd > 0 ? 1 : 0;
 
@@ -121,15 +181,16 @@ const CardDialogContent = forwardRef<
   const extraCost = options.reduce(
     (total, { id: optionId, choices: optionChoices }) => {
       const selected = choices[optionId];
-      const choiceIds = Array.isArray(selected)
-        ? selected
-        : selected
-          ? [selected]
-          : [];
+      if (Array.isArray(selected) && !selected.length) return total;
 
-      const cost = optionChoices
-        .filter(({ id: choiceId }) => choiceIds.includes(choiceId))
-        .reduce((sum, { extraCost }) => sum + extraCost, 0);
+      const selectedIds = Array.isArray(selected) ? selected : [selected];
+      const selectedSet = new Set(selectedIds);
+
+      const cost = optionChoices.reduce(
+        (sum, { id: choiceId, extraCost }) =>
+          selectedSet.has(choiceId) ? sum + extraCost : sum,
+        0,
+      );
 
       return total + cost;
     },
@@ -202,8 +263,18 @@ const CardDialogContent = forwardRef<
               <FormLabel>{optionName[lang]}</FormLabel>
               <Stack direction="row" flexWrap="wrap" gap={1}>
                 {filteredOptionChoices.map(
-                  ({ id: choiceId, name: choiceName, extraCost, stock }) => {
-                    const isChoiceOutOfStock = stock === 0;
+                  ({
+                    id: choiceId,
+                    name: choiceName,
+                    extraCost,
+                    stock: choiceStock,
+                  }) => {
+                    const choiceAvailableQuantity = getChoiceAvailableQuantity(
+                      choiceId,
+                      choiceStock,
+                    );
+                    const isChoiceOutOfStock = choiceAvailableQuantity === 0;
+
                     const isSelected = selectedSet
                       ? selectedSet.has(choiceId)
                       : selected === choiceId;
@@ -215,12 +286,12 @@ const CardDialogContent = forwardRef<
                         const current = prev[optionId];
 
                         if (multiple) {
-                          const currentArr = Array.isArray(current)
+                          const currentArray = Array.isArray(current)
                             ? current
                             : [];
-                          const next = currentArr.includes(choiceId)
-                            ? currentArr.filter((id) => id !== choiceId)
-                            : [...currentArr, choiceId];
+                          const next = currentArray.includes(choiceId)
+                            ? currentArray.filter((id) => id !== choiceId)
+                            : [...currentArray, choiceId];
 
                           return { ...prev, [optionId]: next };
                         }
@@ -328,7 +399,8 @@ const CardDialogContent = forwardRef<
             {quantity >= availableToAdd && (
               <StyledFormHelperText error>
                 {stock === null ||
-                MAX_QUANTITY - selectedQuantity < stockLeft - totalQuantity
+                MAX_QUANTITY - cartItemChoicesTotalQuantity <
+                  itemStockLeft - cartItemTotalQuantity
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })

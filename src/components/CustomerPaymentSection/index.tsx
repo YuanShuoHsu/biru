@@ -73,7 +73,7 @@ const CustomerPaymentSection = () => {
 
   const dict = useI18n();
 
-  const { isEmpty, itemsList, totalAmount } = useCartStore();
+  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -97,9 +97,9 @@ const CustomerPaymentSection = () => {
 
     const dto = {
       base: {
-        TotalAmount: totalAmount,
+        TotalAmount: cartTotalAmount,
         TradeDesc: "餐點付款",
-        ItemName: itemsList
+        ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
             const itemName = getItemName(id, "zh-TW");
             const choiceNames = getChoiceNames(
@@ -180,7 +180,7 @@ const CustomerPaymentSection = () => {
       />
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button
-        disabled={isMutating || isEmpty || !payment}
+        disabled={isMutating || isCartEmpty || !payment}
         fullWidth
         loading={isMutating}
         loadingPosition="start"

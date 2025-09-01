@@ -19,7 +19,7 @@ interface CartIconButtonProps {
 const CartIconButton = ({ onDrawerToggle }: CartIconButtonProps) => {
   const dict = useI18n();
 
-  const { totalQuantity } = useCartStore();
+  const { cartTotalQuantity } = useCartStore();
 
   return (
     <Tooltip title={dict.appBar.cart}>
@@ -28,7 +28,7 @@ const CartIconButton = ({ onDrawerToggle }: CartIconButtonProps) => {
         color="inherit"
         onClick={onDrawerToggle("cart", true)}
       >
-        <CustomizedBadges badgeContent={totalQuantity}>
+        <CustomizedBadges badgeContent={cartTotalQuantity}>
           <ShoppingCart />
         </CustomizedBadges>
       </IconButton>

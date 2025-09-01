@@ -15,7 +15,6 @@ export const getItemKey = (id: string, choices: CartItemChoices): string => {
     return selected ? [`${optionId}:${selected}`] : [];
   });
 
-  console.log(`${id}_${parts.join("_")}`);
   return parts.length > 0 ? `${id}_${parts.join("_")}` : id;
 };
 
@@ -202,7 +201,7 @@ export const menu: Category[] = [
                   "zh-CN": "L",
                 },
                 extraCost: 20,
-                isActive: false,
+                isActive: true,
                 sold: 5,
                 stock: null,
               },
@@ -246,7 +245,7 @@ export const menu: Category[] = [
                 extraCost: 0,
                 isActive: true,
                 sold: 6,
-                stock: null,
+                stock: 4,
               },
               {
                 id: "none",
@@ -992,7 +991,7 @@ export const menu: Category[] = [
         ],
         price: 150,
         sold: 8,
-        stock: 2,
+        stock: 8,
       },
       {
         id: "snack-2",

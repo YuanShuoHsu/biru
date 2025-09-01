@@ -85,14 +85,15 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const dict = useI18n();
 
-  const { deleteItem, getItemTotalQuantity, updateItem } = useCartStore();
+  const { deleteCartItem, getCartItemTotalQuantity, updateCartItem } =
+    useCartStore();
 
   const itemStock = getItemStock(id);
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
-  const totalQuantity = getItemTotalQuantity(id);
+  const cartItemTotalQuantity = getCartItemTotalQuantity(id);
   const availableToAdd = Math.max(
     0,
-    Math.min(MAX_QUANTITY - quantity, itemStockLeft - totalQuantity),
+    Math.min(MAX_QUANTITY - quantity, itemStockLeft - cartItemTotalQuantity),
   );
 
   const itemName = getItemName(id, lang);
@@ -103,7 +104,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const handleDecrease = () => {
     if (canDecrease) {
-      updateItem({
+      updateCartItem({
         ...item,
         quantity: -1,
         amount: -(price + extraCost),
@@ -113,7 +114,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const handleIncrease = () => {
     if (canIncrease) {
-      updateItem({
+      updateCartItem({
         ...item,
         quantity: 1,
         amount: price + extraCost,
@@ -189,7 +190,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
                       <IconButton
                         aria-label={canDecrease ? "decrease" : "delete"}
                         onClick={() =>
-                          canDecrease ? handleDecrease() : deleteItem(item)
+                          canDecrease ? handleDecrease() : deleteCartItem(item)
                         }
                         size="small"
                       >
@@ -226,7 +227,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             />
             {availableToAdd <= 0 && (
               <StyledFormHelperText error>
-                {MAX_QUANTITY - quantity < itemStockLeft - totalQuantity
+                {MAX_QUANTITY - quantity < itemStockLeft - cartItemTotalQuantity
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })

@@ -142,7 +142,7 @@ const ActionAreaCard = ({
 
   const dict = useI18n();
 
-  const { updateItem } = useCartStore();
+  const { updateCartItem } = useCartStore();
   const { setDialog } = useDialogStore();
   const { view } = useViewStore();
   const viewDirection = ViewDirections[view];
@@ -183,7 +183,7 @@ const ActionAreaCard = ({
 
         if (quantity <= 0) return;
 
-        updateItem({
+        updateCartItem({
           id,
           amount,
           extraCost,
