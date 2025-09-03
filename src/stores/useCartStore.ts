@@ -29,10 +29,6 @@ interface CartState {
   deleteCartItem: (item: CartItem) => void;
   updateCartItem: (item: CartItem) => void;
   getCartChoiceTotalQuantity: (choiceId: string) => number;
-  getCartItemChoicesTotalQuantity: (
-    itemId: string,
-    choices: CartItemChoices,
-  ) => number;
   getCartItemTotalQuantity: (itemId: string) => number;
 }
 
@@ -132,8 +128,6 @@ export const useCartStore = create<CartState>()(
           0,
         );
       },
-      getCartItemChoicesTotalQuantity: (itemId, choices) =>
-        get().cartItemsMap[getItemKey(itemId, choices)]?.quantity || 0,
       getCartItemTotalQuantity: (itemId) =>
         Object.values(get().cartItemsMap).reduce(
           (sum, { id, quantity }) => (id === itemId ? sum + quantity : sum),

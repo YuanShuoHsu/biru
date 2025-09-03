@@ -77,11 +77,8 @@ const CardDialogContent = forwardRef<
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
 
-  const {
-    getCartChoiceTotalQuantity,
-    getCartItemChoicesTotalQuantity,
-    getCartItemTotalQuantity,
-  } = useCartStore();
+  const { getCartChoiceTotalQuantity, getCartItemTotalQuantity } =
+    useCartStore();
 
   const getChoiceAvailableQuantity = (
     choiceId: string,
@@ -121,16 +118,15 @@ const CardDialogContent = forwardRef<
 
   const dict = useI18n();
 
-  const cartItemChoicesTotalQuantity = getCartItemChoicesTotalQuantity(
-    id,
-    choices,
-  );
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
   const itemStockLeft = stock === null ? Infinity : stock;
 
+  const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
+  const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
+
   let limitingChoices: LimitingChoices = { names: [], quantity: Infinity };
 
-  const optionsAvailableQuantity = options.reduce(
+  const optionCapLeft = options.reduce(
     (overallMin, { id: optionId, choices: optionChoices }) => {
       const selected = choices[optionId];
       if (Array.isArray(selected) && !selected.length) return overallMin;
@@ -141,7 +137,7 @@ const CardDialogContent = forwardRef<
       const optionAvailableQuantity = optionChoices.reduce(
         (min, { id: choiceId, name: choiceName, stock: choiceStock }) => {
           if (min === 0) return 0;
-          if (!choiceIdSet.has(choiceId)) return min;
+          if (!choiceIdSet.has(choiceId) || choiceStock === null) return min;
 
           const choiceAvailableQuantity = getChoiceAvailableQuantity(
             choiceId,
@@ -177,15 +173,8 @@ const CardDialogContent = forwardRef<
       ? limitingChoices.names.join(dict.common.delimiter)
       : "";
 
-  const availableToAdd = Math.max(
-    0,
-    Math.min(
-      MAX_QUANTITY - cartItemChoicesTotalQuantity,
-      itemStockLeft - cartItemTotalQuantity,
-      optionsAvailableQuantity,
-    ),
-  );
-
+  const minCap = Math.min(perItemCapLeft, itemStockCapLeft, optionCapLeft);
+  const availableToAdd = Math.max(0, minCap);
   const minQuantity = availableToAdd > 0 ? 1 : 0;
 
   const { setDialog } = useDialogStore();
@@ -423,18 +412,16 @@ const CardDialogContent = forwardRef<
             />
             {quantity >= availableToAdd && (
               <StyledFormHelperText error>
-                {stock === null ||
-                MAX_QUANTITY - cartItemChoicesTotalQuantity <
-                  itemStockLeft - cartItemTotalQuantity
-                  ? interpolate(dict.common.maxQuantity, {
-                      quantity: MAX_QUANTITY,
-                    })
-                  : availableToAdd > 0
-                    ? interpolate(dict.dialog.maxStock, {
+                {availableToAdd <= 0
+                  ? dict.common.reachStockLimit
+                  : perItemCapLeft === minCap
+                    ? interpolate(dict.common.maxQuantity, {
+                        quantity: MAX_QUANTITY,
+                      })
+                    : interpolate(dict.dialog.maxStock, {
                         label: limitingChoicesLabel,
                         quantity: availableToAdd,
-                      })
-                    : dict.common.reachStockLimit}
+                      })}
               </StyledFormHelperText>
             )}
           </StyledFormControl>
