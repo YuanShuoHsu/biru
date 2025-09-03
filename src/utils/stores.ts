@@ -29,7 +29,7 @@ export const stores: {
 
 export const getStoreName = (lang: LocaleCode, storeId: StoreId) => {
   const store = stores.find(({ id }) => id === storeId);
-  if (!store) return;
+  if (!store) return storeId;
 
   return store.name[lang];
 };

@@ -24,12 +24,12 @@ import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { LangStoreTableNumberParam } from "@/types/locale";
-
-import { interpolate } from "@/utils/i18n";
-
+import type { LangStoreTableNumberParam, LocaleCode } from "@/types/locale";
 import type { StoreId } from "@/types/stores";
 import type { TableNumberParam } from "@/types/tableNumbers";
+
+import { interpolate } from "@/utils/i18n";
+import { getStoreName } from "@/utils/stores";
 
 interface BreadcrumbItem {
   icon: React.ComponentType<SvgIconProps>;
@@ -38,9 +38,11 @@ interface BreadcrumbItem {
 
 const breadcrumbMap = (
   dict: I18nDict,
+  lang: LocaleCode,
   storeId: StoreId,
   tableNumber: TableNumberParam,
 ): Record<string, BreadcrumbItem> => {
+  const storeName = getStoreName(lang, storeId);
   const isTakeout = tableNumber === "0";
 
   return {
@@ -54,7 +56,7 @@ const breadcrumbMap = (
     },
     [`/order/${storeId}`]: {
       icon: Storefront,
-      label: storeId,
+      label: storeName,
     },
     [`/order/${storeId}/${tableNumber}`]: {
       icon: isTakeout ? LocalMall : TableBar,
@@ -119,7 +121,7 @@ const RouterBreadcrumbs = () => {
   const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
 
   const dict = useI18n();
-  const breadcrumbs = breadcrumbMap(dict, storeId, tableNumber);
+  const breadcrumbs = breadcrumbMap(dict, lang, storeId, tableNumber);
   // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
