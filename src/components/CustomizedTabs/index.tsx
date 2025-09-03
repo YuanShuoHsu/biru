@@ -4,7 +4,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
@@ -25,7 +25,7 @@ import { styled } from "@mui/material/styles";
 
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 
-import type { LangParam } from "@/types/locale";
+import { LangStoreTableNumberParam } from "@/types/locale";
 
 import { menu } from "@/utils/menu";
 
@@ -61,7 +61,9 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { lang } = useParams<LangParam>();
+  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
+  const pathname = usePathname();
+  const isOrderPage = pathname === `/${lang}/order/${storeId}/${tableNumber}`;
 
   const dict = useI18n();
 
@@ -69,7 +71,7 @@ const CustomizedTabs = () => {
   const searchText = orderSearchText.trim().toLowerCase();
 
   const trigger = useScrollTrigger({
-    threshold: SCROLL_TRIGGER_THRESHOLD,
+    threshold: isOrderPage ? SCROLL_TRIGGER_THRESHOLD : undefined,
   });
 
   const categoryGroups = menu

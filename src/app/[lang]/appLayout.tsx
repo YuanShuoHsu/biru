@@ -32,8 +32,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     nav: false,
   });
 
-  const pathname = usePathname();
   const { lang, storeId, tableNumber } = useParams();
+  const pathname = usePathname();
 
   const isHome = pathname === `/${lang}`;
   const isOrderPage = pathname === `/${lang}/order/${storeId}/${tableNumber}`;
