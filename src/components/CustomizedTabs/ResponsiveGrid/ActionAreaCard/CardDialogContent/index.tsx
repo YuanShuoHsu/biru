@@ -49,6 +49,8 @@ const StyledFormHelperText = styled(FormHelperText)({
   textAlign: "right",
 });
 
+type LimitingChoices = { names: string[]; quantity: number };
+
 export interface CardDialogContentImperativeHandle {
   getValues: () => {
     amount: number;
@@ -126,6 +128,8 @@ const CardDialogContent = forwardRef<
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
   const itemStockLeft = stock === null ? Infinity : stock;
 
+  let limitingChoices: LimitingChoices = { names: [], quantity: Infinity };
+
   const optionsAvailableQuantity = options.reduce(
     (overallMin, { id: optionId, choices: optionChoices }) => {
       const selected = choices[optionId];
@@ -135,7 +139,7 @@ const CardDialogContent = forwardRef<
       const choiceIdSet = new Set(selectedIds);
 
       const optionAvailableQuantity = optionChoices.reduce(
-        (min, { id: choiceId, stock: choiceStock }) => {
+        (min, { id: choiceId, name: choiceName, stock: choiceStock }) => {
           if (min === 0) return 0;
           if (!choiceIdSet.has(choiceId)) return min;
 
@@ -143,6 +147,20 @@ const CardDialogContent = forwardRef<
             choiceId,
             choiceStock,
           );
+
+          const localizedChoiceName = choiceName[lang];
+
+          if (choiceAvailableQuantity < limitingChoices.quantity) {
+            limitingChoices = {
+              names: [localizedChoiceName],
+              quantity: choiceAvailableQuantity,
+            };
+          } else if (
+            choiceAvailableQuantity === limitingChoices.quantity &&
+            !limitingChoices.names.includes(localizedChoiceName)
+          ) {
+            limitingChoices.names.push(localizedChoiceName);
+          }
 
           return Math.min(min, choiceAvailableQuantity);
         },
@@ -153,6 +171,12 @@ const CardDialogContent = forwardRef<
     },
     Infinity,
   );
+
+  const limitingChoicesLabel =
+    limitingChoices.names.length > 0
+      ? limitingChoices.names.join(dict.common.delimiter)
+      : "";
+
   const availableToAdd = Math.max(
     0,
     Math.min(
@@ -161,6 +185,7 @@ const CardDialogContent = forwardRef<
       optionsAvailableQuantity,
     ),
   );
+
   const minQuantity = availableToAdd > 0 ? 1 : 0;
 
   const { setDialog } = useDialogStore();
@@ -406,6 +431,7 @@ const CardDialogContent = forwardRef<
                     })
                   : availableToAdd > 0
                     ? interpolate(dict.dialog.maxStock, {
+                        label: limitingChoicesLabel,
                         quantity: availableToAdd,
                       })
                     : dict.common.reachStockLimit}

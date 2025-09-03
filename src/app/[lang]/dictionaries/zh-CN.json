@@ -65,7 +65,7 @@
     "addToCart": "加入购物车",
     "amount": "小计",
     "close": "关闭",
-    "maxStock": "库存仅剩 {quantity} 件"
+    "maxStock": "{label} 库存仅剩 {quantity} 件"
   },
   "nav": {
     "home": "首页",
