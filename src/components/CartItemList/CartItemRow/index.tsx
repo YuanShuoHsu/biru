@@ -171,8 +171,6 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const canDecrease = quantity > 1;
   const canIncrease = availableToAdd > 0;
 
-  console.log(availableToAdd, limitingChoicesLabel);
-
   const handleDecrease = () => {
     if (canDecrease) {
       updateCartItem({

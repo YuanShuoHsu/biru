@@ -9,6 +9,7 @@ export interface Choice {
   name: LocalizedText;
   extraCost: number;
   isActive: boolean;
+  isShared: boolean;
   sold: number;
   stock: number | null;
 }
