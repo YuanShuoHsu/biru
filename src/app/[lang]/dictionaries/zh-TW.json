@@ -57,7 +57,7 @@
     "loading": "載入中...",
     "maxQuantity": "每項商品最多只能購買 {quantity} 件",
     "multiply": "×",
-    "reachStockLimit": "已達庫存上限",
+    "reachStockLimit": "{label} 已達庫存上限",
     "soldOut": "售完",
     "totalAmount": "總計"
   },

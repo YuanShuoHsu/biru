@@ -28,6 +28,13 @@ export const getItemName = (id: string, lang: LocaleCode): string => {
   return item.name[lang];
 };
 
+export const getItemOptions = (id: string): Option[] => {
+  const item = findItemById(id);
+  if (!item) return [];
+
+  return item.options;
+};
+
 export const getItemStock = (id: string): number | null => {
   const item = findItemById(id);
   if (!item) return 0;
@@ -35,7 +42,7 @@ export const getItemStock = (id: string): number | null => {
   return item.stock;
 };
 
-const findOptionChoiceById = (
+export const findOptionChoiceById = (
   option: Option,
   choiceId: string,
 ): Choice | undefined => option.choices.find(({ id }) => id === choiceId);
@@ -386,7 +393,7 @@ export const menu: Category[] = [
           "zh-CN": "香甜焦糖与浓郁浓缩完美结合。",
         },
         imageUrl: "/images/IMG_4590.jpg",
-        isActive: false,
+        isActive: true,
         options: [
           {
             id: "size",
@@ -489,7 +496,7 @@ export const menu: Category[] = [
         ],
         price: 130,
         sold: 5,
-        stock: 0,
+        stock: 2,
       },
     ],
   },

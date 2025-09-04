@@ -28,7 +28,13 @@ import { CartItem, useCartStore } from "@/stores/useCartStore";
 import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
-import { getChoiceNames, getItemName, getItemStock } from "@/utils/menu";
+import {
+  findOptionChoiceById,
+  getChoiceNames,
+  getItemName,
+  getItemOptions,
+  getItemStock,
+} from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   position: "relative",
@@ -85,22 +91,87 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const dict = useI18n();
 
-  const { deleteCartItem, getCartItemTotalQuantity, updateCartItem } =
-    useCartStore();
+  const itemName = getItemName(id, lang);
+  const choiceNames = getChoiceNames(id, choices, lang, dict);
+
+  const {
+    deleteCartItem,
+    getCartChoiceTotalQuantity,
+    getCartItemTotalQuantity,
+    updateCartItem,
+  } = useCartStore();
 
   const itemStock = getItemStock(id);
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
-  const availableToAdd = Math.max(
-    0,
-    Math.min(MAX_QUANTITY - quantity, itemStockLeft - cartItemTotalQuantity),
+
+  const perItemCapLeft = MAX_QUANTITY - quantity;
+  const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
+
+  const options = getItemOptions(id);
+
+  let limitingChoices: { names: string[]; quantity: number } = {
+    names: [],
+    quantity: Infinity,
+  };
+
+  const optionCapLeft = Object.entries(choices).reduce(
+    (overallMin, [optionId, selected]) => {
+      const option = options.find(({ id }) => id === optionId);
+      if (!option) return overallMin;
+
+      const selectedIds = Array.isArray(selected)
+        ? selected
+        : selected
+          ? [selected]
+          : [];
+      if (selectedIds.length === 0) return overallMin;
+
+      const optionMin = selectedIds.reduce((min, choiceId) => {
+        if (min === 0) return 0;
+
+        const choice = findOptionChoiceById(option, choiceId);
+        if (!choice || choice.stock === null) return min;
+
+        const localizedName = choice.name[lang];
+
+        const cartChoiceTotalQuantity = getCartChoiceTotalQuantity(choiceId);
+        const availableQuantity = choice.stock - cartChoiceTotalQuantity;
+
+        if (availableQuantity < limitingChoices.quantity) {
+          limitingChoices = {
+            names: [localizedName],
+            quantity: availableQuantity,
+          };
+        } else if (
+          availableQuantity === limitingChoices.quantity &&
+          !limitingChoices.names.includes(localizedName)
+        ) {
+          limitingChoices.names.push(localizedName);
+        }
+
+        return Math.min(min, availableQuantity);
+      }, Infinity);
+
+      return Math.min(overallMin, optionMin);
+    },
+    Infinity,
   );
 
-  const itemName = getItemName(id, lang);
-  const choiceNames = getChoiceNames(id, choices, lang, dict);
+  // console.log(optionCapLeft, limitingChoices);
+
+  const limitingChoicesLabel =
+    limitingChoices.names.length > 0
+      ? limitingChoices.names.join(dict.common.delimiter)
+      : "";
+
+  const minCap = Math.min(perItemCapLeft, itemStockCapLeft, optionCapLeft);
+  const availableToAdd = Math.max(0, minCap);
 
   const canDecrease = quantity > 1;
   const canIncrease = availableToAdd > 0;
+
+  console.log(availableToAdd, limitingChoicesLabel);
 
   const handleDecrease = () => {
     if (canDecrease) {
@@ -227,11 +298,13 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             />
             {availableToAdd <= 0 && (
               <StyledFormHelperText error>
-                {MAX_QUANTITY - quantity < itemStockLeft - cartItemTotalQuantity
+                {perItemCapLeft === minCap
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
-                  : dict.common.reachStockLimit}
+                  : interpolate(dict.common.reachStockLimit, {
+                      label: limitingChoicesLabel,
+                    })}
               </StyledFormHelperText>
             )}
           </StyledFormControl>

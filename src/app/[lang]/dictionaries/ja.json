@@ -57,7 +57,7 @@
     "loading": "読み込み中...",
     "maxQuantity": "各商品は最大 {quantity} 個まで購入できます",
     "multiply": "×",
-    "reachStockLimit": "在庫の上限に達しました",
+    "reachStockLimit": "在庫の上限に達しました {label}",
     "soldOut": "売り切れ",
     "totalAmount": "合計"
   },

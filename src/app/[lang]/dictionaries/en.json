@@ -57,7 +57,7 @@
     "loading": "Loading...",
     "maxQuantity": "You can buy up to {quantity} per item",
     "multiply": "×",
-    "reachStockLimit": "Reached stock limit",
+    "reachStockLimit": "Stock limit reached {label}",
     "soldOut": "Sold out",
     "totalAmount": "Total"
   },
@@ -65,7 +65,7 @@
     "addToCart": "Add to cart",
     "amount": "SubTotal",
     "close": "Close",
-    "maxStock": "Only {quantity} left in stock for {label}"
+    "maxStock": "Only {quantity} left in stock {label}"
   },
   "nav": {
     "home": "Home",
