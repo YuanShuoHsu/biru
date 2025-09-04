@@ -198,11 +198,11 @@ const CardDialogContent = forwardRef<
       if (Array.isArray(selected) && !selected.length) return total;
 
       const selectedIds = Array.isArray(selected) ? selected : [selected];
-      const selectedSet = new Set(selectedIds);
+      const choiceIdSet = new Set(selectedIds);
 
       const cost = optionChoices.reduce(
         (sum, { id: choiceId, extraCost }) =>
-          selectedSet.has(choiceId) ? sum + extraCost : sum,
+          choiceIdSet.has(choiceId) ? sum + extraCost : sum,
         0,
       );
 
@@ -268,7 +268,7 @@ const CardDialogContent = forwardRef<
           if (filteredOptionChoices.length === 0) return null;
 
           const selected = choices[optionId];
-          const selectedSet = Array.isArray(selected)
+          const choiceIdSet = Array.isArray(selected)
             ? new Set(selected)
             : null;
 
@@ -289,8 +289,8 @@ const CardDialogContent = forwardRef<
                     );
                     const isChoiceOutOfStock = choiceAvailableQuantity === 0;
 
-                    const isSelected = selectedSet
-                      ? selectedSet.has(choiceId)
+                    const isSelected = choiceIdSet
+                      ? choiceIdSet.has(choiceId)
                       : selected === choiceId;
 
                     const handleClick = () => {

@@ -120,14 +120,14 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
       const option = options.find(({ id }) => id === optionId);
       if (!option) return overallMin;
 
-      const selectedIds = Array.isArray(selected)
+      const choiceIds = Array.isArray(selected)
         ? selected
         : selected
           ? [selected]
           : [];
-      if (selectedIds.length === 0) return overallMin;
+      if (choiceIds.length === 0) return overallMin;
 
-      const optionMin = selectedIds.reduce((min, choiceId) => {
+      const optionAvailableQuantity = choiceIds.reduce((min, choiceId) => {
         if (min === 0) return 0;
 
         const choice = findOptionChoiceById(option, choiceId);
@@ -153,12 +153,10 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
         return Math.min(min, availableQuantity);
       }, Infinity);
 
-      return Math.min(overallMin, optionMin);
+      return Math.min(overallMin, optionAvailableQuantity);
     },
     Infinity,
   );
-
-  // console.log(optionCapLeft, limitingChoices);
 
   const limitingChoicesLabel =
     limitingChoices.names.length > 0
