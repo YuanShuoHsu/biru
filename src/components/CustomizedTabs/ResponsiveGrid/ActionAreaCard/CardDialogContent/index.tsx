@@ -77,42 +77,55 @@ const CardDialogContent = forwardRef<
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
 
-  const { getCartChoiceTotalQuantity, getCartItemTotalQuantity } =
-    useCartStore();
+  const {
+    getCartChoiceTotalQuantity,
+    getCartItemChoiceTotalQuantity,
+    getCartItemTotalQuantity,
+  } = useCartStore();
 
   const getChoiceAvailableQuantity = (
     choiceId: string,
     choiceStock: number | null,
+    isShared: boolean,
+    itemId: string,
   ) => {
-    const cartChoiceTotalQuantity = getCartChoiceTotalQuantity(choiceId);
     const choiceStockLeft = choiceStock == null ? Infinity : choiceStock;
 
-    return Math.max(0, choiceStockLeft - cartChoiceTotalQuantity);
+    const used = isShared
+      ? getCartChoiceTotalQuantity(choiceId)
+      : getCartItemChoiceTotalQuantity(itemId, choiceId);
+
+    return Math.max(0, choiceStockLeft - used);
   };
 
-  const [choices, setChoices] = useState<CartItemChoices>(() =>
-    Object.fromEntries(
-      options.map(({ id, choices, multiple, required }) => {
-        if (multiple) return [id, []];
+  const initialChoices = options.reduce<CartItemChoices>(
+    (acc, { id: optionId, choices: optionChoices, multiple, required }) => {
+      if (multiple) {
+        acc[optionId] = [];
+      } else if (required) {
+        const firstInStock = optionChoices.find(
+          ({ id: choiceId, stock: choiceStock, isShared }) => {
+            const choiceAvailableQuantity = getChoiceAvailableQuantity(
+              choiceId,
+              choiceStock,
+              isShared,
+              id,
+            );
 
-        if (required) {
-          const firstInStockChoice = choices.find(
-            ({ id: choiceId, stock: choiceStock }) => {
-              const choiceAvailableQuantity = getChoiceAvailableQuantity(
-                choiceId,
-                choiceStock,
-              );
+            return choiceAvailableQuantity > 0;
+          },
+        );
 
-              return choiceAvailableQuantity > 0;
-            },
-          );
-          return [id, firstInStockChoice?.id];
-        }
+        if (!firstInStock) acc[optionId] = null;
+        else acc[optionId] = firstInStock.id;
+      } else acc[optionId] = null;
 
-        return [id, null];
-      }),
-    ),
+      return acc;
+    },
+    {},
   );
+
+  const [choices, setChoices] = useState<CartItemChoices>(initialChoices);
 
   const { lang } = useParams<LangParam>();
 
@@ -135,13 +148,18 @@ const CardDialogContent = forwardRef<
       const choiceIdSet = new Set(selectedIds);
 
       const optionAvailableQuantity = optionChoices.reduce(
-        (min, { id: choiceId, name: choiceName, stock: choiceStock }) => {
+        (
+          min,
+          { id: choiceId, name: choiceName, stock: choiceStock, isShared },
+        ) => {
           if (min === 0) return 0;
           if (!choiceIdSet.has(choiceId) || choiceStock === null) return min;
 
           const choiceAvailableQuantity = getChoiceAvailableQuantity(
             choiceId,
             choiceStock,
+            isShared,
+            id,
           );
 
           const localizedChoiceName = choiceName[lang];
@@ -281,11 +299,14 @@ const CardDialogContent = forwardRef<
                     id: choiceId,
                     name: choiceName,
                     extraCost,
+                    isShared,
                     stock: choiceStock,
                   }) => {
                     const choiceAvailableQuantity = getChoiceAvailableQuantity(
                       choiceId,
                       choiceStock,
+                      isShared,
+                      id,
                     );
                     const isChoiceOutOfStock = choiceAvailableQuantity === 0;
 

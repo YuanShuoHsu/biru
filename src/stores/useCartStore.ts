@@ -29,6 +29,7 @@ interface CartState {
   deleteCartItem: (item: CartItem) => void;
   updateCartItem: (item: CartItem) => void;
   getCartChoiceTotalQuantity: (choiceId: string) => number;
+  getCartItemChoiceTotalQuantity: (itemId: string, choiceId: string) => number;
   getCartItemTotalQuantity: (itemId: string) => number;
 }
 
@@ -114,6 +115,7 @@ export const useCartStore = create<CartState>()(
           isCartEmpty,
         });
       },
+      // isShared: true
       getCartChoiceTotalQuantity: (choiceId) => {
         return Object.values(get().cartItemsMap).reduce(
           (sum, { choices, quantity }) => {
@@ -124,6 +126,23 @@ export const useCartStore = create<CartState>()(
             );
 
             return sum + (hasChoice ? quantity : 0);
+          },
+          0,
+        );
+      },
+      // isShared: false
+      getCartItemChoiceTotalQuantity: (itemId, choiceId) => {
+        return Object.values(get().cartItemsMap).reduce(
+          (sum, { id, choices, quantity }) => {
+            if (id !== itemId) return sum;
+
+            const used = Object.values(choices).some((selected) =>
+              Array.isArray(selected)
+                ? selected.includes(choiceId)
+                : selected === choiceId,
+            );
+
+            return sum + (used ? quantity : 0);
           },
           0,
         );
