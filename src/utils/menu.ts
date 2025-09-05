@@ -197,7 +197,7 @@ export const menu: Category[] = [
                 isActive: true,
                 isShared: false,
                 sold: 2,
-                stock: 1,
+                stock: 2,
               },
               {
                 id: "l",

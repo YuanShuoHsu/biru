@@ -97,6 +97,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const {
     deleteCartItem,
     getCartChoiceTotalQuantity,
+    getCartItemChoiceTotalQuantity,
     getCartItemTotalQuantity,
     updateCartItem,
   } = useCartStore();
@@ -135,8 +136,10 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
         const localizedName = choice.name[lang];
 
-        const cartChoiceTotalQuantity = getCartChoiceTotalQuantity(choiceId);
-        const availableQuantity = choice.stock - cartChoiceTotalQuantity;
+        const used = choice.isShared
+          ? getCartChoiceTotalQuantity(choiceId)
+          : getCartItemChoiceTotalQuantity(id, choiceId);
+        const availableQuantity = choice.stock - used;
 
         if (availableQuantity < limitingChoices.quantity) {
           limitingChoices = {
