@@ -144,8 +144,8 @@ const CardDialogContent = forwardRef<
       const selected = choices[optionId];
       if (Array.isArray(selected) && !selected.length) return overallMin;
 
-      const selectedIds = Array.isArray(selected) ? selected : [selected];
-      const choiceIdSet = new Set(selectedIds);
+      const choiceIds = Array.isArray(selected) ? selected : [selected];
+      const choiceIdSet = new Set(choiceIds);
 
       const optionAvailableQuantity = optionChoices.reduce(
         (
@@ -215,8 +215,8 @@ const CardDialogContent = forwardRef<
       const selected = choices[optionId];
       if (Array.isArray(selected) && !selected.length) return total;
 
-      const selectedIds = Array.isArray(selected) ? selected : [selected];
-      const choiceIdSet = new Set(selectedIds);
+      const choiceIds = Array.isArray(selected) ? selected : [selected];
+      const choiceIdSet = new Set(choiceIds);
 
       const cost = optionChoices.reduce(
         (sum, { id: choiceId, extraCost }) =>

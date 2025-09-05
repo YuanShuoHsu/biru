@@ -118,15 +118,13 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const optionCapLeft = Object.entries(choices).reduce(
     (overallMin, [optionId, selected]) => {
+      if ((Array.isArray(selected) && !selected.length) || selected == null)
+        return overallMin;
+
       const option = options.find(({ id }) => id === optionId);
       if (!option) return overallMin;
 
-      const choiceIds = Array.isArray(selected)
-        ? selected
-        : selected
-          ? [selected]
-          : [];
-      if (choiceIds.length === 0) return overallMin;
+      const choiceIds = Array.isArray(selected) ? selected : [selected];
 
       const optionAvailableQuantity = choiceIds.reduce((min, choiceId) => {
         if (min === 0) return 0;
