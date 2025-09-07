@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import SoldOut from "@/components/SoldOut";
+import CartItemSoldOut from "@/components/CartItemSoldOut";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
@@ -26,7 +26,6 @@ import { styled } from "@mui/material/styles";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import type { LangParam } from "@/types/locale";
-
 import { interpolate } from "@/utils/i18n";
 import {
   findOptionChoiceById,
@@ -192,7 +191,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   return (
     <StyledListItem disablePadding>
-      <SoldOut item={item} stock={itemStock} />
+      <CartItemSoldOut item={item} stock={itemStock} />
       <Grid
         container
         width="100%"

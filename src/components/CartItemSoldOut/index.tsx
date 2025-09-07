@@ -56,19 +56,13 @@ const StyledTypography = styled(Typography)({
   transform: "rotate(-30deg)",
 });
 
-interface SoldOutProps {
-  item?: CartItem;
+interface CartItemSoldOutProps {
+  item: CartItem;
   stock: number | null;
 }
 
-const SoldOut = ({ item, stock }: SoldOutProps) => {
-  const {
-    id = "",
-    choices = {},
-    quantity = 0,
-    price = 0,
-    extraCost = 0,
-  } = item || {};
+const CartItemSoldOut = ({ item, stock }: CartItemSoldOutProps) => {
+  const { id, choices, extraCost, price, quantity } = item;
 
   const { lang } = useParams<LangParam>();
 
@@ -128,15 +122,13 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
       onClick={handleClick}
       variant="outlined"
     >
-      {item && (
-        <StyledBox>
-          {shouldDeleteItem ? (
-            <Delete fontSize="small" />
-          ) : (
-            <Edit fontSize="small" />
-          )}
-        </StyledBox>
-      )}
+      <StyledBox>
+        {shouldDeleteItem ? (
+          <Delete fontSize="small" />
+        ) : (
+          <Edit fontSize="small" />
+        )}
+      </StyledBox>
       {message && (
         <StyledTypography
           color="error"
@@ -150,4 +142,4 @@ const SoldOut = ({ item, stock }: SoldOutProps) => {
   );
 };
 
-export default SoldOut;
+export default CartItemSoldOut;

@@ -5,8 +5,7 @@ import { useRef } from "react";
 import CardDialogContent, {
   CardDialogContentImperativeHandle,
 } from "./CardDialogContent";
-
-import SoldOut from "@/components/SoldOut";
+import ItemSoldOut from "./ItemSoldOut";
 
 import { useI18n } from "@/context/i18n";
 
@@ -200,7 +199,7 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard>
-      <SoldOut stock={stock} />
+      <ItemSoldOut stock={stock} />
       <StyledCardActionArea
         disableRipple={isItemOutOfStock}
         inStock={!isItemOutOfStock}

@@ -1027,7 +1027,7 @@ export const menu: Category[] = [
         ],
         price: 150,
         sold: 8,
-        stock: 8,
+        stock: 0,
       },
       {
         id: "snack-2",
