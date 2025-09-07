@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import CartItemSoldOut from "@/components/CartItemSoldOut";
+import CartItemSoldOut from "./CartItemSoldOut";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
