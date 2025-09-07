@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 
-import NavigationButton from "@/components/NavigationButton";
+import NavigationButton from "./NavigationButton";
 
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box } from "@mui/material";
