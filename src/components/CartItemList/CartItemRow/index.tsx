@@ -29,11 +29,10 @@ import type { LangParam } from "@/types/locale";
 
 import { interpolate } from "@/utils/i18n";
 import {
-  findItemOption,
-  findOptionChoiceById,
   getChoiceNames,
   getItemName,
   getItemStock,
+  getLimitingChoicesCap,
 } from "@/utils/menu";
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
@@ -79,11 +78,6 @@ const StyledFormHelperText = styled(FormHelperText)({
   textAlign: "right",
 });
 
-type OptionLimitResult = {
-  names: string[];
-  cap: number;
-};
-
 interface CartItemRowProps {
   forceXsLayout: boolean;
   item: CartItem;
@@ -99,12 +93,8 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const itemName = getItemName(id, lang);
   const choiceNames = getChoiceNames(id, choices, lang, dict);
 
-  const {
-    deleteCartItem,
-    getChoiceAvailableQuantity,
-    getCartItemTotalQuantity,
-    updateCartItem,
-  } = useCartStore();
+  const { deleteCartItem, getCartItemTotalQuantity, updateCartItem } =
+    useCartStore();
 
   const itemStock = getItemStock(id);
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
@@ -113,43 +103,8 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
-  const { names: limitingChoiceNames, cap: optionCapLeft } = Object.entries(
-    choices,
-  ).reduce<OptionLimitResult>(
-    (acc, [optionId, choiceIds]) => {
-      if (!choiceIds.length) return acc;
-
-      const option = findItemOption(id, optionId);
-      if (!option) return acc;
-
-      const optionCap = choiceIds.reduce((min, choiceId) => {
-        const choice = findOptionChoiceById(option, choiceId);
-        if (!choice) return min;
-
-        const { stock: choiceStock, isShared, name } = choice;
-        const available = getChoiceAvailableQuantity(
-          choiceId,
-          choiceStock,
-          isShared,
-          id,
-        );
-
-        const localizedName = name[lang];
-
-        if (available < acc.cap) {
-          acc.names = [localizedName];
-          acc.cap = available;
-        } else if (available === acc.cap && !acc.names.includes(localizedName))
-          acc.names.push(localizedName);
-
-        return Math.min(min, available);
-      }, Infinity);
-
-      acc.cap = Math.min(acc.cap, optionCap);
-      return acc;
-    },
-    { cap: Infinity, names: [] },
-  );
+  const { names: limitingChoiceNames, cap: optionCapLeft } =
+    getLimitingChoicesCap(id, choices, lang);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0

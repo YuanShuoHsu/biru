@@ -30,6 +30,7 @@ import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
 
 import { interpolate } from "@/utils/i18n";
+import { getLimitingChoicesCap } from "@/utils/menu";
 
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -48,8 +49,6 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
 const StyledFormHelperText = styled(FormHelperText)({
   textAlign: "right",
 });
-
-type LimitingChoices = { names: string[]; quantity: number };
 
 export interface CardDialogContentImperativeHandle {
   getValues: () => {
@@ -119,58 +118,12 @@ const CardDialogContent = forwardRef<
   const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
-  let limitingChoices: LimitingChoices = { names: [], quantity: Infinity };
-
-  const optionCapLeft = options.reduce(
-    (overallMin, { id: optionId, choices: optionChoices }) => {
-      const selected = choices[optionId];
-      if (Array.isArray(selected) && !selected.length) return overallMin;
-
-      const choiceIds = Array.isArray(selected) ? selected : [selected];
-      const choiceIdSet = new Set(choiceIds);
-
-      const optionAvailableQuantity = optionChoices.reduce(
-        (
-          min,
-          { id: choiceId, name: choiceName, stock: choiceStock, isShared },
-        ) => {
-          if (min === 0) return 0;
-          if (!choiceIdSet.has(choiceId) || choiceStock === null) return min;
-
-          const choiceAvailableQuantity = getChoiceAvailableQuantity(
-            choiceId,
-            choiceStock,
-            isShared,
-            id,
-          );
-
-          const localizedChoiceName = choiceName[lang];
-
-          if (choiceAvailableQuantity < limitingChoices.quantity) {
-            limitingChoices = {
-              names: [localizedChoiceName],
-              quantity: choiceAvailableQuantity,
-            };
-          } else if (
-            choiceAvailableQuantity === limitingChoices.quantity &&
-            !limitingChoices.names.includes(localizedChoiceName)
-          ) {
-            limitingChoices.names.push(localizedChoiceName);
-          }
-
-          return Math.min(min, choiceAvailableQuantity);
-        },
-        Infinity,
-      );
-
-      return Math.min(overallMin, optionAvailableQuantity);
-    },
-    Infinity,
-  );
+  const { names: limitingChoiceNames, cap: optionCapLeft } =
+    getLimitingChoicesCap(id, choices, lang);
 
   const limitingChoicesLabel =
-    limitingChoices.names.length > 0
-      ? limitingChoices.names.join(dict.common.delimiter)
+    limitingChoiceNames.length > 0
+      ? limitingChoiceNames.join(dict.common.delimiter)
       : "";
 
   const availableToAdd = Math.min(
@@ -197,10 +150,9 @@ const CardDialogContent = forwardRef<
 
   const extraCost = options.reduce(
     (total, { id: optionId, choices: optionChoices }) => {
-      const selected = choices[optionId];
-      if (Array.isArray(selected) && !selected.length) return total;
+      const choiceIds = choices[optionId];
+      if (!choiceIds.length) return total;
 
-      const choiceIds = Array.isArray(selected) ? selected : [selected];
       const choiceIdSet = new Set(choiceIds);
 
       const cost = optionChoices.reduce(

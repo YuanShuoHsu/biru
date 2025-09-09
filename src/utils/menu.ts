@@ -1,4 +1,5 @@
 import { I18nDict } from "@/context/i18n";
+import { useCartStore } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
 import type { Category, Choice, MenuItem, Option } from "@/types/menu";
@@ -35,7 +36,7 @@ export const getItemStock = (itemId: string): number | null => {
   return item.stock;
 };
 
-export const findOptionChoiceById = (
+const findOptionChoiceById = (
   option: Option,
   choiceId: string,
 ): Choice | undefined => option.choices.find(({ id }) => id === choiceId);
@@ -55,14 +56,55 @@ const findItemOptionById = (
   optionId: string,
 ): Option | undefined => item.options.find(({ id }) => id === optionId);
 
-export const findItemOption = (
-  itemId: string,
-  optionId: string,
-): Option | undefined => {
-  const item = findItemById(itemId);
-  if (!item) return;
+type OptionLimitResult = { cap: number; names: string[] };
 
-  return findItemOptionById(item, optionId);
+export const getLimitingChoicesCap = (
+  id: string,
+  choices: Record<string, string[]>,
+  lang: LocaleCode,
+): OptionLimitResult => {
+  const { getChoiceAvailableQuantity } = useCartStore.getState();
+
+  const { names, cap } = Object.entries(choices).reduce<OptionLimitResult>(
+    (acc, [optionId, choiceIds]) => {
+      if (!choiceIds.length) return acc;
+
+      const item = findItemById(id);
+      if (!item) return acc;
+
+      const option = findItemOptionById(item, optionId);
+      if (!option) return acc;
+
+      const optionCap = choiceIds.reduce((min, choiceId) => {
+        const choice = findOptionChoiceById(option, choiceId);
+        if (!choice) return min;
+
+        const { stock: choiceStock, isShared, name } = choice;
+        const available = getChoiceAvailableQuantity(
+          choiceId,
+          choiceStock,
+          isShared,
+          id,
+        );
+
+        const localizedName = name[lang];
+
+        if (available < acc.cap) {
+          acc.names = [localizedName];
+          acc.cap = available;
+        } else if (available === acc.cap && !acc.names.includes(localizedName))
+          acc.names.push(localizedName);
+
+        return Math.min(min, available);
+      }, Infinity);
+
+      acc.cap = Math.min(acc.cap, optionCap);
+      return acc;
+    },
+    { cap: Infinity, names: [] },
+  );
+
+  return { names, cap };
 };
 
 export const getChoiceNames = (
@@ -84,36 +126,6 @@ export const getChoiceNames = (
 
       const choiceNames = choiceIds
         .map((choiceId) => getOptionChoiceName(option, choiceId, lang))
-        .filter(Boolean)
-        .join(delimiter);
-
-      return choiceNames ? [`${option.name[lang]}${colon}${choiceNames}`] : [];
-    })
-    .join(joinWith);
-};
-
-export const getOutOfStockChoiceNames = (
-  itemId: string,
-  choices: Record<string, string[]>,
-  lang: LocaleCode,
-  { common: { colon, delimiter } }: I18nDict,
-  joinWith: string = "\n",
-): string => {
-  const item = findItemById(itemId);
-  if (!item) return "";
-
-  return Object.entries(choices)
-    .flatMap(([optionId, choiceIds]) => {
-      if (!choiceIds.length) return [];
-
-      const option = findItemOptionById(item, optionId);
-      if (!option) return [];
-
-      const choiceNames = choiceIds
-        .map((choiceId) => {
-          const choice = findOptionChoiceById(option, choiceId);
-          return choice?.stock === 0 ? choice.name[lang] : null;
-        })
         .filter(Boolean)
         .join(delimiter);
 
