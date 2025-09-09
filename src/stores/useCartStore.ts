@@ -3,8 +3,6 @@ import { createJSONStorage, persist } from "zustand/middleware";
 
 import { getItemKey } from "@/utils/menu";
 
-export type CartItemChoices = Record<string, string | string[] | null>;
-
 export interface CartItem {
   id: string;
   amount: number;
@@ -12,7 +10,7 @@ export interface CartItem {
   imageUrl: string;
   price: number;
   quantity: number;
-  choices: CartItemChoices;
+  choices: Record<string, string[]>;
 }
 
 interface CartState {
@@ -28,8 +26,13 @@ interface CartState {
   clearCartItem: () => void;
   deleteCartItem: (item: CartItem) => void;
   updateCartItem: (item: CartItem) => void;
-  getCartChoiceTotalQuantity: (choiceId: string) => number;
-  getCartItemChoiceTotalQuantity: (itemId: string, choiceId: string) => number;
+  getCartItemChoiceTotalQuantity: (choiceId: string, itemId?: string) => number;
+  getChoiceAvailableQuantity: (
+    choiceId: string,
+    choiceStock: number | null,
+    isShared: boolean,
+    itemId: string,
+  ) => number;
   getCartItemTotalQuantity: (itemId: string) => number;
 }
 
@@ -115,37 +118,31 @@ export const useCartStore = create<CartState>()(
           isCartEmpty,
         });
       },
-      // isShared: true
-      getCartChoiceTotalQuantity: (choiceId) => {
-        return Object.values(get().cartItemsMap).reduce(
-          (sum, { choices, quantity }) => {
-            const hasChoice = Object.values(choices).some((selected) =>
-              Array.isArray(selected)
-                ? selected.includes(choiceId)
-                : selected === choiceId,
-            );
-
-            return sum + (hasChoice ? quantity : 0);
-          },
-          0,
-        );
-      },
-      // isShared: false
-      getCartItemChoiceTotalQuantity: (itemId, choiceId) => {
+      getCartItemChoiceTotalQuantity: (choiceId, itemId) => {
         return Object.values(get().cartItemsMap).reduce(
           (sum, { id, choices, quantity }) => {
-            if (id !== itemId) return sum;
+            // isShared: false
+            if (itemId && id !== itemId) return sum;
 
+            // isShared: true
             const used = Object.values(choices).some((selected) =>
-              Array.isArray(selected)
-                ? selected.includes(choiceId)
-                : selected === choiceId,
+              selected.includes(choiceId),
             );
 
             return sum + (used ? quantity : 0);
           },
           0,
         );
+      },
+      getChoiceAvailableQuantity: (choiceId, choiceStock, isShared, itemId) => {
+        const choiceStockLeft = choiceStock == null ? Infinity : choiceStock;
+
+        const used = get().getCartItemChoiceTotalQuantity(
+          choiceId,
+          isShared ? undefined : itemId,
+        );
+
+        return Math.max(0, choiceStockLeft - used);
       },
       getCartItemTotalQuantity: (itemId) =>
         Object.values(get().cartItemsMap).reduce(

@@ -26,12 +26,13 @@ import { styled } from "@mui/material/styles";
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import type { LangParam } from "@/types/locale";
+
 import { interpolate } from "@/utils/i18n";
 import {
+  findItemOption,
   findOptionChoiceById,
   getChoiceNames,
   getItemName,
-  getItemOptions,
   getItemStock,
 } from "@/utils/menu";
 
@@ -78,6 +79,11 @@ const StyledFormHelperText = styled(FormHelperText)({
   textAlign: "right",
 });
 
+type OptionLimitResult = {
+  names: string[];
+  cap: number;
+};
+
 interface CartItemRowProps {
   forceXsLayout: boolean;
   item: CartItem;
@@ -95,8 +101,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const {
     deleteCartItem,
-    getCartChoiceTotalQuantity,
-    getCartItemChoiceTotalQuantity,
+    getChoiceAvailableQuantity,
     getCartItemTotalQuantity,
     updateCartItem,
   } = useCartStore();
@@ -105,66 +110,57 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
 
-  const perItemCapLeft = MAX_QUANTITY - quantity;
+  const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
-  const options = getItemOptions(id);
+  const { names: limitingChoiceNames, cap: optionCapLeft } = Object.entries(
+    choices,
+  ).reduce<OptionLimitResult>(
+    (acc, [optionId, choiceIds]) => {
+      if (!choiceIds.length) return acc;
 
-  let limitingChoices: { names: string[]; quantity: number } = {
-    names: [],
-    quantity: Infinity,
-  };
+      const option = findItemOption(id, optionId);
+      if (!option) return acc;
 
-  const optionCapLeft = Object.entries(choices).reduce(
-    (overallMin, [optionId, selected]) => {
-      if ((Array.isArray(selected) && !selected.length) || selected == null)
-        return overallMin;
-
-      const option = options.find(({ id }) => id === optionId);
-      if (!option) return overallMin;
-
-      const choiceIds = Array.isArray(selected) ? selected : [selected];
-
-      const optionAvailableQuantity = choiceIds.reduce((min, choiceId) => {
-        if (min === 0) return 0;
-
+      const optionCap = choiceIds.reduce((min, choiceId) => {
         const choice = findOptionChoiceById(option, choiceId);
-        if (!choice || choice.stock === null) return min;
+        if (!choice) return min;
 
-        const localizedName = choice.name[lang];
+        const { stock: choiceStock, isShared, name } = choice;
+        const available = getChoiceAvailableQuantity(
+          choiceId,
+          choiceStock,
+          isShared,
+          id,
+        );
 
-        const used = choice.isShared
-          ? getCartChoiceTotalQuantity(choiceId)
-          : getCartItemChoiceTotalQuantity(id, choiceId);
-        const availableQuantity = choice.stock - used;
+        const localizedName = name[lang];
 
-        if (availableQuantity < limitingChoices.quantity) {
-          limitingChoices = {
-            names: [localizedName],
-            quantity: availableQuantity,
-          };
-        } else if (
-          availableQuantity === limitingChoices.quantity &&
-          !limitingChoices.names.includes(localizedName)
-        ) {
-          limitingChoices.names.push(localizedName);
-        }
+        if (available < acc.cap) {
+          acc.names = [localizedName];
+          acc.cap = available;
+        } else if (available === acc.cap && !acc.names.includes(localizedName))
+          acc.names.push(localizedName);
 
-        return Math.min(min, availableQuantity);
+        return Math.min(min, available);
       }, Infinity);
 
-      return Math.min(overallMin, optionAvailableQuantity);
+      acc.cap = Math.min(acc.cap, optionCap);
+      return acc;
     },
-    Infinity,
+    { cap: Infinity, names: [] },
   );
 
   const limitingChoicesLabel =
-    limitingChoices.names.length > 0
-      ? limitingChoices.names.join(dict.common.delimiter)
+    limitingChoiceNames.length > 0
+      ? limitingChoiceNames.join(dict.common.delimiter)
       : "";
 
-  const minCap = Math.min(perItemCapLeft, itemStockCapLeft, optionCapLeft);
-  const availableToAdd = Math.max(0, minCap);
+  const availableToAdd = Math.min(
+    perItemCapLeft,
+    itemStockCapLeft,
+    optionCapLeft,
+  );
 
   const canDecrease = quantity > 1;
   const canIncrease = availableToAdd > 0;
@@ -191,7 +187,15 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   return (
     <StyledListItem disablePadding>
-      <CartItemSoldOut item={item} stock={itemStock} />
+      <CartItemSoldOut
+        availableToAdd={availableToAdd}
+        item={item}
+        itemStockCapLeft={itemStockCapLeft}
+        itemStockLeft={itemStockLeft}
+        limitingChoicesLabel={limitingChoicesLabel}
+        optionCapLeft={optionCapLeft}
+        perItemCapLeft={perItemCapLeft}
+      />
       <Grid
         container
         width="100%"
@@ -294,13 +298,19 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             />
             {availableToAdd <= 0 && (
               <StyledFormHelperText error>
-                {perItemCapLeft === minCap
+                {perItemCapLeft === availableToAdd
                   ? interpolate(dict.common.maxQuantity, {
                       quantity: MAX_QUANTITY,
                     })
-                  : interpolate(dict.common.reachStockLimit, {
-                      label: limitingChoicesLabel,
-                    })}
+                  : itemStockCapLeft === availableToAdd
+                    ? interpolate(dict.common.reachStockLimit, {
+                        label: "",
+                      })
+                    : optionCapLeft === availableToAdd
+                      ? interpolate(dict.common.reachStockLimit, {
+                          label: limitingChoicesLabel,
+                        })
+                      : ""}
               </StyledFormHelperText>
             )}
           </StyledFormControl>

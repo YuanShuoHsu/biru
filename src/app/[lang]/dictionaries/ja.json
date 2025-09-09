@@ -43,7 +43,6 @@
   "cart": {
     "backToOrder": "メニューに戻る",
     "checkout": "レジに進む",
-    "choiceOutOfStock": "{label}\nは売切れです",
     "quantityExceedsStock": "残り {stock} 個",
     "title": "カート",
     "totalQuantity": "合計 {quantity} 点"
@@ -58,7 +57,7 @@
     "maxQuantity": "各商品は最大 {quantity} 個まで購入できます",
     "multiply": "×",
     "reachStockLimit": "在庫の上限に達しました {label}",
-    "soldOut": "売り切れ",
+    "soldOut": "{label} 売り切れ",
     "totalAmount": "合計"
   },
   "dialog": {

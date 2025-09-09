@@ -199,7 +199,7 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard>
-      <ItemSoldOut stock={stock} />
+      <ItemSoldOut isItemOutOfStock={isItemOutOfStock} />
       <StyledCardActionArea
         disableRipple={isItemOutOfStock}
         inStock={!isItemOutOfStock}

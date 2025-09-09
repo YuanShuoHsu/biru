@@ -43,7 +43,6 @@
   "cart": {
     "backToOrder": "返回點餐",
     "checkout": "前往結帳",
-    "choiceOutOfStock": "{label}\n已售完",
     "quantityExceedsStock": "剩 {stock} 件",
     "title": "購物車清單",
     "totalQuantity": "共 {quantity} 件"
@@ -58,7 +57,7 @@
     "maxQuantity": "每項商品最多只能購買 {quantity} 件",
     "multiply": "×",
     "reachStockLimit": "{label} 已達庫存上限",
-    "soldOut": "售完",
+    "soldOut": "{label} 售完",
     "totalAmount": "總計"
   },
   "dialog": {

@@ -43,7 +43,6 @@
   "cart": {
     "backToOrder": "Back to Order",
     "checkout": "Proceed to Checkout",
-    "choiceOutOfStock": "{label}\nis sold out",
     "quantityExceedsStock": "{stock} left",
     "title": "Shopping Cart",
     "totalQuantity": "{quantity} items"
@@ -58,7 +57,7 @@
     "maxQuantity": "You can buy up to {quantity} per item",
     "multiply": "×",
     "reachStockLimit": "Stock limit reached {label}",
-    "soldOut": "Sold out",
+    "soldOut": "{label} Sold out",
     "totalAmount": "Total"
   },
   "dialog": {

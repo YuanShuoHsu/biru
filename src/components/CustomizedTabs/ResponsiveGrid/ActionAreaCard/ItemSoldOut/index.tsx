@@ -3,6 +3,7 @@ import { useI18n } from "@/context/i18n";
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { interpolate } from "@/utils/i18n";
 import { getTypographyVariant } from "@/utils/soldOut";
 
 const StyledButton = styled(Button, {
@@ -33,14 +34,17 @@ const StyledTypography = styled(Typography)({
 });
 
 interface ItemSoldOutProps {
-  stock: number | null;
+  isItemOutOfStock: boolean;
 }
 
-const ItemSoldOut = ({ stock }: ItemSoldOutProps) => {
+const ItemSoldOut = ({ isItemOutOfStock }: ItemSoldOutProps) => {
   const dict = useI18n();
 
-  const isItemOutOfStock = stock === 0;
-  const message = isItemOutOfStock ? dict.common.soldOut : "";
+  const message = isItemOutOfStock
+    ? interpolate(dict.common.soldOut, {
+        label: "",
+      })
+    : "";
 
   const handleClick = (event: React.MouseEvent) => event.stopPropagation();
 

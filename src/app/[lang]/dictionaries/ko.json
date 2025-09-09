@@ -43,7 +43,6 @@
   "cart": {
     "backToOrder": "메뉴로 돌아가기",
     "checkout": "결제하기",
-    "choiceOutOfStock": "{label}\n품절되었습니다",
     "quantityExceedsStock": "{stock} 개 남음",
     "title": "장바구니",
     "totalQuantity": "총 {quantity} 개"
@@ -58,7 +57,7 @@
     "maxQuantity": "각 상품은 최대 {quantity} 개까지 구매할 수 있습니다",
     "multiply": "×",
     "reachStockLimit": "재고 한도에 도달했습니다 {label}",
-    "soldOut": "품절",
+    "soldOut": "{label} 품절",
     "totalAmount": "합계"
   },
   "dialog": {

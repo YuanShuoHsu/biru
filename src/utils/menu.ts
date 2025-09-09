@@ -1,42 +1,35 @@
 import { I18nDict } from "@/context/i18n";
 
-import type { CartItemChoices } from "@/stores/useCartStore";
-
 import type { LocaleCode } from "@/types/locale";
 import type { Category, Choice, MenuItem, Option } from "@/types/menu";
 
-export const getItemKey = (id: string, choices: CartItemChoices): string => {
-  if (!choices) return id;
+export const getItemKey = (
+  itemId: string,
+  choices: Record<string, string[]>,
+): string => {
+  if (!choices) return itemId;
 
-  const parts = Object.entries(choices).flatMap(([optionId, selected]) => {
-    if (Array.isArray(selected))
-      return [...selected].sort().map((choiceId) => `${optionId}:${choiceId}`);
+  const parts = Object.entries(choices).flatMap(([optionId, selected]) =>
+    selected.length > 0
+      ? [...selected].sort().map((choiceId) => `${optionId}:${choiceId}`)
+      : [],
+  );
 
-    return selected ? [`${optionId}:${selected}`] : [];
-  });
-
-  return parts.length > 0 ? `${id}_${parts.join("_")}` : id;
+  return parts.length > 0 ? `${itemId}_${parts.join("_")}` : itemId;
 };
 
-const findItemById = (id: string): MenuItem | undefined =>
-  menu.flatMap(({ items }) => items).find(({ id: itemId }) => itemId === id);
+const findItemById = (itemId: string): MenuItem | undefined =>
+  menu.flatMap(({ items }) => items).find(({ id }) => id === itemId);
 
-export const getItemName = (id: string, lang: LocaleCode): string => {
-  const item = findItemById(id);
+export const getItemName = (itemId: string, lang: LocaleCode): string => {
+  const item = findItemById(itemId);
   if (!item) return "";
 
   return item.name[lang];
 };
 
-export const getItemOptions = (id: string): Option[] => {
-  const item = findItemById(id);
-  if (!item) return [];
-
-  return item.options;
-};
-
-export const getItemStock = (id: string): number | null => {
-  const item = findItemById(id);
+export const getItemStock = (itemId: string): number | null => {
+  const item = findItemById(itemId);
   if (!item) return 0;
 
   return item.stock;
@@ -62,24 +55,33 @@ const findItemOptionById = (
   optionId: string,
 ): Option | undefined => item.options.find(({ id }) => id === optionId);
 
+export const findItemOption = (
+  itemId: string,
+  optionId: string,
+): Option | undefined => {
+  const item = findItemById(itemId);
+  if (!item) return;
+
+  return findItemOptionById(item, optionId);
+};
+
 export const getChoiceNames = (
-  id: string,
-  choices: CartItemChoices,
+  itemId: string,
+  choices: Record<string, string[]>,
   lang: LocaleCode,
   { common: { colon, delimiter } }: I18nDict,
   joinWith: string = "\n",
 ): string => {
-  const item = findItemById(id);
+  const item = findItemById(itemId);
   if (!item) return "";
 
   return Object.entries(choices)
-    .flatMap(([optionId, selected]) => {
-      if (!selected) return [];
+    .flatMap(([optionId, choiceIds]) => {
+      if (!choiceIds.length) return [];
 
       const option = findItemOptionById(item, optionId);
       if (!option) return [];
 
-      const choiceIds = Array.isArray(selected) ? selected : [selected];
       const choiceNames = choiceIds
         .map((choiceId) => getOptionChoiceName(option, choiceId, lang))
         .filter(Boolean)
@@ -91,23 +93,22 @@ export const getChoiceNames = (
 };
 
 export const getOutOfStockChoiceNames = (
-  id: string,
-  choices: CartItemChoices,
+  itemId: string,
+  choices: Record<string, string[]>,
   lang: LocaleCode,
   { common: { colon, delimiter } }: I18nDict,
   joinWith: string = "\n",
 ): string => {
-  const item = findItemById(id);
+  const item = findItemById(itemId);
   if (!item) return "";
 
   return Object.entries(choices)
-    .flatMap(([optionId, selected]) => {
-      if (!selected) return [];
+    .flatMap(([optionId, choiceIds]) => {
+      if (!choiceIds.length) return [];
 
       const option = findItemOptionById(item, optionId);
       if (!option) return [];
 
-      const choiceIds = Array.isArray(selected) ? selected : [selected];
       const choiceNames = choiceIds
         .map((choiceId) => {
           const choice = findOptionChoiceById(option, choiceId);
@@ -119,28 +120,6 @@ export const getOutOfStockChoiceNames = (
       return choiceNames ? [`${option.name[lang]}${colon}${choiceNames}`] : [];
     })
     .join(joinWith);
-};
-
-export const hasOutOfStockChoices = (
-  id: string,
-  choices: CartItemChoices,
-): boolean => {
-  const item = findItemById(id);
-  if (!item) return false;
-
-  return Object.entries(choices).some(([optionId, selected]) => {
-    if (!selected) return false;
-
-    const option = findItemOptionById(item, optionId);
-    if (!option) return false;
-
-    const choiceIds = Array.isArray(selected) ? selected : [selected];
-
-    return choiceIds.some((choiceId) => {
-      const choice = findOptionChoiceById(option, choiceId);
-      return choice?.stock === 0;
-    });
-  });
 };
 
 export const menu: Category[] = [
@@ -1072,7 +1051,7 @@ export const menu: Category[] = [
                 isActive: true,
                 isShared: true,
                 sold: 3,
-                stock: 4,
+                stock: 5,
               },
               {
                 id: "lettuce",

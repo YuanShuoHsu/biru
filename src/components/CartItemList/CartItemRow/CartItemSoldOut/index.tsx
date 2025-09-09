@@ -1,17 +1,11 @@
-import { useParams } from "next/navigation";
-
 import { useI18n } from "@/context/i18n";
 
-import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { CartItem, useCartStore } from "@/stores/useCartStore";
-
-import type { LangParam } from "@/types/locale";
+import { CartItem } from "@/stores/useCartStore";
 
 import { interpolate } from "@/utils/i18n";
-import { getOutOfStockChoiceNames, hasOutOfStockChoices } from "@/utils/menu";
 import { getTypographyVariant } from "@/utils/soldOut";
 
 const StyledButton = styled(Button, {
@@ -57,77 +51,86 @@ const StyledTypography = styled(Typography)({
 });
 
 interface CartItemSoldOutProps {
+  availableToAdd: number;
+  perItemCapLeft: number;
+  itemStockCapLeft: number;
+  optionCapLeft: number;
+  itemStockLeft: number;
+  limitingChoicesLabel: string;
   item: CartItem;
-  stock: number | null;
 }
 
-const CartItemSoldOut = ({ item, stock }: CartItemSoldOutProps) => {
-  const { id, choices, extraCost, price, quantity } = item;
-
-  const { lang } = useParams<LangParam>();
+const CartItemSoldOut = ({
+  availableToAdd,
+  // item,
+  itemStockCapLeft,
+  itemStockLeft,
+  limitingChoicesLabel,
+  optionCapLeft,
+  // perItemCapLeft,
+}: CartItemSoldOutProps) => {
+  // const { id, choices, extraCost, price, quantity } = item;
 
   const dict = useI18n();
 
-  const { deleteCartItem, updateCartItem } = useCartStore();
+  // const { deleteCartItem, updateCartItem } = useCartStore();
+  // const isOutOfStock = 0;
 
-  const isItemOutOfStock = stock === 0;
-  const isItemOverOrdered = stock !== null && quantity > stock;
-  const isChoiceOutOfStock = hasOutOfStockChoices(id, choices);
-
-  const shouldDeleteItem = isItemOutOfStock || isChoiceOutOfStock;
-  const isOutOfStock = shouldDeleteItem || isItemOverOrdered;
-  const outOfStockChoiceNames = getOutOfStockChoiceNames(
-    id,
-    choices,
-    lang,
-    dict,
-  );
-
-  const message = isItemOutOfStock
-    ? dict.common.soldOut
-    : isChoiceOutOfStock
-      ? interpolate(dict.cart.choiceOutOfStock, {
-          label: outOfStockChoiceNames,
+  const message =
+    itemStockLeft === 0
+      ? interpolate(dict.common.soldOut, {
+          label: "",
         })
-      : isItemOverOrdered
-        ? interpolate(dict.cart.quantityExceedsStock, { stock })
-        : "";
+      : optionCapLeft === 0
+        ? interpolate(dict.common.soldOut, {
+            label: `${limitingChoicesLabel}\n`,
+          })
+        : itemStockCapLeft === availableToAdd
+          ? interpolate(dict.cart.quantityExceedsStock, {
+              label: "",
+              stock: itemStockLeft,
+            })
+          : optionCapLeft === availableToAdd
+            ? interpolate(dict.cart.quantityExceedsStock, {
+                label: limitingChoicesLabel,
+                stock: itemStockLeft,
+              })
+            : "";
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    if (!item) return;
 
-    if (shouldDeleteItem) {
-      deleteCartItem(item);
-      return;
-    }
+    // if (shouldDeleteItem) {
+    //   deleteCartItem(item);
+    //   return;
+    // }
 
-    if (isItemOverOrdered) {
-      const diff = stock - quantity;
+    // if (isItemOverOrdered) {
+    //   const diff = itemStockLeft - quantity;
 
-      updateCartItem({
-        ...item,
-        quantity: diff,
-        amount: (price + extraCost) * diff,
-      });
-    }
+    //   updateCartItem({
+    //     ...item,
+    //     quantity: diff,
+    //     amount: (price + extraCost) * diff,
+    //   });
+    // }
   };
 
   return (
     <StyledButton
       aria-label={message}
       color="error"
-      disabled={!item || !isOutOfStock}
-      inStock={!isOutOfStock}
+      disabled={true}
+      inStock={true}
       onClick={handleClick}
       variant="outlined"
     >
       <StyledBox>
-        {shouldDeleteItem ? (
+        {/* {shouldDeleteItem ? (
           <Delete fontSize="small" />
         ) : (
           <Edit fontSize="small" />
-        )}
+        )} */}
       </StyledBox>
       {message && (
         <StyledTypography

@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { CartItemChoices, useCartStore } from "@/stores/useCartStore";
+import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
 
 import type { LangParam } from "@/types/locale";
@@ -57,7 +57,7 @@ export interface CardDialogContentImperativeHandle {
     extraCost: number;
     price: number;
     quantity: number;
-    choices: CartItemChoices;
+    choices: Record<string, string[]>;
   };
 }
 
@@ -77,28 +77,10 @@ const CardDialogContent = forwardRef<
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {
   const [quantity, setQuantity] = useState(1);
 
-  const {
-    getCartChoiceTotalQuantity,
-    getCartItemChoiceTotalQuantity,
-    getCartItemTotalQuantity,
-  } = useCartStore();
+  const { getChoiceAvailableQuantity, getCartItemTotalQuantity } =
+    useCartStore();
 
-  const getChoiceAvailableQuantity = (
-    choiceId: string,
-    choiceStock: number | null,
-    isShared: boolean,
-    itemId: string,
-  ) => {
-    const choiceStockLeft = choiceStock == null ? Infinity : choiceStock;
-
-    const used = isShared
-      ? getCartChoiceTotalQuantity(choiceId)
-      : getCartItemChoiceTotalQuantity(itemId, choiceId);
-
-    return Math.max(0, choiceStockLeft - used);
-  };
-
-  const initialChoices = options.reduce<CartItemChoices>(
+  const initialChoices = options.reduce<Record<string, string[]>>(
     (acc, { id: optionId, choices: optionChoices, multiple, required }) => {
       if (multiple) {
         acc[optionId] = [];
@@ -116,16 +98,16 @@ const CardDialogContent = forwardRef<
           },
         );
 
-        if (!firstInStock) acc[optionId] = null;
-        else acc[optionId] = firstInStock.id;
-      } else acc[optionId] = null;
+        acc[optionId] = firstInStock ? [firstInStock.id] : [];
+      } else acc[optionId] = [];
 
       return acc;
     },
     {},
   );
 
-  const [choices, setChoices] = useState<CartItemChoices>(initialChoices);
+  const [choices, setChoices] =
+    useState<Record<string, string[]>>(initialChoices);
 
   const { lang } = useParams<LangParam>();
 
@@ -191,8 +173,11 @@ const CardDialogContent = forwardRef<
       ? limitingChoices.names.join(dict.common.delimiter)
       : "";
 
-  const minCap = Math.min(perItemCapLeft, itemStockCapLeft, optionCapLeft);
-  const availableToAdd = Math.max(0, minCap);
+  const availableToAdd = Math.min(
+    perItemCapLeft,
+    itemStockCapLeft,
+    optionCapLeft,
+  );
   const minQuantity = availableToAdd > 0 ? 1 : 0;
 
   const { setDialog } = useDialogStore();
@@ -285,10 +270,8 @@ const CardDialogContent = forwardRef<
           );
           if (filteredOptionChoices.length === 0) return null;
 
-          const selected = choices[optionId];
-          const choiceIdSet = Array.isArray(selected)
-            ? new Set(selected)
-            : null;
+          const choiceIds = choices[optionId];
+          const choiceIdSet = new Set(choiceIds);
 
           return (
             <StyledFormControl key={optionId}>
@@ -310,9 +293,7 @@ const CardDialogContent = forwardRef<
                     );
                     const isChoiceOutOfStock = choiceAvailableQuantity === 0;
 
-                    const isSelected = choiceIdSet
-                      ? choiceIdSet.has(choiceId)
-                      : selected === choiceId;
+                    const isSelected = choiceIdSet.has(choiceId);
 
                     const handleClick = () => {
                       if (isChoiceOutOfStock) return;
@@ -321,17 +302,17 @@ const CardDialogContent = forwardRef<
                         const current = prev[optionId];
 
                         if (multiple) {
-                          const currentArray = Array.isArray(current)
-                            ? current
-                            : [];
-                          const next = currentArray.includes(choiceId)
-                            ? currentArray.filter((id) => id !== choiceId)
-                            : [...currentArray, choiceId];
+                          const next = isSelected
+                            ? current.filter((id) => id !== choiceId)
+                            : [...current, choiceId];
 
                           return { ...prev, [optionId]: next };
                         }
 
-                        return { ...prev, [optionId]: choiceId };
+                        return {
+                          ...prev,
+                          [optionId]: [choiceId],
+                        };
                       });
                     };
 
@@ -433,16 +414,21 @@ const CardDialogContent = forwardRef<
             />
             {quantity >= availableToAdd && (
               <StyledFormHelperText error>
-                {availableToAdd <= 0
-                  ? dict.common.reachStockLimit
-                  : perItemCapLeft === minCap
-                    ? interpolate(dict.common.maxQuantity, {
-                        quantity: MAX_QUANTITY,
-                      })
-                    : interpolate(dict.dialog.maxStock, {
-                        label: limitingChoicesLabel,
+                {perItemCapLeft === availableToAdd
+                  ? interpolate(dict.common.maxQuantity, {
+                      quantity: MAX_QUANTITY,
+                    })
+                  : itemStockCapLeft === availableToAdd
+                    ? interpolate(dict.dialog.maxStock, {
+                        label: "",
                         quantity: availableToAdd,
-                      })}
+                      })
+                    : optionCapLeft === availableToAdd
+                      ? interpolate(dict.dialog.maxStock, {
+                          label: limitingChoicesLabel,
+                          quantity: availableToAdd,
+                        })
+                      : ""}
               </StyledFormHelperText>
             )}
           </StyledFormControl>
