@@ -65,12 +65,12 @@ export const getLimitingChoicesCap = (
 ): OptionLimitResult => {
   const { getChoiceAvailableQuantity } = useCartStore.getState();
 
+  const item = findItemById(id);
+  if (!item) return { cap: Infinity, names: [] };
+
   const { names, cap } = Object.entries(choices).reduce<OptionLimitResult>(
     (acc, [optionId, choiceIds]) => {
       if (!choiceIds.length) return acc;
-
-      const item = findItemById(id);
-      if (!item) return acc;
 
       const option = findItemOptionById(item, optionId);
       if (!option) return acc;
