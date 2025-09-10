@@ -64,7 +64,7 @@ const CartItemSoldOut = ({
   item,
   itemStockCapLeft,
   limitingChoicesLabel,
-  // optionCapLeft,
+  optionCapLeft,
 }: CartItemSoldOutProps) => {
   const dict = useI18n();
 
@@ -76,21 +76,25 @@ const CartItemSoldOut = ({
   const showOverlay = shouldDeleteItem || shouldEditItem;
 
   const message = shouldDeleteItem
-    ? itemStockCapLeft === 0
+    ? itemStockCapLeft === availableToAdd
       ? interpolate(dict.common.soldOut, { label: "" })
-      : interpolate(dict.common.soldOut, {
-          label: `${limitingChoicesLabel}\n`,
-        })
+      : optionCapLeft === availableToAdd
+        ? interpolate(dict.common.soldOut, {
+            label: `${limitingChoicesLabel}\n`,
+          })
+        : ""
     : shouldEditItem
-      ? availableToAdd === itemStockCapLeft
+      ? itemStockCapLeft === availableToAdd
         ? interpolate(dict.cart.quantityExceedsStock, {
             label: "",
             stock: targetQuantity,
           })
-        : interpolate(dict.cart.quantityExceedsStock, {
-            label: limitingChoicesLabel,
-            stock: targetQuantity,
-          })
+        : optionCapLeft === availableToAdd
+          ? interpolate(dict.cart.quantityExceedsStock, {
+              label: limitingChoicesLabel,
+              stock: targetQuantity,
+            })
+          : ""
       : "";
 
   const handleClick = (event: React.MouseEvent) => {

@@ -1063,7 +1063,7 @@ export const menu: Category[] = [
                 isActive: true,
                 isShared: true,
                 sold: 3,
-                stock: 2,
+                stock: 5,
               },
               {
                 id: "lettuce",
