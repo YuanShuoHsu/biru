@@ -74,7 +74,7 @@ const CartItemSoldOut = ({
 
   const targetQuantity = quantity + availableToAdd;
   const shouldDeleteItem = availableToAdd < 0 && targetQuantity <= 0;
-  const shouldEditItem = availableToAdd < 0 && !shouldDeleteItem;
+  const shouldEditItem = availableToAdd < 0 && targetQuantity > 0;
   const showOverlay = shouldDeleteItem || shouldEditItem;
 
   const message = shouldDeleteItem
@@ -101,10 +101,14 @@ const CartItemSoldOut = ({
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (!showOverlay) return;
 
     if (shouldDeleteItem) {
       deleteCartItem(item);
-    } else if (shouldEditItem) {
+      return;
+    }
+
+    if (shouldEditItem) {
       updateCartItem({
         ...item,
         quantity: availableToAdd,
