@@ -66,11 +66,13 @@ const CartItemSoldOut = ({
   limitingChoicesLabel,
   optionCapLeft,
 }: CartItemSoldOutProps) => {
+  const { extraCost, price, quantity } = item;
+
   const dict = useI18n();
 
   const { deleteCartItem, updateCartItem } = useCartStore();
 
-  const targetQuantity = item.quantity + availableToAdd;
+  const targetQuantity = quantity + availableToAdd;
   const shouldDeleteItem = availableToAdd < 0 && targetQuantity <= 0;
   const shouldEditItem = availableToAdd < 0 && !shouldDeleteItem;
   const showOverlay = shouldDeleteItem || shouldEditItem;
@@ -106,7 +108,7 @@ const CartItemSoldOut = ({
       updateCartItem({
         ...item,
         quantity: availableToAdd,
-        amount: availableToAdd * (item.price + item.extraCost),
+        amount: availableToAdd * (price + extraCost),
       });
     }
   };

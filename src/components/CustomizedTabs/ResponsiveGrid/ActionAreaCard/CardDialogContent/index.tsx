@@ -169,6 +169,21 @@ const CardDialogContent = forwardRef<
   const amount = (price + extraCost) * quantity;
   const displayPrice = amount.toLocaleString(lang);
 
+  const formHelperText =
+    perItemCapLeft === availableToAdd
+      ? interpolate(dict.common.maxQuantity, { quantity: MAX_QUANTITY })
+      : itemStockCapLeft === availableToAdd
+        ? interpolate(dict.dialog.maxStock, {
+            label: "",
+            quantity: availableToAdd,
+          })
+        : optionCapLeft === availableToAdd
+          ? interpolate(dict.dialog.maxStock, {
+              label: limitingChoicesLabel,
+              quantity: availableToAdd,
+            })
+          : "";
+
   useImperativeHandle(
     ref,
     () => ({
@@ -183,13 +198,11 @@ const CardDialogContent = forwardRef<
     [amount, extraCost, price, quantity, choices],
   );
 
-  const handleDecreaseQuantity = () => {
+  const handleDecreaseQuantity = () =>
     setQuantity((prev) => Math.max(prev - 1, minQuantity));
-  };
 
-  const handleIncreaseQuantity = () => {
+  const handleIncreaseQuantity = () =>
     setQuantity((prev) => Math.min(prev + 1, availableToAdd));
-  };
 
   return (
     <Stack direction="column" gap={2}>
@@ -366,21 +379,7 @@ const CardDialogContent = forwardRef<
             />
             {quantity >= availableToAdd && (
               <StyledFormHelperText error>
-                {perItemCapLeft === availableToAdd
-                  ? interpolate(dict.common.maxQuantity, {
-                      quantity: MAX_QUANTITY,
-                    })
-                  : itemStockCapLeft === availableToAdd
-                    ? interpolate(dict.dialog.maxStock, {
-                        label: "",
-                        quantity: availableToAdd,
-                      })
-                    : optionCapLeft === availableToAdd
-                      ? interpolate(dict.dialog.maxStock, {
-                          label: limitingChoicesLabel,
-                          quantity: availableToAdd,
-                        })
-                      : ""}
+                {formHelperText}
               </StyledFormHelperText>
             )}
           </StyledFormControl>

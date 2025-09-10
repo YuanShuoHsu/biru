@@ -117,6 +117,17 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
     optionCapLeft,
   );
 
+  const formHelperText =
+    perItemCapLeft === availableToAdd
+      ? interpolate(dict.common.maxQuantity, { quantity: MAX_QUANTITY })
+      : itemStockCapLeft === availableToAdd
+        ? interpolate(dict.common.reachStockLimit, { label: "" })
+        : optionCapLeft === availableToAdd
+          ? interpolate(dict.common.reachStockLimit, {
+              label: limitingChoicesLabel,
+            })
+          : "";
+
   const canDecrease = quantity > 1;
   const canIncrease = availableToAdd > 0;
 
@@ -251,19 +262,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             />
             {availableToAdd <= 0 && (
               <StyledFormHelperText error>
-                {perItemCapLeft === availableToAdd
-                  ? interpolate(dict.common.maxQuantity, {
-                      quantity: MAX_QUANTITY,
-                    })
-                  : itemStockCapLeft === availableToAdd
-                    ? interpolate(dict.common.reachStockLimit, {
-                        label: "",
-                      })
-                    : optionCapLeft === availableToAdd
-                      ? interpolate(dict.common.reachStockLimit, {
-                          label: limitingChoicesLabel,
-                        })
-                      : ""}
+                {formHelperText}
               </StyledFormHelperText>
             )}
           </StyledFormControl>
