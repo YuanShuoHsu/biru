@@ -26,7 +26,6 @@ interface CartState {
   clearCartItem: () => void;
   deleteCartItem: (item: CartItem) => void;
   updateCartItem: (item: CartItem) => void;
-  getCartItemChoiceTotalQuantity: (choiceId: string, itemId?: string) => number;
   getChoiceAvailableQuantity: (
     choiceId: string,
     choiceStock: number | null,
@@ -118,31 +117,23 @@ export const useCartStore = create<CartState>()(
           isCartEmpty,
         });
       },
-      getCartItemChoiceTotalQuantity: (choiceId, itemId) => {
-        return Object.values(get().cartItemsMap).reduce(
-          (sum, { id, choices, quantity }) => {
-            // isShared: false
-            if (itemId && id !== itemId) return sum;
+      getChoiceAvailableQuantity: (choiceId, choiceStock, isShared, itemId) => {
+        if (choiceStock == null) return Infinity;
 
-            // isShared: true
-            const used = Object.values(choices).some((selected) =>
+        const used = Object.values(get().cartItemsMap).reduce(
+          (sum, { id, choices, quantity }) => {
+            if (!isShared && id !== itemId) return sum;
+
+            const hasChoice = Object.values(choices).some((selected) =>
               selected.includes(choiceId),
             );
 
-            return sum + (used ? quantity : 0);
+            return sum + (hasChoice ? quantity : 0);
           },
           0,
         );
-      },
-      getChoiceAvailableQuantity: (choiceId, choiceStock, isShared, itemId) => {
-        const choiceStockLeft = choiceStock == null ? Infinity : choiceStock;
 
-        const used = get().getCartItemChoiceTotalQuantity(
-          choiceId,
-          isShared ? undefined : itemId,
-        );
-
-        return Math.max(0, choiceStockLeft - used);
+        return choiceStock - used;
       },
       getCartItemTotalQuantity: (itemId) =>
         Object.values(get().cartItemsMap).reduce(

@@ -146,10 +146,8 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
         availableToAdd={availableToAdd}
         item={item}
         itemStockCapLeft={itemStockCapLeft}
-        itemStockLeft={itemStockLeft}
         limitingChoicesLabel={limitingChoicesLabel}
         optionCapLeft={optionCapLeft}
-        perItemCapLeft={perItemCapLeft}
       />
       <Grid
         container

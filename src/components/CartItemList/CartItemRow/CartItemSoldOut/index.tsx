@@ -1,9 +1,10 @@
 import { useI18n } from "@/context/i18n";
 
+import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { CartItem } from "@/stores/useCartStore";
+import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import { interpolate } from "@/utils/i18n";
 import { getTypographyVariant } from "@/utils/soldOut";
@@ -52,85 +53,75 @@ const StyledTypography = styled(Typography)({
 
 interface CartItemSoldOutProps {
   availableToAdd: number;
-  perItemCapLeft: number;
-  itemStockCapLeft: number;
-  optionCapLeft: number;
-  itemStockLeft: number;
-  limitingChoicesLabel: string;
   item: CartItem;
+  itemStockCapLeft: number;
+  limitingChoicesLabel: string;
+  optionCapLeft: number;
 }
 
 const CartItemSoldOut = ({
   availableToAdd,
-  // item,
+  item,
   itemStockCapLeft,
-  itemStockLeft,
   limitingChoicesLabel,
-  optionCapLeft,
-  // perItemCapLeft,
+  // optionCapLeft,
 }: CartItemSoldOutProps) => {
-  // const { id, choices, extraCost, price, quantity } = item;
-
   const dict = useI18n();
 
-  // const { deleteCartItem, updateCartItem } = useCartStore();
-  // const isOutOfStock = 0;
+  const { deleteCartItem, updateCartItem } = useCartStore();
 
-  const message =
-    itemStockLeft === 0
-      ? interpolate(dict.common.soldOut, {
-          label: "",
+  const targetQuantity = item.quantity + availableToAdd;
+  const shouldDeleteItem = availableToAdd < 0 && targetQuantity <= 0;
+  const shouldEditItem = availableToAdd < 0 && !shouldDeleteItem;
+  const showOverlay = shouldDeleteItem || shouldEditItem;
+
+  const message = shouldDeleteItem
+    ? itemStockCapLeft === 0
+      ? interpolate(dict.common.soldOut, { label: "" })
+      : interpolate(dict.common.soldOut, {
+          label: `${limitingChoicesLabel}\n`,
         })
-      : optionCapLeft === 0
-        ? interpolate(dict.common.soldOut, {
-            label: `${limitingChoicesLabel}\n`,
+    : shouldEditItem
+      ? availableToAdd === itemStockCapLeft
+        ? interpolate(dict.cart.quantityExceedsStock, {
+            label: "",
+            stock: targetQuantity,
           })
-        : itemStockCapLeft === availableToAdd
-          ? interpolate(dict.cart.quantityExceedsStock, {
-              label: "",
-              stock: itemStockLeft,
-            })
-          : optionCapLeft === availableToAdd
-            ? interpolate(dict.cart.quantityExceedsStock, {
-                label: limitingChoicesLabel,
-                stock: itemStockLeft,
-              })
-            : "";
+        : interpolate(dict.cart.quantityExceedsStock, {
+            label: limitingChoicesLabel,
+            stock: targetQuantity,
+          })
+      : "";
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
 
-    // if (shouldDeleteItem) {
-    //   deleteCartItem(item);
-    //   return;
-    // }
-
-    // if (isItemOverOrdered) {
-    //   const diff = itemStockLeft - quantity;
-
-    //   updateCartItem({
-    //     ...item,
-    //     quantity: diff,
-    //     amount: (price + extraCost) * diff,
-    //   });
-    // }
+    if (shouldDeleteItem) {
+      deleteCartItem(item);
+    } else if (shouldEditItem) {
+      updateCartItem({
+        ...item,
+        quantity: availableToAdd,
+        amount: availableToAdd * (item.price + item.extraCost),
+      });
+    }
   };
 
   return (
     <StyledButton
       aria-label={message}
       color="error"
-      disabled={true}
-      inStock={true}
+      disabled={!showOverlay}
+      inStock={!showOverlay}
       onClick={handleClick}
       variant="outlined"
     >
       <StyledBox>
-        {/* {shouldDeleteItem ? (
+        {shouldDeleteItem ? (
           <Delete fontSize="small" />
         ) : (
           <Edit fontSize="small" />
-        )} */}
+        )}
       </StyledBox>
       {message && (
         <StyledTypography
