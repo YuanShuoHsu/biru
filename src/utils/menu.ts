@@ -1087,7 +1087,7 @@ export const menu: Category[] = [
         ],
         price: 160,
         sold: 5,
-        stock: null,
+        stock: 8,
       },
     ],
   },

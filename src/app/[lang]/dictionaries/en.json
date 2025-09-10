@@ -43,7 +43,7 @@
   "cart": {
     "backToOrder": "Back to Order",
     "checkout": "Proceed to Checkout",
-    "quantityExceedsStock": "{stock} left",
+    "quantityExceedsStock": "{label} {stock} left",
     "title": "Shopping Cart",
     "totalQuantity": "{quantity} items"
   },

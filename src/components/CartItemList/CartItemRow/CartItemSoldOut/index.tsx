@@ -91,7 +91,7 @@ const CartItemSoldOut = ({
           })
         : optionCapLeft === availableToAdd
           ? interpolate(dict.cart.quantityExceedsStock, {
-              label: limitingChoicesLabel,
+              label: `${limitingChoicesLabel}\n`,
               stock: targetQuantity,
             })
           : ""
