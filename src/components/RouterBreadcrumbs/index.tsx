@@ -52,43 +52,6 @@ const breadcrumbsMap = (
   return [
     {
       children: [
-        { icon: TableBar, label: dict.nav.order.dineIn, to: "/order/dine-in" },
-        { icon: LocalMall, label: dict.nav.order.pickup, to: "/order/pickup" },
-        {
-          icon: Storefront,
-          label: storeName,
-          to: `/order/${storeId}`,
-          children: [
-            {
-              children: [
-                {
-                  icon: Payment,
-                  label: dict.breadcrumb.order.checkout,
-                  to: `/order/${storeId}/${tableNumber}/checkout`,
-                },
-                {
-                  icon: Pets,
-                  label: dict.breadcrumb.order.complete,
-                  to: `/order/${storeId}/${tableNumber}/complete`,
-                },
-              ],
-              icon: isTakeout ? LocalMall : TableBar,
-              label: isTakeout
-                ? interpolate(dict.order.storeId.tableNumber.takeout, {
-                    tableNumber,
-                  })
-                : String(tableNumber),
-              to: `/order/${storeId}/${tableNumber}`,
-            },
-          ],
-        },
-      ],
-      icon: ShoppingCart,
-      label: dict.breadcrumb.order.label,
-      to: "/order",
-    },
-    {
-      children: [
         {
           icon: HelpOutline,
           label: dict.breadcrumb.member.forgotPassword,
@@ -123,6 +86,43 @@ const breadcrumbsMap = (
       icon: AccountCircle,
       label: dict.breadcrumb.member.label,
       to: "/member",
+    },
+    {
+      children: [
+        { icon: TableBar, label: dict.nav.order.dineIn, to: "/order/dine-in" },
+        { icon: LocalMall, label: dict.nav.order.pickup, to: "/order/pickup" },
+        {
+          icon: Storefront,
+          label: storeName,
+          to: `/order/${storeId}`,
+          children: [
+            {
+              children: [
+                {
+                  icon: Payment,
+                  label: dict.breadcrumb.order.checkout,
+                  to: `/order/${storeId}/${tableNumber}/checkout`,
+                },
+                {
+                  icon: Pets,
+                  label: dict.breadcrumb.order.complete,
+                  to: `/order/${storeId}/${tableNumber}/complete`,
+                },
+              ],
+              icon: isTakeout ? LocalMall : TableBar,
+              label: isTakeout
+                ? interpolate(dict.order.storeId.tableNumber.takeout, {
+                    tableNumber,
+                  })
+                : String(tableNumber),
+              to: `/order/${storeId}/${tableNumber}`,
+            },
+          ],
+        },
+      ],
+      icon: ShoppingCart,
+      label: dict.breadcrumb.order.label,
+      to: "/order",
     },
   ];
 };
@@ -161,6 +161,7 @@ const findBreadcrumb = (
   targetPath: string,
 ): Pick<BreadcrumbItem, "icon" | "label"> => {
   const candidates = breadcrumbs.flatMap(({ children, label, icon, to }) => {
+    console.log(targetPath, to);
     if (to === targetPath) return [{ icon, label }];
 
     if (children) {
@@ -197,6 +198,8 @@ const RouterBreadcrumbs = () => {
         const to = `/${lang}/${segmentPath}`;
 
         const { label, icon: Icon } = findBreadcrumb(breadcrumbs, matchPath);
+
+        console.log(label);
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>

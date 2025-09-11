@@ -32,7 +32,7 @@
   "breadcrumb": {
     "member": {
       "forgotPassword": "비밀번호 찾기",
-      "label": "",
+      "label": "회원",
       "privacy": "개인정보 처리방침",
       "resetPassword": "비밀번호 재설정",
       "signIn": "로그인",
