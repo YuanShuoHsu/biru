@@ -30,15 +30,20 @@
     "signUp": "新規登録"
   },
   "breadcrumb": {
-    "checkout": "お会計",
-    "complete": "完了",
-    "forgotPassword": "パスワードをお忘れですか",
-    "order": "注文",
-    "privacy": "プライバシーポリシー",
-    "resetPassword": "パスワードをリセット",
-    "signIn": "ログイン",
-    "signUp": "新規登録",
-    "terms": "利用規約"
+    "member": {
+      "forgotPassword": "パスワードをお忘れですか",
+      "label": "",
+      "privacy": "プライバシーポリシー",
+      "resetPassword": "パスワードをリセット",
+      "signIn": "ログイン",
+      "signUp": "新規登録",
+      "terms": "利用規約"
+    },
+    "order": {
+      "checkout": "お会計",
+      "complete": "完了",
+      "label": "注文"
+    }
   },
   "cart": {
     "backToOrder": "メニューに戻る",
@@ -68,10 +73,12 @@
   },
   "nav": {
     "home": "ホーム",
-    "member": "会員",
-    "order": "注文",
-    "signIn": "ログイン",
-    "signUp": "新規登録"
+    "member": {
+      "label": "会員",
+      "signIn": "ログイン",
+      "signUp": "新規登録"
+    },
+    "order": { "dineIn": "店内", "label": "注文", "pickup": "お持ち帰り" }
   },
   "order": {
     "selectStore": "店舗を選択",

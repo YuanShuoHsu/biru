@@ -30,15 +30,20 @@
     "signUp": "Sign up"
   },
   "breadcrumb": {
-    "checkout": "Checkout",
-    "complete": "Complete",
-    "forgotPassword": "Forgot password",
-    "order": "Order",
-    "privacy": "Privacy Policy",
-    "resetPassword": "Reset password",
-    "signIn": "Sign in",
-    "signUp": "Sign up",
-    "terms": "Terms of Service"
+    "member": {
+      "forgotPassword": "Forgot password",
+      "label": "Member",
+      "privacy": "Privacy Policy",
+      "resetPassword": "Reset password",
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "terms": "Terms of Service"
+    },
+    "order": {
+      "checkout": "Checkout",
+      "complete": "Complete",
+      "label": "Order"
+    }
   },
   "cart": {
     "backToOrder": "Back to Order",
@@ -68,10 +73,12 @@
   },
   "nav": {
     "home": "Home",
-    "member": "Member",
-    "order": "Order",
-    "signIn": "Sign in",
-    "signUp": "Sign up"
+    "member": {
+      "label": "Member",
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    },
+    "order": { "dineIn": "Dine-in", "label": "Order", "pickup": "Pickup" }
   },
   "order": {
     "selectStore": "Select a store",

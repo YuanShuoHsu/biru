@@ -11,9 +11,11 @@ import {
   AccountCircle,
   ExpandMore,
   Home,
+  LocalMall,
   Login,
   PersonAdd,
   ShoppingCart,
+  TableBar,
 } from "@mui/icons-material";
 import {
   Box,
@@ -70,26 +72,39 @@ interface NavItem {
 
 const navItemsMap = (dict: I18nDict): NavItem[] => [
   { icon: Home, label: dict.nav.home, to: "/" },
-  { icon: ShoppingCart, label: dict.nav.order, to: "/order" },
   {
-    // auth: "any",
     children: [
       {
-        // auth: "guest",
-        icon: Login,
-        label: dict.nav.signIn,
-        to: "/sign-in",
+        icon: TableBar,
+        label: dict.nav.order.dineIn,
+        to: "/order/dine-in",
       },
       {
-        // auth: "guest",
+        icon: LocalMall,
+        label: dict.nav.order.pickup,
+        to: "/order/pickup",
+      },
+    ],
+    icon: ShoppingCart,
+    label: dict.nav.order.label,
+    to: "/order",
+  },
+  {
+    children: [
+      {
+        icon: Login,
+        label: dict.nav.member.signIn,
+        to: "/member/sign-in",
+      },
+      {
         icon: PersonAdd,
-        label: dict.nav.signUp,
-        to: "/sign-up",
+        label: dict.nav.member.signUp,
+        to: "/member/sign-up",
       },
     ],
     icon: AccountCircle,
-    label: dict.nav.member,
-    to: "/(auth)",
+    label: dict.nav.member.label,
+    to: "/member",
   },
 ];
 

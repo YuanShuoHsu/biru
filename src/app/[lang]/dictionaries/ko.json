@@ -30,15 +30,20 @@
     "signUp": "회원가입"
   },
   "breadcrumb": {
-    "checkout": "결제",
-    "complete": "완료",
-    "forgotPassword": "비밀번호 찾기",
-    "order": "주문",
-    "privacy": "개인정보 처리방침",
-    "resetPassword": "비밀번호 재설정",
-    "signIn": "로그인",
-    "signUp": "회원가입",
-    "terms": "서비스 이용약관"
+    "member": {
+      "forgotPassword": "비밀번호 찾기",
+      "label": "",
+      "privacy": "개인정보 처리방침",
+      "resetPassword": "비밀번호 재설정",
+      "signIn": "로그인",
+      "signUp": "회원가입",
+      "terms": "서비스 이용약관"
+    },
+    "order": {
+      "checkout": "결제",
+      "complete": "완료",
+      "label": "주문"
+    }
   },
   "cart": {
     "backToOrder": "메뉴로 돌아가기",
@@ -68,10 +73,8 @@
   },
   "nav": {
     "home": "홈",
-    "member": "회원",
-    "order": "주문",
-    "signIn": "로그인",
-    "signUp": "회원가입"
+    "member": { "label": "회원", "signIn": "로그인", "signUp": "회원가입" },
+    "order": { "dineIn": "매장 식사", "label": "주문", "pickup": "포장 수령" }
   },
   "order": {
     "selectStore": "지점 선택",

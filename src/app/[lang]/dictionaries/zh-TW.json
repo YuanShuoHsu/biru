@@ -30,15 +30,20 @@
     "signUp": "註冊"
   },
   "breadcrumb": {
-    "checkout": "結帳",
-    "complete": "完成",
-    "forgotPassword": "忘記密碼",
-    "order": "點餐",
-    "privacy": "隱私權政策",
-    "resetPassword": "重設密碼",
-    "signIn": "登入",
-    "signUp": "註冊",
-    "terms": "服務條款"
+    "member": {
+      "forgotPassword": "忘記密碼",
+      "label": "",
+      "privacy": "隱私權政策",
+      "resetPassword": "重設密碼",
+      "signIn": "登入",
+      "signUp": "註冊",
+      "terms": "服務條款"
+    },
+    "order": {
+      "checkout": "結帳",
+      "complete": "完成",
+      "label": "點餐"
+    }
   },
   "cart": {
     "backToOrder": "返回點餐",
@@ -68,10 +73,8 @@
   },
   "nav": {
     "home": "首頁",
-    "member": "會員",
-    "order": "訂單",
-    "signIn": "登入",
-    "signUp": "註冊"
+    "member": { "label": "會員", "signIn": "登入", "signUp": "註冊" },
+    "order": { "dineIn": "內用", "label": "訂單", "pickup": "外帶自取" }
   },
   "order": {
     "selectStore": "選擇門市",

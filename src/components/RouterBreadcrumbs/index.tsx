@@ -7,6 +7,7 @@ import { useParams, usePathname } from "next/navigation";
 import { I18nDict, useI18n } from "@/context/i18n";
 
 import {
+  AccountCircle,
   Gavel,
   HelpOutline,
   LocalMall,
@@ -25,66 +26,105 @@ import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { LangStoreTableNumberParam, LocaleCode } from "@/types/locale";
-import type { StoreId } from "@/types/stores";
-import type { TableNumberParam } from "@/types/tableNumbers";
+import { StoreId } from "@/types/stores";
+import { TableNumber } from "@/types/tableNumbers";
 
 import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
+import React from "react";
 
 interface BreadcrumbItem {
+  children?: BreadcrumbItem[];
   icon: React.ComponentType<SvgIconProps>;
   label: string;
+  to: string;
 }
 
-const breadcrumbMap = (
+const breadcrumbsMap = (
   dict: I18nDict,
   lang: LocaleCode,
   storeId: StoreId,
-  tableNumber: TableNumberParam,
-): Record<string, BreadcrumbItem> => {
+  tableNumber: TableNumber,
+): BreadcrumbItem[] => {
   const storeName = getStoreName(lang, storeId);
   const isTakeout = tableNumber === "0";
 
-  return {
-    // "/": {
-    //   icon: Home,
-    //   label: "Home",
-    // },
-    "/order": {
+  return [
+    {
+      children: [
+        { icon: TableBar, label: dict.nav.order.dineIn, to: "/order/dine-in" },
+        { icon: LocalMall, label: dict.nav.order.pickup, to: "/order/pickup" },
+        {
+          icon: Storefront,
+          label: storeName,
+          to: `/order/${storeId}`,
+          children: [
+            {
+              children: [
+                {
+                  icon: Payment,
+                  label: dict.breadcrumb.order.checkout,
+                  to: `/order/${storeId}/${tableNumber}/checkout`,
+                },
+                {
+                  icon: Pets,
+                  label: dict.breadcrumb.order.complete,
+                  to: `/order/${storeId}/${tableNumber}/complete`,
+                },
+              ],
+              icon: isTakeout ? LocalMall : TableBar,
+              label: isTakeout
+                ? interpolate(dict.order.storeId.tableNumber.takeout, {
+                    tableNumber,
+                  })
+                : String(tableNumber),
+              to: `/order/${storeId}/${tableNumber}`,
+            },
+          ],
+        },
+      ],
       icon: ShoppingCart,
-      label: dict.breadcrumb.order,
+      label: dict.breadcrumb.order.label,
+      to: "/order",
     },
-    [`/order/${storeId}`]: {
-      icon: Storefront,
-      label: storeName,
+    {
+      children: [
+        {
+          icon: HelpOutline,
+          label: dict.breadcrumb.member.forgotPassword,
+          to: "/member/forgot-password",
+        },
+        {
+          icon: LockReset,
+          label: dict.breadcrumb.member.resetPassword,
+          to: "/member/reset-password",
+        },
+        {
+          icon: Login,
+          label: dict.breadcrumb.member.signIn,
+          to: "/member/sign-in",
+        },
+        {
+          icon: PersonAdd,
+          label: dict.breadcrumb.member.signUp,
+          to: "/member/sign-up",
+        },
+        {
+          icon: Policy,
+          label: dict.breadcrumb.member.privacy,
+          to: "/member/privacy",
+        },
+        {
+          icon: Gavel,
+          label: dict.breadcrumb.member.terms,
+          to: "/member/terms",
+        },
+      ],
+      icon: AccountCircle,
+      label: dict.breadcrumb.member.label,
+      to: "/member",
     },
-    [`/order/${storeId}/${tableNumber}`]: {
-      icon: isTakeout ? LocalMall : TableBar,
-      label: isTakeout
-        ? interpolate(dict.order.storeId.tableNumber.takeout, { tableNumber })
-        : tableNumber,
-    },
-    [`/order/${storeId}/${tableNumber}/checkout`]: {
-      icon: Payment,
-      label: dict.breadcrumb.checkout,
-    },
-    [`/order/${storeId}/${tableNumber}/complete`]: {
-      icon: Pets,
-      label: dict.breadcrumb.complete,
-    },
-    "/forgot-password": {
-      icon: HelpOutline,
-      label: dict.breadcrumb.forgotPassword,
-    },
-    "/reset-password": {
-      icon: LockReset,
-      label: dict.breadcrumb.resetPassword,
-    },
-    "/sign-in": { icon: Login, label: dict.breadcrumb.signIn },
-    "/sign-up": { icon: PersonAdd, label: dict.breadcrumb.signUp },
-    "/privacy": { icon: Policy, label: dict.breadcrumb.privacy },
-    "/terms": { icon: Gavel, label: dict.breadcrumb.terms },
-  };
+  ];
 };
 
 interface LinkRouterProps extends LinkProps {
@@ -116,30 +156,47 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
 }));
 
+const findBreadcrumb = (
+  breadcrumbs: BreadcrumbItem[],
+  targetPath: string,
+): Pick<BreadcrumbItem, "icon" | "label"> => {
+  const candidates = breadcrumbs.flatMap(({ children, label, icon, to }) => {
+    if (to === targetPath) return [{ icon, label }];
+
+    if (children) {
+      const found = findBreadcrumb(children, targetPath);
+      if (!found) return [];
+
+      return [found];
+    }
+
+    return [];
+  });
+
+  const found = candidates[0];
+  if (!found) return { icon: () => null, label: targetPath };
+
+  return found;
+};
+
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
 
-  const dict = useI18n();
-  const breadcrumbs = breadcrumbMap(dict, lang, storeId, tableNumber);
-  // const { icon: HomeIcon, label: homeLabel } = breadcrumbs["/"];
-
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
+
+  const dict = useI18n();
+  const breadcrumbs = breadcrumbsMap(dict, lang, storeId, tableNumber);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      {/* <StyledLinkRouter underline="hover" color="inherit" to={`/${lang}`}>
-        <HomeIcon fontSize="inherit" />
-        {homeLabel}
-      </StyledLinkRouter> */}
-      {pathnames.map((value, index) => {
+      {pathnames.map((_, index) => {
         const last = index === pathnames.length - 1;
-        const subPath = pathnames.slice(0, index + 1).join("/");
-        const key = `/${subPath}`;
-        const to = `/${lang}/${subPath}`;
+        const segmentPath = pathnames.slice(0, index + 1).join("/");
+        const matchPath = `/${segmentPath}`;
+        const to = `/${lang}/${segmentPath}`;
 
-        const { label = value, icon: Icon = () => null } =
-          breadcrumbs[key] || {};
+        const { label, icon: Icon } = findBreadcrumb(breadcrumbs, matchPath);
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>

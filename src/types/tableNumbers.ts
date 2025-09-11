@@ -13,4 +13,4 @@ type IntRange<F extends number, T extends number> =
   | Exclude<Enumerate<T>, Enumerate<F>>
   | T;
 
-export type TableNumberParam = `${IntRange<0, typeof TABLE_NUMBERS>}`;
+export type TableNumber = `${IntRange<0, typeof TABLE_NUMBERS>}`;

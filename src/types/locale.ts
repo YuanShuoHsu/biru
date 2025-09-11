@@ -1,5 +1,5 @@
 import type { StoreId } from "./stores";
-import type { TableNumberParam } from "./tableNumbers";
+import type { TableNumber } from "./tableNumbers";
 
 export type LocaleCode = "zh-TW" | "en" | "ja" | "ko" | "zh-CN";
 
@@ -12,10 +12,10 @@ export type LangStoreParam = LangParam & {
 };
 
 export type LangTableNumberParam = LangParam & {
-  tableNumber: TableNumberParam;
+  tableNumber: TableNumber;
 };
 
 export type LangStoreTableNumberParam = LangParam & {
   storeId: StoreId;
-  tableNumber: TableNumberParam;
+  tableNumber: TableNumber;
 };
