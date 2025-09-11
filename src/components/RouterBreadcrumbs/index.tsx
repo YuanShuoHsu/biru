@@ -184,13 +184,14 @@ const RouterBreadcrumbs = () => {
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      {pathnames.map((_, index) => {
+      {pathnames.map((value, index) => {
         const last = index === pathnames.length - 1;
         const segmentPath = pathnames.slice(0, index + 1).join("/");
         const matchPath = `/${segmentPath}`;
         const to = `/${lang}/${segmentPath}`;
 
-        const { label, icon: Icon } = findBreadcrumb(breadcrumbs, matchPath);
+        const { label = value, icon: Icon = () => null } =
+          findBreadcrumb(breadcrumbs, matchPath) || {};
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
