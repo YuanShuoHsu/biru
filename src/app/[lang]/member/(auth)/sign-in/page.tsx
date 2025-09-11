@@ -205,7 +205,7 @@ const SignIn = () => {
           />
           <MuiLink
             component={NextLink}
-            href={`/${lang}/forgot-password`}
+            href={`/${lang}/member/forgot-password`}
             variant="body2"
           >
             {dict.auth.forgotPassword}
@@ -225,7 +225,7 @@ const SignIn = () => {
         </Button>
         <Typography variant="body2">
           {dict.auth.noAccount}{" "}
-          <MuiLink component={NextLink} href={`/${lang}/sign-up`}>
+          <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
             {dict.auth.signUp}
           </MuiLink>
         </Typography>

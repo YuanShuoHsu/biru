@@ -218,11 +218,11 @@ const SignUp = () => {
         <Typography variant="caption" color="text.secondary" align="center">
           By clicking «{dict.auth.signUp}», you agree to Biru Coffee&rsquo;s
           <Box component="br" />
-          <MuiLink component={NextLink} href={`/${lang}/terms`}>
+          <MuiLink component={NextLink} href={`/${lang}/member/terms`}>
             Terms of Service
           </MuiLink>{" "}
           and{" "}
-          <MuiLink component={NextLink} href={`/${lang}/privacy`}>
+          <MuiLink component={NextLink} href={`/${lang}/member/privacy`}>
             Privacy Policy
           </MuiLink>
           .
@@ -232,7 +232,7 @@ const SignUp = () => {
           <Typography variant="body2">{dict.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
-            href={`/${lang}/sign-in`}
+            href={`/${lang}/member/sign-in`}
             variant="body2"
           >
             {dict.auth.signIn}

@@ -139,7 +139,7 @@ const ForgortPassword = () => {
         </Button>
         <Typography variant="body2">
           {dict.auth.rememberedPassword}{" "}
-          <MuiLink component={NextLink} href={`/${lang}/sign-in`}>
+          <MuiLink component={NextLink} href={`/${lang}/member/sign-in`}>
             {dict.auth.signIn}
           </MuiLink>
         </Typography>
