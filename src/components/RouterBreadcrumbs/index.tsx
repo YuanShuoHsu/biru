@@ -190,10 +190,10 @@ const RouterBreadcrumbs = () => {
         const matchPath = `/${segmentPath}`;
         const to = `/${lang}/${segmentPath}`;
 
-        const { label, icon: Icon } = findBreadcrumb(
+        const { icon: Icon, label } = findBreadcrumb(
           breadcrumbs,
           matchPath,
-        ) || { label: value, icon: () => null };
+        ) || { icon: () => null, label: value };
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
