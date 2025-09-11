@@ -159,7 +159,7 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
-): Pick<BreadcrumbItem, "icon" | "label"> =>
+): Pick<BreadcrumbItem, "icon" | "label"> | undefined =>
   breadcrumbs.flatMap(({ children, icon, label, to }) => {
     if (to === targetPath) return [{ icon, label }];
 
@@ -190,8 +190,10 @@ const RouterBreadcrumbs = () => {
         const matchPath = `/${segmentPath}`;
         const to = `/${lang}/${segmentPath}`;
 
-        const { label = value, icon: Icon = () => null } =
-          findBreadcrumb(breadcrumbs, matchPath) || {};
+        const { label, icon: Icon } = findBreadcrumb(
+          breadcrumbs,
+          matchPath,
+        ) || { label: value, icon: () => null };
 
         return last ? (
           <StyledTypography color="text.primary" key={to}>
