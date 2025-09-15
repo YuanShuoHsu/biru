@@ -35,9 +35,12 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
-import { LangStoreTableNumberParam, LocaleCode } from "@/types/locale";
-import { StoreId } from "@/types/stores";
-import { TableNumber } from "@/types/tableNumbers";
+import type {
+  LangModeStoreIdTableNumberParam,
+  LocaleCode,
+} from "@/types/locale";
+import type { StoreId } from "@/types/stores";
+import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
 
@@ -199,7 +202,8 @@ const NavTemporaryDrawer = ({
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
   const pathname = usePathname();
-  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } =
+    useParams<LangModeStoreIdTableNumberParam>();
   const router = useRouter();
 
   const dict = useI18n();
@@ -212,9 +216,7 @@ const NavTemporaryDrawer = ({
   const renderItems = (items: NavItem[], level = 0) =>
     items.map((item) => {
       if ("slot" in item) {
-        const dineInPath = `/${lang}/order/${storeId}/${tableNumber}`;
-        const selected =
-          pathname === dineInPath || pathname.startsWith(`${dineInPath}/`);
+        const selected = mode === "dine-in";
         if (!selected) return null;
 
         const { slot } = item;

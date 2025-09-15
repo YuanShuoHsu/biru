@@ -1,3 +1,4 @@
+import type { OrderMode } from "./orderMode";
 import type { StoreId } from "./stores";
 import type { TableNumber } from "./tableNumbers";
 
@@ -7,15 +8,13 @@ export type LangParam = {
   lang: LocaleCode;
 };
 
-export type LangStoreParam = LangParam & {
+export type LangModeStoreIdParam = LangParam & {
+  mode: OrderMode;
   storeId: StoreId;
 };
 
-export type LangTableNumberParam = LangParam & {
-  tableNumber: TableNumber;
-};
-
-export type LangStoreTableNumberParam = LangParam & {
+export type LangModeStoreIdTableNumberParam = LangParam & {
+  mode: OrderMode;
   storeId: StoreId;
   tableNumber: TableNumber;
 };

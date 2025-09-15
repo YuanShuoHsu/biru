@@ -1,4 +1,5 @@
 import { I18nDict } from "@/context/i18n";
+
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";

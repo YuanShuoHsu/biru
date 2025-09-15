@@ -2,21 +2,22 @@
 
 import { useParams, useRouter } from "next/navigation";
 
+import { useI18n } from "@/context/i18n";
+
 import { MenuItem, TextField } from "@mui/material";
 
-import { LangStoreParam } from "@/types/locale";
+import type { LangModeStoreIdParam } from "@/types/locale";
 
-import { useI18n } from "@/context/i18n";
 import { stores } from "@/utils/stores";
 
-const OrderStoreSelect = () => {
-  const { lang, storeId } = useParams<LangStoreParam>();
+const OrderPickupStoreSelect = () => {
+  const { lang, mode, storeId } = useParams<LangModeStoreIdParam>();
   const router = useRouter();
 
   const dict = useI18n();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/${lang}/order/${event.target.value}`);
+    router.push(`/${lang}/order/${mode}/${event.target.value}/0`);
 
   return (
     <TextField
@@ -40,4 +41,4 @@ const OrderStoreSelect = () => {
   );
 };
 
-export default OrderStoreSelect;
+export default OrderPickupStoreSelect;

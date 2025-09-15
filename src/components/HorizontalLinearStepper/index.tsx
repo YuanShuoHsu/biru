@@ -9,17 +9,19 @@ import { useI18n } from "@/context/i18n";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { LangStoreTableNumberParam } from "@/types/locale";
-import { StoreId } from "@/types/stores";
+import type { LangModeStoreIdTableNumberParam } from "@/types/locale";
+import type { OrderMode } from "@/types/orderMode";
+import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 const createStepPathMap = (
+  mode: OrderMode,
   storeId: StoreId,
   tableNumber: TableNumber,
 ): string[] => [
-  `/order/${storeId}/${tableNumber}`,
-  `/order/${storeId}/${tableNumber}/checkout`,
-  `/order/${storeId}/${tableNumber}/complete`,
+  `/order/${mode}/${storeId}/${tableNumber}`,
+  `/order/${mode}/${storeId}/${tableNumber}/checkout`,
+  `/order/${mode}/${storeId}/${tableNumber}/complete`,
 ];
 
 const StyledStepper = styled(Stepper)(({ theme }) => ({
@@ -44,11 +46,12 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
 
 const HorizontalLinearStepper = () => {
   const pathname = usePathname();
-  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } =
+    useParams<LangModeStoreIdTableNumberParam>();
 
   const dict = useI18n();
 
-  const stepPaths = createStepPathMap(storeId, tableNumber);
+  const stepPaths = createStepPathMap(mode, storeId, tableNumber);
   const activeStep = stepPaths.findIndex(
     (path) => pathname === `/${lang}${path}`,
   );

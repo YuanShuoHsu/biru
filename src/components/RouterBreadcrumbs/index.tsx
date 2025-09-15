@@ -25,16 +25,20 @@ import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { LangStoreTableNumberParam, LocaleCode } from "@/types/locale";
-import { StoreId } from "@/types/stores";
-import { TableNumber } from "@/types/tableNumbers";
+import type {
+  LangModeStoreIdTableNumberParam,
+  LocaleCode,
+} from "@/types/locale";
+import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { StoreId } from "@/types/stores";
+import type { TableNumber } from "@/types/tableNumbers";
 
 import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
-import React from "react";
 
 interface BreadcrumbItem {
   children?: BreadcrumbItem[];
+  disabled?: boolean;
   icon: React.ComponentType<SvgIconProps>;
   label: string;
   to: string;
@@ -43,11 +47,14 @@ interface BreadcrumbItem {
 const breadcrumbsMap = (
   dict: I18nDict,
   lang: LocaleCode,
+  mode: OrderMode,
   storeId: StoreId,
   tableNumber: TableNumber,
 ): BreadcrumbItem[] => {
+  const orderModePath = `/order/${mode}`;
+  const isDineIn = mode === ORDER_MODE.DineIn;
   const storeName = getStoreName(lang, storeId);
-  const isTakeout = tableNumber === "0";
+  const isTakeout = mode === ORDER_MODE.Pickup && tableNumber === "0";
 
   return [
     {
@@ -89,37 +96,45 @@ const breadcrumbsMap = (
     },
     {
       children: [
-        { icon: TableBar, label: dict.nav.order.dineIn, to: "/order/dine-in" },
-        { icon: LocalMall, label: dict.nav.order.pickup, to: "/order/pickup" },
         {
-          icon: Storefront,
-          label: storeName,
-          to: `/order/${storeId}`,
           children: [
             {
               children: [
                 {
-                  icon: Payment,
-                  label: dict.breadcrumb.order.checkout,
-                  to: `/order/${storeId}/${tableNumber}/checkout`,
-                },
-                {
-                  icon: Pets,
-                  label: dict.breadcrumb.order.complete,
-                  to: `/order/${storeId}/${tableNumber}/complete`,
+                  children: [
+                    {
+                      icon: Payment,
+                      label: dict.breadcrumb.order.checkout,
+                      to: `${orderModePath}/${storeId}/${tableNumber}/checkout`,
+                    },
+                    {
+                      icon: Pets,
+                      label: dict.breadcrumb.order.complete,
+                      to: `${orderModePath}/${storeId}/${tableNumber}/complete`,
+                    },
+                  ],
+                  icon: isTakeout ? LocalMall : TableBar,
+                  label: isTakeout
+                    ? interpolate(dict.order.storeId.tableNumber.takeout, {
+                        tableNumber,
+                      })
+                    : String(tableNumber),
+                  to: `${orderModePath}/${storeId}/${tableNumber}`,
                 },
               ],
-              icon: isTakeout ? LocalMall : TableBar,
-              label: isTakeout
-                ? interpolate(dict.order.storeId.tableNumber.takeout, {
-                    tableNumber,
-                  })
-                : String(tableNumber),
-              to: `/order/${storeId}/${tableNumber}`,
+              disabled: true,
+              icon: Storefront,
+              label: storeName,
+              to: `${orderModePath}/${storeId}`,
             },
           ],
+          disabled: isDineIn ? true : false,
+          icon: isDineIn ? TableBar : LocalMall,
+          label: isDineIn ? dict.nav.order.dineIn : dict.nav.order.pickup,
+          to: orderModePath,
         },
       ],
+      disabled: true,
       icon: ShoppingCart,
       label: dict.breadcrumb.order.label,
       to: "/order",
@@ -159,9 +174,9 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
-): Pick<BreadcrumbItem, "icon" | "label"> | undefined =>
-  breadcrumbs.flatMap(({ children, icon, label, to }) => {
-    if (to === targetPath) return [{ icon, label }];
+): Pick<BreadcrumbItem, "disabled" | "icon" | "label"> | undefined =>
+  breadcrumbs.flatMap(({ children, disabled, icon, label, to }) => {
+    if (to === targetPath) return [{ disabled, icon, label }];
 
     if (children) {
       const found = findBreadcrumb(children, targetPath);
@@ -175,12 +190,13 @@ const findBreadcrumb = (
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } =
+    useParams<LangModeStoreIdTableNumberParam>();
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   const dict = useI18n();
-  const breadcrumbs = breadcrumbsMap(dict, lang, storeId, tableNumber);
+  const breadcrumbs = breadcrumbsMap(dict, lang, mode, storeId, tableNumber);
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
@@ -190,13 +206,21 @@ const RouterBreadcrumbs = () => {
         const matchPath = `/${segmentPath}`;
         const to = `/${lang}/${segmentPath}`;
 
-        const { icon: Icon, label } = findBreadcrumb(
-          breadcrumbs,
-          matchPath,
-        ) || { icon: () => null, label: value };
+        const {
+          disabled,
+          icon: Icon,
+          label,
+        } = findBreadcrumb(breadcrumbs, matchPath) || {
+          disabled: false,
+          icon: () => null,
+          label: value,
+        };
 
-        return last ? (
-          <StyledTypography color="text.primary" key={to}>
+        const isText = last || disabled === true;
+        const color = last ? "text.primary" : "text.secondary";
+
+        return isText ? (
+          <StyledTypography color={color} key={to}>
             <Icon fontSize="inherit" />
             {label}
           </StyledTypography>
