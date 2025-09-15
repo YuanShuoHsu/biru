@@ -15,6 +15,7 @@ import {
   Login,
   PersonAdd,
   ShoppingCart,
+  Storefront,
   TableBar,
 } from "@mui/icons-material";
 import {
@@ -27,12 +28,18 @@ import {
   ListItemButtonProps,
   ListItemIcon,
   ListItemText,
+  Stack,
   SvgIconProps,
   Toolbar,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
+import { LangStoreTableNumberParam, LocaleCode } from "@/types/locale";
+import { StoreId } from "@/types/stores";
+import { TableNumber } from "@/types/tableNumbers";
+
+import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
   width: 250,
@@ -63,22 +70,30 @@ const StyledExpandMore = styled(ExpandMore, {
   transition: theme.transitions.create("transform"),
 }));
 
-interface NavItem {
+interface NavLinkItem {
   children?: NavItem[];
-  icon: React.ComponentType;
+  icon: React.ComponentType<SvgIconProps>;
   label: string;
   to: string;
 }
+
+const Slot = {
+  DineIn: "dine-in",
+} as const;
+
+type SlotId = (typeof Slot)[keyof typeof Slot];
+
+interface NavSlotItem {
+  slot: SlotId;
+}
+
+type NavItem = NavLinkItem | NavSlotItem;
 
 const navItemsMap = (dict: I18nDict): NavItem[] => [
   { icon: Home, label: dict.nav.home, to: "/" },
   {
     children: [
-      {
-        icon: TableBar,
-        label: dict.nav.order.dineIn,
-        to: "/order/dine-in",
-      },
+      { slot: Slot.DineIn },
       {
         icon: LocalMall,
         label: dict.nav.order.pickup,
@@ -107,6 +122,35 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
     to: "/member",
   },
 ];
+
+interface SlotProps {
+  lang: LocaleCode;
+  level: number;
+  selected: boolean;
+  storeId: StoreId;
+  tableNumber: TableNumber;
+}
+
+const slots: Record<SlotId, React.ComponentType<SlotProps>> = {
+  [Slot.DineIn]: ({ lang, level, selected, storeId, tableNumber }) => (
+    <StyledListItemButton level={level} selected={selected}>
+      <Stack gap={1}>
+        <Stack flexDirection="row" alignItems="center">
+          <ListItemIcon>
+            <Storefront />
+          </ListItemIcon>
+          <ListItemText primary={getStoreName(lang, storeId)} />
+        </Stack>
+        <Stack flexDirection="row" alignItems="center">
+          <ListItemIcon>
+            <TableBar />
+          </ListItemIcon>
+          <ListItemText primary={tableNumber} />
+        </Stack>
+      </Stack>
+    </StyledListItemButton>
+  ),
+};
 
 interface ListItemLinkProps extends ListItemButtonProps {
   hasChildren?: boolean;
@@ -152,21 +196,46 @@ const NavTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: NavTemporaryDrawerProps) => {
+  const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+
   const pathname = usePathname();
-  const { lang } = useParams();
+  const { lang, storeId, tableNumber } = useParams<LangStoreTableNumberParam>();
   const router = useRouter();
 
   const dict = useI18n();
-  const navItems = navItemsMap(dict);
 
-  const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
+  const navItems = navItemsMap(dict);
 
   const handleIconButtonToggle = (to: string) =>
     setOpenMap((prev) => ({ ...prev, [to]: !prev[to] }));
 
   const renderItems = (items: NavItem[], level = 0) =>
-    items.map(({ children, icon, label, to }) => {
+    items.map((item) => {
+      if ("slot" in item) {
+        const dineInPath = `/${lang}/order/${storeId}/${tableNumber}`;
+        const selected =
+          pathname === dineInPath || pathname.startsWith(`${dineInPath}/`);
+        if (!selected) return null;
+
+        const { slot } = item;
+        const SlotComponent = slots[slot];
+
+        return (
+          <SlotComponent
+            key={`${slot}-${level}`}
+            level={level}
+            selected={selected}
+            lang={lang}
+            storeId={storeId}
+            tableNumber={tableNumber}
+          />
+        );
+      }
+
+      const { children, icon, label, to } = item;
+
       const hasChildren = !!children?.length;
+
       const open = openMap[to];
 
       const isHome = to === "/";
@@ -196,6 +265,7 @@ const NavTemporaryDrawer = ({
             open={open}
             selected={selected}
           />
+
           {hasChildren && (
             <Collapse component="li" in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
