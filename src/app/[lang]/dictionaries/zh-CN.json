@@ -73,7 +73,15 @@
   },
   "nav": {
     "home": "首页",
-    "member": { "label": "会员", "signIn": "登录", "signUp": "注册" },
+    "member": {
+      "forgotPassword": "忘记密码",
+      "label": "会员",
+      "privacy": "隐私政策",
+      "resetPassword": "重置密码",
+      "signIn": "登录",
+      "signUp": "注册",
+      "terms": "服务条款"
+    },
     "order": { "dineIn": "堂食", "label": "订单", "pickup": "自取" }
   },
   "order": {

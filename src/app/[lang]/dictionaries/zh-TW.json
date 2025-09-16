@@ -73,7 +73,15 @@
   },
   "nav": {
     "home": "首頁",
-    "member": { "label": "會員", "signIn": "登入", "signUp": "註冊" },
+    "member": {
+      "forgotPassword": "忘記密碼",
+      "label": "會員",
+      "privacy": "隱私權政策",
+      "resetPassword": "重設密碼",
+      "signIn": "登入",
+      "signUp": "註冊",
+      "terms": "服務條款"
+    },
     "order": { "dineIn": "內用", "label": "訂單", "pickup": "外帶自取" }
   },
   "order": {

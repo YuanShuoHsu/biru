@@ -59,16 +59,6 @@ const breadcrumbsMap = (
     {
       children: [
         {
-          icon: HelpOutline,
-          label: dict.breadcrumb.member.forgotPassword,
-          to: "/member/forgot-password",
-        },
-        {
-          icon: LockReset,
-          label: dict.breadcrumb.member.resetPassword,
-          to: "/member/reset-password",
-        },
-        {
           icon: Login,
           label: dict.breadcrumb.member.signIn,
           to: "/member/sign-in",
@@ -77,6 +67,16 @@ const breadcrumbsMap = (
           icon: PersonAdd,
           label: dict.breadcrumb.member.signUp,
           to: "/member/sign-up",
+        },
+        {
+          icon: HelpOutline,
+          label: dict.breadcrumb.member.forgotPassword,
+          to: "/member/forgot-password",
+        },
+        {
+          icon: LockReset,
+          label: dict.breadcrumb.member.resetPassword,
+          to: "/member/reset-password",
         },
         {
           icon: Policy,

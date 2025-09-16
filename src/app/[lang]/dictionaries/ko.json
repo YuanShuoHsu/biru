@@ -73,7 +73,15 @@
   },
   "nav": {
     "home": "홈",
-    "member": { "label": "회원", "signIn": "로그인", "signUp": "회원가입" },
+    "member": {
+      "forgotPassword": "비밀번호 찾기",
+      "label": "회원",
+      "privacy": "개인정보 처리방침",
+      "resetPassword": "비밀번호 재설정",
+      "signIn": "로그인",
+      "signUp": "회원가입",
+      "terms": "서비스 이용약관"
+    },
     "order": { "dineIn": "매장 식사", "label": "주문", "pickup": "포장 수령" }
   },
   "order": {

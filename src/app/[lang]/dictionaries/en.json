@@ -74,9 +74,13 @@
   "nav": {
     "home": "Home",
     "member": {
+      "forgotPassword": "Forgot password",
       "label": "Member",
+      "privacy": "Privacy Policy",
+      "resetPassword": "Reset password",
       "signIn": "Sign in",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "terms": "Terms of Service"
     },
     "order": { "dineIn": "Dine-in", "label": "Order", "pickup": "Pickup" }
   },

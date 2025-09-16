@@ -74,9 +74,13 @@
   "nav": {
     "home": "ホーム",
     "member": {
+      "forgotPassword": "パスワードをお忘れですか",
       "label": "会員",
+      "privacy": "プライバシーポリシー",
+      "resetPassword": "パスワードをリセット",
       "signIn": "ログイン",
-      "signUp": "新規登録"
+      "signUp": "新規登録",
+      "terms": "利用規約"
     },
     "order": { "dineIn": "店内", "label": "注文", "pickup": "お持ち帰り" }
   },
