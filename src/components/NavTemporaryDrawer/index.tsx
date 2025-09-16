@@ -14,12 +14,14 @@ import {
   LocalMall,
   Login,
   PersonAdd,
+  Restaurant,
   ShoppingCart,
   Storefront,
   TableBar,
 } from "@mui/icons-material";
 import {
   Box,
+  Chip,
   Collapse,
   Divider,
   Drawer,
@@ -58,12 +60,17 @@ const StyledListItemButton = styled(ListItemButton, {
   paddingLeft: theme.spacing(2 + level * 2),
 
   "&.Mui-selected": {
-    backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${level * 0.04}))`,
+    backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${level * 0.1}))`,
 
     "&:hover": {
-      backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${theme.vars.palette.action.hoverOpacity} + ${level * 0.04}))`,
+      backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${theme.vars.palette.action.hoverOpacity} + ${level * 0.1}))`,
     },
   },
+}));
+
+const StyledChip = styled(Chip)(({ theme }) => ({
+  marginLeft: "auto",
+  padding: theme.spacing(0.5),
 }));
 
 const StyledExpandMore = styled(ExpandMore, {
@@ -127,29 +134,55 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
 ];
 
 interface SlotProps {
+  dict: I18nDict;
   lang: LocaleCode;
   level: number;
+  onClick: () => void;
   selected: boolean;
   storeId: StoreId;
   tableNumber: TableNumber;
 }
 
 const slots: Record<SlotId, React.ComponentType<SlotProps>> = {
-  [Slot.DineIn]: ({ lang, level, selected, storeId, tableNumber }) => (
-    <StyledListItemButton level={level} selected={selected}>
-      <Stack gap={1}>
-        <Stack flexDirection="row" alignItems="center">
-          <ListItemIcon>
-            <Storefront />
-          </ListItemIcon>
-          <ListItemText primary={getStoreName(lang, storeId)} />
+  [Slot.DineIn]: ({
+    dict,
+    lang,
+    level,
+    onClick,
+    selected,
+    storeId,
+    tableNumber,
+  }) => (
+    <StyledListItemButton level={level} onClick={onClick} selected={selected}>
+      <Stack
+        width="100%"
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        flexWrap="wrap"
+        gap={1}
+      >
+        <Stack gap={1}>
+          <Stack flexDirection="row" alignItems="center">
+            <ListItemIcon>
+              <Storefront />
+            </ListItemIcon>
+            <ListItemText primary={getStoreName(lang, storeId)} />
+          </Stack>
+          <Stack flexDirection="row" alignItems="center">
+            <ListItemIcon>
+              <TableBar />
+            </ListItemIcon>
+            <ListItemText primary={tableNumber} />
+          </Stack>
         </Stack>
-        <Stack flexDirection="row" alignItems="center">
-          <ListItemIcon>
-            <TableBar />
-          </ListItemIcon>
-          <ListItemText primary={tableNumber} />
-        </Stack>
+        <StyledChip
+          color="primary"
+          icon={<Restaurant />}
+          label={dict.nav.order.dineIn}
+          size="small"
+          variant="outlined"
+        />
       </Stack>
     </StyledListItemButton>
   ),
@@ -222,12 +255,17 @@ const NavTemporaryDrawer = ({
         const { slot } = item;
         const SlotComponent = slots[slot];
 
+        const handleClick = () =>
+          router.push(`/${lang}/order/${mode}/${storeId}/${tableNumber}`);
+
         return (
           <SlotComponent
+            dict={dict}
             key={`${slot}-${level}`}
-            level={level}
-            selected={selected}
             lang={lang}
+            level={level}
+            onClick={handleClick}
+            selected={selected}
             storeId={storeId}
             tableNumber={tableNumber}
           />
