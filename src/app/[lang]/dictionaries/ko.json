@@ -85,8 +85,10 @@
     "order": { "dineIn": "매장 식사", "label": "주문", "pickup": "포장 수령" }
   },
   "order": {
-    "selectStore": "지점 선택",
     "mode": {
+      "pickup": {
+        "selectStoreId": "지점 선택"
+      },
       "storeId": {
         "selectTable": "테이블 선택",
         "tableNumber": {

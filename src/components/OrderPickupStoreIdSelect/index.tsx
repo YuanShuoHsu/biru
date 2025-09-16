@@ -10,7 +10,7 @@ import type { RouteParams } from "@/types/routeParams";
 
 import { stores } from "@/utils/stores";
 
-const OrderPickupStoreSelect = () => {
+const OrderPickupStoreIdSelect = () => {
   const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
 
@@ -24,7 +24,7 @@ const OrderPickupStoreSelect = () => {
       // error={!!state?.errors?.storeId}
       fullWidth
       // helperText={state?.errors?.storeId}
-      label={dict.order.selectStore}
+      label={dict.order.mode.pickup.selectStoreId}
       name="storeId"
       onChange={handleChange}
       required
@@ -41,4 +41,4 @@ const OrderPickupStoreSelect = () => {
   );
 };
 
-export default OrderPickupStoreSelect;
+export default OrderPickupStoreIdSelect;

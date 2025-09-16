@@ -85,8 +85,10 @@
     "order": { "dineIn": "內用", "label": "訂單", "pickup": "外帶自取" }
   },
   "order": {
-    "selectStore": "選擇門市",
     "mode": {
+      "pickup": {
+        "selectStoreId": "選擇門市"
+      },
       "storeId": {
         "selectTable": "選擇桌號",
         "tableNumber": {

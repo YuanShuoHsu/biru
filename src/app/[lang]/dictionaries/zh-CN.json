@@ -85,8 +85,10 @@
     "order": { "dineIn": "堂食", "label": "订单", "pickup": "自取" }
   },
   "order": {
-    "selectStore": "选择门店",
     "mode": {
+      "pickup": {
+        "selectStoreId": "选择门店"
+      },
       "storeId": {
         "selectTable": "选择桌号",
         "tableNumber": {

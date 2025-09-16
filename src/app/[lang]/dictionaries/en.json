@@ -85,8 +85,10 @@
     "order": { "dineIn": "Dine-in", "label": "Order", "pickup": "Pickup" }
   },
   "order": {
-    "selectStore": "Select a store",
     "mode": {
+      "pickup": {
+        "selectStoreId": "Select a store"
+      },
       "storeId": {
         "selectTable": "Select a table",
         "tableNumber": {

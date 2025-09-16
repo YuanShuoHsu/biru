@@ -85,8 +85,8 @@
     "order": { "dineIn": "店内", "label": "注文", "pickup": "お持ち帰り" }
   },
   "order": {
-    "selectStore": "店舗を選択",
     "mode": {
+      "pickup": { "selectStoreId": "店舗を選択" },
       "storeId": {
         "selectTable": "テーブルを選択",
         "tableNumber": {
