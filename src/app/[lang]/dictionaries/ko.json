@@ -86,16 +86,18 @@
   },
   "order": {
     "selectStore": "지점 선택",
-    "storeId": {
-      "selectTable": "테이블 선택",
-      "tableNumber": {
-        "latest": "신상품",
-        "new": "신상품",
-        "search": {
-          "placeholder": "메뉴 검색"
-        },
-        "top": "TOP",
-        "topSold": "인기 상품"
+    "mode": {
+      "storeId": {
+        "selectTable": "테이블 선택",
+        "tableNumber": {
+          "latest": "신상품",
+          "new": "신상품",
+          "search": {
+            "placeholder": "메뉴 검색"
+          },
+          "top": "TOP",
+          "topSold": "인기 상품"
+        }
       }
     }
   }

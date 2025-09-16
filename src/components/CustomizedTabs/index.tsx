@@ -94,7 +94,7 @@ const CustomizedTabs = () => {
       ? {
           id: TOP_SOLD,
           items: topSoldItems,
-          label: dict.order.storeId.tableNumber.topSold,
+          label: dict.order.mode.storeId.tableNumber.topSold,
         }
       : null;
 
@@ -108,7 +108,7 @@ const CustomizedTabs = () => {
       ? {
           id: LATEST,
           items: latestItems,
-          label: dict.order.storeId.tableNumber.latest,
+          label: dict.order.mode.storeId.tableNumber.latest,
         }
       : null;
 

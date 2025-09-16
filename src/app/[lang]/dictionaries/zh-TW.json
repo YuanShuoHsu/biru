@@ -86,16 +86,18 @@
   },
   "order": {
     "selectStore": "選擇門市",
-    "storeId": {
-      "selectTable": "選擇桌號",
-      "tableNumber": {
-        "latest": "新品上架",
-        "new": "新品",
-        "search": {
-          "placeholder": "搜尋菜單"
-        },
-        "top": "TOP",
-        "topSold": "人氣商品"
+    "mode": {
+      "storeId": {
+        "selectTable": "選擇桌號",
+        "tableNumber": {
+          "latest": "新品上架",
+          "new": "新品",
+          "search": {
+            "placeholder": "搜尋菜單"
+          },
+          "top": "TOP",
+          "topSold": "人氣商品"
+        }
       }
     }
   }

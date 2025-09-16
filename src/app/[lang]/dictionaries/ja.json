@@ -86,16 +86,18 @@
   },
   "order": {
     "selectStore": "店舗を選択",
-    "storeId": {
-      "selectTable": "テーブルを選択",
-      "tableNumber": {
-        "latest": "新着商品",
-        "new": "新着",
-        "search": {
-          "placeholder": "メニューを検索"
-        },
-        "top": "TOP",
-        "topSold": "人気商品"
+    "mode": {
+      "storeId": {
+        "selectTable": "テーブルを選択",
+        "tableNumber": {
+          "latest": "新着商品",
+          "new": "新着",
+          "search": {
+            "placeholder": "メニューを検索"
+          },
+          "top": "TOP",
+          "topSold": "人気商品"
+        }
       }
     }
   }
