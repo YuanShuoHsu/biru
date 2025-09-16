@@ -119,7 +119,7 @@ const breadcrumbsMap = (
                   to: `${orderModePath}/${storeId}/${tableNumber}`,
                 },
               ],
-              disabled: true,
+              disabled: isDineIn ? true : false,
               icon: Storefront,
               label: storeName,
               to: `${orderModePath}/${storeId}`,

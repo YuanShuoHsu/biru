@@ -28,7 +28,8 @@ const OrderStoreTableNumberLayout = async ({
     mode === ORDER_MODE.DineIn && number >= 1 && number <= TABLE_NUMBERS;
   const isPickup = mode === ORDER_MODE.Pickup && number === 0;
 
-  if (!(isDineIn || isPickup)) return notFound();
+  const isValidTableNumber = isDineIn || isPickup;
+  if (!isValidTableNumber) return notFound();
 
   return <>{children}</>;
 };
