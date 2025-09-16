@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import OrderPickupStoreIdSelect from "@/components/OrderPickupStoreIdSelect";
+import OrderModePickupStoreIdSelect from "@/components/OrderModePickupStoreIdSelect";
 
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 
@@ -13,7 +13,7 @@ const OrderModePage = async ({ params }: OrderModePageProps) => {
 
   if (mode !== ORDER_MODE.Pickup) return notFound();
 
-  return <OrderPickupStoreIdSelect />;
+  return <OrderModePickupStoreIdSelect />;
 };
 
 export default OrderModePage;

@@ -10,7 +10,7 @@ import type { RouteParams } from "@/types/routeParams";
 
 import { stores } from "@/utils/stores";
 
-const OrderPickupStoreIdSelect = () => {
+const OrderModePickupStoreIdSelect = () => {
   const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
 
@@ -41,4 +41,4 @@ const OrderPickupStoreIdSelect = () => {
   );
 };
 
-export default OrderPickupStoreIdSelect;
+export default OrderModePickupStoreIdSelect;
