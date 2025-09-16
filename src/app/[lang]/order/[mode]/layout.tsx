@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 
-import type { OrderMode } from "@/types/orderMode";
+import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 
 interface OrderModeLayoutProps {
   children: React.ReactNode;
@@ -10,8 +10,8 @@ interface OrderModeLayoutProps {
 const OrderModeLayout = async ({ children, params }: OrderModeLayoutProps) => {
   const { mode } = await params;
 
-  const isValidMode = mode === "dine-in" || mode === "pickup";
-  if (!isValidMode) return notFound();
+  const isOrderMode = mode === ORDER_MODE.DineIn || mode === ORDER_MODE.Pickup;
+  if (!isOrderMode) return notFound();
 
   return <>{children}</>;
 };

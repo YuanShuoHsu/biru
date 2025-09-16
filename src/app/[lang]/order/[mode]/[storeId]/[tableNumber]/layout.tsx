@@ -2,24 +2,33 @@ import { notFound } from "next/navigation";
 
 import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 
+import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { TableNumber } from "@/types/tableNumbers";
 
 interface OrderStoreTableNumberLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ tableNumber: TableNumber }>;
+  params: Promise<{
+    mode: OrderMode;
+    tableNumber: TableNumber;
+  }>;
 }
 
 const OrderStoreTableNumberLayout = async ({
   children,
   params,
 }: OrderStoreTableNumberLayoutProps) => {
-  const { tableNumber } = await params;
+  const { mode, tableNumber } = await params;
 
-  if (
-    !/^(0|[1-9]\d*)$/.test(tableNumber) ||
-    Number(tableNumber) > TABLE_NUMBERS
-  )
-    return notFound();
+  const isValidFormat = /^(0|[1-9]\d*)$/.test(tableNumber);
+  if (!isValidFormat) return notFound();
+
+  const number = Number(tableNumber);
+
+  const isDineIn =
+    mode === ORDER_MODE.DineIn && number >= 1 && number <= TABLE_NUMBERS;
+  const isPickup = mode === ORDER_MODE.Pickup && number === 0;
+
+  if (!(isDineIn || isPickup)) return notFound();
 
   return <>{children}</>;
 };
