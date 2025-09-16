@@ -25,7 +25,7 @@ import { styled } from "@mui/material/styles";
 
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 
-import type { LangModeStoreIdTableNumberParam } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 
 import { menu } from "@/utils/menu";
 
@@ -61,8 +61,7 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { lang, mode, storeId, tableNumber } =
-    useParams<LangModeStoreIdTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
   const pathname = usePathname();
   const isOrderPage =
     pathname === `/${lang}/orde/${mode}/${storeId}/${tableNumber}`;

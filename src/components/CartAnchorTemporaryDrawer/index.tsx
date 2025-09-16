@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { DrawerType } from "@/types/drawer";
-import type { LangModeStoreIdTableNumberParam } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -61,8 +61,7 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { lang, mode, storeId, tableNumber } =
-    useParams<LangModeStoreIdTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
 
   const dict = useI18n();
 

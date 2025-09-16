@@ -6,8 +6,8 @@ import { Grid } from "@mui/material";
 
 import { useViewStore } from "@/stores/useViewStore";
 
-import type { LangParam } from "@/types/locale";
 import type { MenuItem } from "@/types/menu";
+import type { RouteParams } from "@/types/routeParams";
 import { ViewGridSizes } from "@/types/view";
 
 interface ResponsiveGridProps {
@@ -21,7 +21,7 @@ const ResponsiveGrid = ({
   showLatest,
   showTopSold,
 }: ResponsiveGridProps) => {
-  const { lang } = useParams<LangParam>();
+  const { lang } = useParams<RouteParams>();
 
   const { view } = useViewStore();
   const viewGridSizes = ViewGridSizes[view];

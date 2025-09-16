@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import type { LangParam } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
@@ -44,7 +44,7 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
 }));
 
 const CustomizedAccordions = () => {
-  const { lang } = useParams<LangParam>();
+  const { lang } = useParams<RouteParams>();
 
   const dict = useI18n();
 

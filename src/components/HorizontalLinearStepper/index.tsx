@@ -9,8 +9,8 @@ import { useI18n } from "@/context/i18n";
 import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { LangModeStoreIdTableNumberParam } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
+import type { RouteParams } from "@/types/routeParams";
 import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
@@ -46,8 +46,7 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
 
 const HorizontalLinearStepper = () => {
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } =
-    useParams<LangModeStoreIdTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
 
   const dict = useI18n();
 

@@ -37,10 +37,8 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
-import type {
-  LangModeStoreIdTableNumberParam,
-  LocaleCode,
-} from "@/types/locale";
+import type { LocaleCode } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
@@ -235,8 +233,7 @@ const NavTemporaryDrawer = ({
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } =
-    useParams<LangModeStoreIdTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
   const router = useRouter();
 
   const dict = useI18n();

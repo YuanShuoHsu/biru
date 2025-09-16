@@ -6,12 +6,12 @@ import { useI18n } from "@/context/i18n";
 
 import { MenuItem, TextField } from "@mui/material";
 
-import type { LangModeStoreIdParam } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 
 import { stores } from "@/utils/stores";
 
 const OrderPickupStoreSelect = () => {
-  const { lang, mode, storeId } = useParams<LangModeStoreIdParam>();
+  const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
 
   const dict = useI18n();

@@ -2,6 +2,8 @@
 // https://mui.com/material-ui/react-toggle-button/#VerticalSpacingToggleButton.tsx
 // https://mui.com/material-ui/react-radio-button/#RadioButtons.tsx
 
+import { useParams } from "next/navigation";
+
 import {
   CreditCard,
   MarkChatRead,
@@ -19,14 +21,20 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { PaymentMethod } from "@/types/payment";
+import type { RouteParams } from "@/types/routeParams";
 
-const paymentOptions = [
-  {
-    id: "Cash",
-    icon: Payments,
-    label: "現金",
-  },
+const paymentOptions = (mode: OrderMode) => [
+  ...(mode === ORDER_MODE.DineIn
+    ? [
+        {
+          id: "Cash",
+          icon: Payments,
+          label: "現金",
+        },
+      ]
+    : []),
   {
     id: "Credit",
     icon: CreditCard,
@@ -92,8 +100,10 @@ const VerticalSpacingToggleButton = ({
   payment,
   setPayment,
 }: VerticalSpacingToggleButtonProps) => {
+  const { mode } = useParams<RouteParams>();
+
   const handlePaymentChange = (
-    event: React.MouseEvent<HTMLElement>,
+    _: React.MouseEvent<HTMLElement>,
     newPayment: PaymentMethod | null,
   ) => setPayment(newPayment);
 
@@ -107,7 +117,7 @@ const VerticalSpacingToggleButton = ({
         value={payment}
         size="small"
       >
-        {paymentOptions.map(({ id, icon: Icon, label }) => (
+        {paymentOptions(mode).map(({ id, icon: Icon, label }) => (
           <StyledToggleButton aria-label={label} key={id} value={id}>
             <Stack
               display="flex"

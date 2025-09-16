@@ -25,7 +25,7 @@ import { styled } from "@mui/material/styles";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
-import type { LangParam } from "@/types/locale";
+import type { RouteParams } from "@/types/routeParams";
 
 import { interpolate } from "@/utils/i18n";
 import {
@@ -86,7 +86,7 @@ interface CartItemRowProps {
 const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { id, amount, choices, extraCost, imageUrl, price, quantity } = item;
 
-  const { lang } = useParams<LangParam>();
+  const { lang } = useParams<RouteParams>();
 
   const dict = useI18n();
 

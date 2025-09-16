@@ -25,8 +25,8 @@ import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
 import { useViewStore } from "@/stores/useViewStore";
 
-import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
+import type { RouteParams } from "@/types/routeParams";
 import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card)({
@@ -137,7 +137,7 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { lang } = useParams<LangParam>();
+  const { lang } = useParams<RouteParams>();
 
   const dict = useI18n();
 

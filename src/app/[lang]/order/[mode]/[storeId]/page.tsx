@@ -11,9 +11,7 @@ interface OrderModeStoreIdPageProps {
 const OrderModeStoreIdPage = async ({ params }: OrderModeStoreIdPageProps) => {
   const { lang, mode, storeId } = await params;
 
-  if (mode !== ORDER_MODE.Pickup) {
-    return notFound();
-  }
+  if (mode !== ORDER_MODE.Pickup) return notFound();
 
   redirect(`/${lang}/order/${mode}/${storeId}/0`);
 };

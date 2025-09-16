@@ -26,8 +26,8 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
 
-import type { LangParam } from "@/types/locale";
 import type { Option } from "@/types/menu";
+import type { RouteParams } from "@/types/routeParams";
 
 import { interpolate } from "@/utils/i18n";
 import { getLimitingChoicesCap } from "@/utils/menu";
@@ -108,7 +108,7 @@ const CardDialogContent = forwardRef<
   const [choices, setChoices] =
     useState<Record<string, string[]>>(initialChoices);
 
-  const { lang } = useParams<LangParam>();
+  const { lang } = useParams<RouteParams>();
 
   const dict = useI18n();
 

@@ -26,11 +26,9 @@ import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
 import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type {
-  LangModeStoreIdTableNumberParam,
-  LocaleCode,
-} from "@/types/locale";
+import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { RouteParams } from "@/types/routeParams";
 import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
@@ -91,6 +89,7 @@ const breadcrumbsMap = (
           to: "/member/terms",
         },
       ],
+      disabled: true,
       icon: AccountCircle,
       label: dict.breadcrumb.member.label,
       to: "/member",
@@ -188,8 +187,7 @@ const findBreadcrumb = (
 
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } =
-    useParams<LangModeStoreIdTableNumberParam>();
+  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
 
   const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
