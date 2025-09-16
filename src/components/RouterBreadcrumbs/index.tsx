@@ -33,12 +33,12 @@ import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
 
 interface BreadcrumbItem {
   children?: BreadcrumbItem[];
   disabled?: boolean;
+  hidden?: boolean;
   icon: React.ComponentType<SvgIconProps>;
   label: string;
   to: string;
@@ -53,8 +53,8 @@ const breadcrumbsMap = (
 ): BreadcrumbItem[] => {
   const orderModePath = `/order/${mode}`;
   const isDineIn = mode === ORDER_MODE.DineIn;
+  const isPickup = mode === ORDER_MODE.Pickup && tableNumber === "0";
   const storeName = getStoreName(lang, storeId);
-  const isTakeout = mode === ORDER_MODE.Pickup && tableNumber === "0";
 
   return [
     {
@@ -113,12 +113,9 @@ const breadcrumbsMap = (
                       to: `${orderModePath}/${storeId}/${tableNumber}/complete`,
                     },
                   ],
-                  icon: isTakeout ? LocalMall : TableBar,
-                  label: isTakeout
-                    ? interpolate(dict.order.storeId.tableNumber.takeout, {
-                        tableNumber,
-                      })
-                    : String(tableNumber),
+                  hidden: isPickup,
+                  icon: isPickup ? () => null : TableBar,
+                  label: isPickup ? "" : String(tableNumber),
                   to: `${orderModePath}/${storeId}/${tableNumber}`,
                 },
               ],
@@ -174,9 +171,9 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
-): Pick<BreadcrumbItem, "disabled" | "icon" | "label"> | undefined =>
-  breadcrumbs.flatMap(({ children, disabled, icon, label, to }) => {
-    if (to === targetPath) return [{ disabled, icon, label }];
+): Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label"> | undefined =>
+  breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
+    if (to === targetPath) return [{ disabled, hidden, icon, label }];
 
     if (children) {
       const found = findBreadcrumb(children, targetPath);
@@ -208,13 +205,16 @@ const RouterBreadcrumbs = () => {
 
         const {
           disabled,
+          hidden,
           icon: Icon,
           label,
         } = findBreadcrumb(breadcrumbs, matchPath) || {
           disabled: false,
+          hidden: false,
           icon: () => null,
           label: value,
         };
+        if (hidden) return null;
 
         const isText = last || disabled === true;
         const color = last ? "text.primary" : "text.secondary";
@@ -229,7 +229,7 @@ const RouterBreadcrumbs = () => {
             color="text.secondary"
             key={to}
             to={to}
-            underline="hover"
+            underline="always"
           >
             <Icon fontSize="inherit" />
             {label}
