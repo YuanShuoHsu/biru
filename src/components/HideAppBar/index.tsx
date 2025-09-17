@@ -31,7 +31,7 @@ const StyledAppBar = styled(AppBar, {
 })<{ trigger: boolean }>(({ theme, trigger }) => ({
   backgroundImage: "none",
   transform: trigger ? "translateY(-100%)" : "translateY(0)",
-  transition: theme.transitions.create("transform"),
+  transition: theme.transitions.create(["background-color", "transform"]),
   willChange: "transform",
 }));
 
