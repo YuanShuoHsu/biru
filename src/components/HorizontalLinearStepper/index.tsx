@@ -56,9 +56,9 @@ const HorizontalLinearStepper = () => {
   );
 
   const steps = [
-    dict.breadcrumb.order.label,
-    dict.breadcrumb.order.checkout,
-    dict.breadcrumb.order.complete,
+    dict.order.label,
+    dict.order.mode.storeId.tableNumber.stepper.checkout.label,
+    dict.order.mode.storeId.tableNumber.stepper.complete.label,
   ];
 
   return (

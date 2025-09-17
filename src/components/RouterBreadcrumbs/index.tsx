@@ -104,12 +104,16 @@ const breadcrumbsMap = (
                   children: [
                     {
                       icon: Payment,
-                      label: dict.breadcrumb.order.checkout,
+                      label:
+                        dict.order.mode.storeId.tableNumber.stepper.checkout
+                          .label,
                       to: `${orderModePath}/${storeId}/${tableNumber}/checkout`,
                     },
                     {
                       icon: Pets,
-                      label: dict.breadcrumb.order.complete,
+                      label:
+                        dict.order.mode.storeId.tableNumber.stepper.complete
+                          .label,
                       to: `${orderModePath}/${storeId}/${tableNumber}/complete`,
                     },
                   ],
@@ -128,14 +132,14 @@ const breadcrumbsMap = (
           disabled: isDineIn ? true : false,
           icon: isDineIn ? Restaurant : LocalMall,
           label: isDineIn
-            ? dict.breadcrumb.order.dineIn
-            : dict.breadcrumb.order.pickup,
+            ? dict.order.mode.dineIn.label
+            : dict.order.mode.pickup.label,
           to: orderModePath,
         },
       ],
       disabled: true,
       icon: ShoppingCart,
-      label: dict.breadcrumb.order.label,
+      label: dict.order.label,
       to: "/order",
     },
   ];

@@ -14,13 +14,6 @@
       "signIn": "ログイン",
       "signUp": "新規登録",
       "terms": "利用規約"
-    },
-    "order": {
-      "checkout": "お会計",
-      "complete": "完了",
-      "dineIn": "店内",
-      "label": "注文",
-      "pickup": "お持ち帰り"
     }
   },
   "cart": {
@@ -85,12 +78,16 @@
       "signIn": "ログイン",
       "signUp": "新規登録",
       "terms": "利用規約"
-    },
-    "order": { "dineIn": "店内", "label": "注文", "pickup": "お持ち帰り" }
+    }
   },
   "order": {
+    "label": "注文",
     "mode": {
-      "pickup": { "selectStoreId": "店舗を選択" },
+      "dineIn": { "label": "店内" },
+      "pickup": {
+        "label": "お持ち帰り",
+        "selectStoreId": "店舗を選択"
+      },
       "storeId": {
         "selectTable": "テーブルを選択",
         "tableNumber": {
@@ -98,6 +95,10 @@
           "new": "新着",
           "search": {
             "placeholder": "メニューを検索"
+          },
+          "stepper": {
+            "checkout": { "label": "お会計" },
+            "complete": { "label": "完了" }
           },
           "top": "TOP",
           "topSold": "人気商品"

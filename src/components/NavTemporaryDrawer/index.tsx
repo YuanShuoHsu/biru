@@ -99,12 +99,12 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
       { slot: ORDER_MODE.DineIn },
       {
         icon: LocalMall,
-        label: dict.nav.order.pickup,
+        label: dict.order.mode.pickup.label,
         to: "/order/pickup",
       },
     ],
     icon: ShoppingCart,
-    label: dict.nav.order.label,
+    label: dict.order.label,
     to: "/order",
   },
   {
@@ -172,7 +172,7 @@ const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
         <StyledChip
           color="primary"
           icon={<Restaurant />}
-          label={dict.nav.order.dineIn}
+          label={dict.order.mode.dineIn.label}
           size="small"
           variant="outlined"
         />

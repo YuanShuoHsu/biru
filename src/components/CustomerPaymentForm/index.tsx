@@ -155,7 +155,7 @@ const CustomerPaymentForm = () => {
         >
           {/* {isDineIn
             ? interpolate(dict.common.tableNumber, { tableNumber })
-            : dict.nav.order.pickup} */}
+            : dict.order.mode.pickup.label} */}
           桌號 {tableNumber}
         </Typography>
       </Stack>

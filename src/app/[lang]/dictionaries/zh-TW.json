@@ -14,13 +14,6 @@
       "signIn": "登入",
       "signUp": "註冊",
       "terms": "服務條款"
-    },
-    "order": {
-      "checkout": "結帳",
-      "complete": "完成",
-      "dineIn": "內用",
-      "label": "點餐",
-      "pickup": "外帶自取"
     }
   },
   "cart": {
@@ -85,12 +78,16 @@
       "signIn": "登入",
       "signUp": "註冊",
       "terms": "服務條款"
-    },
-    "order": { "dineIn": "內用", "label": "點餐", "pickup": "外帶自取" }
+    }
   },
   "order": {
+    "label": "點餐",
     "mode": {
+      "dineIn": {
+        "label": "內用"
+      },
       "pickup": {
+        "label": "外帶自取",
         "selectStoreId": "選擇門市"
       },
       "storeId": {
@@ -100,6 +97,10 @@
           "new": "新品",
           "search": {
             "placeholder": "搜尋菜單"
+          },
+          "stepper": {
+            "checkout": { "label": "結帳" },
+            "complete": { "label": "完成" }
           },
           "top": "TOP",
           "topSold": "人氣商品"
