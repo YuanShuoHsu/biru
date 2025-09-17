@@ -47,6 +47,7 @@ const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
 
 const CustomizedAccordions = () => {
   const [expanded, setExpanded] = useState<string | false>("panel1");
+  const isPanel1Expanded = expanded === "panel1";
 
   const { lang } = useParams();
 
@@ -55,14 +56,13 @@ const CustomizedAccordions = () => {
   const { cartTotalAmount } = useCartStore();
 
   const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+    (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) =>
       setExpanded(newExpanded ? panel : false);
-    };
 
   return (
     <StyledAccordion
       disableGutters
-      expanded={expanded === "panel1"}
+      expanded={isPanel1Expanded}
       onChange={handleChange("panel1")}
     >
       <StyledAccordionSummary aria-controls="panel1-content" id="panel1-header">
@@ -80,7 +80,7 @@ const CustomizedAccordions = () => {
           {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
         </Typography>
         <Box flex={1} display="flex" justifyContent="flex-end">
-          <StyledExpandMore expanded={expanded === "panel1"} />
+          <StyledExpandMore expanded={isPanel1Expanded} />
         </Box>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
