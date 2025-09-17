@@ -64,7 +64,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 //     body: JSON.stringify(arg),
 //   }).then((res) => res.json());
 
-const SignUp = () => {
+const MemberAuthSignUp = () => {
   const [form, setForm] = useState({
     firstName: "",
     lastName: "",
@@ -243,4 +243,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default MemberAuthSignUp;

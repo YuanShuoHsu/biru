@@ -1,5 +1,5 @@
-const Terms = () => {
+const MemberLegalTerms = () => {
   return <div>Terms</div>;
 };
 
-export default Terms;
+export default MemberLegalTerms;

@@ -1,5 +1,5 @@
-const Privacy = () => {
+const MemberLegalPrivacy = () => {
   return <div>Privacy</div>;
 };
 
-export default Privacy;
+export default MemberLegalPrivacy;

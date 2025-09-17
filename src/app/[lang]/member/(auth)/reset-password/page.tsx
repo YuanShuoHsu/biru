@@ -60,7 +60,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 //     body: JSON.stringify(arg),
 //   }).then((res) => res.json());
 
-const ResetPassword = () => {
+const MemberAuthResetPassword = () => {
   const [form, setForm] = useState({
     email: "",
     newPassword: "",
@@ -249,4 +249,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default MemberAuthResetPassword;

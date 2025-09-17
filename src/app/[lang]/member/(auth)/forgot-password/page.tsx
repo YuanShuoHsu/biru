@@ -57,7 +57,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 //     body: JSON.stringify(arg),
 //   }).then((res) => res.json());
 
-const ForgortPassword = () => {
+const MemberAuthForgortPassword = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -148,4 +148,4 @@ const ForgortPassword = () => {
   );
 };
 
-export default ForgortPassword;
+export default MemberAuthForgortPassword;
