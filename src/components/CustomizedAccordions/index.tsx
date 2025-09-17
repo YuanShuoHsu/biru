@@ -3,6 +3,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 import CartItemList from "@/components/CartItemList";
 
@@ -13,61 +14,74 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Box,
   Typography,
-  TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import type { RouteParams } from "@/types/routeParams";
-
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
 }));
 
-const StyledAccordionSummary = styled(AccordionSummary)({
+const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
   "& .MuiAccordionSummary-content": {
     display: "flex",
     alignItems: "center",
+    gap: theme.spacing(2),
   },
-});
+}));
 
-const StyledTypography = styled(Typography)<TypographyProps>({
-  width: "33%",
-  flexShrink: 0,
-});
+const StyledExpandMore = styled(ExpandMore, {
+  shouldForwardProp: (prop) => prop !== "expanded",
+})<{ expanded: boolean }>(({ expanded, theme }) => ({
+  transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+  transition: theme.transitions.create("transform"),
+}));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   padding: 0,
-  borderTop: `1px solid ${theme.palette.divider}`,
+  borderTop: `1px solid ${theme.vars.palette.divider}`,
 }));
 
 const CustomizedAccordions = () => {
-  const { lang } = useParams<RouteParams>();
+  const [expanded, setExpanded] = useState<string | false>("panel1");
+
+  const { lang } = useParams();
 
   const dict = useI18n();
 
   const { cartTotalAmount } = useCartStore();
 
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+
   return (
-    <StyledAccordion defaultExpanded disableGutters>
-      <StyledAccordionSummary
-        aria-controls="panel1-content"
-        expandIcon={<ExpandMore />}
-        id="panel1-header"
-      >
-        <StyledTypography component="span" variant="subtitle1">
+    <StyledAccordion
+      disableGutters
+      expanded={expanded === "panel1"}
+      onChange={handleChange("panel1")}
+    >
+      <StyledAccordionSummary aria-controls="panel1-content" id="panel1-header">
+        <Typography component="span" flex={1} variant="subtitle1">
           {dict.common.totalAmount}
-        </StyledTypography>
+        </Typography>
         <Typography
           color="primary"
           component="span"
+          flex="auto"
           fontWeight="bold"
+          textAlign="center"
           variant="h6"
         >
           {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
         </Typography>
+        <Box flex={1} display="flex" justifyContent="flex-end">
+          <StyledExpandMore expanded={expanded === "panel1"} />
+        </Box>
       </StyledAccordionSummary>
       <StyledAccordionDetails>
         <CartItemList />
