@@ -5,30 +5,6 @@
     "languageSwitcher": "言語を変更",
     "lightMode": "ライトモード"
   },
-  "auth": {
-    "confirmNewPassword": "新しいパスワードの確認",
-    "email": "メールアドレス",
-    "firstName": "名",
-    "forgotPassword": "パスワードをお忘れですか",
-    "hasAccount": "すでにアカウントをお持ちですか？",
-    "hideConfirmNewPassword": "確認用パスワードを非表示",
-    "hideNewPassword": "新しいパスワードを非表示",
-    "hidePassword": "パスワードを非表示",
-    "lastName": "姓",
-    "newPassword": "新しいパスワード",
-    "noAccount": "アカウントをお持ちでない方",
-    "or": "または",
-    "password": "パスワード",
-    "remember": "ログイン状態を保持",
-    "rememberedPassword": "パスワードを覚えていますか？",
-    "resetPassword": "パスワードをリセット",
-    "sendPasswordResetLink": "パスワードリセットリンクを送信",
-    "showConfirmNewPassword": "確認用パスワードを表示",
-    "showNewPassword": "新しいパスワードを表示",
-    "showPassword": "パスワードを表示",
-    "signIn": "ログイン",
-    "signUp": "新規登録"
-  },
   "breadcrumb": {
     "member": {
       "forgotPassword": "パスワードをお忘れですか",
@@ -70,6 +46,32 @@
     "amount": "小計",
     "close": "閉じる",
     "maxStock": "{label} 在庫は残り {quantity} 個です"
+  },
+  "member": {
+    "auth": {
+      "confirmNewPassword": "新しいパスワードの確認",
+      "email": "メールアドレス",
+      "firstName": "名",
+      "forgotPassword": "パスワードをお忘れですか",
+      "hasAccount": "すでにアカウントをお持ちですか？",
+      "hideConfirmNewPassword": "確認用パスワードを非表示",
+      "hideNewPassword": "新しいパスワードを非表示",
+      "hidePassword": "パスワードを非表示",
+      "lastName": "姓",
+      "newPassword": "新しいパスワード",
+      "noAccount": "アカウントをお持ちでない方",
+      "or": "または",
+      "password": "パスワード",
+      "remember": "ログイン状態を保持",
+      "rememberedPassword": "パスワードを覚えていますか？",
+      "resetPassword": "パスワードをリセット",
+      "sendPasswordResetLink": "パスワードリセットリンクを送信",
+      "showConfirmNewPassword": "確認用パスワードを表示",
+      "showNewPassword": "新しいパスワードを表示",
+      "showPassword": "パスワードを表示",
+      "signIn": "ログイン",
+      "signUp": "新規登録"
+    }
   },
   "nav": {
     "home": "ホーム",

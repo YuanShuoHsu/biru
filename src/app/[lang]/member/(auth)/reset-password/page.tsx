@@ -128,7 +128,7 @@ const MemberAuthResetPassword = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.auth.resetPassword}
+            {dict.member.auth.resetPassword}
           </Typography>
         }
       />
@@ -137,7 +137,7 @@ const MemberAuthResetPassword = () => {
           // error={!!state?.errors?.email}
           fullWidth
           // helperText={state?.errors?.email}
-          label={dict.auth.email}
+          label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
           required
@@ -153,7 +153,7 @@ const MemberAuthResetPassword = () => {
           //     ? `Password must: ${state.errors.newPassword.join(", ")}`
           //     : ""
           // }
-          label={dict.auth.newPassword}
+          label={dict.member.auth.newPassword}
           name="newPassword"
           onChange={handleChange}
           required
@@ -164,8 +164,8 @@ const MemberAuthResetPassword = () => {
                   <IconButton
                     aria-label={
                       showPassword.newPassword
-                        ? dict.auth.hideNewPassword
-                        : dict.auth.showNewPassword
+                        ? dict.member.auth.hideNewPassword
+                        : dict.member.auth.showNewPassword
                     }
                     onClick={handleClickShowPassword("newPassword")}
                     onMouseDown={handleMouseDownPassword}
@@ -194,7 +194,7 @@ const MemberAuthResetPassword = () => {
           //     ? `Password must: ${state.errors.newPassword.join(", ")}`
           //     : ""
           // }
-          label={dict.auth.confirmNewPassword}
+          label={dict.member.auth.confirmNewPassword}
           name="confirmNewPassword"
           onChange={handleChange}
           required
@@ -205,8 +205,8 @@ const MemberAuthResetPassword = () => {
                   <IconButton
                     aria-label={
                       showPassword.confirmNewPassword
-                        ? dict.auth.hideConfirmNewPassword
-                        : dict.auth.showConfirmNewPassword
+                        ? dict.member.auth.hideConfirmNewPassword
+                        : dict.member.auth.showConfirmNewPassword
                     }
                     onClick={handleClickShowPassword("confirmNewPassword")}
                     onMouseDown={handleMouseDownPassword}
@@ -236,12 +236,12 @@ const MemberAuthResetPassword = () => {
           type="submit"
           variant="contained"
         >
-          {dict.auth.resetPassword}
+          {dict.member.auth.resetPassword}
         </Button>
         <Typography variant="body2">
-          {dict.auth.noAccount}{" "}
+          {dict.member.auth.noAccount}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-            {dict.auth.signUp}
+            {dict.member.auth.signUp}
           </MuiLink>
         </Typography>
       </StyledCardActions>

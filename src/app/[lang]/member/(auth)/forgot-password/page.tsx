@@ -109,7 +109,7 @@ const MemberAuthForgortPassword = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.auth.forgotPassword}
+            {dict.member.auth.forgotPassword}
           </Typography>
         }
       />
@@ -118,7 +118,7 @@ const MemberAuthForgortPassword = () => {
           // error={!!state?.errors?.email}
           fullWidth
           // helperText={state?.errors?.email}
-          label={dict.auth.email}
+          label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
           required
@@ -135,12 +135,12 @@ const MemberAuthForgortPassword = () => {
           type="submit"
           variant="contained"
         >
-          {dict.auth.sendPasswordResetLink}
+          {dict.member.auth.sendPasswordResetLink}
         </Button>
         <Typography variant="body2">
-          {dict.auth.rememberedPassword}{" "}
+          {dict.member.auth.rememberedPassword}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-in`}>
-            {dict.auth.signIn}
+            {dict.member.auth.signIn}
           </MuiLink>
         </Typography>
       </StyledCardActions>

@@ -5,30 +5,6 @@
     "languageSwitcher": "Change Language",
     "lightMode": "Light mode"
   },
-  "auth": {
-    "confirmNewPassword": "Confirm new password",
-    "email": "Email",
-    "firstName": "First Name",
-    "forgotPassword": "Forgot password",
-    "hasAccount": "Already have an account?",
-    "hideConfirmNewPassword": "Hide confirm new password",
-    "hideNewPassword": "Hide the new password",
-    "hidePassword": "Hide the password",
-    "lastName": "Last Name",
-    "newPassword": "New password",
-    "noAccount": "Don't have an account?",
-    "or": "or",
-    "password": "Password",
-    "remember": "Remember me",
-    "rememberedPassword": "Remembered your password?",
-    "resetPassword": "Reset password",
-    "sendPasswordResetLink": "Send password reset link",
-    "showConfirmNewPassword": "Show confirm new password",
-    "showNewPassword": "Display the new password",
-    "showPassword": "Display the password",
-    "signIn": "Sign in",
-    "signUp": "Sign up"
-  },
   "breadcrumb": {
     "member": {
       "forgotPassword": "Forgot password",
@@ -70,6 +46,32 @@
     "amount": "SubTotal",
     "close": "Close",
     "maxStock": "Only {quantity} left in stock {label}"
+  },
+  "member": {
+    "auth": {
+      "confirmNewPassword": "Confirm new password",
+      "email": "Email",
+      "firstName": "First Name",
+      "forgotPassword": "Forgot password",
+      "hasAccount": "Already have an account?",
+      "hideConfirmNewPassword": "Hide confirm new password",
+      "hideNewPassword": "Hide the new password",
+      "hidePassword": "Hide the password",
+      "lastName": "Last Name",
+      "newPassword": "New password",
+      "noAccount": "Don't have an account?",
+      "or": "or",
+      "password": "Password",
+      "remember": "Remember me",
+      "rememberedPassword": "Remembered your password?",
+      "resetPassword": "Reset password",
+      "sendPasswordResetLink": "Send password reset link",
+      "showConfirmNewPassword": "Show confirm new password",
+      "showNewPassword": "Display the new password",
+      "showPassword": "Display the password",
+      "signIn": "Sign in",
+      "signUp": "Sign up"
+    }
   },
   "nav": {
     "home": "Home",

@@ -5,30 +5,6 @@
     "languageSwitcher": "언어 변경",
     "lightMode": "라이트 모드"
   },
-  "auth": {
-    "confirmNewPassword": "새 비밀번호 확인",
-    "email": "이메일",
-    "firstName": "이름",
-    "forgotPassword": "비밀번호 찾기",
-    "hasAccount": "이미 계정이 있으신가요?",
-    "hideConfirmNewPassword": "새 비밀번호 확인 숨기기",
-    "hideNewPassword": "새 비밀번호 숨기기",
-    "hidePassword": "비밀번호 숨기기",
-    "lastName": "성",
-    "newPassword": "새 비밀번호",
-    "noAccount": "아직 계정이 없으신가요?",
-    "or": "또는",
-    "password": "비밀번호",
-    "remember": "로그인 상태 유지",
-    "rememberedPassword": "비밀번호 기억나세요?",
-    "resetPassword": "비밀번호 재설정",
-    "sendPasswordResetLink": "비밀번호 재설정 링크 보내기",
-    "showConfirmNewPassword": "새 비밀번호 확인 표시",
-    "showNewPassword": "새 비밀번호 표시",
-    "showPassword": "비밀번호 표시",
-    "signIn": "로그인",
-    "signUp": "회원가입"
-  },
   "breadcrumb": {
     "member": {
       "forgotPassword": "비밀번호 찾기",
@@ -70,6 +46,32 @@
     "amount": "소계",
     "close": "닫기",
     "maxStock": "{label} 재고가 {quantity} 개 남았습니다"
+  },
+  "member": {
+    "auth": {
+      "confirmNewPassword": "새 비밀번호 확인",
+      "email": "이메일",
+      "firstName": "이름",
+      "forgotPassword": "비밀번호 찾기",
+      "hasAccount": "이미 계정이 있으신가요?",
+      "hideConfirmNewPassword": "새 비밀번호 확인 숨기기",
+      "hideNewPassword": "새 비밀번호 숨기기",
+      "hidePassword": "비밀번호 숨기기",
+      "lastName": "성",
+      "newPassword": "새 비밀번호",
+      "noAccount": "아직 계정이 없으신가요?",
+      "or": "또는",
+      "password": "비밀번호",
+      "remember": "로그인 상태 유지",
+      "rememberedPassword": "비밀번호 기억나세요?",
+      "resetPassword": "비밀번호 재설정",
+      "sendPasswordResetLink": "비밀번호 재설정 링크 보내기",
+      "showConfirmNewPassword": "새 비밀번호 확인 표시",
+      "showNewPassword": "새 비밀번호 표시",
+      "showPassword": "비밀번호 표시",
+      "signIn": "로그인",
+      "signUp": "회원가입"
+    }
   },
   "nav": {
     "home": "홈",

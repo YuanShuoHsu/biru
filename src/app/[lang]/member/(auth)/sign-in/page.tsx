@@ -129,18 +129,18 @@ const MemberAuthSignIn = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.auth.signIn}
+            {dict.member.auth.signIn}
           </Typography>
         }
       />
       <StyledCardContent>
         <GoogleButton action="signIn" href="" />
-        <Divider>{dict.auth.or}</Divider>
+        <Divider>{dict.member.auth.or}</Divider>
         <TextField
           // error={!!state?.errors?.email}
           fullWidth
           // helperText={state?.errors?.email}
-          label={dict.auth.email}
+          label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
           required
@@ -156,7 +156,7 @@ const MemberAuthSignIn = () => {
           //     ? `Password must: ${state.errors.password.join(", ")}`
           //     : ""
           // }
-          label={dict.auth.password}
+          label={dict.member.auth.password}
           name="password"
           onChange={handleChange}
           required
@@ -167,8 +167,8 @@ const MemberAuthSignIn = () => {
                   <IconButton
                     aria-label={
                       showPassword
-                        ? dict.auth.hidePassword
-                        : dict.auth.showPassword
+                        ? dict.member.auth.hidePassword
+                        : dict.member.auth.showPassword
                     }
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -200,7 +200,9 @@ const MemberAuthSignIn = () => {
               />
             }
             label={
-              <Typography variant="body2">{dict.auth.remember}</Typography>
+              <Typography variant="body2">
+                {dict.member.auth.remember}
+              </Typography>
             }
           />
           <MuiLink
@@ -208,7 +210,7 @@ const MemberAuthSignIn = () => {
             href={`/${lang}/member/forgot-password`}
             variant="body2"
           >
-            {dict.auth.forgotPassword}
+            {dict.member.auth.forgotPassword}
           </MuiLink>
         </Stack>
       </StyledCardContent>
@@ -221,12 +223,12 @@ const MemberAuthSignIn = () => {
           type="submit"
           variant="contained"
         >
-          {dict.auth.signIn}
+          {dict.member.auth.signIn}
         </Button>
         <Typography variant="body2">
-          {dict.auth.noAccount}{" "}
+          {dict.member.auth.noAccount}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-            {dict.auth.signUp}
+            {dict.member.auth.signUp}
           </MuiLink>
         </Typography>
       </StyledCardActions>

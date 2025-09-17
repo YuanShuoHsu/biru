@@ -130,17 +130,17 @@ const MemberAuthSignUp = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.auth.signUp}
+            {dict.member.auth.signUp}
           </Typography>
         }
       />
       <StyledCardContent>
         <GoogleButton action="signUp" href="" />
-        <Divider>{dict.auth.or}</Divider>
+        <Divider>{dict.member.auth.or}</Divider>
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
             fullWidth
-            label={dict.auth.firstName}
+            label={dict.member.auth.firstName}
             name="firstName"
             onChange={handleChange}
             required
@@ -148,7 +148,7 @@ const MemberAuthSignUp = () => {
           />
           <TextField
             fullWidth
-            label={dict.auth.lastName}
+            label={dict.member.auth.lastName}
             name="lastName"
             onChange={handleChange}
             required
@@ -159,7 +159,7 @@ const MemberAuthSignUp = () => {
           // error={!!state?.errors?.email}
           fullWidth
           // helperText={state?.errors?.email}
-          label={dict.auth.email}
+          label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
           required
@@ -175,7 +175,7 @@ const MemberAuthSignUp = () => {
           //     ? `Password must: ${state.errors.password.join(", ")}`
           //     : ""
           // }
-          label={dict.auth.password}
+          label={dict.member.auth.password}
           name="password"
           onChange={handleChange}
           required
@@ -186,8 +186,8 @@ const MemberAuthSignUp = () => {
                   <IconButton
                     aria-label={
                       showPassword
-                        ? dict.auth.hidePassword
-                        : dict.auth.showPassword
+                        ? dict.member.auth.hidePassword
+                        : dict.member.auth.showPassword
                     }
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -213,10 +213,11 @@ const MemberAuthSignUp = () => {
           type="submit"
           variant="contained"
         >
-          {dict.auth.signUp}
+          {dict.member.auth.signUp}
         </Button>
         <Typography variant="caption" color="text.secondary" align="center">
-          By clicking «{dict.auth.signUp}», you agree to Biru Coffee&rsquo;s
+          By clicking «{dict.member.auth.signUp}», you agree to Biru
+          Coffee&rsquo;s
           <Box component="br" />
           <MuiLink component={NextLink} href={`/${lang}/member/terms`}>
             Terms of Service
@@ -229,13 +230,13 @@ const MemberAuthSignUp = () => {
         </Typography>
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={1}>
-          <Typography variant="body2">{dict.auth.hasAccount}</Typography>
+          <Typography variant="body2">{dict.member.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
             href={`/${lang}/member/sign-in`}
             variant="body2"
           >
-            {dict.auth.signIn}
+            {dict.member.auth.signIn}
           </MuiLink>
         </Stack>
       </StyledCardActions>

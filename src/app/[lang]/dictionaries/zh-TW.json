@@ -5,30 +5,6 @@
     "languageSwitcher": "切換語言",
     "lightMode": "亮色模式"
   },
-  "auth": {
-    "confirmNewPassword": "確認新密碼",
-    "email": "電子郵件",
-    "firstName": "名字",
-    "forgotPassword": "忘記密碼",
-    "hasAccount": "已經有帳號？",
-    "hideConfirmNewPassword": "隱藏確認新密碼",
-    "hideNewPassword": "隱藏新密碼",
-    "hidePassword": "隱藏密碼",
-    "lastName": "姓氏",
-    "newPassword": "新密碼",
-    "noAccount": "還沒有帳號？",
-    "or": "或",
-    "password": "密碼",
-    "remember": "記住我",
-    "rememberedPassword": "還記得密碼？",
-    "resetPassword": "重設密碼",
-    "sendPasswordResetLink": "傳送密碼重設連結",
-    "showConfirmNewPassword": "顯示確認新密碼",
-    "showNewPassword": "顯示新密碼",
-    "showPassword": "顯示密碼",
-    "signIn": "登入",
-    "signUp": "註冊"
-  },
   "breadcrumb": {
     "member": {
       "forgotPassword": "忘記密碼",
@@ -70,6 +46,32 @@
     "amount": "小計",
     "close": "關閉",
     "maxStock": "{label} 庫存僅剩 {quantity} 件"
+  },
+  "member": {
+    "auth": {
+      "confirmNewPassword": "確認新密碼",
+      "email": "電子郵件",
+      "firstName": "名字",
+      "forgotPassword": "忘記密碼",
+      "hasAccount": "已經有帳號？",
+      "hideConfirmNewPassword": "隱藏確認新密碼",
+      "hideNewPassword": "隱藏新密碼",
+      "hidePassword": "隱藏密碼",
+      "lastName": "姓氏",
+      "newPassword": "新密碼",
+      "noAccount": "還沒有帳號？",
+      "or": "或",
+      "password": "密碼",
+      "remember": "記住我",
+      "rememberedPassword": "還記得密碼？",
+      "resetPassword": "重設密碼",
+      "sendPasswordResetLink": "傳送密碼重設連結",
+      "showConfirmNewPassword": "顯示確認新密碼",
+      "showNewPassword": "顯示新密碼",
+      "showPassword": "顯示密碼",
+      "signIn": "登入",
+      "signUp": "註冊"
+    }
   },
   "nav": {
     "home": "首頁",
