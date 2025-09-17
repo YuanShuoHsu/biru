@@ -93,7 +93,7 @@ interface NavSlotItem {
 type NavItem = NavLinkItem | NavSlotItem;
 
 const navItemsMap = (dict: I18nDict): NavItem[] => [
-  { icon: Home, label: dict.nav.home, to: "/" },
+  { icon: Home, label: dict.home.label, to: "/" },
   {
     children: [
       { slot: ORDER_MODE.DineIn },
@@ -111,17 +111,17 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
     children: [
       {
         icon: Login,
-        label: dict.nav.member.signIn,
+        label: dict.member.auth.signIn.label,
         to: "/member/sign-in",
       },
       {
         icon: PersonAdd,
-        label: dict.nav.member.signUp,
+        label: dict.member.auth.signUp.label,
         to: "/member/sign-up",
       },
     ],
     icon: AccountCircle,
-    label: dict.nav.member.label,
+    label: dict.member.label,
     to: "/member",
   },
 ];

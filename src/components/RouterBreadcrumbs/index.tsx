@@ -60,38 +60,38 @@ const breadcrumbsMap = (
       children: [
         {
           icon: Login,
-          label: dict.breadcrumb.member.signIn,
+          label: dict.member.auth.signIn.label,
           to: "/member/sign-in",
         },
         {
           icon: PersonAdd,
-          label: dict.breadcrumb.member.signUp,
+          label: dict.member.auth.signUp.label,
           to: "/member/sign-up",
         },
         {
           icon: HelpOutline,
-          label: dict.breadcrumb.member.forgotPassword,
+          label: dict.member.auth.forgotPassword.label,
           to: "/member/forgot-password",
         },
         {
           icon: LockReset,
-          label: dict.breadcrumb.member.resetPassword,
+          label: dict.member.auth.resetPassword.label,
           to: "/member/reset-password",
         },
         {
           icon: Policy,
-          label: dict.breadcrumb.member.privacy,
+          label: dict.member.legal.privacy.label,
           to: "/member/privacy",
         },
         {
           icon: Gavel,
-          label: dict.breadcrumb.member.terms,
+          label: dict.member.legal.terms.label,
           to: "/member/terms",
         },
       ],
       disabled: true,
       icon: AccountCircle,
-      label: dict.breadcrumb.member.label,
+      label: dict.member.label,
       to: "/member",
     },
     {

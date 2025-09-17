@@ -5,17 +5,6 @@
     "languageSwitcher": "언어 변경",
     "lightMode": "라이트 모드"
   },
-  "breadcrumb": {
-    "member": {
-      "forgotPassword": "비밀번호 찾기",
-      "label": "회원",
-      "privacy": "개인정보 처리방침",
-      "resetPassword": "비밀번호 재설정",
-      "signIn": "로그인",
-      "signUp": "회원가입",
-      "terms": "서비스 이용약관"
-    }
-  },
   "cart": {
     "backToOrder": "메뉴로 돌아가기",
     "checkout": "결제하기",
@@ -42,12 +31,14 @@
     "close": "닫기",
     "maxStock": "{label} 재고가 {quantity} 개 남았습니다"
   },
+  "home": { "label": "홈" },
   "member": {
+    "label": "회원",
     "auth": {
       "confirmNewPassword": "새 비밀번호 확인",
       "email": "이메일",
       "firstName": "이름",
-      "forgotPassword": "비밀번호 찾기",
+      "forgotPassword": { "label": "비밀번호 찾기" },
       "hasAccount": "이미 계정이 있으신가요?",
       "hideConfirmNewPassword": "새 비밀번호 확인 숨기기",
       "hideNewPassword": "새 비밀번호 숨기기",
@@ -59,25 +50,17 @@
       "password": "비밀번호",
       "remember": "로그인 상태 유지",
       "rememberedPassword": "비밀번호 기억나세요?",
-      "resetPassword": "비밀번호 재설정",
+      "resetPassword": { "label": "비밀번호 재설정" },
       "sendPasswordResetLink": "비밀번호 재설정 링크 보내기",
       "showConfirmNewPassword": "새 비밀번호 확인 표시",
       "showNewPassword": "새 비밀번호 표시",
       "showPassword": "비밀번호 표시",
-      "signIn": "로그인",
-      "signUp": "회원가입"
-    }
-  },
-  "nav": {
-    "home": "홈",
-    "member": {
-      "forgotPassword": "비밀번호 찾기",
-      "label": "회원",
-      "privacy": "개인정보 처리방침",
-      "resetPassword": "비밀번호 재설정",
-      "signIn": "로그인",
-      "signUp": "회원가입",
-      "terms": "서비스 이용약관"
+      "signIn": { "label": "로그인" },
+      "signUp": { "label": "회원가입" }
+    },
+    "legal": {
+      "privacy": { "label": "개인정보 처리방침" },
+      "terms": { "label": "서비스 이용약관" }
     }
   },
   "order": {

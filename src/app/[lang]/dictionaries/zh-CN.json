@@ -5,17 +5,6 @@
     "languageSwitcher": "切换语言",
     "lightMode": "浅色模式"
   },
-  "breadcrumb": {
-    "member": {
-      "forgotPassword": "忘记密码",
-      "label": "会员",
-      "privacy": "隐私政策",
-      "resetPassword": "重置密码",
-      "signIn": "登录",
-      "signUp": "注册",
-      "terms": "服务条款"
-    }
-  },
   "cart": {
     "backToOrder": "返回点餐",
     "checkout": "前往结算",
@@ -42,12 +31,14 @@
     "close": "关闭",
     "maxStock": "{label} 库存仅剩 {quantity} 件"
   },
+  "home": { "label": "首页" },
   "member": {
+    "label": "会员",
     "auth": {
       "confirmNewPassword": "确认新密码",
       "email": "电子邮件",
       "firstName": "名字",
-      "forgotPassword": "忘记密码",
+      "forgotPassword": { "label": "忘记密码" },
       "hasAccount": "已经有账号？",
       "hideConfirmNewPassword": "隐藏确认新密码",
       "hideNewPassword": "隐藏新密码",
@@ -59,25 +50,17 @@
       "password": "密码",
       "remember": "记住我",
       "rememberedPassword": "还记得密码？",
-      "resetPassword": "重置密码",
+      "resetPassword": { "label": "重置密码" },
       "sendPasswordResetLink": "发送密码重置链接",
       "showConfirmNewPassword": "显示确认新密码",
       "showNewPassword": "显示新密码",
       "showPassword": "显示密码",
-      "signIn": "登录",
-      "signUp": "注册"
-    }
-  },
-  "nav": {
-    "home": "首页",
-    "member": {
-      "forgotPassword": "忘记密码",
-      "label": "会员",
-      "privacy": "隐私政策",
-      "resetPassword": "重置密码",
-      "signIn": "登录",
-      "signUp": "注册",
-      "terms": "服务条款"
+      "signIn": { "label": "登录" },
+      "signUp": { "label": "注册" }
+    },
+    "legal": {
+      "privacy": { "label": "隐私政策" },
+      "terms": { "label": "服务条款" }
     }
   },
   "order": {

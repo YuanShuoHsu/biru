@@ -5,17 +5,6 @@
     "languageSwitcher": "Change Language",
     "lightMode": "Light mode"
   },
-  "breadcrumb": {
-    "member": {
-      "forgotPassword": "Forgot password",
-      "label": "Member",
-      "privacy": "Privacy Policy",
-      "resetPassword": "Reset password",
-      "signIn": "Sign in",
-      "signUp": "Sign up",
-      "terms": "Terms of Service"
-    }
-  },
   "cart": {
     "backToOrder": "Back to Order",
     "checkout": "Proceed to Checkout",
@@ -42,12 +31,14 @@
     "close": "Close",
     "maxStock": "Only {quantity} left in stock {label}"
   },
+  "home": { "label": "Home" },
   "member": {
+    "label": "Member",
     "auth": {
       "confirmNewPassword": "Confirm new password",
       "email": "Email",
       "firstName": "First Name",
-      "forgotPassword": "Forgot password",
+      "forgotPassword": { "label": "Forgot password" },
       "hasAccount": "Already have an account?",
       "hideConfirmNewPassword": "Hide confirm new password",
       "hideNewPassword": "Hide the new password",
@@ -59,25 +50,17 @@
       "password": "Password",
       "remember": "Remember me",
       "rememberedPassword": "Remembered your password?",
-      "resetPassword": "Reset password",
+      "resetPassword": { "label": "Reset password" },
       "sendPasswordResetLink": "Send password reset link",
       "showConfirmNewPassword": "Show confirm new password",
       "showNewPassword": "Display the new password",
       "showPassword": "Display the password",
-      "signIn": "Sign in",
-      "signUp": "Sign up"
-    }
-  },
-  "nav": {
-    "home": "Home",
-    "member": {
-      "forgotPassword": "Forgot password",
-      "label": "Member",
-      "privacy": "Privacy Policy",
-      "resetPassword": "Reset password",
-      "signIn": "Sign in",
-      "signUp": "Sign up",
-      "terms": "Terms of Service"
+      "signIn": { "label": "Sign in" },
+      "signUp": { "label": "Sign up" }
+    },
+    "legal": {
+      "privacy": { "label": "Privacy Policy" },
+      "terms": { "lable": "Terms of Service" }
     }
   },
   "order": {
