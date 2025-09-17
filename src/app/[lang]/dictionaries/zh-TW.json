@@ -18,7 +18,9 @@
     "order": {
       "checkout": "結帳",
       "complete": "完成",
-      "label": "點餐"
+      "dineIn": "內用",
+      "label": "點餐",
+      "pickup": "外帶自取"
     }
   },
   "cart": {
@@ -84,7 +86,7 @@
       "signUp": "註冊",
       "terms": "服務條款"
     },
-    "order": { "dineIn": "內用", "label": "訂單", "pickup": "外帶自取" }
+    "order": { "dineIn": "內用", "label": "點餐", "pickup": "外帶自取" }
   },
   "order": {
     "mode": {

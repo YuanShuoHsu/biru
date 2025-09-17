@@ -38,6 +38,7 @@ import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
 import type { LocaleCode } from "@/types/locale";
+import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
 import type { StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -85,14 +86,8 @@ interface NavLinkItem {
   to: string;
 }
 
-const Slot = {
-  DineIn: "dine-in",
-} as const;
-
-type SlotId = (typeof Slot)[keyof typeof Slot];
-
 interface NavSlotItem {
-  slot: SlotId;
+  slot: OrderMode;
 }
 
 type NavItem = NavLinkItem | NavSlotItem;
@@ -101,7 +96,7 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
   { icon: Home, label: dict.nav.home, to: "/" },
   {
     children: [
-      { slot: Slot.DineIn },
+      { slot: ORDER_MODE.DineIn },
       {
         icon: LocalMall,
         label: dict.nav.order.pickup,
@@ -141,8 +136,8 @@ interface SlotProps {
   tableNumber: TableNumber;
 }
 
-const slots: Record<SlotId, React.ComponentType<SlotProps>> = {
-  [Slot.DineIn]: ({
+const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
+  [ORDER_MODE.DineIn]: ({
     dict,
     lang,
     level,
@@ -246,11 +241,12 @@ const NavTemporaryDrawer = ({
   const renderItems = (items: NavItem[], level = 0) =>
     items.map((item) => {
       if ("slot" in item) {
-        const selected = mode === "dine-in";
-        if (!selected) return null;
-
         const { slot } = item;
         const SlotComponent = slots[slot];
+        if (!SlotComponent) return null;
+
+        const selected = mode === slot;
+        if (!selected) return null;
 
         const handleClick = () =>
           router.push(`/${lang}/order/${mode}/${storeId}/${tableNumber}`);

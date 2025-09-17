@@ -7,8 +7,6 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
-import zhTW from "@/app/[lang]/dictionaries/zh-TW.json";
-
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -30,6 +28,7 @@ import type {
 import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 
+import { RouteParams } from "@/types/routeParams";
 import { getErrorMessage } from "@/utils/errors";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
@@ -60,7 +59,7 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
   }),
 );
 
-const CustomerPaymentSection = () => {
+const CustomerPaymentForm = () => {
   const [customerInfo, setCustomerInfo] = useState({
     name: "",
     notes: "",
@@ -68,7 +67,9 @@ const CustomerPaymentSection = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
-  const { lang, tableNumber } = useParams();
+  const { lang, tableNumber } = useParams<RouteParams>();
+  // const isDineIn = mode === ORDER_MODE.DineIn;
+
   const router = useRouter();
 
   const dict = useI18n();
@@ -102,13 +103,11 @@ const CustomerPaymentSection = () => {
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
             const itemName = getItemName(id, "zh-TW");
-            const choiceNames = getChoiceNames(
-              id,
-              choices,
-              "zh-TW",
-              zhTW,
-              zhTW.common.delimiter,
-            );
+            const choiceNames = getChoiceNames(id, choices, "zh-TW", {
+              colon: "：",
+              delimiter: "、",
+              joinWith: "、",
+            });
             const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
 
             return `${itemName} ${formattedChoices} ${dict.common.multiply} ${quantity}`;
@@ -118,7 +117,7 @@ const CustomerPaymentSection = () => {
         ClientBackURL: completeUrl,
         OrderResultURL: completeUrl,
         NeedExtraPaidInfo: "Y" as const,
-        Language: mapToEcpayLanguage(lang as LocaleCode),
+        Language: mapToEcpayLanguage(lang),
       },
     };
 
@@ -154,6 +153,9 @@ const CustomerPaymentSection = () => {
           fontWeight="bold"
           variant="h6"
         >
+          {/* {isDineIn
+            ? interpolate(dict.common.tableNumber, { tableNumber })
+            : dict.nav.order.pickup} */}
           桌號 {tableNumber}
         </Typography>
       </Stack>
@@ -178,6 +180,7 @@ const CustomerPaymentSection = () => {
         }}
         value={customerInfo.notes}
       />
+      {/* <CouponForm /> */}
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button
         disabled={isMutating || isCartEmpty || !payment}
@@ -194,4 +197,4 @@ const CustomerPaymentSection = () => {
   );
 };
 
-export default CustomerPaymentSection;
+export default CustomerPaymentForm;

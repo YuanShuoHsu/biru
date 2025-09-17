@@ -18,7 +18,9 @@
     "order": {
       "checkout": "结账",
       "complete": "完成",
-      "label": "点餐"
+      "dineIn": "堂食",
+      "label": "点餐",
+      "pickup": "自取"
     }
   },
   "cart": {
@@ -47,7 +49,6 @@
     "close": "关闭",
     "maxStock": "{label} 库存仅剩 {quantity} 件"
   },
-
   "member": {
     "auth": {
       "confirmNewPassword": "确认新密码",
@@ -85,7 +86,7 @@
       "signUp": "注册",
       "terms": "服务条款"
     },
-    "order": { "dineIn": "堂食", "label": "订单", "pickup": "自取" }
+    "order": { "dineIn": "堂食", "label": "点餐", "pickup": "自取" }
   },
   "order": {
     "mode": {

@@ -127,7 +127,9 @@ const breadcrumbsMap = (
           ],
           disabled: isDineIn ? true : false,
           icon: isDineIn ? Restaurant : LocalMall,
-          label: isDineIn ? dict.nav.order.dineIn : dict.nav.order.pickup,
+          label: isDineIn
+            ? dict.breadcrumb.order.dineIn
+            : dict.breadcrumb.order.pickup,
           to: orderModePath,
         },
       ],

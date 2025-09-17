@@ -1,5 +1,3 @@
-import { I18nDict } from "@/context/i18n";
-
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
@@ -108,12 +106,17 @@ export const getLimitingChoicesCap = (
   return { names, cap };
 };
 
+interface CommonSeparators {
+  colon: string;
+  delimiter: string;
+  joinWith?: string;
+}
+
 export const getChoiceNames = (
   itemId: string,
   choices: Record<string, string[]>,
   lang: LocaleCode,
-  { common: { colon, delimiter } }: I18nDict,
-  joinWith: string = "\n",
+  { colon, delimiter, joinWith = "\n" }: CommonSeparators,
 ): string => {
   const item = findItemById(itemId);
   if (!item) return "";

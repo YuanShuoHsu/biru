@@ -18,7 +18,9 @@
     "order": {
       "checkout": "お会計",
       "complete": "完了",
-      "label": "注文"
+      "dineIn": "店内",
+      "label": "注文",
+      "pickup": "お持ち帰り"
     }
   },
   "cart": {

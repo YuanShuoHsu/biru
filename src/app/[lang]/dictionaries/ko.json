@@ -18,7 +18,9 @@
     "order": {
       "checkout": "결제",
       "complete": "완료",
-      "label": "주문"
+      "dineIn": "매장 식사",
+      "label": "주문",
+      "pickup": "포장 수령"
     }
   },
   "cart": {

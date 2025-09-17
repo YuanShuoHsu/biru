@@ -91,7 +91,10 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const dict = useI18n();
 
   const itemName = getItemName(id, lang);
-  const choiceNames = getChoiceNames(id, choices, lang, dict);
+  const choiceNames = getChoiceNames(id, choices, lang, {
+    colon: dict.common.colon,
+    delimiter: dict.common.delimiter,
+  });
 
   const { deleteCartItem, getCartItemTotalQuantity, updateCartItem } =
     useCartStore();

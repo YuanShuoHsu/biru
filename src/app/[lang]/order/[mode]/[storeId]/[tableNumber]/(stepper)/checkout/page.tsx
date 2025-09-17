@@ -1,4 +1,4 @@
-import CustomerPaymentSection from "@/components/CustomerPaymentSection";
+import CustomerPaymentForm from "@/components/CustomerPaymentForm";
 import CustomizedAccordions from "@/components/CustomizedAccordions";
 
 import { Grid } from "@mui/material";
@@ -9,7 +9,7 @@ const OrderModeStoreIdTableNumberCheckout = () => (
       <CustomizedAccordions />
     </Grid>
     <Grid size={{ xs: 12, md: 6 }}>
-      <CustomerPaymentSection />
+      <CustomerPaymentForm />
     </Grid>
   </Grid>
 );

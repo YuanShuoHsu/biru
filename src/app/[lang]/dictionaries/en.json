@@ -18,7 +18,9 @@
     "order": {
       "checkout": "Checkout",
       "complete": "Complete",
-      "label": "Order"
+      "dineIn": "Dine-in",
+      "label": "Order",
+      "pickup": "Pickup"
     }
   },
   "cart": {
