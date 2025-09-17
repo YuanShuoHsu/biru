@@ -27,6 +27,8 @@ const StyledAccordion = styled(Accordion)(({ theme }) => ({
 
 const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => ({
   "& .MuiAccordionSummary-content": {
+    margin: 0,
+    paddingBlock: theme.spacing(2),
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(2),
@@ -37,7 +39,7 @@ const StyledExpandMore = styled(ExpandMore, {
   shouldForwardProp: (prop) => prop !== "expanded",
 })<{ expanded: boolean }>(({ expanded, theme }) => ({
   transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
-  transition: theme.transitions.create("transform"),
+  transition: theme.transitions.create(["color", "transform"]),
 }));
 
 const StyledAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
@@ -64,6 +66,7 @@ const CustomizedAccordions = () => {
       disableGutters
       expanded={isPanel1Expanded}
       onChange={handleChange("panel1")}
+      slotProps={{ transition: { unmountOnExit: true } }}
     >
       <StyledAccordionSummary aria-controls="panel1-content" id="panel1-header">
         <Typography component="span" flex={1} variant="subtitle1">
