@@ -109,7 +109,7 @@ const MemberAuthForgortPassword = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.forgotPassword}
+            {dict.member.auth.forgotPassword.label}
           </Typography>
         }
       />
@@ -140,7 +140,7 @@ const MemberAuthForgortPassword = () => {
         <Typography variant="body2">
           {dict.member.auth.rememberedPassword}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-in`}>
-            {dict.member.auth.signIn}
+            {dict.member.auth.signIn.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

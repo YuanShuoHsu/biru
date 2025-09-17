@@ -128,7 +128,7 @@ const MemberAuthResetPassword = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.resetPassword}
+            {dict.member.auth.resetPassword.label}
           </Typography>
         }
       />
@@ -236,12 +236,12 @@ const MemberAuthResetPassword = () => {
           type="submit"
           variant="contained"
         >
-          {dict.member.auth.resetPassword}
+          {dict.member.auth.resetPassword.label}
         </Button>
         <Typography variant="body2">
           {dict.member.auth.noAccount}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-            {dict.member.auth.signUp}
+            {dict.member.auth.signUp.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

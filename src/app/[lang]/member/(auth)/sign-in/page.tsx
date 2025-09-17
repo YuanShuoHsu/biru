@@ -129,7 +129,7 @@ const MemberAuthSignIn = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.signIn}
+            {dict.member.auth.signIn.label}
           </Typography>
         }
       />
@@ -210,7 +210,7 @@ const MemberAuthSignIn = () => {
             href={`/${lang}/member/forgot-password`}
             variant="body2"
           >
-            {dict.member.auth.forgotPassword}
+            {dict.member.auth.forgotPassword.label}
           </MuiLink>
         </Stack>
       </StyledCardContent>
@@ -223,12 +223,12 @@ const MemberAuthSignIn = () => {
           type="submit"
           variant="contained"
         >
-          {dict.member.auth.signIn}
+          {dict.member.auth.signIn.label}
         </Button>
         <Typography variant="body2">
           {dict.member.auth.noAccount}{" "}
           <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
-            {dict.member.auth.signUp}
+            {dict.member.auth.signUp.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

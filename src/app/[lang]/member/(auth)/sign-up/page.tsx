@@ -130,7 +130,7 @@ const MemberAuthSignUp = () => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.signUp}
+            {dict.member.auth.signUp.label}
           </Typography>
         }
       />
@@ -213,10 +213,10 @@ const MemberAuthSignUp = () => {
           type="submit"
           variant="contained"
         >
-          {dict.member.auth.signUp}
+          {dict.member.auth.signUp.label}
         </Button>
         <Typography variant="caption" color="text.secondary" align="center">
-          By clicking «{dict.member.auth.signUp}», you agree to Biru
+          By clicking «{dict.member.auth.signUp.label}», you agree to Biru
           Coffee&rsquo;s
           <Box component="br" />
           <MuiLink component={NextLink} href={`/${lang}/member/terms`}>
@@ -236,7 +236,7 @@ const MemberAuthSignUp = () => {
             href={`/${lang}/member/sign-in`}
             variant="body2"
           >
-            {dict.member.auth.signIn}
+            {dict.member.auth.signIn.label}
           </MuiLink>
         </Stack>
       </StyledCardActions>
