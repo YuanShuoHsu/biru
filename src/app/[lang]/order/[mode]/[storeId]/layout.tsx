@@ -4,15 +4,15 @@ import type { StoreId } from "@/types/stores";
 
 import { stores } from "@/utils/stores";
 
-interface OrderStoreLayoutProps {
+interface OrderModeStoreIdLayoutProps {
   children: React.ReactNode;
   params: Promise<{ storeId: StoreId }>;
 }
 
-const OrderStoreLayout = async ({
+const OrderModeStoreIdLayout = async ({
   children,
   params,
-}: OrderStoreLayoutProps) => {
+}: OrderModeStoreIdLayoutProps) => {
   const { storeId } = await params;
 
   const hasStore = stores.some(({ id }) => id === storeId);
@@ -21,4 +21,4 @@ const OrderStoreLayout = async ({
   return <>{children}</>;
 };
 
-export default OrderStoreLayout;
+export default OrderModeStoreIdLayout;

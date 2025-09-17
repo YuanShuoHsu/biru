@@ -1,7 +1,7 @@
 import CustomizedTabs from "@/components/CustomizedTabs";
 import OrderBottomBar from "@/components/OrderBottomBar";
 
-const OrderStoreTableNumber = () => {
+const OrderModeStoreIdTableNumberPage = () => {
   return (
     <>
       <CustomizedTabs />
@@ -10,4 +10,4 @@ const OrderStoreTableNumber = () => {
   );
 };
 
-export default OrderStoreTableNumber;
+export default OrderModeStoreIdTableNumberPage;

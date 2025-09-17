@@ -5,7 +5,7 @@ import { TABLE_NUMBERS } from "@/constants/tableNumbers";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { TableNumber } from "@/types/tableNumbers";
 
-interface OrderStoreTableNumberLayoutProps {
+interface OrderModeStoreIdTableNumberLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     mode: OrderMode;
@@ -13,10 +13,10 @@ interface OrderStoreTableNumberLayoutProps {
   }>;
 }
 
-const OrderStoreTableNumberLayout = async ({
+const OrderModeStoreIdTableNumberLayout = async ({
   children,
   params,
-}: OrderStoreTableNumberLayoutProps) => {
+}: OrderModeStoreIdTableNumberLayoutProps) => {
   const { mode, tableNumber } = await params;
 
   const isValidFormat = /^(0|[1-9]\d*)$/.test(tableNumber);
@@ -34,4 +34,4 @@ const OrderStoreTableNumberLayout = async ({
   return <>{children}</>;
 };
 
-export default OrderStoreTableNumberLayout;
+export default OrderModeStoreIdTableNumberLayout;

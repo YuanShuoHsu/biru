@@ -1,16 +1,16 @@
 import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
 
-interface OrderStoreTableNumberStepperLayoutProps {
+interface OrderModeStoreIdTableNumberStepperLayoutProps {
   children: React.ReactNode;
 }
 
-const OrderStoreTableNumberStepperLayout = ({
+const OrderModeStoreIdTableNumberStepperLayout = ({
   children,
-}: OrderStoreTableNumberStepperLayoutProps) => (
+}: OrderModeStoreIdTableNumberStepperLayoutProps) => (
   <>
     <HorizontalLinearStepper />
     {children}
   </>
 );
 
-export default OrderStoreTableNumberStepperLayout;
+export default OrderModeStoreIdTableNumberStepperLayout;
