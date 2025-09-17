@@ -60,7 +60,7 @@
     },
     "legal": {
       "privacy": { "label": "Privacy Policy" },
-      "terms": { "lable": "Terms of Service" }
+      "terms": { "label": "Terms of Service" }
     }
   },
   "order": {
