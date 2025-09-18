@@ -191,6 +191,25 @@ const findBreadcrumb = (
     return [];
   })[0];
 
+const findHiddenTo = (
+  startIndex: number,
+  pathnames: string[],
+  lang: LocaleCode,
+  breadcrumbs: BreadcrumbItem[],
+): string | undefined => {
+  const nextIndex = startIndex + 1;
+  if (nextIndex >= pathnames.length) return;
+
+  const nextMatchPath = `/${pathnames.slice(0, nextIndex + 1).join("/")}`;
+  const { hidden = false } = findBreadcrumb(breadcrumbs, nextMatchPath) || {};
+  if (!hidden) return;
+
+  const nextTo = findHiddenTo(nextIndex, pathnames, lang, breadcrumbs);
+  if (!nextTo) return `/${lang}${nextMatchPath}`;
+
+  return nextTo;
+};
+
 const RouterBreadcrumbs = () => {
   const pathname = usePathname();
   const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
@@ -203,7 +222,7 @@ const RouterBreadcrumbs = () => {
   const segments = pathnames.flatMap((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");
     const matchPath = `/${segmentPath}`;
-    const to = `/${lang}/${segmentPath}`;
+    const baseTo = `/${lang}/${segmentPath}`;
 
     const {
       disabled = false,
@@ -211,8 +230,12 @@ const RouterBreadcrumbs = () => {
       icon = () => null,
       label = value,
     } = findBreadcrumb(breadcrumbs, matchPath) || {};
+    if (hidden) return [];
 
-    return hidden ? [] : [{ disabled, icon, label, to }];
+    const hiddenTo = findHiddenTo(index, pathnames, lang, breadcrumbs);
+    const to = hiddenTo || baseTo;
+
+    return [{ disabled, icon, label, to }];
   });
 
   const lastIndex = segments.length - 1;
