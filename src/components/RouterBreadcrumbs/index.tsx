@@ -145,6 +145,18 @@ const breadcrumbsMap = (
   ];
 };
 
+const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  transition: "none",
+
+  "& .MuiBreadcrumbs-separator": {
+    transition: theme.transitions.create("color"),
+  },
+
+  "& .MuiSvgIcon-root": {
+    transition: "none",
+  },
+}));
+
 interface LinkRouterProps extends LinkProps {
   to: string;
   replace?: boolean;
@@ -162,12 +174,6 @@ const iconTextBaseStyles = (theme: Theme) => ({
 
 const StyledTypography = styled(Typography)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
-  textAlign: "center",
-  wordBreak: "keep-all",
-
-  "& .MuiSvgIcon-root": {
-    transition: "none",
-  },
 }));
 
 const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
@@ -241,7 +247,7 @@ const RouterBreadcrumbs = () => {
   const lastIndex = segments.length - 1;
 
   return (
-    <Breadcrumbs aria-label="breadcrumb">
+    <StyledBreadcrumbs aria-label="breadcrumb">
       {segments.map(({ disabled, icon: Icon, label, to }, index) => {
         const isLast = index === lastIndex;
         const isText = isLast || disabled;
@@ -264,7 +270,7 @@ const RouterBreadcrumbs = () => {
           </StyledLinkRouter>
         );
       })}
-    </Breadcrumbs>
+    </StyledBreadcrumbs>
   );
 };
 
