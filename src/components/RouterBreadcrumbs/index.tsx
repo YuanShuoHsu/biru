@@ -200,29 +200,29 @@ const RouterBreadcrumbs = () => {
   const dict = useI18n();
   const breadcrumbs = breadcrumbsMap(dict, lang, mode, storeId, tableNumber);
 
+  const segments = pathnames.flatMap((value, index) => {
+    const segmentPath = pathnames.slice(0, index + 1).join("/");
+    const matchPath = `/${segmentPath}`;
+    const to = `/${lang}/${segmentPath}`;
+
+    const {
+      disabled = false,
+      hidden = false,
+      icon = () => null,
+      label = value,
+    } = findBreadcrumb(breadcrumbs, matchPath) || {};
+
+    return hidden ? [] : [{ disabled, icon, label, to }];
+  });
+
+  const lastIndex = segments.length - 1;
+
   return (
     <Breadcrumbs aria-label="breadcrumb">
-      {pathnames.map((value, index) => {
-        const last = index === pathnames.length - 1;
-        const segmentPath = pathnames.slice(0, index + 1).join("/");
-        const matchPath = `/${segmentPath}`;
-        const to = `/${lang}/${segmentPath}`;
-
-        const {
-          disabled,
-          hidden,
-          icon: Icon,
-          label,
-        } = findBreadcrumb(breadcrumbs, matchPath) || {
-          disabled: false,
-          hidden: false,
-          icon: () => null,
-          label: value,
-        };
-        if (hidden) return null;
-
-        const isText = last || disabled === true;
-        const color = last ? "text.primary" : "text.secondary";
+      {segments.map(({ disabled, icon: Icon, label, to }, index) => {
+        const isLast = index === lastIndex;
+        const isText = isLast || disabled;
+        const color = isLast ? "text.primary" : "text.secondary";
 
         return isText ? (
           <StyledTypography color={color} key={to}>
