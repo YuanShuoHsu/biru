@@ -1,8 +1,13 @@
 import { LocaleCode } from "./locale";
 
-export type LocalizedText = {
-  [key in LocaleCode]: string;
-};
+type LocalizedText = Record<LocaleCode, string>;
+
+interface RecipeItem {
+  id: string;
+  name: LocalizedText;
+  unit: LocalizedText;
+  usage: number;
+}
 
 export interface Choice {
   id: string;
@@ -10,6 +15,7 @@ export interface Choice {
   extraCost: number;
   isActive: boolean;
   isShared: boolean;
+  recipes: RecipeItem[];
   sold: number;
   stock: number | null;
 }
@@ -31,6 +37,7 @@ export interface MenuItem {
   isActive: boolean;
   options: Option[];
   price: number;
+  recipes: RecipeItem[];
   sold: number;
   stock: number | null;
 }
