@@ -12,7 +12,7 @@ export default function WsTestPage() {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket: Socket = io("https://stage-api.birucoffee.com/api", {
+    const socket: Socket = io("https://stage-api.birucoffee.com", {
       transports: ["websocket"],
     });
     socketRef.current = socket;
