@@ -32,14 +32,16 @@ export const middleware = (request: NextRequest) => {
   const locale = getLocale(request);
 
   if (pathnameHasLocale) {
-    if (
-      process.env.NEXT_PUBLIC_MAINTENANCE === "true" &&
-      !(
-        pathname === `/${locale}/maintenance` ||
-        pathname.startsWith(`/${locale}/maintenance`)
-      )
-    ) {
-      request.nextUrl.pathname = `/${locale}/maintenance`;
+    const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+    const maintenanceBase = `/${locale}/maintenance`;
+    const isMaintenancePath =
+      pathname.startsWith(`${maintenanceBase}/`) ||
+      pathname === maintenanceBase;
+
+    if (isMaintenanceMode !== isMaintenancePath) {
+      request.nextUrl.pathname = isMaintenanceMode
+        ? maintenanceBase
+        : `/${locale}`;
       return NextResponse.redirect(request.nextUrl);
     }
 
