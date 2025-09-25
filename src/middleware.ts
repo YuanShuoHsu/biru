@@ -42,6 +42,7 @@ export const middleware = (request: NextRequest) => {
       request.nextUrl.pathname = isMaintenanceMode
         ? maintenanceBase
         : `/${locale}`;
+
       return NextResponse.redirect(request.nextUrl);
     }
 
