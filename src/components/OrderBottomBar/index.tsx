@@ -42,7 +42,7 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 const OrderBottomBar = () => {
   const dict = useI18n();
 
-  const { lang, storeId, tableNumber } = useParams();
+  const { lang, mode, storeId, tableNumber } = useParams();
 
   const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore();
 
@@ -61,7 +61,7 @@ const OrderBottomBar = () => {
           component={Link}
           disabled={isCartEmpty}
           fullWidth
-          href={`/${lang}/order/${storeId}/${tableNumber}/checkout`}
+          href={`/${lang}/order/${mode}/${storeId}/${tableNumber}/checkout`}
           size="large"
           variant="contained"
         >
