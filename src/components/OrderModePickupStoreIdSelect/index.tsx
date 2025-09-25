@@ -7,10 +7,15 @@ import { useI18n } from "@/context/i18n";
 import { MenuItem, TextField } from "@mui/material";
 
 import type { RouteParams } from "@/types/routeParams";
+import type { Store } from "@/types/stores";
 
-import { stores } from "@/utils/stores";
+interface OrderModePickupStoreIdSelectProps {
+  data: Store[];
+}
 
-const OrderModePickupStoreIdSelect = () => {
+const OrderModePickupStoreIdSelect = ({
+  data,
+}: OrderModePickupStoreIdSelectProps) => {
   const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
 
@@ -32,7 +37,7 @@ const OrderModePickupStoreIdSelect = () => {
       size="small"
       value={storeId || ""}
     >
-      {stores.map(({ id, name }) => (
+      {data.map(({ id, name }) => (
         <MenuItem key={id} value={id}>
           {name[lang]}
         </MenuItem>

@@ -1,10 +1,7 @@
 import type { LocaleCode } from "@/types/locale";
-import type { StoreId } from "@/types/stores";
+import type { Store, StoreId } from "@/types/stores";
 
-export const stores: {
-  id: string;
-  name: Record<LocaleCode, string>;
-}[] = [
+export const stores: Store[] = [
   {
     id: "aerotropolis",
     name: {
