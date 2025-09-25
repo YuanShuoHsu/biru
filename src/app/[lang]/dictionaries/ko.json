@@ -32,6 +32,9 @@
     "maxStock": "{label} 재고가 {quantity} 개 남았습니다"
   },
   "home": { "label": "홈" },
+  "maintenance": {
+    "title": "점검 중"
+  },
   "member": {
     "label": "회원",
     "auth": {

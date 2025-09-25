@@ -32,6 +32,9 @@
     "maxStock": "Only {quantity} left in stock {label}"
   },
   "home": { "label": "Home" },
+  "maintenance": {
+    "title": "Under Maintenance"
+  },
   "member": {
     "label": "Member",
     "auth": {

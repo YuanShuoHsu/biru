@@ -32,6 +32,9 @@
     "maxStock": "{label} 库存仅剩 {quantity} 件"
   },
   "home": { "label": "首页" },
+  "maintenance": {
+    "title": "维护中"
+  },
   "member": {
     "label": "会员",
     "auth": {

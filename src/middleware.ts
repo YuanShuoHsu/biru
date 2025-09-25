@@ -28,11 +28,25 @@ export const middleware = (request: NextRequest) => {
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
-  if (pathnameHasLocale) return;
 
   const locale = getLocale(request);
-  request.nextUrl.pathname = `/${locale}${pathname}`;
 
+  if (pathnameHasLocale) {
+    if (
+      process.env.NEXT_PUBLIC_MAINTENANCE === "true" &&
+      !(
+        pathname === `/${locale}/maintenance` ||
+        pathname.startsWith(`/${locale}/maintenance`)
+      )
+    ) {
+      request.nextUrl.pathname = `/${locale}/maintenance`;
+      return NextResponse.redirect(request.nextUrl);
+    }
+
+    return NextResponse.next();
+  }
+
+  request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
 };
 

@@ -32,6 +32,9 @@
     "maxStock": "{label} 在庫は残り {quantity} 個です"
   },
   "home": { "label": "ホーム" },
+  "maintenance": {
+    "title": "メンテナンス中"
+  },
   "member": {
     "label": "会員",
     "auth": {

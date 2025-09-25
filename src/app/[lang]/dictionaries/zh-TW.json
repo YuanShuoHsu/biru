@@ -32,6 +32,9 @@
     "maxStock": "{label} 庫存僅剩 {quantity} 件"
   },
   "home": { "label": "首頁" },
+  "maintenance": {
+    "title": "維護中"
+  },
   "member": {
     "label": "會員",
     "auth": {
