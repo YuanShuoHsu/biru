@@ -3,6 +3,7 @@
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 
 import AppLayout from "./appLayout";
@@ -12,6 +13,8 @@ import Providers from "./providers";
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
 import type { LocaleCode } from "@/types/locale";
+
+import { fetcher } from "@/utils/fetcher";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,13 +51,16 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
+  const data = await fetcher(`${process.env.NEXT_PUBLIC_NEST_URL}/api/stores`);
+  const fallback = { "/api/stores": data };
+
   return (
     <html lang={lang} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <Providers dict={dict}>
+        <Providers dict={dict} fallback={fallback}>
           <AppLayout>{children}</AppLayout>
         </Providers>
       </body>

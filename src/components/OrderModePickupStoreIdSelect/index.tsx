@@ -1,23 +1,20 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import useSWR from "swr";
 
 import { useI18n } from "@/context/i18n";
 
 import { MenuItem, TextField } from "@mui/material";
 
 import type { RouteParams } from "@/types/routeParams";
-import type { Store } from "@/types/stores";
+import { Store } from "@/types/stores";
 
-interface OrderModePickupStoreIdSelectProps {
-  data: Store[];
-}
-
-const OrderModePickupStoreIdSelect = ({
-  data,
-}: OrderModePickupStoreIdSelectProps) => {
+const OrderModePickupStoreIdSelect = () => {
   const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
+
+  const { data } = useSWR<Store[]>("/api/stores");
 
   const dict = useI18n();
 
@@ -37,7 +34,7 @@ const OrderModePickupStoreIdSelect = ({
       size="small"
       value={storeId || ""}
     >
-      {data.map(({ id, name }) => (
+      {data?.map(({ id, name }) => (
         <MenuItem key={id} value={id}>
           {name[lang]}
         </MenuItem>
