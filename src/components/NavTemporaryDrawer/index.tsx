@@ -38,10 +38,9 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
-import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { Store } from "@/types/stores";
+import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
@@ -133,7 +132,7 @@ interface SlotProps {
   onClick: () => void;
   selected: boolean;
   tableNumber: TableNumber;
-  storeName: Store["name"][LocaleCode];
+  storeName: StoreName;
 }
 
 const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {

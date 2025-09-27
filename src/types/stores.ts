@@ -1,10 +1,9 @@
 import { LocaleCode } from "./locale";
 
-import { stores } from "@/utils/stores";
-
-export type StoreId = (typeof stores)[number]["id"];
-
 export interface Store {
   id: string;
   name: Record<LocaleCode, string>;
 }
+
+export type StoreId = Store["id"];
+export type StoreName = Store["name"][LocaleCode];

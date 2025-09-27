@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
-import type { StoreId } from "@/types/stores";
+import type { Store, StoreId } from "@/types/stores";
 
-import { stores } from "@/utils/stores";
+import { fetcher } from "@/utils/fetcher";
 
 interface OrderModeStoreIdLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,11 @@ const OrderModeStoreIdLayout = async ({
 }: OrderModeStoreIdLayoutProps) => {
   const { storeId } = await params;
 
-  const hasStore = stores.some(({ id }) => id === storeId);
+  const data = await fetcher<Store[]>(
+    `${process.env.NEXT_PUBLIC_NEST_URL}/api/stores`,
+  );
+
+  const hasStore = data.some(({ id }) => id === storeId);
   if (!hasStore) return notFound();
 
   return <>{children}</>;

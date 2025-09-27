@@ -30,7 +30,7 @@ import { styled } from "@mui/material/styles";
 import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { Store, StoreId } from "@/types/stores";
+import type { Store, StoreId, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
@@ -49,7 +49,7 @@ const breadcrumbsMap = (
   mode: OrderMode,
   storeId: StoreId,
   tableNumber: TableNumber,
-  storeName: Store["name"][LocaleCode],
+  storeName: StoreName,
 ): BreadcrumbItem[] => {
   const orderModePath = `/order/${mode}`;
   const isDineIn = mode === ORDER_MODE.DineIn;
