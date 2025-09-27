@@ -130,21 +130,13 @@ interface SlotProps {
   dict: I18nDict;
   level: number;
   onClick: () => void;
-  selected: boolean;
   tableNumber: TableNumber;
   storeName: StoreName;
 }
 
 const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
-  [ORDER_MODE.DineIn]: ({
-    dict,
-    level,
-    onClick,
-    selected,
-    tableNumber,
-    storeName,
-  }) => (
-    <StyledListItemButton level={level} onClick={onClick} selected={selected}>
+  [ORDER_MODE.DineIn]: ({ dict, level, onClick, tableNumber, storeName }) => (
+    <StyledListItemButton level={level} onClick={onClick} selected={true}>
       <Stack
         width="100%"
         flexDirection="row"
@@ -245,13 +237,13 @@ const NavTemporaryDrawer = ({
         const SlotComponent = slots[slot];
         if (!SlotComponent) return null;
 
-        const selected = mode === slot;
-        if (!selected) return null;
-
         const storeName = getStoreName(data, lang, storeId);
 
-        const handleClick = () =>
+        const handleClick = () => {
+          if (!storeId || !tableNumber) return;
+
           router.push(`/${lang}/order/${mode}/${storeId}/${tableNumber}`);
+        };
 
         return (
           <SlotComponent
@@ -259,7 +251,6 @@ const NavTemporaryDrawer = ({
             key={`${slot}-${level}`}
             level={level}
             onClick={handleClick}
-            selected={selected}
             tableNumber={tableNumber}
             storeName={storeName}
           />
