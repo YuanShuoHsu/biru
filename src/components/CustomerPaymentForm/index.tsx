@@ -27,8 +27,8 @@ import type {
 } from "@/types/ecpay/createEcpayDto";
 import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
+import type { RouteParams } from "@/types/routeParams";
 
-import { RouteParams } from "@/types/routeParams";
 import { getErrorMessage } from "@/utils/errors";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
