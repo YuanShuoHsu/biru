@@ -1,7 +1,7 @@
-import { LocaleCode } from "./locale";
-import { OrderMode } from "./orderMode";
-import { StoreId } from "./stores";
-import { TableNumber } from "./tableNumbers";
+import type { LocaleCode } from "./locale";
+import type { OrderMode } from "./orderMode";
+import type { StoreId } from "./stores";
+import type { TableNumber } from "./tableNumbers";
 
 interface RouteParam {
   lang: LocaleCode;

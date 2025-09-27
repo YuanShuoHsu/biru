@@ -1,6 +1,8 @@
 // https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range
 
-import { TABLE_NUMBERS } from "@/constants/tableNumbers";
+import { StoreId } from "./stores";
+
+import { tableNumbers } from "@/constants/tableNumbers";
 
 type Enumerate<
   N extends number,
@@ -13,4 +15,6 @@ type IntRange<F extends number, T extends number> =
   | Exclude<Enumerate<T>, Enumerate<F>>
   | T;
 
-export type TableNumber = `${IntRange<0, typeof TABLE_NUMBERS>}`;
+export type TableNumber = {
+  [Store in StoreId]: `${IntRange<1, (typeof tableNumbers)[Store]>}`;
+}[StoreId];
