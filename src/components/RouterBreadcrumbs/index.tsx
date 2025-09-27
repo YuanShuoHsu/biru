@@ -3,6 +3,7 @@
 
 import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import useSWR from "swr";
 
 import { I18nDict, useI18n } from "@/context/i18n";
 
@@ -29,7 +30,7 @@ import { styled } from "@mui/material/styles";
 import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { StoreId } from "@/types/stores";
+import type { Store, StoreId } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
@@ -45,15 +46,14 @@ interface BreadcrumbItem {
 
 const breadcrumbsMap = (
   dict: I18nDict,
-  lang: LocaleCode,
   mode: OrderMode,
   storeId: StoreId,
   tableNumber: TableNumber,
+  storeName: Store["name"][LocaleCode],
 ): BreadcrumbItem[] => {
   const orderModePath = `/order/${mode}`;
   const isDineIn = mode === ORDER_MODE.DineIn;
   const isPickup = mode === ORDER_MODE.Pickup && tableNumber === "0";
-  const storeName = getStoreName(lang, storeId);
 
   return [
     {
@@ -217,13 +217,22 @@ const findHiddenTo = (
 };
 
 const RouterBreadcrumbs = () => {
-  const pathname = usePathname();
   const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
 
-  const pathnames = pathname.split("/").filter((x) => x && x !== lang);
+  const { data = [] } = useSWR<Store[]>("/api/stores");
+  const storeName = getStoreName(data, lang, storeId);
 
   const dict = useI18n();
-  const breadcrumbs = breadcrumbsMap(dict, lang, mode, storeId, tableNumber);
+  const breadcrumbs = breadcrumbsMap(
+    dict,
+    mode,
+    storeId,
+    tableNumber,
+    storeName,
+  );
+
+  const pathname = usePathname();
+  const pathnames = pathname.split("/").filter((x) => x && x !== lang);
 
   const segments = pathnames.flatMap((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");

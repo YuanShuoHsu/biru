@@ -4,6 +4,7 @@
 
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
+import useSWR from "swr";
 
 import { I18nDict, useI18n } from "@/context/i18n";
 
@@ -40,7 +41,7 @@ import type { DrawerType } from "@/types/drawer";
 import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { StoreId } from "@/types/stores";
+import type { Store } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
@@ -128,23 +129,21 @@ const navItemsMap = (dict: I18nDict): NavItem[] => [
 
 interface SlotProps {
   dict: I18nDict;
-  lang: LocaleCode;
   level: number;
   onClick: () => void;
   selected: boolean;
-  storeId: StoreId;
   tableNumber: TableNumber;
+  storeName: Store["name"][LocaleCode];
 }
 
 const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
   [ORDER_MODE.DineIn]: ({
     dict,
-    lang,
     level,
     onClick,
     selected,
-    storeId,
     tableNumber,
+    storeName,
   }) => (
     <StyledListItemButton level={level} onClick={onClick} selected={selected}>
       <Stack
@@ -160,7 +159,7 @@ const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
             <ListItemIcon>
               <Storefront />
             </ListItemIcon>
-            <ListItemText primary={getStoreName(lang, storeId)} />
+            <ListItemText primary={storeName} />
           </Stack>
           <Stack flexDirection="row" alignItems="center">
             <ListItemIcon>
@@ -227,6 +226,8 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
+  const { data = [] } = useSWR<Store[]>("/api/stores");
+
   const pathname = usePathname();
   const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
   const router = useRouter();
@@ -248,6 +249,8 @@ const NavTemporaryDrawer = ({
         const selected = mode === slot;
         if (!selected) return null;
 
+        const storeName = getStoreName(data, lang, storeId);
+
         const handleClick = () =>
           router.push(`/${lang}/order/${mode}/${storeId}/${tableNumber}`);
 
@@ -255,12 +258,11 @@ const NavTemporaryDrawer = ({
           <SlotComponent
             dict={dict}
             key={`${slot}-${level}`}
-            lang={lang}
             level={level}
             onClick={handleClick}
             selected={selected}
-            storeId={storeId}
             tableNumber={tableNumber}
+            storeName={storeName}
           />
         );
       }

@@ -24,7 +24,11 @@ export const stores: Store[] = [
   },
 ] as const;
 
-export const getStoreName = (lang: LocaleCode, storeId: StoreId) => {
+export const getStoreName = (
+  stores: Store[],
+  lang: LocaleCode,
+  storeId: StoreId,
+): Store["name"][LocaleCode] => {
   const store = stores.find(({ id }) => id === storeId);
   if (!store) return storeId;
 
