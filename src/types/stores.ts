@@ -1,8 +1,10 @@
-import { LocaleCode } from "./locale";
+import type { LocaleCode, LocalizedText } from "./locale";
 
 export interface Store {
   id: string;
-  name: Record<LocaleCode, string>;
+  name: LocalizedText;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type StoreId = Store["id"];

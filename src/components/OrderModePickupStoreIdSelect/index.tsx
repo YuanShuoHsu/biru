@@ -14,7 +14,7 @@ const OrderModePickupStoreIdSelect = () => {
   const { lang, mode, storeId } = useParams<RouteParams>();
   const router = useRouter();
 
-  const { data } = useSWR<Store[]>("/api/stores");
+  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const dict = useI18n();
 
@@ -34,7 +34,7 @@ const OrderModePickupStoreIdSelect = () => {
       size="small"
       value={storeId || ""}
     >
-      {data?.map(({ id, name }) => (
+      {stores.map(({ id, name }) => (
         <MenuItem key={id} value={id}>
           {name[lang]}
         </MenuItem>

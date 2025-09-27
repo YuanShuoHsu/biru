@@ -1,6 +1,4 @@
-import { LocaleCode } from "./locale";
-
-type LocalizedText = Record<LocaleCode, string>;
+import { LocalizedText } from "./locale";
 
 interface RecipeItem {
   id: string;

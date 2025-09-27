@@ -217,7 +217,7 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
-  const { data = [] } = useSWR<Store[]>("/api/stores");
+  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const pathname = usePathname();
   const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
@@ -237,7 +237,7 @@ const NavTemporaryDrawer = ({
         const SlotComponent = slots[mode];
         if (!SlotComponent) return null;
 
-        const storeName = getStoreName(data, lang, storeId);
+        const storeName = getStoreName(stores, lang, storeId);
 
         const handleClick = () => {
           if (!storeId || !tableNumber) return;
