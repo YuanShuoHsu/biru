@@ -234,7 +234,7 @@ const NavTemporaryDrawer = ({
     items.map((item) => {
       if ("slot" in item) {
         const { slot } = item;
-        const SlotComponent = slots[slot];
+        const SlotComponent = slots[mode];
         if (!SlotComponent) return null;
 
         const storeName = getStoreName(data, lang, storeId);
