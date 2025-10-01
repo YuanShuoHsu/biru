@@ -220,7 +220,7 @@ const NavTemporaryDrawer = ({
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
   const router = useRouter();
 
   const dict = useI18n();
@@ -237,12 +237,12 @@ const NavTemporaryDrawer = ({
         const SlotComponent = slots[mode];
         if (!SlotComponent) return null;
 
-        const storeName = getStoreName(stores, lang, storeId);
+        const storeName = getStoreName(stores, lang, storeSlug);
 
         const handleClick = () => {
-          if (!storeId || !tableNumber) return;
+          if (!storeSlug || !tableNumber) return;
 
-          router.push(`/${lang}/order/${mode}/${storeId}/${tableNumber}`);
+          router.push(`/${lang}/order/${mode}/${storeSlug}/${tableNumber}`);
         };
 
         return (

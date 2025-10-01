@@ -61,10 +61,10 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
   const pathname = usePathname();
   const isOrderPage =
-    pathname === `/${lang}/orde/${mode}/${storeId}/${tableNumber}`;
+    pathname === `/${lang}/orde/${mode}/${storeSlug}/${tableNumber}`;
 
   const dict = useI18n();
 
@@ -94,7 +94,7 @@ const CustomizedTabs = () => {
       ? {
           id: TOP_SOLD,
           items: topSoldItems,
-          label: dict.order.mode.storeId.tableNumber.topSold,
+          label: dict.order.mode.storeSlug.tableNumber.topSold,
         }
       : null;
 
@@ -108,7 +108,7 @@ const CustomizedTabs = () => {
       ? {
           id: LATEST,
           items: latestItems,
-          label: dict.order.mode.storeId.tableNumber.latest,
+          label: dict.order.mode.storeSlug.tableNumber.latest,
         }
       : null;
 

@@ -5,8 +5,8 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
-const OrderModeStoreIdTableNumberComplete = () => {
-  const { tableNumber, lang } = useParams();
+const OrderModeStoreSlugTableNumberComplete = () => {
+  const { lang, tableNumber } = useParams();
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -64,4 +64,4 @@ const OrderModeStoreIdTableNumberComplete = () => {
   );
 };
 
-export default OrderModeStoreIdTableNumberComplete;
+export default OrderModeStoreSlugTableNumberComplete;

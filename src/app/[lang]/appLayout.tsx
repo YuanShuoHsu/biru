@@ -32,12 +32,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     nav: false,
   });
 
-  const { lang, mode, storeId, tableNumber } = useParams();
+  const { lang, mode, storeSlug, tableNumber } = useParams();
   const pathname = usePathname();
 
   const isHome = pathname === `/${lang}`;
   const isOrderPage =
-    pathname === `/${lang}/order/${mode}/${storeId}/${tableNumber}`;
+    pathname === `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
 
   const handleDrawerToggle =
     (type: DrawerType, open: boolean) =>

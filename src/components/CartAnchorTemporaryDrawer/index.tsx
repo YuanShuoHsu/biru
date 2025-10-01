@@ -61,14 +61,14 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
 
   const dict = useI18n();
 
   const { isCartEmpty, cartTotalAmount } = useCartStore();
 
   const pathname = usePathname();
-  const dineInPath = `/${lang}/order/${mode}/${storeId}/${tableNumber}`;
+  const dineInPath = `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
   const checkoutPath = `${dineInPath}/checkout`;
   const isCheckoutPage = pathname === checkoutPath;
 

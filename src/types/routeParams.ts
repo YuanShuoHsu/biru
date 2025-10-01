@@ -1,12 +1,12 @@
 import type { LocaleCode } from "./locale";
 import type { OrderMode } from "./orderMode";
-import type { StoreId } from "./stores";
+import type { StoreSlug } from "./stores";
 import type { TableNumber } from "./tableNumbers";
 
 interface RouteParam {
   lang: LocaleCode;
   mode: OrderMode;
-  storeId: StoreId;
+  storeSlug: StoreSlug;
   tableNumber: TableNumber;
 }
 

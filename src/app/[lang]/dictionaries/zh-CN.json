@@ -72,9 +72,9 @@
       "dineIn": { "label": "堂食" },
       "pickup": {
         "label": "自取",
-        "selectStoreId": "选择门店"
+        "selectStoreSlug": "选择门店"
       },
-      "storeId": {
+      "storeSlug": {
         "selectTable": "选择桌号",
         "tableNumber": {
           "latest": "新品上架",

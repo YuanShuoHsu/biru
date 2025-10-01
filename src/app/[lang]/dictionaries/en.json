@@ -72,9 +72,9 @@
       "dineIn": { "label": "Dine-in" },
       "pickup": {
         "label": "Pickup",
-        "selectStoreId": "Select a store"
+        "selectStoreSlug": "Select a store"
       },
-      "storeId": {
+      "storeSlug": {
         "selectTable": "Select a table",
         "tableNumber": {
           "latest": "New Arrivals",

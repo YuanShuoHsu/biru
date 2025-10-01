@@ -11,17 +11,17 @@ import { styled } from "@mui/material/styles";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { StoreId } from "@/types/stores";
+import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 const createStepPathMap = (
   mode: OrderMode,
-  storeId: StoreId,
+  storeSlug: StoreSlug,
   tableNumber: TableNumber,
 ): string[] => [
-  `/order/${mode}/${storeId}/${tableNumber}`,
-  `/order/${mode}/${storeId}/${tableNumber}/checkout`,
-  `/order/${mode}/${storeId}/${tableNumber}/complete`,
+  `/order/${mode}/${storeSlug}/${tableNumber}`,
+  `/order/${mode}/${storeSlug}/${tableNumber}/checkout`,
+  `/order/${mode}/${storeSlug}/${tableNumber}/complete`,
 ];
 
 const StyledStepper = styled(Stepper)(({ theme }) => ({
@@ -46,19 +46,19 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
 
 const HorizontalLinearStepper = () => {
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
 
   const dict = useI18n();
 
-  const stepPaths = createStepPathMap(mode, storeId, tableNumber);
+  const stepPaths = createStepPathMap(mode, storeSlug, tableNumber);
   const activeStep = stepPaths.findIndex(
     (path) => pathname === `/${lang}${path}`,
   );
 
   const steps = [
     dict.order.label,
-    dict.order.mode.storeId.tableNumber.stepper.checkout.label,
-    dict.order.mode.storeId.tableNumber.stepper.complete.label,
+    dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
+    dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
   ];
 
   return (

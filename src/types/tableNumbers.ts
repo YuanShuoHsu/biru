@@ -1,6 +1,6 @@
 // https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range
 
-import { StoreId } from "./stores";
+import { StoreSlug } from "./stores";
 
 import { tableNumbers } from "@/constants/tableNumbers";
 
@@ -16,5 +16,5 @@ type IntRange<F extends number, T extends number> =
   | T;
 
 export type TableNumber = {
-  [Store in StoreId]: `${IntRange<1, (typeof tableNumbers)[Store]>}`;
-}[StoreId];
+  [Store in StoreSlug]: `${IntRange<1, (typeof tableNumbers)[Store]>}`;
+}[StoreSlug];

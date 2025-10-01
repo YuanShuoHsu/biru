@@ -74,9 +74,9 @@
       },
       "pickup": {
         "label": "外帶自取",
-        "selectStoreId": "選擇門市"
+        "selectStoreSlug": "選擇門市"
       },
-      "storeId": {
+      "storeSlug": {
         "selectTable": "選擇桌號",
         "tableNumber": {
           "latest": "新品上架",

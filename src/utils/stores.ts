@@ -1,5 +1,5 @@
 import type { LocaleCode } from "@/types/locale";
-import type { Store, StoreId, StoreName } from "@/types/stores";
+import type { Store, StoreName, StoreSlug } from "@/types/stores";
 
 // export const stores: Store[] = [
 //   {
@@ -27,10 +27,10 @@ import type { Store, StoreId, StoreName } from "@/types/stores";
 export const getStoreName = (
   stores: Store[],
   lang: LocaleCode,
-  storeId: StoreId,
+  storeSlug: StoreSlug,
 ): StoreName => {
-  const store = stores.find(({ id }) => id === storeId);
-  if (!store) return storeId;
+  const store = stores.find(({ slug }) => slug === storeSlug);
+  if (!store) return storeSlug;
 
   return store.name[lang];
 };

@@ -72,9 +72,9 @@
       "dineIn": { "label": "매장 식사" },
       "pickup": {
         "label": "포장 수령",
-        "selectStoreId": "지점 선택"
+        "selectStoreSlug": "지점 선택"
       },
-      "storeId": {
+      "storeSlug": {
         "selectTable": "테이블 선택",
         "tableNumber": {
           "latest": "신상품",

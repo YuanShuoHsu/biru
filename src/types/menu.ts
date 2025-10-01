@@ -3,30 +3,36 @@ import { LocalizedText } from "./locale";
 interface RecipeItem {
   id: string;
   name: LocalizedText;
+  createdAt: string;
   unit: LocalizedText;
   usage: number;
+  updatedAt: string;
 }
 
-export interface Choice {
+interface Choice {
   id: string;
   name: LocalizedText;
+  createdAt: string;
   extraCost: number;
   isActive: boolean;
   isShared: boolean;
   recipes: RecipeItem[];
   sold: number;
   stock: number | null;
+  updatedAt: string;
 }
 
-export interface Option {
+interface Option {
   id: string;
   name: LocalizedText;
   choices: Choice[];
+  createdAt: string;
   multiple: boolean;
   required: boolean;
+  updatedAt: string;
 }
 
-export interface MenuItem {
+interface MenuItem {
   id: string;
   name: LocalizedText;
   createdAt: string;
@@ -38,10 +44,13 @@ export interface MenuItem {
   recipes: RecipeItem[];
   sold: number;
   stock: number | null;
+  updatedAt: string;
 }
 
-export interface Category {
+export interface Menu {
   id: string;
   name: LocalizedText;
+  createdAt: string;
   items: MenuItem[];
+  updatedAt: string;
 }

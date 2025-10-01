@@ -3,28 +3,28 @@ import { notFound } from "next/navigation";
 import { tableNumbers } from "@/constants/tableNumbers";
 
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
-import type { StoreId } from "@/types/stores";
+import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-interface OrderModeStoreIdTableNumberLayoutProps {
+interface OrderModeStoreSlugTableNumberLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     mode: OrderMode;
-    storeId: StoreId;
+    storeSlug: StoreSlug;
     tableNumber: TableNumber;
   }>;
 }
 
-const OrderModeStoreIdTableNumberLayout = async ({
+const OrderModeStoreSlugTableNumberLayout = async ({
   children,
   params,
-}: OrderModeStoreIdTableNumberLayoutProps) => {
-  const { mode, storeId, tableNumber } = await params;
+}: OrderModeStoreSlugTableNumberLayoutProps) => {
+  const { mode, storeSlug, tableNumber } = await params;
 
   const isValidFormat = /^(0|[1-9]\d*)$/.test(tableNumber);
   if (!isValidFormat) return notFound();
 
-  const maxTableNumbers = tableNumbers[storeId];
+  const maxTableNumbers = tableNumbers[storeSlug];
   const number = Number(tableNumber);
 
   const isDineIn =
@@ -37,4 +37,4 @@ const OrderModeStoreIdTableNumberLayout = async ({
   return <>{children}</>;
 };
 
-export default OrderModeStoreIdTableNumberLayout;
+export default OrderModeStoreSlugTableNumberLayout;

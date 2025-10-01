@@ -30,7 +30,7 @@ import { styled } from "@mui/material/styles";
 import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
-import type { Store, StoreId, StoreName } from "@/types/stores";
+import type { Store, StoreName, StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 import { getStoreName } from "@/utils/stores";
@@ -47,7 +47,7 @@ interface BreadcrumbItem {
 const breadcrumbsMap = (
   dict: I18nDict,
   mode: OrderMode,
-  storeId: StoreId,
+  storeSlug: StoreSlug,
   tableNumber: TableNumber,
   storeName: StoreName,
 ): BreadcrumbItem[] => {
@@ -105,28 +105,28 @@ const breadcrumbsMap = (
                     {
                       icon: Payment,
                       label:
-                        dict.order.mode.storeId.tableNumber.stepper.checkout
+                        dict.order.mode.storeSlug.tableNumber.stepper.checkout
                           .label,
-                      to: `${orderModePath}/${storeId}/${tableNumber}/checkout`,
+                      to: `${orderModePath}/${storeSlug}/${tableNumber}/checkout`,
                     },
                     {
                       icon: Pets,
                       label:
-                        dict.order.mode.storeId.tableNumber.stepper.complete
+                        dict.order.mode.storeSlug.tableNumber.stepper.complete
                           .label,
-                      to: `${orderModePath}/${storeId}/${tableNumber}/complete`,
+                      to: `${orderModePath}/${storeSlug}/${tableNumber}/complete`,
                     },
                   ],
                   hidden: isPickup,
                   icon: isPickup ? () => null : TableBar,
                   label: isPickup ? "" : String(tableNumber),
-                  to: `${orderModePath}/${storeId}/${tableNumber}`,
+                  to: `${orderModePath}/${storeSlug}/${tableNumber}`,
                 },
               ],
               disabled: isDineIn ? true : false,
               icon: Storefront,
               label: storeName,
-              to: `${orderModePath}/${storeId}`,
+              to: `${orderModePath}/${storeSlug}`,
             },
           ],
           disabled: isDineIn ? true : false,
@@ -217,16 +217,16 @@ const findHiddenTo = (
 };
 
 const RouterBreadcrumbs = () => {
-  const { lang, mode, storeId, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
-  const storeName = getStoreName(stores, lang, storeId);
+  const storeName = getStoreName(stores, lang, storeSlug);
 
   const dict = useI18n();
   const breadcrumbs = breadcrumbsMap(
     dict,
     mode,
-    storeId,
+    storeSlug,
     tableNumber,
     storeName,
   );

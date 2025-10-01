@@ -60,13 +60,13 @@ interface HideAppBarProps {
 
 const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
-  const { lang, mode, storeId, tableNumber } = useParams();
+  const { lang, mode, storeSlug, tableNumber } = useParams();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
-  const basePath = `/${lang}/order/${mode}/${storeId}/${tableNumber}`;
+  const basePath = `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
   const showShoppingCartButton =
     pathname === basePath || pathname === `${basePath}/checkout`;
 

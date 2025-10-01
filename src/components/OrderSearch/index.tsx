@@ -40,7 +40,7 @@ const OrderSearch = () => {
     <TextField
       fullWidth
       onChange={handleChange}
-      placeholder={dict.order.mode.storeId.tableNumber.search.placeholder}
+      placeholder={dict.order.mode.storeSlug.tableNumber.search.placeholder}
       slotProps={{
         input: {
           startAdornment: (

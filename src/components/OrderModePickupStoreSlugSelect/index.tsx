@@ -10,8 +10,8 @@ import { MenuItem, TextField } from "@mui/material";
 import type { RouteParams } from "@/types/routeParams";
 import { Store } from "@/types/stores";
 
-const OrderModePickupStoreIdSelect = () => {
-  const { lang, mode, storeId } = useParams<RouteParams>();
+const OrderModePickupStoreSlugSelect = () => {
+  const { lang, mode, storeSlug } = useParams<RouteParams>();
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
@@ -23,19 +23,19 @@ const OrderModePickupStoreIdSelect = () => {
 
   return (
     <TextField
-      // error={!!state?.errors?.storeId}
+      // error={!!state?.errors?.storeSlug}
       fullWidth
-      // helperText={state?.errors?.storeId}
-      label={dict.order.mode.pickup.selectStoreId}
-      name="storeId"
+      // helperText={state?.errors?.storeSlug}
+      label={dict.order.mode.pickup.selectStoreSlug}
+      name="storeSlug"
       onChange={handleChange}
       required
       select
       size="small"
-      value={storeId || ""}
+      value={storeSlug || ""}
     >
-      {stores.map(({ id, name }) => (
-        <MenuItem key={id} value={id}>
+      {stores.map(({ id, name, slug }) => (
+        <MenuItem key={id} value={slug}>
           {name[lang]}
         </MenuItem>
       ))}
@@ -43,4 +43,4 @@ const OrderModePickupStoreIdSelect = () => {
   );
 };
 
-export default OrderModePickupStoreIdSelect;
+export default OrderModePickupStoreSlugSelect;
