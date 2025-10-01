@@ -34,10 +34,10 @@ export const metadata: Metadata = {
 export async function generateStaticParams() {
   return [
     { lang: "zh-TW" },
-    { lang: "zh-CN" },
     { lang: "en" },
     { lang: "ja" },
     { lang: "ko" },
+    { lang: "zh-CN" },
   ];
 }
 
