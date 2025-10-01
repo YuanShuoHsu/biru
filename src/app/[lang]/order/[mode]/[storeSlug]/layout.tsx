@@ -1,7 +1,8 @@
+import { notFound } from "next/navigation";
+
 import type { Store, StoreSlug } from "@/types/stores";
 
 import { fetcher } from "@/utils/fetcher";
-import { notFound } from "next/navigation";
 
 interface OrderModeStoreSlugLayoutProps {
   children: React.ReactNode;
