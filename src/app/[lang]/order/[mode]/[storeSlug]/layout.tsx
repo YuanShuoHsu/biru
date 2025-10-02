@@ -15,9 +15,7 @@ const OrderModeStoreSlugLayout = async ({
 }: OrderModeStoreSlugLayoutProps) => {
   const { storeSlug } = await params;
 
-  const data = await fetcher<Store[]>(
-    `${process.env.NEXT_PUBLIC_NEST_URL}/api/stores`,
-  );
+  const data = await fetcher<Store[]>("/stores");
 
   const hasStore = data.some(({ slug }) => slug === storeSlug);
   if (!hasStore) return notFound();

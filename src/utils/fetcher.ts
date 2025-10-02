@@ -13,11 +13,13 @@ interface FetchError extends Error {
   status: number;
 }
 
+const BASE_URL = `${process.env.NEXT_PUBLIC_NEST_URL}/api`;
+
 export const fetcher = async <T = unknown>(
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<T> => {
-  const res = await fetch(input, init);
+  const res = await fetch(`${BASE_URL}${input}`, init);
 
   if (!res.ok) {
     const error = new Error(
