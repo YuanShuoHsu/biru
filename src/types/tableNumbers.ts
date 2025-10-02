@@ -1,6 +1,6 @@
 // https://stackoverflow.com/questions/39494689/is-it-possible-to-restrict-number-to-a-certain-range
 
-import { StoreSlug } from "./stores";
+import type { StoreSlug } from "./stores";
 
 import { tableNumbers } from "@/constants/tableNumbers";
 

@@ -51,8 +51,8 @@ export default async function RootLayout({
   const { lang } = await params;
   const dict = await getDictionary(lang);
 
-  const data = await fetcher("/stores");
-  const fallback = { "/stores": data };
+  const data = await fetcher("/api/stores");
+  const fallback = { "/api/stores": data };
 
   return (
     <html lang={lang} suppressHydrationWarning>
