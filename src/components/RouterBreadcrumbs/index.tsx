@@ -219,7 +219,7 @@ const findHiddenTo = (
 const RouterBreadcrumbs = () => {
   const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const { data: stores = [] } = useSWR<Store[]>("/stores");
   const storeName = getStoreName(stores, lang, storeSlug);
 
   const dict = useI18n();

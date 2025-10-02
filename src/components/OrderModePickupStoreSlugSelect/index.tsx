@@ -14,7 +14,7 @@ const OrderModePickupStoreSlugSelect = () => {
   const { lang, mode, storeSlug } = useParams<RouteParams>();
   const router = useRouter();
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const { data: stores = [] } = useSWR<Store[]>("/stores");
 
   const dict = useI18n();
 

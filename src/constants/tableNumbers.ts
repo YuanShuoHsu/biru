@@ -1,4 +1,4 @@
-import { StoreSlug } from "@/types/stores";
+import type { StoreSlug } from "@/types/stores";
 
 export const tableNumbers: Record<StoreSlug, number> = {
   aerotropolis: 25,
