@@ -1,5 +1,7 @@
 // https://swr.vercel.app/docs/mutation
 // https://swr.vercel.app/docs/error-handling
+// https://github.com/vercel/swr/discussions/939
+// https://github.com/vercel/swr/blob/main/examples/basic-typescript/libs/fetch.ts
 
 interface ErrorInfo {
   message: string;
@@ -12,10 +14,10 @@ interface FetchError extends Error {
 }
 
 export const fetcher = async <T = unknown>(
-  url: string,
-  options?: RequestInit,
+  input: RequestInfo,
+  init?: RequestInit,
 ): Promise<T> => {
-  const res = await fetch(url, options);
+  const res = await fetch(input, init);
 
   if (!res.ok) {
     const error = new Error(
