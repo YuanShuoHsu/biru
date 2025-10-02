@@ -52,7 +52,7 @@ export default async function RootLayout({
   const dict = await getDictionary(lang);
 
   const data = await fetcher("/stores");
-  const fallback = { "/api/stores": data };
+  const fallback = { "/stores": data };
 
   return (
     <html lang={lang} suppressHydrationWarning>

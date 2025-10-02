@@ -217,7 +217,7 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const { data: stores = [] } = useSWR<Store[]>("/stores");
 
   const pathname = usePathname();
   const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
