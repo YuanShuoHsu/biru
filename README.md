@@ -4,6 +4,7 @@
 
 ```bash
 # https://mui.com/material-ui/customization/color/
+
 唇 霞染胭脂 pink[100] (#f8bbd0) 粉
 大橘為重 暖陽淺橘 orange[100] (#ffe0b2) 橘
 身側 羽柔暖棕 brown[200] (#bcaaa4) 淺棕
@@ -17,18 +18,12 @@
 
 ```bash
 # https://nextjs.org/docs/app/getting-started/installation
-npx create-next-app@latest
-✔ What is your project named? … biru
-✔ Would you like to use TypeScript? … Yes
-✔ Would you like to use ESLint? … Yes
-✔ Would you like to use Tailwind CSS? … Yes
-✔ Would you like your code inside a `src/` directory? … Yes
-✔ Would you like to use App Router? (recommended) … Yes
-✔ Would you like to use Turbopack for `next dev`? … Yes
-✔ Would you like to customize the import alias (`@/*` by default)? … No
+
+pnpm create next-app@latest biru --yes
+
 Creating a new Next.js app in /Users/xuyuanshi/Desktop/biru.
 
-Using npm.
+Using pnpm.
 
 Initializing project with template: app-tw
 
@@ -46,7 +41,28 @@ Installing devDependencies:
 - tailwindcss
 - eslint
 - eslint-config-next
-- @eslint/eslintrc
+
+dependencies:
++ next 16.0.1
++ react 19.2.0
++ react-dom 19.2.0
+
+devDependencies:
++ @tailwindcss/postcss 4.1.16
++ @types/node 20.19.24 (24.9.2 is available)
++ @types/react 19.2.2
++ @types/react-dom 19.2.2
++ eslint 9.38.0
++ eslint-config-next 16.0.1
++ tailwindcss 4.1.16
++ typescript 5.9.3
+
+Done in 6.6s using pnpm v10.20.0
+
+Generating route types...
+✓ Route types generated successfully
+
+Success! Created biru at /Users/xuyuanshi/Desktop/biru
 ```
 
 ## Prettier
@@ -81,31 +97,48 @@ npx prettier . --check
     "source.organizeImports": "always"
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true
 }
 ```
 
-## eslint
+## ESLint
 
 ```bash
 # https://nextjs.org/docs/app/api-reference/config/eslint
-pnpm add --save-dev eslint-config-prettier
+pnpm add -D eslint-config-prettier
 
-# eslint.config.mjs
-import { FlatCompat } from '@eslint/eslintrc'
+import { defineConfig, globalIgnores } from 'eslint/config'
+import nextVitals from 'eslint-config-next/core-web-vitals'
+import prettier from 'eslint-config-prettier/flat'
 
-const compat = new FlatCompat({
-  // import.meta.dirname is available after Node.js v20.11.0
-  baseDirectory: import.meta.dirname,
-})
-
-const eslintConfig = [
-  ...compat.config({
-    extends: ['next', 'prettier'],
-  }),
-]
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  prettier,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    '.next/**',
+    'out/**',
+    'build/**',
+    'next-env.d.ts',
+  ]),
+])
 
 export default eslintConfig
+
+# .lintstagedrc.js
+const path = require('path')
+
+const buildEslintCommand = (filenames) =>
+  `eslint --fix ${filenames
+    .map((f) => `"${path.relative(process.cwd(), f)}"`)
+    .join(' ')}`
+
+module.exports = {
+  '*.{js,jsx,ts,tsx}': [buildEslintCommand],
+}
 ```
 
 ## Git hooks
@@ -121,30 +154,6 @@ node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
     "**/*": "prettier --write --ignore-unknown"
   }
 }
-
-# https://nextjs.org/docs/app/api-reference/config/eslint
-# .lintstagedrc.js
-const path = require('path')
-
-const buildEslintCommand = (filenames) =>
-  `next lint --fix --file ${filenames
-    .map((f) => path.relative(process.cwd(), f))
-    .join(' --file ')}`
-
-module.exports = {
-  '*.{js,jsx,ts,tsx}': [buildEslintCommand],
-}
-
-# eslint.config.mjs
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript", "prettier"),
-  {
-    files: ['.lintstagedrc.js'],
-    rules: {
-      '@typescript-eslint/no-require-imports': 'off',
-    },
-  },
-];
 ```
 
 ## Material UI
