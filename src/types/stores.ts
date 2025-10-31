@@ -3,9 +3,10 @@ import type { LocaleCode, LocalizedText } from "./locale";
 export interface Store {
   id: string;
   name: LocalizedText;
-  createdAt: string;
+  createdAt: Date;
+  isActive: boolean;
   slug: string;
-  updatedAt: string;
+  updatedAt: Date;
 }
 
 export type StoreSlug = Store["slug"];

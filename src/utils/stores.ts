@@ -4,8 +4,10 @@ import type { Store, StoreName, StoreSlug } from "@/types/stores";
 export const getStoreName = (
   stores: Store[],
   lang: LocaleCode,
-  storeSlug: StoreSlug,
+  storeSlug?: StoreSlug,
 ): StoreName => {
+  if (!storeSlug) return "";
+
   const store = stores.find(({ slug }) => slug === storeSlug);
   if (!store) return storeSlug;
 
