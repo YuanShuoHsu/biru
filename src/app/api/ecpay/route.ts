@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export const POST = async (request: NextRequest) => {
   try {
     const base = process.env.NEXT_PUBLIC_NEST_URL;
     const { pathname } = new URL(request.url);
@@ -25,4 +25,4 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
-}
+};

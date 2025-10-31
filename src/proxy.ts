@@ -21,66 +21,31 @@ const getLocale = (request: NextRequest) => {
   return match(languages, locales, defaultLocale);
 };
 
-export function proxy(request: NextRequest) {
+export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
+
   const pathnameHasLocale = locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
-
-  if (pathnameHasLocale) return;
-  // if (pathnameHasLocale) {
-  //   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
-  //   const maintenanceBase = `/${locale}/maintenance`;
-  //   const isMaintenancePath =
-  //     pathname.startsWith(`${maintenanceBase}/`) ||
-  //     pathname === maintenanceBase;
-
-  //   if (isMaintenanceMode !== isMaintenancePath) {
-  //     request.nextUrl.pathname = isMaintenanceMode
-  //       ? maintenanceBase
-  //       : `/${locale}`;
-
-  //     return NextResponse.redirect(request.nextUrl);
-  //   }
-
-  //   return NextResponse.next();
-  // }
+  const pathnameLocale = locales.find(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
+  );
 
   const locale = getLocale(request);
+
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+  if (isMaintenanceMode) {
+    if (pathnameLocale && pathname === `/${pathnameLocale}/maintenance`) return;
+
+    request.nextUrl.pathname = `/${pathnameLocale || locale}/maintenance`;
+    return NextResponse.redirect(request.nextUrl);
+  }
+
+  if (pathnameHasLocale) return;
+
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
-}
-
-// export const middleware = (request: NextRequest) => {
-//   const { pathname } = request.nextUrl;
-
-//   const pathnameHasLocale = locales.some(
-//     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
-//   );
-
-//   const locale = getLocale(request);
-
-//   if (pathnameHasLocale) {
-//     const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
-//     const maintenanceBase = `/${locale}/maintenance`;
-//     const isMaintenancePath =
-//       pathname.startsWith(`${maintenanceBase}/`) ||
-//       pathname === maintenanceBase;
-
-//     if (isMaintenanceMode !== isMaintenancePath) {
-//       request.nextUrl.pathname = isMaintenanceMode
-//         ? maintenanceBase
-//         : `/${locale}`;
-
-//       return NextResponse.redirect(request.nextUrl);
-//     }
-
-//     return NextResponse.next();
-//   }
-
-//   request.nextUrl.pathname = `/${locale}${pathname}`;
-//   return NextResponse.redirect(request.nextUrl);
-// };
+};
 
 export const config = {
   matcher: [
