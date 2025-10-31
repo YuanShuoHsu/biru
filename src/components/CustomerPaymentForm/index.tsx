@@ -32,17 +32,15 @@ import type { RouteParams } from "@/types/routeParams";
 import { getErrorMessage } from "@/utils/errors";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
-const mapToEcpayLanguage = (() => {
-  const map: Record<LocaleCode, EcpayLanguage> = {
-    "zh-TW": "",
-    en: "ENG",
-    ja: "JPN",
-    ko: "KOR",
-    "zh-CN": "CHI",
-  };
+const langMap: Record<LocaleCode, EcpayLanguage> = {
+  "zh-TW": "",
+  en: "ENG",
+  ja: "JPN",
+  ko: "KOR",
+  "zh-CN": "CHI",
+};
 
-  return (locale: LocaleCode): EcpayLanguage => map[locale];
-})();
+const getEcpayLanguage = (locale: LocaleCode): EcpayLanguage => langMap[locale];
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
   fetch(url, {
@@ -117,7 +115,7 @@ const CustomerPaymentForm = () => {
         ClientBackURL: completeUrl,
         OrderResultURL: completeUrl,
         NeedExtraPaidInfo: "Y" as const,
-        Language: mapToEcpayLanguage(lang),
+        Language: getEcpayLanguage(lang),
       },
     };
 

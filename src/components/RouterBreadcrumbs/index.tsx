@@ -5,7 +5,7 @@ import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
-import { I18nDict, useI18n } from "@/context/i18n";
+import { type I18nDict, useI18n } from "@/context/i18n";
 
 import {
   AccountCircle,

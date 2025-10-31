@@ -10,6 +10,8 @@ import AppLayout from "./appLayout";
 import { getDictionary } from "./dictionaries";
 import Providers from "./providers";
 
+import { locales } from "@/constants/locale";
+
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
 import type { LocaleCode } from "@/types/locale";
@@ -32,13 +34,7 @@ export const metadata: Metadata = {
 };
 
 export async function generateStaticParams() {
-  return [
-    { lang: "zh-TW" },
-    { lang: "en" },
-    { lang: "ja" },
-    { lang: "ko" },
-    { lang: "zh-CN" },
-  ];
+  return locales.map((lang) => ({ lang }));
 }
 
 export default async function RootLayout({
@@ -46,16 +42,22 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: Promise<{ lang: LocaleCode }>;
+  params: Promise<{
+    lang: string;
+    // lang: LocaleCode
+  }>;
 }>) {
   const { lang } = await params;
-  const dict = await getDictionary(lang);
+  const langCode = lang as LocaleCode;
+  const dict = await getDictionary(langCode);
+  // const dict = await getDictionary(lang);
 
   const data = await fetcher("/api/stores");
   const fallback = { "/api/stores": data };
 
   return (
-    <html lang={lang} suppressHydrationWarning>
+    <html lang={langCode} suppressHydrationWarning>
+      {/* <html lang={lang} suppressHydrationWarning> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

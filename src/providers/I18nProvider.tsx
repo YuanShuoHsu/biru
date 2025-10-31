@@ -1,4 +1,4 @@
-import I18nContext, { I18nDict } from "@/context/i18n";
+import I18nContext, { type I18nDict } from "@/context/i18n";
 
 interface I18nProviderProps {
   children: React.ReactNode;

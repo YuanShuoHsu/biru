@@ -2,16 +2,20 @@ import { notFound } from "next/navigation";
 
 import { tableNumbers } from "@/constants/tableNumbers";
 
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
-import type { StoreSlug } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
+import { ORDER_MODE } from "@/types/orderMode";
+// import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+// import type { StoreSlug } from "@/types/stores";
+// import type { TableNumber } from "@/types/tableNumbers";
 
 interface OrderModeStoreSlugTableNumberLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    mode: OrderMode;
-    storeSlug: StoreSlug;
-    tableNumber: TableNumber;
+    mode: string;
+    storeSlug: string;
+    tableNumber: string;
+    // mode: OrderMode;
+    // storeSlug: StoreSlug;
+    // tableNumber: TableNumber;
   }>;
 }
 

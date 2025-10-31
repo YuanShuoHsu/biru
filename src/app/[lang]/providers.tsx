@@ -5,7 +5,7 @@
 import { SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
-import { I18nDict } from "@/context/i18n";
+import type { I18nDict } from "@/context/i18n";
 
 import { CssBaseline } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";

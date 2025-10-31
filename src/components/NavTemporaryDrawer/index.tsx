@@ -6,7 +6,7 @@ import { useParams, usePathname, useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
-import { I18nDict, useI18n } from "@/context/i18n";
+import { type I18nDict, useI18n } from "@/context/i18n";
 
 import {
   AccountCircle,

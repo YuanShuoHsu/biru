@@ -7,17 +7,26 @@ import { useState } from "react";
 
 import { useI18n } from "@/context/i18n";
 
+import { locales } from "@/constants/locale";
+
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const languages = [
-  { label: "繁體中文", lang: "zh-TW" },
-  { label: "English", lang: "en" },
-  { label: "日本語", lang: "ja" },
-  { label: "한국어", lang: "ko" },
-  { label: "简体中文", lang: "zh-CN" },
-];
+import type { LocaleCode } from "@/types/locale";
+
+const localeLabels: Record<LocaleCode, string> = {
+  "zh-TW": "繁體中文",
+  en: "English",
+  ja: "日本語",
+  ko: "한국어",
+  "zh-CN": "简体中文",
+};
+
+const languages = locales.map((lang) => ({
+  lang,
+  label: localeLabels[lang],
+}));
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),

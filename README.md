@@ -295,6 +295,13 @@ pnpm add -D @types/negotiator
 pnpm add dayjs
 ```
 
+## socket.io-client
+
+```bash
+# https://www.npmjs.com/package/socket.io-client
+pnpm add socket.io-client
+```
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started

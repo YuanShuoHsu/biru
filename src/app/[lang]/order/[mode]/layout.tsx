@@ -1,10 +1,14 @@
 import { notFound } from "next/navigation";
 
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import { ORDER_MODE } from "@/types/orderMode";
+// import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 
 interface OrderModeLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ mode: OrderMode }>;
+  params: Promise<{
+    mode: string;
+    // mode: OrderMode;
+  }>;
 }
 
 const OrderModeLayout = async ({ children, params }: OrderModeLayoutProps) => {

@@ -7,10 +7,9 @@ import Negotiator from "negotiator";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { match } from "@formatjs/intl-localematcher";
+import { defaultLocale, locales } from "./constants/locale";
 
-const locales = ["zh-TW", "en", "ja", "ko", "zh-CN"];
-const defaultLocale = "zh-TW";
+import { match } from "@formatjs/intl-localematcher";
 
 const getLocale = (request: NextRequest) => {
   const headers = {
@@ -28,7 +27,7 @@ export function proxy(request: NextRequest) {
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
 
-  if (pathnameHasLocale) return
+  if (pathnameHasLocale) return;
   // if (pathnameHasLocale) {
   //   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
   //   const maintenanceBase = `/${locale}/maintenance`;
@@ -50,7 +49,7 @@ export function proxy(request: NextRequest) {
   const locale = getLocale(request);
   request.nextUrl.pathname = `/${locale}${pathname}`;
   return NextResponse.redirect(request.nextUrl);
-};
+}
 
 // export const middleware = (request: NextRequest) => {
 //   const { pathname } = request.nextUrl;
@@ -85,6 +84,6 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/data|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|\\.well-known|images).*)',
+    "/((?!api|_next/data|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|\\.well-known|images).*)",
   ],
 };
