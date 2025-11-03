@@ -51,7 +51,7 @@
       "noAccount": "还没有账号？",
       "or": "或",
       "password": "密码",
-      "remember": "记住我",
+      "rememberMe": "记住我",
       "rememberedPassword": "还记得密码？",
       "resetPassword": { "label": "重置密码" },
       "sendPasswordResetLink": "发送密码重置链接",

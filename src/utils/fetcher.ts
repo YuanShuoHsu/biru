@@ -9,17 +9,28 @@ interface ErrorInfo {
 }
 
 interface FetchError extends Error {
-  info: ErrorInfo;
-  status: number;
+  info?: ErrorInfo;
+  status?: number;
 }
 
 const BASE_URL = process.env.NEXT_PUBLIC_NEST_URL;
+
+const resolveUrl = (input: RequestInfo) => {
+  const url = String(input);
+  const isAbsolute = /^https?:\/\//i.test(url);
+  if (isAbsolute) return url;
+
+  const isServer = typeof window === "undefined";
+  if (isServer) return `${BASE_URL}${url}`;
+
+  return url;
+};
 
 export const fetcher = async <T = unknown>(
   input: RequestInfo,
   init?: RequestInit,
 ): Promise<T> => {
-  const url = `${BASE_URL}${input}`;
+  const url = resolveUrl(input);
   const res = await fetch(url, init);
 
   const contentType = res.headers.get("content-type") || "";
@@ -37,9 +48,9 @@ export const fetcher = async <T = unknown>(
   }
 
   if (!res.ok) {
-    const error = new Error(
+    const error: FetchError = new Error(
       "An error occurred while fetching the data.",
-    ) as FetchError;
+    );
 
     error.info = data;
     error.status = res.status;

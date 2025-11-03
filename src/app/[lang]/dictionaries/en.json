@@ -51,7 +51,7 @@
       "noAccount": "Don't have an account?",
       "or": "or",
       "password": "Password",
-      "remember": "Remember me",
+      "rememberMe": "Remember me",
       "rememberedPassword": "Remembered your password?",
       "resetPassword": { "label": "Reset password" },
       "sendPasswordResetLink": "Send password reset link",

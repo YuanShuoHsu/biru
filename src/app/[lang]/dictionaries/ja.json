@@ -51,7 +51,7 @@
       "noAccount": "アカウントをお持ちでない方",
       "or": "または",
       "password": "パスワード",
-      "remember": "ログイン状態を保持",
+      "rememberMe": "ログイン状態を保持",
       "rememberedPassword": "パスワードを覚えていますか？",
       "resetPassword": { "label": "パスワードをリセット" },
       "sendPasswordResetLink": "パスワードリセットリンクを送信",

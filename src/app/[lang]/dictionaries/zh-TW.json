@@ -51,7 +51,7 @@
       "noAccount": "還沒有帳號？",
       "or": "或",
       "password": "密碼",
-      "remember": "記住我",
+      "rememberMe": "記住我",
       "rememberedPassword": "還記得密碼？",
       "resetPassword": { "label": "重設密碼" },
       "sendPasswordResetLink": "傳送密碼重設連結",

@@ -5,10 +5,10 @@
 "use client";
 
 import NextLink from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useSnackbar } from "notistack";
 import React, { useState } from "react";
-
-// import { signup } from "./actions/auth";
+import useSWRMutation from "swr/mutation";
 
 import GoogleButton from "@/components/GoogleButton";
 
@@ -34,9 +34,18 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-// import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
+import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
+import type { LoginDto } from "@/types/auth/login.dto";
 
-const StyledCard = styled(Card)<CardProps<"form">>({
+import { getErrorMessage } from "@/utils/errors";
+import { fetcher } from "@/utils/fetcher";
+
+const FormCard = React.forwardRef<HTMLFormElement, CardProps<"form">>(
+  (props, ref) => <Card ref={ref} component="form" {...props} />,
+);
+FormCard.displayName = "FormCard";
+
+export const StyledCard = styled(FormCard)({
   width: "100%",
 });
 
@@ -60,32 +69,36 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-// const sendRequest = async (url: string, { arg }: { arg: CreateAuthDto }) =>
-//   fetch(url, {
-//     method: "POST",
-//     body: JSON.stringify(arg),
-//   }).then((res) => res.json());
-
 const MemberAuthSignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    remember: false,
+    rememberMe: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  // const router = useRouter();
 
   const { lang } = useParams();
 
+  const router = useRouter();
+
   const dict = useI18n();
 
-  // const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
 
-  // const { isMutating, trigger } = useSWRMutation(
-  //   "/api/auth/login",
-  //   sendRequest,
-  // );
+  const { isMutating, trigger } = useSWRMutation<
+    AuthResponseDto,
+    Error,
+    string,
+    LoginDto
+  >("/api/auth/login", (url, { arg }) =>
+    fetcher(url, {
+      body: JSON.stringify(arg),
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    }),
+  );
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -104,23 +117,27 @@ const MemberAuthSignIn = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  //   try {
-  //     const { data } = await trigger(form);
-  //     console.log(data);
-  //     router.push(`/${lang}/orders`);
-  //   } catch (error) {
-  //     enqueueSnackbar(String(error), { variant: "error" });
-  //   }
-  // };
+    try {
+      console.log("form", form);
+      const data = await trigger(form);
+      console.log("data", data);
+      // router.push(`/${lang}/orders`);
+    } catch (error) {
+      console.log(error);
+      console.log(String(error));
+      console.log(getErrorMessage(error));
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    } finally {
+    }
+  };
 
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledCard component="form">
-      {/* action={action} */}
+    <StyledCard component="form" onSubmit={handleSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -193,15 +210,15 @@ const MemberAuthSignIn = () => {
           <FormControlLabel
             control={
               <Checkbox
-                checked={form.remember}
-                name="remember"
+                checked={form.rememberMe}
+                name="rememberMe"
                 onChange={handleChange}
                 size="small"
               />
             }
             label={
               <Typography variant="body2">
-                {dict.member.auth.remember}
+                {dict.member.auth.rememberMe}
               </Typography>
             }
           />
@@ -216,9 +233,9 @@ const MemberAuthSignIn = () => {
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
-          // disabled={isMutating}
+          disabled={isMutating}
           fullWidth
-          // loading={isMutating}
+          loading={isMutating}
           size="large"
           type="submit"
           variant="contained"

@@ -51,7 +51,7 @@
       "noAccount": "아직 계정이 없으신가요?",
       "or": "또는",
       "password": "비밀번호",
-      "remember": "로그인 상태 유지",
+      "rememberMe": "로그인 상태 유지",
       "rememberedPassword": "비밀번호 기억나세요?",
       "resetPassword": { "label": "비밀번호 재설정" },
       "sendPasswordResetLink": "비밀번호 재설정 링크 보내기",
