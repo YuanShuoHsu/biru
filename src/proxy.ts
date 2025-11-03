@@ -24,20 +24,24 @@ const getLocale = (request: NextRequest) => {
 export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
-  const pathnameHasLocale = locales.some(
-    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
-  );
   const pathnameLocale = locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
+  const pathnameHasLocale = Boolean(pathnameLocale);
 
   const locale = getLocale(request);
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+  const isMaintenancePath =
+    pathnameLocale && pathname === `/${pathnameLocale}/maintenance`;
   if (isMaintenanceMode) {
-    if (pathnameLocale && pathname === `/${pathnameLocale}/maintenance`) return;
+    if (isMaintenancePath) return;
 
     request.nextUrl.pathname = `/${pathnameLocale || locale}/maintenance`;
+    return NextResponse.redirect(request.nextUrl);
+  }
+  if (isMaintenancePath) {
+    request.nextUrl.pathname = `/${pathnameLocale}`;
     return NextResponse.redirect(request.nextUrl);
   }
 
