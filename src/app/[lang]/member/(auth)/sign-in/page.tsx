@@ -5,7 +5,7 @@
 "use client";
 
 import NextLink from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
 import React, { useState } from "react";
 import useSWRMutation from "swr/mutation";
@@ -38,7 +38,7 @@ import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 
 import { getErrorMessage } from "@/utils/errors";
-import { fetcher } from "@/utils/fetcher";
+import { fetcher, sendRequest } from "@/utils/fetcher";
 
 const FormCard = React.forwardRef<HTMLFormElement, CardProps<"form">>(
   (props, ref) => <Card ref={ref} component="form" {...props} />,
@@ -73,7 +73,7 @@ const MemberAuthSignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    rememberMe: false,
+    rememberMe: true,
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -81,6 +81,10 @@ const MemberAuthSignIn = () => {
   const { lang } = useParams();
 
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const redirect = searchParams.get("redirect");
+  const redirectURL = redirect?.startsWith("/") ? redirect : `/${lang}`;
 
   const dict = useI18n();
 
@@ -91,12 +95,11 @@ const MemberAuthSignIn = () => {
     Error,
     string,
     LoginDto
-  >("/api/auth/login", (url, { arg }) =>
-    fetcher(url, {
-      body: JSON.stringify(arg),
+  >(
+    "/api/auth/login",
+    sendRequest({
       credentials: "include",
       headers: { "Content-Type": "application/json" },
-      method: "POST",
     }),
   );
 
@@ -122,9 +125,19 @@ const MemberAuthSignIn = () => {
 
     try {
       console.log("form", form);
-      const data = await trigger(form);
-      console.log("data", data);
-      // router.push(`/${lang}/orders`);
+      const { access_token } = await trigger(form);
+      console.log("data", access_token);
+
+      const data = await fetcher("/api/auth/profile", {
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+        },
+        credentials: "include",
+      });
+
+      router.push(redirectURL);
+      router.refresh();
+      console.log(data, "this");
     } catch (error) {
       console.log(error);
       console.log(String(error));
@@ -133,8 +146,6 @@ const MemberAuthSignIn = () => {
     } finally {
     }
   };
-
-  //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
     <StyledCard component="form" onSubmit={handleSubmit}>

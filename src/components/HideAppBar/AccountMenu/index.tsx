@@ -2,6 +2,12 @@
 // https://mui.com/material-ui/react-app-bar/#ResponsiveAppBar.tsx
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
 
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import React, { useState } from "react";
 
 import { AccountCircle, Logout, Person } from "@mui/icons-material";
@@ -14,7 +20,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useParams, useRouter } from "next/navigation";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -29,15 +34,24 @@ const AccountMenu = () => {
   const open = Boolean(anchorEl);
 
   const { lang } = useParams();
+
+  const pathname = usePathname();
+
   const router = useRouter();
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    // if (!user) {
-    router.push(`/${lang}/member/sign-in`);
-    return;
-    // }
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const currentURL = search ? `${pathname}?${search}` : pathname;
 
-    setAnchorEl(event.currentTarget);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    const isMemberPage = pathname.startsWith(`/${lang}/member`);
+    router.push(
+      isMemberPage
+        ? `/${lang}/member/sign-in`
+        : `/${lang}/member/sign-in?redirect=${encodeURIComponent(currentURL)}`,
+    );
+
+    // setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => setAnchorEl(null);
