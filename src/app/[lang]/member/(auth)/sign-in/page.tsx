@@ -7,10 +7,12 @@
 import NextLink from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import GoogleButton from "@/components/GoogleButton";
+
+import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useI18n } from "@/context/i18n";
 
@@ -73,7 +75,7 @@ const MemberAuthSignIn = () => {
   const [form, setForm] = useState({
     email: "",
     password: "",
-    rememberMe: true,
+    rememberMe: false,
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -103,6 +105,17 @@ const MemberAuthSignIn = () => {
     }),
   );
 
+  useEffect(() => {
+    const stored = localStorage.getItem(REMEMBER_ME);
+    if (stored === null) {
+      localStorage.setItem(REMEMBER_ME, "true");
+      setForm((prev) => ({ ...prev, rememberMe: true }));
+      return;
+    }
+
+    setForm((prev) => ({ ...prev, rememberMe: stored === "true" }));
+  }, []);
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -114,11 +127,16 @@ const MemberAuthSignIn = () => {
 
   const handleChange = ({
     target: { checked, name, type, value },
-  }: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    const nextValue = type === "checkbox" ? checked : value;
+
+    setForm((prev) => {
+      if (name === "rememberMe" && type === "checkbox")
+        localStorage.setItem(REMEMBER_ME, String(nextValue));
+
+      return { ...prev, [name]: nextValue };
+    });
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
