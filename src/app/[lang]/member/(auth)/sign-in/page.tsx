@@ -7,7 +7,7 @@
 import NextLink from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
-import React, { useEffect, useState } from "react";
+import React, { startTransition, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import GoogleButton from "@/components/GoogleButton";
@@ -15,7 +15,6 @@ import GoogleButton from "@/components/GoogleButton";
 import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useI18n } from "@/context/i18n";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -36,9 +35,12 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import type { UserResponseDto } from "@/types/users/user-response.dto";
+
 import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 
+import { useAuthStore } from "@/stores/useAuthStore";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher, sendRequest } from "@/utils/fetcher";
 
@@ -80,6 +82,8 @@ const MemberAuthSignIn = () => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const { clearAuth, setAccessToken, setProfile } = useAuthStore();
+
   const { lang } = useParams();
 
   const router = useRouter();
@@ -92,28 +96,42 @@ const MemberAuthSignIn = () => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { isMutating, trigger } = useSWRMutation<
-    AuthResponseDto,
-    Error,
-    string,
-    LoginDto
-  >(
-    "/api/auth/login",
-    sendRequest({
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-    }),
-  );
+  const { isMutating: isMutatingAccessToken, trigger: triggerAccessToken } =
+    useSWRMutation<AuthResponseDto, Error, string, LoginDto>(
+      "/api/auth/login",
+      sendRequest({
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+
+  const { isMutating: isMutatingProfile, trigger: triggerProfile } =
+    useSWRMutation<UserResponseDto, Error, string, string>(
+      "/api/auth/profile",
+      (url, { arg: accessToken }) =>
+        fetcher<UserResponseDto>(url, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          credentials: "include",
+        }),
+    );
+
+  const isSubmitting = isMutatingAccessToken || isMutatingProfile;
 
   useEffect(() => {
     const stored = localStorage.getItem(REMEMBER_ME);
-    if (stored === null) {
-      localStorage.setItem(REMEMBER_ME, "true");
-      setForm((prev) => ({ ...prev, rememberMe: true }));
-      return;
-    }
+    const nextValue = stored === null ? true : stored === "true";
 
-    setForm((prev) => ({ ...prev, rememberMe: stored === "true" }));
+    if (stored === null) localStorage.setItem(REMEMBER_ME, "true");
+
+    startTransition(() => {
+      setForm((prev) =>
+        prev.rememberMe === nextValue
+          ? prev
+          : { ...prev, rememberMe: nextValue },
+      );
+    });
   }, []);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -142,26 +160,17 @@ const MemberAuthSignIn = () => {
     event.preventDefault();
 
     try {
-      console.log("form", form);
-      const { access_token } = await trigger(form);
-      console.log("data", access_token);
+      const { access_token } = await triggerAccessToken(form);
+      setAccessToken(access_token);
 
-      const data = await fetcher("/api/auth/profile", {
-        headers: {
-          Authorization: `Bearer ${access_token}`,
-        },
-        credentials: "include",
-      });
+      const profile = await triggerProfile(access_token);
+      setProfile(profile);
 
+      // 這裡好像應該要用 replace？等 access token 完成後，可以到用戶頁面時，再來確認實際效果
       router.push(redirectURL);
-      router.refresh();
-      console.log(data, "this");
     } catch (error) {
-      console.log(error);
-      console.log(String(error));
-      console.log(getErrorMessage(error));
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
-    } finally {
+      clearAuth();
     }
   };
 
@@ -183,6 +192,7 @@ const MemberAuthSignIn = () => {
         <GoogleButton action="signIn" href="" />
         <Divider>{dict.member.auth.or}</Divider>
         <TextField
+          autoComplete="username"
           // error={!!state?.errors?.email}
           fullWidth
           // helperText={state?.errors?.email}
@@ -194,6 +204,7 @@ const MemberAuthSignIn = () => {
           value={form.email}
         />
         <TextField
+          autoComplete="current-password"
           // error={!!state?.errors?.password}
           fullWidth
           // 這邊可能會需要修正
@@ -262,9 +273,9 @@ const MemberAuthSignIn = () => {
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
-          disabled={isMutating}
+          disabled={isSubmitting}
           fullWidth
-          loading={isMutating}
+          loading={isSubmitting}
           size="large"
           type="submit"
           variant="contained"
