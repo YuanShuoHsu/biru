@@ -3,6 +3,7 @@
 import Image from "next/image";
 import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
+import { Suspense } from "react";
 
 import AccountMenu from "./AccountMenu";
 import CartIconButton from "./CartIconButton";
@@ -111,7 +112,9 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
         <Stack direction="row" alignItems="center" gap={0.5}>
           <ModeToggle />
           <LanguageMenu />
-          <AccountMenu />
+          <Suspense>
+            <AccountMenu />
+          </Suspense>
           {showShoppingCartButton && (
             <CartIconButton onDrawerToggle={onDrawerToggle} />
           )}

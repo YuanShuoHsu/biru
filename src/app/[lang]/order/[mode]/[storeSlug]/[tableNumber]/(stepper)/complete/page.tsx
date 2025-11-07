@@ -1,17 +1,18 @@
 "use client";
 
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
 const OrderModeStoreSlugTableNumberComplete = () => {
   const { lang, tableNumber } = useParams();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const router = useRouter();
 
-  const status = searchParams.get("status");
-  const isSuccess = status === null;
+  // const status = searchParams.get("status");
+  // const isSuccess = status === null;
+  const isSuccess = true;
 
   return (
     <Box

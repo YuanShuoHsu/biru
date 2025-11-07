@@ -1,17 +1,27 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 import { useI18n } from "@/context/i18n";
 
 import { MenuItem, TextField } from "@mui/material";
 
-import type { RouteParams } from "@/types/routeParams";
-import { Store } from "@/types/stores";
+import type { LocaleCode } from "@/types/locale";
+import type { OrderMode } from "@/types/orderMode";
+import type { Store, StoreSlug } from "@/types/stores";
 
-const OrderModePickupStoreSlugSelect = () => {
-  const { lang, mode, storeSlug } = useParams<RouteParams>();
+interface OrderModePickupStoreSlugSelectProps {
+  lang: LocaleCode;
+  mode: OrderMode;
+  storeSlug: StoreSlug;
+}
+
+const OrderModePickupStoreSlugSelect = ({
+  lang,
+  mode,
+  storeSlug,
+}: OrderModePickupStoreSlugSelectProps) => {
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
