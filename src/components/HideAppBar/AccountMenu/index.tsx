@@ -1,7 +1,6 @@
 // https://mui.com/material-ui/react-app-bar/#MenuAppBar.tsx
 // https://mui.com/material-ui/react-app-bar/#ResponsiveAppBar.tsx
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
-// https://mui.com/material-ui/react-avatar/#BadgeAvatars.tsx
 
 import {
   useParams,
@@ -14,7 +13,6 @@ import React, { useMemo, useState } from "react";
 import { AccountCircle, Logout, Person } from "@mui/icons-material";
 import {
   Avatar,
-  Badge,
   Divider,
   IconButton,
   ListItemIcon,
@@ -24,6 +22,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import BadgeAvatars from "@/components/BadgeAvatars";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
@@ -31,43 +30,6 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 
   [theme.breakpoints.up("sm")]: {
     marginTop: theme.spacing(7),
-  },
-}));
-
-const StyledBadge = styled(Badge)(({ theme }) => ({
-  "& .MuiBadge-badge": {
-    backgroundColor: theme.vars.palette.secondary.main,
-    boxShadow: `0 0 0 2px ${theme.vars.palette.primary.main}`,
-    color: theme.vars.palette.secondary.main,
-    transition: theme.transitions.create(["background-color", "box-shadow"]),
-
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      inset: 0,
-      border: `1px solid ${theme.vars.palette.primary.main}`,
-      borderRadius: "50%",
-      animation: "ripple 1.2s infinite ease-in-out",
-    },
-  },
-  [theme.getColorSchemeSelector("dark")]: {
-    "& .MuiBadge-badge": {
-      boxShadow: `0 0 0 2px ${theme.vars.palette.background.paper}`,
-
-      "&::after": {
-        border: `1px solid ${theme.vars.palette.background.paper}`,
-      },
-    },
-  },
-  "@keyframes ripple": {
-    "0%": {
-      transform: "scale(.8)",
-      opacity: 1,
-    },
-    "100%": {
-      transform: "scale(2.4)",
-      opacity: 0,
-    },
   },
 }));
 
@@ -146,11 +108,7 @@ const AccountMenu = () => {
           onClick={handleClick}
         >
           {isSignedIn ? (
-            <StyledBadge
-              anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-              overlap="circular"
-              variant="dot"
-            >
+            <BadgeAvatars>
               <Avatar
                 alt={displayName}
                 src={profile?.image}
@@ -158,7 +116,7 @@ const AccountMenu = () => {
               >
                 {avatarInitial}
               </Avatar>
-            </StyledBadge>
+            </BadgeAvatars>
           ) : (
             <AccountCircle />
           )}
