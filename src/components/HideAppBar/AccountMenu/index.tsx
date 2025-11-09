@@ -26,7 +26,8 @@ import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 
-import { stringToColor } from "@/utils/avatar";
+import { RouteParams } from "@/types/routeParams";
+
 import { getDisplayName } from "@/utils/profile";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
@@ -42,10 +43,9 @@ const AccountMenu = () => {
   const open = Boolean(anchorEl);
 
   const { accessToken, clearAuth, profile } = useAuthStore();
+  const { lang } = useParams<RouteParams>();
   const isSignedIn = Boolean(accessToken && profile);
-  const displayName = getDisplayName(profile);
-
-  const { lang } = useParams();
+  const displayName = getDisplayName(profile, lang);
 
   const pathname = usePathname();
 
@@ -91,20 +91,28 @@ const AccountMenu = () => {
           color="inherit"
           onClick={handleClick}
         >
-          <BadgeAvatars>
+          <BadgeAvatars invisible={!isSignedIn}>
             <Avatar
               alt={displayName}
               src={profile?.image}
-              sx={{
+              sx={(theme) => ({
                 width: 24,
                 height: 24,
                 bgcolor: isSignedIn
-                  ? stringToColor(displayName)
+                  ? theme.vars.palette.background.paper
                   : "transparent",
-                color: "inherit",
-              }}
+                color: isSignedIn ? theme.vars.palette.primary.main : "inherit",
+                transition: theme.transitions.create("color"),
+
+                ...(isSignedIn && {
+                  [theme.getColorSchemeSelector("dark")]: {
+                    bgcolor: theme.vars.palette.common.white,
+                    color: theme.vars.palette.primary.contrastText,
+                  },
+                }),
+              })}
             >
-              {!isSignedIn && <AccountCircle />}
+              {!isSignedIn && <AccountCircle color="inherit" />}
             </Avatar>
           </BadgeAvatars>
         </IconButton>
@@ -119,6 +127,19 @@ const AccountMenu = () => {
         open={open}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
+        {/* <MenuItem onClick={handleClose}>
+          <Avatar /> Profile
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Avatar /> My account
+        </MenuItem>
+        <Divider /> */}
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <Person fontSize="small" />
+          </ListItemIcon>
+          Profile
+        </MenuItem>
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Person fontSize="small" />

@@ -1,9 +1,21 @@
+import { Locale } from "@/constants/locale";
+
+import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
-export const getDisplayName = (profile: UserResponseDto | null) => {
+export const getDisplayName = (
+  profile: UserResponseDto | null,
+  lang: LocaleCode,
+) => {
   if (!profile) return "";
 
-  const name = [profile.firstName, profile.lastName].filter(Boolean).join(" ");
+  const showFamilyNameFirst = lang !== Locale.En;
+
+  const nameParts = showFamilyNameFirst
+    ? [profile.lastName, profile.firstName]
+    : [profile.firstName, profile.lastName];
+
+  const name = nameParts.filter(Boolean).join(" ");
 
   return name || profile.email || "";
 };

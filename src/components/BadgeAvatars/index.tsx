@@ -46,8 +46,8 @@ interface BadgeAvatarsProps extends BadgeProps {
 }
 
 const BadgeAvatars = ({
+  anchorOrigin = { horizontal: "right", vertical: "bottom" },
   children,
-  anchorOrigin = { vertical: "bottom", horizontal: "right" },
   overlap = "circular",
   variant = "dot",
   ...restBadgeProps
