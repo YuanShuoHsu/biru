@@ -29,6 +29,7 @@ import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 
+import { Locale } from "@/constants/locale";
 import { getErrorMessage } from "@/utils/errors";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
@@ -100,8 +101,8 @@ const CustomerPaymentForm = () => {
         TradeDesc: "餐點付款",
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
-            const itemName = getItemName(id, "zh-TW");
-            const choiceNames = getChoiceNames(id, choices, "zh-TW", {
+            const itemName = getItemName(id, Locale.ZhTW);
+            const choiceNames = getChoiceNames(id, choices, Locale.ZhTW, {
               colon: "：",
               delimiter: "、",
               joinWith: "、",
