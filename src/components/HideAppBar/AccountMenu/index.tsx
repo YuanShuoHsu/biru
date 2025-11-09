@@ -30,6 +30,25 @@ import { RouteParams } from "@/types/routeParams";
 
 import { getDisplayName } from "@/utils/profile";
 
+const StyledAvatar = styled(Avatar, {
+  shouldForwardProp: (prop) => prop !== "isSignedIn",
+})<{ isSignedIn: boolean }>(({ isSignedIn, theme }) => ({
+  width: 24,
+  height: 24,
+  backgroundColor: isSignedIn
+    ? theme.vars.palette.background.paper
+    : "transparent",
+  color: isSignedIn ? theme.vars.palette.primary.main : "inherit",
+  transition: theme.transitions.create(["color", "background-color"]),
+
+  ...(isSignedIn && {
+    [theme.getColorSchemeSelector("dark")]: {
+      backgroundColor: theme.vars.palette.common.white,
+      color: theme.vars.palette.primary.contrastText,
+    },
+  }),
+}));
+
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
 
@@ -92,28 +111,13 @@ const AccountMenu = () => {
           onClick={handleClick}
         >
           <BadgeAvatars invisible={!isSignedIn}>
-            <Avatar
+            <StyledAvatar
               alt={displayName}
+              isSignedIn={isSignedIn}
               src={profile?.image}
-              sx={(theme) => ({
-                width: 24,
-                height: 24,
-                bgcolor: isSignedIn
-                  ? theme.vars.palette.background.paper
-                  : "transparent",
-                color: isSignedIn ? theme.vars.palette.primary.main : "inherit",
-                transition: theme.transitions.create("color"),
-
-                ...(isSignedIn && {
-                  [theme.getColorSchemeSelector("dark")]: {
-                    bgcolor: theme.vars.palette.common.white,
-                    color: theme.vars.palette.primary.contrastText,
-                  },
-                }),
-              })}
             >
-              {!isSignedIn && <AccountCircle color="inherit" />}
-            </Avatar>
+              {!isSignedIn && <AccountCircle />}
+            </StyledAvatar>
           </BadgeAvatars>
         </IconButton>
       </Tooltip>
