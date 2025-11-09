@@ -8,7 +8,9 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
+
+import BadgeAvatars from "@/components/BadgeAvatars";
 
 import { AccountCircle, Logout, Person } from "@mui/icons-material";
 import {
@@ -22,8 +24,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import BadgeAvatars from "@/components/BadgeAvatars";
 import { useAuthStore } from "@/stores/useAuthStore";
+
+import { stringToColor } from "@/utils/avatar";
+import { getDisplayName } from "@/utils/profile";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -37,29 +41,9 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { accessToken, profile, clearAuth } = useAuthStore();
-
+  const { accessToken, clearAuth, profile } = useAuthStore();
   const isSignedIn = Boolean(accessToken && profile);
-
-  const displayName = useMemo(() => {
-    if (!profile) return "";
-    const name = [profile.firstName, profile.lastName]
-      .filter(Boolean)
-      .join(" ");
-    return name || profile.email || "Account";
-  }, [profile]);
-
-  const avatarInitial = useMemo(() => {
-    if (!profile) return "";
-
-    const source =
-      profile.firstName ||
-      profile.lastName ||
-      profile.email ||
-      profile.id ||
-      "";
-    return source.charAt(0).toUpperCase();
-  }, [profile]);
+  const displayName = getDisplayName(profile);
 
   const { lang } = useParams();
 
@@ -107,19 +91,22 @@ const AccountMenu = () => {
           color="inherit"
           onClick={handleClick}
         >
-          {isSignedIn ? (
-            <BadgeAvatars>
-              <Avatar
-                alt={displayName}
-                src={profile?.image}
-                sx={{ width: 24, height: 24 }}
-              >
-                {avatarInitial}
-              </Avatar>
-            </BadgeAvatars>
-          ) : (
-            <AccountCircle />
-          )}
+          <BadgeAvatars>
+            <Avatar
+              alt={displayName}
+              src={profile?.image}
+              sx={{
+                width: 24,
+                height: 24,
+                bgcolor: isSignedIn
+                  ? stringToColor(displayName)
+                  : "transparent",
+                color: "inherit",
+              }}
+            >
+              {!isSignedIn && <AccountCircle />}
+            </Avatar>
+          </BadgeAvatars>
         </IconButton>
       </Tooltip>
       <StyledMenu
