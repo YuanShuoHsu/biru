@@ -37,6 +37,9 @@
   },
   "member": {
     "label": "Member",
+    "accountSettings": {
+      "label": "Account settings"
+    },
     "auth": {
       "confirmNewPassword": "Confirm new password",
       "email": "Email",
@@ -59,6 +62,7 @@
       "showNewPassword": "Display the new password",
       "showPassword": "Display the password",
       "signIn": { "label": "Sign in" },
+      "signOut": { "label": "Sign out" },
       "signUp": { "label": "Sign up" }
     },
     "legal": {

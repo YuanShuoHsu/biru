@@ -37,6 +37,9 @@
   },
   "member": {
     "label": "회원",
+    "accountSettings": {
+      "label": "계정 설정"
+    },
     "auth": {
       "confirmNewPassword": "새 비밀번호 확인",
       "email": "이메일",
@@ -59,6 +62,7 @@
       "showNewPassword": "새 비밀번호 표시",
       "showPassword": "비밀번호 표시",
       "signIn": { "label": "로그인" },
+      "signOut": { "label": "로그아웃" },
       "signUp": { "label": "회원가입" }
     },
     "legal": {

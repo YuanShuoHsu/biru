@@ -12,7 +12,15 @@ import React, { useState } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
-import { AccountCircle, Logout, Person } from "@mui/icons-material";
+import { useI18n } from "@/context/i18n";
+
+import {
+  AccountCircle,
+  Logout,
+  Person,
+  PersonAdd,
+  Settings,
+} from "@mui/icons-material";
 import {
   Avatar,
   Divider,
@@ -62,9 +70,16 @@ const AccountMenu = () => {
   const open = Boolean(anchorEl);
 
   const { accessToken, clearAuth, profile } = useAuthStore();
+
   const { lang } = useParams<RouteParams>();
+
   const isSignedIn = Boolean(accessToken && profile);
   const displayName = getDisplayName(profile, lang);
+
+  const dict = useI18n();
+  const tooltipTitle = isSignedIn
+    ? dict.member.accountSettings.label
+    : dict.member.auth.signIn.label;
 
   const pathname = usePathname();
 
@@ -94,6 +109,13 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
+  const handleAccountSettings = () => {
+    if (!isSignedIn) return;
+
+    router.push(`/${lang}/member/account-settings`);
+    handleClose();
+  };
+
   const handleLogout = () => {
     clearAuth();
     handleClose();
@@ -101,7 +123,7 @@ const AccountMenu = () => {
 
   return (
     <>
-      <Tooltip title={isSignedIn ? "Account settings" : "Sign in"}>
+      <Tooltip title={tooltipTitle}>
         <IconButton
           aria-controls={open ? "account-menu" : undefined}
           aria-expanded={open ? "true" : undefined}
@@ -136,8 +158,7 @@ const AccountMenu = () => {
         </MenuItem>
         <MenuItem onClick={handleClose}>
           <Avatar /> My account
-        </MenuItem>
-        <Divider /> */}
+        </MenuItem> */}
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <Person fontSize="small" />
@@ -151,11 +172,23 @@ const AccountMenu = () => {
           My account
         </MenuItem>
         <Divider />
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <PersonAdd fontSize="small" />
+          </ListItemIcon>
+          Add another account
+        </MenuItem>
+        <MenuItem onClick={handleAccountSettings}>
+          <ListItemIcon>
+            <Settings fontSize="small" />
+          </ListItemIcon>
+          Settings
+        </MenuItem>
         <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {dict.member.auth.signOut.label}
         </MenuItem>
       </StyledMenu>
     </>

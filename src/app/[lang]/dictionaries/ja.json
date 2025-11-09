@@ -37,6 +37,9 @@
   },
   "member": {
     "label": "会員",
+    "accountSettings": {
+      "label": "アカウント設定"
+    },
     "auth": {
       "confirmNewPassword": "新しいパスワードの確認",
       "email": "メールアドレス",
@@ -59,6 +62,7 @@
       "showNewPassword": "新しいパスワードを表示",
       "showPassword": "パスワードを表示",
       "signIn": { "label": "ログイン" },
+      "signOut": { "label": "ログアウト" },
       "signUp": { "label": "新規登録" }
     },
     "legal": {

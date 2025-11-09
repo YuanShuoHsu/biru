@@ -37,6 +37,9 @@
   },
   "member": {
     "label": "会员",
+    "accountSettings": {
+      "label": "账号设置"
+    },
     "auth": {
       "confirmNewPassword": "确认新密码",
       "email": "电子邮件",
@@ -59,6 +62,7 @@
       "showNewPassword": "显示新密码",
       "showPassword": "显示密码",
       "signIn": { "label": "登录" },
+      "signOut": { "label": "登出" },
       "signUp": { "label": "注册" }
     },
     "legal": {

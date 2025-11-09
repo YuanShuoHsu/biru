@@ -37,6 +37,9 @@
   },
   "member": {
     "label": "會員",
+    "accountSettings": {
+      "label": "帳號設定"
+    },
     "auth": {
       "confirmNewPassword": "確認新密碼",
       "email": "電子郵件",
@@ -59,6 +62,7 @@
       "showNewPassword": "顯示新密碼",
       "showPassword": "顯示密碼",
       "signIn": { "label": "登入" },
+      "signOut": { "label": "登出" },
       "signUp": { "label": "註冊" }
     },
     "legal": {
