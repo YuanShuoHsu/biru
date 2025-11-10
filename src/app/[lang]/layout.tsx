@@ -16,7 +16,7 @@ import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
 import type { LocaleCode } from "@/types/locale";
 
-import { fetcher } from "@/utils/fetcher";
+import getStores from "@/utils/getStores";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +51,7 @@ export default async function RootLayout({
   const dict = await getDictionary(langCode);
   // const dict = await getDictionary(lang);
 
-  const data = await fetcher("/api/stores");
+  const data = await getStores();
   const fallback = { "/api/stores": data };
 
   return (

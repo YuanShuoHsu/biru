@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 
-import type { Store, StoreSlug } from "@/types/stores";
+import type { StoreSlug } from "@/types/stores";
 
-import { fetcher } from "@/utils/fetcher";
+import getStores from "@/utils/getStores";
 
 interface OrderModeStoreSlugLayoutProps {
   children: React.ReactNode;
@@ -15,7 +15,7 @@ const OrderModeStoreSlugLayout = async ({
 }: OrderModeStoreSlugLayoutProps) => {
   const { storeSlug } = await params;
 
-  const data = await fetcher<Store[]>("/api/stores");
+  const data = await getStores();
 
   const hasStore = data.some(({ slug }) => slug === storeSlug);
   if (!hasStore) return notFound();
