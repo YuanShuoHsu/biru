@@ -3,8 +3,6 @@
 // https://github.com/vercel/swr/discussions/939
 // https://github.com/vercel/swr/blob/main/examples/basic-typescript/libs/fetch.ts
 
-import { getErrorMessage } from "./errors";
-
 interface ErrorInfo {
   message: string;
   documentation_url?: string;
@@ -50,7 +48,9 @@ export const fetcher = async <T = unknown>(
   }
 
   if (!res.ok) {
-    const error: FetchError = new Error(getErrorMessage(data.message));
+    const error: FetchError = new Error(
+      data.message || "An error occurred while fetching the data.",
+    );
 
     error.info = data;
     error.status = res.status;
