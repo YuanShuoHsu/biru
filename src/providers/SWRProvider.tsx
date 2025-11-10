@@ -20,7 +20,6 @@ const SWRProvider = ({ children, fallback }: SWRProviderProps) => {
       value={{
         fallback,
         onError: (error, key) => {
-          console.log(key);
           if (error.status !== 403 && error.status !== 404) {
             enqueueSnackbar(getErrorMessage(error), {
               variant: "error",
