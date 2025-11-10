@@ -6,22 +6,22 @@
 
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
 // import { signup } from "./actions/auth";
 
+import GoogleButton from "@/components/GoogleButton";
+
 import { useI18n } from "@/context/i18n";
 
-import GoogleButton from "@/components/GoogleButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
-  Card,
   CardActions,
   CardContent,
   CardHeader,
-  CardProps,
   Divider,
   IconButton,
   InputAdornment,
@@ -32,11 +32,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { getErrorMessage } from "@/utils/errors";
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
 
-const StyledCard = styled(Card)<CardProps<"form">>({
-  width: "100%",
-});
+import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -105,23 +104,22 @@ const MemberAuthSignUp = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  //   try {
-  //     const { data } = await trigger(form);
-  //     console.log(data);
-  //     router.push(`/${lang}/orders`);
-  //   } catch (error) {
-  //     enqueueSnackbar(String(error), { variant: "error" });
-  //   }
-  // };
+    try {
+      // const { data } = await trigger(form);
+      // console.log(data);
+      // router.push(`/${lang}/orders`);
+    } catch (error) {
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    }
+  };
 
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledCard component="form">
-      {/* action={action} */}
+    <FormCard component="form" onSubmit={handleSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -240,7 +238,7 @@ const MemberAuthSignUp = () => {
           </MuiLink>
         </Stack>
       </StyledCardActions>
-    </StyledCard>
+    </FormCard>
   );
 };
 

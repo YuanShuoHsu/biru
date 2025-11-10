@@ -6,6 +6,7 @@
 
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
 // import { signup } from "./actions/auth";
@@ -15,11 +16,9 @@ import { useI18n } from "@/context/i18n";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
-  Card,
   CardActions,
   CardContent,
   CardHeader,
-  CardProps,
   IconButton,
   InputAdornment,
   Link as MuiLink,
@@ -30,9 +29,9 @@ import { styled } from "@mui/material/styles";
 
 // import type { CreateAuthDto } from "@/types/auth/login/createAuthDto";
 
-const StyledCard = styled(Card)<CardProps<"form">>({
-  width: "100%",
-});
+import { getErrorMessage } from "@/utils/errors";
+
+import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -103,22 +102,22 @@ const MemberAuthResetPassword = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
 
-  // const handleSubmit = async (event: React.FormEvent<HTMLDivElement>) => {
-  //   event.preventDefault();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-  //   try {
-  //     const { data } = await trigger(form);
-  //     console.log(data);
-  //     router.push(`/${lang}/orders`);
-  //   } catch (error) {
-  //     enqueueSnackbar(String(error), { variant: "error" });
-  //   }
-  // };
+    try {
+      //     const { data } = await trigger(form);
+      //     console.log(data);
+      //     router.push(`/${lang}/orders`);
+    } catch (error) {
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    }
+  };
 
   //   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <StyledCard component="form">
+    <FormCard component="form" onSubmit={handleSubmit}>
       {/* action={action} */}
       <StyledCardHeader
         title={
@@ -245,7 +244,7 @@ const MemberAuthResetPassword = () => {
           </MuiLink>
         </Typography>
       </StyledCardActions>
-    </StyledCard>
+    </FormCard>
   );
 };
 

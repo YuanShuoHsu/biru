@@ -18,11 +18,9 @@ import { useI18n } from "@/context/i18n";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
-  Card,
   CardActions,
   CardContent,
   CardHeader,
-  CardProps,
   Checkbox,
   Divider,
   FormControlLabel,
@@ -44,14 +42,7 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher, sendRequest } from "@/utils/fetcher";
 
-const FormCard = React.forwardRef<HTMLFormElement, CardProps<"form">>(
-  (props, ref) => <Card ref={ref} component="form" {...props} />,
-);
-FormCard.displayName = "FormCard";
-
-export const StyledCard = styled(FormCard)({
-  width: "100%",
-});
+import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -183,7 +174,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   };
 
   return (
-    <StyledCard component="form" onSubmit={handleSubmit}>
+    <FormCard component="form" onSubmit={handleSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -300,7 +291,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           </MuiLink>
         </Typography>
       </StyledCardActions>
-    </StyledCard>
+    </FormCard>
   );
 };
 
