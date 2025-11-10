@@ -87,14 +87,18 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  const redirectParam =
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
+      : undefined;
+  const handleRedirectParams = (path: string) =>
+    redirectParam
+      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
+      : path;
+
   const { clearAuth, setAccessToken, setProfile } = useAuthStore();
 
   const router = useRouter();
-
-  const redirectURL =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : `/${lang}`;
 
   const dict = useI18n();
 
@@ -171,7 +175,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       setProfile(profile);
 
       // 這裡好像應該要用 replace？等 access token 完成後，可以到用戶頁面時，再來確認實際效果
-      router.push(redirectURL);
+      router.push(redirectParam || `/${lang}`);
     } catch (error) {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
       clearAuth();
@@ -268,7 +272,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           />
           <MuiLink
             component={NextLink}
-            href={`/${lang}/member/forgot-password`}
+            href={handleRedirectParams(`/${lang}/member/forgot-password`)}
             variant="body2"
           >
             {dict.member.auth.forgotPassword.label}
@@ -288,7 +292,10 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
         </Button>
         <Typography variant="body2">
           {dict.member.auth.noAccount}{" "}
-          <MuiLink component={NextLink} href={`/${lang}/member/sign-up`}>
+          <MuiLink
+            component={NextLink}
+            href={handleRedirectParams(`/${lang}/member/sign-up`)}
+          >
             {dict.member.auth.signUp.label}
           </MuiLink>
         </Typography>
