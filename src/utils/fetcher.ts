@@ -48,7 +48,6 @@ export const fetcher = async <T = unknown>(
     const text = await res.text();
     data = { message: text };
   }
-  console.log(data);
 
   if (!res.ok) {
     const error: FetchError = new Error(getErrorMessage(data.message));
