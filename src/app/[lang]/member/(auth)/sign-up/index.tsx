@@ -198,11 +198,17 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           By clicking «{dict.member.auth.signUp.label}», you agree to Biru
           Coffee&rsquo;s
           <Box component="br" />
-          <MuiLink component={NextLink} href={`/${lang}/member/terms`}>
+          <MuiLink
+            component={NextLink}
+            href={handleRedirectParams(`/${lang}/member/terms`)}
+          >
             Terms of Service
           </MuiLink>{" "}
           and{" "}
-          <MuiLink component={NextLink} href={`/${lang}/member/privacy`}>
+          <MuiLink
+            component={NextLink}
+            href={handleRedirectParams(`/${lang}/member/privacy`)}
+          >
             Privacy Policy
           </MuiLink>
           .
