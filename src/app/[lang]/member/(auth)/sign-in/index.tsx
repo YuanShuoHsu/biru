@@ -6,7 +6,6 @@
 
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { useSnackbar } from "notistack";
 import React, { startTransition, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
@@ -39,7 +38,6 @@ import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { getErrorMessage } from "@/utils/errors";
 import { fetcher, sendRequest } from "@/utils/fetcher";
 
 import FormCard from "../FormCard";
@@ -92,8 +90,6 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const router = useRouter();
 
   const dict = useI18n();
-
-  const { enqueueSnackbar } = useSnackbar();
 
   const { isMutating: isMutatingAccessToken, trigger: triggerAccessToken } =
     useSWRMutation<AuthResponseDto, Error, string, LoginDto>(
@@ -168,7 +164,6 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       // 這裡好像應該要用 replace？等 access token 完成後，可以到用戶頁面時，再來確認實際效果
       router.push(redirectParam || `/${lang}`);
     } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
       clearAuth();
     }
   };

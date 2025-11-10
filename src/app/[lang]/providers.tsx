@@ -27,14 +27,12 @@ const Providers = ({ children, dict, fallback }: ProvidersProps) => (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <I18nProvider dict={dict}>
-        <SWRProvider fallback={fallback}>
-          <SnackbarProvider
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            maxSnack={3}
-          >
-            {children}
-          </SnackbarProvider>
-        </SWRProvider>
+        <SnackbarProvider
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          maxSnack={3}
+        >
+          <SWRProvider fallback={fallback}>{children}</SWRProvider>
+        </SnackbarProvider>
       </I18nProvider>
     </ThemeProvider>
   </AppRouterCacheProvider>

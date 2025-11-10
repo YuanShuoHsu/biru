@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useSnackbar } from "notistack";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
@@ -30,7 +29,6 @@ import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 
 import { Locale } from "@/constants/locale";
-import { getErrorMessage } from "@/utils/errors";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
 const langMap: Record<LocaleCode, EcpayLanguage> = {
@@ -75,8 +73,6 @@ const CustomerPaymentForm = () => {
 
   const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore();
 
-  const { enqueueSnackbar } = useSnackbar();
-
   const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,19 +116,15 @@ const CustomerPaymentForm = () => {
       },
     };
 
-    try {
-      const { data } = await trigger(dto);
+    const { data } = await trigger(dto);
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(data, "text/html");
-      const form = doc.getElementById("ecpayForm");
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(data, "text/html");
+    const form = doc.getElementById("ecpayForm");
 
-      if (form instanceof HTMLFormElement) {
-        document.body.appendChild(form);
-        form.submit();
-      }
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    if (form instanceof HTMLFormElement) {
+      document.body.appendChild(form);
+      form.submit();
     }
   };
 
