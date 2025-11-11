@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
@@ -56,10 +56,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   return (
     <Box display="flex">
       <HideAppBar onDrawerToggle={handleDrawerToggle} />
-      <NavTemporaryDrawer
-        onDrawerToggle={handleDrawerToggle}
-        open={drawerState.nav}
-      />
+      <Suspense>
+        <NavTemporaryDrawer
+          onDrawerToggle={handleDrawerToggle}
+          open={drawerState.nav}
+        />
+      </Suspense>
       <CartAnchorTemporaryDrawer
         onDrawerToggle={handleDrawerToggle}
         open={drawerState.cart}
