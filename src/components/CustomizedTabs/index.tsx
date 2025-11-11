@@ -5,7 +5,7 @@
 
 import dayjs from "dayjs";
 import { useParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
@@ -132,17 +132,16 @@ const CustomizedTabs = () => {
 
   const [selectedId, setSelectedId] = useState(filteredGroups[0]?.id || "");
 
-  const currentIndex = filteredGroups.findIndex(({ id }) => id === selectedId);
-  const displayIndex = currentIndex >= 0 ? currentIndex : 0;
+  const activeSelectedId =
+    filteredGroups.length > 0 &&
+    !filteredGroups.some(({ id }) => id === selectedId)
+      ? filteredGroups[0]?.id || ""
+      : selectedId;
 
-  useEffect(() => {
-    if (
-      filteredGroups.length > 0 &&
-      !filteredGroups.some(({ id }) => id === selectedId)
-    ) {
-      setSelectedId(filteredGroups[0].id);
-    }
-  }, [filteredGroups, selectedId]);
+  const currentIndex = filteredGroups.findIndex(
+    ({ id }) => id === activeSelectedId,
+  );
+  const displayIndex = currentIndex >= 0 ? currentIndex : 0;
 
   const handleChange = (_: React.SyntheticEvent, newIndex: number) =>
     setSelectedId(filteredGroups[newIndex].id);

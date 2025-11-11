@@ -74,7 +74,7 @@ const CardDialogContent = forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {
-  const [quantity, setQuantity] = useState(1);
+  const [rawQuantity, setRawQuantity] = useState(1);
 
   const { getChoiceAvailableQuantity, getCartItemTotalQuantity } =
     useCartStore();
@@ -132,21 +132,15 @@ const CardDialogContent = forwardRef<
     optionCapLeft,
   );
   const minQuantity = availableToAdd > 0 ? 1 : 0;
+  const clampQuantity = (value: number) =>
+    Math.max(Math.min(value, availableToAdd), minQuantity);
+  const quantity = clampQuantity(rawQuantity);
 
   const { setDialog } = useDialogStore();
 
   useEffect(() => {
     setDialog({ confirmDisabled: quantity <= 0 });
   }, [quantity, setDialog]);
-
-  useEffect(() => {
-    setQuantity((prev) => {
-      if (prev > availableToAdd) return availableToAdd;
-      if (prev < minQuantity) return minQuantity;
-
-      return prev;
-    });
-  }, [availableToAdd, minQuantity]);
 
   const extraCost = options.reduce(
     (total, { id: optionId, choices: optionChoices }) => {
@@ -199,10 +193,10 @@ const CardDialogContent = forwardRef<
   );
 
   const handleDecreaseQuantity = () =>
-    setQuantity((prev) => Math.max(prev - 1, minQuantity));
+    setRawQuantity((prev) => clampQuantity(prev - 1));
 
   const handleIncreaseQuantity = () =>
-    setQuantity((prev) => Math.min(prev + 1, availableToAdd));
+    setRawQuantity((prev) => clampQuantity(prev + 1));
 
   return (
     <Stack direction="column" gap={2}>
