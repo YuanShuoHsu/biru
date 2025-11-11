@@ -9,6 +9,7 @@ import {
   useSearchParams,
 } from "next/navigation";
 import React, { useState } from "react";
+import useSWRMutation from "swr/mutation";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
@@ -34,8 +35,10 @@ import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/stores/useAuthStore";
 
+import type { LogoutResponseDto } from "@/types/auth/logout-response.dto";
 import { RouteParams } from "@/types/routeParams";
 
+import { sendRequest } from "@/utils/fetcher";
 import { getDisplayName } from "@/utils/profile";
 
 const StyledAvatar = styled(Avatar, {
@@ -70,6 +73,14 @@ const AccountMenu = () => {
   const open = Boolean(anchorEl);
 
   const { accessToken, clearAuth, profile } = useAuthStore();
+
+  const { isMutating: isMutatingLogout, trigger: triggerLogout } =
+    useSWRMutation<LogoutResponseDto, Error, string>(
+      "/api/auth/logout",
+      sendRequest({
+        credentials: "include",
+      }),
+    );
 
   const { lang } = useParams<RouteParams>();
 
@@ -116,9 +127,13 @@ const AccountMenu = () => {
     handleClose();
   };
 
-  const handleLogout = () => {
-    clearAuth();
-    handleClose();
+  const handleLogout = async () => {
+    try {
+      await triggerLogout();
+    } finally {
+      clearAuth();
+      handleClose();
+    }
   };
 
   return (
@@ -184,7 +199,7 @@ const AccountMenu = () => {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleLogout}>
+        <MenuItem disabled={isMutatingLogout} onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

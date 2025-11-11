@@ -11,6 +11,7 @@ import { CssBaseline } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 
+import AuthProvider from "@/providers/AuthProvider";
 import I18nProvider from "@/providers/I18nProvider";
 import SWRProvider from "@/providers/SWRProvider";
 
@@ -31,7 +32,9 @@ const Providers = ({ children, dict, fallback }: ProvidersProps) => (
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
           maxSnack={3}
         >
-          <SWRProvider fallback={fallback}>{children}</SWRProvider>
+          <SWRProvider fallback={fallback}>
+            <AuthProvider>{children}</AuthProvider>
+          </SWRProvider>
         </SnackbarProvider>
       </I18nProvider>
     </ThemeProvider>

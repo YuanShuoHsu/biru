@@ -163,7 +163,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
 
       // 這裡好像應該要用 replace？等 access token 完成後，可以到用戶頁面時，再來確認實際效果
       router.push(redirectParam || `/${lang}`);
-    } catch (error) {
+    } catch {
       clearAuth();
     }
   };

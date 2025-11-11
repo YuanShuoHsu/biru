@@ -61,13 +61,11 @@ export const fetcher = async <T = unknown>(
 };
 
 export const sendRequest =
-  (init?: RequestInit) =>
-  async <TReq = unknown, TRes = unknown>(
-    url: string,
-    { arg }: { arg: TReq },
-  ): Promise<TRes> =>
+  <TRes = unknown, TReq = void>(init?: RequestInit) =>
+  async (url: string, { arg }: { arg?: TReq } = {}): Promise<TRes> =>
     fetcher<TRes>(url, {
-      body: JSON.stringify(arg),
+      ...(arg !== undefined && { body: JSON.stringify(arg) }),
+      headers: { "Content-Type": "application/json" },
       method: "POST",
       ...init,
     });
