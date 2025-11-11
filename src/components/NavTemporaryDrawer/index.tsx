@@ -2,7 +2,12 @@
 // https://mui.com/material-ui/react-list/#NestedList.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
-import { useParams, usePathname, useRouter } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
@@ -84,6 +89,7 @@ interface NavLinkItem {
   icon: React.ComponentType<SvgIconProps>;
   label: string;
   to: string;
+  query?: string;
 }
 
 interface NavSlotItem {
@@ -92,39 +98,46 @@ interface NavSlotItem {
 
 type NavItem = NavLinkItem | NavSlotItem;
 
-const navItemsMap = (dict: I18nDict): NavItem[] => [
-  { icon: Home, label: dict.home.label, to: "/" },
-  {
-    children: [
-      { slot: ORDER_MODE.DineIn },
-      {
-        icon: LocalMall,
-        label: dict.order.mode.pickup.label,
-        to: "/order/pickup",
-      },
-    ],
-    icon: ShoppingCart,
-    label: dict.order.label,
-    to: "/order",
-  },
-  {
-    children: [
-      {
-        icon: Login,
-        label: dict.member.auth.signIn.label,
-        to: "/member/sign-in",
-      },
-      {
-        icon: PersonAdd,
-        label: dict.member.auth.signUp.label,
-        to: "/member/sign-up",
-      },
-    ],
-    icon: AccountCircle,
-    label: dict.member.label,
-    to: "/member",
-  },
-];
+const navItemsMap = (dict: I18nDict, memberRedirectTo?: string): NavItem[] => {
+  const query =
+    memberRedirectTo && `?redirect=${encodeURIComponent(memberRedirectTo)}`;
+
+  return [
+    { icon: Home, label: dict.home.label, to: "/" },
+    {
+      children: [
+        { slot: ORDER_MODE.DineIn },
+        {
+          icon: LocalMall,
+          label: dict.order.mode.pickup.label,
+          to: "/order/pickup",
+        },
+      ],
+      icon: ShoppingCart,
+      label: dict.order.label,
+      to: "/order",
+    },
+    {
+      children: [
+        {
+          icon: Login,
+          label: dict.member.auth.signIn.label,
+          query,
+          to: "/member/sign-in",
+        },
+        {
+          icon: PersonAdd,
+          label: dict.member.auth.signUp.label,
+          query,
+          to: "/member/sign-up",
+        },
+      ],
+      icon: AccountCircle,
+      label: dict.member.label,
+      to: "/member",
+    },
+  ];
+};
 
 interface SlotProps {
   dict: I18nDict;
@@ -225,7 +238,15 @@ const NavTemporaryDrawer = ({
 
   const dict = useI18n();
 
-  const navItems = navItemsMap(dict);
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const currentURL = search ? `${pathname}?${search}` : pathname;
+
+  const redirectParam = searchParams.get("redirect");
+  const isMemberPage = pathname.startsWith(`/${lang}/member`);
+  const redirectTo = isMemberPage && redirectParam ? redirectParam : currentURL;
+
+  const navItems = navItemsMap(dict, redirectTo);
 
   const handleIconButtonToggle = (to: string) =>
     setOpenMap((prev) => ({ ...prev, [to]: !prev[to] }));
@@ -257,17 +278,18 @@ const NavTemporaryDrawer = ({
         );
       }
 
-      const { children, icon, label, to } = item;
+      const { children, icon, label, query, to } = item;
 
       const hasChildren = !!children?.length;
 
       const open = openMap[to];
 
       const isHome = to === "/";
-      const fullPath = `/${lang}${isHome ? "" : to}`;
+      const basePath = `/${lang}${isHome ? "" : to}`;
+      const pathWithQuery = `${basePath}${query || ""}`;
       const selected =
-        pathname === fullPath ||
-        (!isHome && pathname.startsWith(`${fullPath}/`));
+        pathname === basePath ||
+        (!isHome && pathname.startsWith(`${basePath}/`));
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
@@ -276,7 +298,7 @@ const NavTemporaryDrawer = ({
           return;
         }
 
-        router.push(fullPath);
+        router.push(pathWithQuery);
       };
 
       return (

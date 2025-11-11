@@ -102,14 +102,13 @@ const AccountMenu = () => {
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     if (!isSignedIn) {
-      const memberSignInPath = `/${lang}/member/sign-in`;
       const redirectParam = searchParams.get("redirect");
       const isMemberPage = pathname.startsWith(`/${lang}/member`);
-      const redirectTarget =
+      const redirectTo =
         isMemberPage && redirectParam ? redirectParam : currentURL;
 
       router.push(
-        `${memberSignInPath}?redirect=${encodeURIComponent(redirectTarget)}`,
+        `/${lang}/member/sign-in?redirect=${encodeURIComponent(redirectTo)}`,
       );
 
       return;
