@@ -258,7 +258,7 @@ const NavTemporaryDrawer = ({
         const SlotComponent = slots[mode];
         if (!SlotComponent) return null;
 
-        const storeName = getStoreName(stores, lang, storeSlug);
+        const storeName = getStoreName(lang, stores, storeSlug);
 
         const handleClick = () => {
           if (!storeSlug || !tableNumber) return;

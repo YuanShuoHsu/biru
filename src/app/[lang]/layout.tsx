@@ -16,7 +16,7 @@ import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
 import type { LocaleCode } from "@/types/locale";
 
-import getStores from "@/utils/getStores";
+import { getStores } from "@/utils/stores";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,8 +51,8 @@ export default async function RootLayout({
   const dict = await getDictionary(langCode);
   // const dict = await getDictionary(lang);
 
-  const data = await getStores();
-  const fallback = { "/api/stores": data };
+  const stores = await getStores();
+  const fallback = { "/api/stores": stores };
 
   return (
     <html lang={langCode} suppressHydrationWarning>

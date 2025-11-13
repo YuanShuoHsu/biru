@@ -96,7 +96,6 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       "/api/auth/login",
       sendRequest({
         credentials: "include",
-        headers: { "Content-Type": "application/json" },
       }),
     );
 

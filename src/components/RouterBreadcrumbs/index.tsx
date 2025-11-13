@@ -220,7 +220,7 @@ const RouterBreadcrumbs = () => {
   const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
-  const storeName = getStoreName(stores, lang, storeSlug);
+  const storeName = getStoreName(lang, stores, storeSlug);
 
   const dict = useI18n();
   const breadcrumbs = breadcrumbsMap(

@@ -6,6 +6,7 @@ import { useSnackbar } from "notistack";
 import { SWRConfig, SWRConfiguration } from "swr";
 
 import { getErrorMessage } from "@/utils/errors";
+import { fetcher } from "@/utils/fetcher";
 
 interface SWRProviderProps {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ const SWRProvider = ({ children, fallback }: SWRProviderProps) => {
     <SWRConfig
       value={{
         fallback,
+        fetcher,
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         onError: (error, key) => {
           if (error.status !== 403 && error.status !== 404) {
