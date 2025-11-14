@@ -38,7 +38,8 @@ import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { fetcher, sendRequest } from "@/utils/fetcher";
+import { fetchProfile } from "@/utils/auth";
+import { sendRequest } from "@/utils/fetcher";
 
 import FormCard from "../FormCard";
 
@@ -102,13 +103,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const { isMutating: isMutatingProfile, trigger: triggerProfile } =
     useSWRMutation<UserResponseDto, Error, string, string>(
       "/api/auth/profile",
-      (url, { arg: accessToken }) =>
-        fetcher<UserResponseDto>(url, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-          credentials: "include",
-        }),
+      (_, { arg }) => fetchProfile(arg),
     );
 
   const isSubmitting = isMutatingAccessToken || isMutatingProfile;
