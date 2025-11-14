@@ -53,6 +53,6 @@ export const proxy = (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/data|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|\\.well-known|images).*)",
+    "/((?!api|_next/data|_next/static|_next/image|apple-icon.png|favicon.ico|icon\\.svg|sitemap.xml|robots.txt|\\.well-known|images).*)",
   ],
 };
