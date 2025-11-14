@@ -17,7 +17,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { clearAuth, setAccessToken, setProfile } = useAuthStore();
 
   useEffect(() => {
-    const hydrateAuthState = async () => {
+    const initAuthState = async () => {
       try {
         const { access_token } = await sendRequest<AuthResponseDto>({
           credentials: "include",
@@ -31,7 +31,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       }
     };
 
-    hydrateAuthState();
+    initAuthState();
   }, [clearAuth, setAccessToken, setProfile]);
 
   return <>{children}</>;
