@@ -1,5 +1,6 @@
 import { cache } from "react";
 
+import { getErrorMessage } from "./errors";
 import { fetcher } from "./fetcher";
 
 import type { LocaleCode } from "@/types/locale";
@@ -19,9 +20,14 @@ export const getStoreName = (
 };
 
 export const getStores = cache(async () => {
-  const data = await fetcher<Store[]>("/api/stores", {
-    next: { revalidate: 60, tags: ["stores"] },
-  });
+  try {
+    const data = await fetcher<Store[]>("/api/stores", {
+      next: { revalidate: 60, tags: ["stores"] },
+    });
 
-  return Array.isArray(data) ? data : [];
+    return Array.isArray(data) ? data : [];
+  } catch (error) {
+    console.error(getErrorMessage(error));
+    return [];
+  }
 });
