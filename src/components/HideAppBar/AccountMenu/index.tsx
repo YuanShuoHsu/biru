@@ -204,6 +204,7 @@ const AccountMenu = () => {
           aria-label="account of current user"
           color="inherit"
           disabled={isRefreshing}
+          // loading={isRefreshing}
           onClick={handleClick}
         >
           <BadgeAvatars invisible={!isSignedIn}>
