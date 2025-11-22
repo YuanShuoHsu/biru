@@ -18,7 +18,6 @@ import { useI18n } from "@/context/i18n";
 import {
   AccountCircle,
   Logout,
-  Person,
   PersonAdd,
   Settings,
 } from "@mui/icons-material";
@@ -66,13 +65,28 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
     marginTop: theme.spacing(7),
   },
+
+  "& .MuiPaper-root": {
+    "& .MuiMenuItem-root": {
+      gap: theme.spacing(2),
+    },
+
+    "& .MuiListItemIcon-root": {
+      minWidth: 0,
+    },
+
+    "& .MuiAvatar-root": {
+      width: 20,
+      height: 20,
+    },
+  },
 }));
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { accessToken, clearAuth, profile } = useAuthStore();
+  const { accessToken, clearAuth, isRefreshing, profile } = useAuthStore();
 
   const { isMutating: isMutatingLogout, trigger: triggerLogout } =
     useSWRMutation<LogoutResponseDto, Error, string>(
@@ -135,6 +149,51 @@ const AccountMenu = () => {
     }
   };
 
+  type MenuEntry = {
+    disabled?: boolean;
+    icon: React.ElementType;
+    key: string;
+    label: React.ReactNode;
+    onClick: () => void;
+  };
+
+  const profileMenuItems: MenuEntry[] = [
+    {
+      icon: Avatar,
+      key: "profile",
+      label: "Profile",
+      onClick: handleClose,
+    },
+    {
+      icon: Avatar,
+      key: "my-account",
+      label: "My account",
+      onClick: handleClose,
+    },
+  ];
+
+  const accountMenuItems: MenuEntry[] = [
+    {
+      icon: PersonAdd,
+      key: "add-account",
+      label: "Add another account",
+      onClick: handleClose,
+    },
+    {
+      icon: Settings,
+      key: "settings",
+      label: "Settings",
+      onClick: handleAccountSettings,
+    },
+    {
+      disabled: isMutatingLogout,
+      icon: Logout,
+      key: "logout",
+      label: dict.member.auth.signOut.label,
+      onClick: handleLogout,
+    },
+  ];
+
   return (
     <>
       <Tooltip title={tooltipTitle}>
@@ -144,6 +203,7 @@ const AccountMenu = () => {
           aria-haspopup="true"
           aria-label="account of current user"
           color="inherit"
+          disabled={isRefreshing}
           onClick={handleClick}
         >
           <BadgeAvatars invisible={!isSignedIn}>
@@ -167,43 +227,27 @@ const AccountMenu = () => {
         open={open}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
-        {/* <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
-        </MenuItem> */}
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Person fontSize="small" />
-          </ListItemIcon>
-          Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Person fontSize="small" />
-          </ListItemIcon>
-          My account
-        </MenuItem>
+        {profileMenuItems.map(
+          ({ disabled, icon: Icon, key, label, onClick }) => (
+            <MenuItem disabled={disabled} key={key} onClick={onClick}>
+              <ListItemIcon>
+                <Icon fontSize="small" />
+              </ListItemIcon>
+              {label}
+            </MenuItem>
+          ),
+        )}
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleAccountSettings}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem disabled={isMutatingLogout} onClick={handleLogout}>
-          <ListItemIcon>
-            <Logout fontSize="small" />
-          </ListItemIcon>
-          {dict.member.auth.signOut.label}
-        </MenuItem>
+        {accountMenuItems.map(
+          ({ disabled, icon: Icon, key, label, onClick }) => (
+            <MenuItem disabled={disabled} key={key} onClick={onClick}>
+              <ListItemIcon>
+                <Icon fontSize="small" />
+              </ListItemIcon>
+              {label}
+            </MenuItem>
+          ),
+        )}
       </StyledMenu>
     </>
   );

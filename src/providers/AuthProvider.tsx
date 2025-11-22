@@ -14,10 +14,13 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { clearAuth, setAccessToken, setProfile } = useAuthStore();
+  const { clearAuth, setAccessToken, setIsRefreshing, setProfile } =
+    useAuthStore();
 
   useEffect(() => {
     const initAuthState = async () => {
+      setIsRefreshing(true);
+
       try {
         const { access_token } = await sendRequest<AuthResponseDto>({
           credentials: "include",
@@ -28,11 +31,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         setProfile(profile);
       } catch {
         clearAuth();
+      } finally {
+        setIsRefreshing(false);
       }
     };
 
     initAuthState();
-  }, [clearAuth, setAccessToken, setProfile]);
+  }, [clearAuth, setAccessToken, setIsRefreshing, setProfile]);
 
   return <>{children}</>;
 };

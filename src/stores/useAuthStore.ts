@@ -5,16 +5,32 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 interface AuthState {
   accessToken: string | null;
+  isRefreshing: boolean;
   profile: UserResponseDto | null;
-  setAccessToken: (accessToken: AuthResponseDto["access_token"]) => void;
-  setProfile: (profile: UserResponseDto | null) => void;
-  clearAuth: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+interface AuthActions {
+  clearAuth: () => void;
+  setAccessToken: (accessToken: AuthResponseDto["access_token"]) => void;
+  setIsRefreshing: (isRefreshing: boolean) => void;
+  setProfile: (profile: UserResponseDto | null) => void;
+}
+
+type AuthStore = AuthState & AuthActions;
+
+const defaultAuthState: AuthState = {
   accessToken: null,
+  isRefreshing: true,
   profile: null,
-  setAccessToken: (accessToken) => set({ accessToken }),
-  setProfile: (profile) => set({ profile }),
-  clearAuth: () => set({ accessToken: null, profile: null }),
-}));
+};
+
+const createAuthStore = (initState: AuthState = defaultAuthState) =>
+  create<AuthStore>()((set) => ({
+    ...initState,
+    clearAuth: () => set(() => ({ ...initState })),
+    setAccessToken: (accessToken) => set({ accessToken }),
+    setIsRefreshing: (isRefreshing) => set({ isRefreshing }),
+    setProfile: (profile) => set({ profile }),
+  }));
+
+export const useAuthStore = createAuthStore();
