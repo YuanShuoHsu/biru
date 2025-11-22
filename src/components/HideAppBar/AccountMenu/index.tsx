@@ -1,6 +1,7 @@
 // https://mui.com/material-ui/react-app-bar/#MenuAppBar.tsx
 // https://mui.com/material-ui/react-app-bar/#ResponsiveAppBar.tsx
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
+// https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
 import {
   useParams,
@@ -197,26 +198,28 @@ const AccountMenu = () => {
   return (
     <>
       <Tooltip title={tooltipTitle}>
-        <IconButton
-          aria-controls={open ? "account-menu" : undefined}
-          aria-expanded={open ? "true" : undefined}
-          aria-haspopup="true"
-          aria-label="account of current user"
-          color="inherit"
-          disabled={isRefreshing}
-          // loading={isRefreshing}
-          onClick={handleClick}
-        >
-          <BadgeAvatars invisible={!isSignedIn}>
-            <StyledAvatar
-              alt={displayName}
-              isSignedIn={isSignedIn}
-              src={profile?.image}
-            >
-              {!isSignedIn && <AccountCircle />}
-            </StyledAvatar>
-          </BadgeAvatars>
-        </IconButton>
+        <span>
+          <IconButton
+            aria-controls={open ? "account-menu" : undefined}
+            aria-expanded={open ? "true" : undefined}
+            aria-haspopup="true"
+            aria-label="account of current user"
+            color="inherit"
+            disabled={isRefreshing}
+            loading={isRefreshing}
+            onClick={handleClick}
+          >
+            <BadgeAvatars invisible={!isSignedIn}>
+              <StyledAvatar
+                alt={displayName}
+                isSignedIn={isSignedIn}
+                src={profile?.image}
+              >
+                {!isSignedIn && <AccountCircle />}
+              </StyledAvatar>
+            </BadgeAvatars>
+          </IconButton>
+        </span>
       </Tooltip>
       <StyledMenu
         anchorEl={anchorEl}
