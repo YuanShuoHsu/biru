@@ -10,19 +10,15 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import React, { useState } from "react";
+import type { MouseEvent } from "react";
+import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
 import { useI18n } from "@/context/i18n";
 
-import {
-  AccountCircle,
-  Logout,
-  PersonAdd,
-  Settings,
-} from "@mui/icons-material";
+import { AccountCircle } from "@mui/icons-material";
 import {
   Avatar,
   Divider,
@@ -38,8 +34,12 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import type { LogoutResponseDto } from "@/types/auth/logout-response.dto";
 import { RouteParams } from "@/types/routeParams";
 
+import {
+  getAccountMenuItems,
+  getDisplayName,
+  getProfileMenuItems,
+} from "@/utils/auth";
 import { sendRequest } from "@/utils/fetcher";
-import { getDisplayName } from "@/utils/profile";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -83,14 +83,6 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-interface AuthMenuItem {
-  disabled?: boolean;
-  icon: React.ElementType;
-  label: React.ReactNode;
-  onClick?: () => void;
-  to?: string;
-}
-
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -109,7 +101,7 @@ const AccountMenu = () => {
   const memberBasePath = `/${lang}/member`;
 
   const isSignedIn = Boolean(accessToken && profile);
-  const displayName = getDisplayName(profile, lang);
+  const displayName = getDisplayName(lang, profile);
 
   const dict = useI18n();
   const tooltipTitle = isSignedIn
@@ -124,7 +116,7 @@ const AccountMenu = () => {
   const search = searchParams.toString();
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
     if (isRefreshing) return;
 
     if (!isSignedIn) {
@@ -153,38 +145,11 @@ const AccountMenu = () => {
     }
   };
 
-  // label 未來要修正
-  const profileMenuItems: AuthMenuItem[] = [
-    {
-      icon: Avatar,
-      label: dict.member.accountMenu.profile,
-      to: "/profile",
-    },
-    {
-      icon: Avatar,
-      label: dict.member.accountMenu.myAccount,
-      to: "/my-account",
-    },
-  ];
-
-  const accountMenuItems: AuthMenuItem[] = [
-    {
-      icon: PersonAdd,
-      label: dict.member.accountMenu.addAnotherAccount,
-      to: "/add-another-account",
-    },
-    {
-      icon: Settings,
-      label: dict.member.accountMenu.settings,
-      to: "/settings",
-    },
-    {
-      disabled: isMutatingLogout,
-      icon: Logout,
-      label: dict.member.auth.signOut.label,
-      onClick: handleLogout,
-    },
-  ];
+  const profileMenuItems = getProfileMenuItems(dict);
+  const accountMenuItems = getAccountMenuItems(dict, {
+    isMutatingLogout,
+    onLogout: handleLogout,
+  });
 
   return (
     <>
