@@ -39,7 +39,7 @@
     "label": "会员",
     "accountMenu": {
       "這邊未來要根據頁面修正": "",
-      "addAccount": "添加其他账号",
+      "addAnotherAccount": "添加其他账号",
       "myAccount": "我的账号",
       "profile": "个人资料",
       "settings": "设置"

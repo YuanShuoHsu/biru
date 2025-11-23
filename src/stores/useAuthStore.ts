@@ -27,7 +27,7 @@ const defaultAuthState: AuthState = {
 const createAuthStore = (initState: AuthState = defaultAuthState) =>
   create<AuthStore>()((set) => ({
     ...initState,
-    clearAuth: () => set(() => ({ ...initState })),
+    clearAuth: () => set(() => ({ ...initState, isRefreshing: false })),
     setAccessToken: (accessToken) => set({ accessToken }),
     setIsRefreshing: (isRefreshing) => set({ isRefreshing }),
     setProfile: (profile) => set({ profile }),

@@ -3,6 +3,7 @@
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
+import NextLink from "next/link";
 import {
   useParams,
   usePathname,
@@ -34,7 +35,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/stores/useAuthStore";
-
 import type { LogoutResponseDto } from "@/types/auth/logout-response.dto";
 import { RouteParams } from "@/types/routeParams";
 
@@ -86,9 +86,9 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 interface AuthMenuItem {
   disabled?: boolean;
   icon: React.ElementType;
-  key: string;
   label: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  to?: string;
 }
 
 const AccountMenu = () => {
@@ -106,6 +106,7 @@ const AccountMenu = () => {
     );
 
   const { lang } = useParams<RouteParams>();
+  const memberBasePath = `/${lang}/member`;
 
   const isSignedIn = Boolean(accessToken && profile);
   const displayName = getDisplayName(profile, lang);
@@ -144,19 +145,11 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const handleAccountSettings = () => {
-    if (!isSignedIn) return;
-
-    router.push(`/${lang}/member/account-settings`);
-    handleClose();
-  };
-
   const handleLogout = async () => {
     try {
       await triggerLogout();
     } finally {
       clearAuth();
-      handleClose();
     }
   };
 
@@ -164,35 +157,30 @@ const AccountMenu = () => {
   const profileMenuItems: AuthMenuItem[] = [
     {
       icon: Avatar,
-      key: "profile",
       label: dict.member.accountMenu.profile,
-      onClick: handleClose,
+      to: "/profile",
     },
     {
       icon: Avatar,
-      key: "my-account",
       label: dict.member.accountMenu.myAccount,
-      onClick: handleClose,
+      to: "/my-account",
     },
   ];
 
   const accountMenuItems: AuthMenuItem[] = [
     {
       icon: PersonAdd,
-      key: "add-account",
-      label: dict.member.accountMenu.addAccount,
-      onClick: handleClose,
+      label: dict.member.accountMenu.addAnotherAccount,
+      to: "/add-another-account",
     },
     {
       icon: Settings,
-      key: "settings",
       label: dict.member.accountMenu.settings,
-      onClick: handleAccountSettings,
+      to: "/settings",
     },
     {
       disabled: isMutatingLogout,
       icon: Logout,
-      key: "logout",
       label: dict.member.auth.signOut.label,
       onClick: handleLogout,
     },
@@ -235,25 +223,47 @@ const AccountMenu = () => {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
         {profileMenuItems.map(
-          ({ disabled, icon: Icon, key, label, onClick }) => (
-            <MenuItem disabled={disabled} key={key} onClick={onClick}>
-              <ListItemIcon>
-                <Icon fontSize="small" />
-              </ListItemIcon>
-              {label}
-            </MenuItem>
-          ),
+          ({ disabled, icon: Icon, label, onClick, to }, index) => {
+            const href = to ? `${memberBasePath}${to}` : undefined;
+            const menuItemProps = href ? { component: NextLink, href } : {};
+            const menuItemKey = href || `profile-menuItem-${index}`;
+
+            return (
+              <MenuItem
+                {...menuItemProps}
+                disabled={disabled}
+                key={menuItemKey}
+                onClick={onClick}
+              >
+                <ListItemIcon>
+                  <Icon fontSize="small" />
+                </ListItemIcon>
+                {label}
+              </MenuItem>
+            );
+          },
         )}
         <Divider />
         {accountMenuItems.map(
-          ({ disabled, icon: Icon, key, label, onClick }) => (
-            <MenuItem disabled={disabled} key={key} onClick={onClick}>
-              <ListItemIcon>
-                <Icon fontSize="small" />
-              </ListItemIcon>
-              {label}
-            </MenuItem>
-          ),
+          ({ disabled, icon: Icon, label, onClick, to }, index) => {
+            const href = to ? `${memberBasePath}${to}` : undefined;
+            const menuItemProps = href ? { component: NextLink, href } : {};
+            const menuItemKey = href || `account-menuItem-${index}`;
+
+            return (
+              <MenuItem
+                {...menuItemProps}
+                disabled={disabled}
+                key={menuItemKey}
+                onClick={onClick}
+              >
+                <ListItemIcon>
+                  <Icon fontSize="small" />
+                </ListItemIcon>
+                {label}
+              </MenuItem>
+            );
+          },
         )}
       </StyledMenu>
     </>
