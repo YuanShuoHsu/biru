@@ -83,6 +83,14 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
+interface AuthMenuItem {
+  disabled?: boolean;
+  icon: React.ElementType;
+  key: string;
+  label: React.ReactNode;
+  onClick: () => void;
+}
+
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -116,6 +124,8 @@ const AccountMenu = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (isRefreshing) return;
+
     if (!isSignedIn) {
       const redirectParam = searchParams.get("redirect");
       const isMemberPage = pathname.startsWith(`/${lang}/member`);
@@ -150,40 +160,33 @@ const AccountMenu = () => {
     }
   };
 
-  type MenuEntry = {
-    disabled?: boolean;
-    icon: React.ElementType;
-    key: string;
-    label: React.ReactNode;
-    onClick: () => void;
-  };
-
-  const profileMenuItems: MenuEntry[] = [
+  // label 未來要修正
+  const profileMenuItems: AuthMenuItem[] = [
     {
       icon: Avatar,
       key: "profile",
-      label: "Profile",
+      label: dict.member.accountMenu.profile,
       onClick: handleClose,
     },
     {
       icon: Avatar,
       key: "my-account",
-      label: "My account",
+      label: dict.member.accountMenu.myAccount,
       onClick: handleClose,
     },
   ];
 
-  const accountMenuItems: MenuEntry[] = [
+  const accountMenuItems: AuthMenuItem[] = [
     {
       icon: PersonAdd,
       key: "add-account",
-      label: "Add another account",
+      label: dict.member.accountMenu.addAccount,
       onClick: handleClose,
     },
     {
       icon: Settings,
       key: "settings",
-      label: "Settings",
+      label: dict.member.accountMenu.settings,
       onClick: handleAccountSettings,
     },
     {

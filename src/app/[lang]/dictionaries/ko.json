@@ -37,6 +37,13 @@
   },
   "member": {
     "label": "회원",
+    "accountMenu": {
+      "這邊未來要根據頁面修正": "",
+      "addAccount": "다른 계정 추가",
+      "myAccount": "내 계정",
+      "profile": "프로필",
+      "settings": "설정"
+    },
     "accountSettings": {
       "label": "계정 설정"
     },
