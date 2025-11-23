@@ -224,7 +224,7 @@ const AccountMenu = () => {
       >
         {profileMenuItems.map(
           ({ disabled, icon: Icon, label, onClick, to }, index) => {
-            const href = to ? `${memberBasePath}${to}` : undefined;
+            const href = to && `${memberBasePath}${to}`;
             const menuItemProps = href ? { component: NextLink, href } : {};
             const menuItemKey = href || `profile-menuItem-${index}`;
 
@@ -246,7 +246,7 @@ const AccountMenu = () => {
         <Divider />
         {accountMenuItems.map(
           ({ disabled, icon: Icon, label, onClick, to }, index) => {
-            const href = to ? `${memberBasePath}${to}` : undefined;
+            const href = to && `${memberBasePath}${to}`;
             const menuItemProps = href ? { component: NextLink, href } : {};
             const menuItemKey = href || `account-menuItem-${index}`;
 
