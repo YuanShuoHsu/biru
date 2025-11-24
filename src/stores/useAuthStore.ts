@@ -5,14 +5,15 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 interface AuthState {
   accessToken: string | null;
-  isRefreshing: boolean;
+  isAuthLoading: boolean;
+  isSignedIn: boolean;
   profile: UserResponseDto | null;
 }
 
 interface AuthActions {
   clearAuth: () => void;
   setAccessToken: (accessToken: AuthResponseDto["access_token"]) => void;
-  setIsRefreshing: (isRefreshing: boolean) => void;
+  setIsAuthLoading: (isAuthLoading: boolean) => void;
   setProfile: (profile: UserResponseDto | null) => void;
 }
 
@@ -20,17 +21,35 @@ type AuthStore = AuthState & AuthActions;
 
 const defaultAuthState: AuthState = {
   accessToken: null,
-  isRefreshing: true,
+  isAuthLoading: true,
+  isSignedIn: false,
   profile: null,
 };
+
+const computeIsSignedIn = (
+  accessToken: AuthState["accessToken"],
+  profile: AuthState["profile"],
+) => Boolean(accessToken && profile);
 
 const createAuthStore = (initState: AuthState = defaultAuthState) =>
   create<AuthStore>()((set) => ({
     ...initState,
-    clearAuth: () => set(() => ({ ...initState, isRefreshing: false })),
-    setAccessToken: (accessToken) => set({ accessToken }),
-    setIsRefreshing: (isRefreshing) => set({ isRefreshing }),
-    setProfile: (profile) => set({ profile }),
+    clearAuth: () =>
+      set(() => ({
+        ...initState,
+        isAuthLoading: false,
+      })),
+    setAccessToken: (accessToken) =>
+      set((state) => ({
+        accessToken,
+        isSignedIn: computeIsSignedIn(accessToken, state.profile),
+      })),
+    setIsAuthLoading: (isAuthLoading) => set({ isAuthLoading }),
+    setProfile: (profile) =>
+      set((state) => ({
+        profile,
+        isSignedIn: computeIsSignedIn(state.accessToken, profile),
+      })),
   }));
 
 export const useAuthStore = createAuthStore();

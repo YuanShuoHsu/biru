@@ -1,4 +1,4 @@
-import { Button, SvgIconProps } from "@mui/material";
+import { Button, type SvgIconProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledButton = styled(Button, {

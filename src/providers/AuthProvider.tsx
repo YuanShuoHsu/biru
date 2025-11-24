@@ -14,12 +14,12 @@ interface AuthProviderProps {
 }
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { clearAuth, setAccessToken, setIsRefreshing, setProfile } =
+  const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore();
 
   useEffect(() => {
     const initAuthState = async () => {
-      setIsRefreshing(true);
+      setIsAuthLoading(true);
 
       try {
         const { access_token } = await sendRequest<AuthResponseDto>({
@@ -32,12 +32,12 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
       } catch {
         clearAuth();
       } finally {
-        setIsRefreshing(false);
+        setIsAuthLoading(false);
       }
     };
 
     initAuthState();
-  }, [clearAuth, setAccessToken, setIsRefreshing, setProfile]);
+  }, [clearAuth, setAccessToken, setIsAuthLoading, setProfile]);
 
   return <>{children}</>;
 };

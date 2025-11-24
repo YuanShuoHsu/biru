@@ -8,7 +8,7 @@ import { useI18n } from "@/context/i18n";
 import {
   Box,
   Button,
-  ButtonProps,
+  type ButtonProps,
   Chip,
   Fade,
   Stack,

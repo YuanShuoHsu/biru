@@ -2,6 +2,7 @@
 // https://mui.com/material-ui/react-list/#NestedList.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
+import NextLink from "next/link";
 import {
   useParams,
   usePathname,
@@ -12,6 +13,8 @@ import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 import { type I18nDict, useI18n } from "@/context/i18n";
+
+import { useLogout } from "@/hooks/useLogout";
 
 import {
   AccountCircle,
@@ -36,11 +39,14 @@ import {
   ListItemButtonProps,
   ListItemIcon,
   ListItemText,
+  Link as MuiLink,
+  type LinkProps as MuiLinkProps,
   Stack,
-  SvgIconProps,
   Toolbar,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useAuthStore } from "@/stores/useAuthStore";
 
 import type { DrawerType } from "@/types/drawer";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
@@ -48,6 +54,7 @@ import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
+import { getAccountMenuItems, getProfileMenuItems } from "@/utils/auth";
 import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
@@ -62,6 +69,7 @@ const StyledListItemButton = styled(ListItemButton, {
   shouldForwardProp: (prop) => prop !== "level",
 })<StyledListItemButtonProps>(({ level, theme }) => ({
   paddingLeft: theme.spacing(2 + level * 2),
+  gap: theme.spacing(4),
 
   "&.Mui-selected": {
     backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${level * 0.1}))`,
@@ -69,6 +77,15 @@ const StyledListItemButton = styled(ListItemButton, {
     "&:hover": {
       backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / calc(${theme.vars.palette.action.selectedOpacity} + ${theme.vars.palette.action.hoverOpacity} + ${level * 0.1}))`,
     },
+  },
+
+  "& .MuiAvatar-root": {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+  },
+
+  "& .MuiListItemIcon-root": {
+    minWidth: 0,
   },
 }));
 
@@ -84,23 +101,71 @@ const StyledExpandMore = styled(ExpandMore, {
   transition: theme.transitions.create("transform"),
 }));
 
+const StyledMuiLink = styled(MuiLink)<MuiLinkProps>(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(4),
+}));
+
 interface NavLinkItem {
   children?: NavItem[];
-  icon: React.ComponentType<SvgIconProps>;
+  disabled?: boolean;
+  icon: React.ElementType;
   label: string;
-  to: string;
+  onClick?: () => void;
   query?: string;
+  to?: string;
 }
 
+type SlotKey = OrderMode | "divider";
+
 interface NavSlotItem {
-  slot: OrderMode;
+  slot: SlotKey;
 }
 
 type NavItem = NavLinkItem | NavSlotItem;
 
-const navItemsMap = (dict: I18nDict, memberRedirectTo?: string): NavItem[] => {
-  const query =
-    memberRedirectTo && `?redirect=${encodeURIComponent(memberRedirectTo)}`;
+interface NavItemsMapOptions {
+  dict: I18nDict;
+  isMutatingLogout?: boolean;
+  isSignedIn: boolean;
+  onLogout: () => void;
+  redirectTo?: string;
+}
+
+const navItemsMap = ({
+  dict,
+  isMutatingLogout,
+  isSignedIn,
+  onLogout,
+  redirectTo,
+}: NavItemsMapOptions): NavItem[] => {
+  const profileMenuItems = getProfileMenuItems(dict);
+  const accountMenuItems = getAccountMenuItems(dict, {
+    isMutatingLogout,
+    onLogout,
+  });
+
+  const query = redirectTo
+    ? `?redirect=${encodeURIComponent(redirectTo)}`
+    : undefined;
+
+  const memberChildren: NavItem[] = isSignedIn
+    ? [...profileMenuItems, { slot: "divider" }, ...accountMenuItems]
+    : [
+        {
+          icon: Login,
+          label: dict.member.auth.signIn.label,
+          query,
+          to: "/sign-in",
+        },
+        {
+          icon: PersonAdd,
+          label: dict.member.auth.signUp.label,
+          query,
+          to: "/sign-up",
+        },
+      ];
 
   return [
     { icon: Home, label: dict.home.label, to: "/" },
@@ -110,7 +175,7 @@ const navItemsMap = (dict: I18nDict, memberRedirectTo?: string): NavItem[] => {
         {
           icon: LocalMall,
           label: dict.order.mode.pickup.label,
-          to: "/order/pickup",
+          to: "/pickup",
         },
       ],
       icon: ShoppingCart,
@@ -118,20 +183,7 @@ const navItemsMap = (dict: I18nDict, memberRedirectTo?: string): NavItem[] => {
       to: "/order",
     },
     {
-      children: [
-        {
-          icon: Login,
-          label: dict.member.auth.signIn.label,
-          query,
-          to: "/member/sign-in",
-        },
-        {
-          icon: PersonAdd,
-          label: dict.member.auth.signUp.label,
-          query,
-          to: "/member/sign-up",
-        },
-      ],
+      children: memberChildren,
       icon: AccountCircle,
       label: dict.member.label,
       to: "/member",
@@ -147,7 +199,7 @@ interface SlotProps {
   storeName: StoreName;
 }
 
-const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
+const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
   [ORDER_MODE.DineIn]: ({ dict, level, onClick, tableNumber, storeName }) => (
     <StyledListItemButton level={level} onClick={onClick} selected={true}>
       <Stack
@@ -182,18 +234,41 @@ const slots: Partial<Record<OrderMode, React.ComponentType<SlotProps>>> = {
       </Stack>
     </StyledListItemButton>
   ),
+  divider: () => <Divider component="li" variant="inset" />,
 };
 
 interface ListItemLinkProps extends ListItemButtonProps {
   hasChildren?: boolean;
-  icon: React.ComponentType<SvgIconProps>;
+  href?: string;
+  icon: React.ElementType;
   label: string;
   level: number;
   open?: boolean;
 }
 
+const ListItemContent = ({
+  hasChildren,
+  icon: Icon,
+  label,
+  open,
+}: {
+  hasChildren?: boolean;
+  icon: React.ElementType;
+  label: string;
+  open?: boolean;
+}) => (
+  <>
+    <ListItemIcon>
+      <Icon />
+    </ListItemIcon>
+    <ListItemText primary={label} />
+    {hasChildren && <StyledExpandMore open={open} />}
+  </>
+);
+
 const ListItemLink = ({
   hasChildren,
+  href,
   icon: Icon,
   label,
   level,
@@ -208,11 +283,28 @@ const ListItemLink = ({
     onClick={onClick}
     {...other}
   >
-    <ListItemIcon>
-      <Icon />
-    </ListItemIcon>
-    <ListItemText primary={label} />
-    {hasChildren && <StyledExpandMore open={open} />}
+    {href ? (
+      <StyledMuiLink
+        color="inherit"
+        component={NextLink}
+        href={href}
+        underline="none"
+      >
+        <ListItemContent
+          hasChildren={hasChildren}
+          icon={Icon}
+          label={label}
+          open={open}
+        />
+      </StyledMuiLink>
+    ) : (
+      <ListItemContent
+        hasChildren={hasChildren}
+        icon={Icon}
+        label={label}
+        open={open}
+      />
+    )}
   </StyledListItemButton>
 );
 
@@ -232,6 +324,10 @@ const NavTemporaryDrawer = ({
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
+  const { isSignedIn } = useAuthStore();
+
+  const { handleLogout, isMutatingLogout } = useLogout();
+
   const pathname = usePathname();
   const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
   const router = useRouter();
@@ -246,21 +342,41 @@ const NavTemporaryDrawer = ({
   const isMemberPage = pathname.startsWith(`/${lang}/member`);
   const redirectTo = isMemberPage && redirectParam ? redirectParam : currentURL;
 
-  const navItems = navItemsMap(dict, redirectTo);
+  const navItems = navItemsMap({
+    dict,
+    isMutatingLogout,
+    isSignedIn,
+    onLogout: handleLogout,
+    redirectTo,
+  });
 
-  const handleIconButtonToggle = (to: string) =>
-    setOpenMap((prev) => ({ ...prev, [to]: !prev[to] }));
+  const handleIconButtonToggle = (key: string) =>
+    setOpenMap((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const renderItems = (items: NavItem[], level = 0) =>
+  const composePath = (parentPath: string, to?: string) => {
+    const normalizedParent = parentPath === "/" ? "" : parentPath;
+    if (!to) return normalizedParent || "/";
+
+    const child = to.startsWith("/") ? to : `/${to}`;
+    const combined = `${normalizedParent}${child}`;
+
+    return combined || "/";
+  };
+
+  const renderItems = (items: NavItem[], level = 0, parentPath = "") =>
     items.map((item) => {
       if ("slot" in item) {
         const { slot } = item;
-        const SlotComponent = slots[mode];
+        const SlotComponent = slots[slot];
         if (!SlotComponent) return null;
+
+        const isDividerSlot = slot === "divider";
+        if (!isDividerSlot && slot !== mode) return null;
 
         const storeName = getStoreName(lang, stores, storeSlug);
 
         const handleClick = () => {
+          if (isDividerSlot) return;
           if (!storeSlug || !tableNumber) return;
 
           router.push(`/${lang}/order/${mode}/${storeSlug}/${tableNumber}`);
@@ -278,33 +394,39 @@ const NavTemporaryDrawer = ({
         );
       }
 
-      const { children, icon, label, query, to } = item;
+      const { children, disabled, icon, label, onClick, query, to } = item;
 
-      const hasChildren = !!children?.length;
+      const basePath = composePath(parentPath, to);
+      const isHome = basePath === "/";
+      const pathWithLang = `/${lang}${isHome ? "" : basePath}`;
 
-      const open = openMap[to];
-
-      const isHome = to === "/";
-      const basePath = `/${lang}${isHome ? "" : to}`;
-      const pathWithQuery = `${basePath}${query || ""}`;
       const selected =
-        pathname === basePath ||
-        (!isHome && pathname.startsWith(`${basePath}/`));
+        pathname === pathWithLang ||
+        (!isHome && pathname.startsWith(`${pathWithLang}/`));
+
+      const pathWithQuery = to && `${pathWithLang}${query || ""}`;
+      const hasChildren = !!children?.length;
+      const href = !hasChildren ? pathWithQuery : undefined;
+
+      const itemKey = to ? pathWithLang : `${label}-${level}`;
+      const open = Boolean(to && openMap[itemKey]);
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
           event.stopPropagation();
-          handleIconButtonToggle(to);
+          if (to) handleIconButtonToggle(itemKey);
           return;
         }
 
-        router.push(pathWithQuery);
+        onClick?.();
       };
 
       return (
-        <Fragment key={to}>
+        <Fragment key={itemKey}>
           <ListItemLink
+            disabled={disabled}
             hasChildren={hasChildren}
+            href={href}
             icon={icon}
             label={label}
             level={level}
@@ -312,11 +434,10 @@ const NavTemporaryDrawer = ({
             open={open}
             selected={selected}
           />
-
           {hasChildren && (
-            <Collapse component="li" in={open} timeout="auto" unmountOnExit>
+            <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-                {renderItems(children!, level + 1)}
+                {renderItems(children!, level + 1, basePath)}
               </List>
             </Collapse>
           )}

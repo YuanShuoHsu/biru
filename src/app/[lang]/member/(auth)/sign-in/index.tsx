@@ -86,7 +86,8 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
       : path;
 
-  const { clearAuth, setAccessToken, setProfile } = useAuthStore();
+  const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
+    useAuthStore();
 
   const router = useRouter();
 
@@ -148,6 +149,8 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    setIsAuthLoading(true);
+
     try {
       const { access_token } = await triggerAccessToken(form);
       setAccessToken(access_token);
@@ -155,10 +158,11 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       const profile = await triggerProfile(access_token);
       setProfile(profile);
 
-      // 這裡好像應該要用 replace？等 access token 完成後，可以到用戶頁面時，再來確認實際效果
-      router.push(redirectParam || `/${lang}`);
+      router.replace(redirectParam || `/${lang}`);
     } catch {
       clearAuth();
+    } finally {
+      setIsAuthLoading(false);
     }
   };
 

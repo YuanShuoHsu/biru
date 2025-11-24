@@ -23,9 +23,14 @@ import {
   Storefront,
   TableBar,
 } from "@mui/icons-material";
-import type { LinkProps, SvgIconProps, Theme } from "@mui/material";
-import { Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import {
+  Breadcrumbs,
+  Link as MuiLink,
+  type LinkProps as MuiLinkProps,
+  type SvgIconProps,
+  Typography,
+} from "@mui/material";
+import { styled, type Theme } from "@mui/material/styles";
 
 import type { LocaleCode } from "@/types/locale";
 import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
@@ -157,7 +162,7 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   },
 }));
 
-interface LinkRouterProps extends LinkProps {
+interface LinkRouterProps extends MuiLinkProps {
   to: string;
   replace?: boolean;
 }

@@ -13,7 +13,7 @@ import ScrollTop from "@/components/ScrollTop";
 import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, BoxProps, Fab, Stack, Toolbar } from "@mui/material";
+import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";

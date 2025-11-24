@@ -12,11 +12,12 @@ import {
 } from "next/navigation";
 import type { MouseEvent } from "react";
 import { useState } from "react";
-import useSWRMutation from "swr/mutation";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
 import { useI18n } from "@/context/i18n";
+
+import { useLogout } from "@/hooks/useLogout";
 
 import { AccountCircle } from "@mui/icons-material";
 import {
@@ -24,22 +25,24 @@ import {
   Divider,
   IconButton,
   ListItemIcon,
+  ListItemText,
   Menu,
   MenuItem,
+  Link as MuiLink,
+  type LinkProps as MuiLinkProps,
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/stores/useAuthStore";
-import type { LogoutResponseDto } from "@/types/auth/logout-response.dto";
 import { RouteParams } from "@/types/routeParams";
 
 import {
+  AuthMenuItem,
   getAccountMenuItems,
   getDisplayName,
   getProfileMenuItems,
 } from "@/utils/auth";
-import { sendRequest } from "@/utils/fetcher";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -68,39 +71,38 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 
   "& .MuiPaper-root": {
-    "& .MuiMenuItem-root": {
-      gap: theme.spacing(2),
+    "& .MuiAvatar-root": {
+      width: theme.spacing(2.5),
+      height: theme.spacing(2.5),
     },
 
     "& .MuiListItemIcon-root": {
       minWidth: 0,
     },
 
-    "& .MuiAvatar-root": {
-      width: 20,
-      height: 20,
+    "& .MuiMenuItem-root": {
+      gap: theme.spacing(2),
     },
   },
+}));
+
+const StyledMuiLink = styled(MuiLink)<MuiLinkProps>(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(2),
 }));
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { accessToken, clearAuth, isRefreshing, profile } = useAuthStore();
+  const { isAuthLoading, isSignedIn, profile } = useAuthStore();
 
-  const { isMutating: isMutatingLogout, trigger: triggerLogout } =
-    useSWRMutation<LogoutResponseDto, Error, string>(
-      "/api/auth/logout",
-      sendRequest({
-        credentials: "include",
-      }),
-    );
+  const { handleLogout, isMutatingLogout } = useLogout();
 
   const { lang } = useParams<RouteParams>();
   const memberBasePath = `/${lang}/member`;
 
-  const isSignedIn = Boolean(accessToken && profile);
   const displayName = getDisplayName(lang, profile);
 
   const dict = useI18n();
@@ -117,7 +119,7 @@ const AccountMenu = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    if (isRefreshing) return;
+    if (isAuthLoading) return;
 
     if (!isSignedIn) {
       const redirectParam = searchParams.get("redirect");
@@ -137,19 +139,43 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const handleLogout = async () => {
-    try {
-      await triggerLogout();
-    } finally {
-      clearAuth();
-    }
-  };
-
   const profileMenuItems = getProfileMenuItems(dict);
   const accountMenuItems = getAccountMenuItems(dict, {
     isMutatingLogout,
     onLogout: handleLogout,
   });
+
+  const renderMenuItems = (items: AuthMenuItem[], keyPrefix: string) =>
+    items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
+      const href = to && `${memberBasePath}${to}`;
+      const key = `${keyPrefix}-${href || index}`;
+
+      const menuItemContent = (
+        <>
+          <ListItemIcon>
+            <Icon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary={label} />
+        </>
+      );
+
+      return (
+        <MenuItem disabled={disabled} key={key} onClick={onClick}>
+          {href ? (
+            <StyledMuiLink
+              color="inherit"
+              component={NextLink}
+              href={href}
+              underline="none"
+            >
+              {menuItemContent}
+            </StyledMuiLink>
+          ) : (
+            menuItemContent
+          )}
+        </MenuItem>
+      );
+    });
 
   return (
     <>
@@ -161,8 +187,8 @@ const AccountMenu = () => {
             aria-haspopup="true"
             aria-label="account of current user"
             color="inherit"
-            disabled={isRefreshing}
-            loading={isRefreshing}
+            disabled={isAuthLoading}
+            loading={isAuthLoading}
             onClick={handleClick}
           >
             <BadgeAvatars invisible={!isSignedIn}>
@@ -187,49 +213,9 @@ const AccountMenu = () => {
         open={open}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
-        {profileMenuItems.map(
-          ({ disabled, icon: Icon, label, onClick, to }, index) => {
-            const href = to && `${memberBasePath}${to}`;
-            const menuItemProps = href ? { component: NextLink, href } : {};
-            const menuItemKey = href || `profile-menuItem-${index}`;
-
-            return (
-              <MenuItem
-                {...menuItemProps}
-                disabled={disabled}
-                key={menuItemKey}
-                onClick={onClick}
-              >
-                <ListItemIcon>
-                  <Icon fontSize="small" />
-                </ListItemIcon>
-                {label}
-              </MenuItem>
-            );
-          },
-        )}
+        {renderMenuItems(profileMenuItems, "profile")}
         <Divider />
-        {accountMenuItems.map(
-          ({ disabled, icon: Icon, label, onClick, to }, index) => {
-            const href = to && `${memberBasePath}${to}`;
-            const menuItemProps = href ? { component: NextLink, href } : {};
-            const menuItemKey = href || `account-menuItem-${index}`;
-
-            return (
-              <MenuItem
-                {...menuItemProps}
-                disabled={disabled}
-                key={menuItemKey}
-                onClick={onClick}
-              >
-                <ListItemIcon>
-                  <Icon fontSize="small" />
-                </ListItemIcon>
-                {label}
-              </MenuItem>
-            );
-          },
-        )}
+        {renderMenuItems(accountMenuItems, "account")}
       </StyledMenu>
     </>
   );

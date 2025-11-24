@@ -1,7 +1,6 @@
 // https://mui.com/material-ui/react-avatar/#BadgeAvatars.tsx
 
-import type { BadgeProps } from "@mui/material";
-import { Badge } from "@mui/material";
+import { Badge, type BadgeProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({

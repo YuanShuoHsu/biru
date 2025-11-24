@@ -2,7 +2,7 @@
 
 import React from "react";
 
-import { Card, CardProps } from "@mui/material";
+import { Card, type CardProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 export const FormCard = React.forwardRef<HTMLFormElement, CardProps<"form">>(

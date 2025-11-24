@@ -11,7 +11,7 @@ import { useI18n } from "@/context/i18n";
 import {
   Button,
   Paper,
-  PaperProps,
+  type PaperProps,
   Stack,
   TextField,
   Typography,
