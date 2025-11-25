@@ -36,11 +36,9 @@ import {
   Drawer,
   List,
   ListItemButton,
-  ListItemButtonProps,
+  type ListItemButtonProps,
   ListItemIcon,
   ListItemText,
-  Link as MuiLink,
-  type LinkProps as MuiLinkProps,
   Stack,
   Toolbar,
 } from "@mui/material";
@@ -94,17 +92,18 @@ const StyledChip = styled(Chip)(({ theme }) => ({
   padding: theme.spacing(0.5),
 }));
 
+const StyledDivider = styled(Divider, {
+  shouldForwardProp: (prop) => prop !== "level",
+})<{ level: number }>(({ level, theme }) => ({
+  marginBlock: theme.spacing(1),
+  marginLeft: theme.spacing(2 + level * 2),
+}));
+
 const StyledExpandMore = styled(ExpandMore, {
   shouldForwardProp: (prop) => prop !== "open",
 })<{ open?: boolean }>(({ open, theme }) => ({
   transform: open ? "rotate(180deg)" : "rotate(0deg)",
   transition: theme.transitions.create("transform"),
-}));
-
-const StyledMuiLink = styled(MuiLink)<MuiLinkProps>(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(4),
 }));
 
 interface NavLinkItem {
@@ -234,7 +233,7 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
       </Stack>
     </StyledListItemButton>
   ),
-  divider: () => <Divider component="li" variant="inset" />,
+  divider: ({ level }) => <StyledDivider level={level} />,
 };
 
 interface ListItemLinkProps extends ListItemButtonProps {
@@ -245,26 +244,6 @@ interface ListItemLinkProps extends ListItemButtonProps {
   level: number;
   open?: boolean;
 }
-
-const ListItemContent = ({
-  hasChildren,
-  icon: Icon,
-  label,
-  open,
-}: {
-  hasChildren?: boolean;
-  icon: React.ElementType;
-  label: string;
-  open?: boolean;
-}) => (
-  <>
-    <ListItemIcon>
-      <Icon />
-    </ListItemIcon>
-    <ListItemText primary={label} />
-    {hasChildren && <StyledExpandMore open={open} />}
-  </>
-);
 
 const ListItemLink = ({
   hasChildren,
@@ -278,33 +257,17 @@ const ListItemLink = ({
   ...other
 }: ListItemLinkProps) => (
   <StyledListItemButton
+    {...(href ? { component: NextLink, href } : {})}
     level={level}
-    selected={selected}
     onClick={onClick}
+    selected={selected}
     {...other}
   >
-    {href ? (
-      <StyledMuiLink
-        color="inherit"
-        component={NextLink}
-        href={href}
-        underline="none"
-      >
-        <ListItemContent
-          hasChildren={hasChildren}
-          icon={Icon}
-          label={label}
-          open={open}
-        />
-      </StyledMuiLink>
-    ) : (
-      <ListItemContent
-        hasChildren={hasChildren}
-        icon={Icon}
-        label={label}
-        open={open}
-      />
-    )}
+    <ListItemIcon>
+      <Icon />
+    </ListItemIcon>
+    <ListItemText primary={label} />
+    {hasChildren && <StyledExpandMore open={open} />}
   </StyledListItemButton>
 );
 
