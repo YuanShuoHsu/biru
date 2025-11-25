@@ -210,13 +210,13 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
         gap={1}
       >
         <Stack gap={1}>
-          <Stack flexDirection="row" alignItems="center">
+          <Stack flexDirection="row" alignItems="center" gap={4}>
             <ListItemIcon>
               <Storefront />
             </ListItemIcon>
             <ListItemText primary={storeName} />
           </Stack>
-          <Stack flexDirection="row" alignItems="center">
+          <Stack flexDirection="row" alignItems="center" gap={4}>
             <ListItemIcon>
               <TableBar />
             </ListItemIcon>
