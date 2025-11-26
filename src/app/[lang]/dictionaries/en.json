@@ -85,7 +85,10 @@
         "storeSlug": {
           "tableNumber": {
             "partySize": {
-              "select": { "label": "Select party size", "value": "{count} people" }
+              "select": {
+                "label": "Select party size",
+                "value": "{count} people"
+              }
             }
           }
         }
