@@ -84,8 +84,9 @@
         "label": "堂食",
         "storeSlug": {
           "tableNumber": {
+            "value": "桌号 {tableNumber}",
             "partySize": {
-              "select": { "label": "选择用餐人数", "value": "{count} 人" }
+              "select": { "label": "选择用餐人数", "value": "{count} 位" }
             }
           }
         }

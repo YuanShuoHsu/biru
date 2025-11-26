@@ -84,8 +84,9 @@
         "label": "內用",
         "storeSlug": {
           "tableNumber": {
+            "value": "桌號 {tableNumber}",
             "partySize": {
-              "select": { "label": "選擇用餐人數", "value": "{count} 人" }
+              "select": { "label": "選擇用餐人數", "value": "{count} 位" }
             }
           }
         }

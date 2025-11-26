@@ -84,6 +84,7 @@
         "label": "店内",
         "storeSlug": {
           "tableNumber": {
+            "value": "テーブル {tableNumber}",
             "partySize": {
               "select": { "label": "来店人数を選択", "value": "{count} 名" }
             }

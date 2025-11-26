@@ -234,7 +234,12 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
             <ListItemIcon>
               <TableBar />
             </ListItemIcon>
-            <ListItemText primary={tableNumber} />
+            <ListItemText
+              primary={interpolate(
+                dict.order.mode.dineIn.storeSlug.tableNumber.value,
+                { tableNumber },
+              )}
+            />
           </Stack>
           {partySize && (
             <Stack flexDirection="row" alignItems="center" gap={4}>

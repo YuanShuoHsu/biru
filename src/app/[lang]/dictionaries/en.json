@@ -84,6 +84,7 @@
         "label": "Dine-in",
         "storeSlug": {
           "tableNumber": {
+            "value": "Table {tableNumber}",
             "partySize": {
               "select": {
                 "label": "Select party size",
