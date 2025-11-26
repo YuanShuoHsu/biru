@@ -12,6 +12,7 @@ import { type I18nDict, useI18n } from "@/context/i18n";
 import {
   AccountCircle,
   Gavel,
+  Group,
   HelpOutline,
   LocalMall,
   LockReset,
@@ -36,6 +37,7 @@ import { styled, type Theme } from "@mui/material/styles";
 
 import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
+import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName, StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -56,11 +58,81 @@ const breadcrumbsMap = (
   mode: OrderMode,
   storeSlug: StoreSlug,
   tableNumber: TableNumber,
+  partySize: PartySize,
   storeName: StoreName,
 ): BreadcrumbItem[] => {
-  const orderModePath = `/order/${mode}`;
-  const isDineIn = mode === ORDER_MODE.DineIn;
   const isPickup = mode === ORDER_MODE.Pickup;
+
+  const orderModePath = `/order/${mode}`;
+  const storePath = `${orderModePath}/${storeSlug}`;
+  const dineInTablePath = `${storePath}/${tableNumber}`;
+  const dineInPartyPath = `${dineInTablePath}/${partySize}`;
+  const dineInCheckoutPath = `${dineInPartyPath}/checkout`;
+  const dineInCompletePath = `${dineInPartyPath}/complete`;
+  const pickupCheckoutPath = `${storePath}/checkout`;
+  const pickupCompletePath = `${storePath}/complete`;
+
+  const dineInChildren: BreadcrumbItem[] = [
+    {
+      children: [
+        {
+          icon: Payment,
+          label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
+          to: dineInCheckoutPath,
+        },
+        {
+          icon: Pets,
+          label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
+          to: dineInCompletePath,
+        },
+      ],
+      icon: Group,
+      label: partySize,
+      to: dineInPartyPath,
+    },
+  ];
+
+  const pickupChildren: BreadcrumbItem[] = [
+    {
+      icon: Payment,
+      label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
+      to: pickupCheckoutPath,
+    },
+    {
+      icon: Pets,
+      label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
+      to: pickupCompletePath,
+    },
+  ];
+
+  const storeChildren: BreadcrumbItem[] = isPickup
+    ? pickupChildren
+    : [
+        {
+          children: dineInChildren,
+          icon: TableBar,
+          label: tableNumber,
+          to: dineInTablePath,
+        },
+      ];
+
+  const storeNode: BreadcrumbItem = {
+    children: storeChildren,
+    disabled: !isPickup,
+    icon: Storefront,
+    label: storeName,
+    to: storePath,
+  };
+
+  const modeNode: BreadcrumbItem = {
+    children: [storeNode],
+    disabled: !isPickup,
+    icon: isPickup ? LocalMall : Restaurant,
+    label: isPickup
+      ? dict.order.mode.pickup.label
+      : dict.order.mode.dineIn.label,
+    to: orderModePath,
+  };
 
   return [
     {
@@ -102,48 +174,7 @@ const breadcrumbsMap = (
       to: "/member",
     },
     {
-      children: [
-        {
-          children: [
-            {
-              children: [
-                {
-                  children: [
-                    {
-                      icon: Payment,
-                      label:
-                        dict.order.mode.storeSlug.tableNumber.stepper.checkout
-                          .label,
-                      to: `${orderModePath}/${storeSlug}/${tableNumber}/checkout`,
-                    },
-                    {
-                      icon: Pets,
-                      label:
-                        dict.order.mode.storeSlug.tableNumber.stepper.complete
-                          .label,
-                      to: `${orderModePath}/${storeSlug}/${tableNumber}/complete`,
-                    },
-                  ],
-                  hidden: isPickup,
-                  icon: isPickup ? () => null : TableBar,
-                  label: isPickup ? "" : String(tableNumber),
-                  to: `${orderModePath}/${storeSlug}/${tableNumber}`,
-                },
-              ],
-              disabled: isDineIn ? true : false,
-              icon: Storefront,
-              label: storeName,
-              to: `${orderModePath}/${storeSlug}`,
-            },
-          ],
-          disabled: isDineIn ? true : false,
-          icon: isDineIn ? Restaurant : LocalMall,
-          label: isDineIn
-            ? dict.order.mode.dineIn.label
-            : dict.order.mode.pickup.label,
-          to: orderModePath,
-        },
-      ],
+      children: [modeNode],
       disabled: true,
       icon: ShoppingCart,
       label: dict.order.label,
@@ -224,7 +255,8 @@ const findHiddenTo = (
 };
 
 const RouterBreadcrumbs = () => {
-  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
   const storeName = getStoreName(lang, stores, storeSlug);
@@ -235,6 +267,7 @@ const RouterBreadcrumbs = () => {
     mode,
     storeSlug,
     tableNumber,
+    partySize,
     storeName,
   );
 
