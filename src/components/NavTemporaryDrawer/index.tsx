@@ -18,6 +18,8 @@ import { type I18nDict, useI18n } from "@/context/i18n";
 
 import { useLogout } from "@/hooks/useLogout";
 
+import { interpolate } from "@/utils/i18n";
+
 import {
   AccountCircle,
   ExpandMore,
@@ -51,6 +53,7 @@ import { useAuthStore } from "@/stores/useAuthStore";
 
 import type { DrawerType } from "@/types/drawer";
 import type { OrderMode } from "@/types/orderMode";
+import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -197,12 +200,20 @@ interface SlotProps {
   dict: I18nDict;
   level: number;
   onClick: () => void;
-  tableNumber: TableNumber;
   storeName: StoreName;
+  tableNumber: TableNumber;
+  partySize: PartySize;
 }
 
 const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
-  [ORDER_MODE.DineIn]: ({ dict, level, onClick, tableNumber, storeName }) => (
+  [ORDER_MODE.DineIn]: ({
+    dict,
+    level,
+    onClick,
+    storeName,
+    tableNumber,
+    partySize,
+  }) => (
     <StyledListItemButton level={level} onClick={onClick} selected={true}>
       <Stack
         width="100%"
@@ -225,17 +236,20 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
             </ListItemIcon>
             <ListItemText primary={tableNumber} />
           </Stack>
-          <Stack flexDirection="row" alignItems="center" gap={4}>
-            <ListItemIcon>
-              <Group />
-            </ListItemIcon>
-            <ListItemText
-            // primary={interpolate(
-            //   dict.order.mode.storeSlug.tableNumber.partySize.value,
-            //   { count: partySize },
-            // )}
-            />
-          </Stack>
+          {partySize && (
+            <Stack flexDirection="row" alignItems="center" gap={4}>
+              <ListItemIcon>
+                <Group />
+              </ListItemIcon>
+              <ListItemText
+                primary={interpolate(
+                  dict.order.mode.dineIn.storeSlug.tableNumber.partySize.select
+                    .value,
+                  { count: partySize },
+                )}
+              />
+            </Stack>
+          )}
         </Stack>
         <StyledChip
           color="primary"
@@ -306,7 +320,8 @@ const NavTemporaryDrawer = ({
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const pathname = usePathname();
-  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
   const router = useRouter();
 
   const dict = useI18n();
@@ -354,9 +369,11 @@ const NavTemporaryDrawer = ({
 
         const handleClick = () => {
           if (isDividerSlot) return;
-          if (!storeSlug || !tableNumber) return;
+          if (!storeSlug || !tableNumber || !partySize) return;
 
-          router.push(`/${lang}/order/${mode}/${storeSlug}/${tableNumber}`);
+          router.push(
+            `/${lang}/order/${mode}/${storeSlug}/${tableNumber}/${partySize}`,
+          );
         };
 
         return (
@@ -367,6 +384,7 @@ const NavTemporaryDrawer = ({
             onClick={handleClick}
             tableNumber={tableNumber}
             storeName={storeName}
+            partySize={partySize}
           />
         );
       }

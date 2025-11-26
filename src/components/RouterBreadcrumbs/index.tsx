@@ -60,7 +60,7 @@ const breadcrumbsMap = (
 ): BreadcrumbItem[] => {
   const orderModePath = `/order/${mode}`;
   const isDineIn = mode === ORDER_MODE.DineIn;
-  const isPickup = mode === ORDER_MODE.Pickup && tableNumber === "0";
+  const isPickup = mode === ORDER_MODE.Pickup;
 
   return [
     {

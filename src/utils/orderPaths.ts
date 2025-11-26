@@ -17,8 +17,8 @@ export const createOrderPaths = ({
   lang: LocaleCode;
   mode: OrderMode;
   storeSlug: StoreSlug;
-  tableNumber?: TableNumber;
-  partySize?: PartySize;
+  tableNumber: TableNumber;
+  partySize: PartySize;
   pathname: string;
 }) => {
   const isPickup = mode === ORDER_MODE.Pickup;
