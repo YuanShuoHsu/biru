@@ -10,6 +10,7 @@ import { Step, StepLabel, Stepper } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { OrderMode } from "@/types/orderMode";
+import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
 import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -18,11 +19,14 @@ const createStepPathMap = (
   mode: OrderMode,
   storeSlug: StoreSlug,
   tableNumber: TableNumber,
-): string[] => [
-  `/order/${mode}/${storeSlug}/${tableNumber}`,
-  `/order/${mode}/${storeSlug}/${tableNumber}/checkout`,
-  `/order/${mode}/${storeSlug}/${tableNumber}/complete`,
-];
+  partySize: PartySize,
+): string[] => {
+  const base = `/order/${mode}/${storeSlug}/${tableNumber}${
+    partySize ? `/${partySize}` : ""
+  }`;
+
+  return [base, `${base}/checkout`, `${base}/complete`];
+};
 
 const StyledStepper = styled(Stepper)(({ theme }) => ({
   "& .MuiStepConnector-line": {
@@ -45,12 +49,14 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
 }));
 
 const HorizontalLinearStepper = () => {
-  const pathname = usePathname();
-  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
-
   const dict = useI18n();
 
-  const stepPaths = createStepPathMap(mode, storeSlug, tableNumber);
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
+
+  const pathname = usePathname();
+
+  const stepPaths = createStepPathMap(mode, storeSlug, tableNumber, partySize);
   const activeStep = stepPaths.findIndex(
     (path) => pathname === `/${lang}${path}`,
   );

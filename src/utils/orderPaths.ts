@@ -22,26 +22,20 @@ export const createOrderPaths = ({
   pathname: string;
 }) => {
   const isPickup = mode === ORDER_MODE.Pickup;
-  const isDineIn = mode === ORDER_MODE.DineIn;
 
   const basePath = `/${lang}/order/${mode}/${storeSlug}${
     isPickup ? "" : `/${tableNumber}`
   }`;
+  const menuPath = isPickup ? basePath : `${basePath}/${partySize}`;
+  const checkoutPath = `${menuPath}/checkout`;
 
-  const menuPath = isDineIn ? `${basePath}/${partySize}` : null;
-  const checkoutPath = `${basePath}/checkout`;
-
-  const menuRoutes = [
-    ...(isPickup ? [basePath] : []),
-    ...(menuPath ? [menuPath] : []),
-  ];
-
-  const orderRoutes = [checkoutPath, ...menuRoutes];
-
-  const isMenuRoute = menuRoutes.includes(pathname);
+  const orderRoutes = [menuPath, checkoutPath];
+  const isMenuRoute = menuPath === pathname;
   const isOrderRoute = orderRoutes.includes(pathname);
 
   return {
+    menuPath,
+    checkoutPath,
     isMenuRoute,
     isOrderRoute,
   };

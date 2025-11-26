@@ -1,4 +1,4 @@
-import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
+import OrderStepperLayout from "@/components/OrderStepperLayout";
 
 interface OrderModeStoreSlugTableNumberStepperLayoutProps {
   children: React.ReactNode;
@@ -7,10 +7,7 @@ interface OrderModeStoreSlugTableNumberStepperLayoutProps {
 const OrderModeStoreSlugTableNumberStepperLayout = ({
   children,
 }: OrderModeStoreSlugTableNumberStepperLayoutProps) => (
-  <>
-    <HorizontalLinearStepper />
-    {children}
-  </>
+  <OrderStepperLayout>{children}</OrderStepperLayout>
 );
 
 export default OrderModeStoreSlugTableNumberStepperLayout;

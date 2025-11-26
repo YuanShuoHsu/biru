@@ -5,13 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
-const OrderModeStoreSlugTableNumberComplete = () => {
-  const { lang, tableNumber } = useParams();
-  // const searchParams = useSearchParams();
+import type { RouteParams } from "@/types/routeParams";
+
+const OrderCompleteContent = () => {
+  const { lang } = useParams<RouteParams>();
   const router = useRouter();
 
-  // const status = searchParams.get("status");
-  // const isSuccess = status === null;
+  // TODO: wire real status when available
   const isSuccess = true;
 
   return (
@@ -38,9 +38,6 @@ const OrderModeStoreSlugTableNumberComplete = () => {
             <Typography variant="h5" fontWeight="bold" gutterBottom>
               付款成功！
             </Typography>
-            <Typography variant="body1" gutterBottom>
-              感謝您的訂購（桌號 {tableNumber}）。
-            </Typography>
           </>
         ) : (
           <>
@@ -65,4 +62,4 @@ const OrderModeStoreSlugTableNumberComplete = () => {
   );
 };
 
-export default OrderModeStoreSlugTableNumberComplete;
+export default OrderCompleteContent;

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import { useI18n } from "@/context/i18n";
 
@@ -18,7 +18,10 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/stores/useCartStore";
 
+import type { RouteParams } from "@/types/routeParams";
+
 import { interpolate } from "@/utils/i18n";
+import { createOrderPaths } from "@/utils/orderPaths";
 
 const StyledBox = styled(Box)({
   pointerEvents: "none",
@@ -40,11 +43,23 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 }));
 
 const OrderBottomBar = () => {
+  const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore();
+
   const dict = useI18n();
 
-  const { lang, mode, storeSlug, tableNumber } = useParams();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
 
-  const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore();
+  const pathname = usePathname();
+
+  const { checkoutPath } = createOrderPaths({
+    lang,
+    mode,
+    storeSlug,
+    tableNumber,
+    partySize,
+    pathname,
+  });
 
   return (
     <Fade in={!isCartEmpty}>
@@ -61,7 +76,7 @@ const OrderBottomBar = () => {
           component={Link}
           disabled={isCartEmpty}
           fullWidth
-          href={`/${lang}/order/${mode}/${storeSlug}/${tableNumber}/checkout`}
+          href={checkoutPath}
           size="large"
           variant="contained"
         >

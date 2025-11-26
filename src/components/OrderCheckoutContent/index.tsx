@@ -3,7 +3,7 @@ import CustomizedAccordions from "@/components/CustomizedAccordions";
 
 import { Grid } from "@mui/material";
 
-const OrderModeStoreSlugTableNumberCheckout = () => (
+const OrderCheckoutContent = () => (
   <Grid container spacing={2}>
     <Grid size={{ xs: 12, md: 6 }}>
       <CustomizedAccordions />
@@ -14,4 +14,4 @@ const OrderModeStoreSlugTableNumberCheckout = () => (
   </Grid>
 );
 
-export default OrderModeStoreSlugTableNumberCheckout;
+export default OrderCheckoutContent;

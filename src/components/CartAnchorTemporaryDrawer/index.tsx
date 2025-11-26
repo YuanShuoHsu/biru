@@ -23,6 +23,8 @@ import { useCartStore } from "@/stores/useCartStore";
 import type { DrawerType } from "@/types/drawer";
 import type { RouteParams } from "@/types/routeParams";
 
+import { createOrderPaths } from "@/utils/orderPaths";
+
 const DrawerBox = styled(Box)({
   width: 250,
 });
@@ -61,19 +63,28 @@ const CartAnchorTemporaryDrawer = ({
   onDrawerToggle,
   open,
 }: CartAnchorTemporaryDrawerProps) => {
-  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
+  const { isCartEmpty, cartTotalAmount } = useCartStore();
 
   const dict = useI18n();
 
-  const { isCartEmpty, cartTotalAmount } = useCartStore();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
 
   const pathname = usePathname();
-  const dineInPath = `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
-  const checkoutPath = `${dineInPath}/checkout`;
+
+  const { checkoutPath, menuPath } = createOrderPaths({
+    lang,
+    mode,
+    storeSlug,
+    tableNumber,
+    partySize,
+    pathname,
+  });
+
   const isCheckoutPage = pathname === checkoutPath;
 
   const actionDisabled = !isCheckoutPage && isCartEmpty;
-  const actionHref = isCheckoutPage ? dineInPath : checkoutPath;
+  const actionHref = isCheckoutPage ? menuPath : checkoutPath;
   const actionLabel = isCheckoutPage
     ? dict.cart.backToOrder
     : dict.cart.checkout;
