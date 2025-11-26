@@ -80,10 +80,19 @@
   "order": {
     "label": "注文",
     "mode": {
-      "dineIn": { "label": "店内" },
+      "dineIn": {
+        "label": "店内",
+        "storeSlug": {
+          "tableNumber": {
+            "partySize": {
+              "select": { "label": "来店人数を選択", "value": "{count} 名" }
+            }
+          }
+        }
+      },
       "pickup": {
         "label": "お持ち帰り",
-        "selectStoreSlug": "店舗を選択"
+        "select": { "label": "店舗を選択" }
       },
       "storeSlug": {
         "selectTable": "テーブルを選択",

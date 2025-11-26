@@ -5,6 +5,8 @@ import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
+import { ORDER_MODE } from "@/constants/orderMode";
+
 import { type I18nDict, useI18n } from "@/context/i18n";
 
 import {
@@ -33,7 +35,7 @@ import {
 import { styled, type Theme } from "@mui/material/styles";
 
 import type { LocaleCode } from "@/types/locale";
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName, StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";

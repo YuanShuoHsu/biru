@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 
 import OrderModePickupStoreSlugSelect from "@/components/OrderModePickupStoreSlugSelect";
 
+import { ORDER_MODE } from "@/constants/orderMode";
+
 import type { LocaleCode } from "@/types/locale";
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 
 interface OrderModePageProps {

@@ -28,6 +28,7 @@ import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 import type { RouteParams } from "@/types/routeParams";
 
 import { menu } from "@/utils/menu";
+import { createOrderPaths } from "@/utils/orderPaths";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -61,10 +62,18 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { lang, mode, storeSlug, tableNumber } = useParams<RouteParams>();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
   const pathname = usePathname();
-  const isOrderPage =
-    pathname === `/${lang}/orde/${mode}/${storeSlug}/${tableNumber}`;
+
+  const { isMenuRoute } = createOrderPaths({
+    lang,
+    mode,
+    storeSlug,
+    tableNumber,
+    partySize,
+    pathname,
+  });
 
   const dict = useI18n();
 
@@ -72,7 +81,7 @@ const CustomizedTabs = () => {
   const searchText = orderSearchText.trim().toLowerCase();
 
   const trigger = useScrollTrigger({
-    threshold: isOrderPage ? SCROLL_TRIGGER_THRESHOLD : undefined,
+    threshold: isMenuRoute ? SCROLL_TRIGGER_THRESHOLD : undefined,
   });
 
   const categoryGroups = menu

@@ -12,6 +12,8 @@ import {
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
+import { ORDER_MODE } from "@/constants/orderMode";
+
 import { type I18nDict, useI18n } from "@/context/i18n";
 
 import { useLogout } from "@/hooks/useLogout";
@@ -19,6 +21,7 @@ import { useLogout } from "@/hooks/useLogout";
 import {
   AccountCircle,
   ExpandMore,
+  Group,
   Home,
   LocalMall,
   Login,
@@ -47,7 +50,7 @@ import { styled } from "@mui/material/styles";
 import { useAuthStore } from "@/stores/useAuthStore";
 
 import type { DrawerType } from "@/types/drawer";
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -221,6 +224,17 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
               <TableBar />
             </ListItemIcon>
             <ListItemText primary={tableNumber} />
+          </Stack>
+          <Stack flexDirection="row" alignItems="center" gap={4}>
+            <ListItemIcon>
+              <Group />
+            </ListItemIcon>
+            <ListItemText
+            // primary={interpolate(
+            //   dict.order.mode.storeSlug.tableNumber.partySize.value,
+            //   { count: partySize },
+            // )}
+            />
           </Stack>
         </Stack>
         <StyledChip

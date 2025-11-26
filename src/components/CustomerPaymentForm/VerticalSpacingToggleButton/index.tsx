@@ -4,6 +4,8 @@
 
 import { useParams } from "next/navigation";
 
+import { ORDER_MODE } from "@/constants/orderMode";
+
 import {
   CreditCard,
   MarkChatRead,
@@ -21,7 +23,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
+import type { OrderMode } from "@/types/orderMode";
 import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 

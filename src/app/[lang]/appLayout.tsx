@@ -17,6 +17,9 @@ import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
+import type { RouteParams } from "@/types/routeParams";
+
+import { createOrderPaths } from "@/utils/orderPaths";
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
@@ -32,12 +35,20 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     nav: false,
   });
 
-  const { lang, mode, storeSlug, tableNumber } = useParams();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
   const pathname = usePathname();
 
   const isHome = pathname === `/${lang}`;
-  const isOrderPage =
-    pathname === `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
+
+  const { isMenuRoute } = createOrderPaths({
+    lang,
+    mode,
+    storeSlug,
+    tableNumber,
+    partySize,
+    pathname,
+  });
 
   const handleDrawerToggle =
     (type: DrawerType, open: boolean) =>
@@ -87,7 +98,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
               gap={2}
             >
               <RouterBreadcrumbs />
-              {isOrderPage && (
+              {isMenuRoute && (
                 <Stack
                   width={{ xs: "100%", sm: "auto" }}
                   direction="row"

@@ -22,21 +22,21 @@ const OrderModePickupStoreSlugSelect = ({
   mode,
   storeSlug,
 }: OrderModePickupStoreSlugSelectProps) => {
+  const dict = useI18n();
+
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
-  const dict = useI18n();
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/${lang}/order/${mode}/${event.target.value}/0`);
+    router.push(`/${lang}/order/${mode}/${event.target.value}`);
 
   return (
     <TextField
       // error={!!state?.errors?.storeSlug}
       fullWidth
       // helperText={state?.errors?.storeSlug}
-      label={dict.order.mode.pickup.selectStoreSlug}
+      label={dict.order.mode.pickup.select.label}
       name="storeSlug"
       onChange={handleChange}
       required

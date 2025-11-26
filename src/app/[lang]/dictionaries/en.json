@@ -80,10 +80,19 @@
   "order": {
     "label": "Order",
     "mode": {
-      "dineIn": { "label": "Dine-in" },
+      "dineIn": {
+        "label": "Dine-in",
+        "storeSlug": {
+          "tableNumber": {
+            "partySize": {
+              "select": { "label": "Select party size", "value": "{count} people" }
+            }
+          }
+        }
+      },
       "pickup": {
         "label": "Pickup",
-        "selectStoreSlug": "Select a store"
+        "select": { "label": "Select a store" }
       },
       "storeSlug": {
         "selectTable": "Select a table",

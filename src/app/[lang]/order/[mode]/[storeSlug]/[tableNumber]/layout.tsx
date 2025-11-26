@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { ORDER_MODE } from "@/constants/orderMode";
 import { tableNumbers } from "@/constants/tableNumbers";
-
-import { ORDER_MODE } from "@/types/orderMode";
 // import { ORDER_MODE, type OrderMode } from "@/types/orderMode";
 // import type { StoreSlug } from "@/types/stores";
 // import type { TableNumber } from "@/types/tableNumbers";
@@ -25,17 +24,14 @@ const OrderModeStoreSlugTableNumberLayout = async ({
 }: OrderModeStoreSlugTableNumberLayoutProps) => {
   const { mode, storeSlug, tableNumber } = await params;
 
-  const isValidFormat = /^(0|[1-9]\d*)$/.test(tableNumber);
-  if (!isValidFormat) return notFound();
+  const isNumeric = /^(0|[1-9]\d*)$/.test(tableNumber);
+  if (!isNumeric) return notFound();
 
   const maxTableNumbers = tableNumbers[storeSlug];
   const number = Number(tableNumber);
 
-  const isDineIn =
+  const isValidTableNumber =
     mode === ORDER_MODE.DineIn && number >= 1 && number <= maxTableNumbers;
-  const isPickup = mode === ORDER_MODE.Pickup && number === 0;
-
-  const isValidTableNumber = isDineIn || isPickup;
   if (!isValidTableNumber) return notFound();
 
   return <>{children}</>;

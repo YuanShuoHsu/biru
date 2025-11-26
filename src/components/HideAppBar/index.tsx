@@ -26,6 +26,9 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { DrawerType } from "@/types/drawer";
+import type { RouteParams } from "@/types/routeParams";
+
+import { createOrderPaths } from "@/utils/orderPaths";
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -61,15 +64,21 @@ interface HideAppBarProps {
 
 const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
-  const { lang, mode, storeSlug, tableNumber } = useParams();
+  const { lang, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
-  const basePath = `/${lang}/order/${mode}/${storeSlug}/${tableNumber}`;
-  const showShoppingCartButton =
-    pathname === basePath || pathname === `${basePath}/checkout`;
+  const { isOrderRoute: showShoppingCartButton } = createOrderPaths({
+    lang,
+    mode,
+    storeSlug,
+    tableNumber,
+    partySize,
+    pathname,
+  });
 
   return (
     <StyledAppBar position="fixed" trigger={trigger}>

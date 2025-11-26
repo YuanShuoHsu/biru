@@ -1,3 +1,5 @@
+"use client";
+
 import { ViewList, ViewModule } from "@mui/icons-material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { styled } from "@mui/material/styles";

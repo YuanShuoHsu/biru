@@ -1,12 +1,36 @@
-import CustomizedTabs from "@/components/CustomizedTabs";
-import OrderBottomBar from "@/components/OrderBottomBar";
+import { notFound } from "next/navigation";
 
-const OrderModeStoreSlugTableNumberPage = () => {
+import OrderModeDineInStoreSlugTableNumberSelect from "@/components/OrderModeDineInStoreSlugTableNumberSelect";
+
+import { ORDER_MODE } from "@/constants/orderMode";
+
+import type { LocaleCode } from "@/types/locale";
+import type { OrderMode } from "@/types/orderMode";
+import type { StoreSlug } from "@/types/stores";
+import type { TableNumber } from "@/types/tableNumbers";
+
+interface OrderModeStoreSlugTableNumberPageProps {
+  params: Promise<{
+    lang: LocaleCode;
+    mode: OrderMode;
+    storeSlug: StoreSlug;
+    tableNumber: TableNumber;
+  }>;
+}
+
+const OrderModeStoreSlugTableNumberPage = async ({
+  params,
+}: OrderModeStoreSlugTableNumberPageProps) => {
+  const { lang, mode, storeSlug, tableNumber } = await params;
+  if (mode !== ORDER_MODE.DineIn) return notFound();
+
   return (
-    <>
-      <CustomizedTabs />
-      <OrderBottomBar />
-    </>
+    <OrderModeDineInStoreSlugTableNumberSelect
+      lang={lang}
+      mode={mode}
+      storeSlug={storeSlug}
+      tableNumber={tableNumber}
+    />
   );
 };
 

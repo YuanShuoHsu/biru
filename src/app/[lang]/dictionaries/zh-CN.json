@@ -80,10 +80,19 @@
   "order": {
     "label": "点餐",
     "mode": {
-      "dineIn": { "label": "堂食" },
+      "dineIn": {
+        "label": "堂食",
+        "storeSlug": {
+          "tableNumber": {
+            "partySize": {
+              "select": { "label": "选择用餐人数", "value": "{count} 人" }
+            }
+          }
+        }
+      },
       "pickup": {
         "label": "自取",
-        "selectStoreSlug": "选择门店"
+        "select": { "label": "选择门店" }
       },
       "storeSlug": {
         "selectTable": "选择桌号",
