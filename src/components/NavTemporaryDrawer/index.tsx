@@ -26,6 +26,7 @@ import {
   Group,
   Home,
   LocalMall,
+  Person,
   Login,
   PersonAdd,
   Restaurant,
@@ -244,7 +245,7 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
           {partySize && (
             <Stack flexDirection="row" alignItems="center" gap={4}>
               <ListItemIcon>
-                <Group />
+                {partySize === "1" ? <Person /> : <Group />}
               </ListItemIcon>
               <ListItemText
                 primary={interpolate(
