@@ -29,8 +29,8 @@ import {
   Menu,
   MenuItem,
   Link as MuiLink,
-  type LinkProps as MuiLinkProps,
   Tooltip,
+  type LinkProps as MuiLinkProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -104,6 +104,7 @@ const AccountMenu = () => {
   const memberBasePath = `/${lang}/member`;
 
   const displayName = getDisplayName(lang, profile);
+  const avatarChild = !isSignedIn ? <AccountCircle /> : displayName[0];
 
   const dict = useI18n();
   const tooltipTitle = isSignedIn
@@ -197,7 +198,7 @@ const AccountMenu = () => {
                 isSignedIn={isSignedIn}
                 src={profile?.image}
               >
-                {!isSignedIn && <AccountCircle />}
+                {avatarChild}
               </StyledAvatar>
             </BadgeAvatars>
           </IconButton>

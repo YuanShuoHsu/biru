@@ -26,8 +26,8 @@ import {
   Group,
   Home,
   LocalMall,
-  Person,
   Login,
+  Person,
   PersonAdd,
   Restaurant,
   ShoppingCart,
@@ -351,17 +351,7 @@ const NavTemporaryDrawer = ({
   const handleIconButtonToggle = (key: string) =>
     setOpenMap((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const composePath = (parentPath: string, to?: string) => {
-    const normalizedParent = parentPath === "/" ? "" : parentPath;
-    if (!to) return normalizedParent || "/";
-
-    const child = to.startsWith("/") ? to : `/${to}`;
-    const combined = `${normalizedParent}${child}`;
-
-    return combined || "/";
-  };
-
-  const renderItems = (items: NavItem[], level = 0, parentPath = "") =>
+  const renderItems = (items: NavItem[], level = 0, parentPath = "/") =>
     items.map((item) => {
       if ("slot" in item) {
         const { slot } = item;
@@ -397,20 +387,19 @@ const NavTemporaryDrawer = ({
 
       const { children, disabled, icon, label, onClick, query, to } = item;
 
-      const basePath = composePath(parentPath, to);
-      const isHome = basePath === "/";
-      const pathWithLang = `/${lang}${isHome ? "" : basePath}`;
+      const parentPrefix = parentPath === "/" ? "" : parentPath;
+      const basePath = to ? `${parentPrefix}${to}` : parentPath;
+      const pathWithLang =
+        basePath === "/" ? `/${lang}` : `/${lang}${basePath}`;
 
+      const hasChildren = Boolean(children?.length);
+      const href =
+        to && !hasChildren ? `${pathWithLang}${query || ""}` : undefined;
+
+      const itemKey = to || `${label}-${level}`;
+      const open = Boolean(hasChildren && openMap[itemKey]);
       const selected =
-        pathname === pathWithLang ||
-        (!isHome && pathname.startsWith(`${pathWithLang}/`));
-
-      const pathWithQuery = to && `${pathWithLang}${query || ""}`;
-      const hasChildren = !!children?.length;
-      const href = !hasChildren ? pathWithQuery : undefined;
-
-      const itemKey = to ? pathWithLang : `${label}-${level}`;
-      const open = Boolean(to && openMap[itemKey]);
+        pathname === pathWithLang || pathname.startsWith(`${pathWithLang}/`);
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
