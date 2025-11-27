@@ -51,7 +51,7 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
   },
 
   ".swiper-pagination-bullet": {
-    backgroundColor: `${theme.palette.common.white} !important`,
+    backgroundColor: `${theme.vars.palette.common.white} !important`,
     opacity: "0.5 !important",
     transition: theme.transitions.create([
       "width",
@@ -62,8 +62,14 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
 
   ".swiper-pagination-bullet-active": {
     width: `${theme.spacing(2)} !important`,
+    backgroundColor: `${theme.vars.palette.primary.main} !important`,
     borderRadius: `${theme.shape.borderRadius}px !important`,
-    backgroundColor: `${theme.palette.primary.main} !important`,
+  },
+
+  [theme.getColorSchemeSelector("dark")]: {
+    ".swiper-pagination-bullet-active": {
+      backgroundColor: `${theme.vars.palette.background.paper} !important`,
+    },
   },
 }));
 

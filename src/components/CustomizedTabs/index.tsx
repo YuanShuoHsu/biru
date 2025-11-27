@@ -4,7 +4,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
@@ -28,7 +28,6 @@ import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 import type { RouteParams } from "@/types/routeParams";
 
 import { menu } from "@/utils/menu";
-import { createOrderPaths } from "@/utils/orderPaths";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -62,26 +61,15 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { lang, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
-  const pathname = usePathname();
-
-  const { isMenuRoute } = createOrderPaths({
-    lang,
-    mode,
-    storeSlug,
-    tableNumber,
-    partySize,
-    pathname,
-  });
-
   const dict = useI18n();
 
   const { orderSearchText } = useOrderSearchStore();
   const searchText = orderSearchText.trim().toLowerCase();
 
+  const { lang } = useParams<RouteParams>();
+
   const trigger = useScrollTrigger({
-    threshold: isMenuRoute ? SCROLL_TRIGGER_THRESHOLD : undefined,
+    threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
   const categoryGroups = menu
