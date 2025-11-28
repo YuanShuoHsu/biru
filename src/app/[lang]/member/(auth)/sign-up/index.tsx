@@ -186,15 +186,24 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           label={dict.member.auth.birthDate}
           onChange={handleBirthDateChange}
           slotProps={{
-            textField: { fullWidth: true, required: true },
+            textField: {
+              autoComplete: "bday",
+              fullWidth: true,
+              inputMode: "numeric",
+              required: true,
+            },
           }}
           value={form.birthDate ? dayjs(form.birthDate) : null}
         />
         <TextField
+          autoComplete="sex"
+          // error={!!state?.errors?.gender}
           fullWidth
           label={dict.member.auth.gender.label}
+          // helperText={state?.errors?.gender}
           name="gender"
           onChange={handleChange}
+          required
           select
           value={form.gender}
         >
@@ -215,7 +224,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           value={form.email}
         />
         <TextField
-          autoComplete="current-password"
+          autoComplete="new-password"
           fullWidth
           label={dict.member.auth.password}
           name="password"
@@ -280,41 +289,6 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           type={showPassword.confirmPassword ? "text" : "password"}
           value={form.confirmPassword}
         />
-
-        <TextField
-          fullWidth
-          label={dict.member.auth.confirmPassword}
-          name="confirmPassword"
-          onChange={handleChange}
-          required
-          slotProps={{
-            input: {
-              endAdornment: (
-                <InputAdornment position="start">
-                  <IconButton
-                    aria-label={
-                      showPassword.confirmPassword
-                        ? dict.member.auth.hideConfirmPassword
-                        : dict.member.auth.showConfirmPassword
-                    }
-                    onClick={handleClickShowPassword("confirmPassword")}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {showPassword.confirmPassword ? (
-                      <VisibilityOff />
-                    ) : (
-                      <Visibility />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            },
-          }}
-          type={showPassword.confirmPassword ? "text" : "password"}
-          value={form.confirmPassword}
-        />
         <Grid container spacing={2}>
           <Grid size={{ xs: 4 }}>
             <CountrySelect />
@@ -328,6 +302,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
               name="phone"
               onChange={handleChange}
               required
+              type="tel"
               value={form.phone}
             />
           </Grid>
