@@ -17,7 +17,11 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore();
 
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+
   useEffect(() => {
+    if (isMaintenanceMode) return;
+
     const initAuthState = async () => {
       setIsAuthLoading(true);
 
@@ -37,7 +41,13 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     initAuthState();
-  }, [clearAuth, setAccessToken, setIsAuthLoading, setProfile]);
+  }, [
+    clearAuth,
+    isMaintenanceMode,
+    setAccessToken,
+    setIsAuthLoading,
+    setProfile,
+  ]);
 
   return <>{children}</>;
 };

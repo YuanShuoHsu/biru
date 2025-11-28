@@ -50,6 +50,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     pathname,
   });
 
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+
   const handleDrawerToggle =
     (type: DrawerType, open: boolean) =>
     (event: React.KeyboardEvent | React.MouseEvent) => {
@@ -90,27 +92,29 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           children
         ) : (
           <Stack padding={2} height="100%" gap={2}>
-            <Stack
-              flexWrap={{ xs: "wrap", sm: "nowrap" }}
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              gap={2}
-            >
-              <RouterBreadcrumbs />
-              {isMenuRoute && (
-                <Stack
-                  width={{ xs: "100%", sm: "auto" }}
-                  direction="row"
-                  justifyContent={{ xs: "space-between" }}
-                  alignItems="center"
-                  gap={2}
-                >
-                  <OrderSearch />
-                  <ViewToggleButtons />
-                </Stack>
-              )}
-            </Stack>
+            {!isMaintenanceMode && (
+              <Stack
+                flexWrap={{ xs: "wrap", sm: "nowrap" }}
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+                gap={2}
+              >
+                <RouterBreadcrumbs />
+                {isMenuRoute && (
+                  <Stack
+                    width={{ xs: "100%", sm: "auto" }}
+                    direction="row"
+                    justifyContent={{ xs: "space-between" }}
+                    alignItems="center"
+                    gap={2}
+                  >
+                    <OrderSearch />
+                    <ViewToggleButtons />
+                  </Stack>
+                )}
+              </Stack>
+            )}
             {children}
           </Stack>
         )}

@@ -80,18 +80,22 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
     pathname,
   });
 
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+
   return (
     <StyledAppBar position="fixed" trigger={trigger}>
       <StyledToolbar>
         <Stack minWidth={0} flexDirection="row" alignItems="center" gap={1}>
-          <IconButton
-            aria-label="open drawer"
-            color="inherit"
-            edge="start"
-            onClick={onDrawerToggle("nav", true)}
-          >
-            <Menu />
-          </IconButton>
+          {!isMaintenanceMode && (
+            <IconButton
+              aria-label="open drawer"
+              color="inherit"
+              edge="start"
+              onClick={onDrawerToggle("nav", true)}
+            >
+              <Menu />
+            </IconButton>
+          )}
           <MuiLink
             minWidth={0}
             color="inherit"
@@ -121,9 +125,11 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
         <Stack direction="row" alignItems="center" gap={0.5}>
           <ModeToggle />
           <LanguageMenu />
-          <Suspense>
-            <AccountMenu />
-          </Suspense>
+          {!isMaintenanceMode && (
+            <Suspense>
+              <AccountMenu />
+            </Suspense>
+          )}
           {showShoppingCartButton && (
             <CartIconButton onDrawerToggle={onDrawerToggle} />
           )}
