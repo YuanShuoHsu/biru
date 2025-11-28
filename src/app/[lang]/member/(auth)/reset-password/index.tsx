@@ -48,6 +48,8 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+type ResetPasswordField = "newPassword" | "confirmNewPassword";
+
 interface MemberAuthResetPasswordProps {
   lang: string;
   redirect?: string | string[];
@@ -63,7 +65,9 @@ const MemberAuthResetPassword = ({
     confirmNewPassword: "",
   });
 
-  const [showPassword, setShowPassword] = useState({
+  const [showPassword, setShowPassword] = useState<
+    Record<ResetPasswordField, boolean>
+  >({
     newPassword: false,
     confirmNewPassword: false,
   });
@@ -79,7 +83,7 @@ const MemberAuthResetPassword = ({
 
   const dict = useI18n();
 
-  const handleClickShowPassword = (key: keyof typeof showPassword) => () =>
+  const handleClickShowPassword = (key: ResetPasswordField) => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleMouseDownPassword = (

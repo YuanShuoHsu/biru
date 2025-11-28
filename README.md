@@ -291,6 +291,9 @@ pnpm add -D @types/negotiator
 ## dayjs
 
 ```bash
+# https://mui.com/x/react-date-pickers/quickstart/
+pnpm add @mui/x-date-pickers
+
 # https://day.js.org/
 pnpm add dayjs
 ```

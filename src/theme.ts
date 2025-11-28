@@ -1,9 +1,13 @@
 // https://mui.com/material-ui/customization/breakpoints/
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
 // https://mui.com/material-ui/customization/css-theme-variables/usage/#typescript
+// https://mui.com/x/react-date-pickers/quickstart/#typescript
+// https://mui.com/x/react-date-pickers/quickstart/#date-value-types
 
 import { createTheme } from "@mui/material/styles";
 import type {} from "@mui/material/themeCssVarsAugmentation";
+import type {} from "@mui/x-date-pickers/AdapterDayjs";
+import type {} from "@mui/x-date-pickers/themeAugmentation";
 
 const theme = createTheme({
   colorSchemes: {

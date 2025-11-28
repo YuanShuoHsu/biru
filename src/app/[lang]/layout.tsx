@@ -61,7 +61,7 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <Providers dict={dict} fallback={fallback}>
+        <Providers dict={dict} fallback={fallback} lang={langCode}>
           <AppLayout>{children}</AppLayout>
         </Providers>
       </body>

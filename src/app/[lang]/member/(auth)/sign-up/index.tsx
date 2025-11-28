@@ -1,13 +1,16 @@
 // https://nextjs.org/docs/app/guides/authentication
 // https://mui.com/toolpad/core/react-sign-up-page/
 // https://mui.com/store/sign-up/
+// https://mui.com/x/react-date-pickers/quickstart/
 
 "use client";
 
+import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
+import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
 
 import { useI18n } from "@/context/i18n";
@@ -20,14 +23,17 @@ import {
   CardContent,
   CardHeader,
   Divider,
+  Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Link as MuiLink,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { getErrorMessage } from "@/utils/errors";
 
@@ -53,6 +59,8 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+type PasswordField = "password" | "confirmPassword";
+
 interface MemberAuthSignUpProps {
   lang: string;
   redirect?: string | string[];
@@ -60,13 +68,23 @@ interface MemberAuthSignUpProps {
 
 const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const [form, setForm] = useState({
-    firstName: "",
     lastName: "",
+    firstName: "",
+    birthDate: "",
+    gender: "",
     email: "",
     password: "",
+    confirmPassword: "",
+    countryCode: "",
+    phone: "",
   });
 
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState<
+    Record<PasswordField, boolean>
+  >({
+    password: false,
+    confirmPassword: false,
+  });
 
   const redirectParam =
     typeof redirect === "string" && redirect.startsWith("/")
@@ -80,9 +98,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const dict = useI18n();
 
   const langNameDirection: "row" | "row-reverse" =
-    lang === "en" ? "row" : "row-reverse";
+    lang === "en" ? "row-reverse" : "row";
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowPassword = (key: PasswordField) => () =>
+    setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -93,10 +112,17 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
 
   const handleChange = ({
     target: { checked, name, type, value },
-  }: React.ChangeEvent<HTMLInputElement>) =>
+  }: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleBirthDateChange = (value: Dayjs | null) =>
+    setForm((prev) => ({
+      ...prev,
+      birthDate: value?.isValid() ? value.toISOString() : "",
     }));
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -110,6 +136,15 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
   };
+
+  const genderOptions = [
+    { label: dict.member.auth.gender.options.female, value: "FEMALE" },
+    { label: dict.member.auth.gender.options.male, value: "MALE" },
+    {
+      label: dict.member.auth.gender.options.notDisclosed,
+      value: "NOT_DISCLOSED",
+    },
+  ];
 
   return (
     <FormCard component="form" onSubmit={handleSubmit}>
@@ -130,6 +165,14 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <Divider>{dict.member.auth.or}</Divider>
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
+            autoComplete="family-name"
+            fullWidth
+            label={dict.member.auth.lastName}
+            name="lastName"
+            onChange={handleChange}
+            value={form.lastName}
+          />
+          <TextField
             autoComplete="given-name"
             fullWidth
             label={dict.member.auth.firstName}
@@ -138,16 +181,29 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             required
             value={form.firstName}
           />
-          <TextField
-            autoComplete="family-name"
-            fullWidth
-            label={dict.member.auth.lastName}
-            name="lastName"
-            onChange={handleChange}
-            required
-            value={form.lastName}
-          />
         </Stack>
+        <DatePicker
+          label={dict.member.auth.birthDate}
+          onChange={handleBirthDateChange}
+          slotProps={{
+            textField: { fullWidth: true, required: true },
+          }}
+          value={form.birthDate ? dayjs(form.birthDate) : null}
+        />
+        <TextField
+          fullWidth
+          label={dict.member.auth.gender.label}
+          name="gender"
+          onChange={handleChange}
+          select
+          value={form.gender}
+        >
+          {genderOptions.map(({ label, value }) => (
+            <MenuItem key={value} value={value}>
+              {label}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           autoComplete="email"
           fullWidth
@@ -171,24 +227,111 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
                 <InputAdornment position="start">
                   <IconButton
                     aria-label={
-                      showPassword
+                      showPassword.password
                         ? dict.member.auth.hidePassword
                         : dict.member.auth.showPassword
                     }
-                    onClick={handleClickShowPassword}
+                    onClick={handleClickShowPassword("password")}
                     onMouseDown={handleMouseDownPassword}
                     onMouseUp={handleMouseUpPassword}
                     edge="end"
                   >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                    {showPassword.password ? <VisibilityOff /> : <Visibility />}
                   </IconButton>
                 </InputAdornment>
               ),
             },
           }}
-          type={showPassword ? "text" : "password"}
+          type={showPassword.password ? "text" : "password"}
           value={form.password}
         />
+        <TextField
+          autoComplete="new-password"
+          fullWidth
+          label={dict.member.auth.confirmPassword}
+          name="confirmPassword"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword.confirmPassword
+                        ? dict.member.auth.hidePassword
+                        : dict.member.auth.showPassword
+                    }
+                    onClick={handleClickShowPassword("confirmPassword")}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword.confirmPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword.confirmPassword ? "text" : "password"}
+          value={form.confirmPassword}
+        />
+
+        <TextField
+          fullWidth
+          label={dict.member.auth.confirmPassword}
+          name="confirmPassword"
+          onChange={handleChange}
+          required
+          slotProps={{
+            input: {
+              endAdornment: (
+                <InputAdornment position="start">
+                  <IconButton
+                    aria-label={
+                      showPassword.confirmPassword
+                        ? dict.member.auth.hideConfirmPassword
+                        : dict.member.auth.showConfirmPassword
+                    }
+                    onClick={handleClickShowPassword("confirmPassword")}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword.confirmPassword ? (
+                      <VisibilityOff />
+                    ) : (
+                      <Visibility />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            },
+          }}
+          type={showPassword.confirmPassword ? "text" : "password"}
+          value={form.confirmPassword}
+        />
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 4 }}>
+            <CountrySelect />
+          </Grid>
+          <Grid size={{ xs: 8 }}>
+            <TextField
+              autoComplete="tel"
+              fullWidth
+              inputMode="tel"
+              label={dict.member.auth.phone}
+              name="phone"
+              onChange={handleChange}
+              required
+              value={form.phone}
+            />
+          </Grid>
+        </Grid>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button fullWidth size="large" type="submit" variant="contained">
