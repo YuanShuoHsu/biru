@@ -164,6 +164,7 @@ const CountrySelect = () => {
                 hint.current = "";
               }
             }}
+            required
             slotProps={{
               htmlInput: {
                 ...params.inputProps,
