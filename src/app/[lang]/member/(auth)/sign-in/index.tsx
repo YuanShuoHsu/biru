@@ -199,12 +199,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           autoComplete="current-password"
           // error={!!state?.errors?.password}
           fullWidth
-          // 這邊可能會需要修正
-          // helperText={
-          //   state?.errors?.password?.length
-          //     ? `Password must: ${state.errors.password.join(", ")}`
-          //     : ""
-          // }
+          // helperText={state?.errors?.email}
           label={dict.member.auth.password}
           name="password"
           onChange={handleChange}

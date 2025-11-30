@@ -139,6 +139,7 @@ const MemberAuthResetPassword = ({
           value={form.email}
         />
         <TextField
+          autoComplete="new-password"
           fullWidth
           label={dict.member.auth.newPassword}
           name="newPassword"
@@ -173,6 +174,7 @@ const MemberAuthResetPassword = ({
           value={form.newPassword}
         />
         <TextField
+          autoComplete="new-password"
           fullWidth
           label={dict.member.auth.confirmNewPassword}
           name="confirmNewPassword"
