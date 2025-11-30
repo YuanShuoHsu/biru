@@ -298,6 +298,14 @@ pnpm add @mui/x-date-pickers
 pnpm add dayjs
 ```
 
+## libphonenumber-js
+
+```bash
+# https://www.npmjs.com/package/libphonenumber-js
+# https://gitlab.com/catamphetamine/libphonenumber-js
+pnpm add libphonenumber-js
+```
+
 ## socket.io-client
 
 ```bash

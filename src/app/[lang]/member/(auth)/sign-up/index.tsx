@@ -8,7 +8,7 @@
 import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
-import React, { useState } from "react";
+import { useState } from "react";
 
 import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
@@ -75,7 +75,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     email: "",
     password: "",
     confirmPassword: "",
-    countryCode: "",
+    countryCode: "TW",
     phone: "",
   });
 
@@ -137,6 +137,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     }
   };
 
+  // 修改成不願透露
   const genderOptions = [
     { label: dict.member.auth.gender.options.female, value: "FEMALE" },
     { label: dict.member.auth.gender.options.male, value: "MALE" },
@@ -294,6 +295,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             <CountrySelect />
           </Grid>
           <Grid size={{ xs: 8 }}>
+            {/* 修改成電話號碼 */}
             <TextField
               autoComplete="tel"
               fullWidth

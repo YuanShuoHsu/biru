@@ -1,7 +1,11 @@
-// https://nextjs.org/docs/app/api-reference/components/image#remotepatterns
+// https://mui.com/material-ui/react-autocomplete/#AutocompleteHint.tsx
+// https://mui.com/material-ui/react-autocomplete/#CountrySelect.tsx
+// https://mui.com/material-ui/react-autocomplete/#Filter.tsx
+// https://mui.com/material-ui/react-autocomplete/#GloballyCustomizedOptions.tsx
+// https://mui.com/material-ui/react-autocomplete/#RenderGroup.tsx
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { countries } from "@/constants/countries";
 
@@ -11,20 +15,58 @@ import {
   Autocomplete,
   Box,
   TextField,
+  Typography,
   createFilterOptions,
   type BoxProps,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { darken, lighten, styled } from "@mui/material/styles";
 
-import type { CountryType } from "@/types/countries";
+import type { CountryOption, CountryType } from "@/types/countries";
 
-const StyledBox = styled((props: BoxProps<"li">) => (
+const GroupHeader = styled("div")(({ theme }) => ({
+  position: "sticky",
+  top: theme.spacing(-1),
+  padding: theme.spacing(0.5, 1.25),
+  color: theme.palette.primary.main,
+  backgroundColor: lighten(theme.palette.primary.light, 0.85),
+
+  ...theme.applyStyles("dark", {
+    backgroundColor: darken(theme.palette.primary.main, 0.8),
+  }),
+}));
+
+const GroupItems = styled("ul")({
+  padding: 0,
+});
+
+const InputBox = styled(Box)({
+  position: "relative",
+});
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  position: "absolute",
+  top: theme.spacing(2),
+  left: theme.spacing(1.75),
+  width: "calc(100% - 75px)",
+  opacity: 0.5,
+  overflow: "hidden",
+  whiteSpace: "nowrap",
+  pointerEvents: "none",
+  zIndex: 1,
+}));
+
+const CountryOptionBox = styled((props: BoxProps<"li">) => (
   <Box component="li" {...props} />
 ))(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(2),
 }));
+
+const filterOptions = createFilterOptions({
+  matchFrom: "start",
+  stringify: ({ label }: CountryOption) => label,
+});
 
 const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
   <Image
@@ -39,27 +81,42 @@ const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
 );
 
 const CountrySelect = () => {
-  const [value, setValue] = useState<CountryType | null>(null);
+  const hint = useRef("");
+  const [value, setValue] = useState<CountryOption | null>(null);
   const [inputValue, setInputValue] = useState("");
 
   const dict = useI18n();
 
-  const filter = createFilterOptions<CountryType>();
+  const options = countries.map((option) => {
+    const firstLetter = option.label[0].toUpperCase();
+
+    return {
+      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+      ...option,
+    };
+  });
 
   return (
     <Autocomplete
       autoHighlight
+      disablePortal
       filterOptions={(options, state) =>
         value && state.inputValue === value.code
           ? options
-          : filter(options, state)
+          : filterOptions(options, state)
       }
-      getOptionLabel={({ label }) => label}
+      getOptionLabel={({ code, label, phone }: CountryOption) =>
+        `${label} (${code}) +${phone}`
+      }
+      groupBy={({ firstLetter }: CountryOption) => firstLetter}
       id="country-select-demo"
       inputValue={inputValue}
       onChange={(_, newValue) => {
         setValue(newValue);
         setInputValue(newValue?.code || "");
+      }}
+      onClose={() => {
+        hint.current = "";
       }}
       onInputChange={(_, newInputValue, reason) => {
         if (reason === "reset") return;
@@ -70,33 +127,70 @@ const CountrySelect = () => {
 
         setInputValue(newInputValue);
       }}
-      options={countries}
+      onKeyDown={(event) => {
+        if (event.key === "Tab") {
+          if (hint.current) {
+            setInputValue(hint.current);
+            event.preventDefault();
+          }
+        }
+      }}
+      options={options.sort(
+        (a, b) => -b.firstLetter.localeCompare(a.firstLetter),
+      )}
+      renderGroup={(params) => (
+        <li key={params.key}>
+          <GroupHeader>{params.group}</GroupHeader>
+          <GroupItems>{params.children}</GroupItems>
+        </li>
+      )}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label={dict.member.auth.chooseCountry}
-          slotProps={{
-            htmlInput: {
-              ...params.inputProps,
-              autoComplete: "new-password",
-            },
-            input: {
-              ...params.InputProps,
-              startAdornment: value ? (
-                <FlagImage code={value.code} label={value.label} />
-              ) : (
-                params.InputProps.startAdornment
-              ),
-            },
-          }}
-        />
+        <InputBox>
+          <StyledTypography>{hint.current}</StyledTypography>
+          <TextField
+            {...params}
+            label={dict.member.auth.chooseCountry}
+            onChange={(event) => {
+              const newValue = event.target.value;
+              setInputValue(newValue);
+
+              const matchingOption = countries.find((option) =>
+                option.label.startsWith(newValue),
+              );
+
+              if (newValue && matchingOption) {
+                hint.current = matchingOption.label;
+              } else {
+                hint.current = "";
+              }
+            }}
+            slotProps={{
+              htmlInput: {
+                ...params.inputProps,
+                autoComplete: "new-password",
+              },
+              input: {
+                ...params.InputProps,
+                startAdornment: value ? (
+                  <FlagImage code={value.code} label={value.label} />
+                ) : (
+                  params.InputProps.startAdornment
+                ),
+              },
+            }}
+          />
+        </InputBox>
       )}
-      renderOption={({ key, ...optionProps }, { code, label, phone }) => (
-        <StyledBox key={key} {...optionProps}>
-          <FlagImage code={code} label={label} />
-          {label} ({code}) +{phone}
-        </StyledBox>
-      )}
+      renderOption={({ key, ...optionProps }, option, state, ownerState) => {
+        const { code, label } = option;
+
+        return (
+          <CountryOptionBox key={key} {...optionProps}>
+            <FlagImage code={code} label={label} />
+            {ownerState.getOptionLabel(option)}
+          </CountryOptionBox>
+        );
+      }}
       value={value}
     />
   );
