@@ -61,7 +61,7 @@
         "options": {
           "female": "女性",
           "male": "男性",
-          "notDisclosed": "不透露"
+          "notDisclosed": "不願透露"
         }
       },
       "hasAccount": "已經有帳號？",
@@ -74,7 +74,7 @@
       "noAccount": "還沒有帳號？",
       "or": "或",
       "password": "密碼",
-      "phone": "手機號碼",
+      "phone": "電話號碼",
       "rememberMe": "記住我",
       "rememberedPassword": "還記得密碼？",
       "resetPassword": { "label": "重設密碼" },

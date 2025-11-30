@@ -61,7 +61,7 @@
         "options": {
           "female": "女性",
           "male": "男性",
-          "notDisclosed": "不透露"
+          "notDisclosed": "不愿透露"
         }
       },
       "hasAccount": "已经有账号？",
@@ -74,7 +74,7 @@
       "noAccount": "还没有账号？",
       "or": "或",
       "password": "密码",
-      "phone": "手机号",
+      "phone": "电话号码",
       "rememberMe": "记住我",
       "rememberedPassword": "还记得密码？",
       "resetPassword": { "label": "重置密码" },

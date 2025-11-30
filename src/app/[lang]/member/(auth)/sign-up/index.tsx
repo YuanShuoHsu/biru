@@ -137,7 +137,6 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     }
   };
 
-  // 修改成不願透露
   const genderOptions = [
     { label: dict.member.auth.gender.options.female, value: "FEMALE" },
     { label: dict.member.auth.gender.options.male, value: "MALE" },
