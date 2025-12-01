@@ -20,6 +20,7 @@
     "@mui/material": "^7.3.4",
     "@mui/material-nextjs": "^7.3.3",
     "@mui/x-date-pickers": "^7.29.4",
+    "autosuggest-highlight": "^3.3.4",
     "dayjs": "^1.11.18",
     "libphonenumber-js": "^1.12.29",
     "negotiator": "^1.0.0",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
+    "@types/autosuggest-highlight": "^3.2.3",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^20",
     "@types/react": "^19",

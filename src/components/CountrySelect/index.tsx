@@ -2,8 +2,11 @@
 // https://mui.com/material-ui/react-autocomplete/#CountrySelect.tsx
 // https://mui.com/material-ui/react-autocomplete/#Filter.tsx
 // https://mui.com/material-ui/react-autocomplete/#GloballyCustomizedOptions.tsx
+// https://mui.com/material-ui/react-autocomplete/#Highlights.tsx
 // https://mui.com/material-ui/react-autocomplete/#RenderGroup.tsx
 
+import match from "autosuggest-highlight/match";
+import parse from "autosuggest-highlight/parse";
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -16,6 +19,7 @@ import {
   Box,
   TextField,
   Typography,
+  TypographyProps,
   createFilterOptions,
   type BoxProps,
 } from "@mui/material";
@@ -63,9 +67,25 @@ const CountryOptionBox = styled((props: BoxProps<"li">) => (
   gap: theme.spacing(2),
 }));
 
+const HighlightTypography = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "highlight",
+})<TypographyProps<"span"> & { highlight: boolean }>(
+  ({ highlight, theme }) => ({
+    fontWeight: highlight
+      ? theme.typography.fontWeightBold
+      : theme.typography.fontWeightRegular,
+  }),
+);
+
+const formatPhone = (phone?: CountryOption["phone"]) =>
+  phone ? `+${phone}` : "";
+
+const getCountryLabel = ({ label, code, phone }: CountryOption) =>
+  `${label} (${code}) ${formatPhone(phone)}`;
+
 const filterOptions = createFilterOptions({
-  matchFrom: "start",
-  stringify: ({ label }: CountryOption) => label,
+  // matchFrom: "start",
+  stringify: getCountryLabel,
 });
 
 const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
@@ -101,19 +121,17 @@ const CountrySelect = () => {
       autoHighlight
       disablePortal
       filterOptions={(options, state) =>
-        value && state.inputValue === value.code
+        value && state.inputValue === formatPhone(value.phone)
           ? options
           : filterOptions(options, state)
       }
-      getOptionLabel={({ code, label, phone }: CountryOption) =>
-        `${label} (${code}) +${phone}`
-      }
+      getOptionLabel={getCountryLabel}
       groupBy={({ firstLetter }: CountryOption) => firstLetter}
       id="country-select-demo"
       inputValue={inputValue}
       onChange={(_, newValue) => {
         setValue(newValue);
-        setInputValue(newValue?.code || "");
+        setInputValue(formatPhone(newValue?.phone));
       }}
       onClose={() => {
         hint.current = "";
@@ -121,7 +139,7 @@ const CountrySelect = () => {
       onInputChange={(_, newInputValue, reason) => {
         if (reason === "reset") return;
         if (reason === "blur") {
-          setInputValue(value?.code || "");
+          setInputValue(formatPhone(value?.phone));
           return;
         }
 
@@ -139,10 +157,10 @@ const CountrySelect = () => {
         (a, b) => -b.firstLetter.localeCompare(a.firstLetter),
       )}
       renderGroup={(params) => (
-        <li key={params.key}>
+        <Box component="li" key={params.key}>
           <GroupHeader>{params.group}</GroupHeader>
           <GroupItems>{params.children}</GroupItems>
-        </li>
+        </Box>
       )}
       renderInput={(params) => (
         <InputBox>
@@ -182,13 +200,34 @@ const CountrySelect = () => {
           />
         </InputBox>
       )}
-      renderOption={({ key, ...optionProps }, option, state, ownerState) => {
+      renderOption={(
+        { key, ...optionProps },
+        option,
+        { inputValue },
+        ownerState,
+      ) => {
         const { code, label } = option;
+        const optionLabelText = ownerState.getOptionLabel(option);
+        const matches = match(optionLabelText, inputValue, {
+          findAllOccurrences: true,
+          insideWords: true,
+        });
+        const parts = parse(optionLabelText, matches);
 
         return (
           <CountryOptionBox key={key} {...optionProps}>
             <FlagImage code={code} label={label} />
-            {ownerState.getOptionLabel(option)}
+            <Box component="div">
+              {parts.map(({ highlight, text }, index) => (
+                <HighlightTypography
+                  component="span"
+                  highlight={highlight}
+                  key={index}
+                >
+                  {text}
+                </HighlightTypography>
+              ))}
+            </Box>
           </CountryOptionBox>
         );
       }}

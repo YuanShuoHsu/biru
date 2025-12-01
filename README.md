@@ -288,6 +288,13 @@ pnpm add negotiator
 pnpm add -D @types/negotiator
 ```
 
+## autosuggest-highlight
+
+```bash
+pnpm add autosuggest-highlight
+pnpm add @types/autosuggest-highlight
+```
+
 ## dayjs
 
 ```bash
