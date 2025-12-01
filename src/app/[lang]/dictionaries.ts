@@ -2,15 +2,20 @@
 
 import "server-only";
 
+import { Locale } from "@/constants/locale";
+
 import type { LocaleCode } from "@/types/locale";
 
 export const dictionaries = {
-  "zh-TW": () =>
+  [Locale.ZhTW]: () =>
     import("./dictionaries/zh-TW.json").then((module) => module.default),
-  en: () => import("./dictionaries/en.json").then((module) => module.default),
-  ja: () => import("./dictionaries/ja.json").then((module) => module.default),
-  ko: () => import("./dictionaries/ko.json").then((module) => module.default),
-  "zh-CN": () =>
+  [Locale.En]: () =>
+    import("./dictionaries/en.json").then((module) => module.default),
+  [Locale.Ja]: () =>
+    import("./dictionaries/ja.json").then((module) => module.default),
+  [Locale.Ko]: () =>
+    import("./dictionaries/ko.json").then((module) => module.default),
+  [Locale.ZhCN]: () =>
     import("./dictionaries/zh-CN.json").then((module) => module.default),
 };
 

@@ -12,6 +12,10 @@ import { useState } from "react";
 
 import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
+import TextMaskCustom from "@/components/TextMaskCustom";
+
+import { countries } from "@/constants/countries";
+import { countryCodeLocaleMap, Locale } from "@/constants/locale";
 
 import { useI18n } from "@/context/i18n";
 
@@ -35,6 +39,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import { formatPhone } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
 
 import FormCard from "../FormCard";
@@ -66,7 +71,16 @@ interface MemberAuthSignUpProps {
   redirect?: string | string[];
 }
 
+const getDefaultCountryCode = (locale: string) => {
+  const countryCode = countryCodeLocaleMap[locale as Locale];
+  const matchedCountry = countries.find(({ code }) => code === countryCode);
+
+  return formatPhone(matchedCountry?.phone);
+};
+
 const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
+  const defaultCountryCode = getDefaultCountryCode(lang);
+
   const [form, setForm] = useState({
     lastName: "",
     firstName: "",
@@ -75,7 +89,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     email: "",
     password: "",
     confirmPassword: "",
-    countryCode: "TW",
+    countryCode: defaultCountryCode,
     phone: "",
   });
 
@@ -118,6 +132,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
+
+  const handleCountryCodeChange = (code: string) =>
+    setForm((prev) => ({ ...prev, countryCode: code }));
 
   const handleBirthDateChange = (value: Dayjs | null) =>
     setForm((prev) => ({
@@ -291,10 +308,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         />
         <Grid container spacing={2}>
           <Grid size={{ xs: 4 }}>
-            <CountrySelect />
+            <CountrySelect lang={lang} onChange={handleCountryCodeChange} />
           </Grid>
           <Grid size={{ xs: 8 }}>
-            {/* 修改成電話號碼 */}
             <TextField
               autoComplete="tel"
               fullWidth
@@ -303,6 +319,13 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
               name="phone"
               onChange={handleChange}
               required
+              slotProps={{
+                input: {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  inputComponent: TextMaskCustom as any,
+                  // inputProps: { countryCode: form.countryCode },
+                },
+              }}
               type="tel"
               value={form.phone}
             />

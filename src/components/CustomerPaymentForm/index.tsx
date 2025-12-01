@@ -6,6 +6,8 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
+import { ecpayLocaleMap, Locale } from "@/constants/locale";
+
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -28,18 +30,10 @@ import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 
-import { Locale } from "@/constants/locale";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
-const langMap: Record<LocaleCode, EcpayLanguage> = {
-  "zh-TW": "",
-  en: "ENG",
-  ja: "JPN",
-  ko: "KOR",
-  "zh-CN": "CHI",
-};
-
-const getEcpayLanguage = (locale: LocaleCode): EcpayLanguage => langMap[locale];
+const getEcpayLanguage = (locale: LocaleCode): EcpayLanguage =>
+  ecpayLocaleMap[locale];
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
   fetch(url, {

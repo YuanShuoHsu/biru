@@ -11,21 +11,24 @@ import Image from "next/image";
 import { useRef, useState } from "react";
 
 import { countries } from "@/constants/countries";
+import { countryCodeLocaleMap, Locale } from "@/constants/locale";
 
 import { useI18n } from "@/context/i18n";
 
 import {
   Autocomplete,
   Box,
+  createFilterOptions,
   TextField,
   Typography,
   TypographyProps,
-  createFilterOptions,
   type BoxProps,
 } from "@mui/material";
 import { darken, lighten, styled } from "@mui/material/styles";
 
 import type { CountryOption, CountryType } from "@/types/countries";
+
+import { formatPhone } from "@/utils/countries";
 
 const GroupHeader = styled("div")(({ theme }) => ({
   position: "sticky",
@@ -77,9 +80,6 @@ const HighlightTypography = styled(Typography, {
   }),
 );
 
-const formatPhone = (phone?: CountryOption["phone"]) =>
-  phone ? `+${phone}` : "";
-
 const getCountryLabel = ({ label, code, phone }: CountryOption) =>
   `${label} (${code}) ${formatPhone(phone)}`;
 
@@ -100,13 +100,12 @@ const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
   />
 );
 
-const CountrySelect = () => {
-  const hint = useRef("");
-  const [value, setValue] = useState<CountryOption | null>(null);
-  const [inputValue, setInputValue] = useState("");
+interface CountrySelectProps {
+  lang: string;
+  onChange: (code: string) => void;
+}
 
-  const dict = useI18n();
-
+const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
   const options = countries.map((option) => {
     const firstLetter = option.label[0].toUpperCase();
 
@@ -115,6 +114,21 @@ const CountrySelect = () => {
       ...option,
     };
   });
+
+  const matchedCountry = options.find(
+    ({ code }) => code === countryCodeLocaleMap[lang as Locale],
+  );
+
+  const [value, setValue] = useState<CountryOption | null>(
+    matchedCountry || null,
+  );
+  const [inputValue, setInputValue] = useState(
+    formatPhone(matchedCountry?.phone),
+  );
+
+  const hint = useRef("");
+
+  const dict = useI18n();
 
   return (
     <Autocomplete
@@ -131,7 +145,10 @@ const CountrySelect = () => {
       inputValue={inputValue}
       onChange={(_, newValue) => {
         setValue(newValue);
-        setInputValue(formatPhone(newValue?.phone));
+
+        const formattedPhone = formatPhone(newValue?.phone);
+        setInputValue(formattedPhone);
+        onChange(formattedPhone);
       }}
       onClose={() => {
         hint.current = "";

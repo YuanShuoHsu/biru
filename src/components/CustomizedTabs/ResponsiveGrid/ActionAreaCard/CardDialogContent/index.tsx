@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
+import React, { useEffect, useImperativeHandle, useState } from "react";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
@@ -70,7 +70,7 @@ interface CardDialogContentProps {
   stock: number | null;
 }
 
-const CardDialogContent = forwardRef<
+const CardDialogContent = React.forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
 >(({ id, name, description, imageUrl, options, price, stock }, ref) => {

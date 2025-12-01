@@ -3,8 +3,9 @@
 import { createContext, useContext } from "react";
 
 import { dictionaries } from "@/app/[lang]/dictionaries";
+import { Locale } from "@/constants/locale";
 
-export type I18nDict = Awaited<ReturnType<(typeof dictionaries)["zh-TW"]>>;
+export type I18nDict = Awaited<ReturnType<(typeof dictionaries)[Locale.ZhTW]>>;
 
 const I18nContext = createContext<I18nDict | null>(null);
 

@@ -6,6 +6,8 @@
 import { SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
+import { dayjsLocaleMap } from "@/constants/locale";
+
 import type { I18nDict } from "@/context/i18n";
 
 import { CssBaseline } from "@mui/material";
@@ -28,16 +30,6 @@ import "dayjs/locale/ko";
 import "dayjs/locale/zh-cn";
 import "dayjs/locale/zh-tw";
 
-const localeMap: Record<LocaleCode, string> = {
-  "zh-TW": "zh-tw",
-  en: "en",
-  ja: "ja",
-  ko: "ko",
-  "zh-CN": "zh-cn",
-};
-
-const getDayjsLocale = (lang: LocaleCode) => localeMap[lang];
-
 interface ProvidersProps {
   children: React.ReactNode;
   dict: I18nDict;
@@ -49,7 +41,7 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
   <AppRouterCacheProvider options={{ enableCssLayer: true }}>
     <ThemeProvider theme={theme}>
       <LocalizationProvider
-        adapterLocale={getDayjsLocale(lang)}
+        adapterLocale={dayjsLocaleMap[lang]}
         dateAdapter={AdapterDayjs}
       >
         <CssBaseline />

@@ -305,6 +305,15 @@ pnpm add @mui/x-date-pickers
 pnpm add dayjs
 ```
 
+## react-imask
+
+```bash
+# https://mui.com/material-ui/react-text-field/#FormattedInputs.tsx
+# https://github.com/uNmAnNeR/imaskjs
+# https://imask.js.org/
+pnpm add react-imask
+```
+
 ## libphonenumber-js
 
 ```bash

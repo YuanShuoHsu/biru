@@ -10,6 +10,7 @@ import { useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
+import { menu } from "@/constants/menu";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 import {
   LATEST,
@@ -26,8 +27,6 @@ import { styled } from "@mui/material/styles";
 import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
 
 import type { RouteParams } from "@/types/routeParams";
-
-import { menu } from "@/utils/menu";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
