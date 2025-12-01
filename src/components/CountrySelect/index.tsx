@@ -19,6 +19,7 @@ import {
   Autocomplete,
   Box,
   createFilterOptions,
+  InputAdornment,
   TextField,
   Typography,
   TypographyProps,
@@ -50,7 +51,7 @@ const InputBox = styled(Box)({
   position: "relative",
 });
 
-const StyledTypography = styled(Typography)(({ theme }) => ({
+const HintTypography = styled(Typography)(({ theme }) => ({
   position: "absolute",
   top: theme.spacing(2),
   left: theme.spacing(1.75),
@@ -60,6 +61,10 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   whiteSpace: "nowrap",
   pointerEvents: "none",
   zIndex: 1,
+}));
+
+const StyledInputAdornment = styled(InputAdornment)(({ theme }) => ({
+  marginInline: theme.spacing(0.625),
 }));
 
 const CountryOptionBox = styled((props: BoxProps<"li">) => (
@@ -181,7 +186,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       )}
       renderInput={(params) => (
         <InputBox>
-          <StyledTypography>{hint.current}</StyledTypography>
+          <HintTypography>{hint.current}</HintTypography>
           <TextField
             {...params}
             label={dict.member.auth.chooseCountry}
@@ -208,7 +213,9 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
               input: {
                 ...params.InputProps,
                 startAdornment: value ? (
-                  <FlagImage code={value.code} label={value.label} />
+                  <StyledInputAdornment position="start">
+                    <FlagImage code={value.code} label={value.label} />
+                  </StyledInputAdornment>
                 ) : (
                   params.InputProps.startAdornment
                 ),

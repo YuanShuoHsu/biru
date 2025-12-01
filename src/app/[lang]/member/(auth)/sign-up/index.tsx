@@ -14,9 +14,6 @@ import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
 import TextMaskCustom from "@/components/TextMaskCustom";
 
-import { countries } from "@/constants/countries";
-import { countryCodeLocaleMap, Locale } from "@/constants/locale";
-
 import { useI18n } from "@/context/i18n";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -39,7 +36,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { formatPhone } from "@/utils/countries";
+import { getDefaultCountryCode } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
 
 import FormCard from "../FormCard";
@@ -70,13 +67,6 @@ interface MemberAuthSignUpProps {
   lang: string;
   redirect?: string | string[];
 }
-
-const getDefaultCountryCode = (locale: string) => {
-  const countryCode = countryCodeLocaleMap[locale as Locale];
-  const matchedCountry = countries.find(({ code }) => code === countryCode);
-
-  return formatPhone(matchedCountry?.phone);
-};
 
 const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const defaultCountryCode = getDefaultCountryCode(lang);
