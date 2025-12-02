@@ -297,10 +297,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           value={form.confirmPassword}
         />
         <Grid container spacing={2}>
-          <Grid size={{ xs: 4 }}>
+          <Grid size={{ xs: 6, sm: 4 }}>
             <CountrySelect lang={lang} onChange={handleCountryCodeChange} />
           </Grid>
-          <Grid size={{ xs: 8 }}>
+          <Grid size={{ xs: 6, sm: 8 }}>
             <TextField
               autoComplete="tel"
               fullWidth
@@ -313,7 +313,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
                 input: {
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   inputComponent: TextMaskCustom as any,
-                  // inputProps: { countryCode: form.countryCode },
+                  inputProps: { countryCode: form.countryCode },
                 },
               }}
               type="tel"

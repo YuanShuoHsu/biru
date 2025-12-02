@@ -88,7 +88,7 @@ const HighlightTypography = styled(Typography, {
 const getCountryLabel = ({ label, code, phone }: CountryOption) =>
   `${label} (${code}) ${formatPhone(phone)}`;
 
-const filterOptions = createFilterOptions({
+const filter = createFilterOptions<CountryOption>({
   // matchFrom: "start",
   stringify: getCountryLabel,
 });
@@ -124,11 +124,16 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
     ({ code }) => code === countryCodeLocaleMap[lang as Locale],
   );
 
-  const [value, setValue] = useState<CountryOption | null>(
-    matchedCountry || null,
-  );
+  const defaultCountry = matchedCountry || {
+    code: "TW",
+    label: "Taiwan",
+    phone: "886",
+    firstLetter: "T",
+  };
+
+  const [value, setValue] = useState<CountryOption>(defaultCountry);
   const [inputValue, setInputValue] = useState(
-    formatPhone(matchedCountry?.phone),
+    formatPhone(defaultCountry.phone),
   );
 
   const hint = useRef("");
@@ -138,20 +143,22 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
   return (
     <Autocomplete
       autoHighlight
+      disableClearable
       disablePortal
-      filterOptions={(options, state) =>
-        value && state.inputValue === formatPhone(value.phone)
-          ? options
-          : filterOptions(options, state)
-      }
+      filterOptions={(options, params) => {
+        const { inputValue } = params;
+        if (value && inputValue === formatPhone(value.phone)) return options;
+
+        return filter(options, params);
+      }}
       getOptionLabel={getCountryLabel}
       groupBy={({ firstLetter }: CountryOption) => firstLetter}
       id="country-select-demo"
       inputValue={inputValue}
-      onChange={(_, newValue) => {
+      onChange={(_, newValue: CountryOption) => {
         setValue(newValue);
 
-        const formattedPhone = formatPhone(newValue?.phone);
+        const formattedPhone = formatPhone(newValue.phone);
         setInputValue(formattedPhone);
         onChange(formattedPhone);
       }}
@@ -161,7 +168,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       onInputChange={(_, newInputValue, reason) => {
         if (reason === "reset") return;
         if (reason === "blur") {
-          setInputValue(formatPhone(value?.phone));
+          setInputValue(formatPhone(value.phone));
           return;
         }
 
