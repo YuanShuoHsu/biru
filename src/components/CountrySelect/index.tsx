@@ -8,7 +8,7 @@
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 import { countries } from "@/constants/countries";
 import { countryCodeLocaleMap, Locale } from "@/constants/locale";
@@ -67,12 +67,26 @@ const StyledInputAdornment = styled(InputAdornment)(({ theme }) => ({
   marginInline: theme.spacing(0.625),
 }));
 
-const CountryOptionBox = styled((props: BoxProps<"li">) => (
-  <Box component="li" {...props} />
-))(({ theme }) => ({
+type CountryOptionBoxProps = Omit<BoxProps<"li">, "component"> & {
+  selected: boolean;
+};
+
+const CountryOptionRoot = React.forwardRef<
+  HTMLLIElement,
+  CountryOptionBoxProps
+>((props, ref) => <Box component="li" ref={ref} {...props} />);
+
+CountryOptionRoot.displayName = "CountryOptionRoot";
+
+const CountryOptionBox = styled(CountryOptionRoot, {
+  shouldForwardProp: (prop) => prop !== "selected",
+})<CountryOptionBoxProps>(({ selected, theme }) => ({
   display: "flex",
   alignItems: "center",
   gap: theme.spacing(2),
+  backgroundColor: selected
+    ? theme.vars.palette.action.selected
+    : "transparent",
 }));
 
 const HighlightTypography = styled(Typography, {
@@ -152,6 +166,9 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
         return filter(options, params);
       }}
       getOptionLabel={getCountryLabel}
+      isOptionEqualToValue={({ code: optionCode }, { code: valueCode }) =>
+        optionCode === valueCode
+      }
       groupBy={({ firstLetter }: CountryOption) => firstLetter}
       id="country-select-demo"
       inputValue={inputValue}
@@ -234,7 +251,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       renderOption={(
         { key, ...optionProps },
         option,
-        { inputValue },
+        { inputValue, selected },
         ownerState,
       ) => {
         const { code, label } = option;
@@ -246,7 +263,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
         const parts = parse(optionLabelText, matches);
 
         return (
-          <CountryOptionBox key={key} {...optionProps}>
+          <CountryOptionBox key={key} selected={selected} {...optionProps}>
             <FlagImage code={code} label={label} />
             <Box component="div">
               {parts.map(({ highlight, text }, index) => (
