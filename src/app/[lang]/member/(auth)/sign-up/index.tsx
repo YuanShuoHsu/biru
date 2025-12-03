@@ -104,6 +104,15 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const langNameDirection: "row" | "row-reverse" =
     lang === "en" ? "row-reverse" : "row";
 
+  const genderOptions = [
+    { label: dict.member.auth.gender.options.female, value: "FEMALE" },
+    { label: dict.member.auth.gender.options.male, value: "MALE" },
+    {
+      label: dict.member.auth.gender.options.notDisclosed,
+      value: "NOT_DISCLOSED",
+    },
+  ];
+
   const handleClickShowPassword = (key: PasswordField) => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -123,14 +132,14 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     }));
   };
 
-  const handleCountryCodeChange = (code: string) =>
-    setForm((prev) => ({ ...prev, countryCode: code }));
-
   const handleBirthDateChange = (value: Dayjs | null) =>
     setForm((prev) => ({
       ...prev,
-      birthDate: value?.isValid() ? value.toISOString() : "",
+      birthDate: value?.isValid() ? value.format("YYYY-MM-DD") : "",
     }));
+
+  const handleCountryCodeChange = (code: string) =>
+    setForm((prev) => ({ ...prev, countryCode: code }));
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -143,15 +152,6 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
   };
-
-  const genderOptions = [
-    { label: dict.member.auth.gender.options.female, value: "FEMALE" },
-    { label: dict.member.auth.gender.options.male, value: "MALE" },
-    {
-      label: dict.member.auth.gender.options.notDisclosed,
-      value: "NOT_DISCLOSED",
-    },
-  ];
 
   return (
     <FormCard component="form" onSubmit={handleSubmit}>
@@ -190,6 +190,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           />
         </Stack>
         <DatePicker
+          disableFuture
           label={dict.member.auth.birthDate}
           onChange={handleBirthDateChange}
           slotProps={{

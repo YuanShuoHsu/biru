@@ -33,11 +33,6 @@ const stripPrefixDigits = (value: string, digitsToStrip: number) => {
 
   return stripped.trim();
 };
-interface CustomProps {
-  countryCode: string;
-  name: string;
-  onChange: (event: { target: { name: string; value: string } }) => void;
-}
 
 const getPhoneFormatting = (countryCode: string) => {
   const callingCode = toDigits(countryCode);
@@ -70,6 +65,12 @@ const getPhoneFormatting = (countryCode: string) => {
     placeholder,
   };
 };
+
+interface CustomProps {
+  countryCode: string;
+  name: string;
+  onChange: (event: { target: { name: string; value: string } }) => void;
+}
 
 const TextMaskCustom = React.forwardRef<HTMLInputElement, CustomProps>(
   function TextMaskCustom({ countryCode, name, onChange, ...other }, ref) {
