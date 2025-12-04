@@ -1,3 +1,4 @@
+// https://mui.com/material-ui/react-stepper/#CustomizedSteppers.tsx
 // https://mui.com/material-ui/react-stepper/#HorizontalLinearStepper.tsx
 
 "use client";
@@ -6,7 +7,15 @@ import { useParams, usePathname } from "next/navigation";
 
 import { useI18n } from "@/context/i18n";
 
-import { Step, StepLabel, Stepper } from "@mui/material";
+import { ORDER_MODE } from "@/constants/orderMode";
+
+import {
+  Step,
+  StepConnector,
+  stepConnectorClasses,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { OrderMode } from "@/types/orderMode";
@@ -15,21 +24,22 @@ import type { RouteParams } from "@/types/routeParams";
 import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-const createStepPathMap = (
-  mode: OrderMode,
-  storeSlug: StoreSlug,
-  tableNumber: TableNumber,
-  partySize: PartySize,
-): string[] => {
-  const base = `/order/${mode}/${storeSlug}/${tableNumber}${
-    partySize ? `/${partySize}` : ""
-  }`;
-
-  return [base, `${base}/checkout`, `${base}/complete`];
-};
-
-const StyledStepper = styled(Stepper)(({ theme }) => ({
-  "& .MuiStepConnector-line": {
+const QontoConnector = styled(StepConnector)(({ theme }) => ({
+  [`&.${stepConnectorClasses.alternativeLabel}`]: {
+    top: 10,
+    left: "calc(-50% + 16px)",
+    right: "calc(50% + 16px)",
+  },
+  [`&.${stepConnectorClasses.active} .${stepConnectorClasses.line}`]: {
+    borderColor: theme.vars.palette.primary.main,
+  },
+  [`&.${stepConnectorClasses.completed} .${stepConnectorClasses.line}`]: {
+    borderColor: theme.vars.palette.primary.main,
+  },
+  [`& .${stepConnectorClasses.line}`]: {
+    borderColor: theme.vars.palette.divider,
+    borderTopWidth: 3,
+    borderRadius: 1,
     transition: theme.transitions.create("border-color"),
   },
 }));
@@ -47,6 +57,20 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
     transition: theme.transitions.create("color"),
   },
 }));
+
+const createStepPathMap = (
+  mode: OrderMode,
+  storeSlug: StoreSlug,
+  tableNumber?: TableNumber,
+  partySize?: PartySize,
+): string[] => {
+  const base =
+    mode === ORDER_MODE.Pickup
+      ? `/order/${mode}/${storeSlug}`
+      : `/order/${mode}/${storeSlug}/${tableNumber}/${partySize}`;
+
+  return [base, `${base}/checkout`, `${base}/complete`];
+};
 
 const HorizontalLinearStepper = () => {
   const dict = useI18n();
@@ -68,13 +92,13 @@ const HorizontalLinearStepper = () => {
   ];
 
   return (
-    <StyledStepper activeStep={activeStep}>
+    <Stepper activeStep={activeStep} connector={<QontoConnector />}>
       {steps.map((label, index) => (
         <Step key={label} completed={activeStep > index}>
           <StyledStepLabel>{label}</StyledStepLabel>
         </Step>
       ))}
-    </StyledStepper>
+    </Stepper>
   );
 };
 
