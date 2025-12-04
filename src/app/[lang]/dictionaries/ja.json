@@ -65,6 +65,7 @@
         }
       },
       "hasAccount": "すでにアカウントをお持ちですか？",
+      "legalConsent": "「{action}」をクリックすると、Biru Coffeeの\n{terms} と {privacy} に同意したものとみなされます。",
       "hideConfirmPassword": "確認用パスワードを非表示",
       "hideConfirmNewPassword": "確認用パスワードを非表示",
       "hideNewPassword": "新しいパスワードを非表示",

@@ -65,6 +65,7 @@
         }
       },
       "hasAccount": "Already have an account?",
+      "legalConsent": "By clicking «{action}», you agree to Biru Coffee's\n{terms} and {privacy}.",
       "hideConfirmPassword": "Hide confirm password",
       "hideConfirmNewPassword": "Hide confirm new password",
       "hideNewPassword": "Hide the new password",

@@ -65,6 +65,7 @@
         }
       },
       "hasAccount": "已经有账号？",
+      "legalConsent": "点击「{action}」，即表示您同意 Biru Coffee 的\n{terms} 和 {privacy}。",
       "hideConfirmPassword": "隐藏确认密码",
       "hideConfirmNewPassword": "隐藏确认新密码",
       "hideNewPassword": "隐藏新密码",

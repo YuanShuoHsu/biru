@@ -8,11 +8,13 @@
 import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 
 import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
 import TextMaskCustom from "@/components/TextMaskCustom";
+
+import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
 
 import { useI18n } from "@/context/i18n";
 
@@ -38,6 +40,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { getDefaultCountryCode } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
+import { interpolate } from "@/utils/i18n";
 
 import FormCard from "../FormCard";
 
@@ -112,6 +115,43 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       value: "NOT_DISCLOSED",
     },
   ];
+
+  const legalConsentText = interpolate(dict.member.auth.legalConsent, {
+    action: dict.member.auth.signUp.label,
+    terms: `{${LegalLinkType.Terms}}`,
+    privacy: `{${LegalLinkType.Privacy}}`,
+  });
+
+  const legalPlaceholders = Object.fromEntries(
+    LEGAL_LINK_TYPES.map((type) => [
+      `{${type}}`,
+      <MuiLink
+        key={type}
+        component={NextLink}
+        href={handleRedirectParams(`/${lang}/member/${type}`)}
+      >
+        {dict.member.legal[type].label}
+      </MuiLink>,
+    ]),
+  );
+
+  const legalSegmentPattern = new RegExp(
+    `(\\n|${LEGAL_LINK_TYPES.map((type) => `{${type}}`).join("|")})`,
+    "g",
+  );
+
+  const legalConsent = legalConsentText
+    .split(legalSegmentPattern)
+    .map((segment, index) => {
+      if (segment === "\n")
+        return <Box component="br" key={`legal-${index}`} />;
+
+      return (
+        legalPlaceholders[segment] || (
+          <Fragment key={`legal-${index}`}>{segment}</Fragment>
+        )
+      );
+    });
 
   const handleClickShowPassword = (key: PasswordField) => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -328,23 +368,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           {dict.member.auth.signUp.label}
         </Button>
         <Typography variant="caption" color="text.secondary" align="center">
-          By clicking «{dict.member.auth.signUp.label}», you agree to Biru
-          Coffee&rsquo;s
-          <Box component="br" />
-          <MuiLink
-            component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/terms`)}
-          >
-            Terms of Service
-          </MuiLink>{" "}
-          and{" "}
-          <MuiLink
-            component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/privacy`)}
-          >
-            Privacy Policy
-          </MuiLink>
-          .
+          {legalConsent}
         </Typography>
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={1}>
