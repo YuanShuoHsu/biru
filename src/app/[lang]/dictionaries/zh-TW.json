@@ -47,6 +47,24 @@
     "accountSettings": {
       "label": "帳號設定"
     },
+    "profile": {
+      "activity": "最新紀錄",
+      "completion": "檔案完成度",
+      "contact": "聯絡方式",
+      "empty": "登入後即可查看你的帳戶資訊。",
+      "lastUpdated": "最後更新 {date}",
+      "localNotice": "偏好目前只會儲存在此裝置。",
+      "memberSince": "加入時間 {date}",
+      "newsletter": "咖啡電子報",
+      "orderUpdates": "訂單更新通知",
+      "placeholderName": "咖啡同好",
+      "preferences": "偏好設定",
+      "recommendations": "個人化推薦",
+      "signInCta": "登入即可查看個人檔案",
+      "subtitle": "管理個人資訊與偏好",
+      "unverified": "尚未驗證",
+      "verified": "已驗證"
+    },
     "auth": {
       "birthDate": "出生日期",
       "confirmPassword": "確認密碼",
@@ -54,6 +72,7 @@
       "chooseCountry": "選擇國家",
       "countryCode": "國碼",
       "email": "電子郵件",
+      "emailUpdates": "我想透過電子郵件接收最新資訊",
       "firstName": "名字",
       "forgotPassword": { "label": "忘記密碼" },
       "gender": {
@@ -89,6 +108,7 @@
       "signUp": { "label": "註冊" }
     },
     "legal": {
+      "back": "返回",
       "privacy": { "label": "隱私權政策" },
       "terms": { "label": "服務條款" }
     }

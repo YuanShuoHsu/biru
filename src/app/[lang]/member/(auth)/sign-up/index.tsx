@@ -25,7 +25,9 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  Checkbox,
   Divider,
+  FormControlLabel,
   Grid,
   IconButton,
   InputAdornment,
@@ -84,6 +86,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: "",
     countryCode: defaultCountryCode,
     phone: "",
+    emailUpdates: true,
   });
 
   const [showPassword, setShowPassword] = useState<
@@ -362,6 +365,21 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             />
           </Grid>
         </Grid>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={form.emailUpdates}
+              name="emailUpdates"
+              onChange={handleChange}
+              size="small"
+            />
+          }
+          label={
+            <Typography variant="body2">
+              {dict.member.auth.emailUpdates}
+            </Typography>
+          }
+        />
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button fullWidth size="large" type="submit" variant="contained">

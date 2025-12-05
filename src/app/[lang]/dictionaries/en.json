@@ -47,6 +47,24 @@
     "accountSettings": {
       "label": "Account settings"
     },
+    "profile": {
+      "activity": "Recent activity",
+      "completion": "Profile completion",
+      "contact": "Contact",
+      "empty": "We will show your account details after you sign in.",
+      "lastUpdated": "Last updated {date}",
+      "localNotice": "Preferences stay on this device for now.",
+      "memberSince": "Member since {date}",
+      "newsletter": "Coffee newsletter",
+      "orderUpdates": "Order updates",
+      "placeholderName": "Coffee lover",
+      "preferences": "Preferences",
+      "recommendations": "Recommendations",
+      "signInCta": "Sign in to view your profile",
+      "subtitle": "Personal details and preferences",
+      "unverified": "Not verified",
+      "verified": "Verified"
+    },
     "auth": {
       "birthDate": "Birth date",
       "confirmPassword": "Confirm password",
@@ -54,6 +72,7 @@
       "chooseCountry": "Choose a country",
       "countryCode": "Country code",
       "email": "Email",
+      "emailUpdates": "I want to receive updates via email",
       "firstName": "First Name",
       "forgotPassword": { "label": "Forgot password" },
       "gender": {
@@ -89,6 +108,7 @@
       "signUp": { "label": "Sign up" }
     },
     "legal": {
+      "back": "Back",
       "privacy": { "label": "Privacy Policy" },
       "terms": { "label": "Terms of Service" }
     }

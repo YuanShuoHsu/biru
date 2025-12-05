@@ -47,6 +47,24 @@
     "accountSettings": {
       "label": "アカウント設定"
     },
+    "profile": {
+      "activity": "最近のアクティビティ",
+      "completion": "プロフィール完成度",
+      "contact": "連絡先",
+      "empty": "サインインするとアカウント情報を表示します。",
+      "lastUpdated": "最終更新 {date}",
+      "localNotice": "設定は今のところこの端末にのみ保存されます。",
+      "memberSince": "メンバー登録日 {date}",
+      "newsletter": "コーヒーニュースレター",
+      "orderUpdates": "注文状況の通知",
+      "placeholderName": "コーヒー好き",
+      "preferences": "設定",
+      "recommendations": "おすすめ情報",
+      "signInCta": "サインインしてプロフィールを確認",
+      "subtitle": "個人情報と設定",
+      "unverified": "未認証",
+      "verified": "認証済み"
+    },
     "auth": {
       "birthDate": "生年月日",
       "confirmPassword": "パスワードの確認",
@@ -54,6 +72,7 @@
       "chooseCountry": "国を選択",
       "countryCode": "国コード",
       "email": "メールアドレス",
+      "emailUpdates": "メールで最新情報を受け取りたい",
       "firstName": "名",
       "forgotPassword": { "label": "パスワードをお忘れですか" },
       "gender": {
@@ -89,6 +108,7 @@
       "signUp": { "label": "新規登録" }
     },
     "legal": {
+      "back": "戻る",
       "privacy": { "label": "プライバシーポリシー" },
       "terms": { "label": "利用規約" }
     }
