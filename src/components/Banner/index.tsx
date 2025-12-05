@@ -94,7 +94,7 @@ const Banner = () => (
         enabled: true,
       }}
       loop={true}
-      mousewheel={true}
+      // mousewheel={true}
       navigation={{
         nextEl: ".custom-swiper-button-next",
         prevEl: ".custom-swiper-button-prev",
