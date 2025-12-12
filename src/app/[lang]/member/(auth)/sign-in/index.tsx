@@ -65,7 +65,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface MemberAuthSignInProps {
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
@@ -76,15 +76,6 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-
-  const redirectParam =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
-  const handleRedirectParams = (path: string) =>
-    redirectParam
-      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
-      : path;
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore();
@@ -146,6 +137,9 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
     });
   };
 
+  const handleRedirectParams = (path: string) =>
+    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -158,7 +152,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       const profile = await triggerProfile(access_token);
       setProfile(profile);
 
-      router.replace(redirectParam || `/${lang}`);
+      router.replace(redirect || `/${lang}`);
     } catch {
       clearAuth();
     } finally {

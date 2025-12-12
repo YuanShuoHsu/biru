@@ -105,7 +105,23 @@
       "showPassword": "显示密码",
       "signIn": { "label": "登录" },
       "signOut": { "label": "登出" },
-      "signUp": { "label": "注册" }
+      "signUp": { "label": "注册" },
+      "passwordRules": {
+        "minLength": "至少 8 个字符长度",
+        "letter": "包含至少一个英文字母",
+        "number": "包含至少一个数字",
+        "match": "与密码一致"
+      },
+      "verifyEmail": {
+        "backToSignIn": "返回登录",
+        "checkSpam": "没收到？请检查垃圾邮件或稍后再试。",
+        "enterEmail": "请输入电子邮件后再重新发送",
+        "resend": "重新发送验证邮件",
+        "resendSuccess": "已重新发送验证邮件",
+        "sent": "验证邮件已寄出",
+        "subtitle": "我们已将验证邮件发送到 {email}，请完成验证后再登录。",
+        "title": "验证邮件已发送"
+      }
     },
     "legal": {
       "back": "返回",

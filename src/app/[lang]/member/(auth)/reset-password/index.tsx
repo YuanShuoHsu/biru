@@ -52,7 +52,7 @@ type ResetPasswordField = "newPassword" | "confirmNewPassword";
 
 interface MemberAuthResetPasswordProps {
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const MemberAuthResetPassword = ({
@@ -71,15 +71,6 @@ const MemberAuthResetPassword = ({
     newPassword: false,
     confirmNewPassword: false,
   });
-
-  const redirectParam =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
-  const handleRedirectParams = (path: string) =>
-    redirectParam
-      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
-      : path;
 
   const dict = useI18n();
 
@@ -100,6 +91,9 @@ const MemberAuthResetPassword = ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+  const handleRedirectParams = (path: string) =>
+    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

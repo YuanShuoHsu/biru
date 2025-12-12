@@ -17,7 +17,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 interface MemberLegalClientLayoutProps {
   children: React.ReactNode;
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const MemberLegalClientLayout = ({

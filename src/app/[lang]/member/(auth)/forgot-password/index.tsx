@@ -47,7 +47,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface MemberAuthForgotPasswordProps {
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const MemberAuthForgotPassword = ({
@@ -57,14 +57,6 @@ const MemberAuthForgotPassword = ({
   const [form, setForm] = useState({
     email: "",
   });
-  const redirectParam =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
-  const handleRedirectParams = (path: string) =>
-    redirectParam
-      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
-      : path;
 
   const dict = useI18n();
 
@@ -75,6 +67,9 @@ const MemberAuthForgotPassword = ({
       ...prev,
       [name]: value,
     }));
+
+  const handleRedirectParams = (path: string) =>
+    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

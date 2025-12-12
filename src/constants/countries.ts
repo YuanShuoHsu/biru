@@ -2,6 +2,11 @@
 
 import type { CountryType } from "@/types/countries";
 
+export const DEFAULT_COUNTRY_PHONE = "886";
+
+export const DEFAULT_NATIONAL_MASK = "0000000000";
+export const DEFAULT_NATIONAL_PLACEHOLDER = "0123456789";
+
 export const countries: readonly CountryType[] = [
   { code: "AD", label: "Andorra", phone: "376" },
   {

@@ -2,23 +2,31 @@
 // https://mui.com/toolpad/core/react-sign-up-page/
 // https://mui.com/store/sign-up/
 // https://mui.com/x/react-date-pickers/quickstart/
+// https://mui.com/x/react-date-pickers/validation/
 
 "use client";
 
 import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
-import { enqueueSnackbar } from "notistack";
-import { Fragment, useState } from "react";
+import { Fragment, useActionState, useState } from "react";
+
+import { signup } from "@/app/actions/auth";
 
 import CountrySelect from "@/components/CountrySelect";
 import GoogleButton from "@/components/GoogleButton";
 import TextMaskCustom from "@/components/TextMaskCustom";
 
+import { GENDER_LABELS, GENDER_VALUES } from "@/constants/gender";
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
 
 import { useI18n } from "@/context/i18n";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import {
+  CheckCircleOutline,
+  RadioButtonUnchecked,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -31,6 +39,10 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   MenuItem,
   Link as MuiLink,
   Stack,
@@ -41,7 +53,6 @@ import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { getDefaultCountryCode } from "@/utils/countries";
-import { getErrorMessage } from "@/utils/errors";
 import { interpolate } from "@/utils/i18n";
 
 import FormCard from "../FormCard";
@@ -66,11 +77,13 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const today = dayjs();
+
 type PasswordField = "password" | "confirmPassword";
 
 interface MemberAuthSignUpProps {
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
@@ -96,34 +109,136 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: false,
   });
 
-  const redirectParam =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
-  const handleRedirectParams = (path: string) =>
-    redirectParam
-      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
-      : path;
+  const [state, formAction, pending] = useActionState(signup, undefined);
 
   const dict = useI18n();
 
-  const langNameDirection: "row" | "row-reverse" =
-    lang === "en" ? "row-reverse" : "row";
+  const langNameDirection = lang === "en" ? "row-reverse" : "row";
 
-  const genderOptions = [
-    { label: dict.member.auth.gender.options.female, value: "FEMALE" },
-    { label: dict.member.auth.gender.options.male, value: "MALE" },
+  const genderOptions = GENDER_VALUES.map((value) => ({
+    label: dict.member.auth.gender.options[GENDER_LABELS[value]],
+    value,
+  }));
+
+  const hasPassword = form.password.length > 0;
+  const hasConfirmPassword = form.confirmPassword.length > 0;
+  const passwordsMatch =
+    hasPassword && hasConfirmPassword && form.password === form.confirmPassword;
+
+  const passwordRules = [
     {
-      label: dict.member.auth.gender.options.notDisclosed,
-      value: "NOT_DISCLOSED",
+      key: "minLength",
+      passed: form.password.length >= 8,
+      label: dict.member.auth.passwordRules.minLength,
+    },
+    {
+      key: "letter",
+      passed: /[a-zA-Z]/.test(form.password),
+      label: dict.member.auth.passwordRules.letter,
+    },
+    {
+      key: "number",
+      passed: /\d/.test(form.password),
+      label: dict.member.auth.passwordRules.number,
     },
   ];
+
+  const isPasswordError =
+    hasPassword && passwordRules.some(({ passed }) => !passed);
+
+  const confirmPasswordRule = {
+    key: "match",
+    passed: passwordsMatch,
+    label: dict.member.auth.passwordRules.match,
+  };
+
+  const isConfirmPasswordError =
+    hasConfirmPassword && !confirmPasswordRule.passed;
+
+  const getPasswordRuleColor = (passed: boolean) =>
+    hasPassword ? (passed ? "success.main" : "error.main") : "text.secondary";
+
+  const passwordHelperContent = (
+    <List dense disablePadding>
+      {passwordRules.map(({ key, label, passed }) => {
+        const color = getPasswordRuleColor(passed);
+
+        return (
+          <ListItem disablePadding key={key}>
+            <ListItemIcon
+              sx={{
+                color,
+                minWidth: 28,
+              }}
+            >
+              {passed ? (
+                <CheckCircleOutline fontSize="small" />
+              ) : (
+                <RadioButtonUnchecked fontSize="small" />
+              )}
+            </ListItemIcon>
+            <ListItemText
+              primary={label}
+              slotProps={{
+                primary: {
+                  color,
+                  variant: "caption",
+                },
+              }}
+            />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+
+  const getConfirmPasswordRuleColor = (passed: boolean) =>
+    hasConfirmPassword
+      ? passed
+        ? "success.main"
+        : "error.main"
+      : "text.secondary";
+
+  const confirmPasswordRuleColor = getConfirmPasswordRuleColor(
+    confirmPasswordRule.passed,
+  );
+
+  const confirmPasswordHelperContent = (
+    <List dense disablePadding>
+      <ListItem disablePadding key={confirmPasswordRule.key}>
+        <ListItemIcon
+          sx={{
+            color: confirmPasswordRuleColor,
+            minWidth: 28,
+          }}
+        >
+          {confirmPasswordRule.passed ? (
+            <CheckCircleOutline fontSize="small" />
+          ) : (
+            <RadioButtonUnchecked fontSize="small" />
+          )}
+        </ListItemIcon>
+        <ListItemText
+          primary={confirmPasswordRule.label}
+          slotProps={{
+            primary: {
+              color: confirmPasswordRuleColor,
+              variant: "caption",
+            },
+          }}
+        />
+      </ListItem>
+    </List>
+  );
 
   const legalConsentText = interpolate(dict.member.auth.legalConsent, {
     action: dict.member.auth.signUp.label,
     terms: `{${LegalLinkType.Terms}}`,
     privacy: `{${LegalLinkType.Privacy}}`,
   });
+
+  const handleRedirectParams = (path: string) =>
+    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const legalPlaceholders = Object.fromEntries(
     LEGAL_LINK_TYPES.map((type) => [
@@ -184,20 +299,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const handleCountryCodeChange = (code: string) =>
     setForm((prev) => ({ ...prev, countryCode: code }));
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    try {
-      // const { data } = await trigger(form);
-      // console.log(data);
-      // router.push(`/${lang}/orders`);
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
-    }
-  };
-
   return (
-    <FormCard component="form" onSubmit={handleSubmit}>
+    <FormCard action={formAction} component="form">
       <StyledCardHeader
         title={
           <Typography
@@ -216,7 +319,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
+            error={!!state?.errors.lastName}
             fullWidth
+            helperText={state?.errors.lastName?.join("\n")}
             label={dict.member.auth.lastName}
             name="lastName"
             onChange={handleChange}
@@ -224,7 +329,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           />
           <TextField
             autoComplete="given-name"
+            error={!!state?.errors.firstName}
             fullWidth
+            helperText={state?.errors.firstName?.join("\n")}
             label={dict.member.auth.firstName}
             name="firstName"
             onChange={handleChange}
@@ -235,12 +342,14 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <DatePicker
           disableFuture
           label={dict.member.auth.birthDate}
+          maxDate={today}
+          name="birthDate"
           onChange={handleBirthDateChange}
           slotProps={{
             textField: {
               autoComplete: "bday",
-              fullWidth: true,
-              inputMode: "numeric",
+              error: !!state?.errors.birthDate,
+              helperText: state?.errors.birthDate?.join("\n"),
               required: true,
             },
           }}
@@ -248,10 +357,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         />
         <TextField
           autoComplete="sex"
-          // error={!!state?.errors?.gender}
+          error={!!state?.errors.gender}
           fullWidth
           label={dict.member.auth.gender.label}
-          // helperText={state?.errors?.gender}
+          helperText={state?.errors.gender?.join("\n")}
           name="gender"
           onChange={handleChange}
           required
@@ -266,7 +375,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         </TextField>
         <TextField
           autoComplete="email"
+          error={!!state?.errors.email}
           fullWidth
+          helperText={state?.errors.email?.join("\n")}
           label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
@@ -276,12 +387,16 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         />
         <TextField
           autoComplete="new-password"
+          error={isPasswordError}
           fullWidth
+          helperText={passwordHelperContent}
           label={dict.member.auth.password}
           name="password"
           onChange={handleChange}
           required
           slotProps={{
+            // 這個要測測
+            formHelperText: { component: "div" },
             input: {
               endAdornment: (
                 <InputAdornment position="start">
@@ -307,12 +422,16 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         />
         <TextField
           autoComplete="new-password"
+          error={isConfirmPasswordError}
           fullWidth
+          helperText={confirmPasswordHelperContent}
           label={dict.member.auth.confirmPassword}
           name="confirmPassword"
           onChange={handleChange}
           required
           slotProps={{
+            // 這個要測測
+            formHelperText: { component: "div" },
             input: {
               endAdornment: (
                 <InputAdornment position="start">
@@ -347,7 +466,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           <Grid size={{ xs: 6, sm: 8 }}>
             <TextField
               autoComplete="tel"
+              error={!!state?.errors.phone}
               fullWidth
+              helperText={state?.errors.phone?.join("\n")}
               inputMode="tel"
               label={dict.member.auth.phone}
               name="phone"
@@ -382,7 +503,13 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         />
       </StyledCardContent>
       <StyledCardActions disableSpacing>
-        <Button fullWidth size="large" type="submit" variant="contained">
+        <Button
+          disabled={pending}
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+        >
           {dict.member.auth.signUp.label}
         </Button>
         <Typography variant="caption" color="text.secondary" align="center">

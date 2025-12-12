@@ -9,7 +9,7 @@ import { Button } from "@mui/material";
 
 interface BackButtonProps {
   lang: string;
-  redirect?: string | string[];
+  redirect?: string;
 }
 
 const BackButton = ({ lang, redirect }: BackButtonProps) => {
@@ -17,15 +17,8 @@ const BackButton = ({ lang, redirect }: BackButtonProps) => {
 
   const backLabel = dict.member.legal.back;
 
-  const redirectParam =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
-
   const handleRedirectParams = (path: string) =>
-    redirectParam
-      ? `${path}?redirect=${encodeURIComponent(redirectParam)}`
-      : path;
+    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   return (
     <Button

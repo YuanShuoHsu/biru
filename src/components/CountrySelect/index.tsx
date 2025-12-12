@@ -64,7 +64,9 @@ const HintTypography = styled(Typography)(({ theme }) => ({
 }));
 
 const StyledInputAdornment = styled(InputAdornment)(({ theme }) => ({
+  position: "relative",
   marginInline: theme.spacing(0.625),
+  width: theme.spacing(2.5),
 }));
 
 type CountryOptionBoxProps = Omit<BoxProps<"li">, "component"> & {
@@ -110,12 +112,14 @@ const filter = createFilterOptions<CountryOption>({
 const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
   <Image
     alt={label}
-    height={14}
+    fill
     loading="lazy"
+    sizes="(min-width: 808px) 50vw, 100vw"
     src={`/images/flags/w20/${code.toLowerCase()}.png`}
-    style={{ flexShrink: 0 }}
+    style={{
+      objectFit: "contain",
+    }}
     unoptimized
-    width={20}
   />
 );
 

@@ -14,8 +14,13 @@ const MemberLegalLayout = async ({
   const { lang } = await params;
   const { redirect } = await searchParams;
 
+  const safeRedirect =
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
+      : undefined;
+
   return (
-    <MemberLegalClientLayout lang={lang} redirect={redirect}>
+    <MemberLegalClientLayout lang={lang} redirect={safeRedirect}>
       {children}
     </MemberLegalClientLayout>
   );

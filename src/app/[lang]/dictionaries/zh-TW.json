@@ -105,7 +105,23 @@
       "showPassword": "顯示密碼",
       "signIn": { "label": "登入" },
       "signOut": { "label": "登出" },
-      "signUp": { "label": "註冊" }
+      "signUp": { "label": "註冊" },
+      "passwordRules": {
+        "minLength": "至少 8 個字元長度",
+        "letter": "包含至少一個英文字母",
+        "number": "包含至少一個數字",
+        "match": "與密碼一致"
+      },
+      "verifyEmail": {
+        "backToSignIn": "返回登入",
+        "checkSpam": "沒收到？請檢查垃圾郵件或稍後再試。",
+        "enterEmail": "請輸入電子郵件後再重新寄送",
+        "resend": "重新寄送驗證信",
+        "resendSuccess": "已重新寄送驗證信",
+        "sent": "驗證信已寄出",
+        "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
+        "title": "驗證信已寄出"
+      }
     },
     "legal": {
       "back": "返回",

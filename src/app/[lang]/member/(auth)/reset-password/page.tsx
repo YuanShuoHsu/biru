@@ -12,7 +12,12 @@ const MemberAuthResetPasswordPage = async ({
   const { lang } = await params;
   const { redirect } = await searchParams;
 
-  return <MemberAuthResetPassword lang={lang} redirect={redirect} />;
+  const safeRedirect =
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
+      : undefined;
+
+  return <MemberAuthResetPassword lang={lang} redirect={safeRedirect} />;
 };
 
 export default MemberAuthResetPasswordPage;

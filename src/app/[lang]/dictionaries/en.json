@@ -105,7 +105,23 @@
       "showPassword": "Display the password",
       "signIn": { "label": "Sign in" },
       "signOut": { "label": "Sign out" },
-      "signUp": { "label": "Sign up" }
+      "signUp": { "label": "Sign up" },
+      "passwordRules": {
+        "minLength": "Be at least 8 characters long",
+        "letter": "Contain at least one letter",
+        "number": "Contain at least one number",
+        "match": "Matches the password"
+      },
+      "verifyEmail": {
+        "backToSignIn": "Back to sign in",
+        "checkSpam": "Didn't get it? Check spam or try resending in a moment.",
+        "enterEmail": "Enter your email before resending",
+        "resend": "Resend verification email",
+        "resendSuccess": "Verification email sent again",
+        "sent": "Verification email sent",
+        "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
+        "title": "Check your email"
+      }
     },
     "legal": {
       "back": "Back",

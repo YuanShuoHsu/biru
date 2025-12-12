@@ -12,7 +12,12 @@ const MemberAuthSignInPage = async ({
   const { lang } = await params;
   const { redirect } = await searchParams;
 
-  return <MemberAuthSignIn lang={lang} redirect={redirect} />;
+  const safeRedirect =
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
+      : undefined;
+
+  return <MemberAuthSignIn lang={lang} redirect={safeRedirect} />;
 };
 
 export default MemberAuthSignInPage;
