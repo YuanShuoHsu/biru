@@ -167,4 +167,3 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
 };
 
 export default AddAnotherAccount;
-

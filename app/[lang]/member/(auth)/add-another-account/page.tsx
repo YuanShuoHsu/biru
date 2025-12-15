@@ -23,4 +23,3 @@ const MemberAddAnotherAccountPage = async ({
 };
 
 export default MemberAddAnotherAccountPage;
-
