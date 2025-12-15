@@ -77,6 +77,31 @@
         "action": "アカウント削除"
       }
     },
+    "myAccount": {
+      "title": "マイアカウント",
+      "subtitle": "概要とクイック操作",
+      "signInCta": "ログインしてアカウントを管理",
+      "empty": "ログインするとアカウント概要を表示します。",
+      "sections": {
+        "overview": "概要",
+        "security": "セキュリティ",
+        "quickActions": "クイック操作",
+        "appearance": "外観",
+        "support": "サポート"
+      },
+      "actions": {
+        "profile": "プロフィールを見る",
+        "settings": "アカウント設定",
+        "verifyEmail": "メールを確認",
+        "resetPassword": "パスワードをリセット",
+        "terms": "利用規約",
+        "privacy": "プライバシーポリシー"
+      },
+      "colorMode": {
+        "label": "カラーモード",
+        "helper": "ライト/ダークを切り替えます。"
+      }
+    },
     "profile": {
       "activity": "最近のアクティビティ",
       "completion": "プロフィール完成度",

@@ -77,6 +77,31 @@
         "action": "Delete account"
       }
     },
+    "myAccount": {
+      "title": "My account",
+      "subtitle": "Overview and quick actions",
+      "signInCta": "Sign in to manage your account",
+      "empty": "We will show your account overview after you sign in.",
+      "sections": {
+        "overview": "Overview",
+        "security": "Security",
+        "quickActions": "Quick actions",
+        "appearance": "Appearance",
+        "support": "Support"
+      },
+      "actions": {
+        "profile": "View profile",
+        "settings": "Account settings",
+        "verifyEmail": "Verify email",
+        "resetPassword": "Reset password",
+        "terms": "Terms of service",
+        "privacy": "Privacy policy"
+      },
+      "colorMode": {
+        "label": "Color mode",
+        "helper": "Switch between light and dark."
+      }
+    },
     "profile": {
       "activity": "Recent activity",
       "completion": "Profile completion",

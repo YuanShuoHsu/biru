@@ -77,6 +77,31 @@
         "action": "删除账号"
       }
     },
+    "myAccount": {
+      "title": "我的账号",
+      "subtitle": "账号概览与快捷操作",
+      "signInCta": "登录以管理你的账号",
+      "empty": "登录后将显示你的账号概览。",
+      "sections": {
+        "overview": "概览",
+        "security": "安全",
+        "quickActions": "快捷操作",
+        "appearance": "外观",
+        "support": "支持"
+      },
+      "actions": {
+        "profile": "查看个人资料",
+        "settings": "账号设置",
+        "verifyEmail": "验证邮箱",
+        "resetPassword": "重置密码",
+        "terms": "服务条款",
+        "privacy": "隐私政策"
+      },
+      "colorMode": {
+        "label": "颜色模式",
+        "helper": "切换浅色/深色模式。"
+      }
+    },
     "profile": {
       "activity": "最新记录",
       "completion": "资料完成度",

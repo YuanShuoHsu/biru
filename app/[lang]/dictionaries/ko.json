@@ -77,6 +77,31 @@
         "action": "계정 삭제"
       }
     },
+    "myAccount": {
+      "title": "내 계정",
+      "subtitle": "개요 및 빠른 작업",
+      "signInCta": "로그인하여 계정을 관리하세요",
+      "empty": "로그인하면 계정 개요가 표시됩니다.",
+      "sections": {
+        "overview": "개요",
+        "security": "보안",
+        "quickActions": "빠른 작업",
+        "appearance": "모양",
+        "support": "지원"
+      },
+      "actions": {
+        "profile": "프로필 보기",
+        "settings": "계정 설정",
+        "verifyEmail": "이메일 인증",
+        "resetPassword": "비밀번호 재설정",
+        "terms": "서비스 이용약관",
+        "privacy": "개인정보 처리방침"
+      },
+      "colorMode": {
+        "label": "색상 모드",
+        "helper": "라이트/다크 모드를 전환합니다."
+      }
+    },
     "profile": {
       "activity": "최근 활동",
       "completion": "프로필 완성도",
