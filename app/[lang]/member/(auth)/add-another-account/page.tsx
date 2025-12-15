@@ -1,10 +1,8 @@
 import AddAnotherAccount from ".";
 
-type SearchParams = { [key: string]: string | string[] | undefined };
-
 interface MemberAddAnotherAccountPageProps {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 const MemberAddAnotherAccountPage = async ({
