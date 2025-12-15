@@ -44,6 +44,18 @@
       "profile": "プロフィール",
       "settings": "設定"
     },
+    "addAnotherAccount": {
+      "title": "別のアカウントを追加",
+      "subtitle": "このデバイスでアカウントを切り替え",
+      "signedInNotice": "別のアカウントでサインインするには、先にサインアウトします。",
+      "signedOutNotice": "サインインしていません。サインインに進んでください。",
+      "currentAccount": "現在のアカウント",
+      "actions": {
+        "goToSignIn": "サインインへ",
+        "signOutContinue": "サインアウトして続行",
+        "cancel": "キャンセル"
+      }
+    },
     "accountSettings": {
       "label": "アカウント設定",
       "title": "アカウント設定",

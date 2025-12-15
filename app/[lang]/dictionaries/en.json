@@ -44,6 +44,18 @@
       "profile": "Profile",
       "settings": "Settings"
     },
+    "addAnotherAccount": {
+      "title": "Add another account",
+      "subtitle": "Switch accounts on this device",
+      "signedInNotice": "To sign in with another account, we'll sign you out first.",
+      "signedOutNotice": "You're not signed in. Continue to sign in.",
+      "currentAccount": "Current account",
+      "actions": {
+        "goToSignIn": "Go to sign in",
+        "signOutContinue": "Sign out & continue",
+        "cancel": "Cancel"
+      }
+    },
     "accountSettings": {
       "label": "Account settings",
       "title": "Account settings",

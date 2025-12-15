@@ -44,6 +44,18 @@
       "profile": "프로필",
       "settings": "설정"
     },
+    "addAnotherAccount": {
+      "title": "다른 계정 추가",
+      "subtitle": "이 기기에서 계정 전환",
+      "signedInNotice": "다른 계정으로 로그인하려면 먼저 로그아웃합니다.",
+      "signedOutNotice": "로그인되어 있지 않습니다. 로그인으로 이동하세요.",
+      "currentAccount": "현재 계정",
+      "actions": {
+        "goToSignIn": "로그인으로 이동",
+        "signOutContinue": "로그아웃 후 계속",
+        "cancel": "취소"
+      }
+    },
     "accountSettings": {
       "label": "계정 설정",
       "title": "계정 설정",

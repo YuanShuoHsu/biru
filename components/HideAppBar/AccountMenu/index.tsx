@@ -140,9 +140,17 @@ const AccountMenu = () => {
   const renderMenuItems = (items: AuthMenuItem[]) =>
     items.map(({ disabled, icon: Icon, label, onClick, to }) => {
       const key = to || label;
-      const href = to && `/${lang}/member${to}`;
-      const selected = href
-        ? pathname === href || pathname.startsWith(`${href}/`)
+      const baseHref = to && `/${lang}/member${to}`;
+      const href =
+        to === "/add-another-account"
+          ? `${baseHref}?redirect=${encodeURIComponent(
+              pathname.startsWith(`/${lang}/member/add-another-account`)
+                ? `/${lang}/member/my-account`
+                : currentURL,
+            )}`
+          : baseHref;
+      const selected = baseHref
+        ? pathname === baseHref || pathname.startsWith(`${baseHref}/`)
         : false;
 
       return (
