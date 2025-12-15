@@ -79,8 +79,11 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 const today = dayjs();
 
-type PasswordField = "password" | "confirmPassword";
-
+interface PasswordRule {
+  key: string;
+  passed: boolean;
+  label: string;
+}
 interface MemberAuthSignUpProps {
   lang: string;
   redirect?: string;
@@ -102,9 +105,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     emailUpdates: true,
   });
 
-  const [showPassword, setShowPassword] = useState<
-    Record<PasswordField, boolean>
-  >({
+  const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
   });
@@ -125,7 +126,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const passwordsMatch =
     hasPassword && hasConfirmPassword && form.password === form.confirmPassword;
 
-  const passwordRules = [
+  const passwordRules: PasswordRule[] = [
     {
       key: "minLength",
       passed: form.password.length >= 8,
@@ -146,22 +147,25 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const isPasswordError =
     hasPassword && passwordRules.some(({ passed }) => !passed);
 
-  const confirmPasswordRule = {
-    key: "match",
-    passed: passwordsMatch,
-    label: dict.member.auth.passwordRules.match,
-  };
+  const confirmPasswordRules: PasswordRule[] = [
+    {
+      key: "match",
+      passed: passwordsMatch,
+      label: dict.member.auth.passwordRules.match,
+    },
+  ];
 
   const isConfirmPasswordError =
-    hasConfirmPassword && !confirmPasswordRule.passed;
+    hasConfirmPassword && !confirmPasswordRules[0].passed;
 
-  const getPasswordRuleColor = (passed: boolean) =>
-    hasPassword ? (passed ? "success.main" : "error.main") : "text.secondary";
-
-  const passwordHelperContent = (
+  const renderPasswordRules = (rules: PasswordRule[], hasValue: boolean) => (
     <List dense disablePadding>
-      {passwordRules.map(({ key, label, passed }) => {
-        const color = getPasswordRuleColor(passed);
+      {rules.map(({ key, label, passed }) => {
+        const color = hasValue
+          ? passed
+            ? "primary.main"
+            : "error.main"
+          : "text.secondary";
 
         return (
           <ListItem disablePadding key={key}>
@@ -192,43 +196,11 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     </List>
   );
 
-  const getConfirmPasswordRuleColor = (passed: boolean) =>
-    hasConfirmPassword
-      ? passed
-        ? "success.main"
-        : "error.main"
-      : "text.secondary";
+  const passwordHelperContent = renderPasswordRules(passwordRules, hasPassword);
 
-  const confirmPasswordRuleColor = getConfirmPasswordRuleColor(
-    confirmPasswordRule.passed,
-  );
-
-  const confirmPasswordHelperContent = (
-    <List dense disablePadding>
-      <ListItem disablePadding key={confirmPasswordRule.key}>
-        <ListItemIcon
-          sx={{
-            color: confirmPasswordRuleColor,
-            minWidth: 28,
-          }}
-        >
-          {confirmPasswordRule.passed ? (
-            <CheckCircleOutline fontSize="small" />
-          ) : (
-            <RadioButtonUnchecked fontSize="small" />
-          )}
-        </ListItemIcon>
-        <ListItemText
-          primary={confirmPasswordRule.label}
-          slotProps={{
-            primary: {
-              color: confirmPasswordRuleColor,
-              variant: "caption",
-            },
-          }}
-        />
-      </ListItem>
-    </List>
+  const confirmPasswordHelperContent = renderPasswordRules(
+    confirmPasswordRules,
+    hasConfirmPassword,
   );
 
   const legalConsentText = interpolate(dict.member.auth.legalConsent, {
@@ -271,7 +243,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       );
     });
 
-  const handleClickShowPassword = (key: PasswordField) => () =>
+  const handleClickShowPassword = (key: "password" | "confirmPassword") => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleMouseDownPassword = (
