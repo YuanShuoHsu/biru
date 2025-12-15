@@ -5,10 +5,15 @@ interface MemberLegalLayoutProps {
   params: Promise<{ lang: string }>;
 }
 
-const MemberLegalLayout = async ({ children, params }: MemberLegalLayoutProps) => {
+const MemberLegalLayout = async ({
+  children,
+  params,
+}: MemberLegalLayoutProps) => {
   const { lang } = await params;
 
-  return <MemberLegalClientLayout lang={lang}>{children}</MemberLegalClientLayout>;
+  return (
+    <MemberLegalClientLayout lang={lang}>{children}</MemberLegalClientLayout>
+  );
 };
 
 export default MemberLegalLayout;
