@@ -28,36 +28,36 @@ Using pnpm.
 Initializing project with template: app-tw
 
 Installing dependencies:
+- next
 - react
 - react-dom
-- next
 
 Installing devDependencies:
-- typescript
+- @tailwindcss/postcss
 - @types/node
 - @types/react
 - @types/react-dom
-- @tailwindcss/postcss
-- tailwindcss
 - eslint
 - eslint-config-next
+- tailwindcss
+- typescript
 
 dependencies:
-+ next 16.0.1
-+ react 19.2.0
-+ react-dom 19.2.0
++ next 16.0.10
++ react 19.2.1 (19.2.3 is available)
++ react-dom 19.2.1 (19.2.3 is available)
 
 devDependencies:
-+ @tailwindcss/postcss 4.1.16
-+ @types/node 20.19.24 (24.9.2 is available)
-+ @types/react 19.2.2
-+ @types/react-dom 19.2.2
-+ eslint 9.38.0
-+ eslint-config-next 16.0.1
-+ tailwindcss 4.1.16
++ @tailwindcss/postcss 4.1.18
++ @types/node 20.19.27 (25.0.2 is available)
++ @types/react 19.2.7
++ @types/react-dom 19.2.3
++ eslint 9.39.2
++ eslint-config-next 16.0.10
++ tailwindcss 4.1.18
 + typescript 5.9.3
 
-Done in 6.6s using pnpm v10.20.0
+Done in 8s using pnpm v10.26.0
 
 Generating route types...
 ✓ Route types generated successfully
