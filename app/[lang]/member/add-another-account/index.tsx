@@ -29,8 +29,6 @@ import { styled } from "@mui/material/styles";
 
 import type { LocaleCode } from "@/types/locale";
 
-import FormCard from "../FormCard";
-
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
   paddingBottom: 0,
