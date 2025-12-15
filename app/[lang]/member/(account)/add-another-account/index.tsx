@@ -29,7 +29,7 @@ import type { LocaleCode } from "@/types/locale";
 
 import { getDisplayName } from "@/utils/auth";
 
-import FormCard from "../(auth)/FormCard";
+import FormCard from "../../(auth)/FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
