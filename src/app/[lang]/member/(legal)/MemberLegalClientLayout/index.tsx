@@ -1,5 +1,7 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
+
 import ArrowBackButton from "./BackButton";
 
 import { Container } from "@mui/material";
@@ -17,18 +19,26 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 interface MemberLegalClientLayoutProps {
   children: React.ReactNode;
   lang: string;
-  redirect?: string;
 }
 
 const MemberLegalClientLayout = ({
   children,
   lang,
-  redirect,
-}: MemberLegalClientLayoutProps) => (
-  <StyledContainer maxWidth="sm" disableGutters>
-    <ArrowBackButton lang={lang} redirect={redirect} />
-    {children}
-  </StyledContainer>
-);
+}: MemberLegalClientLayoutProps) => {
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect");
+  const safeRedirect =
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
+      : undefined;
+
+  return (
+    <StyledContainer maxWidth="sm" disableGutters>
+      <ArrowBackButton lang={lang} redirect={safeRedirect} />
+      {children}
+    </StyledContainer>
+  );
+};
 
 export default MemberLegalClientLayout;

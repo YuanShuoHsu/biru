@@ -345,6 +345,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           maxDate={today}
           name="birthDate"
           onChange={handleBirthDateChange}
+          openTo="year"
           slotProps={{
             textField: {
               autoComplete: "bday",
@@ -354,6 +355,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             },
           }}
           value={form.birthDate ? dayjs(form.birthDate) : null}
+          yearsOrder="desc"
         />
         <TextField
           autoComplete="sex"

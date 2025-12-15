@@ -71,6 +71,8 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
+  console.log(trigger);
+
   const { isOrderRoute: showShoppingCartButton } = createOrderPaths({
     lang,
     mode,
