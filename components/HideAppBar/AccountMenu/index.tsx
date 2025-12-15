@@ -28,9 +28,7 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  Link as MuiLink,
   Tooltip,
-  type LinkProps as MuiLinkProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -86,12 +84,6 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-const StyledMuiLink = styled(MuiLink)<MuiLinkProps>(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
-
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -101,7 +93,6 @@ const AccountMenu = () => {
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const { lang } = useParams<RouteParams>();
-  const memberBasePath = `/${lang}/member`;
 
   const displayName = getDisplayName(lang, profile);
   const avatarChild = !isSignedIn ? <AccountCircle /> : displayName[0];
@@ -146,34 +137,26 @@ const AccountMenu = () => {
     onLogout: handleLogout,
   });
 
-  const renderMenuItems = (items: AuthMenuItem[], keyPrefix: string) =>
-    items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
-      const href = to && `${memberBasePath}${to}`;
-      const key = `${keyPrefix}-${href || index}`;
+  const renderMenuItems = (items: AuthMenuItem[]) =>
+    items.map(({ disabled, icon: Icon, label, onClick, to }) => {
+      const key = to || label;
+      const href = to && `/${lang}/member${to}`;
+      const selected = href
+        ? pathname === href || pathname.startsWith(`${href}/`)
+        : false;
 
-      const menuItemContent = (
-        <>
+      return (
+        <MenuItem
+          disabled={disabled}
+          key={key}
+          onClick={onClick}
+          selected={selected}
+          {...(href ? { component: NextLink, href } : {})}
+        >
           <ListItemIcon>
             <Icon fontSize="small" />
           </ListItemIcon>
           <ListItemText primary={label} />
-        </>
-      );
-
-      return (
-        <MenuItem disabled={disabled} key={key} onClick={onClick}>
-          {href ? (
-            <StyledMuiLink
-              color="inherit"
-              component={NextLink}
-              href={href}
-              underline="none"
-            >
-              {menuItemContent}
-            </StyledMuiLink>
-          ) : (
-            menuItemContent
-          )}
         </MenuItem>
       );
     });
@@ -214,9 +197,9 @@ const AccountMenu = () => {
         open={open}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
-        {renderMenuItems(profileMenuItems, "profile")}
+        {renderMenuItems(profileMenuItems)}
         <Divider />
-        {renderMenuItems(accountMenuItems, "account")}
+        {renderMenuItems(accountMenuItems)}
       </StyledMenu>
     </>
   );
