@@ -43,4 +43,3 @@ const MemberMyAccountPage = async ({
 };
 
 export default MemberMyAccountPage;
-

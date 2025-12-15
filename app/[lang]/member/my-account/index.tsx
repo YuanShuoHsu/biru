@@ -134,7 +134,9 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
           <ErrorOutline fontSize="small" />
         )
       }
-      label={verified ? dict.member.profile.verified : dict.member.profile.unverified}
+      label={
+        verified ? dict.member.profile.verified : dict.member.profile.unverified
+      }
       size="small"
       variant={verified ? "filled" : "outlined"}
     />
@@ -187,7 +189,9 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
         <CardHeader title={dict.member.myAccount.title} />
         <CardContent>
           <Stack gap={2}>
-            <Typography variant="h6">{dict.member.myAccount.signInCta}</Typography>
+            <Typography variant="h6">
+              {dict.member.myAccount.signInCta}
+            </Typography>
             <Typography color="text.secondary" variant="body2">
               {dict.member.myAccount.empty}
             </Typography>
