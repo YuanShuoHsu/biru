@@ -1,3 +1,5 @@
+// vibe coding 未來要修正
+
 // https://mui.com/material-ui/react-card/
 
 "use client";

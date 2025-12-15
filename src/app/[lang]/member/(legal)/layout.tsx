@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+
 import MemberLegalClientLayout from "./MemberLegalClientLayout";
 
 interface MemberLegalLayoutProps {
@@ -12,7 +14,9 @@ const MemberLegalLayout = async ({
   const { lang } = await params;
 
   return (
-    <MemberLegalClientLayout lang={lang}>{children}</MemberLegalClientLayout>
+    <Suspense>
+      <MemberLegalClientLayout lang={lang}>{children}</MemberLegalClientLayout>
+    </Suspense>
   );
 };
 
