@@ -45,7 +45,37 @@
       "settings": "설정"
     },
     "accountSettings": {
-      "label": "계정 설정"
+      "label": "계정 설정",
+      "title": "계정 설정",
+      "subtitle": "보안, 로그인, 기기 환경설정",
+      "signInCta": "로그인하여 설정 관리",
+      "empty": "로그인하면 설정을 확인할 수 있습니다.",
+      "sections": {
+        "account": "계정",
+        "security": "보안",
+        "device": "이 기기",
+        "support": "지원",
+        "danger": "위험 구역"
+      },
+      "actions": {
+        "viewProfile": "프로필 보기",
+        "terms": "서비스 이용약관",
+        "privacy": "개인정보 처리방침"
+      },
+      "fields": {
+        "name": "이름"
+      },
+      "rememberMe": {
+        "label": "기본으로 로그인 상태 유지",
+        "helper": "로그인 화면의 기본값으로 사용됩니다."
+      },
+      "deviceNotice": "설정은 이 기기에 로컬로 저장됩니다.",
+      "securityNotice": "일부 보안 작업은 이메일 인증이 필요할 수 있습니다.",
+      "danger": {
+        "title": "계정 삭제",
+        "subtitle": "아직 사용할 수 없습니다.",
+        "action": "계정 삭제"
+      }
     },
     "profile": {
       "activity": "최근 활동",

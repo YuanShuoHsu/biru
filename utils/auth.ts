@@ -71,7 +71,7 @@ export const getAccountMenuItems = (
   {
     icon: Settings,
     label: dict.member.accountMenu.settings,
-    to: "/settings",
+    to: "/account-settings",
   },
   {
     disabled: isMutatingLogout,

@@ -45,7 +45,37 @@
       "settings": "Settings"
     },
     "accountSettings": {
-      "label": "Account settings"
+      "label": "Account settings",
+      "title": "Account settings",
+      "subtitle": "Security, sign-in, and device preferences",
+      "signInCta": "Sign in to manage your settings",
+      "empty": "We will show settings after you sign in.",
+      "sections": {
+        "account": "Account",
+        "security": "Security",
+        "device": "On this device",
+        "support": "Support",
+        "danger": "Danger zone"
+      },
+      "actions": {
+        "viewProfile": "View profile",
+        "terms": "Terms of service",
+        "privacy": "Privacy policy"
+      },
+      "fields": {
+        "name": "Name"
+      },
+      "rememberMe": {
+        "label": "Remember me by default",
+        "helper": "Used as the default on the sign-in screen."
+      },
+      "deviceNotice": "Settings are stored locally on this device.",
+      "securityNotice": "Some security actions may require email verification.",
+      "danger": {
+        "title": "Delete account",
+        "subtitle": "Not available yet.",
+        "action": "Delete account"
+      }
     },
     "profile": {
       "activity": "Recent activity",

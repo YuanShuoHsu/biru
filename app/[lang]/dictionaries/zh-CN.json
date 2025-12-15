@@ -45,7 +45,37 @@
       "settings": "设置"
     },
     "accountSettings": {
-      "label": "账号设置"
+      "label": "账号设置",
+      "title": "账号设置",
+      "subtitle": "管理安全性、登录与设备偏好",
+      "signInCta": "登录后即可管理设置",
+      "empty": "登录后才可以调整你的账号设置。",
+      "sections": {
+        "account": "账户",
+        "security": "安全",
+        "device": "此设备",
+        "support": "支持",
+        "danger": "危险区域"
+      },
+      "actions": {
+        "viewProfile": "查看个人资料",
+        "terms": "服务条款",
+        "privacy": "隐私政策"
+      },
+      "fields": {
+        "name": "姓名"
+      },
+      "rememberMe": {
+        "label": "默认记住我",
+        "helper": "作为此设备的登录默认值。"
+      },
+      "deviceNotice": "此页面偏好目前仅会保存在此设备。",
+      "securityNotice": "部分安全操作可能需要重新验证电子邮件。",
+      "danger": {
+        "title": "删除账号",
+        "subtitle": "功能尚未开放。",
+        "action": "删除账号"
+      }
     },
     "profile": {
       "activity": "最新记录",

@@ -1,52 +1,45 @@
 // vibe coding 未來要修正
 
-// https://mui.com/material-ui/react-card/
+import AccountSettings from ".";
 
-"use client";
+type SearchParams = { [key: string]: string | string[] | undefined };
 
-import { Box, Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+interface MemberAccountSettingsPageProps {
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<SearchParams>;
+}
 
-const StyledWrapper = styled(Box)(({ theme }) => ({
-  minHeight: "100%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: theme.spacing(2),
-}));
+const toSearchString = (searchParams: SearchParams) => {
+  const urlSearchParams = new URLSearchParams();
 
-const StyledCard = styled(Card)(({ theme }) => ({
-  width: "100%",
-  maxWidth: theme.breakpoints.values.sm,
-}));
+  for (const [key, value] of Object.entries(searchParams)) {
+    if (typeof value === "string") {
+      urlSearchParams.append(key, value);
+      continue;
+    }
 
-const AccountSettingsPage = () => {
-  // const dict = useI18n();
-  // const { lang } = useParams<{ lang?: string }>();
+    if (Array.isArray(value)) {
+      for (const item of value) {
+        urlSearchParams.append(key, item);
+      }
+    }
+  }
 
-  return (
-    <StyledWrapper>
-      <StyledCard>
-        <CardHeader
-          title={
-            <Typography component="h1" variant="h6" fontWeight="bold">
-              {/* {dict.member.accountSettings.title} */}
-            </Typography>
-          }
-          subheader={
-            <Typography color="text.secondary" variant="body2">
-              {/* {dict.member.accountSettings.subtitle} */}
-            </Typography>
-          }
-        />
-        <CardContent>
-          <Typography color="text.secondary" variant="body2">
-            {/* {dict.member.accountSettings.placeholder.replace("{lang}", lang ?? "")} */}
-          </Typography>
-        </CardContent>
-      </StyledCard>
-    </StyledWrapper>
-  );
+  return urlSearchParams.toString();
 };
 
-export default AccountSettingsPage;
+const MemberAccountSettingsPage = async ({
+  params,
+  searchParams,
+}: MemberAccountSettingsPageProps) => {
+  const { lang } = await params;
+  const resolvedSearchParams = await searchParams;
+
+  const pathname = `/${lang}/member/account-settings`;
+  const search = toSearchString(resolvedSearchParams);
+  const currentURL = search ? `${pathname}?${search}` : pathname;
+
+  return <AccountSettings currentURL={currentURL} lang={lang} />;
+};
+
+export default MemberAccountSettingsPage;

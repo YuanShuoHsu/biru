@@ -45,7 +45,37 @@
       "settings": "設定"
     },
     "accountSettings": {
-      "label": "アカウント設定"
+      "label": "アカウント設定",
+      "title": "アカウント設定",
+      "subtitle": "セキュリティ、サインイン、端末の設定",
+      "signInCta": "サインインして設定を管理",
+      "empty": "サインインすると設定を表示します。",
+      "sections": {
+        "account": "アカウント",
+        "security": "セキュリティ",
+        "device": "この端末",
+        "support": "サポート",
+        "danger": "危険な操作"
+      },
+      "actions": {
+        "viewProfile": "プロフィールを見る",
+        "terms": "利用規約",
+        "privacy": "プライバシーポリシー"
+      },
+      "fields": {
+        "name": "名前"
+      },
+      "rememberMe": {
+        "label": "デフォルトでログイン状態を保持",
+        "helper": "サインイン画面のデフォルトとして使用します。"
+      },
+      "deviceNotice": "設定はこの端末にローカル保存されます。",
+      "securityNotice": "一部の操作ではメール認証が必要になる場合があります。",
+      "danger": {
+        "title": "アカウント削除",
+        "subtitle": "現在は利用できません。",
+        "action": "アカウント削除"
+      }
     },
     "profile": {
       "activity": "最近のアクティビティ",

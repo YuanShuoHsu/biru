@@ -1,12 +1,11 @@
 // vibe coding 未來要修正
 
+import { SearchParams } from "next/dist/server/request/search-params";
 import MemberProfile from ".";
-
-type SearchParams = { [key: string]: string | string[] | undefined };
 
 interface MemberProfilePageProps {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 const toSearchString = (searchParams: SearchParams) => {
