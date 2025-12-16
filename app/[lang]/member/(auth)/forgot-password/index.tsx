@@ -8,6 +8,8 @@ import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
+import FormCard from "@/components/FormCard";
+
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -22,8 +24,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
-
-import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),

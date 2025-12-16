@@ -4,6 +4,8 @@ import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import useSWRMutation from "swr/mutation";
 
+import FormCard from "@/components/FormCard";
+
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -19,8 +21,6 @@ import { styled } from "@mui/material/styles";
 import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
-
-import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),

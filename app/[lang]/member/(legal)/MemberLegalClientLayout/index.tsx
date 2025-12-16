@@ -34,7 +34,7 @@ const MemberLegalClientLayout = ({
       : undefined;
 
   return (
-    <StyledContainer maxWidth="sm" disableGutters>
+    <StyledContainer disableGutters maxWidth="sm">
       <ArrowBackButton lang={lang} redirect={safeRedirect} />
       {children}
     </StyledContainer>

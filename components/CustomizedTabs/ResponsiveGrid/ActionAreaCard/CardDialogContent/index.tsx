@@ -12,7 +12,6 @@ import {
   Chip,
   Divider,
   FormControl,
-  FormHelperText,
   FormLabel,
   Grid,
   IconButton,
@@ -45,10 +44,6 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   flexDirection: "column",
   gap: theme.spacing(1),
 }));
-
-const StyledFormHelperText = styled(FormHelperText)({
-  textAlign: "right",
-});
 
 export interface CardDialogContentImperativeHandle {
   getValues: () => {
@@ -162,6 +157,8 @@ const CardDialogContent = React.forwardRef<
 
   const amount = (price + extraCost) * quantity;
   const displayPrice = amount.toLocaleString(lang);
+
+  const isAtLimit = quantity >= availableToAdd;
 
   const formHelperText =
     perItemCapLeft === availableToAdd
@@ -329,54 +326,52 @@ const CardDialogContent = React.forwardRef<
           </Typography>
         </Grid>
         <Grid size={{ xs: 7 }}>
-          <StyledFormControl>
-            <TextField
-              disabled={!quantity}
-              fullWidth
-              size="small"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton
-                        aria-label="decrease"
-                        disabled={quantity <= minQuantity}
-                        onClick={handleDecreaseQuantity}
-                        size="small"
-                      >
-                        <Remove fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="increase"
-                        disabled={quantity >= availableToAdd}
-                        onClick={handleIncreaseQuantity}
-                        size="small"
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  readOnly: true,
-                  sx: {
-                    paddingInline: 1,
-                  },
+          <TextField
+            disabled={!quantity}
+            fullWidth
+            helperText={isAtLimit ? formHelperText : undefined}
+            size="small"
+            slotProps={{
+              formHelperText: {
+                error: isAtLimit,
+                sx: { textAlign: "right" },
+              },
+              htmlInput: {
+                sx: { textAlign: "center" },
+              },
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton
+                      aria-label="decrease"
+                      disabled={quantity <= minQuantity}
+                      onClick={handleDecreaseQuantity}
+                      size="small"
+                    >
+                      <Remove fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="increase"
+                      disabled={quantity >= availableToAdd}
+                      onClick={handleIncreaseQuantity}
+                      size="small"
+                    >
+                      <Add fontSize="small" />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                readOnly: true,
+                sx: {
+                  paddingInline: 1,
                 },
-                htmlInput: {
-                  sx: { textAlign: "center" },
-                },
-              }}
-              value={quantity}
-            />
-            {quantity >= availableToAdd && (
-              <StyledFormHelperText error>
-                {formHelperText}
-              </StyledFormHelperText>
-            )}
-          </StyledFormControl>
+              },
+            }}
+            value={quantity}
+          />
         </Grid>
       </Grid>
     </Stack>

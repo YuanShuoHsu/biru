@@ -10,8 +10,6 @@ import { useI18n } from "@/context/i18n";
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
-  FormControl,
-  FormHelperText,
   Grid,
   IconButton,
   InputAdornment,
@@ -64,18 +62,8 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   },
 }));
 
-const StyledFormControl = styled(FormControl)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  gap: theme.spacing(1),
-}));
-
 const StyledInputAdornment = styled(InputAdornment)({
   margin: 0,
-});
-
-const StyledFormHelperText = styled(FormHelperText)({
-  textAlign: "right",
 });
 
 interface CartItemRowProps {
@@ -216,59 +204,57 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             ...(forceXsLayout ? {} : { sm: 4 }),
           }}
         >
-          <StyledFormControl>
-            <TextField
-              disabled={!quantity}
-              fullWidth
-              size="small"
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <StyledInputAdornment position="start">
-                      <IconButton
-                        aria-label={canDecrease ? "decrease" : "delete"}
-                        onClick={() =>
-                          canDecrease ? handleDecrease() : deleteCartItem(item)
-                        }
-                        size="small"
-                      >
-                        {canDecrease ? (
-                          <Remove fontSize="small" />
-                        ) : (
-                          <Delete fontSize="small" />
-                        )}
-                      </IconButton>
-                    </StyledInputAdornment>
-                  ),
-                  endAdornment: (
-                    <StyledInputAdornment position="end">
-                      <IconButton
-                        aria-label="increase"
-                        disabled={!canIncrease}
-                        onClick={handleIncrease}
-                        size="small"
-                      >
-                        <Add fontSize="small" />
-                      </IconButton>
-                    </StyledInputAdornment>
-                  ),
-                  readOnly: true,
-                  sx: {
-                    paddingInline: 1,
-                  },
+          <TextField
+            disabled={!quantity}
+            fullWidth
+            helperText={!canIncrease ? formHelperText : undefined}
+            size="small"
+            slotProps={{
+              formHelperText: {
+                error: !canIncrease,
+                sx: { textAlign: "right" },
+              },
+              htmlInput: {
+                sx: { textAlign: "center" },
+              },
+              input: {
+                startAdornment: (
+                  <StyledInputAdornment position="start">
+                    <IconButton
+                      aria-label={canDecrease ? "decrease" : "delete"}
+                      onClick={() =>
+                        canDecrease ? handleDecrease() : deleteCartItem(item)
+                      }
+                      size="small"
+                    >
+                      {canDecrease ? (
+                        <Remove fontSize="small" />
+                      ) : (
+                        <Delete fontSize="small" />
+                      )}
+                    </IconButton>
+                  </StyledInputAdornment>
+                ),
+                endAdornment: (
+                  <StyledInputAdornment position="end">
+                    <IconButton
+                      aria-label="increase"
+                      disabled={!canIncrease}
+                      onClick={handleIncrease}
+                      size="small"
+                    >
+                      <Add fontSize="small" />
+                    </IconButton>
+                  </StyledInputAdornment>
+                ),
+                readOnly: true,
+                sx: {
+                  paddingInline: 1,
                 },
-                htmlInput: {
-                  sx: { textAlign: "center" },
-                },
-              }}
-              value={quantity}
-            />
-            {availableToAdd <= 0 && (
-              <StyledFormHelperText error>
-                {formHelperText}
-              </StyledFormHelperText>
-            )}
-          </StyledFormControl>
+              },
+            }}
+            value={quantity}
+          />
         </Grid>
       </Grid>
     </StyledListItem>

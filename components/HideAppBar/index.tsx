@@ -1,9 +1,9 @@
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
-import Image from "next/image";
-import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Suspense } from "react";
+
+import BrandMark from "@/components/BrandMark";
 
 import AccountMenu from "./AccountMenu";
 import CartIconButton from "./CartIconButton";
@@ -15,12 +15,9 @@ import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 import { Menu } from "@mui/icons-material";
 import {
   AppBar,
-  Box,
   IconButton,
-  Link as MuiLink,
   Stack,
   Toolbar,
-  Typography,
   useScrollTrigger,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -44,15 +41,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   justifyContent: "space-between",
   alignItems: "center",
   gap: theme.spacing(1),
-}));
-
-const ImageBox = styled(Box)(({ theme }) => ({
-  position: "relative",
-  width: theme.spacing(4),
-  height: theme.spacing(4),
-  borderRadius: theme.shape.borderRadius,
-  flexShrink: 0,
-  overflow: "hidden",
 }));
 
 interface HideAppBarProps {
@@ -96,31 +84,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <Menu />
             </IconButton>
           )}
-          <MuiLink
-            minWidth={0}
-            color="inherit"
-            component={NextLink}
-            href={`/${lang}`}
-            display="flex"
-            alignItems="center"
-            gap={1}
-            underline="none"
-          >
-            <ImageBox>
-              <Image
-                alt="biru coffee"
-                draggable={false}
-                fill
-                priority
-                sizes="(min-width: 808px) 50vw, 100vw"
-                src="/images/IMG_4590.jpg"
-                style={{ objectFit: "cover" }}
-              />
-            </ImageBox>
-            <Typography component="span" noWrap variant="h6">
-              Biru Coffee
-            </Typography>
-          </MuiLink>
+          <BrandMark />
         </Stack>
         <Stack direction="row" alignItems="center" gap={0.5}>
           <ModeToggle />

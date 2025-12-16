@@ -1,9 +1,12 @@
-// https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations
+// https://nextjs.org/docs/app/getting-started/updating-data
+// https://nextjs.org/docs/app/guides/forms
 // https://zod.dev/error-formatting?id=zflattenerror
+
+"use server";
 
 import { z } from "zod";
 
-import { FormState, SignupFormSchema } from "@/app/lib/definitions";
+import { FormState, SignupFormSchema } from "./definitions";
 
 export const signup = async (_state: FormState, formData: FormData) => {
   const validatedFields = SignupFormSchema.safeParse({
@@ -30,7 +33,7 @@ export const signup = async (_state: FormState, formData: FormData) => {
     //   arg: validatedFields.data,
     // });
     // return { success: true };
-  } catch (error) {
+  } catch {
     // return { message: getErrorMessage(error), success: false };
   }
 };

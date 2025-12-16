@@ -15,7 +15,7 @@ interface MemberAuthLayoutProps {
 }
 
 const MemberAuthLayout = ({ children }: MemberAuthLayoutProps) => (
-  <StyledContainer maxWidth="sm" disableGutters>
+  <StyledContainer disableGutters maxWidth="sm">
     {children}
   </StyledContainer>
 );

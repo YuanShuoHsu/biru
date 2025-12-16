@@ -10,9 +10,10 @@ import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
 import { Fragment, useActionState, useState } from "react";
 
-import { signup } from "@/app/actions/auth";
+import { signup } from "./actions";
 
 import CountrySelect from "@/components/CountrySelect";
+import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 import TextMaskCustom from "@/components/TextMaskCustom";
 
@@ -54,8 +55,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { getDefaultCountryCode } from "@/utils/countries";
 import { interpolate } from "@/utils/i18n";
-
-import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -480,6 +479,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <Button
           disabled={pending}
           fullWidth
+          loading={pending}
+          loadingPosition="start"
           size="large"
           type="submit"
           variant="contained"

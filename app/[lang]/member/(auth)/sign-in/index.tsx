@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import React, { startTransition, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
 
+import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 
 import { REMEMBER_ME } from "@/constants/sign-in";
@@ -40,8 +41,6 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
 import { sendRequest } from "@/utils/fetcher";
-
-import FormCard from "../FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),

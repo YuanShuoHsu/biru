@@ -15,7 +15,7 @@ interface MaintenanceLayoutProps {
 }
 
 const MaintenanceLayout = ({ children }: MaintenanceLayoutProps) => (
-  <StyledContainer maxWidth="sm" disableGutters>
+  <StyledContainer disableGutters maxWidth="sm">
     {children}
   </StyledContainer>
 );

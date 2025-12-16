@@ -5,6 +5,8 @@
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
+import FormCard from "@/components/FormCard";
+
 import { useI18n } from "@/context/i18n";
 
 import { useLogout } from "@/hooks/useLogout";
@@ -28,8 +30,6 @@ import { useAuthStore } from "@/stores/useAuthStore";
 import type { LocaleCode } from "@/types/locale";
 
 import { getDisplayName } from "@/utils/auth";
-
-import FormCard from "../../(auth)/FormCard";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),

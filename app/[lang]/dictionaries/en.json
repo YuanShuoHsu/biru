@@ -31,7 +31,27 @@
     "close": "Close",
     "maxStock": "Only {quantity} left in stock {label}"
   },
-  "home": { "label": "Home" },
+  "home": {
+    "label": "Home"
+  },
+  "footer": {
+    "brand": "Biru Coffee",
+    "tagline": "Coffee, crafted for your day.",
+    "sections": {
+      "order": { "title": "Order", "quickStart": "Quick start" },
+      "member": { "title": "Member" },
+      "legal": { "title": "Legal", "terms": "Terms", "privacy": "Privacy" }
+    },
+    "newsletter": {
+      "title": "Keep up to date",
+      "subtitle": "Join our newsletter for regular updates. No spam ever.",
+      "emailLabel": "Your email",
+      "action": "Subscribe",
+      "success": "Subscribed (demo).",
+      "invalidEmail": "Please enter a valid email."
+    },
+    "copyright": "Copyright © {year} {brand}."
+  },
   "maintenance": {
     "title": "Under Maintenance"
   },
