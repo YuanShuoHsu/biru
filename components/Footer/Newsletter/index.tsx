@@ -11,7 +11,6 @@ import { styled } from "@mui/material/styles";
 
 import { useI18n } from "@/context/i18n";
 
-import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 
 const isLikelyEmail = (value: string) => /^\S+@\S+\.\S+$/.test(value);
@@ -57,8 +56,8 @@ const Newsletter = () => {
       enqueueSnackbar(dict.home.footer.newsletter.success, {
         variant: "success",
       });
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    } catch {
+      return;
     }
   };
 

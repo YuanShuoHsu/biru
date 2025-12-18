@@ -194,8 +194,8 @@
       "showConfirmNewPassword": "確認用パスワードを表示",
       "showNewPassword": "新しいパスワードを表示",
       "showPassword": "パスワードを表示",
-      "signIn": { "label": "ログイン" },
-      "signOut": { "label": "ログアウト" },
+      "signIn": { "label": "ログイン", "success": "ログインしました" },
+      "signOut": { "label": "ログアウト", "success": "ログアウトしました" },
       "signUp": { "label": "新規登録" },
       "passwordRules": {
         "minLength": "8文字以上の長さ",

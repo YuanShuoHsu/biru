@@ -190,8 +190,8 @@
       "showConfirmNewPassword": "Show confirm new password",
       "showNewPassword": "Display the new password",
       "showPassword": "Display the password",
-      "signIn": { "label": "Sign in" },
-      "signOut": { "label": "Sign out" },
+      "signIn": { "label": "Sign in", "success": "Signed in" },
+      "signOut": { "label": "Sign out", "success": "Signed out" },
       "signUp": { "label": "Sign up" },
       "passwordRules": {
         "minLength": "Be at least 8 characters long",

@@ -194,8 +194,8 @@
       "showConfirmNewPassword": "显示确认新密码",
       "showNewPassword": "显示新密码",
       "showPassword": "显示密码",
-      "signIn": { "label": "登录" },
-      "signOut": { "label": "登出" },
+      "signIn": { "label": "登录", "success": "登录成功" },
+      "signOut": { "label": "登出", "success": "已登出" },
       "signUp": { "label": "注册" },
       "passwordRules": {
         "minLength": "至少 8 个字符长度",

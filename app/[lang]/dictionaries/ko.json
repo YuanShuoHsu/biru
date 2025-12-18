@@ -194,8 +194,8 @@
       "showConfirmNewPassword": "새 비밀번호 확인 표시",
       "showNewPassword": "새 비밀번호 표시",
       "showPassword": "비밀번호 표시",
-      "signIn": { "label": "로그인" },
-      "signOut": { "label": "로그아웃" },
+      "signIn": { "label": "로그인", "success": "로그인되었습니다" },
+      "signOut": { "label": "로그아웃", "success": "로그아웃되었습니다" },
       "signUp": { "label": "회원가입" },
       "passwordRules": {
         "minLength": "8자 이상 길이",

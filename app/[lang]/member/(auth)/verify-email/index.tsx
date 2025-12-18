@@ -18,7 +18,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleRedirectParams } from "@/utils/redirect";
@@ -77,8 +76,8 @@ const MemberAuthVerifyEmail = ({
       enqueueSnackbar(dict.member.auth.verifyEmail.resendSuccess, {
         variant: "success",
       });
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+    } catch {
+      return;
     }
   };
 

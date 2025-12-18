@@ -4,6 +4,7 @@
 
 "use client";
 
+import { enqueueSnackbar } from "notistack";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import React, { startTransition, useEffect, useState } from "react";
@@ -150,6 +151,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       const profile = await triggerProfile(access_token);
       setProfile(profile);
 
+      enqueueSnackbar(dict.member.auth.signIn.success, { variant: "success" });
       router.replace(redirect || `/${lang}`);
     } catch {
       clearAuth();
