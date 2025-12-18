@@ -498,27 +498,32 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
     privacyByLocale[lang as LocaleCode] || privacyByLocale[defaultLocale];
 
   return (
-    <Box component="section" display="flex" flexDirection="column" gap={3}>
-      <Typography variant="h4" component="h1" fontWeight="bold">
+    <Box component="section" display="flex" flexDirection="column" gap={2}>
+      <Typography
+        color="text.primary"
+        component="h1"
+        fontWeight="bold"
+        variant="h4"
+      >
         {content.title}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography color="text.secondary" variant="body2">
         {content.lastUpdated}
       </Typography>
-      <Typography variant="body2" color="text.secondary">
+      <Typography color="text.secondary" variant="body2">
         {content.intro}
       </Typography>
-      <Paper variant="outlined" sx={{ p: 2 }}>
+      <Paper sx={{ p: 2 }} variant="outlined">
         <Stack spacing={1}>
-          <Typography variant="subtitle2" fontWeight="bold">
+          <Typography fontWeight="bold" variant="subtitle2">
             {content.tocTitle}
           </Typography>
           <Stack spacing={0.5}>
             {content.sections.map((section) => (
               <MuiLink
-                key={section.id}
                 color="text.secondary"
                 href={`#${section.id}`}
+                key={section.id}
                 underline="hover"
                 variant="body2"
               >
@@ -528,21 +533,21 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
           </Stack>
         </Stack>
       </Paper>
-      <Stack spacing={3} divider={<Divider />}>
+      <Stack divider={<Divider />} spacing={3}>
         {content.sections.map((section) => (
           <Stack key={section.id} spacing={1}>
             <Typography
-              id={section.id}
-              variant="h6"
+              color="primary"
               component="h2"
               fontWeight="bold"
-              color="primary"
-              sx={{ scrollMarginTop: 96 }}
+              id={section.id}
+              sx={{ scrollMarginTop: 24 }}
+              variant="h6"
             >
               {section.heading}
             </Typography>
             {section.paragraphs.map((p) => (
-              <Typography key={p} variant="body2" color="text.secondary">
+              <Typography color="text.secondary" key={p} variant="body2">
                 {p}
               </Typography>
             ))}
@@ -558,7 +563,7 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
                 }}
               >
                 {section.bullets.map((item) => (
-                  <Box key={item} component="li">
+                  <Box component="li" key={item}>
                     {item}
                   </Box>
                 ))}
@@ -567,11 +572,11 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
           </Stack>
         ))}
       </Stack>
-      <Typography variant="body2" color="text.secondary">
+      <Typography color="text.secondary" variant="body2">
         {content.contact}
       </Typography>
       {content.closingNote ? (
-        <Typography variant="caption" color="text.secondary">
+        <Typography color="text.secondary" variant="caption">
           {content.closingNote}
         </Typography>
       ) : null}

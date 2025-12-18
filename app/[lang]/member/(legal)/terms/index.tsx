@@ -560,65 +560,63 @@ const MemberLegalTerms = ({ lang }: MemberLegalTermsProps) => {
   const content =
     termsByLocale[lang as LocaleCode] ?? termsByLocale[defaultLocale];
 
-  return (
-    <Box component="section" display="flex" flexDirection="column" gap={3}>
-      <Typography
-        component="h1"
-        color="text.primary"
-        variant="h4"
-        fontWeight="bold"
-      >
-        {content.title}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {content.lastUpdated}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        {content.intro}
-      </Typography>
-      <Paper variant="outlined" sx={{ p: 2 }}>
-        <Stack spacing={1}>
-          <Typography variant="subtitle2" fontWeight="bold">
-            {content.tocTitle}
-          </Typography>
-          <Stack spacing={1}>
-            {content.sections.map((section) => (
-              <MuiLink
-                key={section.id}
-                color="text.secondary"
-                href={`#${section.id}`}
-                underline="hover"
-                variant="body2"
-              >
-                {section.heading}
-              </MuiLink>
-            ))}
-          </Stack>
-        </Stack>
-      </Paper>
-      <Stack spacing={3} divider={<Divider />}>
-        {content.sections.map((section) => (
-          <Stack key={section.id} spacing={1}>
-            <Typography
-              id={section.id}
-              variant="h6"
-              component="h2"
-              fontWeight="bold"
-              color="primary"
-              sx={{ scrollMarginTop: 96 }}
-            >
-              {section.heading}
-            </Typography>
-
-            {section.paragraphs.map((p) => (
-              <Typography key={p} variant="body2" color="text.secondary">
-                {p}
-              </Typography>
-            ))}
-
-            {section.bullets?.length ? (
-              <Box
-                component="ul"
+	return (
+	  <Box component="section" display="flex" flexDirection="column" gap={2}>
+	    <Typography
+	      color="text.primary"
+	      component="h1"
+	      fontWeight="bold"
+	      variant="h4"
+	    >
+	      {content.title}
+	    </Typography>
+	    <Typography color="text.secondary" variant="body2">
+	      {content.lastUpdated}
+	    </Typography>
+	    <Typography color="text.secondary" variant="body2">
+	      {content.intro}
+	    </Typography>
+	    <Paper sx={{ p: 2 }} variant="outlined">
+	      <Stack spacing={1}>
+	        <Typography fontWeight="bold" variant="subtitle2">
+	          {content.tocTitle}
+	        </Typography>
+	        <Stack spacing={1}>
+	          {content.sections.map((section) => (
+	            <MuiLink
+	              color="text.secondary"
+	              href={`#${section.id}`}
+	              key={section.id}
+	              underline="hover"
+	              variant="body2"
+	            >
+	              {section.heading}
+	            </MuiLink>
+	          ))}
+	        </Stack>
+	      </Stack>
+	    </Paper>
+	    <Stack divider={<Divider />} spacing={3}>
+	      {content.sections.map((section) => (
+	        <Stack key={section.id} spacing={1}>
+	          <Typography
+	            color="primary"
+	            component="h2"
+	            fontWeight="bold"
+	            id={section.id}
+	            sx={{ scrollMarginTop: 24 }}
+	            variant="h6"
+	          >
+	            {section.heading}
+	          </Typography>
+	          {section.paragraphs.map((p) => (
+	            <Typography color="text.secondary" key={p} variant="body2">
+	              {p}
+	            </Typography>
+	          ))}
+	          {section.bullets?.length ? (
+	            <Box
+	              component="ul"
                 sx={{
                   m: 0,
                   pl: 2.5,
@@ -626,27 +624,27 @@ const MemberLegalTerms = ({ lang }: MemberLegalTermsProps) => {
                   color: "text.secondary",
                   "& li": { mt: 0.75 },
                 }}
-              >
-                {section.bullets.map((item) => (
-                  <Box key={item} component="li">
-                    {item}
-                  </Box>
-                ))}
-              </Box>
-            ) : null}
-          </Stack>
-        ))}
-      </Stack>
-      <Typography variant="body2" color="text.secondary">
-        {content.contact}
-      </Typography>
-      {content.closingNote ? (
-        <Typography variant="caption" color="text.secondary">
-          {content.closingNote}
-        </Typography>
-      ) : null}
-    </Box>
-  );
+	            >
+	              {section.bullets.map((item) => (
+	                <Box component="li" key={item}>
+	                  {item}
+	                </Box>
+	              ))}
+	            </Box>
+	          ) : null}
+	        </Stack>
+	      ))}
+	    </Stack>
+	    <Typography color="text.secondary" variant="body2">
+	      {content.contact}
+	    </Typography>
+	    {content.closingNote ? (
+	      <Typography color="text.secondary" variant="caption">
+	        {content.closingNote}
+	      </Typography>
+	    ) : null}
+	  </Box>
+	);
 };
 
 export default MemberLegalTerms;
