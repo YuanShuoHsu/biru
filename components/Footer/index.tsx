@@ -3,10 +3,10 @@
 
 "use client";
 
+import FooterCopyright from "./FooterCopyright";
 import FooterLinkSection from "./FooterLinkSection";
 import FooterNewsletter from "./FooterNewsletter";
 import FooterSocialLinks from "./FooterSocialLinks";
-import FooterCopyright from "./FooterCopyright";
 
 import {
   Box,
@@ -31,27 +31,25 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const Footer = () => {
-  return (
-    <StyledBox component="footer">
-      <StyledContainer disableGutters maxWidth="lg">
-        <Grid container spacing={2}>
-          <FooterNewsletter />
-          <FooterLinkSection />
-        </Grid>
-        <Divider />
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems="center"
-          gap={1}
-        >
-          <FooterCopyright />
-          <FooterSocialLinks />
-        </Stack>
-      </StyledContainer>
-    </StyledBox>
-  );
-};
+const Footer = () => (
+  <StyledBox component="footer">
+    <StyledContainer disableGutters maxWidth="lg">
+      <Grid container spacing={2}>
+        <FooterNewsletter />
+        <FooterLinkSection />
+      </Grid>
+      <Divider />
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems="center"
+        gap={1}
+      >
+        <FooterCopyright />
+        <FooterSocialLinks />
+      </Stack>
+    </StyledContainer>
+  </StyledBox>
+);
 
 export default Footer;

@@ -18,7 +18,7 @@ interface FooterLinkSectionData {
   links: FooterLink[];
 }
 
-export const createFooterLinkSections = ({
+const createFooterLinkSections = ({
   lang,
   dict,
 }: {
