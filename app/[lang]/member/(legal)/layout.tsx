@@ -1,23 +1,25 @@
-import { Suspense } from "react";
+"use client";
 
-import MemberLegalClientLayout from "./MemberLegalClientLayout";
+import { Container } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  height: "100%",
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  gap: theme.spacing(2),
+}));
 
 interface MemberLegalLayoutProps {
   children: React.ReactNode;
-  params: Promise<{ lang: string }>;
 }
 
-const MemberLegalLayout = async ({
-  children,
-  params,
-}: MemberLegalLayoutProps) => {
-  const { lang } = await params;
-
-  return (
-    <Suspense>
-      <MemberLegalClientLayout lang={lang}>{children}</MemberLegalClientLayout>
-    </Suspense>
-  );
-};
+const MemberLegalLayout = ({ children }: MemberLegalLayoutProps) => (
+  <StyledContainer disableGutters maxWidth="sm">
+    {children}
+  </StyledContainer>
+);
 
 export default MemberLegalLayout;
