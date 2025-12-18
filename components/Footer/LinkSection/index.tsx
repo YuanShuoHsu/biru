@@ -7,7 +7,11 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { useI18n, type I18nDict } from "@/context/i18n";
 import { useAuthStore } from "@/stores/useAuthStore";
 import type { RouteParams } from "@/types/routeParams";
-import { getMemberAuthLinkItems } from "@/utils/auth";
+import {
+  getAccountLinkItems,
+  getMemberAuthLinkItems,
+  getProfileMenuItems,
+} from "@/utils/auth";
 import { Grid, Link as MuiLink, styled, Typography } from "@mui/material";
 
 interface FooterLink {
@@ -39,14 +43,12 @@ const createFooterLinkSections = ({
     title: dict.home.footer.sections.order.title,
   },
   {
-    links: isSignedIn
-      ? [
-          {
-            href: `/${lang}/member/my-account`,
-            label: dict.member.myAccount.title,
-          },
-        ]
-      : getMemberAuthLinkItems(dict, { redirectTo: `/${lang}` }).map(
+    links: !isSignedIn
+      ? getMemberAuthLinkItems(dict, `/${lang}`).map(({ label, to }) => ({
+          href: `/${lang}/member${to}`,
+          label,
+        }))
+      : [...getProfileMenuItems(dict), ...getAccountLinkItems(dict)].map(
           ({ label, to }) => ({
             href: `/${lang}/member${to}`,
             label,

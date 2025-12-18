@@ -44,18 +44,18 @@ export interface MemberAuthLinkItem {
 
 export const getMemberAuthLinkItems = (
   dict: I18nDict,
-  { redirectTo }: { redirectTo?: string } = {},
+  redirect?: string,
 ): MemberAuthLinkItem[] => {
   return [
     {
       icon: Login,
       label: dict.member.auth.signIn.label,
-      to: handleRedirectParams("/sign-in", redirectTo),
+      to: handleRedirectParams("/sign-in", redirect),
     },
     {
       icon: PersonAdd,
       label: dict.member.auth.signUp.label,
-      to: handleRedirectParams("/sign-up", redirectTo),
+      to: handleRedirectParams("/sign-up", redirect),
     },
   ];
 };
@@ -81,13 +81,7 @@ export const getProfileMenuItems = (dict: I18nDict): AuthMenuItem[] => [
   },
 ];
 
-export const getAccountMenuItems = (
-  dict: I18nDict,
-  {
-    isMutatingLogout,
-    onLogout,
-  }: { isMutatingLogout?: boolean; onLogout: () => void },
-): AuthMenuItem[] => [
+export const getAccountLinkItems = (dict: I18nDict): AuthMenuItem[] => [
   {
     icon: PersonAdd,
     label: dict.member.accountMenu.addAnotherAccount,
@@ -98,6 +92,16 @@ export const getAccountMenuItems = (
     label: dict.member.accountMenu.settings,
     to: "/account-settings",
   },
+];
+
+export const getAccountMenuItems = (
+  dict: I18nDict,
+  {
+    isMutatingLogout,
+    onLogout,
+  }: { isMutatingLogout?: boolean; onLogout: () => void },
+): AuthMenuItem[] => [
+  ...getAccountLinkItems(dict),
   {
     disabled: isMutatingLogout,
     icon: Logout,

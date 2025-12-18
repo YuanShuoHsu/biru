@@ -137,7 +137,7 @@ interface NavItemsMapOptions {
   isMutatingLogout?: boolean;
   isSignedIn: boolean;
   onLogout: () => void;
-  redirectTo?: string;
+  redirect?: string;
 }
 
 const navItemsMap = ({
@@ -145,7 +145,7 @@ const navItemsMap = ({
   isMutatingLogout,
   isSignedIn,
   onLogout,
-  redirectTo,
+  redirect,
 }: NavItemsMapOptions): NavItem[] => {
   const profileMenuItems = getProfileMenuItems(dict);
   const accountMenuItems = getAccountMenuItems(dict, {
@@ -153,9 +153,9 @@ const navItemsMap = ({
     onLogout,
   });
 
-  const memberChildren: NavItem[] = isSignedIn
-    ? [...profileMenuItems, { slot: "divider" }, ...accountMenuItems]
-    : getMemberAuthLinkItems(dict, { redirectTo });
+  const memberChildren: NavItem[] = !isSignedIn
+    ? getMemberAuthLinkItems(dict, redirect)
+    : [...profileMenuItems, { slot: "divider" }, ...accountMenuItems];
 
   return [
     { icon: Home, label: dict.home.label, to: "/" },
@@ -322,14 +322,14 @@ const NavTemporaryDrawer = ({
 
   const redirectParam = searchParams.get("redirect");
   const isMemberPage = pathname.startsWith(`/${lang}/member`);
-  const redirectTo = isMemberPage && redirectParam ? redirectParam : currentURL;
+  const redirect = isMemberPage && redirectParam ? redirectParam : currentURL;
 
   const navItems = navItemsMap({
     dict,
     isMutatingLogout,
     isSignedIn,
     onLogout: handleLogout,
-    redirectTo,
+    redirect,
   });
 
   const handleIconButtonToggle = (key: string) =>
