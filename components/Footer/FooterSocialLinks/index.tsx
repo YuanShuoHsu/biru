@@ -50,4 +50,3 @@ const FooterSocialLinks = () => (
 );
 
 export default FooterSocialLinks;
-
