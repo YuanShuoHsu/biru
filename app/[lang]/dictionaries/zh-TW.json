@@ -44,7 +44,11 @@
         "title": "掌握最新消息"
       },
       "sections": {
-        "legal": { "privacy": "隱私權政策", "terms": "服務條款", "title": "法務" },
+        "legal": {
+          "privacy": "隱私權政策",
+          "terms": "服務條款",
+          "title": "法務"
+        },
         "member": { "title": "會員" },
         "order": { "quickStart": "快速開始", "title": "點餐" }
       },

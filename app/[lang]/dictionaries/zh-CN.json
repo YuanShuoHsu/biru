@@ -44,7 +44,11 @@
         "title": "保持最新资讯"
       },
       "sections": {
-        "legal": { "privacy": "隐私政策", "terms": "服务条款", "title": "法律" },
+        "legal": {
+          "privacy": "隐私政策",
+          "terms": "服务条款",
+          "title": "法律"
+        },
         "member": { "title": "会员" },
         "order": { "quickStart": "快速开始", "title": "点餐" }
       },
