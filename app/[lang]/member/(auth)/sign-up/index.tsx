@@ -211,13 +211,18 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const handleRedirectParams = (path: string) =>
     redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
+  const signUpHref = handleRedirectParams(`/${lang}/member/sign-up`);
+
+  const handleBackToSignUpParams = (path: string) =>
+    `${path}?redirect=${encodeURIComponent(signUpHref)}`;
+
   const legalPlaceholders = Object.fromEntries(
     LEGAL_LINK_TYPES.map((type) => [
       `{${type}}`,
       <MuiLink
         key={type}
         component={NextLink}
-        href={handleRedirectParams(`/${lang}/member/${type}`)}
+        href={handleBackToSignUpParams(`/${lang}/member/${type}`)}
       >
         {dict.member.legal[type].label}
       </MuiLink>,

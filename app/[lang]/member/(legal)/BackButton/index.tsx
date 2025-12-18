@@ -15,15 +15,13 @@ interface BackButtonProps {
 const BackButton = ({ lang, redirect }: BackButtonProps) => {
   const dict = useI18n();
 
+  const href = redirect || `/${lang}`;
   const backLabel = dict.member.legal.back;
-
-  const handleRedirectParams = (path: string) =>
-    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   return (
     <Button
       component={NextLink}
-      href={handleRedirectParams(`/${lang}/member/sign-up`)}
+      href={href}
       size="small"
       startIcon={<KeyboardArrowLeft fontSize="small" />}
       variant="outlined"
