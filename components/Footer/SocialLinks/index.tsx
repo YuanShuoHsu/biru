@@ -1,6 +1,5 @@
 import { Facebook, Instagram, YouTube } from "@mui/icons-material";
-import { IconButton, Stack, SvgIcon } from "@mui/material";
-import type { SvgIconProps } from "@mui/material/SvgIcon";
+import { IconButton, Stack, SvgIcon, type SvgIconProps } from "@mui/material";
 
 const Line = (props: SvgIconProps) => (
   <SvgIcon {...props} viewBox="0 0 24 24">
@@ -31,7 +30,7 @@ const SOCIAL_LINKS = [
   },
 ];
 
-const FooterSocialLinks = () => (
+const SocialLinks = () => (
   <Stack direction="row" gap={1}>
     {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
       <IconButton
@@ -50,4 +49,4 @@ const FooterSocialLinks = () => (
   </Stack>
 );
 
-export default FooterSocialLinks;
+export default SocialLinks;

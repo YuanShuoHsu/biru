@@ -32,7 +32,7 @@ const createFooterLinkSections = ({
         label: dict.order.mode.pickup.label,
       },
     ],
-    title: dict.footer.sections.order.title,
+    title: dict.home.footer.sections.order.title,
   },
   {
     links: [
@@ -47,7 +47,7 @@ const createFooterLinkSections = ({
         label: dict.member.myAccount.title,
       },
     ],
-    title: dict.footer.sections.member.title,
+    title: dict.home.footer.sections.member.title,
   },
   {
     links: [
@@ -55,16 +55,16 @@ const createFooterLinkSections = ({
         href: `/${lang}/member/terms?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.footer.sections.legal.terms,
+        label: dict.home.footer.sections.legal.terms,
       },
       {
         href: `/${lang}/member/privacy?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.footer.sections.legal.privacy,
+        label: dict.home.footer.sections.legal.privacy,
       },
     ],
-    title: dict.footer.sections.legal.title,
+    title: dict.home.footer.sections.legal.title,
   },
 ];
 
@@ -75,7 +75,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   alignItems: "flex-start",
 }));
 
-const FooterLinkSection = () => {
+const LinkSection = () => {
   const dict = useI18n();
   const { lang } = useParams<RouteParams>();
 
@@ -106,4 +106,4 @@ const FooterLinkSection = () => {
   );
 };
 
-export default FooterLinkSection;
+export default LinkSection;

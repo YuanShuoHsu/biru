@@ -6,12 +6,12 @@ import { Typography } from "@mui/material";
 
 import { interpolate } from "@/utils/i18n";
 
-const FooterCopyright = () => {
+const Copyright = () => {
   const dict = useI18n();
 
-  const copyrightLine = interpolate(dict.footer.copyright, {
+  const copyrightLine = interpolate(dict.home.footer.copyright, {
     year: new Date().getFullYear(),
-    brand: dict.footer.brand,
+    brand: dict.home.footer.brand,
   });
 
   return (
@@ -21,4 +21,4 @@ const FooterCopyright = () => {
   );
 };
 
-export default FooterCopyright;
+export default Copyright;

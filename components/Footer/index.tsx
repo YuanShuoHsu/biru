@@ -3,10 +3,10 @@
 
 "use client";
 
-import FooterCopyright from "./FooterCopyright";
-import FooterLinkSection from "./FooterLinkSection";
-import FooterNewsletter from "./FooterNewsletter";
-import FooterSocialLinks from "./FooterSocialLinks";
+import Copyright from "./Copyright";
+import LinkSection from "./LinkSection";
+import Newsletter from "./Newsletter";
+import SocialLinks from "./SocialLinks";
 
 import {
   Box,
@@ -35,8 +35,8 @@ const Footer = () => (
   <StyledBox component="footer">
     <StyledContainer disableGutters maxWidth="lg">
       <Grid container spacing={2}>
-        <FooterNewsletter />
-        <FooterLinkSection />
+        <Newsletter />
+        <LinkSection />
       </Grid>
       <Divider />
       <Stack
@@ -45,8 +45,8 @@ const Footer = () => (
         alignItems="center"
         gap={1}
       >
-        <FooterCopyright />
-        <FooterSocialLinks />
+        <Copyright />
+        <SocialLinks />
       </Stack>
     </StyledContainer>
   </StyledBox>

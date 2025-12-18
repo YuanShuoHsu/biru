@@ -32,25 +32,25 @@
     "maxStock": "{label} 庫存僅剩 {quantity} 件"
   },
   "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "訂閱",
+        "emailLabel": "你的電子郵件",
+        "invalidEmail": "請輸入有效的電子郵件。",
+        "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
+        "success": "訂閱成功（示意）。",
+        "title": "掌握最新消息"
+      },
+      "sections": {
+        "legal": { "privacy": "隱私權政策", "terms": "服務條款", "title": "法務" },
+        "member": { "title": "會員" },
+        "order": { "quickStart": "快速開始", "title": "點餐" }
+      },
+      "tagline": "為你的每一天，沖煮一杯好咖啡。"
+    },
     "label": "首頁"
-  },
-  "footer": {
-    "brand": "Biru Coffee",
-    "tagline": "為你的每一天，沖煮一杯好咖啡。",
-    "sections": {
-      "order": { "title": "點餐", "quickStart": "快速開始" },
-      "member": { "title": "會員" },
-      "legal": { "title": "法務", "terms": "服務條款", "privacy": "隱私權政策" }
-    },
-    "newsletter": {
-      "title": "掌握最新消息",
-      "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
-      "emailLabel": "你的電子郵件",
-      "action": "訂閱",
-      "success": "訂閱成功（示意）。",
-      "invalidEmail": "請輸入有效的電子郵件。"
-    },
-    "copyright": "Copyright © {year} {brand}."
   },
   "maintenance": {
     "title": "維護中"

@@ -32,25 +32,25 @@
     "maxStock": "Only {quantity} left in stock {label}"
   },
   "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "Subscribe",
+        "emailLabel": "Your email",
+        "invalidEmail": "Please enter a valid email.",
+        "subtitle": "Join our newsletter for regular updates. No spam ever.",
+        "success": "Subscribed (demo).",
+        "title": "Keep up to date"
+      },
+      "sections": {
+        "legal": { "privacy": "Privacy", "terms": "Terms", "title": "Legal" },
+        "member": { "title": "Member" },
+        "order": { "quickStart": "Quick start", "title": "Order" }
+      },
+      "tagline": "Coffee, crafted for your day."
+    },
     "label": "Home"
-  },
-  "footer": {
-    "brand": "Biru Coffee",
-    "tagline": "Coffee, crafted for your day.",
-    "sections": {
-      "order": { "title": "Order", "quickStart": "Quick start" },
-      "member": { "title": "Member" },
-      "legal": { "title": "Legal", "terms": "Terms", "privacy": "Privacy" }
-    },
-    "newsletter": {
-      "title": "Keep up to date",
-      "subtitle": "Join our newsletter for regular updates. No spam ever.",
-      "emailLabel": "Your email",
-      "action": "Subscribe",
-      "success": "Subscribed (demo).",
-      "invalidEmail": "Please enter a valid email."
-    },
-    "copyright": "Copyright © {year} {brand}."
   },
   "maintenance": {
     "title": "Under Maintenance"

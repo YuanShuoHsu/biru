@@ -23,7 +23,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   alignItems: "flex-start",
 }));
 
-const FooterNewsletter = () => {
+const Newsletter = () => {
   const [email, setEmail] = useState("");
 
   const dict = useI18n();
@@ -44,7 +44,7 @@ const FooterNewsletter = () => {
 
     const trimmedEmail = email.trim();
     if (!trimmedEmail || !isLikelyEmail(trimmedEmail)) {
-      enqueueSnackbar(dict.footer.newsletter.invalidEmail, {
+      enqueueSnackbar(dict.home.footer.newsletter.invalidEmail, {
         variant: "warning",
       });
       return;
@@ -54,7 +54,9 @@ const FooterNewsletter = () => {
       await trigger({ email: trimmedEmail });
 
       setEmail("");
-      enqueueSnackbar(dict.footer.newsletter.success, { variant: "success" });
+      enqueueSnackbar(dict.home.footer.newsletter.success, {
+        variant: "success",
+      });
     } catch (error) {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
@@ -64,10 +66,10 @@ const FooterNewsletter = () => {
     <StyledGrid size={{ xs: 12, md: 6 }}>
       <BrandMark color="text.primary" />
       <Typography color="text.primary" variant="subtitle2">
-        {dict.footer.newsletter.title}
+        {dict.home.footer.newsletter.title}
       </Typography>
       <Typography color="text.secondary" variant="body2">
-        {dict.footer.newsletter.subtitle}
+        {dict.home.footer.newsletter.subtitle}
       </Typography>
       <Box
         component="form"
@@ -79,7 +81,7 @@ const FooterNewsletter = () => {
       >
         <TextField
           autoComplete="email"
-          label={dict.footer.newsletter.emailLabel}
+          label={dict.home.footer.newsletter.emailLabel}
           name="email"
           onChange={(event) => setEmail(event.target.value)}
           placeholder="example@email.com"
@@ -96,11 +98,11 @@ const FooterNewsletter = () => {
           type="submit"
           variant="outlined"
         >
-          {dict.footer.newsletter.action}
+          {dict.home.footer.newsletter.action}
         </Button>
       </Box>
     </StyledGrid>
   );
 };
 
-export default FooterNewsletter;
+export default Newsletter;

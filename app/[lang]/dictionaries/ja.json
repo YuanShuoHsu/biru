@@ -32,29 +32,29 @@
     "maxStock": "{label} 在庫は残り {quantity} 個です"
   },
   "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "登録",
+        "emailLabel": "メールアドレス",
+        "invalidEmail": "有効なメールアドレスを入力してください。",
+        "subtitle": "ニュースレターに登録して定期的な更新を受け取りましょう。スパムは一切送りません。",
+        "success": "登録しました（デモ）。",
+        "title": "最新情報を受け取る"
+      },
+      "sections": {
+        "legal": {
+          "privacy": "プライバシーポリシー",
+          "terms": "利用規約",
+          "title": "法務"
+        },
+        "member": { "title": "メンバー" },
+        "order": { "quickStart": "クイックスタート", "title": "注文" }
+      },
+      "tagline": "あなたの一日を彩る、こだわりのコーヒー。"
+    },
     "label": "ホーム"
-  },
-  "footer": {
-    "brand": "Biru Coffee",
-    "tagline": "あなたの一日を彩る、こだわりのコーヒー。",
-    "sections": {
-      "order": { "title": "注文", "quickStart": "クイックスタート" },
-      "member": { "title": "メンバー" },
-      "legal": {
-        "title": "法務",
-        "terms": "利用規約",
-        "privacy": "プライバシーポリシー"
-      }
-    },
-    "newsletter": {
-      "title": "最新情報を受け取る",
-      "subtitle": "ニュースレターに登録して定期的な更新を受け取りましょう。スパムは一切送りません。",
-      "emailLabel": "メールアドレス",
-      "action": "登録",
-      "success": "登録しました（デモ）。",
-      "invalidEmail": "有効なメールアドレスを入力してください。"
-    },
-    "copyright": "Copyright © {year} {brand}."
   },
   "maintenance": {
     "title": "メンテナンス中"
