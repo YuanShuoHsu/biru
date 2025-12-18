@@ -6,8 +6,8 @@ import { styled } from "@mui/material/styles";
 const StyledContainer = styled(Container)({
   height: "100%",
   display: "flex",
+  flexDirection: "column",
   justifyContent: "center",
-  alignItems: "center",
 });
 
 interface MemberAuthLayoutProps {
