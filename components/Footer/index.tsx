@@ -1,3 +1,4 @@
+// https://mui.com/
 // https://mui.com/templates/
 
 "use client";
@@ -57,6 +58,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
+  alignItems: "flex-start",
 }));
 
 const LineIcon = (props: SvgIconProps) => (
@@ -151,6 +153,7 @@ const Footer = () => {
               flexDirection={{ xs: "column", sm: "row" }}
               gap={1}
               onSubmit={handleSubmit}
+              width="100%"
             >
               <TextField
                 autoComplete="email"
@@ -165,7 +168,6 @@ const Footer = () => {
               />
               <Button
                 disabled={isMutating}
-                // fullWidth
                 loading={isMutating}
                 loadingPosition="start"
                 size="small"
