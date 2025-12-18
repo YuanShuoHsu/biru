@@ -243,7 +243,10 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           />
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/forgot-password`, redirect)}
+            href={handleRedirectParams(
+              `/${lang}/member/forgot-password`,
+              redirect,
+            )}
             variant="body2"
           >
             {dict.member.auth.forgotPassword.label}
