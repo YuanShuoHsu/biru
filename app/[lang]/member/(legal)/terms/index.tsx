@@ -1,3 +1,6 @@
+// https://mui.com/store/terms/
+// https://vercel.com/legal/terms
+
 import { Locale } from "@/constants/locale";
 
 import { Box, Divider, Stack, Typography } from "@mui/material";
