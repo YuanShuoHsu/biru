@@ -26,9 +26,7 @@ import {
   Group,
   Home,
   LocalMall,
-  Login,
   Person,
-  PersonAdd,
   Restaurant,
   ShoppingCart,
   Storefront,
@@ -59,7 +57,11 @@ import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-import { getAccountMenuItems, getProfileMenuItems } from "@/utils/auth";
+import {
+  getAccountMenuItems,
+  getMemberAuthLinkItems,
+  getProfileMenuItems,
+} from "@/utils/auth";
 import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
@@ -119,7 +121,6 @@ interface NavLinkItem {
   icon: React.ElementType;
   label: string;
   onClick?: () => void;
-  query?: string;
   to?: string;
 }
 
@@ -152,26 +153,9 @@ const navItemsMap = ({
     onLogout,
   });
 
-  const query = redirectTo
-    ? `?redirect=${encodeURIComponent(redirectTo)}`
-    : undefined;
-
   const memberChildren: NavItem[] = isSignedIn
     ? [...profileMenuItems, { slot: "divider" }, ...accountMenuItems]
-    : [
-        {
-          icon: Login,
-          label: dict.member.auth.signIn.label,
-          query,
-          to: "/sign-in",
-        },
-        {
-          icon: PersonAdd,
-          label: dict.member.auth.signUp.label,
-          query,
-          to: "/sign-up",
-        },
-      ];
+    : getMemberAuthLinkItems(dict, { redirectTo });
 
   return [
     { icon: Home, label: dict.home.label, to: "/" },
@@ -385,18 +369,20 @@ const NavTemporaryDrawer = ({
         );
       }
 
-      const { children, disabled, icon, label, onClick, query, to } = item;
+      const { children, disabled, icon, label, onClick, to } = item;
+      const [toPath, toSearchParams] = to?.split("?") ?? [];
+      const toSearch = toSearchParams ? `?${toSearchParams}` : "";
 
       const parentPrefix = parentPath === "/" ? "" : parentPath;
-      const basePath = to ? `${parentPrefix}${to}` : parentPath;
+      const basePath = toPath ? `${parentPrefix}${toPath}` : parentPath;
       const pathWithLang =
         basePath === "/" ? `/${lang}` : `/${lang}${basePath}`;
 
       const hasChildren = Boolean(children?.length);
       const href =
-        to && !hasChildren ? `${pathWithLang}${query || ""}` : undefined;
+        to && !hasChildren ? `${pathWithLang}${toSearch}` : undefined;
 
-      const itemKey = to || `${label}-${level}`;
+      const itemKey = toPath || `${label}-${level}`;
       const open = Boolean(hasChildren && openMap[itemKey]);
       const selected =
         pathname === pathWithLang || pathname.startsWith(`${pathWithLang}/`);

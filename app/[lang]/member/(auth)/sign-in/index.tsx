@@ -15,6 +15,7 @@ import GoogleButton from "@/components/GoogleButton";
 import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useI18n } from "@/context/i18n";
+
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -40,6 +41,7 @@ import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
+import { handleRedirectParams } from "@/utils/redirect";
 import { sendRequest } from "@/utils/fetcher";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -135,9 +137,6 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       return { ...prev, [name]: nextValue };
     });
   };
-
-  const handleRedirectParams = (path: string) =>
-    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -244,7 +243,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           />
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/forgot-password`)}
+            href={handleRedirectParams(`/${lang}/member/forgot-password`, redirect)}
             variant="body2"
           >
             {dict.member.auth.forgotPassword.label}
@@ -266,7 +265,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           {dict.member.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`)}
+            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>

@@ -55,6 +55,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { getDefaultCountryCode } from "@/utils/countries";
 import { interpolate } from "@/utils/i18n";
+import { handleRedirectParams } from "@/utils/redirect";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -208,13 +209,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     privacy: `{${LegalLinkType.Privacy}}`,
   });
 
-  const handleRedirectParams = (path: string) =>
-    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
-
-  const signUpHref = handleRedirectParams(`/${lang}/member/sign-up`);
+  const signUpHref = handleRedirectParams(`/${lang}/member/sign-up`, redirect);
 
   const handleBackToSignUpParams = (path: string) =>
-    `${path}?redirect=${encodeURIComponent(signUpHref)}`;
+    handleRedirectParams(path, signUpHref);
 
   const legalPlaceholders = Object.fromEntries(
     LEGAL_LINK_TYPES.map((type) => [
@@ -500,7 +498,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           <Typography variant="body2">{dict.member.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-in`)}
+            href={handleRedirectParams(`/${lang}/member/sign-in`, redirect)}
             variant="body2"
           >
             {dict.member.auth.signIn.label}

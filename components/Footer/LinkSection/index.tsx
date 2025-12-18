@@ -5,7 +5,9 @@ import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { useI18n, type I18nDict } from "@/context/i18n";
+import { useAuthStore } from "@/stores/useAuthStore";
 import type { RouteParams } from "@/types/routeParams";
+import { getMemberAuthLinkItems } from "@/utils/auth";
 import { Grid, Link as MuiLink, styled, Typography } from "@mui/material";
 
 interface FooterLink {
@@ -21,9 +23,11 @@ interface FooterLinkSectionData {
 const createFooterLinkSections = ({
   lang,
   dict,
+  isSignedIn,
 }: {
   lang: string;
   dict: I18nDict;
+  isSignedIn: boolean;
 }): FooterLinkSectionData[] => [
   {
     links: [
@@ -35,18 +39,19 @@ const createFooterLinkSections = ({
     title: dict.home.footer.sections.order.title,
   },
   {
-    links: [
-      {
-        href: `/${lang}/member/sign-in?redirect=${encodeURIComponent(
-          `/${lang}`,
-        )}`,
-        label: dict.member.auth.signIn.label,
-      },
-      {
-        href: `/${lang}/member/my-account`,
-        label: dict.member.myAccount.title,
-      },
-    ],
+    links: isSignedIn
+      ? [
+          {
+            href: `/${lang}/member/my-account`,
+            label: dict.member.myAccount.title,
+          },
+        ]
+      : getMemberAuthLinkItems(dict, { redirectTo: `/${lang}` }).map(
+          ({ label, to }) => ({
+            href: `/${lang}/member${to}`,
+            label,
+          }),
+        ),
     title: dict.home.footer.sections.member.title,
   },
   {
@@ -79,7 +84,9 @@ const LinkSection = () => {
   const dict = useI18n();
   const { lang } = useParams<RouteParams>();
 
-  const linkSections = createFooterLinkSections({ lang, dict });
+  const { isSignedIn } = useAuthStore();
+
+  const linkSections = createFooterLinkSections({ lang, dict, isSignedIn });
 
   return (
     <>

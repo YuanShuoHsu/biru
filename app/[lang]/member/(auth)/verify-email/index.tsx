@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
+import { handleRedirectParams } from "@/utils/redirect";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -54,9 +55,6 @@ const MemberAuthVerifyEmail = ({
   redirect,
 }: MemberAuthVerifyEmailProps) => {
   const dict = useI18n();
-
-  const handleRedirectParams = (path: string) =>
-    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
     useSWRMutation<unknown, Error, string, { email: string }>(
@@ -121,7 +119,7 @@ const MemberAuthVerifyEmail = ({
         <Button
           component={NextLink}
           fullWidth
-          href={handleRedirectParams(`/${lang}/member/sign-in`)}
+          href={handleRedirectParams(`/${lang}/member/sign-in`, redirect)}
           size="large"
           variant="outlined"
         >
@@ -130,7 +128,7 @@ const MemberAuthVerifyEmail = ({
         <Typography color="text.secondary" textAlign="center" variant="body2">
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`)}
+            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>

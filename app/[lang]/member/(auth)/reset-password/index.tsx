@@ -27,6 +27,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
+import { handleRedirectParams } from "@/utils/redirect";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -91,9 +92,6 @@ const MemberAuthResetPassword = ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
-
-  const handleRedirectParams = (path: string) =>
-    redirect ? `${path}?redirect=${encodeURIComponent(redirect)}` : path;
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -211,7 +209,7 @@ const MemberAuthResetPassword = ({
           {dict.member.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`)}
+            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>
