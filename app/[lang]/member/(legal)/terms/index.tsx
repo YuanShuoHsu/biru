@@ -28,7 +28,6 @@ interface TermsContent {
   tocTitle: string;
   sections: TermsSection[];
   contact: string;
-  closingNote?: string;
 }
 
 const termsByLocale: Record<Locale, TermsContent> = {
@@ -132,8 +131,6 @@ const termsByLocale: Record<Locale, TermsContent> = {
       },
     ],
     contact: "如對本條款有任何疑問，請透過客服信箱或門市與我們聯繫。",
-    closingNote:
-      "提示：本頁為一般性條款範本，若您需符合特定法規或商業模式，建議諮詢專業法律意見。",
   },
   [Locale.ZhCN]: {
     title: "Biru Coffee 会员服务条款",
@@ -235,8 +232,6 @@ const termsByLocale: Record<Locale, TermsContent> = {
       },
     ],
     contact: "如对本条款有任何疑问，请通过客服邮箱或门店与我们联系。",
-    closingNote:
-      "提示：本页为通用条款范本，如需满足特定法规或商业模式，建议咨询专业法律意见。",
   },
   [Locale.En]: {
     title: "Biru Coffee Terms of Service",
@@ -339,8 +334,6 @@ const termsByLocale: Record<Locale, TermsContent> = {
     ],
     contact:
       "If you have questions about these Terms, please contact us via our customer support email or at our stores.",
-    closingNote:
-      "Note: This page is a general template. If you need to meet specific regulatory or business requirements, consider seeking professional legal advice.",
   },
   [Locale.Ja]: {
     title: "Biru Coffee 利用規約",
@@ -443,8 +436,6 @@ const termsByLocale: Record<Locale, TermsContent> = {
     ],
     contact:
       "本規約に関するお問い合わせは、サポート窓口または店舗までご連絡ください。",
-    closingNote:
-      "注：本ページは一般的な雛形です。特定の法令や事業要件がある場合は、専門家への相談をご検討ください。",
   },
   [Locale.Ko]: {
     title: "Biru Coffee 서비스 이용약관",
@@ -547,8 +538,6 @@ const termsByLocale: Record<Locale, TermsContent> = {
     ],
     contact:
       "본 약관에 관한 문의는 고객지원 이메일 또는 매장을 통해 연락해 주세요.",
-    closingNote:
-      "안내: 본 페이지는 일반적인 템플릿입니다. 특정 규제 또는 사업 요건이 있다면 전문가 자문을 권장합니다.",
   },
 };
 
@@ -638,11 +627,6 @@ const MemberLegalTerms = ({ lang }: MemberLegalTermsProps) => {
       <Typography color="text.secondary" variant="body2">
         {content.contact}
       </Typography>
-      {content.closingNote ? (
-        <Typography color="text.secondary" variant="caption">
-          {content.closingNote}
-        </Typography>
-      ) : null}
     </Box>
   );
 };

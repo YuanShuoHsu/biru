@@ -28,7 +28,6 @@ interface PrivacyContent {
   tocTitle: string;
   sections: PrivacySection[];
   contact: string;
-  closingNote?: string;
 }
 
 const privacyByLocale: Record<Locale, PrivacyContent> = {
@@ -120,8 +119,6 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     ],
     contact:
       "如有任何隱私相關疑問或權利行使需求，請透過客服信箱或門市與我們聯繫。",
-    closingNote:
-      "提示：本頁為一般性政策說明，若您需符合特定法規或商業情境，建議諮詢專業法律意見。",
   },
   [Locale.ZhCN]: {
     title: "Biru Coffee 隐私权政策",
@@ -211,8 +208,6 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     ],
     contact:
       "如对本政策有任何疑问或权利行使需求，请通过客服邮箱或门店与我们联系。",
-    closingNote:
-      "提示：本页为通用政策说明，如需满足特定法规或商业场景，建议咨询专业法律意见。",
   },
   [Locale.En]: {
     title: "Biru Coffee Privacy Policy",
@@ -302,8 +297,6 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     ],
     contact:
       "Questions or requests? Contact us via customer support email or in-store.",
-    closingNote:
-      "Note: This page is a general template. If you need to meet specific regulatory or business requirements, consider seeking professional legal advice.",
   },
   [Locale.Ja]: {
     title: "Biru Coffee プライバシーポリシー",
@@ -393,8 +386,6 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     ],
     contact:
       "プライバシーに関するお問い合わせや権利行使のご希望は、カスタマーサポートまたは店舗までご連絡ください。",
-    closingNote:
-      "注：本ページは一般的な雛形です。特定の法令や事業要件がある場合は、専門家への相談をご検討ください。",
   },
   [Locale.Ko]: {
     title: "Biru Coffee 개인정보 처리방침",
@@ -484,8 +475,6 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     ],
     contact:
       "개인정보 관련 문의 또는 권리 행사는 고객지원 이메일 또는 매장을 통해 연락해 주세요.",
-    closingNote:
-      "안내: 본 페이지는 일반적인 템플릿입니다. 특정 규제 또는 사업 요건이 있다면 전문가 자문을 권장합니다.",
   },
 };
 
@@ -575,11 +564,6 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
       <Typography color="text.secondary" variant="body2">
         {content.contact}
       </Typography>
-      {content.closingNote ? (
-        <Typography color="text.secondary" variant="caption">
-          {content.closingNote}
-        </Typography>
-      ) : null}
     </Box>
   );
 };
