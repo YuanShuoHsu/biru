@@ -3,14 +3,15 @@
 
 "use client";
 
-import { SnackbarProvider } from "notistack";
+import { closeSnackbar, SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
 import { dayjsLocaleMap } from "@/constants/locale";
 
 import type { I18nDict } from "@/context/i18n";
 
-import { CssBaseline } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { CssBaseline, IconButton } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 import { ThemeProvider } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -47,6 +48,16 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
         <CssBaseline />
         <I18nProvider dict={dict}>
           <SnackbarProvider
+            action={(snackbarId) => (
+              <IconButton
+                aria-label="close"
+                color="inherit"
+                onClick={() => closeSnackbar(snackbarId)}
+                size="small"
+              >
+                <Close fontSize="small" />
+              </IconButton>
+            )}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
             maxSnack={3}
           >
