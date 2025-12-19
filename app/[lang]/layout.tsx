@@ -55,7 +55,11 @@ export default async function RootLayout({
   const fallback = { "/api/stores": stores };
 
   return (
-    <html lang={langCode} suppressHydrationWarning>
+    <html
+      data-scroll-behavior="smooth"
+      lang={langCode}
+      suppressHydrationWarning
+    >
       {/* <html lang={lang} suppressHydrationWarning> */}
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
