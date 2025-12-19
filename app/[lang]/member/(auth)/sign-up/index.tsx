@@ -334,6 +334,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           value={form.birthDate ? dayjs(form.birthDate) : null}
           yearsOrder="desc"
         />
+        {/* Incorrect use of <label for=FORM_ELEMENT> */}
         <TextField
           autoComplete="sex"
           error={!!state?.errors.gender}
