@@ -4,6 +4,12 @@
 // https://mui.com/x/react-date-pickers/quickstart/#typescript
 // https://mui.com/x/react-date-pickers/quickstart/#date-value-types
 
+import {
+  APP_BAR_TOOLBAR_HEIGHT,
+  APP_BAR_TOOLBAR_HEIGHT_SM_UP,
+  APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
+} from "@/constants/appBar";
+
 import { createTheme } from "@mui/material/styles";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 import type {} from "@mui/x-date-pickers/AdapterDayjs";
@@ -73,6 +79,21 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: (theme) => ({
+        ".notistack-container-top-right-offset": {
+          top: `${APP_BAR_TOOLBAR_HEIGHT}px !important`,
+
+          [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
+            top: `${APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE}px !important`,
+          },
+
+          [theme.breakpoints.up("sm")]: {
+            top: `${APP_BAR_TOOLBAR_HEIGHT_SM_UP}px !important`,
+          },
+        },
+      }),
+    },
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({

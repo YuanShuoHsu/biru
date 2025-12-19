@@ -59,6 +59,10 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
               </IconButton>
             )}
             anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            classes={{
+              containerAnchorOriginTopRight:
+                "notistack-container-top-right-offset",
+            }}
             maxSnack={3}
           >
             <SWRProvider fallback={fallback}>

@@ -10,6 +10,11 @@ import { useState } from "react";
 import ResponsiveGrid from "./ResponsiveGrid";
 import TabPanel from "./TabPanel";
 
+import {
+  APP_BAR_TOOLBAR_HEIGHT,
+  APP_BAR_TOOLBAR_HEIGHT_SM_UP,
+  APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
+} from "@/constants/appBar";
 import { menu } from "@/constants/menu";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 import {
@@ -32,16 +37,23 @@ const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
 })<{ trigger: boolean }>(({ theme, trigger }) => ({
   position: "sticky",
+  top: APP_BAR_TOOLBAR_HEIGHT,
+  transform: trigger
+    ? `translateY(-${APP_BAR_TOOLBAR_HEIGHT}px)`
+    : "translateY(0)",
 
-  top: 56,
-  transform: trigger ? "translateY(-56px)" : "translateY(0)",
   [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-    top: 48,
-    transform: trigger ? "translateY(-48px)" : "translateY(0)",
+    top: APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
+    transform: trigger
+      ? `translateY(-${APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE}px)`
+      : "translateY(0)",
   },
+
   [theme.breakpoints.up("sm")]: {
-    top: 64,
-    transform: trigger ? "translateY(-64px)" : "translateY(0)",
+    top: APP_BAR_TOOLBAR_HEIGHT_SM_UP,
+    transform: trigger
+      ? `translateY(-${APP_BAR_TOOLBAR_HEIGHT_SM_UP}px)`
+      : "translateY(0)",
   },
 
   backgroundColor: theme.vars.palette.background.paper,
