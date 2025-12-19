@@ -6,20 +6,13 @@
 
 import { z } from "zod";
 
-import { createSignupFormSchema, type FormState } from "./definitions";
-
-import { getDictionary } from "@/app/[lang]/dictionaries";
-
-import { LocaleCode } from "@/types/locale";
+import type { createSignupFormSchema, FormState } from "./definitions";
 
 export const signup = async (
-  lang: string,
+  signupFormSchema: ReturnType<typeof createSignupFormSchema>,
   _state: FormState,
   formData: FormData,
 ) => {
-  const dict = await getDictionary(lang as LocaleCode);
-  const signupFormSchema = createSignupFormSchema(dict);
-
   const validatedFields = signupFormSchema.safeParse({
     lastName: formData.get("lastName"),
     firstName: formData.get("firstName"),

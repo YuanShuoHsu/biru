@@ -11,6 +11,7 @@ import NextLink from "next/link";
 import { Fragment, useActionState, useState } from "react";
 
 import { signup } from "./actions";
+import { createSignupFormSchema, type FormState } from "./definitions";
 
 import CountrySelect from "@/components/CountrySelect";
 import FormCard from "@/components/FormCard";
@@ -110,12 +111,13 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: false,
   });
 
-  const [state, formAction, pending] = useActionState(
-    signup.bind(null, lang),
+  const dict = useI18n();
+  const signupFormSchema = createSignupFormSchema(dict);
+
+  const [state, formAction, pending] = useActionState<FormState, FormData>(
+    signup.bind(null, signupFormSchema),
     undefined,
   );
-
-  const dict = useI18n();
 
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
 
@@ -296,9 +298,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
-            error={!!state?.errors.lastName}
+            error={!!state?.errors?.lastName}
             fullWidth
-            helperText={state?.errors.lastName?.join("\n")}
+            helperText={state?.errors?.lastName?.join("\n")}
             label={dict.member.auth.lastName}
             name="lastName"
             onChange={handleChange}
@@ -306,9 +308,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           />
           <TextField
             autoComplete="given-name"
-            error={!!state?.errors.firstName}
+            error={!!state?.errors?.firstName}
             fullWidth
-            helperText={state?.errors.firstName?.join("\n")}
+            helperText={state?.errors?.firstName?.join("\n")}
             label={dict.member.auth.firstName}
             name="firstName"
             onChange={handleChange}
@@ -326,8 +328,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           slotProps={{
             textField: {
               autoComplete: "bday",
-              error: !!state?.errors.birthDate,
-              helperText: state?.errors.birthDate?.join("\n"),
+              error: !!state?.errors?.birthDate,
+              helperText: state?.errors?.birthDate?.join("\n"),
               required: true,
             },
           }}
@@ -337,10 +339,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         {/* Incorrect use of <label for=FORM_ELEMENT> */}
         <TextField
           autoComplete="sex"
-          error={!!state?.errors.gender}
+          error={!!state?.errors?.gender}
           fullWidth
           label={dict.member.auth.gender.label}
-          helperText={state?.errors.gender?.join("\n")}
+          helperText={state?.errors?.gender?.join("\n")}
           name="gender"
           onChange={handleChange}
           required
@@ -355,9 +357,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         </TextField>
         <TextField
           autoComplete="email"
-          error={!!state?.errors.email}
+          error={!!state?.errors?.email}
           fullWidth
-          helperText={state?.errors.email?.join("\n")}
+          helperText={state?.errors?.email?.join("\n")}
           label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
@@ -446,9 +448,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           <Grid size={{ xs: 6, sm: 8 }}>
             <TextField
               autoComplete="tel"
-              error={!!state?.errors.phone}
+              error={!!state?.errors?.phone}
               fullWidth
-              helperText={state?.errors.phone?.join("\n")}
+              helperText={state?.errors?.phone?.join("\n")}
               inputMode="tel"
               label={dict.member.auth.phone}
               name="phone"
