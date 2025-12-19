@@ -37,7 +37,7 @@
       "copyright": "Copyright © {year} {brand}.",
       "newsletter": {
         "action": "訂閱",
-        "emailLabel": "你的電子郵件",
+        "emailLabel": "電子郵件",
         "invalidEmail": "請輸入有效的電子郵件。",
         "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
         "success": "訂閱成功（示意）。",

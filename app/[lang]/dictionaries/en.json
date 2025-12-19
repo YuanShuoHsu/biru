@@ -37,7 +37,7 @@
       "copyright": "Copyright © {year} {brand}.",
       "newsletter": {
         "action": "Subscribe",
-        "emailLabel": "Your email",
+        "emailLabel": "Email",
         "invalidEmail": "Please enter a valid email.",
         "subtitle": "Join our newsletter for regular updates. No spam ever.",
         "success": "Subscribed (demo).",

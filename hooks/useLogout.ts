@@ -14,6 +14,7 @@ export const useLogout = () => {
   const { clearAuth, setIsAuthLoading } = useAuthStore();
 
   const dict = useI18n();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const { isMutating, trigger } = useSWRMutation<

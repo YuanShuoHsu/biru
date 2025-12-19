@@ -37,8 +37,8 @@
       "copyright": "Copyright © {year} {brand}.",
       "newsletter": {
         "action": "订阅",
-        "emailLabel": "你的邮箱",
-        "invalidEmail": "请输入有效的电子邮箱。",
+        "emailLabel": "电子邮件",
+        "invalidEmail": "请输入有效的电子邮件。",
         "subtitle": "订阅我们的邮件，定期获取更新。绝不发送垃圾邮件。",
         "success": "订阅成功（示意）。",
         "title": "保持最新资讯"
@@ -128,7 +128,7 @@
       "actions": {
         "profile": "查看个人资料",
         "settings": "账号设置",
-        "verifyEmail": "验证邮箱",
+        "verifyEmail": "验证电子邮件",
         "resetPassword": "重置密码",
         "terms": "服务条款",
         "privacy": "隐私政策"
