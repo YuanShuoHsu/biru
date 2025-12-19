@@ -4,11 +4,14 @@
 
 "use client";
 
-import { enqueueSnackbar } from "notistack";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import React, { startTransition, useEffect, useState } from "react";
+import { enqueueSnackbar } from "notistack";
+import { startTransition, useEffect, useState } from "react";
 import useSWRMutation from "swr/mutation";
+import { z } from "zod";
+
+import { type FormState, SigninFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
@@ -42,8 +45,8 @@ import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
-import { handleRedirectParams } from "@/utils/redirect";
 import { sendRequest } from "@/utils/fetcher";
+import { handleRedirectParams } from "@/utils/redirect";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -78,6 +81,8 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   });
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const [state, setState] = useState<FormState>();
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore();
@@ -142,6 +147,14 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
+    const validatedFields = SigninFormSchema.safeParse(form);
+
+    if (!validatedFields.success) {
+      const { fieldErrors } = z.flattenError(validatedFields.error);
+      setState({ errors: fieldErrors });
+      return;
+    }
+
     setIsAuthLoading(true);
 
     try {
@@ -178,10 +191,10 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
         <GoogleButton action="signIn" href="" />
         <Divider>{dict.member.auth.or}</Divider>
         <TextField
-          autoComplete="username"
-          // error={!!state?.errors?.email}
+          autoComplete="email"
+          error={!!state?.errors?.email}
           fullWidth
-          // helperText={state?.errors?.email}
+          helperText={state?.errors?.email?.join("\n")}
           label={dict.member.auth.email}
           name="email"
           onChange={handleChange}
@@ -191,9 +204,9 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
         />
         <TextField
           autoComplete="current-password"
-          // error={!!state?.errors?.password}
+          error={!!state?.errors?.password}
           fullWidth
-          // helperText={state?.errors?.email}
+          helperText={state?.errors?.password?.join("\n")}
           label={dict.member.auth.password}
           name="password"
           onChange={handleChange}
