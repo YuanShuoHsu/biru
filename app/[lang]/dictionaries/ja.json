@@ -197,12 +197,6 @@
       "signIn": { "label": "ログイン", "success": "ログインしました" },
       "signOut": { "label": "ログアウト", "success": "ログアウトしました" },
       "signUp": { "label": "新規登録" },
-      "passwordRules": {
-        "minLength": "8文字以上の長さ",
-        "letter": "英字を1文字以上含む",
-        "number": "数字を1文字以上含む",
-        "match": "パスワードと一致"
-      },
       "verifyEmail": {
         "backToSignIn": "ログインへ戻る",
         "checkSpam": "メールが届かない場合は迷惑メールフォルダを確認するか、少し待ってから再送してください。",
@@ -254,6 +248,17 @@
           "topSold": "人気商品"
         }
       }
+    }
+  },
+  "validation": {
+    "email": {
+      "invalid": "有効なメールアドレスを入力してください。"
+    },
+    "password": {
+      "letter": "英字を1文字以上含む",
+      "match": "パスワードと一致",
+      "minLength": "8文字以上の長さ",
+      "number": "数字を1文字以上含む"
     }
   }
 }

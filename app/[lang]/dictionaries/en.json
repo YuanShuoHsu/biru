@@ -193,12 +193,6 @@
       "signIn": { "label": "Sign in", "success": "Signed in" },
       "signOut": { "label": "Sign out", "success": "Signed out" },
       "signUp": { "label": "Sign up" },
-      "passwordRules": {
-        "minLength": "Be at least 8 characters long",
-        "letter": "Contain at least one letter",
-        "number": "Contain at least one number",
-        "match": "Matches the password"
-      },
       "verifyEmail": {
         "backToSignIn": "Back to sign in",
         "checkSpam": "Didn't get it? Check spam or try resending in a moment.",
@@ -253,6 +247,17 @@
           "topSold": "Best Sellers"
         }
       }
+    }
+  },
+  "validation": {
+    "email": {
+      "invalid": "Please enter a valid email."
+    },
+    "password": {
+      "letter": "Contain at least one letter.",
+      "match": "Matches the password",
+      "minLength": "Be at least 8 characters long",
+      "number": "Contain at least one number."
     }
   }
 }

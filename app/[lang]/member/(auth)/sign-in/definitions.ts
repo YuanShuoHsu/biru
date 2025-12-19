@@ -2,16 +2,19 @@
 
 import * as z from "zod";
 
-export const SigninFormSchema = z.object({
-  email: z.email({ error: "Please enter a valid email." }).trim(),
-  password: z
-    .string()
-    .min(8, { error: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { error: "Contain at least one letter." })
-    .regex(/[0-9]/, { error: "Contain at least one number." })
-    .trim(),
-  rememberMe: z.boolean(),
-});
+import type { I18nDict } from "@/context/i18n";
+
+export const createSigninFormSchema = (dict: I18nDict) =>
+  z.object({
+    email: z.email({ error: dict.validation.email.invalid }).trim(),
+    password: z
+      .string()
+      .min(8, { error: dict.validation.password.minLength })
+      .regex(/[a-zA-Z]/, { error: dict.validation.password.letter })
+      .regex(/[0-9]/, { error: dict.validation.password.number })
+      .trim(),
+    rememberMe: z.boolean(),
+  });
 
 export type FormState =
   | {

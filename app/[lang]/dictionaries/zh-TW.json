@@ -197,12 +197,6 @@
       "signIn": { "label": "登入", "success": "登入成功" },
       "signOut": { "label": "登出", "success": "已登出" },
       "signUp": { "label": "註冊" },
-      "passwordRules": {
-        "minLength": "至少 8 個字元長度",
-        "letter": "包含至少一個英文字母",
-        "number": "包含至少一個數字",
-        "match": "與密碼一致"
-      },
       "verifyEmail": {
         "backToSignIn": "返回登入",
         "checkSpam": "沒收到？請檢查垃圾郵件或稍後再試。",
@@ -254,6 +248,17 @@
           "topSold": "人氣商品"
         }
       }
+    }
+  },
+  "validation": {
+    "email": {
+      "invalid": "請輸入有效的電子郵件。"
+    },
+    "password": {
+      "letter": "包含至少一個英文字母",
+      "match": "與密碼一致",
+      "minLength": "至少 8 個字元長度",
+      "number": "包含至少一個數字"
     }
   }
 }

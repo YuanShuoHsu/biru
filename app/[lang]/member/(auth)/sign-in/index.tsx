@@ -7,11 +7,11 @@
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { startTransition, useEffect, useState } from "react";
+import { startTransition, useEffect, useMemo, useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { z } from "zod";
 
-import { type FormState, SigninFormSchema } from "./definitions";
+import { createSigninFormSchema, type FormState } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
@@ -91,6 +91,8 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
 
   const dict = useI18n();
 
+  const signinFormSchema = useMemo(() => createSigninFormSchema(dict), [dict]);
+
   const { isMutating: isMutatingAccessToken, trigger: triggerAccessToken } =
     useSWRMutation<AuthResponseDto, Error, string, LoginDto>(
       "/api/auth/login",
@@ -147,7 +149,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const validatedFields = SigninFormSchema.safeParse(form);
+    const validatedFields = signinFormSchema.safeParse(form);
 
     if (!validatedFields.success) {
       const { fieldErrors } = z.flattenError(validatedFields.error);

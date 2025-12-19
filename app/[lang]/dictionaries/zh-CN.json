@@ -197,12 +197,6 @@
       "signIn": { "label": "登录", "success": "登录成功" },
       "signOut": { "label": "登出", "success": "已登出" },
       "signUp": { "label": "注册" },
-      "passwordRules": {
-        "minLength": "至少 8 个字符长度",
-        "letter": "包含至少一个英文字母",
-        "number": "包含至少一个数字",
-        "match": "与密码一致"
-      },
       "verifyEmail": {
         "backToSignIn": "返回登录",
         "checkSpam": "没收到？请检查垃圾邮件或稍后再试。",
@@ -254,6 +248,17 @@
           "topSold": "人气商品"
         }
       }
+    }
+  },
+  "validation": {
+    "email": {
+      "invalid": "请输入有效的电子邮件。"
+    },
+    "password": {
+      "letter": "包含至少一个英文字母",
+      "match": "与密码一致",
+      "minLength": "至少 8 个字符长度",
+      "number": "包含至少一个数字"
     }
   }
 }

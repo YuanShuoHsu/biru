@@ -197,12 +197,6 @@
       "signIn": { "label": "로그인", "success": "로그인되었습니다" },
       "signOut": { "label": "로그아웃", "success": "로그아웃되었습니다" },
       "signUp": { "label": "회원가입" },
-      "passwordRules": {
-        "minLength": "8자 이상 길이",
-        "letter": "영문자를 최소 1개 포함",
-        "number": "숫자를 최소 1개 포함",
-        "match": "비밀번호와 일치"
-      },
       "verifyEmail": {
         "backToSignIn": "로그인으로 돌아가기",
         "checkSpam": "메일이 없다면 스팸함을 확인하거나 잠시 후 다시 시도해 주세요.",
@@ -254,6 +248,17 @@
           "topSold": "인기 상품"
         }
       }
+    }
+  },
+  "validation": {
+    "email": {
+      "invalid": "올바른 이메일을 입력해 주세요."
+    },
+    "password": {
+      "letter": "영문자를 최소 1개 포함",
+      "match": "비밀번호와 일치",
+      "minLength": "8자 이상 길이",
+      "number": "숫자를 최소 1개 포함"
     }
   }
 }

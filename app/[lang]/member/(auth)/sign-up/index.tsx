@@ -130,17 +130,17 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     {
       key: "minLength",
       passed: form.password.length >= 8,
-      label: dict.member.auth.passwordRules.minLength,
+      label: dict.validation.password.minLength,
     },
     {
       key: "letter",
       passed: /[a-zA-Z]/.test(form.password),
-      label: dict.member.auth.passwordRules.letter,
+      label: dict.validation.password.letter,
     },
     {
       key: "number",
       passed: /\d/.test(form.password),
-      label: dict.member.auth.passwordRules.number,
+      label: dict.validation.password.number,
     },
   ];
 
@@ -151,7 +151,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     {
       key: "match",
       passed: passwordsMatch,
-      label: dict.member.auth.passwordRules.match,
+      label: dict.validation.password.match,
     },
   ];
 
