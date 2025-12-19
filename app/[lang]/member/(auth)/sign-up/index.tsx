@@ -110,7 +110,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: false,
   });
 
-  const [state, formAction, pending] = useActionState(signup, undefined);
+  const [state, formAction, pending] = useActionState(
+    signup.bind(null, lang),
+    undefined,
+  );
 
   const dict = useI18n();
 
