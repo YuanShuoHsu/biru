@@ -99,12 +99,13 @@ const MemberAuthForgotPassword = ({
         <TextField
           autoComplete="email"
           fullWidth
-          label={dict.member.auth.email}
+          label={dict.member.auth.email.label}
           name="email"
           onChange={handleChange}
           required
           type="email"
           value={form.email}
+          placeholder={dict.member.auth.email.placeholder}
         />
       </StyledCardContent>
       <StyledCardActions disableSpacing>

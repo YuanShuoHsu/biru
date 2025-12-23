@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { startTransition, useEffect, useMemo, useState } from "react";
 import useSWRMutation from "swr/mutation";
-import { z } from "zod";
+import * as z from "zod";
 
 import { createSigninFormSchema, type FormState } from "./definitions";
 
@@ -154,6 +154,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
     if (!validatedFields.success) {
       const { fieldErrors } = z.flattenError(validatedFields.error);
       setState({ errors: fieldErrors });
+
       return;
     }
 
@@ -197,19 +198,20 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           error={!!state?.errors?.email}
           fullWidth
           helperText={state?.errors?.email?.join("\n")}
-          label={dict.member.auth.email}
+          label={dict.member.auth.email.label}
           name="email"
           onChange={handleChange}
           required
           type="email"
           value={form.email}
+          placeholder={dict.member.auth.email.placeholder}
         />
         <TextField
           autoComplete="current-password"
           error={!!state?.errors?.password}
           fullWidth
           helperText={state?.errors?.password?.join("\n")}
-          label={dict.member.auth.password}
+          label={dict.member.auth.password.label}
           name="password"
           onChange={handleChange}
           required
@@ -236,6 +238,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           }}
           type={showPassword ? "text" : "password"}
           value={form.password}
+          placeholder={dict.member.auth.password.placeholder}
         />
         <Stack
           flexDirection="row"

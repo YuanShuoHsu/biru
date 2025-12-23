@@ -157,17 +157,30 @@
       "verified": "已验证"
     },
     "auth": {
-      "birthDate": "出生日期",
-      "confirmPassword": "确认密码",
+      "birthDate": {
+        "label": "出生日期",
+        "placeholder": "请选择出生日期"
+      },
+      "confirmPassword": {
+        "label": "确认密码",
+        "placeholder": "请再次输入密码"
+      },
       "confirmNewPassword": "确认新密码",
       "chooseCountry": "选择国家",
       "countryCode": "国家码",
-      "email": "电子邮件",
+      "email": {
+        "label": "电子邮件",
+        "placeholder": "请输入电子邮件"
+      },
       "emailUpdates": "我想通过邮件接收最新资讯",
-      "firstName": "名字",
+      "firstName": {
+        "label": "名字",
+        "placeholder": "请输入名字"
+      },
       "forgotPassword": { "label": "忘记密码" },
       "gender": {
         "label": "性别",
+        "placeholder": "请选择性别",
         "options": {
           "female": "女性",
           "male": "男性",
@@ -180,11 +193,17 @@
       "hideConfirmNewPassword": "隐藏确认新密码",
       "hideNewPassword": "隐藏新密码",
       "hidePassword": "隐藏密码",
-      "lastName": "姓氏（选填）",
+      "lastName": {
+        "label": "姓氏（选填）",
+        "placeholder": "请输入姓氏"
+      },
       "newPassword": "新密码",
       "noAccount": "还没有账号？",
       "or": "或",
-      "password": "密码",
+      "password": {
+        "label": "密码",
+        "placeholder": "请输入密码"
+      },
       "phone": "电话号码",
       "rememberMe": "记住我",
       "rememberedPassword": "还记得密码？",

@@ -365,7 +365,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                 <Stack gap={2}>
                   <InfoRow
                     icon={MailOutline}
-                    label={dict.member.auth.email}
+                    label={dict.member.auth.email.label}
                     status={verificationChip(profile.emailVerified)}
                     value={profile.email || dict.common.empty}
                   />

@@ -157,17 +157,30 @@
       "verified": "認証済み"
     },
     "auth": {
-      "birthDate": "生年月日",
-      "confirmPassword": "パスワードの確認",
+      "birthDate": {
+        "label": "生年月日",
+        "placeholder": "生年月日を選択してください"
+      },
+      "confirmPassword": {
+        "label": "パスワードの確認",
+        "placeholder": "パスワードを再入力してください"
+      },
       "confirmNewPassword": "新しいパスワードの確認",
       "chooseCountry": "国を選択",
       "countryCode": "国コード",
-      "email": "メールアドレス",
+      "email": {
+        "label": "メールアドレス",
+        "placeholder": "メールアドレスを入力してください"
+      },
       "emailUpdates": "メールで最新情報を受け取りたい",
-      "firstName": "名",
+      "firstName": {
+        "label": "名",
+        "placeholder": "名を入力してください"
+      },
       "forgotPassword": { "label": "パスワードをお忘れですか" },
       "gender": {
         "label": "性別",
+        "placeholder": "性別を選択してください",
         "options": {
           "female": "女性",
           "male": "男性",
@@ -180,11 +193,17 @@
       "hideConfirmNewPassword": "確認用パスワードを非表示",
       "hideNewPassword": "新しいパスワードを非表示",
       "hidePassword": "パスワードを非表示",
-      "lastName": "姓（任意）",
+      "lastName": {
+        "label": "姓（任意）",
+        "placeholder": "姓を入力してください"
+      },
       "newPassword": "新しいパスワード",
       "noAccount": "アカウントをお持ちでない方",
       "or": "または",
-      "password": "パスワード",
+      "password": {
+        "label": "パスワード",
+        "placeholder": "パスワードを入力してください"
+      },
       "phone": "電話番号",
       "rememberMe": "ログイン状態を保持",
       "rememberedPassword": "パスワードを覚えていますか？",

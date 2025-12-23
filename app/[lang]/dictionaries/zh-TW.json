@@ -157,17 +157,30 @@
       "verified": "已驗證"
     },
     "auth": {
-      "birthDate": "出生日期",
-      "confirmPassword": "確認密碼",
+      "birthDate": {
+        "label": "出生日期",
+        "placeholder": "請選擇出生日期"
+      },
+      "confirmPassword": {
+        "label": "確認密碼",
+        "placeholder": "請再次輸入密碼"
+      },
       "confirmNewPassword": "確認新密碼",
       "chooseCountry": "選擇國家",
       "countryCode": "國碼",
-      "email": "電子郵件",
+      "email": {
+        "label": "電子郵件",
+        "placeholder": "請輸入電子郵件"
+      },
       "emailUpdates": "我想透過電子郵件接收最新資訊",
-      "firstName": "名字",
+      "firstName": {
+        "label": "名字",
+        "placeholder": "請輸入名字"
+      },
       "forgotPassword": { "label": "忘記密碼" },
       "gender": {
         "label": "性別",
+        "placeholder": "請選擇性別",
         "options": {
           "female": "女性",
           "male": "男性",
@@ -180,11 +193,17 @@
       "hideConfirmNewPassword": "隱藏確認新密碼",
       "hideNewPassword": "隱藏新密碼",
       "hidePassword": "隱藏密碼",
-      "lastName": "姓氏（選填）",
+      "lastName": {
+        "label": "姓氏（選填）",
+        "placeholder": "請輸入姓氏"
+      },
       "newPassword": "新密碼",
       "noAccount": "還沒有帳號？",
       "or": "或",
-      "password": "密碼",
+      "password": {
+        "label": "密碼",
+        "placeholder": "請輸入密碼"
+      },
       "phone": "電話號碼",
       "rememberMe": "記住我",
       "rememberedPassword": "還記得密碼？",

@@ -8,9 +8,11 @@
 
 import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
-import { Fragment, useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Fragment, useState } from "react";
+import useSWRMutation from "swr/mutation";
+import * as z from "zod";
 
-import { signup } from "./actions";
 import { createSignupFormSchema, type FormState } from "./definitions";
 
 import CountrySelect from "@/components/CountrySelect";
@@ -54,7 +56,12 @@ import {
 import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import { useAuthStore } from "@/stores/useAuthStore";
+
+import { UserResponseDto } from "@/types/users/user-response.dto";
+
 import { getDefaultCountryCode } from "@/utils/countries";
+import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleRedirectParams } from "@/utils/redirect";
 
@@ -85,6 +92,20 @@ interface PasswordRule {
   passed: boolean;
   label: string;
 }
+
+interface SignUpFormData {
+  lastName: string;
+  firstName: string;
+  birthDate: string;
+  gender: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+  countryCode: string;
+  phone: string;
+  isSubscribed: boolean;
+}
+
 interface MemberAuthSignUpProps {
   lang: string;
   redirect?: string;
@@ -93,7 +114,7 @@ interface MemberAuthSignUpProps {
 const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const defaultCountryCode = getDefaultCountryCode(lang);
 
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<SignUpFormData>({
     lastName: "",
     firstName: "",
     birthDate: "",
@@ -103,7 +124,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: "",
     countryCode: defaultCountryCode,
     phone: "",
-    emailUpdates: true,
+    isSubscribed: true,
   });
 
   const [showPassword, setShowPassword] = useState({
@@ -111,12 +132,20 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     confirmPassword: false,
   });
 
+  const [isGenderFocused, setIsGenderFocused] = useState(false);
+
+  const [state, setState] = useState<FormState>();
+
+  const { setIsAuthLoading } = useAuthStore();
+
   const dict = useI18n();
   const signupFormSchema = createSignupFormSchema(dict);
 
-  const [state, formAction, pending] = useActionState<FormState, FormData>(
-    signup.bind(null, signupFormSchema),
-    undefined,
+  const router = useRouter();
+
+  const { isMutating, trigger } = useSWRMutation(
+    "/api/users",
+    sendRequest<UserResponseDto, SignUpFormData>({ credentials: "include" }),
   );
 
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
@@ -278,8 +307,36 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const handleCountryCodeChange = (code: string) =>
     setForm((prev) => ({ ...prev, countryCode: code }));
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const validatedFields = signupFormSchema.safeParse(form);
+
+    if (!validatedFields.success) {
+      const { fieldErrors } = z.flattenError(validatedFields.error);
+      setState({ errors: fieldErrors });
+
+      return;
+    }
+
+    setIsAuthLoading(true);
+
+    try {
+      // const user = await trigger(form);
+      // const verifyEmailHref = handleRedirectParams(
+      //   `/${lang}/member/verify-email?email=${encodeURIComponent(user.email)}`,
+      //   redirect,
+      // );
+      // router.replace(verifyEmailHref);
+      console.log("yes");
+    } catch {
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
   return (
-    <FormCard action={formAction} component="form">
+    <FormCard component="form" onSubmit={handleSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -301,9 +358,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             error={!!state?.errors?.lastName}
             fullWidth
             helperText={state?.errors?.lastName?.join("\n")}
-            label={dict.member.auth.lastName}
+            label={dict.member.auth.lastName.label}
             name="lastName"
             onChange={handleChange}
+            placeholder={dict.member.auth.lastName.placeholder}
             value={form.lastName}
           />
           <TextField
@@ -311,16 +369,17 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             error={!!state?.errors?.firstName}
             fullWidth
             helperText={state?.errors?.firstName?.join("\n")}
-            label={dict.member.auth.firstName}
+            label={dict.member.auth.firstName.label}
             name="firstName"
             onChange={handleChange}
+            placeholder={dict.member.auth.firstName.placeholder}
             required
             value={form.firstName}
           />
         </Stack>
         <DatePicker
           disableFuture
-          label={dict.member.auth.birthDate}
+          label={dict.member.auth.birthDate.label}
           maxDate={today}
           name="birthDate"
           onChange={handleBirthDateChange}
@@ -330,10 +389,12 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
               autoComplete: "bday",
               error: !!state?.errors?.birthDate,
               helperText: state?.errors?.birthDate?.join("\n"),
+              placeholder: dict.member.auth.birthDate.placeholder,
               required: true,
             },
           }}
           value={form.birthDate ? dayjs(form.birthDate) : null}
+          views={["year", "month", "day"]}
           yearsOrder="desc"
         />
         {/* Incorrect use of <label for=FORM_ELEMENT> */}
@@ -344,9 +405,28 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           label={dict.member.auth.gender.label}
           helperText={state?.errors?.gender?.join("\n")}
           name="gender"
+          onBlur={() => setIsGenderFocused(false)}
           onChange={handleChange}
+          onFocus={() => setIsGenderFocused(true)}
           required
           select
+          slotProps={{
+            select: {
+              displayEmpty: isGenderFocused,
+              renderValue: (value: unknown) => {
+                if (!value)
+                  return (
+                    <Typography color="gray">
+                      {dict.member.auth.gender.placeholder}
+                    </Typography>
+                  );
+
+                return genderOptions.find(
+                  ({ value: optionValue }) => optionValue === value,
+                )?.label;
+              },
+            },
+          }}
           value={form.gender}
         >
           {genderOptions.map(({ label, value }) => (
@@ -360,24 +440,24 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           error={!!state?.errors?.email}
           fullWidth
           helperText={state?.errors?.email?.join("\n")}
-          label={dict.member.auth.email}
+          label={dict.member.auth.email.label}
           name="email"
           onChange={handleChange}
           required
           type="email"
           value={form.email}
+          placeholder={dict.member.auth.email.placeholder}
         />
         <TextField
           autoComplete="new-password"
           error={isPasswordError}
           fullWidth
           helperText={passwordHelperContent}
-          label={dict.member.auth.password}
+          label={dict.member.auth.password.label}
           name="password"
           onChange={handleChange}
           required
           slotProps={{
-            // 這個要測測
             formHelperText: { component: "div" },
             input: {
               endAdornment: (
@@ -401,18 +481,18 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           }}
           type={showPassword.password ? "text" : "password"}
           value={form.password}
+          placeholder={dict.member.auth.password.placeholder}
         />
         <TextField
           autoComplete="new-password"
           error={isConfirmPasswordError}
           fullWidth
           helperText={confirmPasswordHelperContent}
-          label={dict.member.auth.confirmPassword}
+          label={dict.member.auth.confirmPassword.label}
           name="confirmPassword"
           onChange={handleChange}
           required
           slotProps={{
-            // 這個要測測
             formHelperText: { component: "div" },
             input: {
               endAdornment: (
@@ -440,6 +520,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           }}
           type={showPassword.confirmPassword ? "text" : "password"}
           value={form.confirmPassword}
+          placeholder={dict.member.auth.confirmPassword.placeholder}
         />
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, sm: 4 }}>
@@ -471,8 +552,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         <FormControlLabel
           control={
             <Checkbox
-              checked={form.emailUpdates}
-              name="emailUpdates"
+              checked={form.isSubscribed}
+              name="isSubscribed"
               onChange={handleChange}
               size="small"
             />
@@ -486,9 +567,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
-          disabled={pending}
+          disabled={isMutating}
           fullWidth
-          loading={pending}
+          loading={isMutating}
           loadingPosition="start"
           size="large"
           type="submit"

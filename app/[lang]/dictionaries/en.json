@@ -153,17 +153,30 @@
       "verified": "Verified"
     },
     "auth": {
-      "birthDate": "Birth date",
-      "confirmPassword": "Confirm password",
+      "birthDate": {
+        "label": "Birth date",
+        "placeholder": "Select birth date"
+      },
+      "confirmPassword": {
+        "label": "Confirm password",
+        "placeholder": "Confirm your password"
+      },
       "confirmNewPassword": "Confirm new password",
       "chooseCountry": "Choose a country",
       "countryCode": "Country code",
-      "email": "Email",
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter email"
+      },
       "emailUpdates": "I want to receive updates via email",
-      "firstName": "First Name",
+      "firstName": {
+        "label": "First Name",
+        "placeholder": "Enter first name"
+      },
       "forgotPassword": { "label": "Forgot password" },
       "gender": {
         "label": "Gender",
+        "placeholder": "Select gender",
         "options": {
           "female": "Female",
           "male": "Male",
@@ -176,11 +189,17 @@
       "hideConfirmNewPassword": "Hide confirm new password",
       "hideNewPassword": "Hide the new password",
       "hidePassword": "Hide the password",
-      "lastName": "Last Name (optional)",
+      "lastName": {
+        "label": "Last Name (optional)",
+        "placeholder": "Enter last name"
+      },
       "newPassword": "New password",
       "noAccount": "Don't have an account?",
       "or": "or",
-      "password": "Password",
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter password"
+      },
       "phone": "Phone Number",
       "rememberMe": "Remember me",
       "rememberedPassword": "Remembered your password?",
