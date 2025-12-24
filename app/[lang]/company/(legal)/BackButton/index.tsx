@@ -16,7 +16,7 @@ const BackButton = ({ lang, redirect }: BackButtonProps) => {
   const dict = useI18n();
 
   const href = redirect || `/${lang}`;
-  const backLabel = dict.member.legal.back;
+  const backLabel = dict.company.legal.back;
 
   return (
     <Button

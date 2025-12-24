@@ -25,6 +25,14 @@
     "soldOut": "{label} 售罄",
     "totalAmount": "总计"
   },
+  "company": {
+    "legal": {
+      "back": "返回",
+      "privacy": { "label": "隐私政策" },
+      "terms": { "label": "服务条款" }
+    },
+    "label": "公司"
+  },
   "dialog": {
     "addToCart": "加入购物车",
     "amount": "小计",
@@ -41,11 +49,6 @@
         "subtitle": "订阅我们的邮件，定期获取更新。绝不发送垃圾邮件。",
         "success": "订阅成功（示意）。",
         "title": "保持最新资讯"
-      },
-      "company": {
-        "privacy": "隐私政策",
-        "terms": "服务条款",
-        "title": "关于我们"
       },
       "tagline": "为你的每一天，冲一杯好咖啡。"
     },
@@ -221,11 +224,6 @@
         "subtitle": "我们已将验证邮件发送到 {email}，请完成验证后再登录。",
         "title": "验证邮件已发送"
       }
-    },
-    "legal": {
-      "back": "返回",
-      "privacy": { "label": "隐私政策" },
-      "terms": { "label": "服务条款" }
     }
   },
   "order": {

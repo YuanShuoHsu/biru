@@ -11,6 +11,7 @@ import { type I18nDict, useI18n } from "@/context/i18n";
 
 import {
   AccountCircle,
+  Business,
   Gavel,
   Group,
   HelpOutline,
@@ -140,6 +141,24 @@ const breadcrumbsMap = (
     {
       children: [
         {
+          icon: Gavel,
+          label: dict.company.legal.terms.label,
+          to: "/company/terms",
+        },
+        {
+          icon: Policy,
+          label: dict.company.legal.privacy.label,
+          to: "/company/privacy",
+        },
+      ],
+      disabled: true,
+      icon: Business,
+      label: dict.company.label,
+      to: "/company",
+    },
+    {
+      children: [
+        {
           icon: Login,
           label: dict.member.auth.signIn.label,
           to: "/member/sign-in",
@@ -158,16 +177,6 @@ const breadcrumbsMap = (
           icon: LockReset,
           label: dict.member.auth.resetPassword.label,
           to: "/member/reset-password",
-        },
-        {
-          icon: Gavel,
-          label: dict.member.legal.terms.label,
-          to: "/member/terms",
-        },
-        {
-          icon: Policy,
-          label: dict.member.legal.privacy.label,
-          to: "/member/privacy",
         },
         {
           icon: Group,

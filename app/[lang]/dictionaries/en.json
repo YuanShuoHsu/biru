@@ -25,6 +25,14 @@
     "soldOut": "{label} Sold out",
     "totalAmount": "Total"
   },
+  "company": {
+    "legal": {
+      "back": "Back",
+      "privacy": { "label": "Privacy Policy" },
+      "terms": { "label": "Terms of Service" }
+    },
+    "label": "Company"
+  },
   "dialog": {
     "addToCart": "Add to cart",
     "amount": "SubTotal",
@@ -42,7 +50,6 @@
         "success": "Subscribed (demo).",
         "title": "Keep up to date"
       },
-      "company": { "privacy": "Privacy", "terms": "Terms", "title": "Company" },
       "tagline": "Coffee, crafted for your day."
     },
     "label": "Home"
@@ -217,11 +224,6 @@
         "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
         "title": "Check your email"
       }
-    },
-    "legal": {
-      "back": "Back",
-      "privacy": { "label": "Privacy Policy" },
-      "terms": { "label": "Terms of Service" }
     }
   },
   "order": {

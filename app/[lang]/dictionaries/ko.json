@@ -25,6 +25,14 @@
     "soldOut": "{label} 품절",
     "totalAmount": "합계"
   },
+  "company": {
+    "legal": {
+      "back": "뒤로가기",
+      "privacy": { "label": "개인정보 처리방침" },
+      "terms": { "label": "서비스 이용약관" }
+    },
+    "label": "회사 소개"
+  },
   "dialog": {
     "addToCart": "장바구니에 추가",
     "amount": "소계",
@@ -41,11 +49,6 @@
         "subtitle": "뉴스레터를 구독하고 정기적인 업데이트를 받아보세요. 스팸은 절대 보내지 않습니다.",
         "success": "구독 완료(데모).",
         "title": "최신 소식을 받아보세요"
-      },
-      "company": {
-        "privacy": "개인정보 처리방침",
-        "terms": "이용약관",
-        "title": "회사 소개"
       },
       "tagline": "당신의 하루를 위한 커피."
     },
@@ -221,11 +224,6 @@
         "subtitle": "{email} 로 인증 메일을 보냈어요. 로그인 전에 메일 인증을 완료하세요.",
         "title": "인증 메일을 보냈습니다"
       }
-    },
-    "legal": {
-      "back": "뒤로가기",
-      "privacy": { "label": "개인정보 처리방침" },
-      "terms": { "label": "서비스 이용약관" }
     }
   },
   "order": {

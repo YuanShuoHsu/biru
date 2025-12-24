@@ -25,6 +25,14 @@
     "soldOut": "{label} 売り切れ",
     "totalAmount": "合計"
   },
+  "company": {
+    "legal": {
+      "back": "戻る",
+      "privacy": { "label": "プライバシーポリシー" },
+      "terms": { "label": "利用規約" }
+    },
+    "label": "会社概要"
+  },
   "dialog": {
     "addToCart": "カートに追加",
     "amount": "小計",
@@ -41,11 +49,6 @@
         "subtitle": "ニュースレターに登録して定期的な更新を受け取りましょう。スパムは一切送りません。",
         "success": "登録しました（デモ）。",
         "title": "最新情報を受け取る"
-      },
-      "company": {
-        "privacy": "プライバシーポリシー",
-        "terms": "利用規約",
-        "title": "会社概要"
       },
       "tagline": "あなたの一日を彩る、こだわりのコーヒー。"
     },
@@ -221,11 +224,6 @@
         "subtitle": "{email} に確認メールを送信しました。ログインするにはメール認証を完了してください。",
         "title": "確認メールを送信しました"
       }
-    },
-    "legal": {
-      "back": "戻る",
-      "privacy": { "label": "プライバシーポリシー" },
-      "terms": { "label": "利用規約" }
     }
   },
   "order": {

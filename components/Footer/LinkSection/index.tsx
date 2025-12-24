@@ -59,19 +59,19 @@ const createFooterLinkSections = ({
   {
     links: [
       {
-        href: `/${lang}/member/terms?redirect=${encodeURIComponent(
+        href: `/${lang}/company/terms?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.home.footer.company.terms,
+        label: dict.company.legal.terms.label,
       },
       {
-        href: `/${lang}/member/privacy?redirect=${encodeURIComponent(
+        href: `/${lang}/company/privacy?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.home.footer.company.privacy,
+        label: dict.company.legal.privacy.label,
       },
     ],
-    title: dict.home.footer.company.title,
+    title: dict.company.label,
   },
 ];
 

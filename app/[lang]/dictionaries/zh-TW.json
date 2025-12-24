@@ -25,6 +25,14 @@
     "soldOut": "{label} 售完",
     "totalAmount": "總計"
   },
+  "company": {
+    "legal": {
+      "back": "返回",
+      "privacy": { "label": "隱私權政策" },
+      "terms": { "label": "服務條款" }
+    },
+    "label": "公司"
+  },
   "dialog": {
     "addToCart": "加入購物車",
     "amount": "小計",
@@ -41,11 +49,6 @@
         "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
         "success": "訂閱成功（示意）。",
         "title": "掌握最新消息"
-      },
-      "company": {
-        "privacy": "隱私權政策",
-        "terms": "服務條款",
-        "title": "關於我們"
       },
       "tagline": "為你的每一天，沖煮一杯好咖啡。"
     },
@@ -221,11 +224,6 @@
         "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
         "title": "驗證信已寄出"
       }
-    },
-    "legal": {
-      "back": "返回",
-      "privacy": { "label": "隱私權政策" },
-      "terms": { "label": "服務條款" }
     }
   },
   "order": {
