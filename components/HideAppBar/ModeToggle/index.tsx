@@ -1,3 +1,5 @@
+"use client";
+
 // https://mui.com/material-ui/customization/dark-mode/#ToggleColorMode.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 

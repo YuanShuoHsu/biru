@@ -1,3 +1,5 @@
+"use client";
+
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
 import { useParams, usePathname } from "next/navigation";
