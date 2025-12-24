@@ -326,10 +326,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     try {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const { confirmPassword, ...data } = form;
-      const user = await trigger(data);
+      const { email } = await trigger(data);
 
       const verifyEmailHref = handleRedirectParams(
-        `/${lang}/member/verify-email?email=${encodeURIComponent(user.email)}`,
+        `/${lang}/member/verify-email?email=${encodeURIComponent(email)}`,
         redirect,
       );
       router.replace(verifyEmailHref);
