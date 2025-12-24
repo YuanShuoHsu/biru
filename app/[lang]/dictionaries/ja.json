@@ -26,12 +26,13 @@
     "totalAmount": "合計"
   },
   "company": {
+    "about": { "label": "私たちについて" },
+    "label": "会社概要",
     "legal": {
       "back": "戻る",
       "privacy": { "label": "プライバシーポリシー" },
       "terms": { "label": "利用規約" }
-    },
-    "label": "会社概要"
+    }
   },
   "dialog": {
     "addToCart": "カートに追加",

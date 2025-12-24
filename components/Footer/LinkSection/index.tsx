@@ -5,75 +5,18 @@ import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { useI18n, type I18nDict } from "@/context/i18n";
-import { useAuthStore } from "@/stores/useAuthStore";
-import type { RouteParams } from "@/types/routeParams";
+
 import {
   getAccountLinkItems,
   getMemberAuthLinkItems,
   getProfileMenuItems,
 } from "@/utils/auth";
-import { Grid, Link as MuiLink, styled, Typography } from "@mui/material";
+import { Grid, Link as MuiLink, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-interface FooterLink {
-  href: string;
-  label: string;
-}
+import { useAuthStore } from "@/stores/useAuthStore";
 
-interface FooterLinkSectionData {
-  title: string;
-  links: FooterLink[];
-}
-
-const createFooterLinkSections = ({
-  lang,
-  dict,
-  isSignedIn,
-}: {
-  lang: string;
-  dict: I18nDict;
-  isSignedIn: boolean;
-}): FooterLinkSectionData[] => [
-  {
-    links: [
-      {
-        href: `/${lang}/order/${ORDER_MODE.Pickup}`,
-        label: dict.order.mode.pickup.label,
-      },
-    ],
-    title: dict.order.label,
-  },
-  {
-    links: !isSignedIn
-      ? getMemberAuthLinkItems(dict, `/${lang}`).map(({ label, to }) => ({
-          href: `/${lang}/member${to}`,
-          label,
-        }))
-      : [...getProfileMenuItems(dict), ...getAccountLinkItems(dict)].map(
-          ({ label, to }) => ({
-            href: `/${lang}/member${to}`,
-            label,
-          }),
-        ),
-    title: dict.member.label,
-  },
-  {
-    links: [
-      {
-        href: `/${lang}/company/terms?redirect=${encodeURIComponent(
-          `/${lang}`,
-        )}`,
-        label: dict.company.legal.terms.label,
-      },
-      {
-        href: `/${lang}/company/privacy?redirect=${encodeURIComponent(
-          `/${lang}`,
-        )}`,
-        label: dict.company.legal.privacy.label,
-      },
-    ],
-    title: dict.company.label,
-  },
-];
+import type { RouteParams } from "@/types/routeParams";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -82,31 +25,90 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   alignItems: "flex-start",
 }));
 
-const LinkSection = () => {
-  const dict = useI18n();
-  const { lang } = useParams<RouteParams>();
+interface FooterItem {
+  children?: FooterItem[];
+  label: string;
+  to: string;
+}
 
+const footerItemsMap = ({
+  dict,
+  isSignedIn,
+}: {
+  dict: I18nDict;
+  isSignedIn: boolean;
+}): FooterItem[] => [
+  {
+    children: [
+      {
+        label: dict.order.mode.pickup.label,
+        to: `/${ORDER_MODE.Pickup}`,
+      },
+    ],
+    label: dict.order.label,
+    to: "/order",
+  },
+  {
+    children: !isSignedIn
+      ? getMemberAuthLinkItems(dict).map(({ label, to }) => ({
+          label,
+          to,
+        }))
+      : [...getProfileMenuItems(dict), ...getAccountLinkItems(dict)].map(
+          ({ label, to }) => ({
+            label,
+            to,
+          }),
+        ),
+    label: dict.member.label,
+    to: "/member",
+  },
+  {
+    children: [
+      {
+        label: dict.company.about.label,
+        to: `/about`,
+      },
+      {
+        label: dict.company.legal.terms.label,
+        to: `/terms?redirect=${encodeURIComponent("/")}`,
+      },
+      {
+        label: dict.company.legal.privacy.label,
+        to: `/privacy?redirect=${encodeURIComponent("/")}`,
+      },
+    ],
+    label: dict.company.label,
+    to: "/company",
+  },
+];
+
+const LinkSection = () => {
   const { isSignedIn } = useAuthStore();
 
-  const linkSections = createFooterLinkSections({ lang, dict, isSignedIn });
+  const dict = useI18n();
+
+  const { lang } = useParams<RouteParams>();
+
+  const items = footerItemsMap({ dict, isSignedIn });
 
   return (
     <>
-      {linkSections.map(({ links, title }) => (
-        <StyledGrid key={title} size={{ xs: 6, md: 2 }}>
+      {items.map(({ children, label: parentLabel, to: parentTo }) => (
+        <StyledGrid key={parentLabel} size={{ xs: 6, md: 2 }}>
           <Typography color="text.primary" variant="subtitle2">
-            {title}
+            {parentLabel}
           </Typography>
-          {links.map(({ href, label }) => (
+          {children?.map(({ label: childLabel, to: childTo }) => (
             <MuiLink
-              key={href}
+              key={childTo}
               color="text.secondary"
               component={NextLink}
-              href={href}
+              href={`/${lang}${parentTo}${childTo}`}
               underline="hover"
               variant="body2"
             >
-              {label}
+              {childLabel}
             </MuiLink>
           ))}
         </StyledGrid>

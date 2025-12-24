@@ -26,12 +26,13 @@
     "totalAmount": "Total"
   },
   "company": {
+    "about": { "label": "About" },
+    "label": "Company",
     "legal": {
       "back": "Back",
       "privacy": { "label": "Privacy Policy" },
       "terms": { "label": "Terms of Service" }
-    },
-    "label": "Company"
+    }
   },
   "dialog": {
     "addToCart": "Add to cart",

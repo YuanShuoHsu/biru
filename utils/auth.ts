@@ -60,15 +60,25 @@ export const getMemberAuthLinkItems = (
   ];
 };
 
-export interface AuthMenuItem {
+interface BaseAuthMenuItem {
   disabled?: boolean;
   icon: React.ElementType;
   label: string;
-  onClick?: () => void;
-  to?: string;
 }
 
-export const getProfileMenuItems = (dict: I18nDict): AuthMenuItem[] => [
+interface LinkAuthMenuItem extends BaseAuthMenuItem {
+  onClick?: never;
+  to: string;
+}
+
+interface ButtonAuthMenuItem extends BaseAuthMenuItem {
+  onClick: () => void;
+  to?: never;
+}
+
+export type AuthMenuItem = LinkAuthMenuItem | ButtonAuthMenuItem;
+
+export const getProfileMenuItems = (dict: I18nDict): LinkAuthMenuItem[] => [
   {
     icon: Avatar,
     label: dict.member.accountMenu.profile,
@@ -81,7 +91,7 @@ export const getProfileMenuItems = (dict: I18nDict): AuthMenuItem[] => [
   },
 ];
 
-export const getAccountLinkItems = (dict: I18nDict): AuthMenuItem[] => [
+export const getAccountLinkItems = (dict: I18nDict): LinkAuthMenuItem[] => [
   {
     icon: PersonAdd,
     label: dict.member.accountMenu.addAnotherAccount,
@@ -94,18 +104,28 @@ export const getAccountLinkItems = (dict: I18nDict): AuthMenuItem[] => [
   },
 ];
 
-export const getAccountMenuItems = (
+export const getLogoutMenuItem = (
   dict: I18nDict,
   {
     isMutatingLogout,
     onLogout,
-  }: { isMutatingLogout?: boolean; onLogout: () => void },
-): AuthMenuItem[] => [
-  ...getAccountLinkItems(dict),
+  }: { isMutatingLogout: boolean; onLogout: () => void },
+): ButtonAuthMenuItem[] => [
   {
     disabled: isMutatingLogout,
     icon: Logout,
     label: dict.member.auth.signOut.label,
     onClick: onLogout,
   },
+];
+
+export const getAccountMenuItems = (
+  dict: I18nDict,
+  {
+    isMutatingLogout,
+    onLogout,
+  }: { isMutatingLogout: boolean; onLogout: () => void },
+): AuthMenuItem[] => [
+  ...getAccountLinkItems(dict),
+  ...getLogoutMenuItem(dict, { isMutatingLogout, onLogout }),
 ];

@@ -143,12 +143,12 @@ const breadcrumbsMap = (
         {
           icon: Gavel,
           label: dict.company.legal.terms.label,
-          to: "/company/terms",
+          to: "/terms",
         },
         {
           icon: Policy,
           label: dict.company.legal.privacy.label,
-          to: "/company/privacy",
+          to: "/privacy",
         },
       ],
       disabled: true,
@@ -161,42 +161,42 @@ const breadcrumbsMap = (
         {
           icon: Login,
           label: dict.member.auth.signIn.label,
-          to: "/member/sign-in",
+          to: "/sign-in",
         },
         {
           icon: PersonAdd,
           label: dict.member.auth.signUp.label,
-          to: "/member/sign-up",
+          to: "/sign-up",
         },
         {
           icon: HelpOutline,
           label: dict.member.auth.forgotPassword.label,
-          to: "/member/forgot-password",
+          to: "/forgot-password",
         },
         {
           icon: LockReset,
           label: dict.member.auth.resetPassword.label,
-          to: "/member/reset-password",
+          to: "/reset-password",
         },
         {
           icon: Group,
           label: dict.member.accountMenu.profile,
-          to: "/member/profile",
+          to: "/profile",
         },
         {
           icon: Person,
           label: dict.member.accountMenu.myAccount,
-          to: "/member/my-account",
+          to: "/my-account",
         },
         {
           icon: PersonAdd,
           label: dict.member.accountMenu.addAnotherAccount,
-          to: "/member/add-another-account",
+          to: "/add-another-account",
         },
         {
           icon: Settings,
           label: dict.member.accountSettings.label,
-          to: "/member/account-settings",
+          to: "/account-settings",
         },
       ],
       disabled: true,
@@ -252,12 +252,15 @@ const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
 const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
+  parentPath = "",
 ): Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label"> | undefined =>
   breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
-    if (to === targetPath) return [{ disabled, hidden, icon, label }];
+    const currentPath = `${parentPath}${to}`;
+
+    if (currentPath === targetPath) return [{ disabled, hidden, icon, label }];
 
     if (children) {
-      const found = findBreadcrumb(children, targetPath);
+      const found = findBreadcrumb(children, targetPath, currentPath);
       if (!found) return [];
 
       return [found];
