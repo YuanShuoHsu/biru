@@ -447,10 +447,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           label={dict.member.auth.email.label}
           name="email"
           onChange={handleChange}
+          placeholder={dict.member.auth.email.placeholder}
           required
           type="email"
           value={form.email}
-          placeholder={dict.member.auth.email.placeholder}
         />
         <TextField
           autoComplete="new-password"

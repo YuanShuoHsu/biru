@@ -37,7 +37,6 @@
       "copyright": "Copyright © {year} {brand}.",
       "newsletter": {
         "action": "구독",
-        "emailLabel": "이메일",
         "invalidEmail": "올바른 이메일을 입력해 주세요.",
         "subtitle": "뉴스레터를 구독하고 정기적인 업데이트를 받아보세요. 스팸은 절대 보내지 않습니다.",
         "success": "구독 완료(데모).",

@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 
 const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
   padding: theme.spacing(2),
-  backgroundColor: theme.vars.palette.background.paper,
+  backgroundColor: theme.vars.palette.background.default,
   borderTop: `1px solid ${theme.vars.palette.divider}`,
   transition: theme.transitions.create("background-color"),
 }));

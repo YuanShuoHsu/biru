@@ -23,7 +23,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 }));
 
 const Newsletter = () => {
-  const [email, setEmail] = useState("");
+  const [form, setForm] = useState({ email: "" });
 
   const dict = useI18n();
 
@@ -36,12 +36,18 @@ const Newsletter = () => {
     { email: string }
   >("/api/newsletter", sendRequest());
 
+  const handleChange = ({
+    target: { name, value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (isMutating) return;
 
-    const trimmedEmail = email.trim();
+    const trimmedEmail = form.email.trim();
     if (!trimmedEmail || !isLikelyEmail(trimmedEmail)) {
       enqueueSnackbar(dict.home.footer.newsletter.invalidEmail, {
         variant: "warning",
@@ -52,7 +58,7 @@ const Newsletter = () => {
     try {
       await trigger({ email: trimmedEmail });
 
-      setEmail("");
+      setForm({ email: "" });
       enqueueSnackbar(dict.home.footer.newsletter.success, {
         variant: "success",
       });
@@ -80,14 +86,19 @@ const Newsletter = () => {
       >
         <TextField
           autoComplete="email"
-          label={dict.home.footer.newsletter.emailLabel}
+          label={dict.member.auth.email.label}
           name="email"
-          onChange={(event) => setEmail(event.target.value)}
-          placeholder="example@email.com"
+          onChange={handleChange}
+          placeholder={dict.member.auth.email.placeholder}
           required
           size="small"
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              backgroundColor: "transparent",
+            },
+          }}
           type="email"
-          value={email}
+          value={form.email}
         />
         <Button
           disabled={isMutating}
