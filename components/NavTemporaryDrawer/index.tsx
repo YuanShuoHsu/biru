@@ -385,7 +385,10 @@ const NavTemporaryDrawer = ({
       const itemKey = toPath || `${label}-${level}`;
       const open = Boolean(hasChildren && openMap[itemKey]);
       const selected =
-        pathname === pathWithLang || pathname.startsWith(`${pathWithLang}/`);
+        basePath === "/"
+          ? pathname === pathWithLang
+          : pathname === pathWithLang ||
+            pathname.startsWith(`${pathWithLang}/`);
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (hasChildren) {
