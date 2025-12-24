@@ -256,7 +256,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       <MuiLink
         key={type}
         component={NextLink}
-        href={handleBackToSignUpParams(`/${lang}/member/${type}`)}
+        href={handleBackToSignUpParams(`/${lang}/company/${type}`)}
       >
         {dict.company.legal[type].label}
       </MuiLink>,
