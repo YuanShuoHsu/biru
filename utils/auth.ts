@@ -109,7 +109,7 @@ export const getLogoutMenuItem = (
   {
     isMutatingLogout,
     onLogout,
-  }: { isMutatingLogout: boolean; onLogout: () => void },
+  }: { isMutatingLogout?: boolean; onLogout: () => void },
 ): ButtonAuthMenuItem[] => [
   {
     disabled: isMutatingLogout,
@@ -124,7 +124,7 @@ export const getAccountMenuItems = (
   {
     isMutatingLogout,
     onLogout,
-  }: { isMutatingLogout: boolean; onLogout: () => void },
+  }: { isMutatingLogout?: boolean; onLogout: () => void },
 ): AuthMenuItem[] => [
   ...getAccountLinkItems(dict),
   ...getLogoutMenuItem(dict, { isMutatingLogout, onLogout }),
