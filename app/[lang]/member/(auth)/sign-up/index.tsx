@@ -145,7 +145,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
 
   const { isMutating, trigger } = useSWRMutation(
     "/api/users",
-    sendRequest<UserResponseDto, SignUpFormData>({ credentials: "include" }),
+    sendRequest<UserResponseDto, Omit<SignUpFormData, "confirmPassword">>({
+      credentials: "include",
+    }),
   );
 
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
@@ -322,12 +324,15 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     setIsAuthLoading(true);
 
     try {
-      // const user = await trigger(form);
-      // const verifyEmailHref = handleRedirectParams(
-      //   `/${lang}/member/verify-email?email=${encodeURIComponent(user.email)}`,
-      //   redirect,
-      // );
-      // router.replace(verifyEmailHref);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword, ...data } = form;
+      const user = await trigger(data);
+
+      const verifyEmailHref = handleRedirectParams(
+        `/${lang}/member/verify-email?email=${encodeURIComponent(user.email)}`,
+        redirect,
+      );
+      router.replace(verifyEmailHref);
       console.log("yes");
     } catch {
     } finally {
