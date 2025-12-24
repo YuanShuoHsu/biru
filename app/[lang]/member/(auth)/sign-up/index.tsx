@@ -333,7 +333,6 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
         redirect,
       );
       router.replace(verifyEmailHref);
-      console.log("yes");
     } catch {
     } finally {
       setIsAuthLoading(false);
