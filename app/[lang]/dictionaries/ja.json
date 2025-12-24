@@ -42,14 +42,10 @@
         "success": "登録しました（デモ）。",
         "title": "最新情報を受け取る"
       },
-      "sections": {
-        "legal": {
-          "privacy": "プライバシーポリシー",
-          "terms": "利用規約",
-          "title": "法務"
-        },
-        "member": { "title": "メンバー" },
-        "order": { "quickStart": "クイックスタート", "title": "注文" }
+      "company": {
+        "privacy": "プライバシーポリシー",
+        "terms": "利用規約",
+        "title": "会社概要"
       },
       "tagline": "あなたの一日を彩る、こだわりのコーヒー。"
     },

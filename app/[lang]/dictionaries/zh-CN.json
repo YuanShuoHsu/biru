@@ -42,14 +42,10 @@
         "success": "订阅成功（示意）。",
         "title": "保持最新资讯"
       },
-      "sections": {
-        "legal": {
-          "privacy": "隐私政策",
-          "terms": "服务条款",
-          "title": "法律"
-        },
-        "member": { "title": "会员" },
-        "order": { "quickStart": "快速开始", "title": "点餐" }
+      "company": {
+        "privacy": "隐私政策",
+        "terms": "服务条款",
+        "title": "关于我们"
       },
       "tagline": "为你的每一天，冲一杯好咖啡。"
     },

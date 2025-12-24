@@ -42,14 +42,10 @@
         "success": "구독 완료(데모).",
         "title": "최신 소식을 받아보세요"
       },
-      "sections": {
-        "legal": {
-          "privacy": "개인정보 처리방침",
-          "terms": "이용약관",
-          "title": "정책"
-        },
-        "member": { "title": "회원" },
-        "order": { "quickStart": "빠른 시작", "title": "주문" }
+      "company": {
+        "privacy": "개인정보 처리방침",
+        "terms": "이용약관",
+        "title": "회사 소개"
       },
       "tagline": "당신의 하루를 위한 커피."
     },

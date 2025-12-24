@@ -42,11 +42,7 @@
         "success": "Subscribed (demo).",
         "title": "Keep up to date"
       },
-      "sections": {
-        "legal": { "privacy": "Privacy", "terms": "Terms", "title": "Legal" },
-        "member": { "title": "Member" },
-        "order": { "quickStart": "Quick start", "title": "Order" }
-      },
+      "company": { "privacy": "Privacy", "terms": "Terms", "title": "Company" },
       "tagline": "Coffee, crafted for your day."
     },
     "label": "Home"

@@ -40,7 +40,7 @@ const createFooterLinkSections = ({
         label: dict.order.mode.pickup.label,
       },
     ],
-    title: dict.home.footer.sections.order.title,
+    title: dict.order.label,
   },
   {
     links: !isSignedIn
@@ -54,7 +54,7 @@ const createFooterLinkSections = ({
             label,
           }),
         ),
-    title: dict.home.footer.sections.member.title,
+    title: dict.member.label,
   },
   {
     links: [
@@ -62,16 +62,16 @@ const createFooterLinkSections = ({
         href: `/${lang}/member/terms?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.home.footer.sections.legal.terms,
+        label: dict.home.footer.company.terms,
       },
       {
         href: `/${lang}/member/privacy?redirect=${encodeURIComponent(
           `/${lang}`,
         )}`,
-        label: dict.home.footer.sections.legal.privacy,
+        label: dict.home.footer.company.privacy,
       },
     ],
-    title: dict.home.footer.sections.legal.title,
+    title: dict.home.footer.company.title,
   },
 ];
 

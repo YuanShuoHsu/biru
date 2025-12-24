@@ -42,14 +42,10 @@
         "success": "訂閱成功（示意）。",
         "title": "掌握最新消息"
       },
-      "sections": {
-        "legal": {
-          "privacy": "隱私權政策",
-          "terms": "服務條款",
-          "title": "法務"
-        },
-        "member": { "title": "會員" },
-        "order": { "quickStart": "快速開始", "title": "點餐" }
+      "company": {
+        "privacy": "隱私權政策",
+        "terms": "服務條款",
+        "title": "關於我們"
       },
       "tagline": "為你的每一天，沖煮一杯好咖啡。"
     },
