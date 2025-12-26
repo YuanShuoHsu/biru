@@ -15,6 +15,7 @@ import {
   Gavel,
   Group,
   HelpOutline,
+  Info,
   LocalMall,
   LockReset,
   Login,
@@ -140,6 +141,11 @@ const breadcrumbsMap = (
   return [
     {
       children: [
+        {
+          icon: Info,
+          label: dict.company.about.label,
+          to: "/about",
+        },
         {
           icon: Gavel,
           label: dict.company.legal.terms.label,
