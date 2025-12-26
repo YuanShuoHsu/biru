@@ -46,7 +46,7 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
 import { sendRequest } from "@/utils/fetcher";
-import { handleRedirectParams } from "@/utils/redirect";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -263,8 +263,9 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           />
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(
+            href={handleQueryParam(
               `/${lang}/member/forgot-password`,
+              QueryParamKey.Redirect,
               redirect,
             )}
             variant="body2"
@@ -288,7 +289,11 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           {dict.member.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
+            href={handleQueryParam(
+              `/${lang}/member/sign-up`,
+              QueryParamKey.Redirect,
+              redirect,
+            )}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>

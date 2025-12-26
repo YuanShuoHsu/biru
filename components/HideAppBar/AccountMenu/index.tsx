@@ -41,6 +41,7 @@ import {
   getDisplayName,
   getProfileMenuItems,
 } from "@/utils/auth";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -115,12 +116,21 @@ const AccountMenu = () => {
 
     if (!isSignedIn) {
       const redirectParam = searchParams.get("redirect");
+
+      const isCompanyPage = pathname.startsWith(`/${lang}/company`);
       const isMemberPage = pathname.startsWith(`/${lang}/member`);
-      const redirectTo =
-        isMemberPage && redirectParam ? redirectParam : currentURL;
+
+      const redirect =
+        (isCompanyPage || isMemberPage) && redirectParam
+          ? redirectParam
+          : currentURL;
 
       router.push(
-        `/${lang}/member/sign-in?redirect=${encodeURIComponent(redirectTo)}`,
+        handleQueryParam(
+          `/${lang}/member/sign-in`,
+          QueryParamKey.Redirect,
+          redirect,
+        ),
       );
 
       return;

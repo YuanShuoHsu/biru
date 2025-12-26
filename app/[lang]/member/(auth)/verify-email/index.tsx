@@ -20,7 +20,7 @@ import { styled } from "@mui/material/styles";
 
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
-import { handleRedirectParams } from "@/utils/redirect";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -118,7 +118,11 @@ const MemberAuthVerifyEmail = ({
         <Button
           component={NextLink}
           fullWidth
-          href={handleRedirectParams(`/${lang}/member/sign-in`, redirect)}
+          href={handleQueryParam(
+            `/${lang}/member/sign-in`,
+            QueryParamKey.Redirect,
+            redirect,
+          )}
           size="large"
           variant="outlined"
         >
@@ -127,7 +131,11 @@ const MemberAuthVerifyEmail = ({
         <Typography color="text.secondary" textAlign="center" variant="body2">
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
+            href={handleQueryParam(
+              `/${lang}/member/sign-up`,
+              QueryParamKey.Redirect,
+              redirect,
+            )}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>

@@ -27,7 +27,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
-import { handleRedirectParams } from "@/utils/redirect";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -210,7 +210,11 @@ const MemberAuthResetPassword = ({
           {dict.member.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-up`, redirect)}
+            href={handleQueryParam(
+              `/${lang}/member/sign-up`,
+              QueryParamKey.Redirect,
+              redirect,
+            )}
           >
             {dict.member.auth.signUp.label}
           </MuiLink>

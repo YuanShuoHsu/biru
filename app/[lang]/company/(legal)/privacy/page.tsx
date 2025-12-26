@@ -1,5 +1,6 @@
-import BackButton from "../BackButton";
 import MemberLegalPrivacy from "./index";
+
+import BackButton from "@/components/BackButton";
 
 interface MemberLegalPrivacyPageProps {
   params: Promise<{ lang: string }>;
@@ -11,17 +12,16 @@ const MemberLegalPrivacyPage = async ({
   searchParams,
 }: MemberLegalPrivacyPageProps) => {
   const { lang } = await params;
-  const { redirect } = await searchParams;
+  const { back, redirect } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
-      : undefined;
+  const safeBack =
+    typeof back === "string" && back.startsWith("/") ? back : undefined;
+  const safeRedirect = typeof redirect === "string" ? redirect : undefined;
 
   return (
     <>
-      <BackButton lang={lang} redirect={safeRedirect} />{" "}
-      <MemberLegalPrivacy lang={lang} />;
+      <BackButton back={safeBack} lang={lang} redirect={safeRedirect} />
+      <MemberLegalPrivacy lang={lang} />
     </>
   );
 };

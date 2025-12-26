@@ -63,7 +63,7 @@ import { UserResponseDto } from "@/types/users/user-response.dto";
 import { getDefaultCountryCode } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
-import { handleRedirectParams } from "@/utils/redirect";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -245,10 +245,15 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     privacy: `{${LegalLinkType.Privacy}}`,
   });
 
-  const signUpHref = handleRedirectParams(`/${lang}/member/sign-up`, redirect);
+  const handleBackToSignUpParams = (path: string) => {
+    const withBack = handleQueryParam(
+      path,
+      QueryParamKey.Back,
+      `/${lang}/member/sign-up`,
+    );
 
-  const handleBackToSignUpParams = (path: string) =>
-    handleRedirectParams(path, signUpHref);
+    return handleQueryParam(withBack, QueryParamKey.Redirect, redirect);
+  };
 
   const legalPlaceholders = Object.fromEntries(
     LEGAL_LINK_TYPES.map((type) => [
@@ -328,8 +333,9 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       const { confirmPassword, ...data } = form;
       const { email } = await trigger(data);
 
-      const verifyEmailHref = handleRedirectParams(
+      const verifyEmailHref = handleQueryParam(
         `/${lang}/member/verify-email?email=${encodeURIComponent(email)}`,
+        QueryParamKey.Redirect,
         redirect,
       );
       router.replace(verifyEmailHref);
@@ -589,7 +595,11 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           <Typography variant="body2">{dict.member.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
-            href={handleRedirectParams(`/${lang}/member/sign-in`, redirect)}
+            href={handleQueryParam(
+              `/${lang}/member/sign-in`,
+              QueryParamKey.Redirect,
+              redirect,
+            )}
             variant="body2"
           >
             {dict.member.auth.signIn.label}

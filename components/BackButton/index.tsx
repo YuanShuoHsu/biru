@@ -7,15 +7,22 @@ import { useI18n } from "@/context/i18n";
 import { KeyboardArrowLeft } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+
 interface BackButtonProps {
+  back?: string;
   lang: string;
   redirect?: string;
 }
 
-const BackButton = ({ lang, redirect }: BackButtonProps) => {
+const BackButton = ({ back, lang, redirect }: BackButtonProps) => {
   const dict = useI18n();
 
-  const href = redirect || `/${lang}`;
+  const href =
+    back && redirect
+      ? handleQueryParam(back, QueryParamKey.Redirect, redirect)
+      : back || `/${lang}`;
+
   const backLabel = dict.company.legal.back;
 
   return (

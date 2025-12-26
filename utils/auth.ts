@@ -1,5 +1,5 @@
 import { fetcher } from "./fetcher";
-import { handleRedirectParams } from "./redirect";
+import { handleQueryParam, QueryParamKey } from "./queryParams";
 
 import { Locale } from "@/constants/locale";
 
@@ -50,12 +50,12 @@ export const getMemberAuthLinkItems = (
     {
       icon: Login,
       label: dict.member.auth.signIn.label,
-      to: handleRedirectParams("/sign-in", redirect),
+      to: handleQueryParam("/sign-in", QueryParamKey.Redirect, redirect),
     },
     {
       icon: PersonAdd,
       label: dict.member.auth.signUp.label,
-      to: handleRedirectParams("/sign-up", redirect),
+      to: handleQueryParam("/sign-up", QueryParamKey.Redirect, redirect),
     },
   ];
 };

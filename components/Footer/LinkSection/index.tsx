@@ -71,11 +71,11 @@ const footerItemsMap = ({
       },
       {
         label: dict.company.legal.terms.label,
-        to: `/terms?redirect=${encodeURIComponent("/")}`,
+        to: `/terms`,
       },
       {
         label: dict.company.legal.privacy.label,
-        to: `/privacy?redirect=${encodeURIComponent("/")}`,
+        to: `/privacy`,
       },
     ],
     label: dict.company.label,
