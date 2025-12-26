@@ -1,66 +1,62 @@
+// https://socket.io/how-to/use-with-nextjs
+
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { io, type Socket } from "socket.io-client";
+import { useEffect, useState } from "react";
 
-type CreateEventPayload = { name: string };
-type CreateEventAck = unknown;
-type FindAllEventsAck = unknown;
+import { socket } from "@/app/socket";
 
-export default function WsTestPage() {
+import { type Menu } from "@/types/menu";
+
+const WsTestPage = () => {
+  const [isConnected, setIsConnected] = useState(false);
+  const [transport, setTransport] = useState("N/A");
+
   const [messages, setMessages] = useState<string[]>([]);
-  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    const socket: Socket = io(process.env.NEXT_PUBLIC_NEST_URL, {
-      transports: ["websocket"],
-    });
-    socketRef.current = socket;
+    const onConnect = () => {
+      setIsConnected(true);
+      setTransport(socket.io.engine.transport.name);
 
-    socket.on("connect", () => {
+      socket.io.engine.on("upgrade", (transport) => {
+        setTransport(transport.name);
+      });
+
       setMessages((prev) => [...prev, `✅ Connected: ${socket.id}`]);
 
-      const payload: CreateEventPayload = { name: "latte" };
-      socket.emit("createEvent", payload, (res: CreateEventAck) => {
+      socket.emit("findAllMenus", {}, (res: Menu[]) => {
+        console.log("findAllMenus data:", res);
         setMessages((prev) => [
           ...prev,
-          `createEvent -> ${JSON.stringify(res)}`,
+          `findAllMenus -> ${JSON.stringify(res)}`,
         ]);
       });
+    };
 
-      socket.emit("findAllEvents", null, (res: FindAllEventsAck) => {
-        setMessages((prev) => [
-          ...prev,
-          `findAllEvents -> ${JSON.stringify(res)}`,
-        ]);
-      });
-    });
+    const onDisconnect = () => {
+      setIsConnected(false);
+      setTransport("N/A");
 
-    socket.on("disconnect", () => {
       setMessages((prev) => [...prev, "❌ Disconnected"]);
-    });
+    };
 
-    socket.on("connect_error", (err: Error) => {
-      setMessages((prev) => [...prev, `⚠️ Connect error: ${err.message}`]);
-    });
+    if (socket.connected) onConnect();
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
 
     return () => {
-      socket.disconnect();
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
     };
   }, []);
 
-  const ping = () => {
-    socketRef.current?.emit("ping", null, (res: unknown) => {
-      setMessages((prev) => [...prev, `ping -> ${JSON.stringify(res)}`]);
-    });
-  };
-
   return (
-    <div style={{ padding: 20 }}>
+    <div>
       <h1>WebSocket Test</h1>
-      <button onClick={ping} style={{ marginBottom: 12 }}>
-        Ping
-      </button>
+      <p>Status: {isConnected ? "connected" : "disconnected"}</p>
+      <p>Transport: {transport}</p>
       <ul>
         {messages.map((m, i) => (
           <li key={i}>{m}</li>
@@ -68,4 +64,6 @@ export default function WsTestPage() {
       </ul>
     </div>
   );
-}
+};
+
+export default WsTestPage;
