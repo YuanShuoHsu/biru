@@ -111,25 +111,24 @@ const AccountMenu = () => {
   const search = searchParams.toString();
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
+  const redirectParam = searchParams.get("redirect");
+  const isCompanyPage = pathname.startsWith(`/${lang}/company`);
+  const isMemberPage = pathname.startsWith(`/${lang}/member`);
+
+  const redirectTarget =
+    (isCompanyPage || isMemberPage) && redirectParam
+      ? redirectParam
+      : currentURL;
+
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     if (isAuthLoading) return;
 
     if (!isSignedIn) {
-      const redirectParam = searchParams.get("redirect");
-
-      const isCompanyPage = pathname.startsWith(`/${lang}/company`);
-      const isMemberPage = pathname.startsWith(`/${lang}/member`);
-
-      const redirect =
-        (isCompanyPage || isMemberPage) && redirectParam
-          ? redirectParam
-          : currentURL;
-
       router.push(
         handleQueryParam(
           `/${lang}/member/sign-in`,
           QueryParamKey.Redirect,
-          redirect,
+          redirectTarget,
         ),
       );
 
@@ -150,17 +149,10 @@ const AccountMenu = () => {
   const renderMenuItems = (items: AuthMenuItem[]) =>
     items.map(({ disabled, icon: Icon, label, onClick, to }) => {
       const key = to || label;
-      const baseHref = to && `/${lang}/member${to}`;
-      const href =
-        to === "/add-another-account"
-          ? `${baseHref}?redirect=${encodeURIComponent(
-              pathname.startsWith(`/${lang}/member/add-another-account`)
-                ? `/${lang}/member/my-account`
-                : currentURL,
-            )}`
-          : baseHref;
-      const selected = baseHref
-        ? pathname === baseHref || pathname.startsWith(`${baseHref}/`)
+      const href = to && `/${lang}/member${to}`;
+
+      const selected = href
+        ? pathname === href || pathname.startsWith(`${href}/`)
         : false;
 
       return (

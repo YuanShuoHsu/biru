@@ -333,11 +333,18 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       const { confirmPassword, ...data } = form;
       const { email } = await trigger(data);
 
+      const withEmail = handleQueryParam(
+        `/${lang}/member/verify-email`,
+        QueryParamKey.Email,
+        email,
+      );
+
       const verifyEmailHref = handleQueryParam(
-        `/${lang}/member/verify-email?email=${encodeURIComponent(email)}`,
+        withEmail,
         QueryParamKey.Redirect,
         redirect,
       );
+
       router.replace(verifyEmailHref);
     } catch {
     } finally {
