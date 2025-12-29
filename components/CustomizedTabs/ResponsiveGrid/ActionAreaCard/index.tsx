@@ -21,9 +21,9 @@ import {
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
+import { useViewStore } from "@/providers/view-store-provider";
 import { useCartStore } from "@/stores/useCartStore";
 import { useDialogStore } from "@/stores/useDialogStore";
-import { useViewStore } from "@/stores/useViewStore";
 
 import type { Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
@@ -143,7 +143,7 @@ const ActionAreaCard = ({
 
   const { updateCartItem } = useCartStore();
   const { setDialog } = useDialogStore();
-  const { view } = useViewStore();
+  const { view } = useViewStore((state) => state);
   const viewDirection = ViewDirections[view];
 
   const displayPrice = price.toLocaleString(lang);

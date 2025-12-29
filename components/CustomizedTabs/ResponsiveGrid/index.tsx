@@ -4,7 +4,7 @@ import ActionAreaCard from "./ActionAreaCard";
 
 import { Grid } from "@mui/material";
 
-import { useViewStore } from "@/stores/useViewStore";
+import { useViewStore } from "@/providers/view-store-provider";
 
 import type { MenuItem } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
@@ -23,7 +23,7 @@ const ResponsiveGrid = ({
 }: ResponsiveGridProps) => {
   const { lang } = useParams<RouteParams>();
 
-  const { view } = useViewStore();
+  const { view } = useViewStore((state) => state);
   const viewGridSizes = ViewGridSizes[view];
 
   return (

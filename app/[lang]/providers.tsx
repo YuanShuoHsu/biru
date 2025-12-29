@@ -23,6 +23,7 @@ import I18nProvider from "@/providers/I18nProvider";
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 import { OrderSearchStoreProvider } from "@/providers/order-search-store-provider";
 import SWRProvider from "@/providers/SWRProvider";
+import { ViewStoreProvider } from "@/providers/view-store-provider";
 
 import theme from "@/theme";
 
@@ -73,7 +74,7 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
                 <AuthProvider>
                   <MenuStoreProvider>
                     <OrderSearchStoreProvider>
-                      {children}
+                      <ViewStoreProvider>{children}</ViewStoreProvider>
                     </OrderSearchStoreProvider>
                   </MenuStoreProvider>
                 </AuthProvider>

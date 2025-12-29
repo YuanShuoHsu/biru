@@ -4,7 +4,7 @@ import { ViewList, ViewModule } from "@mui/icons-material";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useViewStore } from "@/stores/useViewStore";
+import { useViewStore } from "@/providers/view-store-provider";
 
 import { ViewMode } from "@/types/view";
 
@@ -14,7 +14,7 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
 }));
 
 const ViewToggleButtons = () => {
-  const { view, setView } = useViewStore();
+  const { view, setView } = useViewStore((state) => state);
 
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
