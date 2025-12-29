@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 
-import { socket } from "@/app/socket";
+import { menuSocket } from "@/app/socket";
 
 import { type Menu } from "@/types/menu";
 
@@ -26,8 +26,9 @@ export const createMenuStore = (initState: MenuState = defaultInitState) => {
     ...initState,
     fetchMenus: (storeId: string) => {
       set({ isLoading: true });
-      socket.emit("findAllMenus", storeId, (res: Menu[]) => {
-        console.log("Fetched menus via Store:", res);
+      const targetId = storeId || "48c533dc-97fd-404b-b435-5692f03cb123";
+
+      menuSocket.emit("findAllMenus", targetId, (res: Menu[]) => {
         set({ menus: res, isLoading: false });
       });
     },

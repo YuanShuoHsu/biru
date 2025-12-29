@@ -7,7 +7,7 @@ import { useMenuSocket } from "@/hooks/useMenuSocket";
 const WsTestPage = () => {
   const [storeId, setStoreId] = useState("");
 
-  const { menus, isLoading, isConnected, transport } = useMenuSocket(storeId);
+  const { isLoading, isConnected, menus, transport } = useMenuSocket(storeId);
 
   return (
     <div>

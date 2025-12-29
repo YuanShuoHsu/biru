@@ -3,10 +3,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { type Socket } from "socket.io-client";
 
-import { socket } from "@/app/socket";
-
-export const useSocket = () => {
+export const useSocketConnection = (socket: Socket) => {
   const [isConnected, setIsConnected] = useState(false);
   const [transport, setTransport] = useState("N/A");
 
@@ -34,7 +33,7 @@ export const useSocket = () => {
       socket.off("connect", onConnect);
       socket.off("disconnect", onDisconnect);
     };
-  }, []);
+  }, [socket]);
 
   return { isConnected, transport };
 };
