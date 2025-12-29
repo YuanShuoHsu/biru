@@ -19,6 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import AuthProvider from "@/providers/AuthProvider";
 import I18nProvider from "@/providers/I18nProvider";
+import { MenuStoreProvider } from "@/providers/menu-store-provider";
 import SWRProvider from "@/providers/SWRProvider";
 
 import theme from "@/theme";
@@ -66,7 +67,9 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
             maxSnack={3}
           >
             <SWRProvider fallback={fallback}>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <MenuStoreProvider>{children}</MenuStoreProvider>
+              </AuthProvider>
             </SWRProvider>
           </SnackbarProvider>
         </I18nProvider>

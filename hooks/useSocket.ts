@@ -1,3 +1,5 @@
+// https://socket.io/how-to/use-with-nextjs
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,9 +25,7 @@ export const useSocket = () => {
       setTransport("N/A");
     };
 
-    if (socket.connected) {
-      onConnect();
-    }
+    if (socket.connected) onConnect();
 
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
@@ -36,5 +36,5 @@ export const useSocket = () => {
     };
   }, []);
 
-  return { socket, isConnected, transport };
+  return { isConnected, transport };
 };

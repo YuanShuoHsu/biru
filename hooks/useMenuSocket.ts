@@ -1,22 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import { useSocket } from "./useSocket";
 
-import { type Menu } from "@/types/menu";
+import { useMenuStore } from "@/providers/menu-store-provider";
 
-export const useMenuSocket = () => {
-  const [menus, setMenus] = useState<Menu[]>([]);
+export const useMenuSocket = (storeId: string) => {
+  const { isConnected, transport } = useSocket();
 
-  const { socket, isConnected, transport } = useSocket();
+  const { menus, isLoading, fetchMenus } = useMenuStore((state) => state);
 
   useEffect(() => {
     if (!isConnected) return;
+    if (!storeId) return;
 
-    socket.emit("findAllMenus", {}, (res: Menu[]) => {
-      console.log("Fetched menus:", res);
-      setMenus(res);
-    });
-  }, [isConnected, socket]);
+    fetchMenus(storeId);
+  }, [fetchMenus, isConnected, storeId]);
 
-  return { menus, isConnected, transport };
+  return { isConnected, isLoading, menus, transport };
 };
