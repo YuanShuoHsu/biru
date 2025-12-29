@@ -261,7 +261,7 @@ const findBreadcrumb = (
   parentPath = "",
 ): Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label"> | undefined =>
   breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
-    const currentPath = `${parentPath}${to}`;
+    const currentPath = to.startsWith("/") ? to : `${parentPath}${to}`;
 
     if (currentPath === targetPath) return [{ disabled, hidden, icon, label }];
 
