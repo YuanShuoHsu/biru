@@ -11,7 +11,7 @@ export const menu: Menu[] = [
       "zh-CN": "咖啡",
     },
     createdAt: new Date("2025-08-04T22:50:00"),
-    items: [
+    menuItems: [
       {
         id: "coffee-1",
         name: {
@@ -592,7 +592,7 @@ export const menu: Menu[] = [
       "zh-CN": "茶饮",
     },
     createdAt: new Date("2025-08-04T22:50:00"),
-    items: [
+    menuItems: [
       {
         id: "tea-1",
         name: {
@@ -915,7 +915,7 @@ export const menu: Menu[] = [
       "zh-CN": "招牌特调",
     },
     createdAt: new Date("2025-08-04T22:50:00"),
-    items: [
+    menuItems: [
       {
         id: "sig-1",
         name: {
@@ -1087,7 +1087,7 @@ export const menu: Menu[] = [
       "zh-CN": "甜点",
     },
     createdAt: new Date("2025-08-04T22:50:00"),
-    items: [
+    menuItems: [
       {
         id: "pastry-1",
         name: {
@@ -1153,7 +1153,7 @@ export const menu: Menu[] = [
       "zh-CN": "轻食",
     },
     createdAt: new Date("2025-08-04T22:50:00"),
-    items: [
+    menuItems: [
       {
         id: "snack-1",
         name: {
