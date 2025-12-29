@@ -21,7 +21,7 @@ export const getItemKey = (
 };
 
 const findItemById = (itemId: string): MenuItem | undefined =>
-  menu.flatMap(({ items }) => items).find(({ id }) => id === itemId);
+  menu.flatMap(({ menuItems }) => menuItems).find(({ id }) => id === itemId);
 
 export const getItemName = (itemId: string, lang: LocaleCode): string => {
   const item = findItemById(itemId);
