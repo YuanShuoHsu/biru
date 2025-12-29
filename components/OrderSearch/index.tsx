@@ -7,7 +7,7 @@ import { useI18n } from "@/context/i18n";
 import { Clear, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
-import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
+import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 const StyledIconButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== "visible",
@@ -21,7 +21,7 @@ const OrderSearch = () => {
   const dict = useI18n();
 
   const { clearOrderSearchText, orderSearchText, setOrderSearchText } =
-    useOrderSearchStore();
+    useOrderSearchStore((state) => state);
 
   useEffect(() => () => clearOrderSearchText(), [clearOrderSearchText]);
 

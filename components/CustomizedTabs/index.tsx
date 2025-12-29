@@ -29,7 +29,7 @@ import { useI18n } from "@/context/i18n";
 import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useOrderSearchStore } from "@/stores/useOrderSearchStore";
+import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 import type { RouteParams } from "@/types/routeParams";
 
@@ -74,7 +74,7 @@ const a11yProps = (index: number) => ({
 const CustomizedTabs = () => {
   const dict = useI18n();
 
-  const { orderSearchText } = useOrderSearchStore();
+  const { orderSearchText } = useOrderSearchStore((state) => state);
   const searchText = orderSearchText.trim().toLowerCase();
 
   const { lang } = useParams<RouteParams>();

@@ -17,9 +17,11 @@ import { ThemeProvider } from "@mui/material/styles";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
+import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import AuthProvider from "@/providers/AuthProvider";
 import I18nProvider from "@/providers/I18nProvider";
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
+import { OrderSearchStoreProvider } from "@/providers/order-search-store-provider";
 import SWRProvider from "@/providers/SWRProvider";
 
 import theme from "@/theme";
@@ -67,9 +69,15 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
             maxSnack={3}
           >
             <SWRProvider fallback={fallback}>
-              <AuthProvider>
-                <MenuStoreProvider>{children}</MenuStoreProvider>
-              </AuthProvider>
+              <AuthStoreProvider>
+                <AuthProvider>
+                  <MenuStoreProvider>
+                    <OrderSearchStoreProvider>
+                      {children}
+                    </OrderSearchStoreProvider>
+                  </MenuStoreProvider>
+                </AuthProvider>
+              </AuthStoreProvider>
             </SWRProvider>
           </SnackbarProvider>
         </I18nProvider>
