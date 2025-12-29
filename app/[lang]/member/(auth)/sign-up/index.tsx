@@ -56,7 +56,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -136,7 +136,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
 
   const [state, setState] = useState<FormState>();
 
-  const { setIsAuthLoading } = useAuthStore();
+  const { setIsAuthLoading } = useAuthStore((state) => state);
 
   const dict = useI18n();
   const signupFormSchema = createSignupFormSchema(dict);

@@ -42,7 +42,7 @@ import { useColorScheme } from "@mui/material/styles";
 
 import { useLogout } from "@/hooks/useLogout";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
@@ -103,7 +103,7 @@ interface MyAccountProps {
 
 const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
   const dict = useI18n();
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore();
+  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const langCode = lang as LocaleCode;

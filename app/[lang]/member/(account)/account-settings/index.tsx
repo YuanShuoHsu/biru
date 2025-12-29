@@ -43,7 +43,7 @@ import {
 
 import { useLogout } from "@/hooks/useLogout";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
@@ -107,7 +107,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
 
   const langCode = lang as LocaleCode;
 
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore();
+  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const dict = useI18n();
   const { handleLogout, isMutatingLogout } = useLogout();
 

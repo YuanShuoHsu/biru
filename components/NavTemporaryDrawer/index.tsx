@@ -48,7 +48,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { DrawerType } from "@/types/drawer";
 import type { OrderMode } from "@/types/orderMode";
@@ -305,7 +305,7 @@ const NavTemporaryDrawer = ({
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
-  const { isSignedIn } = useAuthStore();
+  const { isSignedIn } = useAuthStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 

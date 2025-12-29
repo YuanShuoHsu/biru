@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { AuthResponseDto } from "@/types/auth/auth-response.dto";
 
@@ -15,7 +15,7 @@ interface AuthProviderProps {
 
 const AuthProvider = ({ children }: AuthProviderProps) => {
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
-    useAuthStore();
+    useAuthStore((state) => state);
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 

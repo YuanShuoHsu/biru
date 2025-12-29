@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { LocaleCode } from "@/types/locale";
 
@@ -60,7 +60,7 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
   const dict = useI18n();
   const router = useRouter();
 
-  const { isAuthLoading, isSignedIn, profile } = useAuthStore();
+  const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const langCode = lang as LocaleCode;

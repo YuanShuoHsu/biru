@@ -14,7 +14,7 @@ import {
 import { Grid, Link as MuiLink, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { RouteParams } from "@/types/routeParams";
 
@@ -84,7 +84,7 @@ const footerItemsMap = ({
 ];
 
 const LinkSection = () => {
-  const { isSignedIn } = useAuthStore();
+  const { isSignedIn } = useAuthStore((state) => state);
 
   const dict = useI18n();
 

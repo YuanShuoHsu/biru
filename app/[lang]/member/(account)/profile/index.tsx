@@ -38,7 +38,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
@@ -105,11 +105,13 @@ interface MemberProfileProps {
 }
 
 const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
-  const dict = useI18n();
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore();
-  const langCode = lang as LocaleCode;
-
   const [preferences, setPreferences] = useState(preferenceDefaults);
+
+  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+
+  const dict = useI18n();
+
+  const langCode = lang as LocaleCode;
 
   const name = useMemo(
     () =>

@@ -38,7 +38,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
@@ -85,7 +85,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   const [state, setState] = useState<FormState>();
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
-    useAuthStore();
+    useAuthStore((state) => state);
 
   const router = useRouter();
 

@@ -32,7 +32,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/stores/useAuthStore";
+import { useAuthStore } from "@/providers/auth-store-provider";
+
 import { RouteParams } from "@/types/routeParams";
 
 import {
@@ -89,7 +90,7 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { isAuthLoading, isSignedIn, profile } = useAuthStore();
+  const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
