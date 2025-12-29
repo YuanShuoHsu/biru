@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useDialogStore } from "@/stores/useDialogStore";
+import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import { getErrorMessage } from "@/utils/errors";
 
@@ -59,7 +59,7 @@ const CustomizedDialogs = () => {
     open,
     resetDialog,
     title,
-  } = useDialogStore();
+  } = useDialogStore((state) => state);
 
   const { enqueueSnackbar } = useSnackbar();
 

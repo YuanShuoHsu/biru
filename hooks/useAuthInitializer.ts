@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
@@ -9,11 +7,7 @@ import { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import { fetchProfile } from "@/utils/auth";
 import { sendRequest } from "@/utils/fetcher";
 
-interface AuthProviderProps {
-  children: React.ReactNode;
-}
-
-const AuthProvider = ({ children }: AuthProviderProps) => {
+export const useAuthInitializer = () => {
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore((state) => state);
 
@@ -48,8 +42,4 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     setIsAuthLoading,
     setProfile,
   ]);
-
-  return <>{children}</>;
 };
-
-export default AuthProvider;

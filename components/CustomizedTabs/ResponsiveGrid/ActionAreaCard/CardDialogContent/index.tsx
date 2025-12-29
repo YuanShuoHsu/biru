@@ -22,8 +22,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useCartStore } from "@/stores/useCartStore";
-import { useDialogStore } from "@/stores/useDialogStore";
 
 import type { Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
@@ -131,7 +131,7 @@ const CardDialogContent = React.forwardRef<
     Math.max(Math.min(value, availableToAdd), minQuantity);
   const quantity = clampQuantity(rawQuantity);
 
-  const { setDialog } = useDialogStore();
+  const { setDialog } = useDialogStore((state) => state);
 
   useEffect(() => {
     setDialog({ confirmDisabled: quantity <= 0 });

@@ -12,6 +12,8 @@ import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 import ScrollTop from "@/components/ScrollTop";
 import ViewToggleButtons from "@/components/ViewToggleButtons";
 
+import { useAuthInitializer } from "@/hooks/useAuthInitializer";
+
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -30,6 +32,8 @@ interface AppLayoutProps {
 }
 
 const AppLayout = ({ children }: AppLayoutProps) => {
+  useAuthInitializer();
+
   const [drawerState, setDrawerState] = useState({
     cart: false,
     nav: false,
