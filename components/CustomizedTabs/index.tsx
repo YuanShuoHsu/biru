@@ -15,7 +15,6 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_SM_UP,
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
-import { menu } from "@/constants/menu";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 import {
   LATEST,
@@ -29,6 +28,7 @@ import { useI18n } from "@/context/i18n";
 import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 import type { RouteParams } from "@/types/routeParams";
@@ -77,17 +77,19 @@ const CustomizedTabs = () => {
   const { orderSearchText } = useOrderSearchStore((state) => state);
   const searchText = orderSearchText.trim().toLowerCase();
 
+  const { menus } = useMenuStore((state) => state);
+
   const { lang } = useParams<RouteParams>();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
-  const categoryGroups = menu
-    .map(({ id, name, items }) => ({
+  const categoryGroups = menus
+    .map(({ id, name, menuItems }) => ({
       id,
       label: name[lang],
-      items: items.filter(({ isActive }) => isActive),
+      items: menuItems.filter(({ isActive }) => isActive),
     }))
     .filter(({ items }) => items.length > 0);
 

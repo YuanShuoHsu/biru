@@ -51,6 +51,6 @@ export interface Menu {
   id: string;
   name: LocalizedText;
   createdAt: Date;
-  items: MenuItem[];
+  menuItems: MenuItem[];
   updatedAt: Date;
 }

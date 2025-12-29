@@ -1,7 +1,5 @@
 import { createStore } from "zustand/vanilla";
 
-import { menuSocket } from "@/app/socket";
-
 import { type Menu } from "@/types/menu";
 
 type MenuState = {
@@ -10,8 +8,7 @@ type MenuState = {
 };
 
 type MenuActions = {
-  fetchMenus: (storeId: string) => void;
-  setMenus: (menus: Menu[]) => void;
+  setMenu: (options: Partial<MenuState>) => void;
 };
 
 export type MenuStore = MenuState & MenuActions;
@@ -24,14 +21,10 @@ export const defaultInitState: MenuState = {
 export const createMenuStore = (initState: MenuState = defaultInitState) => {
   return createStore<MenuStore>()((set) => ({
     ...initState,
-    fetchMenus: (storeId: string) => {
-      set({ isLoading: true });
-      const targetId = storeId || "48c533dc-97fd-404b-b435-5692f03cb123";
-
-      menuSocket.emit("findAllMenus", targetId, (res: Menu[]) => {
-        set({ isLoading: false, menus: res });
-      });
-    },
-    setMenus: (menus) => set({ menus }),
+    setMenu: (options) =>
+      set((state) => ({
+        ...state,
+        ...options,
+      })),
   }));
 };

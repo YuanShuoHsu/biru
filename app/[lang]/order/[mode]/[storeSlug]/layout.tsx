@@ -17,8 +17,8 @@ const OrderModeStoreSlugLayout = async ({
 
   const stores = await getStores();
 
-  const hasStore = stores.some(({ slug }) => slug === storeSlug);
-  if (!hasStore) return notFound();
+  const store = stores.find(({ slug }) => slug === storeSlug);
+  if (!store) return notFound();
 
   return <>{children}</>;
 };
