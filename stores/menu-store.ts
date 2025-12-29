@@ -29,7 +29,7 @@ export const createMenuStore = (initState: MenuState = defaultInitState) => {
       const targetId = storeId || "48c533dc-97fd-404b-b435-5692f03cb123";
 
       menuSocket.emit("findAllMenus", targetId, (res: Menu[]) => {
-        set({ menus: res, isLoading: false });
+        set({ isLoading: false, menus: res });
       });
     },
     setMenus: (menus) => set({ menus }),
