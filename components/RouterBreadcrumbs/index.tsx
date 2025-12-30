@@ -67,32 +67,23 @@ const breadcrumbsMap = (
 ): BreadcrumbItem[] => {
   const isPickup = mode === ORDER_MODE.Pickup;
 
-  const orderModePath = `/order/${mode}`;
-  const storePath = `${orderModePath}/${storeSlug}`;
-  const dineInTablePath = `${storePath}/${tableNumber}`;
-  const dineInPartyPath = `${dineInTablePath}/${partySize}`;
-  const dineInCheckoutPath = `${dineInPartyPath}/checkout`;
-  const dineInCompletePath = `${dineInPartyPath}/complete`;
-  const pickupCheckoutPath = `${storePath}/checkout`;
-  const pickupCompletePath = `${storePath}/complete`;
-
   const dineInChildren: BreadcrumbItem[] = [
     {
       children: [
         {
           icon: Payment,
           label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
-          to: dineInCheckoutPath,
+          to: "/checkout",
         },
         {
           icon: Pets,
           label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
-          to: dineInCompletePath,
+          to: "/complete",
         },
       ],
       icon: partySize === "1" ? Person : Group,
       label: partySize,
-      to: dineInPartyPath,
+      to: `/${partySize}`,
     },
   ];
 
@@ -100,12 +91,12 @@ const breadcrumbsMap = (
     {
       icon: Payment,
       label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
-      to: pickupCheckoutPath,
+      to: "/checkout",
     },
     {
       icon: Pets,
       label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
-      to: pickupCompletePath,
+      to: "/complete",
     },
   ];
 
@@ -116,27 +107,31 @@ const breadcrumbsMap = (
           children: dineInChildren,
           icon: TableBar,
           label: tableNumber,
-          to: dineInTablePath,
+          to: `/${tableNumber}`,
         },
       ];
 
-  const storeNode: BreadcrumbItem = {
-    children: storeChildren,
-    disabled: !isPickup,
-    icon: Storefront,
-    label: storeName,
-    to: storePath,
-  };
+  const modeChildren: BreadcrumbItem[] = [
+    {
+      children: storeChildren,
+      disabled: !isPickup,
+      icon: Storefront,
+      label: storeName,
+      to: `/${storeSlug}`,
+    },
+  ];
 
-  const modeNode: BreadcrumbItem = {
-    children: [storeNode],
-    disabled: !isPickup,
-    icon: isPickup ? LocalMall : Restaurant,
-    label: isPickup
-      ? dict.order.mode.pickup.label
-      : dict.order.mode.dineIn.label,
-    to: orderModePath,
-  };
+  const orderChildren: BreadcrumbItem[] = [
+    {
+      children: modeChildren,
+      disabled: !isPickup,
+      icon: isPickup ? LocalMall : Restaurant,
+      label: isPickup
+        ? dict.order.mode.pickup.label
+        : dict.order.mode.dineIn.label,
+      to: `/${mode}`,
+    },
+  ];
 
   return [
     {
@@ -211,7 +206,7 @@ const breadcrumbsMap = (
       to: "/member",
     },
     {
-      children: [modeNode],
+      children: orderChildren,
       disabled: true,
       icon: ShoppingCart,
       label: dict.order.label,
@@ -261,7 +256,7 @@ const findBreadcrumb = (
   parentPath = "",
 ): Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label"> | undefined =>
   breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
-    const currentPath = to.startsWith("/") ? to : `${parentPath}${to}`;
+    const currentPath = `${parentPath}${to}`;
 
     if (currentPath === targetPath) return [{ disabled, hidden, icon, label }];
 
