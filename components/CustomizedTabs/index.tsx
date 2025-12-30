@@ -86,10 +86,10 @@ const CustomizedTabs = () => {
   });
 
   const categoryGroups = menus
-    .map(({ id, name, menuItems }) => ({
+    .map(({ id, name, items }) => ({
       id,
       label: name[lang],
-      items: menuItems.filter(({ isActive }) => isActive),
+      items: items.filter(({ isActive }) => isActive),
     }))
     .filter(({ items }) => items.length > 0);
 
