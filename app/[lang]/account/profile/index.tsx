@@ -44,6 +44,7 @@ import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 type PreferenceKey = "newsletter" | "orderUpdates" | "recommendations";
 
@@ -115,8 +116,8 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
 
   const name = useMemo(
     () =>
-      getDisplayName(langCode, profile) || dict.member.profile.placeholderName,
-    [dict.member.profile.placeholderName, langCode, profile],
+      getDisplayName(langCode, profile) || dict.account.profile.placeholderName,
+    [dict.account.profile.placeholderName, langCode, profile],
   );
 
   const initial = name.charAt(0).toUpperCase();
@@ -164,7 +165,9 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
         )
       }
       label={
-        verified ? dict.member.profile.verified : dict.member.profile.unverified
+        verified
+          ? dict.account.profile.verified
+          : dict.account.profile.unverified
       }
       size="small"
       variant={verified ? "filled" : "outlined"}
@@ -227,22 +230,24 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
   if (!isSignedIn || !profile) {
     return (
       <Card>
-        <CardHeader title={dict.member.accountMenu.profile} />
+        <CardHeader title={dict.account.accountMenu.profile} />
         <CardContent>
           <Stack gap={2}>
             <Typography variant="h6">
-              {dict.member.profile.signInCta}
+              {dict.account.profile.signInCta}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              {dict.member.profile.empty}
+              {dict.account.profile.empty}
             </Typography>
             <Button
               component={NextLink}
-              href={`/${langCode}/member/sign-in?redirect=${encodeURIComponent(currentURL)}`}
+              href={handleQueryParam(`/${langCode}/auth/sign-in`, {
+                [QueryParamKey.Redirect]: currentURL,
+              })}
               startIcon={<Login />}
               variant="contained"
             >
-              {dict.member.auth.signIn.label}
+              {dict.auth.signIn.label}
             </Button>
           </Stack>
         </CardContent>
@@ -291,19 +296,19 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
               </Avatar>
               <Stack gap={0.5}>
                 <Typography color="primary" fontWeight={700} variant="overline">
-                  {dict.member.accountMenu.profile}
+                  {dict.account.accountMenu.profile}
                 </Typography>
                 <Typography fontWeight={700} variant="h5">
                   {name}
                 </Typography>
                 <Typography color="text.secondary" variant="body2">
-                  {dict.member.profile.subtitle}
+                  {dict.account.profile.subtitle}
                 </Typography>
                 <Stack direction="row" flexWrap="wrap" gap={1}>
                   {memberSince && (
                     <Chip
                       color="primary"
-                      label={interpolate(dict.member.profile.memberSince, {
+                      label={interpolate(dict.account.profile.memberSince, {
                         date: memberSince,
                       })}
                       size="small"
@@ -322,20 +327,20 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
             <Stack gap={1} minWidth={{ xs: "100%", md: 280 }}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2">
-                  {dict.member.profile.completion}
+                  {dict.account.profile.completion}
                 </Typography>
                 <Typography fontWeight={700} variant="body2">
                   {completion}%
                 </Typography>
               </Stack>
               <LinearProgress
-                aria-label={dict.member.profile.completion}
+                aria-label={dict.account.profile.completion}
                 value={completion}
                 variant="determinate"
               />
               {updatedAt && (
                 <Typography color="text.secondary" variant="caption">
-                  {interpolate(dict.member.profile.lastUpdated, {
+                  {interpolate(dict.account.profile.lastUpdated, {
                     date: updatedAt,
                   })}
                 </Typography>
@@ -349,19 +354,19 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
         <Grid size={{ xs: 12, md: 7 }}>
           <Stack gap={2}>
             <Card>
-              <CardHeader title={dict.member.profile.contact} />
+              <CardHeader title={dict.account.profile.contact} />
               <CardContent>
                 <Stack gap={2}>
                   <InfoRow
                     icon={MailOutline}
-                    label={dict.member.auth.email.label}
+                    label={dict.auth.email.label}
                     status={verificationChip(profile.emailVerified)}
                     value={profile.email || dict.common.empty}
                   />
                   <Divider flexItem />
                   <InfoRow
                     icon={PhoneIphone}
-                    label={dict.member.auth.phone}
+                    label={dict.auth.phone}
                     status={verificationChip(profile.phoneVerified)}
                     value={profile.phone || dict.common.empty}
                   />
@@ -387,11 +392,11 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
                 <Divider sx={{ my: 2 }} />
                 <Button
                   component={NextLink}
-                  href={`/${langCode}/member/account-settings`}
+                  href={`/${langCode}/account/account-settings`}
                   startIcon={<Settings />}
                   variant="outlined"
                 >
-                  {dict.member.accountSettings.label}
+                  {dict.account.accountSettings.label}
                 </Button>
               </CardContent>
             </Card>
@@ -400,36 +405,36 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
         <Grid size={{ xs: 12, md: 5 }}>
           <Stack gap={2}>
             <Card>
-              <CardHeader title={dict.member.profile.preferences} />
+              <CardHeader title={dict.account.profile.preferences} />
               <CardContent>
                 <Stack gap={1.5}>
                   {renderPreference(
                     "orderUpdates",
-                    dict.member.profile.orderUpdates,
+                    dict.account.profile.orderUpdates,
                   )}
                   {renderPreference(
                     "newsletter",
-                    dict.member.profile.newsletter,
+                    dict.account.profile.newsletter,
                   )}
                   {renderPreference(
                     "recommendations",
-                    dict.member.profile.recommendations,
+                    dict.account.profile.recommendations,
                   )}
                 </Stack>
                 <Typography color="text.secondary" mt={2} variant="caption">
-                  {dict.member.profile.localNotice}
+                  {dict.account.profile.localNotice}
                 </Typography>
               </CardContent>
             </Card>
             <Card>
-              <CardHeader title={dict.member.profile.activity} />
+              <CardHeader title={dict.account.profile.activity} />
               <CardContent>
                 <Stack gap={1.5}>
                   {memberSince && (
                     <Stack alignItems="center" direction="row" gap={1}>
                       <Update fontSize="small" />
                       <Typography variant="body2">
-                        {interpolate(dict.member.profile.memberSince, {
+                        {interpolate(dict.account.profile.memberSince, {
                           date: memberSince,
                         })}
                       </Typography>
@@ -439,7 +444,7 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
                     <Stack alignItems="center" direction="row" gap={1}>
                       <CheckCircle color="primary" fontSize="small" />
                       <Typography variant="body2">
-                        {interpolate(dict.member.profile.lastUpdated, {
+                        {interpolate(dict.account.profile.lastUpdated, {
                           date: updatedAt,
                         })}
                       </Typography>

@@ -5,61 +5,8 @@
     "languageSwitcher": "Change Language",
     "lightMode": "Light mode"
   },
-  "cart": {
-    "backToOrder": "Back to Order",
-    "checkout": "Proceed to Checkout",
-    "quantityExceedsStock": "{label} {stock} left",
-    "title": "Shopping Cart",
-    "totalQuantity": "{quantity} items"
-  },
-  "common": {
-    "colon": ": ",
-    "currency": "NT$",
-    "delimiter": ", ",
-    "empty": "No items yet",
-    "from": "from",
-    "loading": "Loading...",
-    "maxQuantity": "You can buy up to {quantity} per item",
-    "multiply": "×",
-    "reachStockLimit": "Stock limit reached {label}",
-    "soldOut": "{label} Sold out",
-    "totalAmount": "Total"
-  },
-  "company": {
-    "about": { "label": "About" },
-    "label": "Company",
-    "legal": {
-      "back": "Back",
-      "privacy": { "label": "Privacy Policy" },
-      "terms": { "label": "Terms of Service" }
-    }
-  },
-  "dialog": {
-    "addToCart": "Add to cart",
-    "amount": "SubTotal",
-    "close": "Close",
-    "maxStock": "Only {quantity} left in stock {label}"
-  },
-  "home": {
-    "footer": {
-      "brand": "Biru Coffee",
-      "copyright": "Copyright © {year} {brand}.",
-      "newsletter": {
-        "action": "Subscribe",
-        "invalidEmail": "Please enter a valid email.",
-        "subtitle": "Join our newsletter for regular updates. No spam ever.",
-        "success": "Subscribed (demo).",
-        "title": "Keep up to date"
-      },
-      "tagline": "Coffee, crafted for your day."
-    },
-    "label": "Home"
-  },
-  "maintenance": {
-    "title": "Under Maintenance"
-  },
-  "member": {
-    "label": "Member",
+  "account": {
+    "label": "Account",
     "accountMenu": {
       "這邊未來要根據頁面修正": "",
       "addAnotherAccount": "Add another account",
@@ -154,78 +101,153 @@
       "subtitle": "Personal details and preferences",
       "unverified": "Not verified",
       "verified": "Verified"
+    }
+  },
+  "auth": {
+    "label": "Member",
+    "birthDate": {
+      "label": "Birth date",
+      "placeholder": "Select birth date"
     },
-    "auth": {
-      "birthDate": {
-        "label": "Birth date",
-        "placeholder": "Select birth date"
+    "confirmPassword": {
+      "label": "Confirm password",
+      "placeholder": "Confirm your password"
+    },
+    "confirmNewPassword": "Confirm new password",
+    "chooseCountry": "Choose a country",
+    "countryCode": "Country code",
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter email"
+    },
+    "emailUpdates": "I want to receive updates via email",
+    "firstName": {
+      "label": "First Name",
+      "placeholder": "Enter first name"
+    },
+    "forgotPassword": {
+      "label": "Forgot password"
+    },
+    "gender": {
+      "label": "Gender",
+      "placeholder": "Select gender",
+      "options": {
+        "female": "Female",
+        "male": "Male",
+        "notDisclosed": "Prefer not to say"
+      }
+    },
+    "hasAccount": "Already have an account?",
+    "legalConsent": "By clicking «{action}», you agree to Biru Coffee's\n{terms} and {privacy}.",
+    "hideConfirmPassword": "Hide confirm password",
+    "hideConfirmNewPassword": "Hide confirm new password",
+    "hideNewPassword": "Hide the new password",
+    "hidePassword": "Hide the password",
+    "lastName": {
+      "label": "Last Name (optional)",
+      "placeholder": "Enter last name"
+    },
+    "newPassword": "New password",
+    "noAccount": "Don't have an account?",
+    "or": "or",
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter password"
+    },
+    "phone": "Phone Number",
+    "rememberMe": "Remember me",
+    "rememberedPassword": "Remembered your password?",
+    "resetPassword": {
+      "label": "Reset password"
+    },
+    "sendPasswordResetLink": "Send password reset link",
+    "showConfirmPassword": "Show confirm password",
+    "showConfirmNewPassword": "Show confirm new password",
+    "showNewPassword": "Display the new password",
+    "showPassword": "Display the password",
+    "signIn": {
+      "label": "Sign in",
+      "success": "Signed in"
+    },
+    "signOut": {
+      "label": "Sign out",
+      "success": "Signed out"
+    },
+    "signUp": {
+      "label": "Sign up"
+    },
+    "verifyEmail": {
+      "backToSignIn": "Back to sign in",
+      "checkSpam": "Didn't get it? Check spam or try resending in a moment.",
+      "enterEmail": "Enter your email before resending",
+      "resend": "Resend verification email",
+      "resendSuccess": "Verification email sent again",
+      "sent": "Verification email sent",
+      "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
+      "title": "Check your email"
+    }
+  },
+  "cart": {
+    "backToOrder": "Back to Order",
+    "checkout": "Proceed to Checkout",
+    "quantityExceedsStock": "{label} {stock} left",
+    "title": "Shopping Cart",
+    "totalQuantity": "{quantity} items"
+  },
+  "common": {
+    "colon": ": ",
+    "currency": "NT$",
+    "delimiter": ", ",
+    "empty": "No items yet",
+    "from": "from",
+    "loading": "Loading...",
+    "maxQuantity": "You can buy up to {quantity} per item",
+    "multiply": "×",
+    "reachStockLimit": "Stock limit reached {label}",
+    "soldOut": "{label} Sold out",
+    "totalAmount": "Total"
+  },
+  "company": {
+    "about": {
+      "label": "About"
+    },
+    "label": "Company",
+    "legal": {
+      "back": "Back",
+      "privacy": {
+        "label": "Privacy Policy"
       },
-      "confirmPassword": {
-        "label": "Confirm password",
-        "placeholder": "Confirm your password"
-      },
-      "confirmNewPassword": "Confirm new password",
-      "chooseCountry": "Choose a country",
-      "countryCode": "Country code",
-      "email": {
-        "label": "Email",
-        "placeholder": "Enter email"
-      },
-      "emailUpdates": "I want to receive updates via email",
-      "firstName": {
-        "label": "First Name",
-        "placeholder": "Enter first name"
-      },
-      "forgotPassword": { "label": "Forgot password" },
-      "gender": {
-        "label": "Gender",
-        "placeholder": "Select gender",
-        "options": {
-          "female": "Female",
-          "male": "Male",
-          "notDisclosed": "Prefer not to say"
-        }
-      },
-      "hasAccount": "Already have an account?",
-      "legalConsent": "By clicking «{action}», you agree to Biru Coffee's\n{terms} and {privacy}.",
-      "hideConfirmPassword": "Hide confirm password",
-      "hideConfirmNewPassword": "Hide confirm new password",
-      "hideNewPassword": "Hide the new password",
-      "hidePassword": "Hide the password",
-      "lastName": {
-        "label": "Last Name (optional)",
-        "placeholder": "Enter last name"
-      },
-      "newPassword": "New password",
-      "noAccount": "Don't have an account?",
-      "or": "or",
-      "password": {
-        "label": "Password",
-        "placeholder": "Enter password"
-      },
-      "phone": "Phone Number",
-      "rememberMe": "Remember me",
-      "rememberedPassword": "Remembered your password?",
-      "resetPassword": { "label": "Reset password" },
-      "sendPasswordResetLink": "Send password reset link",
-      "showConfirmPassword": "Show confirm password",
-      "showConfirmNewPassword": "Show confirm new password",
-      "showNewPassword": "Display the new password",
-      "showPassword": "Display the password",
-      "signIn": { "label": "Sign in", "success": "Signed in" },
-      "signOut": { "label": "Sign out", "success": "Signed out" },
-      "signUp": { "label": "Sign up" },
-      "verifyEmail": {
-        "backToSignIn": "Back to sign in",
-        "checkSpam": "Didn't get it? Check spam or try resending in a moment.",
-        "enterEmail": "Enter your email before resending",
-        "resend": "Resend verification email",
-        "resendSuccess": "Verification email sent again",
-        "sent": "Verification email sent",
-        "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
-        "title": "Check your email"
+      "terms": {
+        "label": "Terms of Service"
       }
     }
+  },
+  "dialog": {
+    "addToCart": "Add to cart",
+    "amount": "SubTotal",
+    "close": "Close",
+    "maxStock": "Only {quantity} left in stock {label}"
+  },
+  "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "Subscribe",
+        "invalidEmail": "Please enter a valid email.",
+        "subtitle": "Join our newsletter for regular updates. No spam ever.",
+        "success": "Subscribed (demo).",
+        "title": "Keep up to date"
+      },
+      "tagline": "Coffee, crafted for your day."
+    },
+    "label": "Home"
+  },
+  "maintenance": {
+    "title": "Under Maintenance"
+  },
+  "member": {
+    "label": "Member"
   },
   "order": {
     "label": "Order",
@@ -246,7 +268,9 @@
       },
       "pickup": {
         "label": "Pickup",
-        "select": { "label": "Select a store" }
+        "select": {
+          "label": "Select a store"
+        }
       },
       "storeSlug": {
         "selectTable": "Select a table",
@@ -257,8 +281,12 @@
             "placeholder": "Search menu"
           },
           "stepper": {
-            "checkout": { "label": "Checkout" },
-            "complete": { "label": "Complete" }
+            "checkout": {
+              "label": "Checkout"
+            },
+            "complete": {
+              "label": "Complete"
+            }
           },
           "top": "TOP",
           "topSold": "Best Sellers"

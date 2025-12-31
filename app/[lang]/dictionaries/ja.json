@@ -5,61 +5,8 @@
     "languageSwitcher": "言語を変更",
     "lightMode": "ライトモード"
   },
-  "cart": {
-    "backToOrder": "メニューに戻る",
-    "checkout": "レジに進む",
-    "quantityExceedsStock": "{label} 残り {stock} 個",
-    "title": "カート",
-    "totalQuantity": "合計 {quantity} 点"
-  },
-  "common": {
-    "colon": "：",
-    "currency": "NT$",
-    "delimiter": "、",
-    "empty": "商品がありません",
-    "from": "〜",
-    "loading": "読み込み中...",
-    "maxQuantity": "各商品は最大 {quantity} 個まで購入できます",
-    "multiply": "×",
-    "reachStockLimit": "在庫の上限に達しました {label}",
-    "soldOut": "{label} 売り切れ",
-    "totalAmount": "合計"
-  },
-  "company": {
-    "about": { "label": "私たちについて" },
-    "label": "会社概要",
-    "legal": {
-      "back": "戻る",
-      "privacy": { "label": "プライバシーポリシー" },
-      "terms": { "label": "利用規約" }
-    }
-  },
-  "dialog": {
-    "addToCart": "カートに追加",
-    "amount": "小計",
-    "close": "閉じる",
-    "maxStock": "{label} 在庫は残り {quantity} 個です"
-  },
-  "home": {
-    "footer": {
-      "brand": "Biru Coffee",
-      "copyright": "Copyright © {year} {brand}.",
-      "newsletter": {
-        "action": "登録",
-        "invalidEmail": "有効なメールアドレスを入力してください。",
-        "subtitle": "ニュースレターに登録して定期的な更新を受け取りましょう。スパムは一切送りません。",
-        "success": "登録しました（デモ）。",
-        "title": "最新情報を受け取る"
-      },
-      "tagline": "あなたの一日を彩る、こだわりのコーヒー。"
-    },
-    "label": "ホーム"
-  },
-  "maintenance": {
-    "title": "メンテナンス中"
-  },
-  "member": {
-    "label": "会員",
+  "account": {
+    "label": "アカウント",
     "accountMenu": {
       "這邊未來要根據頁面修正": "",
       "addAnotherAccount": "別のアカウントを追加",
@@ -154,78 +101,153 @@
       "subtitle": "個人情報と設定",
       "unverified": "未認証",
       "verified": "認証済み"
+    }
+  },
+  "auth": {
+    "label": "会員",
+    "birthDate": {
+      "label": "生年月日",
+      "placeholder": "生年月日を選択してください"
     },
-    "auth": {
-      "birthDate": {
-        "label": "生年月日",
-        "placeholder": "生年月日を選択してください"
+    "confirmPassword": {
+      "label": "パスワードの確認",
+      "placeholder": "パスワードを再入力してください"
+    },
+    "confirmNewPassword": "新しいパスワードの確認",
+    "chooseCountry": "国を選択",
+    "countryCode": "国コード",
+    "email": {
+      "label": "メールアドレス",
+      "placeholder": "メールアドレスを入力してください"
+    },
+    "emailUpdates": "メールで最新情報を受け取りたい",
+    "firstName": {
+      "label": "名",
+      "placeholder": "名を入力してください"
+    },
+    "forgotPassword": {
+      "label": "パスワードをお忘れですか"
+    },
+    "gender": {
+      "label": "性別",
+      "placeholder": "性別を選択してください",
+      "options": {
+        "female": "女性",
+        "male": "男性",
+        "notDisclosed": "回答しない"
+      }
+    },
+    "hasAccount": "すでにアカウントをお持ちですか？",
+    "legalConsent": "「{action}」をクリックすると、Biru Coffeeの\n{terms} と {privacy} に同意したものとみなされます。",
+    "hideConfirmPassword": "確認用パスワードを非表示",
+    "hideConfirmNewPassword": "確認用パスワードを非表示",
+    "hideNewPassword": "新しいパスワードを非表示",
+    "hidePassword": "パスワードを非表示",
+    "lastName": {
+      "label": "姓（任意）",
+      "placeholder": "姓を入力してください"
+    },
+    "newPassword": "新しいパスワード",
+    "noAccount": "アカウントをお持ちでない方",
+    "or": "または",
+    "password": {
+      "label": "パスワード",
+      "placeholder": "パスワードを入力してください"
+    },
+    "phone": "電話番号",
+    "rememberMe": "ログイン状態を保持",
+    "rememberedPassword": "パスワードを覚えていますか？",
+    "resetPassword": {
+      "label": "パスワードをリセット"
+    },
+    "sendPasswordResetLink": "パスワードリセットリンクを送信",
+    "showConfirmPassword": "確認用パスワードを表示",
+    "showConfirmNewPassword": "確認用パスワードを表示",
+    "showNewPassword": "新しいパスワードを表示",
+    "showPassword": "パスワードを表示",
+    "signIn": {
+      "label": "ログイン",
+      "success": "ログインしました"
+    },
+    "signOut": {
+      "label": "ログアウト",
+      "success": "ログアウトしました"
+    },
+    "signUp": {
+      "label": "新規登録"
+    },
+    "verifyEmail": {
+      "backToSignIn": "ログインへ戻る",
+      "checkSpam": "メールが届かない場合は迷惑メールフォルダを確認するか、少し待ってから再送してください。",
+      "enterEmail": "メールアドレスを入力してから再送してください",
+      "resend": "確認メールを再送",
+      "resendSuccess": "確認メールを再送しました",
+      "sent": "確認メールを送信しました",
+      "subtitle": "{email} に確認メールを送信しました。ログインするにはメール認証を完了してください。",
+      "title": "確認メールを送信しました"
+    }
+  },
+  "cart": {
+    "backToOrder": "メニューに戻る",
+    "checkout": "レジに進む",
+    "quantityExceedsStock": "{label} 残り {stock} 個",
+    "title": "カート",
+    "totalQuantity": "合計 {quantity} 点"
+  },
+  "common": {
+    "colon": "：",
+    "currency": "NT$",
+    "delimiter": "、",
+    "empty": "商品がありません",
+    "from": "〜",
+    "loading": "読み込み中...",
+    "maxQuantity": "各商品は最大 {quantity} 個まで購入できます",
+    "multiply": "×",
+    "reachStockLimit": "在庫の上限に達しました {label}",
+    "soldOut": "{label} 売り切れ",
+    "totalAmount": "合計"
+  },
+  "company": {
+    "about": {
+      "label": "私たちについて"
+    },
+    "label": "会社概要",
+    "legal": {
+      "back": "戻る",
+      "privacy": {
+        "label": "プライバシーポリシー"
       },
-      "confirmPassword": {
-        "label": "パスワードの確認",
-        "placeholder": "パスワードを再入力してください"
-      },
-      "confirmNewPassword": "新しいパスワードの確認",
-      "chooseCountry": "国を選択",
-      "countryCode": "国コード",
-      "email": {
-        "label": "メールアドレス",
-        "placeholder": "メールアドレスを入力してください"
-      },
-      "emailUpdates": "メールで最新情報を受け取りたい",
-      "firstName": {
-        "label": "名",
-        "placeholder": "名を入力してください"
-      },
-      "forgotPassword": { "label": "パスワードをお忘れですか" },
-      "gender": {
-        "label": "性別",
-        "placeholder": "性別を選択してください",
-        "options": {
-          "female": "女性",
-          "male": "男性",
-          "notDisclosed": "回答しない"
-        }
-      },
-      "hasAccount": "すでにアカウントをお持ちですか？",
-      "legalConsent": "「{action}」をクリックすると、Biru Coffeeの\n{terms} と {privacy} に同意したものとみなされます。",
-      "hideConfirmPassword": "確認用パスワードを非表示",
-      "hideConfirmNewPassword": "確認用パスワードを非表示",
-      "hideNewPassword": "新しいパスワードを非表示",
-      "hidePassword": "パスワードを非表示",
-      "lastName": {
-        "label": "姓（任意）",
-        "placeholder": "姓を入力してください"
-      },
-      "newPassword": "新しいパスワード",
-      "noAccount": "アカウントをお持ちでない方",
-      "or": "または",
-      "password": {
-        "label": "パスワード",
-        "placeholder": "パスワードを入力してください"
-      },
-      "phone": "電話番号",
-      "rememberMe": "ログイン状態を保持",
-      "rememberedPassword": "パスワードを覚えていますか？",
-      "resetPassword": { "label": "パスワードをリセット" },
-      "sendPasswordResetLink": "パスワードリセットリンクを送信",
-      "showConfirmPassword": "確認用パスワードを表示",
-      "showConfirmNewPassword": "確認用パスワードを表示",
-      "showNewPassword": "新しいパスワードを表示",
-      "showPassword": "パスワードを表示",
-      "signIn": { "label": "ログイン", "success": "ログインしました" },
-      "signOut": { "label": "ログアウト", "success": "ログアウトしました" },
-      "signUp": { "label": "新規登録" },
-      "verifyEmail": {
-        "backToSignIn": "ログインへ戻る",
-        "checkSpam": "メールが届かない場合は迷惑メールフォルダを確認するか、少し待ってから再送してください。",
-        "enterEmail": "メールアドレスを入力してから再送してください",
-        "resend": "確認メールを再送",
-        "resendSuccess": "確認メールを再送しました",
-        "sent": "確認メールを送信しました",
-        "subtitle": "{email} に確認メールを送信しました。ログインするにはメール認証を完了してください。",
-        "title": "確認メールを送信しました"
+      "terms": {
+        "label": "利用規約"
       }
     }
+  },
+  "dialog": {
+    "addToCart": "カートに追加",
+    "amount": "小計",
+    "close": "閉じる",
+    "maxStock": "{label} 在庫は残り {quantity} 個です"
+  },
+  "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "登録",
+        "invalidEmail": "有効なメールアドレスを入力してください。",
+        "subtitle": "ニュースレターに登録して定期的な更新を受け取りましょう。スパムは一切送りません。",
+        "success": "登録しました（デモ）。",
+        "title": "最新情報を受け取る"
+      },
+      "tagline": "あなたの一日を彩る、こだわりのコーヒー。"
+    },
+    "label": "ホーム"
+  },
+  "maintenance": {
+    "title": "メンテナンス中"
+  },
+  "member": {
+    "label": "会員"
   },
   "order": {
     "label": "注文",
@@ -236,14 +258,19 @@
           "tableNumber": {
             "value": "テーブル {tableNumber}",
             "partySize": {
-              "select": { "label": "来店人数を選択", "value": "{count} 名" }
+              "select": {
+                "label": "来店人数を選択",
+                "value": "{count} 名"
+              }
             }
           }
         }
       },
       "pickup": {
         "label": "お持ち帰り",
-        "select": { "label": "店舗を選択" }
+        "select": {
+          "label": "店舗を選択"
+        }
       },
       "storeSlug": {
         "selectTable": "テーブルを選択",
@@ -254,8 +281,12 @@
             "placeholder": "メニューを検索"
           },
           "stepper": {
-            "checkout": { "label": "お会計" },
-            "complete": { "label": "完了" }
+            "checkout": {
+              "label": "お会計"
+            },
+            "complete": {
+              "label": "完了"
+            }
           },
           "top": "TOP",
           "topSold": "人気商品"

@@ -137,6 +137,62 @@ const breadcrumbsMap = (
     {
       children: [
         {
+          icon: Group,
+          label: dict.account.accountMenu.profile,
+          to: "/profile",
+        },
+        {
+          icon: Person,
+          label: dict.account.accountMenu.myAccount,
+          to: "/my-account",
+        },
+        {
+          icon: PersonAdd,
+          label: dict.account.accountMenu.addAnotherAccount,
+          to: "/add-another-account",
+        },
+        {
+          icon: Settings,
+          label: dict.account.accountSettings.label,
+          to: "/account-settings",
+        },
+      ],
+      disabled: true,
+      icon: AccountCircle,
+      label: dict.account.label,
+      to: "/account",
+    },
+    {
+      children: [
+        {
+          icon: Login,
+          label: dict.auth.signIn.label,
+          to: "/sign-in",
+        },
+        {
+          icon: PersonAdd,
+          label: dict.auth.signUp.label,
+          to: "/sign-up",
+        },
+        {
+          icon: HelpOutline,
+          label: dict.auth.forgotPassword.label,
+          to: "/forgot-password",
+        },
+        {
+          icon: LockReset,
+          label: dict.auth.resetPassword.label,
+          to: "/reset-password",
+        },
+      ],
+      disabled: true,
+      icon: Login,
+      label: dict.auth.label,
+      to: "/auth",
+    },
+    {
+      children: [
+        {
           icon: Info,
           label: dict.company.about.label,
           to: "/about",
@@ -156,54 +212,6 @@ const breadcrumbsMap = (
       icon: Business,
       label: dict.company.label,
       to: "/company",
-    },
-    {
-      children: [
-        {
-          icon: Login,
-          label: dict.member.auth.signIn.label,
-          to: "/sign-in",
-        },
-        {
-          icon: PersonAdd,
-          label: dict.member.auth.signUp.label,
-          to: "/sign-up",
-        },
-        {
-          icon: HelpOutline,
-          label: dict.member.auth.forgotPassword.label,
-          to: "/forgot-password",
-        },
-        {
-          icon: LockReset,
-          label: dict.member.auth.resetPassword.label,
-          to: "/reset-password",
-        },
-        {
-          icon: Group,
-          label: dict.member.accountMenu.profile,
-          to: "/profile",
-        },
-        {
-          icon: Person,
-          label: dict.member.accountMenu.myAccount,
-          to: "/my-account",
-        },
-        {
-          icon: PersonAdd,
-          label: dict.member.accountMenu.addAnotherAccount,
-          to: "/add-another-account",
-        },
-        {
-          icon: Settings,
-          label: dict.member.accountSettings.label,
-          to: "/account-settings",
-        },
-      ],
-      disabled: true,
-      icon: AccountCircle,
-      label: dict.member.label,
-      to: "/member",
     },
     {
       children: orderChildren,

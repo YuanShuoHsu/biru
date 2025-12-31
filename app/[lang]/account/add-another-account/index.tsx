@@ -30,6 +30,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import type { LocaleCode } from "@/types/locale";
 
 import { getDisplayName } from "@/utils/auth";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -66,15 +67,15 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
   const langCode = lang as LocaleCode;
 
   const safeRedirect =
-    redirect && redirect !== `/${langCode}/member/add-another-account`
+    redirect && redirect !== `/${langCode}/account/add-another-account`
       ? redirect
-      : `/${langCode}/member/my-account`;
+      : `/${langCode}/account/my-account`;
 
-  const signInHref = `/${langCode}/member/sign-in?redirect=${encodeURIComponent(
-    safeRedirect,
-  )}`;
+  const signInHref = handleQueryParam(`/${langCode}/auth/sign-in`, {
+    [QueryParamKey.Redirect]: safeRedirect,
+  });
 
-  const handleCancel = () => router.push(`/${langCode}/member/my-account`);
+  const handleCancel = () => router.push(`/${langCode}/account/my-account`);
 
   const handleSignOutAndContinue = async () => {
     await handleLogout();
@@ -90,10 +91,10 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
         title={
           <Stack gap={0.5} textAlign="center">
             <Typography color="primary" fontWeight="bold" variant="h6">
-              {dict.member.addAnotherAccount.title}
+              {dict.account.addAnotherAccount.title}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              {dict.member.addAnotherAccount.subtitle}
+              {dict.account.addAnotherAccount.subtitle}
             </Typography>
           </Stack>
         }
@@ -103,7 +104,7 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
         {!isAuthLoading && isSignedIn && profile ? (
           <>
             <Typography color="text.secondary" variant="body2">
-              {dict.member.addAnotherAccount.signedInNotice}
+              {dict.account.addAnotherAccount.signedInNotice}
             </Typography>
             <Divider />
             <Stack alignItems="center" direction="row" gap={2}>
@@ -112,7 +113,7 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
               </Avatar>
               <Stack>
                 <Typography variant="body2" color="text.secondary">
-                  {dict.member.addAnotherAccount.currentAccount}
+                  {dict.account.addAnotherAccount.currentAccount}
                 </Typography>
                 <Typography fontWeight={600} variant="body1">
                   {name || profile.email || ""}
@@ -123,7 +124,7 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
         ) : (
           !isAuthLoading && (
             <Typography color="text.secondary" variant="body2">
-              {dict.member.addAnotherAccount.signedOutNotice}
+              {dict.account.addAnotherAccount.signedOutNotice}
             </Typography>
           )
         )}
@@ -139,10 +140,10 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
               startIcon={<PersonAdd />}
               variant="contained"
             >
-              {dict.member.addAnotherAccount.actions.signOutContinue}
+              {dict.account.addAnotherAccount.actions.signOutContinue}
             </Button>
             <Button fullWidth onClick={handleCancel} variant="text">
-              {dict.member.addAnotherAccount.actions.cancel}
+              {dict.account.addAnotherAccount.actions.cancel}
             </Button>
           </>
         ) : (
@@ -154,10 +155,10 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
               startIcon={<Login />}
               variant="contained"
             >
-              {dict.member.addAnotherAccount.actions.goToSignIn}
+              {dict.account.addAnotherAccount.actions.goToSignIn}
             </Button>
             <Button fullWidth onClick={handleCancel} variant="text">
-              {dict.member.addAnotherAccount.actions.cancel}
+              {dict.account.addAnotherAccount.actions.cancel}
             </Button>
           </>
         )}

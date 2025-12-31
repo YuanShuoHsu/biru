@@ -65,7 +65,7 @@ const MemberAuthVerifyEmail = ({
 
   const handleResend = async () => {
     if (!email) {
-      enqueueSnackbar(dict.member.auth.verifyEmail.enterEmail, {
+      enqueueSnackbar(dict.auth.verifyEmail.enterEmail, {
         variant: "warning",
       });
       return;
@@ -73,7 +73,7 @@ const MemberAuthVerifyEmail = ({
 
     try {
       await triggerResend({ email });
-      enqueueSnackbar(dict.member.auth.verifyEmail.resendSuccess, {
+      enqueueSnackbar(dict.auth.verifyEmail.resendSuccess, {
         variant: "success",
       });
     } catch {
@@ -91,18 +91,18 @@ const MemberAuthVerifyEmail = ({
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.verifyEmail.title}
+            {dict.auth.verifyEmail.title}
           </Typography>
         }
       />
       <StyledCardContent>
         <Typography textAlign="center">
-          {interpolate(dict.member.auth.verifyEmail.subtitle, {
+          {interpolate(dict.auth.verifyEmail.subtitle, {
             email,
           })}
         </Typography>
         <Typography color="text.secondary" textAlign="center" variant="body2">
-          {dict.member.auth.verifyEmail.checkSpam}
+          {dict.auth.verifyEmail.checkSpam}
         </Typography>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
@@ -113,31 +113,27 @@ const MemberAuthVerifyEmail = ({
           size="large"
           variant="contained"
         >
-          {dict.member.auth.verifyEmail.resend}
+          {dict.auth.verifyEmail.resend}
         </Button>
         <Button
           component={NextLink}
           fullWidth
-          href={handleQueryParam(
-            `/${lang}/member/sign-in`,
-            QueryParamKey.Redirect,
-            redirect,
-          )}
+          href={handleQueryParam(`/${lang}/auth/sign-in`, {
+            [QueryParamKey.Redirect]: redirect,
+          })}
           size="large"
           variant="outlined"
         >
-          {dict.member.auth.verifyEmail.backToSignIn}
+          {dict.auth.verifyEmail.backToSignIn}
         </Button>
         <Typography color="text.secondary" textAlign="center" variant="body2">
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/sign-up`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/sign-up`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
           >
-            {dict.member.auth.signUp.label}
+            {dict.auth.signUp.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

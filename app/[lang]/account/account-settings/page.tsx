@@ -1,11 +1,12 @@
 // vibe coding 未來要修正
 
-import { SearchParams } from "next/dist/server/request/search-params";
-import MemberProfile from ".";
+import AccountSettings from ".";
 
-interface MemberProfilePageProps {
+type SearchParams = { [key: string]: string | string[] | undefined };
+
+interface MemberAccountSettingsPageProps {
   params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: Promise<SearchParams>;
 }
 
 const toSearchString = (searchParams: SearchParams) => {
@@ -27,18 +28,18 @@ const toSearchString = (searchParams: SearchParams) => {
   return urlSearchParams.toString();
 };
 
-const MemberProfilePage = async ({
+const MemberAccountSettingsPage = async ({
   params,
   searchParams,
-}: MemberProfilePageProps) => {
+}: MemberAccountSettingsPageProps) => {
   const { lang } = await params;
   const resolvedSearchParams = await searchParams;
 
-  const pathname = `/${lang}/member/profile`;
+  const pathname = `/${lang}/account/account-settings`;
   const search = toSearchString(resolvedSearchParams);
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
-  return <MemberProfile lang={lang} currentURL={currentURL} />;
+  return <AccountSettings currentURL={currentURL} lang={lang} />;
 };
 
-export default MemberProfilePage;
+export default MemberAccountSettingsPage;

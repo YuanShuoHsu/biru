@@ -91,7 +91,7 @@ const MemberAuthForgotPassword = ({
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.forgotPassword.label}
+            {dict.auth.forgotPassword.label}
           </Typography>
         }
       />
@@ -99,10 +99,10 @@ const MemberAuthForgotPassword = ({
         <TextField
           autoComplete="email"
           fullWidth
-          label={dict.member.auth.email.label}
+          label={dict.auth.email.label}
           name="email"
           onChange={handleChange}
-          placeholder={dict.member.auth.email.placeholder}
+          placeholder={dict.auth.email.placeholder}
           required
           type="email"
           value={form.email}
@@ -110,19 +110,17 @@ const MemberAuthForgotPassword = ({
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button fullWidth size="large" type="submit" variant="contained">
-          {dict.member.auth.sendPasswordResetLink}
+          {dict.auth.sendPasswordResetLink}
         </Button>
         <Typography variant="body2">
-          {dict.member.auth.rememberedPassword}{" "}
+          {dict.auth.rememberedPassword}{" "}
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/sign-in`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/sign-in`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
           >
-            {dict.member.auth.signIn.label}
+            {dict.auth.signIn.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

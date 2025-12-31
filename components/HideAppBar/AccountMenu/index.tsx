@@ -34,14 +34,15 @@ import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
+import type { MenuItem as MenuItemData } from "@/types/menuItem";
 import { RouteParams } from "@/types/routeParams";
 
 import {
-  AuthMenuItem,
   getAccountMenuItems,
-  getDisplayName,
+  getLogoutMenuItem,
   getProfileMenuItems,
-} from "@/utils/auth";
+} from "@/utils/account";
+import { getDisplayName } from "@/utils/auth";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledAvatar = styled(Avatar, {
@@ -101,8 +102,8 @@ const AccountMenu = () => {
 
   const dict = useI18n();
   const tooltipTitle = isSignedIn
-    ? dict.member.accountSettings.label
-    : dict.member.auth.signIn.label;
+    ? dict.account.accountSettings.label
+    : dict.auth.signIn.label;
 
   const pathname = usePathname();
 
@@ -113,11 +114,12 @@ const AccountMenu = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const redirectParam = searchParams.get("redirect");
+  const isAccountPage = pathname.startsWith(`/${lang}/account`);
+  const isAuthPage = pathname.startsWith(`/${lang}/auth`);
   const isCompanyPage = pathname.startsWith(`/${lang}/company`);
-  const isMemberPage = pathname.startsWith(`/${lang}/member`);
 
   const redirectTarget =
-    (isCompanyPage || isMemberPage) && redirectParam
+    (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
       ? redirectParam
       : currentURL;
 
@@ -126,11 +128,9 @@ const AccountMenu = () => {
 
     if (!isSignedIn) {
       router.push(
-        handleQueryParam(
-          `/${lang}/member/sign-in`,
-          QueryParamKey.Redirect,
-          redirectTarget,
-        ),
+        handleQueryParam(`/${lang}/auth/sign-in`, {
+          [QueryParamKey.Redirect]: redirectTarget,
+        }),
       );
 
       return;
@@ -142,15 +142,18 @@ const AccountMenu = () => {
   const handleClose = () => setAnchorEl(null);
 
   const profileMenuItems = getProfileMenuItems(dict);
-  const accountMenuItems = getAccountMenuItems(dict, {
-    isMutatingLogout,
-    onLogout: handleLogout,
-  });
+  const accountMenuItems = [
+    ...getAccountMenuItems(dict),
+    getLogoutMenuItem(dict, {
+      isMutatingLogout,
+      onLogout: handleLogout,
+    }),
+  ];
 
-  const renderMenuItems = (items: AuthMenuItem[]) =>
-    items.map(({ disabled, icon: Icon, label, onClick, to }) => {
-      const key = to || label;
-      const href = to && `/${lang}/member${to}`;
+  const renderMenuItems = (items: MenuItemData[]) =>
+    items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
+      const key = to || index;
+      const href = to && `/${lang}/account${to}`;
 
       const selected = href
         ? pathname === href || pathname.startsWith(`${href}/`)
@@ -164,9 +167,11 @@ const AccountMenu = () => {
           selected={selected}
           {...(href ? { component: NextLink, href } : {})}
         >
-          <ListItemIcon>
-            <Icon fontSize="small" />
-          </ListItemIcon>
+          {Icon && (
+            <ListItemIcon>
+              <Icon fontSize="small" />
+            </ListItemIcon>
+          )}
           <ListItemText primary={label} />
         </MenuItem>
       );

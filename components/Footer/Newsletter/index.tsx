@@ -86,10 +86,10 @@ const Newsletter = () => {
       >
         <TextField
           autoComplete="email"
-          label={dict.member.auth.email.label}
+          label={dict.auth.email.label}
           name="email"
           onChange={handleChange}
-          placeholder={dict.member.auth.email.placeholder}
+          placeholder={dict.auth.email.placeholder}
           required
           size="small"
           sx={{

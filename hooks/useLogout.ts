@@ -33,7 +33,7 @@ export const useLogout = () => {
 
     try {
       await trigger();
-      enqueueSnackbar(dict.member.auth.signOut.success, { variant: "success" });
+      enqueueSnackbar(dict.auth.signOut.success, { variant: "success" });
     } catch {
       return;
     } finally {

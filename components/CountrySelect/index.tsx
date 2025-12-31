@@ -217,7 +217,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
           <HintTypography>{hint.current}</HintTypography>
           <TextField
             {...params}
-            label={dict.member.auth.chooseCountry}
+            label={dict.auth.chooseCountry}
             onChange={(event) => {
               const newValue = event.target.value;
               setInputValue(newValue);

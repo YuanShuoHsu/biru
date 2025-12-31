@@ -3,6 +3,7 @@ import type { Menu } from "@/types/menu";
 export const menu: Menu[] = [
   {
     id: "coffee",
+    key: "coffee",
     name: {
       "zh-TW": "咖啡",
       en: "Coffee",
@@ -10,10 +11,13 @@ export const menu: Menu[] = [
       ko: "커피",
       "zh-CN": "咖啡",
     },
+    isActive: true,
+    storeId: "store-1",
     createdAt: new Date("2025-08-04T22:50:00"),
-    menuItems: [
+    items: [
       {
         id: "coffee-1",
+        key: "coffee-1",
         name: {
           "zh-TW": "經典拿鐵",
           en: "Classic Latte",
@@ -34,6 +38,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "size",
+            key: "size",
             name: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -41,9 +46,11 @@ export const menu: Menu[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            isActive: true,
             choices: [
               {
                 id: "m",
+                key: "m",
                 name: {
                   "zh-TW": "M",
                   en: "M",
@@ -55,9 +62,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "milk",
+                    key: "milk",
                     name: {
                       "zh-TW": "牛奶",
                       en: "Milk",
@@ -83,6 +91,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "l",
+                key: "l",
                 name: {
                   "zh-TW": "L",
                   en: "L",
@@ -94,9 +103,10 @@ export const menu: Menu[] = [
                 extraCost: 20,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "milk",
+                    key: "milk",
                     name: {
                       "zh-TW": "牛奶",
                       en: "Milk",
@@ -128,6 +138,7 @@ export const menu: Menu[] = [
           },
           {
             id: "sweetness",
+            key: "sweetness",
             name: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -135,9 +146,11 @@ export const menu: Menu[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            isActive: true,
             choices: [
               {
                 id: "none",
+                key: "none",
                 name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
@@ -149,13 +162,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 10,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "less",
+                key: "less",
                 name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
@@ -167,9 +181,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -195,6 +210,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "regular",
+                key: "regular",
                 name: {
                   "zh-TW": "正常",
                   en: "Regular",
@@ -206,9 +222,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -240,6 +257,7 @@ export const menu: Menu[] = [
           },
           {
             id: "ice",
+            key: "ice",
             name: {
               "zh-TW": "冰塊",
               en: "Ice Level",
@@ -247,9 +265,11 @@ export const menu: Menu[] = [
               ko: "얼음량",
               "zh-CN": "冰块",
             },
+            isActive: true,
             choices: [
               {
                 id: "regular",
+                key: "regular",
                 name: {
                   "zh-TW": "正常",
                   en: "Regular Ice",
@@ -261,9 +281,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -289,6 +310,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "less",
+                key: "less",
                 name: {
                   "zh-TW": "去冰",
                   en: "Less Ice",
@@ -300,13 +322,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 2,
                 stock: 0,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "hot",
+                key: "hot",
                 name: {
                   "zh-TW": "熱飲",
                   en: "Hot",
@@ -318,7 +341,7 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 6,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -331,6 +354,7 @@ export const menu: Menu[] = [
           },
           {
             id: "topping",
+            key: "topping",
             name: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -338,9 +362,11 @@ export const menu: Menu[] = [
               ko: "토핑",
               "zh-CN": "加料",
             },
+            isActive: true,
             choices: [
               {
                 id: "pearls",
+                key: "pearls",
                 name: {
                   "zh-TW": "珍珠",
                   en: "Pearls",
@@ -352,13 +378,14 @@ export const menu: Menu[] = [
                 extraCost: 10,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 8,
                 stock: 0,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "pudding",
+                key: "pudding",
                 name: {
                   "zh-TW": "布丁",
                   en: "Pudding",
@@ -370,7 +397,7 @@ export const menu: Menu[] = [
                 extraCost: 15,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 10,
                 stock: 0,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -383,13 +410,14 @@ export const menu: Menu[] = [
           },
         ],
         price: 120,
-        recipes: [],
+        ingredients: [],
         sold: 4,
         stock: null,
         updatedAt: new Date("2025-08-04T22:50:00"),
       },
       {
         id: "coffee-2",
+        key: "coffee-2",
         name: {
           "zh-TW": "焦糖瑪奇朵",
           en: "Caramel Macchiato",
@@ -410,6 +438,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "size",
+            key: "size",
             name: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -417,9 +446,11 @@ export const menu: Menu[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            isActive: true,
             choices: [
               {
                 id: "m",
+                key: "m",
                 name: {
                   "zh-TW": "M",
                   en: "M",
@@ -431,13 +462,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 10,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "l",
+                key: "l",
                 name: {
                   "zh-TW": "L",
                   en: "L",
@@ -449,7 +481,7 @@ export const menu: Menu[] = [
                 extraCost: 20,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 5,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -462,6 +494,7 @@ export const menu: Menu[] = [
           },
           {
             id: "sweetness",
+            key: "sweetness",
             name: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -469,9 +502,11 @@ export const menu: Menu[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            isActive: true,
             choices: [
               {
                 id: "none",
+                key: "none",
                 name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
@@ -483,13 +518,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 6,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "less",
+                key: "less",
                 name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
@@ -501,9 +537,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -529,6 +566,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "regular",
+                key: "regular",
                 name: {
                   "zh-TW": "正常",
                   en: "Regular",
@@ -540,9 +578,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -574,7 +613,7 @@ export const menu: Menu[] = [
           },
         ],
         price: 130,
-        recipes: [],
+        ingredients: [],
         sold: 5,
         stock: 2,
         updatedAt: new Date("2025-08-04T22:50:00"),
@@ -584,6 +623,7 @@ export const menu: Menu[] = [
   },
   {
     id: "tea",
+    key: "tea",
     name: {
       "zh-TW": "茶飲",
       en: "Tea",
@@ -591,10 +631,13 @@ export const menu: Menu[] = [
       ko: "차",
       "zh-CN": "茶饮",
     },
+    isActive: true,
+    storeId: "store-1",
     createdAt: new Date("2025-08-04T22:50:00"),
-    menuItems: [
+    items: [
       {
         id: "tea-1",
+        key: "tea-1",
         name: {
           "zh-TW": "茉香綠茶",
           en: "Jasmine Green Tea",
@@ -615,6 +658,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "ice",
+            key: "ice",
             name: {
               "zh-TW": "冰塊",
               en: "Ice Level",
@@ -622,9 +666,11 @@ export const menu: Menu[] = [
               ko: "얼음량",
               "zh-CN": "冰块",
             },
+            isActive: true,
             choices: [
               {
                 id: "regular",
+                key: "regular",
                 name: {
                   "zh-TW": "正常",
                   en: "Regular Ice",
@@ -636,9 +682,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -664,6 +711,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "less",
+                key: "less",
                 name: {
                   "zh-TW": "去冰",
                   en: "Less Ice",
@@ -675,13 +723,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 8,
                 stock: 0,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "hot",
+                key: "hot",
                 name: {
                   "zh-TW": "熱飲",
                   en: "Hot",
@@ -693,7 +742,7 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 9,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -706,13 +755,14 @@ export const menu: Menu[] = [
           },
         ],
         price: 80,
-        recipes: [],
+        ingredients: [],
         sold: 9,
         stock: 20,
         updatedAt: new Date("2025-08-04T22:50:00"),
       },
       {
         id: "tea-2",
+        key: "tea-2",
         name: {
           "zh-TW": "伯爵鮮奶茶",
           en: "Earl Grey Milk Tea",
@@ -733,6 +783,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "size",
+            key: "size",
             name: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -740,9 +791,11 @@ export const menu: Menu[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            isActive: true,
             choices: [
               {
                 id: "m",
+                key: "m",
                 name: {
                   "zh-TW": "M",
                   en: "M",
@@ -754,13 +807,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 7,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "l",
+                key: "l",
                 name: {
                   "zh-TW": "L",
                   en: "L",
@@ -772,7 +826,7 @@ export const menu: Menu[] = [
                 extraCost: 20,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 9,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -785,6 +839,7 @@ export const menu: Menu[] = [
           },
           {
             id: "sweetness",
+            key: "sweetness",
             name: {
               "zh-TW": "甜度",
               en: "Sweetness",
@@ -792,9 +847,11 @@ export const menu: Menu[] = [
               ko: "당도",
               "zh-CN": "甜度",
             },
+            isActive: true,
             choices: [
               {
                 id: "none",
+                key: "none",
                 name: {
                   "zh-TW": "無糖",
                   en: "No Sugar",
@@ -806,13 +863,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 8,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "less",
+                key: "less",
                 name: {
                   "zh-TW": "少糖",
                   en: "Less Sugar",
@@ -824,9 +882,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -852,6 +911,7 @@ export const menu: Menu[] = [
               },
               {
                 id: "regular",
+                key: "regular",
                 name: {
                   "zh-TW": "正常",
                   en: "Regular",
@@ -863,9 +923,10 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [
+                ingredients: [
                   {
                     id: "syrup",
+                    key: "syrup",
                     name: {
                       "zh-TW": "糖漿",
                       en: "Syrup",
@@ -897,7 +958,7 @@ export const menu: Menu[] = [
           },
         ],
         price: 110,
-        recipes: [],
+        ingredients: [],
         sold: 3,
         stock: 5,
         updatedAt: new Date("2025-08-04T22:50:00"),
@@ -907,6 +968,7 @@ export const menu: Menu[] = [
   },
   {
     id: "signature",
+    key: "signature",
     name: {
       "zh-TW": "招牌特調",
       en: "Signature Drinks",
@@ -914,10 +976,13 @@ export const menu: Menu[] = [
       ko: "시그니처 음료",
       "zh-CN": "招牌特调",
     },
+    isActive: true,
+    storeId: "store-1",
     createdAt: new Date("2025-08-04T22:50:00"),
-    menuItems: [
+    items: [
       {
         id: "sig-1",
+        key: "sig-1",
         name: {
           "zh-TW": "水果氣泡飲",
           en: "Fruit Sparkling Drink",
@@ -938,6 +1003,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "topping",
+            key: "topping",
             name: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -945,9 +1011,11 @@ export const menu: Menu[] = [
               ko: "토핑",
               "zh-CN": "加料",
             },
+            isActive: true,
             choices: [
               {
                 id: "chia_seeds",
+                key: "chia_seeds",
                 name: {
                   "zh-TW": "奇亞籽",
                   en: "Chia Seeds",
@@ -959,13 +1027,14 @@ export const menu: Menu[] = [
                 extraCost: 10,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 10,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "mint",
+                key: "mint",
                 name: {
                   "zh-TW": "薄荷",
                   en: "Mint",
@@ -977,13 +1046,14 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 6,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "pudding",
+                key: "pudding",
                 name: {
                   "zh-TW": "布丁",
                   en: "Pudding",
@@ -995,7 +1065,7 @@ export const menu: Menu[] = [
                 extraCost: 15,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 10,
                 stock: 0,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1008,13 +1078,14 @@ export const menu: Menu[] = [
           },
         ],
         price: 140,
-        recipes: [],
+        ingredients: [],
         sold: 2,
         stock: 3,
         updatedAt: new Date("2025-08-04T22:50:00"),
       },
       {
         id: "sig-2",
+        key: "sig-2",
         name: {
           "zh-TW": "抹茶氣泡拿鐵",
           en: "Matcha Sparkling Latte",
@@ -1035,6 +1106,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "size",
+            key: "size",
             name: {
               "zh-TW": "尺寸",
               en: "Size",
@@ -1042,9 +1114,11 @@ export const menu: Menu[] = [
               ko: "사이즈",
               "zh-CN": "尺寸",
             },
+            isActive: true,
             choices: [
               {
                 id: "l",
+                key: "l",
                 name: {
                   "zh-TW": "L",
                   en: "L",
@@ -1056,7 +1130,7 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: false,
-                recipes: [],
+                ingredients: [],
                 sold: 4,
                 stock: null,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1069,7 +1143,7 @@ export const menu: Menu[] = [
           },
         ],
         price: 150,
-        recipes: [],
+        ingredients: [],
         sold: 7,
         stock: 6,
         updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1079,6 +1153,7 @@ export const menu: Menu[] = [
   },
   {
     id: "pastry",
+    key: "pastry",
     name: {
       "zh-TW": "甜點",
       en: "Pastries",
@@ -1086,10 +1161,13 @@ export const menu: Menu[] = [
       ko: "디저트",
       "zh-CN": "甜点",
     },
+    isActive: true,
+    storeId: "store-1",
     createdAt: new Date("2025-08-04T22:50:00"),
-    menuItems: [
+    items: [
       {
         id: "pastry-1",
+        key: "pastry-1",
         name: {
           "zh-TW": "經典可頌",
           en: "Classic Croissant",
@@ -1109,13 +1187,14 @@ export const menu: Menu[] = [
         isActive: true,
         options: [],
         price: 60,
-        recipes: [],
+        ingredients: [],
         sold: 2,
         stock: 8,
         updatedAt: new Date("2025-08-04T22:50:00"),
       },
       {
         id: "pastry-2",
+        key: "pastry-2",
         name: {
           "zh-TW": "巧克力蛋糕",
           en: "Chocolate Cake",
@@ -1135,7 +1214,7 @@ export const menu: Menu[] = [
         isActive: true,
         options: [],
         price: 90,
-        recipes: [],
+        ingredients: [],
         sold: 4,
         stock: 2,
         updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1145,17 +1224,21 @@ export const menu: Menu[] = [
   },
   {
     id: "snack",
+    key: "snack",
     name: {
       "zh-TW": "輕食",
       en: "Snacks",
       ja: "軽食",
       ko: "간편식",
-      "zh-CN": "轻食",
+      "zh-CN": "輕食",
     },
+    isActive: true,
+    storeId: "store-1",
     createdAt: new Date("2025-08-04T22:50:00"),
-    menuItems: [
+    items: [
       {
         id: "snack-1",
+        key: "snack-1",
         name: {
           "zh-TW": "火腿起司三明治",
           en: "Ham & Cheese Sandwich",
@@ -1176,6 +1259,7 @@ export const menu: Menu[] = [
         options: [
           {
             id: "topping",
+            key: "topping",
             name: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -1183,9 +1267,11 @@ export const menu: Menu[] = [
               ko: "추가재료",
               "zh-CN": "加料",
             },
+            isActive: true,
             choices: [
               {
                 id: "tomato",
+                key: "tomato",
                 name: {
                   "zh-TW": "番茄",
                   en: "Tomato",
@@ -1197,13 +1283,14 @@ export const menu: Menu[] = [
                 extraCost: 5,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 3,
                 stock: 4,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "lettuce",
+                key: "lettuce",
                 name: {
                   "zh-TW": "生菜",
                   en: "Lettuce",
@@ -1215,7 +1302,7 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 7,
                 stock: 5,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1228,19 +1315,20 @@ export const menu: Menu[] = [
           },
         ],
         price: 150,
-        recipes: [],
+        ingredients: [],
         sold: 8,
         stock: 0,
         updatedAt: new Date("2025-08-04T22:50:00"),
       },
       {
         id: "snack-2",
+        key: "snack-2",
         name: {
           "zh-TW": "雞肉沙拉",
           en: "Chicken Salad",
           ja: "チキンサラダ",
           ko: "치킨 샐러드",
-          "zh-CN": "鸡肉沙拉",
+          "zh-CN": "雞肉沙拉",
         },
         createdAt: new Date("2024-05-27T18:20:00"),
         description: {
@@ -1248,13 +1336,14 @@ export const menu: Menu[] = [
           en: "Fresh lettuce with grilled chicken.",
           ja: "新鮮なレタスと香ばしいグリルチキンのサラダ。",
           ko: "신선한 채소와 구운 치킨이 어우러진 샐러드.",
-          "zh-CN": "新鲜生菜搭配香煎鸡肉。",
+          "zh-CN": "新鮮生菜搭配香煎雞肉。",
         },
         imageUrl: "/images/IMG_4590.jpg",
         isActive: true,
         options: [
           {
             id: "topping",
+            key: "topping",
             name: {
               "zh-TW": "加料",
               en: "Toppings",
@@ -1262,9 +1351,11 @@ export const menu: Menu[] = [
               ko: "추가재료",
               "zh-CN": "加料",
             },
+            isActive: true,
             choices: [
               {
                 id: "tomato",
+                key: "tomato",
                 name: {
                   "zh-TW": "番茄",
                   en: "Tomato",
@@ -1276,13 +1367,14 @@ export const menu: Menu[] = [
                 extraCost: 5,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 3,
                 stock: 5,
                 updatedAt: new Date("2025-08-04T22:50:00"),
               },
               {
                 id: "lettuce",
+                key: "lettuce",
                 name: {
                   "zh-TW": "生菜",
                   en: "Lettuce",
@@ -1294,7 +1386,7 @@ export const menu: Menu[] = [
                 extraCost: 0,
                 isActive: true,
                 isShared: true,
-                recipes: [],
+                ingredients: [],
                 sold: 7,
                 stock: 5,
                 updatedAt: new Date("2025-08-04T22:50:00"),
@@ -1307,7 +1399,7 @@ export const menu: Menu[] = [
           },
         ],
         price: 160,
-        recipes: [],
+        ingredients: [],
         sold: 5,
         stock: 8,
         updatedAt: new Date("2025-08-04T22:50:00"),

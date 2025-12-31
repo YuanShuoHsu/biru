@@ -1,16 +1,22 @@
 export enum QueryParamKey {
   Back = "back",
   Email = "email",
+  Lang = "lang",
   Redirect = "redirect",
 }
 
 export const handleQueryParam = (
   path: string,
-  key: QueryParamKey,
-  value?: string,
+  params: Partial<Record<QueryParamKey, string | undefined>>,
 ) => {
-  if (!value) return path;
+  let newPath = path;
 
-  const separator = path.includes("?") ? "&" : "?";
-  return `${path}${separator}${key}=${encodeURIComponent(value)}`;
+  Object.entries(params).forEach(([key, value]) => {
+    if (!value) return;
+
+    const separator = newPath.includes("?") ? "&" : "?";
+    newPath = `${newPath}${separator}${key}=${encodeURIComponent(value)}`;
+  });
+
+  return newPath;
 };

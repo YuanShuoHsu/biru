@@ -3,19 +3,16 @@
 "use client";
 
 import NextLink from "next/link";
-import { startTransition, useEffect, useMemo, useState } from "react";
-
-import { REMEMBER_ME } from "@/constants/sign-in";
+import { useMemo } from "react";
 
 import { useI18n } from "@/context/i18n";
 
 import {
-  AccountCircle,
   CheckCircle,
-  DeleteForever,
   ErrorOutline,
   Gavel,
   LockReset,
+  Login,
   Logout,
   MailOutline,
   Person,
@@ -23,6 +20,7 @@ import {
   Policy,
   Security,
   Settings,
+  Style,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -40,6 +38,7 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
+import { useColorScheme } from "@mui/material/styles";
 
 import { useLogout } from "@/hooks/useLogout";
 
@@ -50,15 +49,16 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
 import { interpolate } from "@/utils/i18n";
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
-interface SettingRowProps {
+interface InfoRowProps {
   icon: React.ElementType;
   label: string;
   status?: React.ReactNode;
   value: string;
 }
 
-const SettingRow = ({ icon: Icon, label, status, value }: SettingRowProps) => (
+const InfoRow = ({ icon: Icon, label, status, value }: InfoRowProps) => (
   <Stack
     alignItems={{ xs: "flex-start", sm: "center" }}
     direction={{ xs: "column", sm: "row" }}
@@ -97,37 +97,21 @@ const SettingRow = ({ icon: Icon, label, status, value }: SettingRowProps) => (
 const formatRole = (role?: UserResponseDto["role"]) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
-interface AccountSettingsProps {
+interface MyAccountProps {
   lang: string;
   currentURL: string;
 }
 
-const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
-  const [rememberMeByDefault, setRememberMeByDefault] = useState(true);
+const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
+  const dict = useI18n();
+  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+  const { handleLogout, isMutatingLogout } = useLogout();
 
   const langCode = lang as LocaleCode;
 
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
-  const dict = useI18n();
-  const { handleLogout, isMutatingLogout } = useLogout();
-
-  useEffect(() => {
-    const stored = localStorage.getItem(REMEMBER_ME);
-    const nextValue = stored === null ? true : stored === "true";
-
-    if (stored === null) localStorage.setItem(REMEMBER_ME, "true");
-
-    startTransition(() => {
-      setRememberMeByDefault(nextValue);
-    });
-  }, []);
-
-  const handleToggleRememberMe = () =>
-    setRememberMeByDefault((prev) => {
-      const next = !prev;
-      localStorage.setItem(REMEMBER_ME, String(next));
-      return next;
-    });
+  const { mode, setMode } = useColorScheme();
+  const isModeLoading = !mode;
+  const isDarkMode = mode === "dark";
 
   const formatDate = useMemo(
     () => (value?: string | null) => {
@@ -141,17 +125,6 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
     [langCode],
   );
 
-  const memberSince = formatDate(profile?.createdAt);
-  const updatedAt = formatDate(profile?.updatedAt);
-
-  const name = useMemo(
-    () =>
-      getDisplayName(langCode, profile) || dict.member.profile.placeholderName,
-    [dict.member.profile.placeholderName, langCode, profile],
-  );
-
-  const initial = name.charAt(0).toUpperCase();
-
   const verificationChip = (verified?: boolean) => (
     <Chip
       color={verified ? "success" : "warning"}
@@ -163,7 +136,9 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
         )
       }
       label={
-        verified ? dict.member.profile.verified : dict.member.profile.unverified
+        verified
+          ? dict.account.profile.verified
+          : dict.account.profile.unverified
       }
       size="small"
       variant={verified ? "filled" : "outlined"}
@@ -178,8 +153,8 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
           <CardContent>
             <Stack gap={2}>
               <Skeleton height={24} width="45%" />
-              <Skeleton height={16} width="70%" />
-              <Skeleton height={52} width="100%" />
+              <Skeleton height={16} width="65%" />
+              <Skeleton height={56} width="100%" />
             </Stack>
           </CardContent>
         </Card>
@@ -214,22 +189,24 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
   if (!isSignedIn || !profile) {
     return (
       <Card>
-        <CardHeader title={dict.member.accountSettings.title} />
+        <CardHeader title={dict.account.myAccount.title} />
         <CardContent>
           <Stack gap={2}>
             <Typography variant="h6">
-              {dict.member.accountSettings.signInCta}
+              {dict.account.myAccount.signInCta}
             </Typography>
             <Typography color="text.secondary" variant="body2">
-              {dict.member.accountSettings.empty}
+              {dict.account.myAccount.empty}
             </Typography>
             <Button
               component={NextLink}
-              href={`/${langCode}/member/sign-in?redirect=${encodeURIComponent(currentURL)}`}
-              startIcon={<Settings />}
+              href={handleQueryParam(`/${langCode}/auth/sign-in`, {
+                [QueryParamKey.Redirect]: currentURL,
+              })}
+              startIcon={<Login />}
               variant="contained"
             >
-              {dict.member.auth.signIn.label}
+              {dict.auth.signIn.label}
             </Button>
           </Stack>
         </CardContent>
@@ -237,13 +214,30 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
     );
   }
 
-  const verifyEmailHref = `/${langCode}/member/verify-email?email=${encodeURIComponent(
-    profile.email,
-  )}&redirect=${encodeURIComponent(currentURL)}`;
+  const memberSince = formatDate(profile.createdAt);
+  const updatedAt = formatDate(profile.updatedAt);
 
-  const forgotPasswordHref = `/${langCode}/member/forgot-password?redirect=${encodeURIComponent(
-    currentURL,
-  )}`;
+  const name =
+    getDisplayName(langCode, profile) || dict.account.profile.placeholderName;
+  const initial = name.charAt(0).toUpperCase();
+
+  const verifyEmailHref = handleQueryParam(`/${langCode}/auth/verify-email`, {
+    [QueryParamKey.Email]: profile.email,
+    [QueryParamKey.Redirect]: currentURL,
+  });
+
+  const forgotPasswordHref = handleQueryParam(
+    `/${langCode}/auth/forgot-password`,
+    { [QueryParamKey.Redirect]: currentURL },
+  );
+
+  const settingsHref = `/${langCode}/account/account-settings`;
+  const profileHref = `/${langCode}/account/profile`;
+
+  const handleToggleColorMode = () => {
+    if (isModeLoading) return;
+    setMode(isDarkMode ? "light" : "dark");
+  };
 
   return (
     <Stack gap={3}>
@@ -286,19 +280,19 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
               </Avatar>
               <Stack gap={0.5}>
                 <Typography color="primary" fontWeight={700} variant="overline">
-                  {dict.member.accountSettings.title}
+                  {dict.account.myAccount.title}
                 </Typography>
                 <Typography fontWeight={700} variant="h5">
                   {name}
                 </Typography>
                 <Typography color="text.secondary" variant="body2">
-                  {dict.member.accountSettings.subtitle}
+                  {dict.account.myAccount.subtitle}
                 </Typography>
                 <Stack direction="row" flexWrap="wrap" gap={1}>
                   {memberSince && (
                     <Chip
                       color="primary"
-                      label={interpolate(dict.member.profile.memberSince, {
+                      label={interpolate(dict.account.profile.memberSince, {
                         date: memberSince,
                       })}
                       size="small"
@@ -308,20 +302,27 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                   {updatedAt && (
                     <Chip
                       color="default"
-                      label={interpolate(dict.member.profile.lastUpdated, {
+                      label={interpolate(dict.account.profile.lastUpdated, {
                         date: updatedAt,
                       })}
                       size="small"
                       variant="outlined"
                     />
                   )}
+                  <Chip
+                    color="default"
+                    label={formatRole(profile.role)}
+                    size="small"
+                    variant="outlined"
+                  />
                 </Stack>
               </Stack>
             </Stack>
+
             <Stack
               alignItems="flex-end"
               gap={1}
-              minWidth={{ xs: "100%", md: 260 }}
+              minWidth={{ xs: "100%", md: 320 }}
             >
               <Stack
                 direction="row"
@@ -331,97 +332,82 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
               >
                 {verificationChip(profile.emailVerified)}
                 {verificationChip(profile.phoneVerified)}
-                <Chip
-                  color="default"
-                  label={formatRole(profile.role)}
-                  size="small"
-                  variant="outlined"
-                />
               </Stack>
-              {!profile.emailVerified && (
+              <Stack
+                direction="row"
+                flexWrap="wrap"
+                gap={1}
+                justifyContent="flex-end"
+              >
                 <Button
                   component={NextLink}
-                  href={verifyEmailHref}
+                  href={settingsHref}
                   size="small"
-                  startIcon={<Security />}
+                  startIcon={<Settings />}
+                  variant="contained"
+                >
+                  {dict.account.accountSettings.label}
+                </Button>
+                <Button
+                  component={NextLink}
+                  href={profileHref}
+                  size="small"
+                  startIcon={<Person />}
                   variant="outlined"
                 >
-                  {dict.member.auth.verifyEmail.resend}
+                  {dict.account.accountMenu.profile}
                 </Button>
-              )}
+              </Stack>
             </Stack>
           </Stack>
         </CardContent>
       </Card>
+
       <Grid columnSpacing={2} container rowSpacing={2}>
         <Grid size={{ xs: 12, md: 7 }}>
           <Stack gap={2}>
             <Card>
-              <CardHeader
-                title={dict.member.accountSettings.sections.account}
-              />
+              <CardHeader title={dict.account.myAccount.sections.overview} />
               <CardContent>
                 <Stack gap={2}>
-                  <SettingRow
-                    icon={Person}
-                    label={dict.member.accountSettings.fields.name}
-                    value={name}
-                  />
-                  <Divider flexItem />
-                  <SettingRow
+                  <InfoRow
                     icon={MailOutline}
-                    label={dict.member.auth.email.label}
+                    label={dict.auth.email.label}
                     status={verificationChip(profile.emailVerified)}
                     value={profile.email || dict.common.empty}
                   />
                   <Divider flexItem />
-                  <SettingRow
+                  <InfoRow
                     icon={PhoneIphone}
-                    label={dict.member.auth.phone}
+                    label={dict.auth.phone}
                     status={verificationChip(profile.phoneVerified)}
                     value={profile.phone || dict.common.empty}
                   />
                 </Stack>
-
-                <Stack
-                  direction="row"
-                  flexWrap="wrap"
-                  gap={1}
-                  justifyContent="flex-end"
-                  mt={2}
-                >
-                  <Chip
-                    color="default"
-                    icon={<Security fontSize="small" />}
-                    label={formatRole(profile.role)}
-                    size="small"
-                    variant="outlined"
-                  />
-                </Stack>
-                <Divider sx={{ my: 2 }} />
-                <Button
-                  component={NextLink}
-                  href={`/${langCode}/member/profile`}
-                  startIcon={<AccountCircle />}
-                  variant="outlined"
-                >
-                  {dict.member.accountSettings.actions.viewProfile}
-                </Button>
               </CardContent>
             </Card>
+
             <Card>
-              <CardHeader
-                title={dict.member.accountSettings.sections.security}
-              />
+              <CardHeader title={dict.account.myAccount.sections.security} />
               <CardContent>
                 <Stack gap={1.5}>
+                  {!profile.emailVerified && (
+                    <Button
+                      component={NextLink}
+                      href={verifyEmailHref}
+                      startIcon={<Security />}
+                      variant="outlined"
+                    >
+                      {dict.account.myAccount.actions.verifyEmail}
+                    </Button>
+                  )}
                   <Button
                     component={NextLink}
                     href={forgotPasswordHref}
                     startIcon={<LockReset />}
                     variant="outlined"
                   >
-                    {dict.member.auth.forgotPassword.label}
+                    {dict.account.myAccount.actions.resetPassword}
                   </Button>
                   <Button
                     color="error"
@@ -431,20 +417,44 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                     startIcon={<Logout />}
                     variant="contained"
                   >
-                    {dict.member.auth.signOut.label}
+                    {dict.auth.signOut.label}
                   </Button>
                 </Stack>
-                <Typography color="text.secondary" mt={2} variant="caption">
-                  {dict.member.accountSettings.securityNotice}
-                </Typography>
               </CardContent>
             </Card>
           </Stack>
         </Grid>
+
         <Grid size={{ xs: 12, md: 5 }}>
           <Stack gap={2}>
             <Card>
-              <CardHeader title={dict.member.accountSettings.sections.device} />
+              <CardHeader
+                title={dict.account.myAccount.sections.quickActions}
+              />
+              <CardContent>
+                <Stack gap={1.5}>
+                  <Button
+                    component={NextLink}
+                    href={profileHref}
+                    startIcon={<Person />}
+                    variant="outlined"
+                  >
+                    {dict.account.myAccount.actions.profile}
+                  </Button>
+                  <Button
+                    component={NextLink}
+                    href={settingsHref}
+                    startIcon={<Settings />}
+                    variant="outlined"
+                  >
+                    {dict.account.myAccount.actions.settings}
+                  </Button>
+                </Stack>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader title={dict.account.myAccount.sections.appearance} />
               <CardContent>
                 <Stack
                   alignItems="center"
@@ -454,70 +464,55 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                 >
                   <Stack minWidth={0}>
                     <Typography fontWeight={600} variant="body2">
-                      {dict.member.accountSettings.rememberMe.label}
+                      {dict.account.myAccount.colorMode.label}
                     </Typography>
                     <Typography color="text.secondary" variant="caption">
-                      {dict.member.accountSettings.rememberMe.helper}
+                      {dict.account.myAccount.colorMode.helper}
                     </Typography>
                   </Stack>
-                  <Switch
-                    checked={rememberMeByDefault}
-                    color="primary"
-                    inputProps={{
-                      "aria-label":
-                        dict.member.accountSettings.rememberMe.label,
-                    }}
-                    onChange={handleToggleRememberMe}
-                    size="small"
-                  />
+                  <Stack alignItems="center" direction="row" gap={1}>
+                    <Style fontSize="small" />
+                    <Switch
+                      checked={isDarkMode}
+                      color="primary"
+                      disabled={isModeLoading}
+                      inputProps={{
+                        "aria-label": dict.account.myAccount.colorMode.label,
+                      }}
+                      onChange={handleToggleColorMode}
+                      size="small"
+                    />
+                  </Stack>
                 </Stack>
-                <Typography color="text.secondary" mt={2} variant="caption">
-                  {dict.member.accountSettings.deviceNotice}
+                <Typography color="text.secondary" mt={1} variant="caption">
+                  {isModeLoading
+                    ? dict.common.loading
+                    : isDarkMode
+                      ? dict.appBar.darkMode
+                      : dict.appBar.lightMode}
                 </Typography>
               </CardContent>
             </Card>
+
             <Card>
-              <CardHeader
-                title={dict.member.accountSettings.sections.support}
-              />
+              <CardHeader title={dict.account.myAccount.sections.support} />
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/member/terms`}
+                    href={`/${langCode}/company/terms`}
                     startIcon={<Gavel />}
                     variant="outlined"
                   >
-                    {dict.member.accountSettings.actions.terms}
+                    {dict.account.myAccount.actions.terms}
                   </Button>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/member/privacy`}
+                    href={`/${langCode}/company/privacy`}
                     startIcon={<Policy />}
                     variant="outlined"
                   >
-                    {dict.member.accountSettings.actions.privacy}
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader title={dict.member.accountSettings.sections.danger} />
-              <CardContent>
-                <Stack gap={1}>
-                  <Typography fontWeight={600} variant="body2">
-                    {dict.member.accountSettings.danger.title}
-                  </Typography>
-                  <Typography color="text.secondary" variant="body2">
-                    {dict.member.accountSettings.danger.subtitle}
-                  </Typography>
-                  <Button
-                    color="error"
-                    disabled
-                    startIcon={<DeleteForever />}
-                    variant="outlined"
-                  >
-                    {dict.member.accountSettings.danger.action}
+                    {dict.account.myAccount.actions.privacy}
                   </Button>
                 </Stack>
               </CardContent>
@@ -529,4 +524,4 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
   );
 };
 
-export default AccountSettings;
+export default MyAccount;

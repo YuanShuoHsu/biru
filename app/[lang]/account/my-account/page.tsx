@@ -35,7 +35,7 @@ const MemberMyAccountPage = async ({
   const { lang } = await params;
   const resolvedSearchParams = await searchParams;
 
-  const pathname = `/${lang}/member/my-account`;
+  const pathname = `/${lang}/account/my-account`;
   const search = toSearchString(resolvedSearchParams);
   const currentURL = search ? `${pathname}?${search}` : pathname;
 

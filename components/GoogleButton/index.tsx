@@ -4,6 +4,8 @@ import Link from "next/link";
 
 import { Button } from "@mui/material";
 
+import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+
 const GoogleIcon = () => (
   <svg
     height={24}
@@ -44,11 +46,17 @@ const ACTION_LABEL: Record<GoogleAction, string> = {
 
 interface GoogleButtonProps {
   action: GoogleAction;
-  href: string;
+  lang: string;
+  redirect?: string;
 }
 
-const GoogleButton = ({ action, href }: GoogleButtonProps) => {
+const GoogleButton = ({ action, lang, redirect }: GoogleButtonProps) => {
   const label = `${ACTION_LABEL[action]} with Google`;
+
+  const href = handleQueryParam("/api/auth/google", {
+    [QueryParamKey.Lang]: lang,
+    [QueryParamKey.Redirect]: redirect,
+  });
 
   return (
     <Button

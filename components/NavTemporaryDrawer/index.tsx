@@ -18,8 +18,6 @@ import { type I18nDict, useI18n } from "@/context/i18n";
 
 import { useLogout } from "@/hooks/useLogout";
 
-import { interpolate } from "@/utils/i18n";
-
 import {
   AccountCircle,
   ExpandMore,
@@ -51,7 +49,7 @@ import { styled } from "@mui/material/styles";
 import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { DrawerType } from "@/types/drawer";
-import type { OrderMode } from "@/types/orderMode";
+import type { MenuItem } from "@/types/menuItem";
 import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
@@ -59,9 +57,11 @@ import type { TableNumber } from "@/types/tableNumbers";
 
 import {
   getAccountMenuItems,
-  getMemberAuthLinkItems,
+  getLogoutMenuItem,
   getProfileMenuItems,
-} from "@/utils/auth";
+} from "@/utils/account";
+import { getAuthMenuItems } from "@/utils/auth";
+import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
@@ -105,7 +105,7 @@ const StyledDivider = styled(Divider, {
   shouldForwardProp: (prop) => prop !== "level",
 })<{ level: number }>(({ level, theme }) => ({
   marginBlock: theme.spacing(1),
-  marginLeft: theme.spacing(2 + level * 2),
+  marginLeft: theme.spacing(level * 2),
 }));
 
 const StyledExpandMore = styled(ExpandMore, {
@@ -115,90 +115,14 @@ const StyledExpandMore = styled(ExpandMore, {
   transition: theme.transitions.create("transform"),
 }));
 
-interface NavLinkItem {
-  children?: NavItem[];
-  disabled?: boolean;
-  icon: React.ElementType;
-  label: string;
-  onClick?: () => void;
-  to?: string;
-}
-
-type SlotKey = OrderMode | "divider";
-
-interface NavSlotItem {
-  slot: SlotKey;
-}
-
-type NavItem = NavLinkItem | NavSlotItem;
-
-interface NavItemsMapOptions {
-  dict: I18nDict;
-  isMutatingLogout?: boolean;
-  isSignedIn: boolean;
-  onLogout: () => void;
-  redirect?: string;
-}
-
-const navItemsMap = ({
-  dict,
-  isMutatingLogout,
-  isSignedIn,
-  onLogout,
-  redirect,
-}: NavItemsMapOptions): NavItem[] => {
-  const profileMenuItems = getProfileMenuItems(dict);
-  const accountMenuItems = getAccountMenuItems(dict, {
-    isMutatingLogout,
-    onLogout,
-  });
-
-  const memberChildren: NavItem[] = !isSignedIn
-    ? getMemberAuthLinkItems(dict, redirect)
-    : [...profileMenuItems, { slot: "divider" }, ...accountMenuItems];
-
-  return [
-    { icon: Home, label: dict.home.label, to: "/" },
-    {
-      children: [
-        { slot: ORDER_MODE.DineIn },
-        {
-          icon: LocalMall,
-          label: dict.order.mode.pickup.label,
-          to: "/pickup",
-        },
-      ],
-      icon: ShoppingCart,
-      label: dict.order.label,
-      to: "/order",
-    },
-    {
-      children: memberChildren,
-      icon: AccountCircle,
-      label: dict.member.label,
-      to: "/member",
-    },
-  ];
-};
-
-interface SlotProps {
-  dict: I18nDict;
-  level: number;
-  onClick: () => void;
-  storeName: StoreName;
-  tableNumber: TableNumber;
-  partySize: PartySize;
-}
-
-const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
-  [ORDER_MODE.DineIn]: ({
-    dict,
-    level,
-    onClick,
-    storeName,
-    tableNumber,
-    partySize,
-  }) => (
+const createDineInSlot = (
+  dict: I18nDict,
+  storeName: StoreName,
+  tableNumber?: TableNumber,
+  partySize?: PartySize,
+  onClick?: () => void,
+): MenuItem => ({
+  slot: ({ level }) => (
     <StyledListItemButton level={level} onClick={onClick} selected={true}>
       <Stack
         width="100%"
@@ -215,17 +139,19 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
             </ListItemIcon>
             <ListItemText primary={storeName} />
           </Stack>
-          <Stack flexDirection="row" alignItems="center" gap={4}>
-            <ListItemIcon>
-              <TableBar />
-            </ListItemIcon>
-            <ListItemText
-              primary={interpolate(
-                dict.order.mode.dineIn.storeSlug.tableNumber.value,
-                { tableNumber },
-              )}
-            />
-          </Stack>
+          {tableNumber && (
+            <Stack flexDirection="row" alignItems="center" gap={4}>
+              <ListItemIcon>
+                <TableBar />
+              </ListItemIcon>
+              <ListItemText
+                primary={interpolate(
+                  dict.order.mode.dineIn.storeSlug.tableNumber.value,
+                  { tableNumber },
+                )}
+              />
+            </Stack>
+          )}
           {partySize && (
             <Stack flexDirection="row" alignItems="center" gap={4}>
               <ListItemIcon>
@@ -251,22 +177,62 @@ const slots: Partial<Record<SlotKey, React.ComponentType<SlotProps>>> = {
       </Stack>
     </StyledListItemButton>
   ),
-  divider: ({ level }) => <StyledDivider level={level} />,
+});
+
+const dividerSlot: MenuItem = {
+  slot: ({ level }) => <StyledDivider level={level} />,
 };
 
+interface NavItemsMapOptions {
+  accountChildren: MenuItem[];
+  authChildren: MenuItem[];
+  dict: I18nDict;
+  dineInChildren: MenuItem[];
+  isSignedIn: boolean;
+}
+
+const navItemsMap = ({
+  accountChildren,
+  authChildren,
+  dict,
+  dineInChildren,
+  isSignedIn,
+}: NavItemsMapOptions): MenuItem[] => [
+  { icon: Home, label: dict.home.label, to: "/" },
+  {
+    children: dineInChildren,
+    icon: ShoppingCart,
+    label: dict.order.label,
+    to: "/order",
+  },
+  isSignedIn
+    ? {
+        children: accountChildren,
+        icon: AccountCircle,
+        label: dict.account.label,
+        to: "/account",
+      }
+    : {
+        children: authChildren,
+        icon: AccountCircle,
+        label: dict.auth.label,
+        to: "/auth",
+      },
+];
+
 interface ListItemLinkProps extends ListItemButtonProps {
-  hasChildren?: boolean;
   href?: string;
-  icon: React.ElementType;
-  label: string;
+  icon?: React.ElementType;
+  isExpandable?: boolean;
+  label?: string;
   level: number;
   open?: boolean;
 }
 
 const ListItemLink = ({
-  hasChildren,
   href,
   icon: Icon,
+  isExpandable,
   label,
   level,
   onClick,
@@ -281,11 +247,13 @@ const ListItemLink = ({
     selected={selected}
     {...other}
   >
-    <ListItemIcon>
-      <Icon />
-    </ListItemIcon>
+    {Icon && (
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+    )}
     <ListItemText primary={label} />
-    {hasChildren && <StyledExpandMore open={open} />}
+    {isExpandable && <StyledExpandMore open={open} />}
   </StyledListItemButton>
 );
 
@@ -303,74 +271,77 @@ const NavTemporaryDrawer = ({
 }: NavTemporaryDrawerProps) => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
-
   const { isSignedIn } = useAuthStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const pathname = usePathname();
   const { lang, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
+  const pathname = usePathname();
   const router = useRouter();
 
   const dict = useI18n();
+
+  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const searchParams = useSearchParams();
   const search = searchParams.toString();
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const redirectParam = searchParams.get("redirect");
-  const isMemberPage = pathname.startsWith(`/${lang}/member`);
-  const redirect = isMemberPage && redirectParam ? redirectParam : currentURL;
+  const isAccountPage = pathname.startsWith(`/${lang}/account`);
+  const isAuthPage = pathname.startsWith(`/${lang}/auth`);
+  const isCompanyPage = pathname.startsWith(`/${lang}/company`);
+
+  const redirect =
+    (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
+      ? redirectParam
+      : currentURL;
+
+  const storeName = getStoreName(lang, stores, storeSlug);
+
+  const accountChildren = [
+    ...getProfileMenuItems(dict),
+    dividerSlot,
+    ...getAccountMenuItems(dict),
+    getLogoutMenuItem(dict, { isMutatingLogout, onLogout: handleLogout }),
+  ];
+
+  const authChildren = getAuthMenuItems(dict, redirect);
+
+  const dineInChildren = [
+    ...(mode === ORDER_MODE.DineIn && storeSlug && storeName
+      ? [
+          createDineInSlot(dict, storeName, tableNumber, partySize, () =>
+            router.push(
+              `/${[lang, "order", mode, storeSlug, tableNumber, partySize]
+                .filter(Boolean)
+                .join("/")}`,
+            ),
+          ),
+        ]
+      : []),
+    {
+      icon: LocalMall,
+      label: dict.order.mode.pickup.label,
+      to: "/pickup",
+    },
+  ];
 
   const navItems = navItemsMap({
+    accountChildren,
+    authChildren,
     dict,
-    isMutatingLogout,
+    dineInChildren,
     isSignedIn,
-    onLogout: handleLogout,
-    redirect,
   });
 
   const handleIconButtonToggle = (key: string) =>
     setOpenMap((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const renderItems = (items: NavItem[], level = 0, parentPath = "/") =>
-    items.map((item) => {
-      if ("slot" in item) {
-        const { slot } = item;
-        const SlotComponent = slots[slot];
-        if (!SlotComponent) return null;
-
-        const isDividerSlot = slot === "divider";
-        if (!isDividerSlot && slot !== mode) return null;
-
-        const storeName = getStoreName(lang, stores, storeSlug);
-
-        const handleClick = () => {
-          if (isDividerSlot) return;
-          if (!storeSlug || !tableNumber || !partySize) return;
-
-          router.push(
-            `/${lang}/order/${mode}/${storeSlug}/${tableNumber}/${partySize}`,
-          );
-        };
-
-        return (
-          <SlotComponent
-            dict={dict}
-            key={`${slot}-${level}`}
-            level={level}
-            onClick={handleClick}
-            tableNumber={tableNumber}
-            storeName={storeName}
-            partySize={partySize}
-          />
-        );
-      }
-
-      const { children, disabled, icon, label, onClick, to } = item;
-      const [toPath, toSearchParams] = to?.split("?") ?? [];
+  const renderItems = (items: MenuItem[], level = 0, parentPath = "/") =>
+    items.map(({ children, disabled, icon, label, onClick, slot, to }) => {
+      const [toPath, toSearchParams] = to?.split("?") || [];
       const toSearch = toSearchParams ? `?${toSearchParams}` : "";
 
       const parentPrefix = parentPath === "/" ? "" : parentPath;
@@ -378,12 +349,12 @@ const NavTemporaryDrawer = ({
       const pathWithLang =
         basePath === "/" ? `/${lang}` : `/${lang}${basePath}`;
 
-      const hasChildren = Boolean(children?.length);
+      const isExpandable = Boolean(children?.length);
       const href =
-        to && !hasChildren ? `${pathWithLang}${toSearch}` : undefined;
+        to && !isExpandable ? `${pathWithLang}${toSearch}` : undefined;
 
       const itemKey = toPath || `${label}-${level}`;
-      const open = Boolean(hasChildren && openMap[itemKey]);
+      const open = Boolean(isExpandable && openMap[itemKey]);
       const selected =
         basePath === "/"
           ? pathname === pathWithLang
@@ -391,9 +362,11 @@ const NavTemporaryDrawer = ({
             pathname.startsWith(`${pathWithLang}/`);
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-        if (hasChildren) {
+        if (isExpandable) {
           event.stopPropagation();
+
           if (to) handleIconButtonToggle(itemKey);
+
           return;
         }
 
@@ -402,18 +375,22 @@ const NavTemporaryDrawer = ({
 
       return (
         <Fragment key={itemKey}>
-          <ListItemLink
-            disabled={disabled}
-            hasChildren={hasChildren}
-            href={href}
-            icon={icon}
-            label={label}
-            level={level}
-            onClick={handleClick}
-            open={open}
-            selected={selected}
-          />
-          {hasChildren && (
+          {slot ? (
+            slot({ level })
+          ) : (
+            <ListItemLink
+              disabled={disabled}
+              href={href}
+              icon={icon}
+              isExpandable={isExpandable}
+              label={label}
+              level={level}
+              onClick={handleClick}
+              open={open}
+              selected={selected}
+            />
+          )}
+          {isExpandable && (
             <Collapse in={open} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {renderItems(children!, level + 1, basePath)}

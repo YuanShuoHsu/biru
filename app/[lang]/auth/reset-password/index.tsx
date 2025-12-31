@@ -115,7 +115,7 @@ const MemberAuthResetPassword = ({
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.resetPassword.label}
+            {dict.auth.resetPassword.label}
           </Typography>
         }
       />
@@ -123,10 +123,10 @@ const MemberAuthResetPassword = ({
         <TextField
           autoComplete="email"
           fullWidth
-          label={dict.member.auth.email.label}
+          label={dict.auth.email.label}
           name="email"
           onChange={handleChange}
-          placeholder={dict.member.auth.email.placeholder}
+          placeholder={dict.auth.email.placeholder}
           required
           type="email"
           value={form.email}
@@ -134,7 +134,7 @@ const MemberAuthResetPassword = ({
         <TextField
           autoComplete="new-password"
           fullWidth
-          label={dict.member.auth.newPassword}
+          label={dict.auth.newPassword}
           name="newPassword"
           onChange={handleChange}
           required
@@ -145,8 +145,8 @@ const MemberAuthResetPassword = ({
                   <IconButton
                     aria-label={
                       showPassword.newPassword
-                        ? dict.member.auth.hideNewPassword
-                        : dict.member.auth.showNewPassword
+                        ? dict.auth.hideNewPassword
+                        : dict.auth.showNewPassword
                     }
                     onClick={handleClickShowPassword("newPassword")}
                     onMouseDown={handleMouseDownPassword}
@@ -169,7 +169,7 @@ const MemberAuthResetPassword = ({
         <TextField
           autoComplete="new-password"
           fullWidth
-          label={dict.member.auth.confirmNewPassword}
+          label={dict.auth.confirmNewPassword}
           name="confirmNewPassword"
           onChange={handleChange}
           required
@@ -180,8 +180,8 @@ const MemberAuthResetPassword = ({
                   <IconButton
                     aria-label={
                       showPassword.confirmNewPassword
-                        ? dict.member.auth.hideConfirmNewPassword
-                        : dict.member.auth.showConfirmNewPassword
+                        ? dict.auth.hideConfirmNewPassword
+                        : dict.auth.showConfirmNewPassword
                     }
                     onClick={handleClickShowPassword("confirmNewPassword")}
                     onMouseDown={handleMouseDownPassword}
@@ -204,19 +204,17 @@ const MemberAuthResetPassword = ({
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button fullWidth size="large" type="submit" variant="contained">
-          {dict.member.auth.resetPassword.label}
+          {dict.auth.resetPassword.label}
         </Button>
         <Typography variant="body2">
-          {dict.member.auth.noAccount}{" "}
+          {dict.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/sign-up`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/sign-up`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
           >
-            {dict.member.auth.signUp.label}
+            {dict.auth.signUp.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

@@ -167,7 +167,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
       const profile = await triggerProfile(access_token);
       setProfile(profile);
 
-      enqueueSnackbar(dict.member.auth.signIn.success, { variant: "success" });
+      enqueueSnackbar(dict.auth.signIn.success, { variant: "success" });
       router.replace(redirect || `/${lang}`);
     } catch {
       clearAuth();
@@ -186,22 +186,22 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.signIn.label}
+            {dict.auth.signIn.label}
           </Typography>
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signIn" href="" />
-        <Divider>{dict.member.auth.or}</Divider>
+        <GoogleButton action="signIn" lang={lang} redirect={redirect} />
+        <Divider>{dict.auth.or}</Divider>
         <TextField
           autoComplete="email"
           error={!!state?.errors?.email}
           fullWidth
           helperText={state?.errors?.email?.join("\n")}
-          label={dict.member.auth.email.label}
+          label={dict.auth.email.label}
           name="email"
           onChange={handleChange}
-          placeholder={dict.member.auth.email.placeholder}
+          placeholder={dict.auth.email.placeholder}
           required
           type="email"
           value={form.email}
@@ -211,7 +211,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           error={!!state?.errors?.password}
           fullWidth
           helperText={state?.errors?.password?.join("\n")}
-          label={dict.member.auth.password.label}
+          label={dict.auth.password.label}
           name="password"
           onChange={handleChange}
           required
@@ -222,8 +222,8 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
                   <IconButton
                     aria-label={
                       showPassword
-                        ? dict.member.auth.hidePassword
-                        : dict.member.auth.showPassword
+                        ? dict.auth.hidePassword
+                        : dict.auth.showPassword
                     }
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -238,7 +238,7 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           }}
           type={showPassword ? "text" : "password"}
           value={form.password}
-          placeholder={dict.member.auth.password.placeholder}
+          placeholder={dict.auth.password.placeholder}
         />
         <Stack
           flexDirection="row"
@@ -256,21 +256,17 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
               />
             }
             label={
-              <Typography variant="body2">
-                {dict.member.auth.rememberMe}
-              </Typography>
+              <Typography variant="body2">{dict.auth.rememberMe}</Typography>
             }
           />
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/forgot-password`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/forgot-password`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
             variant="body2"
           >
-            {dict.member.auth.forgotPassword.label}
+            {dict.auth.forgotPassword.label}
           </MuiLink>
         </Stack>
       </StyledCardContent>
@@ -283,19 +279,17 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
           type="submit"
           variant="contained"
         >
-          {dict.member.auth.signIn.label}
+          {dict.auth.signIn.label}
         </Button>
         <Typography variant="body2">
-          {dict.member.auth.noAccount}{" "}
+          {dict.auth.noAccount}{" "}
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/sign-up`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/sign-up`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
           >
-            {dict.member.auth.signUp.label}
+            {dict.auth.signUp.label}
           </MuiLink>
         </Typography>
       </StyledCardActions>

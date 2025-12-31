@@ -20,7 +20,7 @@ const BackButton = ({ back, lang, redirect }: BackButtonProps) => {
 
   const href =
     back && redirect
-      ? handleQueryParam(back, QueryParamKey.Redirect, redirect)
+      ? handleQueryParam(back, { [QueryParamKey.Redirect]: redirect })
       : back || `/${lang}`;
 
   const backLabel = dict.company.legal.back;

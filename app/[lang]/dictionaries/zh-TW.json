@@ -5,61 +5,8 @@
     "languageSwitcher": "切換語言",
     "lightMode": "亮色模式"
   },
-  "cart": {
-    "backToOrder": "返回點餐",
-    "checkout": "前往結帳",
-    "quantityExceedsStock": "{label} 剩 {stock} 件",
-    "title": "購物車清單",
-    "totalQuantity": "共 {quantity} 件"
-  },
-  "common": {
-    "colon": "：",
-    "currency": "NT$",
-    "delimiter": "、",
-    "empty": "尚未有商品",
-    "from": "起",
-    "loading": "載入中...",
-    "maxQuantity": "每項商品最多只能購買 {quantity} 件",
-    "multiply": "×",
-    "reachStockLimit": "{label} 已達庫存上限",
-    "soldOut": "{label} 售完",
-    "totalAmount": "總計"
-  },
-  "company": {
-    "about": { "label": "關於我們" },
-    "label": "公司",
-    "legal": {
-      "back": "返回",
-      "privacy": { "label": "隱私權政策" },
-      "terms": { "label": "服務條款" }
-    }
-  },
-  "dialog": {
-    "addToCart": "加入購物車",
-    "amount": "小計",
-    "close": "關閉",
-    "maxStock": "{label} 庫存僅剩 {quantity} 件"
-  },
-  "home": {
-    "footer": {
-      "brand": "Biru Coffee",
-      "copyright": "Copyright © {year} {brand}.",
-      "newsletter": {
-        "action": "訂閱",
-        "invalidEmail": "請輸入有效的電子郵件。",
-        "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
-        "success": "訂閱成功（示意）。",
-        "title": "掌握最新消息"
-      },
-      "tagline": "為你的每一天，沖煮一杯好咖啡。"
-    },
-    "label": "首頁"
-  },
-  "maintenance": {
-    "title": "維護中"
-  },
-  "member": {
-    "label": "會員",
+  "account": {
+    "label": "帳號",
     "accountMenu": {
       "這邊未來要根據頁面修正": "",
       "addAnotherAccount": "新增其他帳號",
@@ -154,78 +101,153 @@
       "subtitle": "管理個人資訊與偏好",
       "unverified": "尚未驗證",
       "verified": "已驗證"
+    }
+  },
+  "auth": {
+    "label": "會員",
+    "birthDate": {
+      "label": "出生日期",
+      "placeholder": "請選擇出生日期"
     },
-    "auth": {
-      "birthDate": {
-        "label": "出生日期",
-        "placeholder": "請選擇出生日期"
+    "confirmPassword": {
+      "label": "確認密碼",
+      "placeholder": "請再次輸入密碼"
+    },
+    "confirmNewPassword": "確認新密碼",
+    "chooseCountry": "選擇國家",
+    "countryCode": "國碼",
+    "email": {
+      "label": "電子郵件",
+      "placeholder": "請輸入電子郵件"
+    },
+    "emailUpdates": "我想透過電子郵件接收最新資訊",
+    "firstName": {
+      "label": "名字",
+      "placeholder": "請輸入名字"
+    },
+    "forgotPassword": {
+      "label": "忘記密碼"
+    },
+    "gender": {
+      "label": "性別",
+      "placeholder": "請選擇性別",
+      "options": {
+        "female": "女性",
+        "male": "男性",
+        "notDisclosed": "不願透露"
+      }
+    },
+    "hasAccount": "已經有帳號？",
+    "legalConsent": "點擊「{action}」，即表示您同意 Biru Coffee 的\n{terms} 與 {privacy}。",
+    "hideConfirmPassword": "隱藏確認密碼",
+    "hideConfirmNewPassword": "隱藏確認新密碼",
+    "hideNewPassword": "隱藏新密碼",
+    "hidePassword": "隱藏密碼",
+    "lastName": {
+      "label": "姓氏（選填）",
+      "placeholder": "請輸入姓氏"
+    },
+    "newPassword": "新密碼",
+    "noAccount": "還沒有帳號？",
+    "or": "或",
+    "password": {
+      "label": "密碼",
+      "placeholder": "請輸入密碼"
+    },
+    "phone": "電話號碼",
+    "rememberMe": "記住我",
+    "rememberedPassword": "還記得密碼？",
+    "resetPassword": {
+      "label": "重設密碼"
+    },
+    "sendPasswordResetLink": "傳送密碼重設連結",
+    "showConfirmPassword": "顯示確認密碼",
+    "showConfirmNewPassword": "顯示確認新密碼",
+    "showNewPassword": "顯示新密碼",
+    "showPassword": "顯示密碼",
+    "signIn": {
+      "label": "登入",
+      "success": "登入成功"
+    },
+    "signOut": {
+      "label": "登出",
+      "success": "已登出"
+    },
+    "signUp": {
+      "label": "註冊"
+    },
+    "verifyEmail": {
+      "backToSignIn": "返回登入",
+      "checkSpam": "沒收到？請檢查垃圾郵件或稍後再試。",
+      "enterEmail": "請輸入電子郵件後再重新寄送",
+      "resend": "重新寄送驗證信",
+      "resendSuccess": "已重新寄送驗證信",
+      "sent": "驗證信已寄出",
+      "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
+      "title": "驗證信已寄出"
+    }
+  },
+  "cart": {
+    "backToOrder": "返回點餐",
+    "checkout": "前往結帳",
+    "quantityExceedsStock": "{label} 剩 {stock} 件",
+    "title": "購物車清單",
+    "totalQuantity": "共 {quantity} 件"
+  },
+  "common": {
+    "colon": "：",
+    "currency": "NT$",
+    "delimiter": "、",
+    "empty": "尚未有商品",
+    "from": "起",
+    "loading": "載入中...",
+    "maxQuantity": "每項商品最多只能購買 {quantity} 件",
+    "multiply": "×",
+    "reachStockLimit": "{label} 已達庫存上限",
+    "soldOut": "{label} 售完",
+    "totalAmount": "總計"
+  },
+  "company": {
+    "about": {
+      "label": "關於我們"
+    },
+    "label": "公司",
+    "legal": {
+      "back": "返回",
+      "privacy": {
+        "label": "隱私權政策"
       },
-      "confirmPassword": {
-        "label": "確認密碼",
-        "placeholder": "請再次輸入密碼"
-      },
-      "confirmNewPassword": "確認新密碼",
-      "chooseCountry": "選擇國家",
-      "countryCode": "國碼",
-      "email": {
-        "label": "電子郵件",
-        "placeholder": "請輸入電子郵件"
-      },
-      "emailUpdates": "我想透過電子郵件接收最新資訊",
-      "firstName": {
-        "label": "名字",
-        "placeholder": "請輸入名字"
-      },
-      "forgotPassword": { "label": "忘記密碼" },
-      "gender": {
-        "label": "性別",
-        "placeholder": "請選擇性別",
-        "options": {
-          "female": "女性",
-          "male": "男性",
-          "notDisclosed": "不願透露"
-        }
-      },
-      "hasAccount": "已經有帳號？",
-      "legalConsent": "點擊「{action}」，即表示您同意 Biru Coffee 的\n{terms} 與 {privacy}。",
-      "hideConfirmPassword": "隱藏確認密碼",
-      "hideConfirmNewPassword": "隱藏確認新密碼",
-      "hideNewPassword": "隱藏新密碼",
-      "hidePassword": "隱藏密碼",
-      "lastName": {
-        "label": "姓氏（選填）",
-        "placeholder": "請輸入姓氏"
-      },
-      "newPassword": "新密碼",
-      "noAccount": "還沒有帳號？",
-      "or": "或",
-      "password": {
-        "label": "密碼",
-        "placeholder": "請輸入密碼"
-      },
-      "phone": "電話號碼",
-      "rememberMe": "記住我",
-      "rememberedPassword": "還記得密碼？",
-      "resetPassword": { "label": "重設密碼" },
-      "sendPasswordResetLink": "傳送密碼重設連結",
-      "showConfirmPassword": "顯示確認密碼",
-      "showConfirmNewPassword": "顯示確認新密碼",
-      "showNewPassword": "顯示新密碼",
-      "showPassword": "顯示密碼",
-      "signIn": { "label": "登入", "success": "登入成功" },
-      "signOut": { "label": "登出", "success": "已登出" },
-      "signUp": { "label": "註冊" },
-      "verifyEmail": {
-        "backToSignIn": "返回登入",
-        "checkSpam": "沒收到？請檢查垃圾郵件或稍後再試。",
-        "enterEmail": "請輸入電子郵件後再重新寄送",
-        "resend": "重新寄送驗證信",
-        "resendSuccess": "已重新寄送驗證信",
-        "sent": "驗證信已寄出",
-        "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
-        "title": "驗證信已寄出"
+      "terms": {
+        "label": "服務條款"
       }
     }
+  },
+  "dialog": {
+    "addToCart": "加入購物車",
+    "amount": "小計",
+    "close": "關閉",
+    "maxStock": "{label} 庫存僅剩 {quantity} 件"
+  },
+  "home": {
+    "footer": {
+      "brand": "Biru Coffee",
+      "copyright": "Copyright © {year} {brand}.",
+      "newsletter": {
+        "action": "訂閱",
+        "invalidEmail": "請輸入有效的電子郵件。",
+        "subtitle": "訂閱電子報，定期收到更新。我們絕不寄送垃圾郵件。",
+        "success": "訂閱成功（示意）。",
+        "title": "掌握最新消息"
+      },
+      "tagline": "為你的每一天，沖煮一杯好咖啡。"
+    },
+    "label": "首頁"
+  },
+  "maintenance": {
+    "title": "維護中"
+  },
+  "member": {
+    "label": "會員"
   },
   "order": {
     "label": "點餐",
@@ -236,14 +258,19 @@
           "tableNumber": {
             "value": "桌號 {tableNumber}",
             "partySize": {
-              "select": { "label": "選擇用餐人數", "value": "{count} 位" }
+              "select": {
+                "label": "選擇用餐人數",
+                "value": "{count} 位"
+              }
             }
           }
         }
       },
       "pickup": {
         "label": "外帶自取",
-        "select": { "label": "選擇門市" }
+        "select": {
+          "label": "選擇門市"
+        }
       },
       "storeSlug": {
         "selectTable": "選擇桌號",
@@ -254,8 +281,12 @@
             "placeholder": "搜尋菜單"
           },
           "stepper": {
-            "checkout": { "label": "結帳" },
-            "complete": { "label": "完成" }
+            "checkout": {
+              "label": "結帳"
+            },
+            "complete": {
+              "label": "完成"
+            }
           },
           "top": "TOP",
           "topSold": "人氣商品"

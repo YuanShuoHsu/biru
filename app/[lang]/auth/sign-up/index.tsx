@@ -153,7 +153,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
 
   const genderOptions = GENDER_VALUES.map((value) => ({
-    label: dict.member.auth.gender.options[GENDER_LABELS[value]],
+    label: dict.auth.gender.options[GENDER_LABELS[value]],
     value,
   }));
 
@@ -239,21 +239,11 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
     hasConfirmPassword,
   );
 
-  const legalConsentText = interpolate(dict.member.auth.legalConsent, {
-    action: dict.member.auth.signUp.label,
+  const legalConsentText = interpolate(dict.auth.legalConsent, {
+    action: dict.auth.signUp.label,
     terms: `{${LegalLinkType.Terms}}`,
     privacy: `{${LegalLinkType.Privacy}}`,
   });
-
-  const handleBackToSignUpParams = (path: string) => {
-    const withBack = handleQueryParam(
-      path,
-      QueryParamKey.Back,
-      `/${lang}/member/sign-up`,
-    );
-
-    return handleQueryParam(withBack, QueryParamKey.Redirect, redirect);
-  };
 
   const legalPlaceholders = Object.fromEntries(
     LEGAL_LINK_TYPES.map((type) => [
@@ -261,7 +251,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       <MuiLink
         key={type}
         component={NextLink}
-        href={handleBackToSignUpParams(`/${lang}/company/${type}`)}
+        href={handleQueryParam(`/${lang}/company/${type}`, {
+          [QueryParamKey.Back]: `/${lang}/auth/sign-up`,
+          [QueryParamKey.Redirect]: redirect,
+        })}
       >
         {dict.company.legal[type].label}
       </MuiLink>,
@@ -333,17 +326,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
       const { confirmPassword, ...data } = form;
       const { email } = await trigger(data);
 
-      const withEmail = handleQueryParam(
-        `/${lang}/member/verify-email`,
-        QueryParamKey.Email,
-        email,
-      );
-
-      const verifyEmailHref = handleQueryParam(
-        withEmail,
-        QueryParamKey.Redirect,
-        redirect,
-      );
+      const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
+        [QueryParamKey.Email]: email,
+        [QueryParamKey.Redirect]: redirect,
+      });
 
       router.replace(verifyEmailHref);
     } catch {
@@ -362,23 +348,23 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             textAlign="center"
             variant="h6"
           >
-            {dict.member.auth.signUp.label}
+            {dict.auth.signUp.label}
           </Typography>
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signUp" href="" />
-        <Divider>{dict.member.auth.or}</Divider>
+        <GoogleButton action="signUp" lang={lang} redirect={redirect} />
+        <Divider>{dict.auth.or}</Divider>
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
             error={!!state?.errors?.lastName}
             fullWidth
             helperText={state?.errors?.lastName?.join("\n")}
-            label={dict.member.auth.lastName.label}
+            label={dict.auth.lastName.label}
             name="lastName"
             onChange={handleChange}
-            placeholder={dict.member.auth.lastName.placeholder}
+            placeholder={dict.auth.lastName.placeholder}
             value={form.lastName}
           />
           <TextField
@@ -386,17 +372,17 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             error={!!state?.errors?.firstName}
             fullWidth
             helperText={state?.errors?.firstName?.join("\n")}
-            label={dict.member.auth.firstName.label}
+            label={dict.auth.firstName.label}
             name="firstName"
             onChange={handleChange}
-            placeholder={dict.member.auth.firstName.placeholder}
+            placeholder={dict.auth.firstName.placeholder}
             required
             value={form.firstName}
           />
         </Stack>
         <DatePicker
           disableFuture
-          label={dict.member.auth.birthDate.label}
+          label={dict.auth.birthDate.label}
           maxDate={today}
           name="birthDate"
           onChange={handleBirthDateChange}
@@ -406,7 +392,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
               autoComplete: "bday",
               error: !!state?.errors?.birthDate,
               helperText: state?.errors?.birthDate?.join("\n"),
-              placeholder: dict.member.auth.birthDate.placeholder,
+              placeholder: dict.auth.birthDate.placeholder,
               required: true,
             },
           }}
@@ -419,7 +405,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           autoComplete="sex"
           error={!!state?.errors?.gender}
           fullWidth
-          label={dict.member.auth.gender.label}
+          label={dict.auth.gender.label}
           helperText={state?.errors?.gender?.join("\n")}
           name="gender"
           onBlur={() => setIsGenderFocused(false)}
@@ -434,7 +420,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
                 if (!value)
                   return (
                     <Typography color="gray">
-                      {dict.member.auth.gender.placeholder}
+                      {dict.auth.gender.placeholder}
                     </Typography>
                   );
 
@@ -457,10 +443,10 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           error={!!state?.errors?.email}
           fullWidth
           helperText={state?.errors?.email?.join("\n")}
-          label={dict.member.auth.email.label}
+          label={dict.auth.email.label}
           name="email"
           onChange={handleChange}
-          placeholder={dict.member.auth.email.placeholder}
+          placeholder={dict.auth.email.placeholder}
           required
           type="email"
           value={form.email}
@@ -470,7 +456,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           error={isPasswordError}
           fullWidth
           helperText={passwordHelperContent}
-          label={dict.member.auth.password.label}
+          label={dict.auth.password.label}
           name="password"
           onChange={handleChange}
           required
@@ -482,8 +468,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
                   <IconButton
                     aria-label={
                       showPassword.password
-                        ? dict.member.auth.hidePassword
-                        : dict.member.auth.showPassword
+                        ? dict.auth.hidePassword
+                        : dict.auth.showPassword
                     }
                     onClick={handleClickShowPassword("password")}
                     onMouseDown={handleMouseDownPassword}
@@ -498,14 +484,14 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           }}
           type={showPassword.password ? "text" : "password"}
           value={form.password}
-          placeholder={dict.member.auth.password.placeholder}
+          placeholder={dict.auth.password.placeholder}
         />
         <TextField
           autoComplete="new-password"
           error={isConfirmPasswordError}
           fullWidth
           helperText={confirmPasswordHelperContent}
-          label={dict.member.auth.confirmPassword.label}
+          label={dict.auth.confirmPassword.label}
           name="confirmPassword"
           onChange={handleChange}
           required
@@ -517,8 +503,8 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
                   <IconButton
                     aria-label={
                       showPassword.confirmPassword
-                        ? dict.member.auth.hidePassword
-                        : dict.member.auth.showPassword
+                        ? dict.auth.hidePassword
+                        : dict.auth.showPassword
                     }
                     onClick={handleClickShowPassword("confirmPassword")}
                     onMouseDown={handleMouseDownPassword}
@@ -537,7 +523,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           }}
           type={showPassword.confirmPassword ? "text" : "password"}
           value={form.confirmPassword}
-          placeholder={dict.member.auth.confirmPassword.placeholder}
+          placeholder={dict.auth.confirmPassword.placeholder}
         />
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, sm: 4 }}>
@@ -550,7 +536,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
               fullWidth
               helperText={state?.errors?.phone?.join("\n")}
               inputMode="tel"
-              label={dict.member.auth.phone}
+              label={dict.auth.phone}
               name="phone"
               onChange={handleChange}
               required
@@ -576,9 +562,7 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
             />
           }
           label={
-            <Typography variant="body2">
-              {dict.member.auth.emailUpdates}
-            </Typography>
+            <Typography variant="body2">{dict.auth.emailUpdates}</Typography>
           }
         />
       </StyledCardContent>
@@ -592,24 +576,22 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
           type="submit"
           variant="contained"
         >
-          {dict.member.auth.signUp.label}
+          {dict.auth.signUp.label}
         </Button>
         <Typography variant="caption" color="text.secondary" align="center">
           {legalConsent}
         </Typography>
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={1}>
-          <Typography variant="body2">{dict.member.auth.hasAccount}</Typography>
+          <Typography variant="body2">{dict.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
-            href={handleQueryParam(
-              `/${lang}/member/sign-in`,
-              QueryParamKey.Redirect,
-              redirect,
-            )}
+            href={handleQueryParam(`/${lang}/auth/sign-in`, {
+              [QueryParamKey.Redirect]: redirect,
+            })}
             variant="body2"
           >
-            {dict.member.auth.signIn.label}
+            {dict.auth.signIn.label}
           </MuiLink>
         </Stack>
       </StyledCardActions>
