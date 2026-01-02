@@ -31,6 +31,21 @@ export const proxy = (request: NextRequest) => {
 
   const locale = getLocale(request);
 
+  const hasAuthHint = request.cookies.get("biru-auth")?.value === "true";
+
+  const isAuthPage = pathname.includes("/auth");
+  const isAccountPage = pathname.includes("/account");
+
+  if (hasAuthHint && isAuthPage)
+    return NextResponse.redirect(
+      new URL(`/${locale}/account/my-account`, request.url),
+    );
+
+  if (!hasAuthHint && isAccountPage)
+    return NextResponse.redirect(
+      new URL(`/${locale}/auth/sign-in`, request.url),
+    );
+
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
   const isMaintenancePath =
     pathnameLocale && pathname === `/${pathnameLocale}/maintenance`;

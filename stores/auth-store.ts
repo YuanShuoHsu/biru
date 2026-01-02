@@ -34,16 +34,26 @@ const computeIsSignedIn = (
 export const createAuthStore = (initState: AuthState = defaultInitState) => {
   return createStore<AuthStore>()((set) => ({
     ...initState,
-    clearAuth: () =>
+    clearAuth: () => {
+      if (typeof window !== "undefined") {
+        document.cookie =
+          "biru-auth=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
       set(() => ({
         ...defaultInitState,
         isAuthLoading: false,
-      })),
-    setAccessToken: (accessToken) =>
+      }));
+    },
+    setAccessToken: (accessToken) => {
+      if (typeof window !== "undefined" && accessToken) {
+        document.cookie =
+          "biru-auth=true; path=/; max-age=2592000; SameSite=Lax";
+      }
       set((state) => ({
         accessToken,
         isSignedIn: computeIsSignedIn(accessToken, state.profile),
-      })),
+      }));
+    },
     setIsAuthLoading: (isAuthLoading) => set({ isAuthLoading }),
     setProfile: (profile) =>
       set((state) => ({
