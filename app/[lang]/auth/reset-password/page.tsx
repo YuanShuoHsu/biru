@@ -1,14 +1,14 @@
-import MemberAuthResetPassword from ".";
+import AuthResetPassword from ".";
 
-interface MemberAuthResetPasswordPageProps {
+interface AuthResetPasswordPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberAuthResetPasswordPage = async ({
+const AuthResetPasswordPage = async ({
   params,
   searchParams,
-}: MemberAuthResetPasswordPageProps) => {
+}: AuthResetPasswordPageProps) => {
   const { lang } = await params;
   const { redirect } = await searchParams;
 
@@ -17,7 +17,7 @@ const MemberAuthResetPasswordPage = async ({
       ? redirect
       : undefined;
 
-  return <MemberAuthResetPassword lang={lang} redirect={safeRedirect} />;
+  return <AuthResetPassword lang={lang} redirect={safeRedirect} />;
 };
 
-export default MemberAuthResetPasswordPage;
+export default AuthResetPasswordPage;

@@ -1,16 +1,16 @@
-import MemberLegalPrivacy from "./index";
+import CompanyLegalPrivacy from "./index";
 
 import BackButton from "@/components/BackButton";
 
-interface MemberLegalPrivacyPageProps {
+interface CompanyLegalPrivacyPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberLegalPrivacyPage = async ({
+const CompanyLegalPrivacyPage = async ({
   params,
   searchParams,
-}: MemberLegalPrivacyPageProps) => {
+}: CompanyLegalPrivacyPageProps) => {
   const { lang } = await params;
   const { back, redirect } = await searchParams;
 
@@ -21,9 +21,9 @@ const MemberLegalPrivacyPage = async ({
   return (
     <>
       <BackButton back={safeBack} lang={lang} redirect={safeRedirect} />
-      <MemberLegalPrivacy lang={lang} />
+      <CompanyLegalPrivacy lang={lang} />
     </>
   );
 };
 
-export default MemberLegalPrivacyPage;
+export default CompanyLegalPrivacyPage;

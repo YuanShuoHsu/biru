@@ -246,9 +246,6 @@
   "maintenance": {
     "title": "维护中"
   },
-  "member": {
-    "label": "会员"
-  },
   "order": {
     "label": "点餐",
     "mode": {

@@ -1,14 +1,14 @@
-import MemberAuthForgotPassword from ".";
+import AuthForgotPassword from ".";
 
-interface MemberAuthForgotPasswordPageProps {
+interface AuthForgotPasswordPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberAuthForgotPasswordPage = async ({
+const AuthForgotPasswordPage = async ({
   params,
   searchParams,
-}: MemberAuthForgotPasswordPageProps) => {
+}: AuthForgotPasswordPageProps) => {
   const { lang } = await params;
   const { redirect } = await searchParams;
 
@@ -17,7 +17,7 @@ const MemberAuthForgotPasswordPage = async ({
       ? redirect
       : undefined;
 
-  return <MemberAuthForgotPassword lang={lang} redirect={safeRedirect} />;
+  return <AuthForgotPassword lang={lang} redirect={safeRedirect} />;
 };
 
-export default MemberAuthForgotPasswordPage;
+export default AuthForgotPasswordPage;

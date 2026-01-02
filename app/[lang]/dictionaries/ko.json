@@ -246,9 +246,6 @@
   "maintenance": {
     "title": "점검 중"
   },
-  "member": {
-    "label": "회원"
-  },
   "order": {
     "label": "주문",
     "mode": {

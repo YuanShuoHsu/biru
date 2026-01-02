@@ -106,12 +106,12 @@ interface SignUpFormData {
   isSubscribed: boolean;
 }
 
-interface MemberAuthSignUpProps {
+interface AuthSignUpProps {
   lang: string;
   redirect?: string;
 }
 
-const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
+const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
   const defaultCountryCode = getDefaultCountryCode(lang);
 
   const [form, setForm] = useState<SignUpFormData>({
@@ -599,4 +599,4 @@ const MemberAuthSignUp = ({ lang, redirect }: MemberAuthSignUpProps) => {
   );
 };
 
-export default MemberAuthSignUp;
+export default AuthSignUp;

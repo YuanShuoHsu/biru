@@ -12,14 +12,14 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface MemberLegalLayoutProps {
+interface CompanyLegalLayoutProps {
   children: React.ReactNode;
 }
 
-const MemberLegalLayout = ({ children }: MemberLegalLayoutProps) => (
+const CompanyLegalLayout = ({ children }: CompanyLegalLayoutProps) => (
   <StyledContainer disableGutters maxWidth="sm">
     {children}
   </StyledContainer>
 );
 
-export default MemberLegalLayout;
+export default CompanyLegalLayout;

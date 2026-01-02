@@ -100,12 +100,12 @@ const InfoRow = ({ icon: Icon, label, status, value }: InfoRowProps) => (
   </Stack>
 );
 
-interface MemberProfileProps {
+interface AccountProfileProps {
   lang: string;
   currentURL: string;
 }
 
-const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
+const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
   const [preferences, setPreferences] = useState(preferenceDefaults);
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
@@ -465,4 +465,4 @@ const MemberProfile = ({ lang, currentURL }: MemberProfileProps) => {
   );
 };
 
-export default MemberProfile;
+export default AccountProfile;

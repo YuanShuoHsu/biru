@@ -51,15 +51,12 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 type ResetPasswordField = "newPassword" | "confirmNewPassword";
 
-interface MemberAuthResetPasswordProps {
+interface AuthResetPasswordProps {
   lang: string;
   redirect?: string;
 }
 
-const MemberAuthResetPassword = ({
-  lang,
-  redirect,
-}: MemberAuthResetPasswordProps) => {
+const AuthResetPassword = ({ lang, redirect }: AuthResetPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
     newPassword: "",
@@ -222,4 +219,4 @@ const MemberAuthResetPassword = ({
   );
 };
 
-export default MemberAuthResetPassword;
+export default AuthResetPassword;

@@ -4,11 +4,6 @@ import { SearchParams } from "next/dist/server/request/search-params";
 
 import MyAccount from ".";
 
-interface MemberMyAccountPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
-
 const toSearchString = (searchParams: SearchParams) => {
   const urlSearchParams = new URLSearchParams();
 
@@ -28,10 +23,15 @@ const toSearchString = (searchParams: SearchParams) => {
   return urlSearchParams.toString();
 };
 
-const MemberMyAccountPage = async ({
+interface AccountMyAccountPageProps {
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+const AccountMyAccountPage = async ({
   params,
   searchParams,
-}: MemberMyAccountPageProps) => {
+}: AccountMyAccountPageProps) => {
   const { lang } = await params;
   const resolvedSearchParams = await searchParams;
 
@@ -42,4 +42,4 @@ const MemberMyAccountPage = async ({
   return <MyAccount currentURL={currentURL} lang={lang} />;
 };
 
-export default MemberMyAccountPage;
+export default AccountMyAccountPage;

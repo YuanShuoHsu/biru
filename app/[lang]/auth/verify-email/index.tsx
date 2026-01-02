@@ -42,17 +42,13 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface MemberAuthVerifyEmailProps {
+interface AuthVerifyEmailProps {
   email?: string;
   lang: string;
   redirect?: string;
 }
 
-const MemberAuthVerifyEmail = ({
-  email,
-  lang,
-  redirect,
-}: MemberAuthVerifyEmailProps) => {
+const AuthVerifyEmail = ({ email, lang, redirect }: AuthVerifyEmailProps) => {
   const dict = useI18n();
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
@@ -141,4 +137,4 @@ const MemberAuthVerifyEmail = ({
   );
 };
 
-export default MemberAuthVerifyEmail;
+export default AuthVerifyEmail;

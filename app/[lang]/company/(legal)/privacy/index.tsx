@@ -478,11 +478,11 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
   },
 };
 
-interface MemberLegalPrivacyProps {
+interface CompanyLegalPrivacyProps {
   lang: string;
 }
 
-const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
+const CompanyLegalPrivacy = ({ lang }: CompanyLegalPrivacyProps) => {
   const content =
     privacyByLocale[lang as LocaleCode] || privacyByLocale[defaultLocale];
 
@@ -568,4 +568,4 @@ const MemberLegalPrivacy = ({ lang }: MemberLegalPrivacyProps) => {
   );
 };
 
-export default MemberLegalPrivacy;
+export default CompanyLegalPrivacy;

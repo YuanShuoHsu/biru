@@ -1,14 +1,14 @@
-import MemberAuthSignUp from ".";
+import AuthSignUp from ".";
 
-interface MemberAuthSignUpPageProps {
+interface AuthSignUpPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberAuthSignUpPage = async ({
+const AuthSignUpPage = async ({
   params,
   searchParams,
-}: MemberAuthSignUpPageProps) => {
+}: AuthSignUpPageProps) => {
   const { lang } = await params;
   const { redirect } = await searchParams;
 
@@ -17,7 +17,7 @@ const MemberAuthSignUpPage = async ({
       ? redirect
       : undefined;
 
-  return <MemberAuthSignUp lang={lang} redirect={safeRedirect} />;
+  return <AuthSignUp lang={lang} redirect={safeRedirect} />;
 };
 
-export default MemberAuthSignUpPage;
+export default AuthSignUpPage;

@@ -46,15 +46,12 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface MemberAuthForgotPasswordProps {
+interface AuthForgotPasswordProps {
   lang: string;
   redirect?: string;
 }
 
-const MemberAuthForgotPassword = ({
-  lang,
-  redirect,
-}: MemberAuthForgotPasswordProps) => {
+const AuthForgotPassword = ({ lang, redirect }: AuthForgotPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
   });
@@ -128,4 +125,4 @@ const MemberAuthForgotPassword = ({
   );
 };
 
-export default MemberAuthForgotPassword;
+export default AuthForgotPassword;

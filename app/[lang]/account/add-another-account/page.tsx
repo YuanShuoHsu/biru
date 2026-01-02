@@ -1,14 +1,14 @@
 import AddAnotherAccount from ".";
 
-interface MemberAddAnotherAccountPageProps {
+interface AccountAddAnotherAccountPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberAddAnotherAccountPage = async ({
+const AccountAddAnotherAccountPage = async ({
   params,
   searchParams,
-}: MemberAddAnotherAccountPageProps) => {
+}: AccountAddAnotherAccountPageProps) => {
   const { lang } = await params;
   const { redirect } = await searchParams;
 
@@ -20,4 +20,4 @@ const MemberAddAnotherAccountPage = async ({
   return <AddAnotherAccount lang={lang} redirect={safeRedirect} />;
 };
 
-export default MemberAddAnotherAccountPage;
+export default AccountAddAnotherAccountPage;

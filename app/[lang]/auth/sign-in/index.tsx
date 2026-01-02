@@ -68,12 +68,12 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface MemberAuthSignInProps {
+interface AuthSignInProps {
   lang: string;
   redirect?: string;
 }
 
-const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
+const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -297,4 +297,4 @@ const MemberAuthSignIn = ({ lang, redirect }: MemberAuthSignInProps) => {
   );
 };
 
-export default MemberAuthSignIn;
+export default AuthSignIn;

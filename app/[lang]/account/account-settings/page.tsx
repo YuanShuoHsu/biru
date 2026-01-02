@@ -4,11 +4,6 @@ import AccountSettings from ".";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
-interface MemberAccountSettingsPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<SearchParams>;
-}
-
 const toSearchString = (searchParams: SearchParams) => {
   const urlSearchParams = new URLSearchParams();
 
@@ -28,10 +23,15 @@ const toSearchString = (searchParams: SearchParams) => {
   return urlSearchParams.toString();
 };
 
-const MemberAccountSettingsPage = async ({
+interface AccountAccountSettingsPageProps {
+  params: Promise<{ lang: string }>;
+  searchParams: Promise<SearchParams>;
+}
+
+const AccountAccountSettingsPage = async ({
   params,
   searchParams,
-}: MemberAccountSettingsPageProps) => {
+}: AccountAccountSettingsPageProps) => {
   const { lang } = await params;
   const resolvedSearchParams = await searchParams;
 
@@ -42,4 +42,4 @@ const MemberAccountSettingsPage = async ({
   return <AccountSettings currentURL={currentURL} lang={lang} />;
 };
 
-export default MemberAccountSettingsPage;
+export default AccountAccountSettingsPage;

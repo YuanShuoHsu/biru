@@ -541,11 +541,11 @@ const termsByLocale: Record<Locale, TermsContent> = {
   },
 };
 
-interface MemberLegalTermsProps {
+interface CompanyLegalTermsProps {
   lang: string;
 }
 
-const MemberLegalTerms = ({ lang }: MemberLegalTermsProps) => {
+const CompanyLegalTerms = ({ lang }: CompanyLegalTermsProps) => {
   const content =
     termsByLocale[lang as LocaleCode] ?? termsByLocale[defaultLocale];
 
@@ -631,4 +631,4 @@ const MemberLegalTerms = ({ lang }: MemberLegalTermsProps) => {
   );
 };
 
-export default MemberLegalTerms;
+export default CompanyLegalTerms;

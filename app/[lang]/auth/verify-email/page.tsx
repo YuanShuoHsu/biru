@@ -1,14 +1,14 @@
-import MemberAuthVerifyEmail from ".";
+import AuthVerifyEmail from ".";
 
-interface MemberAuthVerifyEmailPageProps {
+interface AuthVerifyEmailPageProps {
   params: Promise<{ lang: string }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
-const MemberAuthVerifyEmailPage = async ({
+const AuthVerifyEmailPage = async ({
   params,
   searchParams,
-}: MemberAuthVerifyEmailPageProps) => {
+}: AuthVerifyEmailPageProps) => {
   const { lang } = await params;
   const { email, redirect } = await searchParams;
 
@@ -19,12 +19,8 @@ const MemberAuthVerifyEmailPage = async ({
       : undefined;
 
   return (
-    <MemberAuthVerifyEmail
-      email={safeEmail}
-      lang={lang}
-      redirect={safeRedirect}
-    />
+    <AuthVerifyEmail email={safeEmail} lang={lang} redirect={safeRedirect} />
   );
 };
 
-export default MemberAuthVerifyEmailPage;
+export default AuthVerifyEmailPage;
