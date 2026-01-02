@@ -116,35 +116,19 @@ const LinkSection = () => {
           <Typography color="text.primary" variant="subtitle2">
             {parentLabel}
           </Typography>
-          {children?.map(({ label: childLabel, onClick, to: childTo }) => {
-            if (onClick) {
-              return (
-                <MuiLink
-                  color="text.secondary"
-                  component="button"
-                  key={childLabel}
-                  onClick={onClick}
-                  underline="hover"
-                  variant="body2"
-                >
-                  {childLabel}
-                </MuiLink>
-              );
-            }
-
-            return (
-              <MuiLink
-                color="text.secondary"
-                component={NextLink}
-                href={`/${lang}${parentTo}${childTo}`}
-                key={childTo}
-                underline="hover"
-                variant="body2"
-              >
-                {childLabel}
-              </MuiLink>
-            );
-          })}
+          {children?.map(({ label: childLabel, onClick, to: childTo }) => (
+            <MuiLink
+              color="text.secondary"
+              component={onClick ? "button" : NextLink}
+              href={onClick ? undefined : `/${lang}${parentTo}${childTo}`}
+              key={onClick ? childLabel : childTo}
+              onClick={onClick}
+              underline="hover"
+              variant="body2"
+            >
+              {childLabel}
+            </MuiLink>
+          ))}
         </StyledGrid>
       ))}
     </>
