@@ -17,6 +17,14 @@ export const useAuthInitializer = () => {
     if (isMaintenanceMode) return;
 
     const initAuthState = async () => {
+      const hasAuthCookie = document.cookie.includes("biru-auth=");
+
+      if (!hasAuthCookie) {
+        setIsAuthLoading(false);
+
+        return;
+      }
+
       setIsAuthLoading(true);
 
       try {
