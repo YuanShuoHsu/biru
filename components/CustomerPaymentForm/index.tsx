@@ -20,6 +20,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useMenuStore } from "@/providers/menu-store-provider";
+
 import { useCartStore } from "@/stores/useCartStore";
 
 import type {
@@ -66,6 +68,7 @@ const CustomerPaymentForm = () => {
   const dict = useI18n();
 
   const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore();
+  const { menus } = useMenuStore((state) => state);
 
   const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
@@ -91,12 +94,18 @@ const CustomerPaymentForm = () => {
         TradeDesc: "餐點付款",
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
-            const itemName = getItemName(id, Locale.ZhTW);
-            const choiceNames = getChoiceNames(id, choices, Locale.ZhTW, {
-              colon: "：",
-              delimiter: "、",
-              joinWith: "、",
-            });
+            const itemName = getItemName(menus, id, Locale.ZhTW);
+            const choiceNames = getChoiceNames(
+              menus,
+              id,
+              choices,
+              Locale.ZhTW,
+              {
+                colon: "：",
+                delimiter: "、",
+                joinWith: "、",
+              },
+            );
             const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
 
             return `${itemName} ${formattedChoices} ${dict.common.multiply} ${quantity}`;

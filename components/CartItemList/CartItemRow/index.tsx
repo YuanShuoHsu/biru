@@ -21,6 +21,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useMenuStore } from "@/providers/menu-store-provider";
+
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
 import type { RouteParams } from "@/types/routeParams";
@@ -77,9 +79,10 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { lang } = useParams<RouteParams>();
 
   const dict = useI18n();
+  const { menus } = useMenuStore((state) => state);
 
-  const itemName = getItemName(id, lang);
-  const choiceNames = getChoiceNames(id, choices, lang, {
+  const itemName = getItemName(menus, id, lang);
+  const choiceNames = getChoiceNames(menus, id, choices, lang, {
     colon: dict.common.colon,
     delimiter: dict.common.delimiter,
   });
@@ -87,7 +90,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { deleteCartItem, getCartItemTotalQuantity, updateCartItem } =
     useCartStore();
 
-  const itemStock = getItemStock(id);
+  const itemStock = getItemStock(menus, id);
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
 
@@ -95,7 +98,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(id, choices, lang);
+    getLimitingChoicesCap(menus, id, choices, lang);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0

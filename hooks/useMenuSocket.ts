@@ -23,10 +23,7 @@ export const useMenuSocket = (storeId: string) => {
       try {
         const response = await menuSocket
           .timeout(5000)
-          .emitWithAck(
-            "findAllMenus",
-            storeId || "48c533dc-97fd-404b-b435-5692f03cb123",
-          );
+          .emitWithAck("findAllMenus", storeId);
 
         setMenu({ menus: response });
       } catch (error) {

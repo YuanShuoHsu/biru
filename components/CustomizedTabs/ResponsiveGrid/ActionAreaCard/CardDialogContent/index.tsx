@@ -23,6 +23,8 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
+import { useMenuStore } from "@/providers/menu-store-provider";
+
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { Option } from "@/types/menu";
@@ -74,6 +76,8 @@ const CardDialogContent = React.forwardRef<
   const { getChoiceAvailableQuantity, getCartItemTotalQuantity } =
     useCartStore();
 
+  const { menus } = useMenuStore((state) => state);
+
   const initialChoices = options.reduce<Record<string, string[]>>(
     (acc, { id: optionId, choices: optionChoices, multiple, required }) => {
       if (multiple) {
@@ -114,7 +118,7 @@ const CardDialogContent = React.forwardRef<
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(id, choices, lang);
+    getLimitingChoicesCap(menus, id, choices, lang);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0

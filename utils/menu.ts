@@ -1,9 +1,7 @@
-import { menu } from "@/constants/menu";
-
 import { useCartStore } from "@/stores/useCartStore";
 
 import type { LocaleCode } from "@/types/locale";
-import type { Choice, MenuItem, Option } from "@/types/menu";
+import type { Choice, Menu, MenuItem, Option } from "@/types/menu";
 
 export const getItemKey = (
   itemId: string,
@@ -20,18 +18,22 @@ export const getItemKey = (
   return parts.length > 0 ? `${itemId}_${parts.join("_")}` : itemId;
 };
 
-const findItemById = (itemId: string): MenuItem | undefined =>
-  menu.flatMap(({ items }) => items).find(({ id }) => id === itemId);
+const findItemById = (menus: Menu[], itemId: string): MenuItem | undefined =>
+  menus.flatMap(({ items }) => items).find(({ id }) => id === itemId);
 
-export const getItemName = (itemId: string, lang: LocaleCode): string => {
-  const item = findItemById(itemId);
+export const getItemName = (
+  menus: Menu[],
+  itemId: string,
+  lang: LocaleCode,
+): string => {
+  const item = findItemById(menus, itemId);
   if (!item) return "";
 
   return item.name[lang];
 };
 
-export const getItemStock = (itemId: string): number | null => {
-  const item = findItemById(itemId);
+export const getItemStock = (menus: Menu[], itemId: string): number | null => {
+  const item = findItemById(menus, itemId);
   if (!item) return 0;
 
   return item.stock;
@@ -60,13 +62,14 @@ const findItemOptionById = (
 type OptionLimitResult = { cap: number; names: string[] };
 
 export const getLimitingChoicesCap = (
+  menus: Menu[],
   id: string,
   choices: Record<string, string[]>,
   lang: LocaleCode,
 ): OptionLimitResult => {
   const { getChoiceAvailableQuantity } = useCartStore.getState();
 
-  const item = findItemById(id);
+  const item = findItemById(menus, id);
   if (!item) return { cap: Infinity, names: [] };
 
   const { names, cap } = Object.entries(choices).reduce<OptionLimitResult>(
@@ -115,12 +118,13 @@ interface CommonSeparators {
 }
 
 export const getChoiceNames = (
+  menus: Menu[],
   itemId: string,
   choices: Record<string, string[]>,
   lang: LocaleCode,
   { colon, delimiter, joinWith = "\n" }: CommonSeparators,
 ): string => {
-  const item = findItemById(itemId);
+  const item = findItemById(menus, itemId);
   if (!item) return "";
 
   return Object.entries(choices)
