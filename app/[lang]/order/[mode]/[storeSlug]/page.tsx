@@ -24,7 +24,7 @@ const OrderModeStoreSlugPage = async ({
   const store = stores.find(({ slug }) => slug === storeSlug);
   if (!store) return notFound();
 
-  return <OrderMenuContent storeId={store.id} />;
+  return <OrderMenuContent />;
 };
 
 export default OrderModeStoreSlugPage;

@@ -1,18 +1,24 @@
+"use client";
+
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 
-import { useSocketConnection } from "./useSocketConnection";
-
 import { menuSocket } from "@/app/socket";
+
+import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { getErrorMessage } from "@/utils/errors";
 
-export const useMenuSocket = (storeId: string) => {
-  const { menus, isLoading, setMenu } = useMenuStore((state) => state);
+interface MenuSocketInitializerProps {
+  storeId: string;
+}
+
+const MenuSocketInitializer = ({ storeId }: MenuSocketInitializerProps) => {
+  const { setMenu } = useMenuStore((state) => state);
   const { enqueueSnackbar } = useSnackbar();
-  const { isConnected, transport } = useSocketConnection(menuSocket);
+  const { isConnected } = useSocketConnection(menuSocket);
 
   useEffect(() => {
     if (!isConnected) return;
@@ -37,5 +43,7 @@ export const useMenuSocket = (storeId: string) => {
     initMenus();
   }, [enqueueSnackbar, isConnected, setMenu, storeId]);
 
-  return { isConnected, isLoading, menus, transport };
+  return null;
 };
+
+export default MenuSocketInitializer;
