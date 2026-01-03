@@ -20,7 +20,7 @@ const OrderModeStoreSlugTableNumberPartySizePage = async ({
 
   if (!store) return notFound();
 
-  return <OrderMenuContent storeId={store.id} />;
+  return <OrderMenuContent />;
 };
 
 export default OrderModeStoreSlugTableNumberPartySizePage;
