@@ -6,6 +6,7 @@ import { useI18n } from "@/context/i18n";
 
 import { Divider, List, NoSsr, Typography } from "@mui/material";
 
+import { useMenuStore } from "@/providers/menu-store-provider";
 import { useCartStore } from "@/stores/useCartStore";
 
 import { getItemKey } from "@/utils/menu";
@@ -15,17 +16,20 @@ interface CartItemListProps {
 }
 
 const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
+  const { isCartEmpty, cartItemsList } = useCartStore();
+
   const dict = useI18n();
 
-  const { isCartEmpty, cartItemsList } = useCartStore();
+  const { isLoading } = useMenuStore((state) => state);
+
+  const loading = <Typography padding={2}>{dict.common.loading}</Typography>;
 
   return (
     <List disablePadding>
-      <NoSsr
-        defer
-        fallback={<Typography padding={2}>{dict.common.loading}</Typography>}
-      >
-        {isCartEmpty ? (
+      <NoSsr defer fallback={loading}>
+        {isLoading ? (
+          loading
+        ) : isCartEmpty ? (
           <Typography padding={2} variant="body1">
             {dict.common.empty}
           </Typography>

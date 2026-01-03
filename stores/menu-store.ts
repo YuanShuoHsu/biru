@@ -14,7 +14,7 @@ type MenuActions = {
 export type MenuStore = MenuState & MenuActions;
 
 export const defaultInitState: MenuState = {
-  isLoading: false,
+  isLoading: true,
   menus: [],
 };
 
