@@ -104,14 +104,14 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const SizeOptionChip = styled(Chip)({
-  "& .MuiChip-label": {
-    padding: 0,
-    width: 24,
-    display: "flex",
-    justifyContent: "center",
-  },
-});
+// const SizeOptionChip = styled(Chip)({
+//   "& .MuiChip-label": {
+//     padding: 0,
+//     width: 24,
+//     display: "flex",
+//     justifyContent: "center",
+//   },
+// });
 
 export interface ActionAreaCardProps {
   id: string;
@@ -149,7 +149,7 @@ const ActionAreaCard = ({
 
   const displayPrice = price.toLocaleString(lang);
 
-  const sizes = options?.find(({ id }) => id === "size")?.choices;
+  // const sizes = options?.find(({ id }) => id === "size")?.choices;
 
   const hasExtraCost = options?.some(({ choices }) =>
     choices.some(({ extraCost }) => extraCost > 0),
@@ -238,13 +238,13 @@ const ActionAreaCard = ({
         <StyledCardContent>
           <Typography variant="h6">{name}</Typography>
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
-            {sizes?.map(({ name }) => (
+            {/* {sizes?.map(({ name }) => (
               <SizeOptionChip
                 key={name[lang]}
                 label={name[lang]}
                 size="small"
               />
-            ))}
+            ))} */}
             <Typography color="text.primary" variant="subtitle2">
               {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.common.from : ""}`}
             </Typography>
