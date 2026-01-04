@@ -1,7 +1,7 @@
 // https://mui.com/legal/privacy/
 // https://vercel.com/legal/privacy-policy
 
-import { Locale, defaultLocale } from "@/constants/locale";
+import { LocaleEnum, defaultLocale } from "@/constants/locale";
 
 import {
   Box,
@@ -30,8 +30,8 @@ interface PrivacyContent {
   contact: string;
 }
 
-const privacyByLocale: Record<Locale, PrivacyContent> = {
-  [Locale.ZhTW]: {
+const privacyByLocale: Record<LocaleEnum, PrivacyContent> = {
+  [LocaleEnum.ZhTW]: {
     title: "Biru Coffee 隱私權政策",
     lastUpdated: "最近更新：2024/09/01",
     intro:
@@ -120,7 +120,7 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     contact:
       "如有任何隱私相關疑問或權利行使需求，請透過客服信箱或門市與我們聯繫。",
   },
-  [Locale.ZhCN]: {
+  [LocaleEnum.ZhCN]: {
     title: "Biru Coffee 隐私权政策",
     lastUpdated: "最近更新：2024/09/01",
     intro:
@@ -209,7 +209,7 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     contact:
       "如对本政策有任何疑问或权利行使需求，请通过客服邮箱或门店与我们联系。",
   },
-  [Locale.En]: {
+  [LocaleEnum.En]: {
     title: "Biru Coffee Privacy Policy",
     lastUpdated: "Last updated: 2024/09/01",
     intro:
@@ -298,7 +298,7 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     contact:
       "Questions or requests? Contact us via customer support email or in-store.",
   },
-  [Locale.Ja]: {
+  [LocaleEnum.Ja]: {
     title: "Biru Coffee プライバシーポリシー",
     lastUpdated: "最終更新日：2024/09/01",
     intro:
@@ -387,7 +387,7 @@ const privacyByLocale: Record<Locale, PrivacyContent> = {
     contact:
       "プライバシーに関するお問い合わせや権利行使のご希望は、カスタマーサポートまたは店舗までご連絡ください。",
   },
-  [Locale.Ko]: {
+  [LocaleEnum.Ko]: {
     title: "Biru Coffee 개인정보 처리방침",
     lastUpdated: "최종 업데이트: 2024/09/01",
     intro:

@@ -1,23 +1,25 @@
-// https://nextjs.org/docs/app/building-your-application/routing/internationalization#localization
+// https://nextjs.org/docs/app/guides/internationalization
 
 import "server-only";
 
-import { Locale } from "@/constants/locale";
-
-import type { LocaleCode } from "@/types/locale";
+import { LocaleEnum } from "@/constants/locale";
 
 export const dictionaries = {
-  [Locale.ZhTW]: () =>
+  [LocaleEnum.ZhTW]: () =>
     import("./dictionaries/zh-TW.json").then((module) => module.default),
-  [Locale.En]: () =>
+  [LocaleEnum.En]: () =>
     import("./dictionaries/en.json").then((module) => module.default),
-  [Locale.Ja]: () =>
+  [LocaleEnum.Ja]: () =>
     import("./dictionaries/ja.json").then((module) => module.default),
-  [Locale.Ko]: () =>
+  [LocaleEnum.Ko]: () =>
     import("./dictionaries/ko.json").then((module) => module.default),
-  [Locale.ZhCN]: () =>
+  [LocaleEnum.ZhCN]: () =>
     import("./dictionaries/zh-CN.json").then((module) => module.default),
 };
 
-export const getDictionary = async (locale: LocaleCode) =>
-  dictionaries[locale]();
+export type Locale = keyof typeof dictionaries;
+
+export const hasLocale = (locale: string): locale is Locale =>
+  locale in dictionaries;
+
+export const getDictionary = async (locale: Locale) => dictionaries[locale]();

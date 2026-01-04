@@ -1,7 +1,7 @@
 import type { EcpayLanguage } from "@/types/ecpay/createEcpayDto";
 import type { LocaleCode } from "@/types/locale";
 
-export enum Locale {
+export enum LocaleEnum {
   ZhTW = "zh-TW",
   En = "en",
   Ja = "ja",
@@ -10,29 +10,29 @@ export enum Locale {
 }
 
 export const locales = [
-  Locale.ZhTW,
-  Locale.En,
-  Locale.Ja,
-  Locale.Ko,
-  Locale.ZhCN,
+  LocaleEnum.ZhTW,
+  LocaleEnum.En,
+  LocaleEnum.Ja,
+  LocaleEnum.Ko,
+  LocaleEnum.ZhCN,
 ] as const;
 
-export const defaultLocale = Locale.ZhTW;
+export const defaultLocale = LocaleEnum.ZhTW;
 
-export const countryCodeLocaleMap: Record<Locale, string> = {
-  [Locale.ZhTW]: "TW",
-  [Locale.Ja]: "JP",
-  [Locale.Ko]: "KR",
-  [Locale.En]: "US",
-  [Locale.ZhCN]: "CN",
+export const countryCodeLocaleMap: Record<LocaleEnum, string> = {
+  [LocaleEnum.ZhTW]: "TW",
+  [LocaleEnum.Ja]: "JP",
+  [LocaleEnum.Ko]: "KR",
+  [LocaleEnum.En]: "US",
+  [LocaleEnum.ZhCN]: "CN",
 };
 
-export const dayjsLocaleMap: Record<Locale, string> = {
-  [Locale.ZhTW]: "zh-tw",
-  [Locale.En]: "en",
-  [Locale.Ja]: "ja",
-  [Locale.Ko]: "ko",
-  [Locale.ZhCN]: "zh-cn",
+export const dayjsLocaleMap: Record<LocaleEnum, string> = {
+  [LocaleEnum.ZhTW]: "zh-tw",
+  [LocaleEnum.En]: "en",
+  [LocaleEnum.Ja]: "ja",
+  [LocaleEnum.Ko]: "ko",
+  [LocaleEnum.ZhCN]: "zh-cn",
 };
 
 export const ecpayLocaleMap: Record<LocaleCode, EcpayLanguage> = {
@@ -43,10 +43,10 @@ export const ecpayLocaleMap: Record<LocaleCode, EcpayLanguage> = {
   "zh-CN": "CHI",
 };
 
-export const languageLocaleMap: Record<Locale, string> = {
-  [Locale.ZhTW]: "繁體中文",
-  [Locale.En]: "English",
-  [Locale.Ja]: "日本語",
-  [Locale.Ko]: "한국어",
-  [Locale.ZhCN]: "简体中文",
+export const languageLocaleMap: Record<LocaleEnum, string> = {
+  [LocaleEnum.ZhTW]: "繁體中文",
+  [LocaleEnum.En]: "English",
+  [LocaleEnum.Ja]: "日本語",
+  [LocaleEnum.Ko]: "한국어",
+  [LocaleEnum.ZhCN]: "简体中文",
 };

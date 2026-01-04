@@ -1,5 +1,5 @@
-import { Locale } from "@/constants/locale";
+import { LocaleEnum } from "@/constants/locale";
 
-export type LocaleCode = (typeof Locale)[keyof typeof Locale];
+export type LocaleCode = (typeof LocaleEnum)[keyof typeof LocaleEnum];
 
 export type LocalizedText = Record<LocaleCode, string>;

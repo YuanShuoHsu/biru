@@ -7,14 +7,14 @@ import {
   DEFAULT_NATIONAL_MASK,
   DEFAULT_NATIONAL_PLACEHOLDER,
 } from "@/constants/countries";
-import { countryCodeLocaleMap, Locale } from "@/constants/locale";
+import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
 
 import type { CountryType } from "@/types/countries";
 
 export const formatPhone = (phone: CountryType["phone"]) => `+${phone}`;
 
 export const getDefaultCountryCode = (locale: string) => {
-  const countryCode = countryCodeLocaleMap[locale as Locale];
+  const countryCode = countryCodeLocaleMap[locale as LocaleEnum];
   const matchedCountry = countries.find(({ code }) => code === countryCode);
   const phone = matchedCountry?.phone || DEFAULT_COUNTRY_PHONE;
 

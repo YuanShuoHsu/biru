@@ -1,7 +1,7 @@
 import { fetcher } from "./fetcher";
 import { handleQueryParam, QueryParamKey } from "./queryParams";
 
-import { Locale } from "@/constants/locale";
+import { LocaleEnum } from "@/constants/locale";
 
 import type { I18nDict } from "@/context/i18n";
 
@@ -25,7 +25,7 @@ export const getDisplayName = (
 ) => {
   if (!profile) return "";
 
-  const showFamilyNameFirst = lang !== Locale.En;
+  const showFamilyNameFirst = lang !== LocaleEnum.En;
 
   const nameParts = showFamilyNameFirst
     ? [profile.lastName, profile.firstName]

@@ -11,7 +11,7 @@ import Image from "next/image";
 import React, { useRef, useState } from "react";
 
 import { countries } from "@/constants/countries";
-import { countryCodeLocaleMap, Locale } from "@/constants/locale";
+import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
 
 import { useI18n } from "@/context/i18n";
 
@@ -139,7 +139,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
   });
 
   const matchedCountry = options.find(
-    ({ code }) => code === countryCodeLocaleMap[lang as Locale],
+    ({ code }) => code === countryCodeLocaleMap[lang as LocaleEnum],
   );
 
   const defaultCountry = matchedCountry || {

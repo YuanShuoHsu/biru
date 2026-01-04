@@ -94,7 +94,7 @@ const AuthVerifyEmail = ({ email, lang, redirect }: AuthVerifyEmailProps) => {
       <StyledCardContent>
         <Typography textAlign="center">
           {interpolate(dict.auth.verifyEmail.subtitle, {
-            email,
+            email: email || "",
           })}
         </Typography>
         <Typography color="text.secondary" textAlign="center" variant="body2">

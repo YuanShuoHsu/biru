@@ -6,7 +6,7 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
-import { ecpayLocaleMap, Locale } from "@/constants/locale";
+import { ecpayLocaleMap, LocaleEnum } from "@/constants/locale";
 
 import { useI18n } from "@/context/i18n";
 
@@ -94,12 +94,12 @@ const CustomerPaymentForm = () => {
         TradeDesc: "餐點付款",
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
-            const itemName = getItemName(menus, id, Locale.ZhTW);
+            const itemName = getItemName(menus, id, LocaleEnum.ZhTW);
             const choiceNames = getChoiceNames(
               menus,
               id,
               choices,
-              Locale.ZhTW,
+              LocaleEnum.ZhTW,
               {
                 colon: "：",
                 delimiter: "、",

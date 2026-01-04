@@ -1,7 +1,7 @@
 // https://mui.com/store/terms/
 // https://vercel.com/legal/terms
 
-import { Locale, defaultLocale } from "@/constants/locale";
+import { LocaleEnum, defaultLocale } from "@/constants/locale";
 
 import {
   Box,
@@ -30,8 +30,8 @@ interface TermsContent {
   contact: string;
 }
 
-const termsByLocale: Record<Locale, TermsContent> = {
-  [Locale.ZhTW]: {
+const termsByLocale: Record<LocaleEnum, TermsContent> = {
+  [LocaleEnum.ZhTW]: {
     title: "Biru Coffee 會員服務條款",
     lastUpdated: "最近更新：2024/09/01",
     intro:
@@ -132,7 +132,7 @@ const termsByLocale: Record<Locale, TermsContent> = {
     ],
     contact: "如對本條款有任何疑問，請透過客服信箱或門市與我們聯繫。",
   },
-  [Locale.ZhCN]: {
+  [LocaleEnum.ZhCN]: {
     title: "Biru Coffee 会员服务条款",
     lastUpdated: "最近更新：2024/09/01",
     intro:
@@ -233,7 +233,7 @@ const termsByLocale: Record<Locale, TermsContent> = {
     ],
     contact: "如对本条款有任何疑问，请通过客服邮箱或门店与我们联系。",
   },
-  [Locale.En]: {
+  [LocaleEnum.En]: {
     title: "Biru Coffee Terms of Service",
     lastUpdated: "Last updated: 2024/09/01",
     intro:
@@ -335,7 +335,7 @@ const termsByLocale: Record<Locale, TermsContent> = {
     contact:
       "If you have questions about these Terms, please contact us via our customer support email or at our stores.",
   },
-  [Locale.Ja]: {
+  [LocaleEnum.Ja]: {
     title: "Biru Coffee 利用規約",
     lastUpdated: "最終更新日：2024/09/01",
     intro:
@@ -437,7 +437,7 @@ const termsByLocale: Record<Locale, TermsContent> = {
     contact:
       "本規約に関するお問い合わせは、サポート窓口または店舗までご連絡ください。",
   },
-  [Locale.Ko]: {
+  [LocaleEnum.Ko]: {
     title: "Biru Coffee 서비스 이용약관",
     lastUpdated: "최종 업데이트: 2024/09/01",
     intro:

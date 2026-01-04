@@ -6,6 +6,8 @@
 import { closeSnackbar, SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
+import type { Locale } from "./dictionaries";
+
 import { dayjsLocaleMap } from "@/constants/locale";
 
 import type { I18nDict } from "@/context/i18n";
@@ -27,8 +29,6 @@ import { ViewStoreProvider } from "@/providers/view-store-provider";
 
 import theme from "@/theme";
 
-import type { LocaleCode } from "@/types/locale";
-
 import "dayjs/locale/en";
 import "dayjs/locale/ja";
 import "dayjs/locale/ko";
@@ -39,7 +39,7 @@ interface ProvidersProps {
   children: React.ReactNode;
   dict: I18nDict;
   fallback: SWRConfiguration["fallback"];
-  lang: LocaleCode;
+  lang: Locale;
 }
 
 const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (

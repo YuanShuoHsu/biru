@@ -1,20 +1,19 @@
-// https://nextjs.org/docs/app/building-your-application/routing/internationalization
+// https://nextjs.org/docs/app/guides/internationalization
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#next-js-app-router
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { notFound } from "next/navigation";
 
 import "./globals.css";
 
 import AppLayout from "./appLayout";
-import { getDictionary } from "./dictionaries";
+import { getDictionary, hasLocale } from "./dictionaries";
 import Providers from "./providers";
 
 import { locales } from "@/constants/locale";
 
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
-
-import type { LocaleCode } from "@/types/locale";
 
 import { getStores } from "@/utils/stores";
 
@@ -39,33 +38,22 @@ export const generateStaticParams = async () =>
 export default async function RootLayout({
   children,
   params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: Promise<{
-    lang: string;
-    // lang: LocaleCode
-  }>;
-}>) {
+}: LayoutProps<"/[lang]">) {
   const { lang } = await params;
-  const langCode = lang as LocaleCode;
-  const dict = await getDictionary(langCode);
-  // const dict = await getDictionary(lang);
+  if (!hasLocale(lang)) notFound();
+
+  const dict = await getDictionary(lang);
 
   const stores = await getStores();
   const fallback = { "/api/stores": stores };
 
   return (
-    <html
-      data-scroll-behavior="smooth"
-      lang={langCode}
-      suppressHydrationWarning
-    >
-      {/* <html lang={lang} suppressHydrationWarning> */}
+    <html data-scroll-behavior="smooth" lang={lang} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <Providers dict={dict} fallback={fallback} lang={langCode}>
+        <Providers dict={dict} fallback={fallback} lang={lang}>
           <AppLayout>{children}</AppLayout>
         </Providers>
       </body>
