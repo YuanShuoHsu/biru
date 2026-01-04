@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { useState } from "react";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { useI18n } from "@/context/i18n";
 
 import { languageLocaleMap, locales } from "@/constants/locale";
@@ -37,7 +39,7 @@ const LanguageMenu = () => {
 
   const dict = useI18n();
 
-  const switchPath = (lang: string) => {
+  const switchPath = (lang: Locale) => {
     const rest = pathname.split("/").slice(2).join("/");
 
     return `/${lang}${rest ? `/${rest}` : ""}`;

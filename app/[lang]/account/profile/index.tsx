@@ -7,9 +7,9 @@
 import NextLink from "next/link";
 import { useMemo, useState } from "react";
 
-import { useI18n } from "@/context/i18n";
+import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { interpolate } from "@/utils/i18n";
+import { useI18n } from "@/context/i18n";
 
 import {
   CheckCircle,
@@ -40,10 +40,10 @@ import {
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
+import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 type PreferenceKey = "newsletter" | "orderUpdates" | "recommendations";
@@ -101,7 +101,7 @@ const InfoRow = ({ icon: Icon, label, status, value }: InfoRowProps) => (
 );
 
 interface AccountProfileProps {
-  lang: string;
+  lang: Locale;
   currentURL: string;
 }
 
@@ -112,12 +112,9 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
 
   const dict = useI18n();
 
-  const langCode = lang as LocaleCode;
-
   const name = useMemo(
-    () =>
-      getDisplayName(langCode, profile) || dict.account.profile.placeholderName,
-    [dict.account.profile.placeholderName, langCode, profile],
+    () => getDisplayName(lang, profile) || dict.account.profile.placeholderName,
+    [dict.account.profile.placeholderName, lang, profile],
   );
 
   const initial = name.charAt(0).toUpperCase();
@@ -127,11 +124,11 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
       if (!value) return null;
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return value;
-      return new Intl.DateTimeFormat(langCode, {
+      return new Intl.DateTimeFormat(lang, {
         dateStyle: "medium",
       }).format(date);
     },
-    [langCode],
+    [lang],
   );
 
   const memberSince = formatDate(profile?.createdAt);
@@ -241,7 +238,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
             </Typography>
             <Button
               component={NextLink}
-              href={handleQueryParam(`/${langCode}/auth/sign-in`, {
+              href={handleQueryParam(`/${lang}/auth/sign-in`, {
                 [QueryParamKey.Redirect]: currentURL,
               })}
               startIcon={<Login />}
@@ -392,7 +389,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
                 <Divider sx={{ my: 2 }} />
                 <Button
                   component={NextLink}
-                  href={`/${langCode}/account/account-settings`}
+                  href={`/${lang}/account/account-settings`}
                   startIcon={<Settings />}
                   variant="outlined"
                 >

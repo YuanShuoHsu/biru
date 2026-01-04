@@ -1,6 +1,8 @@
 // https://mui.com/legal/privacy/
 // https://vercel.com/legal/privacy-policy
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { LocaleEnum, defaultLocale } from "@/constants/locale";
 
 import {
@@ -11,8 +13,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
-import type { LocaleCode } from "@/types/locale";
 
 interface PrivacySection {
   id: string;
@@ -479,12 +479,11 @@ const privacyByLocale: Record<LocaleEnum, PrivacyContent> = {
 };
 
 interface CompanyLegalPrivacyProps {
-  lang: string;
+  lang: Locale;
 }
 
 const CompanyLegalPrivacy = ({ lang }: CompanyLegalPrivacyProps) => {
-  const content =
-    privacyByLocale[lang as LocaleCode] || privacyByLocale[defaultLocale];
+  const content = privacyByLocale[lang] || privacyByLocale[defaultLocale];
 
   return (
     <Box component="section" display="flex" flexDirection="column" gap={2}>

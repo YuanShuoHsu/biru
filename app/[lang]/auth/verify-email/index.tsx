@@ -4,6 +4,8 @@ import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import useSWRMutation from "swr/mutation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import FormCard from "@/components/FormCard";
 
 import { useI18n } from "@/context/i18n";
@@ -44,7 +46,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface AuthVerifyEmailProps {
   email?: string;
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

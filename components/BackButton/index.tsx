@@ -2,6 +2,8 @@
 
 import NextLink from "next/link";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { useI18n } from "@/context/i18n";
 
 import { KeyboardArrowLeft } from "@mui/icons-material";
@@ -11,7 +13,7 @@ import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 interface BackButtonProps {
   back?: string;
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

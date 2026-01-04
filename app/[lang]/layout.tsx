@@ -37,6 +37,7 @@ export const generateStaticParams = async () =>
 
 const RootLayout = async ({ children, params }: LayoutProps<"/[lang]">) => {
   const { lang } = await params;
+
   if (!hasLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);

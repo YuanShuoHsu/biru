@@ -1,11 +1,11 @@
-import { LocalizedText } from "./locale";
+import { Locale } from "@/app/[lang]/dictionaries";
 
 interface Ingredient {
   id: string;
   key: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   createdAt: Date;
-  unit: LocalizedText;
+  unit: Record<Locale, string>;
   updatedAt: Date;
   usage: number;
 }
@@ -13,7 +13,7 @@ interface Ingredient {
 export interface Choice {
   id: string;
   key: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   createdAt: Date;
   extraCost: number;
   ingredients: Ingredient[];
@@ -27,7 +27,7 @@ export interface Choice {
 export interface Option {
   id: string;
   key: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   choices: Choice[];
   createdAt: Date;
   isActive: boolean;
@@ -39,9 +39,9 @@ export interface Option {
 export interface MenuItem {
   id: string;
   key: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   createdAt: Date;
-  description: LocalizedText;
+  description: Record<Locale, string>;
   imageUrl: string;
   ingredients: Ingredient[];
   isActive: boolean;
@@ -55,7 +55,7 @@ export interface MenuItem {
 export interface Menu {
   id: string;
   key: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   createdAt: Date;
   isActive: boolean;
   items: MenuItem[];

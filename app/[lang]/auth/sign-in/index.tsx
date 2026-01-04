@@ -13,6 +13,8 @@ import * as z from "zod";
 
 import { createSigninFormSchema, type FormState } from "./definitions";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 
@@ -69,7 +71,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 interface AuthSignInProps {
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

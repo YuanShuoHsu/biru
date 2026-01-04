@@ -3,16 +3,17 @@
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { useI18n } from "@/context/i18n";
 
 import { MenuItem, TextField } from "@mui/material";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { Store, StoreSlug } from "@/types/stores";
 
 interface OrderModePickupStoreSlugSelectProps {
-  lang: LocaleCode;
+  lang: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
 }

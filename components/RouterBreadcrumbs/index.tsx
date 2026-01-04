@@ -5,6 +5,8 @@ import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { type I18nDict, useI18n } from "@/context/i18n";
@@ -39,7 +41,6 @@ import {
 } from "@mui/material";
 import { styled, type Theme } from "@mui/material/styles";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
@@ -281,7 +282,7 @@ const findBreadcrumb = (
 const findHiddenTo = (
   startIndex: number,
   pathnames: string[],
-  lang: LocaleCode,
+  lang: Locale,
   breadcrumbs: BreadcrumbItem[],
 ): string | undefined => {
   const nextIndex = startIndex + 1;

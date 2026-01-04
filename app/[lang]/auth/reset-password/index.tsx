@@ -8,6 +8,8 @@ import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import FormCard from "@/components/FormCard";
 
 import { useI18n } from "@/context/i18n";
@@ -52,7 +54,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 type ResetPasswordField = "newPassword" | "confirmNewPassword";
 
 interface AuthResetPasswordProps {
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

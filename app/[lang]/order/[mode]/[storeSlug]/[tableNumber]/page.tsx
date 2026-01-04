@@ -1,17 +1,18 @@
 import { notFound } from "next/navigation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import OrderModeDineInStoreSlugTableNumberSelect from "@/components/OrderModeDineInStoreSlugTableNumberSelect";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 interface OrderModeStoreSlugTableNumberPageProps {
   params: Promise<{
-    lang: LocaleCode;
+    lang: Locale;
     mode: OrderMode;
     storeSlug: StoreSlug;
     tableNumber: TableNumber;

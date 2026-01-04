@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { Button } from "@mui/material";
 
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -46,7 +48,7 @@ const ACTION_LABEL: Record<GoogleAction, string> = {
 
 interface GoogleButtonProps {
   action: GoogleAction;
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

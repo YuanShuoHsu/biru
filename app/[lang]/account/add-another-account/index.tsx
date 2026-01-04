@@ -5,6 +5,8 @@
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import FormCard from "@/components/FormCard";
 
 import { useI18n } from "@/context/i18n";
@@ -26,8 +28,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
-
-import type { LocaleCode } from "@/types/locale";
 
 import { getDisplayName } from "@/utils/auth";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -53,7 +53,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 interface AddAnotherAccountProps {
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 
@@ -64,25 +64,23 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
   const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const langCode = lang as LocaleCode;
-
   const safeRedirect =
-    redirect && redirect !== `/${langCode}/account/add-another-account`
+    redirect && redirect !== `/${lang}/account/add-another-account`
       ? redirect
-      : `/${langCode}/account/my-account`;
+      : `/${lang}/account/my-account`;
 
-  const signInHref = handleQueryParam(`/${langCode}/auth/sign-in`, {
+  const signInHref = handleQueryParam(`/${lang}/auth/sign-in`, {
     [QueryParamKey.Redirect]: safeRedirect,
   });
 
-  const handleCancel = () => router.push(`/${langCode}/account/my-account`);
+  const handleCancel = () => router.push(`/${lang}/account/my-account`);
 
   const handleSignOutAndContinue = async () => {
     await handleLogout();
     router.push(signInHref);
   };
 
-  const name = getDisplayName(langCode, profile);
+  const name = getDisplayName(lang, profile);
   const avatarText = name ? name.charAt(0).toUpperCase() : "U";
 
   return (

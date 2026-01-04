@@ -1,6 +1,7 @@
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { useCartStore } from "@/stores/useCartStore";
 
-import type { LocaleCode } from "@/types/locale";
 import type { Choice, Menu, MenuItem, Option } from "@/types/menu";
 
 export const getItemKey = (
@@ -24,7 +25,7 @@ const findItemById = (menus: Menu[], itemId: string): MenuItem | undefined =>
 export const getItemName = (
   menus: Menu[],
   itemId: string,
-  lang: LocaleCode,
+  lang: Locale,
 ): string => {
   const item = findItemById(menus, itemId);
   if (!item) return "";
@@ -47,7 +48,7 @@ const findOptionChoiceById = (
 const getOptionChoiceName = (
   option: Option,
   choiceId: string,
-  lang: LocaleCode,
+  lang: Locale,
 ): string => {
   const choice = findOptionChoiceById(option, choiceId);
 
@@ -65,7 +66,7 @@ export const getLimitingChoicesCap = (
   menus: Menu[],
   id: string,
   choices: Record<string, string[]>,
-  lang: LocaleCode,
+  lang: Locale,
 ): OptionLimitResult => {
   const { getChoiceAvailableQuantity } = useCartStore.getState();
 
@@ -121,7 +122,7 @@ export const getChoiceNames = (
   menus: Menu[],
   itemId: string,
   choices: Record<string, string[]>,
-  lang: LocaleCode,
+  lang: Locale,
   { colon, delimiter, joinWith = "\n" }: CommonSeparators,
 ): string => {
   const item = findItemById(menus, itemId);

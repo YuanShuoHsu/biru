@@ -5,6 +5,8 @@
 import NextLink from "next/link";
 import { startTransition, useEffect, useMemo, useState } from "react";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useI18n } from "@/context/i18n";
@@ -45,7 +47,6 @@ import { useLogout } from "@/hooks/useLogout";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
@@ -99,14 +100,12 @@ const formatRole = (role?: UserResponseDto["role"]) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface AccountSettingsProps {
-  lang: string;
+  lang: Locale;
   currentURL: string;
 }
 
 const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
   const [rememberMeByDefault, setRememberMeByDefault] = useState(true);
-
-  const langCode = lang as LocaleCode;
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const dict = useI18n();
@@ -135,20 +134,19 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
       if (!value) return null;
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return value;
-      return new Intl.DateTimeFormat(langCode, {
+      return new Intl.DateTimeFormat(lang, {
         dateStyle: "medium",
       }).format(date);
     },
-    [langCode],
+    [lang],
   );
 
   const memberSince = formatDate(profile?.createdAt);
   const updatedAt = formatDate(profile?.updatedAt);
 
   const name = useMemo(
-    () =>
-      getDisplayName(langCode, profile) || dict.account.profile.placeholderName,
-    [dict.account.profile.placeholderName, langCode, profile],
+    () => getDisplayName(lang, profile) || dict.account.profile.placeholderName,
+    [dict.account.profile.placeholderName, lang, profile],
   );
 
   const initial = name.charAt(0).toUpperCase();
@@ -228,7 +226,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
             </Typography>
             <Button
               component={NextLink}
-              href={handleQueryParam(`/${langCode}/auth/sign-in`, {
+              href={handleQueryParam(`/${lang}/auth/sign-in`, {
                 [QueryParamKey.Redirect]: currentURL,
               })}
               startIcon={<Settings />}
@@ -242,15 +240,14 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
     );
   }
 
-  const verifyEmailHref = handleQueryParam(`/${langCode}/auth/verify-email`, {
+  const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
     [QueryParamKey.Email]: profile.email,
     [QueryParamKey.Redirect]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(
-    `/${langCode}/auth/forgot-password`,
-    { [QueryParamKey.Redirect]: currentURL },
-  );
+  const forgotPasswordHref = handleQueryParam(`/${lang}/auth/forgot-password`, {
+    [QueryParamKey.Redirect]: currentURL,
+  });
 
   return (
     <Stack gap={3}>
@@ -408,7 +405,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                 <Divider sx={{ my: 2 }} />
                 <Button
                   component={NextLink}
-                  href={`/${langCode}/account/profile`}
+                  href={`/${lang}/account/profile`}
                   startIcon={<AccountCircle />}
                   variant="outlined"
                 >
@@ -493,7 +490,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                 <Stack gap={1.5}>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/company/terms`}
+                    href={`/${lang}/company/terms`}
                     startIcon={<Gavel />}
                     variant="outlined"
                   >
@@ -501,7 +498,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                   </Button>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/company/privacy`}
+                    href={`/${lang}/company/privacy`}
                     startIcon={<Policy />}
                     variant="outlined"
                   >

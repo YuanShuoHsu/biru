@@ -1,15 +1,17 @@
+import { notFound } from "next/navigation";
+
 import AuthResetPassword from ".";
 
-interface AuthResetPasswordPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+import { hasLocale } from "@/app/[lang]/dictionaries";
 
 const AuthResetPasswordPage = async ({
   params,
   searchParams,
-}: AuthResetPasswordPageProps) => {
+}: PageProps<"/[lang]">) => {
   const { lang } = await params;
+
+  if (!hasLocale(lang)) notFound();
+
   const { redirect } = await searchParams;
 
   const safeRedirect =

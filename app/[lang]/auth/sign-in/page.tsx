@@ -1,15 +1,17 @@
+import { notFound } from "next/navigation";
+
 import AuthSignIn from ".";
 
-interface AuthSignInPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+import { hasLocale } from "@/app/[lang]/dictionaries";
 
 const AuthSignInPage = async ({
   params,
   searchParams,
-}: AuthSignInPageProps) => {
+}: PageProps<"/[lang]">) => {
   const { lang } = await params;
+
+  if (!hasLocale(lang)) notFound();
+
   const { redirect } = await searchParams;
 
   const safeRedirect =

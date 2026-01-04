@@ -15,6 +15,8 @@ import * as z from "zod";
 
 import { createSignupFormSchema, type FormState } from "./definitions";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import CountrySelect from "@/components/CountrySelect";
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
@@ -107,7 +109,7 @@ interface SignUpFormData {
 }
 
 interface AuthSignUpProps {
-  lang: string;
+  lang: Locale;
   redirect?: string;
 }
 

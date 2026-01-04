@@ -1,5 +1,6 @@
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import type { EcpayLanguage } from "@/types/ecpay/createEcpayDto";
-import type { LocaleCode } from "@/types/locale";
 
 export enum LocaleEnum {
   ZhTW = "zh-TW",
@@ -35,7 +36,7 @@ export const dayjsLocaleMap: Record<LocaleEnum, string> = {
   [LocaleEnum.ZhCN]: "zh-cn",
 };
 
-export const ecpayLocaleMap: Record<LocaleCode, EcpayLanguage> = {
+export const ecpayLocaleMap: Record<Locale, EcpayLanguage> = {
   "zh-TW": "",
   en: "ENG",
   ja: "JPN",

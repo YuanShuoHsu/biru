@@ -1,6 +1,10 @@
 // vibe coding 未來要修正
 
+import { notFound } from "next/navigation";
+
 import AccountSettings from ".";
+
+import { hasLocale } from "@/app/[lang]/dictionaries";
 
 type SearchParams = { [key: string]: string | string[] | undefined };
 
@@ -23,16 +27,14 @@ const toSearchString = (searchParams: SearchParams) => {
   return urlSearchParams.toString();
 };
 
-interface AccountAccountSettingsPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<SearchParams>;
-}
-
 const AccountAccountSettingsPage = async ({
   params,
   searchParams,
-}: AccountAccountSettingsPageProps) => {
+}: PageProps<"/[lang]">) => {
   const { lang } = await params;
+
+  if (!hasLocale(lang)) notFound();
+
   const resolvedSearchParams = await searchParams;
 
   const pathname = `/${lang}/account/account-settings`;

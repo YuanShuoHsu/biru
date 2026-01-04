@@ -1,17 +1,19 @@
+import { notFound } from "next/navigation";
+
 import CompanyLegalTerms from "./index";
 
-import BackButton from "@/components/BackButton";
+import { hasLocale } from "@/app/[lang]/dictionaries";
 
-interface CompanyLegalTermsPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+import BackButton from "@/components/BackButton";
 
 const CompanyLegalTermsPage = async ({
   params,
   searchParams,
-}: CompanyLegalTermsPageProps) => {
+}: PageProps<"/[lang]">) => {
   const { lang } = await params;
+
+  if (!hasLocale(lang)) notFound();
+
   const { back, redirect } = await searchParams;
 
   const safeBack =

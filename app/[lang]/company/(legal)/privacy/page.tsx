@@ -2,15 +2,12 @@ import CompanyLegalPrivacy from "./index";
 
 import BackButton from "@/components/BackButton";
 
-interface CompanyLegalPrivacyPageProps {
-  params: Promise<{ lang: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}
+import type { Locale } from "@/app/[lang]/dictionaries";
 
 const CompanyLegalPrivacyPage = async ({
   params,
   searchParams,
-}: CompanyLegalPrivacyPageProps) => {
+}: PageProps<"/[lang]">) => {
   const { lang } = await params;
   const { back, redirect } = await searchParams;
 
@@ -20,8 +17,12 @@ const CompanyLegalPrivacyPage = async ({
 
   return (
     <>
-      <BackButton back={safeBack} lang={lang} redirect={safeRedirect} />
-      <CompanyLegalPrivacy lang={lang} />
+      <BackButton
+        back={safeBack}
+        lang={lang as Locale}
+        redirect={safeRedirect}
+      />
+      <CompanyLegalPrivacy lang={lang as Locale} />
     </>
   );
 };

@@ -3,11 +3,12 @@ import { cache } from "react";
 import { getErrorMessage } from "./errors";
 import { fetcher } from "./fetcher";
 
-import type { LocaleCode } from "@/types/locale";
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import type { Store, StoreName, StoreSlug } from "@/types/stores";
 
 export const getStoreName = (
-  lang: LocaleCode,
+  lang: Locale,
   stores: Store[],
   storeSlug?: StoreSlug,
 ): StoreName => {

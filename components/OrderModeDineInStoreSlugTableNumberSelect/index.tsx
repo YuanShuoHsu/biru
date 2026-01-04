@@ -2,13 +2,14 @@
 
 import { useRouter } from "next/navigation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
 import { useI18n } from "@/context/i18n";
 
 import { MenuItem, TextField } from "@mui/material";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
@@ -16,7 +17,7 @@ import type { TableNumber } from "@/types/tableNumbers";
 import { interpolate } from "@/utils/i18n";
 
 interface OrderModeDineInStoreSlugTableNumberSelectProps {
-  lang: LocaleCode;
+  lang: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;

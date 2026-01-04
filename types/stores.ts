@@ -1,8 +1,8 @@
-import type { LocaleCode, LocalizedText } from "./locale";
+import type { Locale } from "@/app/[lang]/dictionaries";
 
 export interface Store {
   id: string;
-  name: LocalizedText;
+  name: Record<Locale, string>;
   createdAt: Date;
   isActive: boolean;
   slug: string;
@@ -10,4 +10,4 @@ export interface Store {
 }
 
 export type StoreSlug = Store["slug"];
-export type StoreName = Store["name"][LocaleCode];
+export type StoreName = Store["name"][Locale];

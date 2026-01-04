@@ -5,6 +5,8 @@
 import NextLink from "next/link";
 import { useMemo } from "react";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { useI18n } from "@/context/i18n";
 
 import {
@@ -44,7 +46,6 @@ import { useLogout } from "@/hooks/useLogout";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-import type { LocaleCode } from "@/types/locale";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
@@ -98,7 +99,7 @@ const formatRole = (role?: UserResponseDto["role"]) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface MyAccountProps {
-  lang: string;
+  lang: Locale;
   currentURL: string;
 }
 
@@ -106,8 +107,6 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
   const dict = useI18n();
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
-
-  const langCode = lang as LocaleCode;
 
   const { mode, setMode } = useColorScheme();
   const isModeLoading = !mode;
@@ -118,11 +117,11 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
       if (!value) return null;
       const date = new Date(value);
       if (Number.isNaN(date.getTime())) return value;
-      return new Intl.DateTimeFormat(langCode, {
+      return new Intl.DateTimeFormat(lang, {
         dateStyle: "medium",
       }).format(date);
     },
-    [langCode],
+    [lang],
   );
 
   const verificationChip = (verified?: boolean) => (
@@ -200,7 +199,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
             </Typography>
             <Button
               component={NextLink}
-              href={handleQueryParam(`/${langCode}/auth/sign-in`, {
+              href={handleQueryParam(`/${lang}/auth/sign-in`, {
                 [QueryParamKey.Redirect]: currentURL,
               })}
               startIcon={<Login />}
@@ -218,21 +217,20 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
   const updatedAt = formatDate(profile.updatedAt);
 
   const name =
-    getDisplayName(langCode, profile) || dict.account.profile.placeholderName;
+    getDisplayName(lang, profile) || dict.account.profile.placeholderName;
   const initial = name.charAt(0).toUpperCase();
 
-  const verifyEmailHref = handleQueryParam(`/${langCode}/auth/verify-email`, {
+  const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
     [QueryParamKey.Email]: profile.email,
     [QueryParamKey.Redirect]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(
-    `/${langCode}/auth/forgot-password`,
-    { [QueryParamKey.Redirect]: currentURL },
-  );
+  const forgotPasswordHref = handleQueryParam(`/${lang}/auth/forgot-password`, {
+    [QueryParamKey.Redirect]: currentURL,
+  });
 
-  const settingsHref = `/${langCode}/account/account-settings`;
-  const profileHref = `/${langCode}/account/profile`;
+  const settingsHref = `/${lang}/account/account-settings`;
+  const profileHref = `/${lang}/account/profile`;
 
   const handleToggleColorMode = () => {
     if (isModeLoading) return;
@@ -500,7 +498,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                 <Stack gap={1.5}>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/company/terms`}
+                    href={`/${lang}/company/terms`}
                     startIcon={<Gavel />}
                     variant="outlined"
                   >
@@ -508,7 +506,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                   </Button>
                   <Button
                     component={NextLink}
-                    href={`/${langCode}/company/privacy`}
+                    href={`/${lang}/company/privacy`}
                     startIcon={<Policy />}
                     variant="outlined"
                   >

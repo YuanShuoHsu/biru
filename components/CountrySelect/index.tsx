@@ -10,6 +10,8 @@ import parse from "autosuggest-highlight/parse";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { countries } from "@/constants/countries";
 import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
 
@@ -124,7 +126,7 @@ const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
 );
 
 interface CountrySelectProps {
-  lang: string;
+  lang: Locale;
   onChange: (code: string) => void;
 }
 

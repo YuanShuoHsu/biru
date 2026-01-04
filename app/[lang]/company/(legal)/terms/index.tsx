@@ -1,6 +1,8 @@
 // https://mui.com/store/terms/
 // https://vercel.com/legal/terms
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { LocaleEnum, defaultLocale } from "@/constants/locale";
 
 import {
@@ -11,8 +13,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-
-import type { LocaleCode } from "@/types/locale";
 
 interface TermsSection {
   id: string;
@@ -542,12 +542,11 @@ const termsByLocale: Record<LocaleEnum, TermsContent> = {
 };
 
 interface CompanyLegalTermsProps {
-  lang: string;
+  lang: Locale;
 }
 
 const CompanyLegalTerms = ({ lang }: CompanyLegalTermsProps) => {
-  const content =
-    termsByLocale[lang as LocaleCode] ?? termsByLocale[defaultLocale];
+  const content = termsByLocale[lang] ?? termsByLocale[defaultLocale];
 
   return (
     <Box component="section" display="flex" flexDirection="column" gap={2}>

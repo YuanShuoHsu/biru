@@ -1,15 +1,16 @@
 import { notFound } from "next/navigation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import OrderModePickupStoreSlugSelect from "@/components/OrderModePickupStoreSlugSelect";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 
 interface OrderModePageProps {
-  params: Promise<{ lang: LocaleCode; mode: OrderMode; storeSlug: StoreSlug }>;
+  params: Promise<{ lang: Locale; mode: OrderMode; storeSlug: StoreSlug }>;
 }
 
 const OrderModePage = async ({ params }: OrderModePageProps) => {

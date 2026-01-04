@@ -1,6 +1,7 @@
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import type { LocaleCode } from "@/types/locale";
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
 import type { StoreSlug } from "@/types/stores";
@@ -14,7 +15,7 @@ export const createOrderPaths = ({
   partySize,
   pathname,
 }: {
-  lang: LocaleCode;
+  lang: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;

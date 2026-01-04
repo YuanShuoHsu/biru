@@ -1,13 +1,14 @@
 import { fetcher } from "./fetcher";
 import { handleQueryParam, QueryParamKey } from "./queryParams";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { LocaleEnum } from "@/constants/locale";
 
 import type { I18nDict } from "@/context/i18n";
 
 import { Login, PersonAdd } from "@mui/icons-material";
 
-import type { LocaleCode } from "@/types/locale";
 import type { MenuItem } from "@/types/menuItem";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -20,7 +21,7 @@ export const fetchProfile = (accessToken: string) =>
   });
 
 export const getDisplayName = (
-  lang: LocaleCode,
+  lang: Locale,
   profile: UserResponseDto | null,
 ) => {
   if (!profile) return "";

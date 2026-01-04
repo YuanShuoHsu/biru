@@ -6,6 +6,8 @@ import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import { ecpayLocaleMap, LocaleEnum } from "@/constants/locale";
 
 import { useI18n } from "@/context/i18n";
@@ -28,13 +30,12 @@ import type {
   CreateEcpayDto,
   EcpayLanguage,
 } from "@/types/ecpay/createEcpayDto";
-import type { LocaleCode } from "@/types/locale";
 import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
-const getEcpayLanguage = (locale: LocaleCode): EcpayLanguage =>
+const getEcpayLanguage = (locale: Locale): EcpayLanguage =>
   ecpayLocaleMap[locale];
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
