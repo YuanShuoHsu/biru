@@ -35,10 +35,7 @@ export const metadata: Metadata = {
 export const generateStaticParams = async () =>
   locales.map((lang) => ({ lang }));
 
-export default async function RootLayout({
-  children,
-  params,
-}: LayoutProps<"/[lang]">) {
+const RootLayout = async ({ children, params }: LayoutProps<"/[lang]">) => {
   const { lang } = await params;
   if (!hasLocale(lang)) notFound();
 
@@ -59,4 +56,6 @@ export default async function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
