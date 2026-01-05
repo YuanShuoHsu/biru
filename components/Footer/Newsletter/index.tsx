@@ -9,7 +9,7 @@ import BrandMark from "@/components/BrandMark";
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useI18n } from "@/context/i18n";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { sendRequest } from "@/utils/fetcher";
 
@@ -25,7 +25,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 const Newsletter = () => {
   const [form, setForm] = useState({ email: "" });
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { enqueueSnackbar } = useSnackbar();
 

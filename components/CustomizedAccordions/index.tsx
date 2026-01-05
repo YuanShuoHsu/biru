@@ -7,8 +7,6 @@ import { useState } from "react";
 
 import CartItemList from "@/components/CartItemList";
 
-import { useI18n } from "@/context/i18n";
-
 import { ExpandMore } from "@mui/icons-material";
 import {
   Accordion,
@@ -18,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
 
@@ -51,11 +51,11 @@ const CustomizedAccordions = () => {
   const [expanded, setExpanded] = useState<string | false>("panel1");
   const isPanel1Expanded = expanded === "panel1";
 
-  const { lang } = useParams();
-
-  const dict = useI18n();
-
   const { cartTotalAmount } = useCartStore();
+
+  const { dict } = useI18nStore((state) => state);
+
+  const { lang } = useParams();
 
   const handleChange =
     (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) =>

@@ -15,8 +15,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 import { countries } from "@/constants/countries";
 import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   Autocomplete,
   Box,
@@ -28,6 +26,8 @@ import {
   type BoxProps,
 } from "@mui/material";
 import { darken, lighten, styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { CountryOption, CountryType } from "@/types/countries";
 
@@ -131,6 +131,10 @@ interface CountrySelectProps {
 }
 
 const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
+  const hint = useRef("");
+
+  const { dict } = useI18nStore((state) => state);
+
   const options = countries.map((option) => {
     const firstLetter = option.label[0].toUpperCase();
 
@@ -155,10 +159,6 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
   const [inputValue, setInputValue] = useState(
     formatPhone(defaultCountry.phone),
   );
-
-  const hint = useRef("");
-
-  const dict = useI18n();
 
   return (
     <Autocomplete

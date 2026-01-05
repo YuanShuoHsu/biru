@@ -5,8 +5,6 @@
 
 import { useParams, usePathname } from "next/navigation";
 
-import { useI18n } from "@/context/i18n";
-
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import {
@@ -17,6 +15,8 @@ import {
   Stepper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
@@ -73,7 +73,7 @@ const createStepPathMap = (
 };
 
 const HorizontalLinearStepper = () => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { lang, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();

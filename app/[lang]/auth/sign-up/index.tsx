@@ -25,8 +25,6 @@ import TextMaskCustom from "@/components/TextMaskCustom";
 import { GENDER_LABELS, GENDER_VALUES } from "@/constants/gender";
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   CheckCircleOutline,
   RadioButtonUnchecked,
@@ -59,6 +57,7 @@ import { styled } from "@mui/material/styles";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -140,7 +139,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   const { setIsAuthLoading } = useAuthStore((state) => state);
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
   const signupFormSchema = createSignupFormSchema(dict);
 
   const router = useRouter();

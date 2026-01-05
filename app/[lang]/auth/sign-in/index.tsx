@@ -20,8 +20,6 @@ import GoogleButton from "@/components/GoogleButton";
 
 import { REMEMBER_ME } from "@/constants/sign-in";
 
-import { useI18n } from "@/context/i18n";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -41,6 +39,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
@@ -89,9 +88,9 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore((state) => state);
 
-  const router = useRouter();
+  const { dict } = useI18nStore((state) => state);
 
-  const dict = useI18n();
+  const router = useRouter();
 
   const signinFormSchema = useMemo(() => createSigninFormSchema(dict), [dict]);
 

@@ -9,8 +9,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 
-import { useI18n } from "@/context/i18n";
-
 import { useLogout } from "@/hooks/useLogout";
 
 import { Login, PersonAdd } from "@mui/icons-material";
@@ -28,6 +26,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { getDisplayName } from "@/utils/auth";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -58,11 +57,10 @@ interface AddAnotherAccountProps {
 }
 
 const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
-  const dict = useI18n();
-  const router = useRouter();
-
   const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
+  const { dict } = useI18nStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
+  const router = useRouter();
 
   const safeRedirect =
     redirect && redirect !== `/${lang}/account/add-another-account`

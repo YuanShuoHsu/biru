@@ -9,8 +9,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { REMEMBER_ME } from "@/constants/sign-in";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   AccountCircle,
   CheckCircle,
@@ -46,6 +44,7 @@ import {
 import { useLogout } from "@/hooks/useLogout";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -108,7 +107,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
   const [rememberMeByDefault, setRememberMeByDefault] = useState(true);
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
   useEffect(() => {

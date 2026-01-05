@@ -4,8 +4,6 @@ import React, { useEffect, useImperativeHandle, useState } from "react";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
-import { useI18n } from "@/context/i18n";
-
 import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
@@ -23,6 +21,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
@@ -109,7 +108,7 @@ const CardDialogContent = React.forwardRef<
 
   const { lang } = useParams<RouteParams>();
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
   const itemStockLeft = stock === null ? Infinity : stock;

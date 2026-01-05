@@ -10,8 +10,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { ecpayLocaleMap, LocaleEnum } from "@/constants/locale";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   Button,
   Paper,
@@ -22,6 +20,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
@@ -61,12 +60,12 @@ const CustomerPaymentForm = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
+  const { dict } = useI18nStore((state) => state);
+
   const { lang, tableNumber } = useParams<RouteParams>();
   // const isDineIn = mode === ORDER_MODE.DineIn;
 
   const router = useRouter();
-
-  const dict = useI18n();
 
   const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore();
   const { menus } = useMenuStore((state) => state);

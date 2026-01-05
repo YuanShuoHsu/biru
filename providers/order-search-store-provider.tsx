@@ -34,11 +34,10 @@ export const useOrderSearchStore = <T,>(
 ): T => {
   const orderSearchStoreContext = useContext(OrderSearchStoreContext);
 
-  if (!orderSearchStoreContext) {
+  if (!orderSearchStoreContext)
     throw new Error(
       `useOrderSearchStore must be used within OrderSearchStoreProvider`,
     );
-  }
 
   return useStore(orderSearchStoreContext, selector);
 };

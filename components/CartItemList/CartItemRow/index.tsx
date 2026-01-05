@@ -5,8 +5,6 @@ import CartItemSoldOut from "./CartItemSoldOut";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
-import { useI18n } from "@/context/i18n";
-
 import { Add, Delete, Remove } from "@mui/icons-material";
 import {
   Box,
@@ -21,6 +19,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
@@ -76,10 +75,11 @@ interface CartItemRowProps {
 const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { id, amount, choices, extraCost, imageUrl, price, quantity } = item;
 
-  const { lang } = useParams<RouteParams>();
+  const { dict } = useI18nStore((state) => state);
 
-  const dict = useI18n();
   const { menus } = useMenuStore((state) => state);
+
+  const { lang } = useParams<RouteParams>();
 
   const itemName = getItemName(menus, id, lang);
   const choiceNames = getChoiceNames(menus, id, choices, lang, {

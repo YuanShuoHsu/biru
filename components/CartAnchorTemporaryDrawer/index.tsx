@@ -5,8 +5,6 @@ import { useParams, usePathname } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   Box,
   Button,
@@ -17,6 +15,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
 
@@ -65,7 +65,7 @@ const CartAnchorTemporaryDrawer = ({
 }: CartAnchorTemporaryDrawerProps) => {
   const { isCartEmpty, cartTotalAmount } = useCartStore();
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { lang, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();

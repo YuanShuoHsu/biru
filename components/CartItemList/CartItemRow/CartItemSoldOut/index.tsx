@@ -1,8 +1,8 @@
-import { useI18n } from "@/context/i18n";
-
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { CartItem, useCartStore } from "@/stores/useCartStore";
 
@@ -68,7 +68,7 @@ const CartItemSoldOut = ({
 }: CartItemSoldOutProps) => {
   const { extraCost, price, quantity } = item;
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { deleteCartItem, updateCartItem } = useCartStore();
 

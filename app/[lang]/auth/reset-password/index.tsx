@@ -12,8 +12,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 
-import { useI18n } from "@/context/i18n";
-
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
@@ -27,6 +25,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { getErrorMessage } from "@/utils/errors";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -72,7 +72,7 @@ const AuthResetPassword = ({ lang, redirect }: AuthResetPasswordProps) => {
     confirmNewPassword: false,
   });
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const handleClickShowPassword = (key: ResetPasswordField) => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));

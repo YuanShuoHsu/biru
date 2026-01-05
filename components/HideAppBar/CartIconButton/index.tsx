@@ -1,9 +1,9 @@
 import CustomizedBadges from "@/components/CustomizedBadges";
 
-import { useI18n } from "@/context/i18n";
-
 import { ShoppingCart } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
 
@@ -17,7 +17,7 @@ interface CartIconButtonProps {
 }
 
 const CartIconButton = ({ onDrawerToggle }: CartIconButtonProps) => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { cartTotalQuantity } = useCartStore();
 

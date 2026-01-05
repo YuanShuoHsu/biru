@@ -1,13 +1,13 @@
 "use client";
 
-import { useI18n } from "@/context/i18n";
-
 import { Typography } from "@mui/material";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { interpolate } from "@/utils/i18n";
 
 const Copyright = () => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const copyrightLine = interpolate(dict.home.footer.copyright, {
     year: new Date().getFullYear(),

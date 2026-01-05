@@ -7,8 +7,6 @@ import CardDialogContent, {
 } from "./CardDialogContent";
 import ItemSoldOut from "./ItemSoldOut";
 
-import { useI18n } from "@/context/i18n";
-
 import { AutoAwesome, FavoriteBorder } from "@mui/icons-material";
 import {
   Box,
@@ -22,6 +20,7 @@ import {
 import { alpha, styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
@@ -140,10 +139,9 @@ const ActionAreaCard = ({
 
   const { lang } = useParams<RouteParams>();
 
-  const dict = useI18n();
-
   const { updateCartItem } = useCartStore();
   const { setDialog } = useDialogStore((state) => state);
+  const { dict } = useI18nStore((state) => state);
   const { view } = useViewStore((state) => state);
   const viewDirection = ViewDirections[view];
 

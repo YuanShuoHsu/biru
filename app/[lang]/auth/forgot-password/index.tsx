@@ -12,8 +12,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   Button,
   CardActions,
@@ -24,6 +22,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { getErrorMessage } from "@/utils/errors";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -58,7 +58,7 @@ const AuthForgotPassword = ({ lang, redirect }: AuthForgotPasswordProps) => {
     email: "",
   });
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const handleChange = ({
     target: { name, value },

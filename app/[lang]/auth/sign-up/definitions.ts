@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 import * as z from "zod";
 
 import { GENDER_VALUES } from "@/constants/gender";
-import type { I18nDict } from "@/context/i18n";
+
+import type { I18nDict } from "@/providers/i18n-store-provider";
 
 import { getPhoneFormatting, toDigits } from "@/utils/countries";
 

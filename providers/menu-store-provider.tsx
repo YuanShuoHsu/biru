@@ -30,9 +30,8 @@ export const MenuStoreProvider = ({ children }: MenuStoreProviderProps) => {
 export const useMenuStore = <T,>(selector: (store: MenuStore) => T): T => {
   const menuStoreContext = useContext(MenuStoreContext);
 
-  if (!menuStoreContext) {
+  if (!menuStoreContext)
     throw new Error(`useMenuStore must be used within MenuStoreProvider`);
-  }
 
   return useStore(menuStoreContext, selector);
 };

@@ -2,11 +2,10 @@
 
 import { useEffect } from "react";
 
-import { useI18n } from "@/context/i18n";
-
 import { Clear, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 const StyledIconButton = styled(IconButton, {
@@ -18,7 +17,7 @@ const StyledIconButton = styled(IconButton, {
 }));
 
 const OrderSearch = () => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { clearOrderSearchText, orderSearchText, setOrderSearchText } =
     useOrderSearchStore((state) => state);

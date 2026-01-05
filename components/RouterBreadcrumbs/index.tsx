@@ -9,8 +9,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { type I18nDict, useI18n } from "@/context/i18n";
-
 import {
   AccountCircle,
   Business,
@@ -40,6 +38,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled, type Theme } from "@mui/material/styles";
+
+import { type I18nDict, useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
@@ -305,7 +305,7 @@ const RouterBreadcrumbs = () => {
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
   const storeName = getStoreName(lang, stores, storeSlug);
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
   const breadcrumbs = breadcrumbsMap(
     dict,
     mode,

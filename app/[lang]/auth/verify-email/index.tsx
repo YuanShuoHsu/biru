@@ -8,8 +8,6 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   Button,
   CardActions,
@@ -19,6 +17,8 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
@@ -51,7 +51,7 @@ interface AuthVerifyEmailProps {
 }
 
 const AuthVerifyEmail = ({ email, lang, redirect }: AuthVerifyEmailProps) => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
     useSWRMutation<unknown, Error, string, { email: string }>(

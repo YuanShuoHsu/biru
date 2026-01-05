@@ -5,9 +5,9 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { LocaleEnum } from "@/constants/locale";
 
-import type { I18nDict } from "@/context/i18n";
-
 import { Login, PersonAdd } from "@mui/icons-material";
+
+import type { I18nDict } from "@/providers/i18n-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { UserResponseDto } from "@/types/users/user-response.dto";

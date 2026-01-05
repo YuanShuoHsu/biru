@@ -9,8 +9,6 @@ import { useMemo, useState } from "react";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   CheckCircle,
   ErrorOutline,
@@ -39,6 +37,7 @@ import {
 } from "@mui/material";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -110,7 +109,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const name = useMemo(
     () => getDisplayName(lang, profile) || dict.account.profile.placeholderName,

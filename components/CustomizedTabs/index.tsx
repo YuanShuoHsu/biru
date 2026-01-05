@@ -23,11 +23,10 @@ import {
   TOP_SOLD_LIMIT,
 } from "@/constants/tab";
 
-import { useI18n } from "@/context/i18n";
-
 import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
@@ -72,7 +71,7 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { orderSearchText } = useOrderSearchStore((state) => state);
   const searchText = orderSearchText.trim().toLowerCase();

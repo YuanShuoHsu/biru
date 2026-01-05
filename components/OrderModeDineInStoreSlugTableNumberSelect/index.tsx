@@ -6,9 +6,9 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
-import { useI18n } from "@/context/i18n";
-
 import { MenuItem, TextField } from "@mui/material";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
@@ -29,7 +29,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
   storeSlug,
   tableNumber,
 }: OrderModeDineInStoreSlugTableNumberSelectProps) => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const router = useRouter();
 

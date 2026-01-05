@@ -30,9 +30,8 @@ export const ViewStoreProvider = ({ children }: ViewStoreProviderProps) => {
 export const useViewStore = <T,>(selector: (store: ViewStore) => T): T => {
   const viewStoreContext = useContext(ViewStoreContext);
 
-  if (!viewStoreContext) {
+  if (!viewStoreContext)
     throw new Error(`useViewStore must be used within ViewStoreProvider`);
-  }
 
   return useStore(viewStoreContext, selector);
 };

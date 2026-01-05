@@ -14,8 +14,6 @@ import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { type I18nDict, useI18n } from "@/context/i18n";
-
 import { useLogout } from "@/hooks/useLogout";
 
 import {
@@ -47,6 +45,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { type I18nDict, useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { DrawerType } from "@/types/drawer";
 import type { MenuItem } from "@/types/menuItem";
@@ -280,7 +279,7 @@ const NavTemporaryDrawer = ({
   const pathname = usePathname();
   const router = useRouter();
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 

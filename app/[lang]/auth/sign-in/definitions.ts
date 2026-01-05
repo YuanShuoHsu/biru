@@ -2,7 +2,7 @@
 
 import * as z from "zod";
 
-import type { I18nDict } from "@/context/i18n";
+import type { I18nDict } from "@/providers/i18n-store-provider";
 
 export const createSigninFormSchema = (dict: I18nDict) =>
   z.object({

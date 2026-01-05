@@ -10,8 +10,6 @@ import type { Locale } from "./dictionaries";
 
 import { dayjsLocaleMap } from "@/constants/locale";
 
-import type { I18nDict } from "@/context/i18n";
-
 import { Close } from "@mui/icons-material";
 import { CssBaseline, IconButton } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
@@ -21,7 +19,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
-import I18nProvider from "@/providers/I18nProvider";
+import type { I18nDict } from "@/providers/i18n-store-provider";
+import { I18nStoreProvider } from "@/providers/i18n-store-provider";
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 import { OrderSearchStoreProvider } from "@/providers/order-search-store-provider";
 import SWRProvider from "@/providers/SWRProvider";
@@ -50,7 +49,7 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
         dateAdapter={AdapterDayjs}
       >
         <CssBaseline />
-        <I18nProvider dict={dict}>
+        <I18nStoreProvider dict={dict}>
           <SnackbarProvider
             action={(snackbarId) => (
               <IconButton
@@ -81,7 +80,7 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
               </AuthStoreProvider>
             </SWRProvider>
           </SnackbarProvider>
-        </I18nProvider>
+        </I18nStoreProvider>
       </LocalizationProvider>
     </ThemeProvider>
   </AppRouterCacheProvider>

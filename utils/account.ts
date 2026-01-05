@@ -1,7 +1,7 @@
-import type { I18nDict } from "@/context/i18n";
-
 import { Logout, PersonAdd, Settings } from "@mui/icons-material";
 import { Avatar } from "@mui/material";
+
+import type { I18nDict } from "@/providers/i18n-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 

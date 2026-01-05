@@ -2,12 +2,12 @@
 
 "use client";
 
-import { useI18n } from "@/context/i18n";
-
 import { Typography } from "@mui/material";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
+
 const Maintenance = () => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   return (
     <Typography color="primary" fontWeight="bold" variant="h4">

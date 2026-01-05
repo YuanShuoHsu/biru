@@ -7,8 +7,6 @@ import { useMemo } from "react";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useI18n } from "@/context/i18n";
-
 import {
   CheckCircle,
   ErrorOutline,
@@ -45,6 +43,7 @@ import { useColorScheme } from "@mui/material/styles";
 import { useLogout } from "@/hooks/useLogout";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -104,8 +103,8 @@ interface MyAccountProps {
 }
 
 const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
-  const dict = useI18n();
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+  const { dict } = useI18nStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const { mode, setMode } = useColorScheme();

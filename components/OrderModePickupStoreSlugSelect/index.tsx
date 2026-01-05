@@ -5,9 +5,9 @@ import useSWR from "swr";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useI18n } from "@/context/i18n";
-
 import { MenuItem, TextField } from "@mui/material";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { Store, StoreSlug } from "@/types/stores";
@@ -23,7 +23,7 @@ const OrderModePickupStoreSlugSelect = ({
   mode,
   storeSlug,
 }: OrderModePickupStoreSlugSelectProps) => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const router = useRouter();
 

@@ -15,8 +15,6 @@ import { useState } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
-import { useI18n } from "@/context/i18n";
-
 import { useLogout } from "@/hooks/useLogout";
 
 import { AccountCircle } from "@mui/icons-material";
@@ -33,6 +31,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 import { RouteParams } from "@/types/routeParams";
@@ -100,7 +99,7 @@ const AccountMenu = () => {
   const displayName = getDisplayName(lang, profile);
   const avatarChild = !isSignedIn ? <AccountCircle /> : displayName[0];
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
   const tooltipTitle = isSignedIn
     ? dict.account.accountSettings.label
     : dict.auth.signIn.label;

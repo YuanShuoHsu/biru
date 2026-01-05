@@ -7,13 +7,13 @@ import { useState } from "react";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useI18n } from "@/context/i18n";
-
 import { languageLocaleMap, locales } from "@/constants/locale";
 
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 const languages = locales.map((lang) => ({
   lang,
@@ -37,7 +37,7 @@ const LanguageMenu = () => {
   const pathname = usePathname();
   const { lang: currentLang } = useParams();
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const switchPath = (lang: Locale) => {
     const rest = pathname.split("/").slice(2).join("/");

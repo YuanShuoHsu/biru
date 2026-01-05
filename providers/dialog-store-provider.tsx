@@ -30,9 +30,8 @@ export const DialogStoreProvider = ({ children }: DialogStoreProviderProps) => {
 export const useDialogStore = <T,>(selector: (store: DialogStore) => T): T => {
   const dialogStoreContext = useContext(DialogStoreContext);
 
-  if (!dialogStoreContext) {
+  if (!dialogStoreContext)
     throw new Error(`useDialogStore must be used within DialogStoreProvider`);
-  }
 
   return useStore(dialogStoreContext, selector);
 };

@@ -4,10 +4,10 @@ import NextLink from "next/link";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useI18n } from "@/context/i18n";
-
 import { KeyboardArrowLeft } from "@mui/icons-material";
 import { Button } from "@mui/material";
+
+import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
@@ -18,7 +18,7 @@ interface BackButtonProps {
 }
 
 const BackButton = ({ back, lang, redirect }: BackButtonProps) => {
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const href =
     back && redirect

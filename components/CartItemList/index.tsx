@@ -2,11 +2,11 @@ import { Fragment } from "react";
 
 import CartItemRow from "./CartItemRow";
 
-import { useI18n } from "@/context/i18n";
-
 import { Divider, List, NoSsr, Typography } from "@mui/material";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
+
 import { useCartStore } from "@/stores/useCartStore";
 
 import { getItemKey } from "@/utils/menu";
@@ -18,7 +18,7 @@ interface CartItemListProps {
 const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
   const { isCartEmpty, cartItemsList } = useCartStore();
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { isLoading } = useMenuStore((state) => state);
 

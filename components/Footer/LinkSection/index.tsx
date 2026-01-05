@@ -4,7 +4,6 @@ import NextLink from "next/link";
 import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
-import { useI18n, type I18nDict } from "@/context/i18n";
 
 import { useLogout } from "@/hooks/useLogout";
 
@@ -18,6 +17,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useI18nStore, type I18nDict } from "@/providers/i18n-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { RouteParams } from "@/types/routeParams";
@@ -114,7 +114,7 @@ const footerItemsMap = ({
 const LinkSection = () => {
   const { isAuthLoading, isSignedIn } = useAuthStore((state) => state);
 
-  const dict = useI18n();
+  const { dict } = useI18nStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
