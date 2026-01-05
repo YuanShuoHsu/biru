@@ -24,9 +24,11 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { DrawerType } from "@/types/drawer";
+import { useDrawerStore } from "@/providers/drawer-store-provider";
+
 import type { RouteParams } from "@/types/routeParams";
 
+import { handleDrawerToggle } from "@/utils/drawer";
 import { createOrderPaths } from "@/utils/orderPaths";
 
 const StyledAppBar = styled(AppBar, {
@@ -45,14 +47,10 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-interface HideAppBarProps {
-  onDrawerToggle: (
-    type: DrawerType,
-    open: boolean,
-  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
-}
+const HideAppBar = () => {
+  const { setDrawerOpen } = useDrawerStore((state) => state);
+  const handleNavOpen = handleDrawerToggle(setDrawerOpen, "nav", true);
 
-const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
   const pathname = usePathname();
   const { lang, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
@@ -81,7 +79,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               aria-label="open drawer"
               color="inherit"
               edge="start"
-              onClick={onDrawerToggle("nav", true)}
+              onClick={handleNavOpen}
             >
               <Menu />
             </IconButton>
@@ -96,9 +94,7 @@ const HideAppBar = ({ onDrawerToggle }: HideAppBarProps) => {
               <AccountMenu />
             </Suspense>
           )}
-          {showShoppingCartButton && (
-            <CartIconButton onDrawerToggle={onDrawerToggle} />
-          )}
+          {showShoppingCartButton && <CartIconButton />}
         </Stack>
       </StyledToolbar>
     </StyledAppBar>

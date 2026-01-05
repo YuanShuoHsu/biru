@@ -1,9 +1,8 @@
 "use client";
 
 import { useParams, usePathname } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 
-import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import NavTemporaryDrawer from "@/components/NavTemporaryDrawer";
@@ -18,7 +17,6 @@ import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { DrawerType } from "@/types/drawer";
 import type { RouteParams } from "@/types/routeParams";
 
 import { createOrderPaths } from "@/utils/orderPaths";
@@ -33,11 +31,6 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   useAuthInitializer();
-
-  const [drawerState, setDrawerState] = useState({
-    cart: false,
-    nav: false,
-  });
 
   const { lang, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
@@ -56,33 +49,12 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
-  const handleDrawerToggle =
-    (type: DrawerType, open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-
-      setDrawerState((prev) => ({ ...prev, [type]: open }));
-    };
-
   return (
     <Box display="flex">
-      <HideAppBar onDrawerToggle={handleDrawerToggle} />
+      <HideAppBar />
       <Suspense>
-        <NavTemporaryDrawer
-          onDrawerToggle={handleDrawerToggle}
-          open={drawerState.nav}
-        />
+        <NavTemporaryDrawer />
       </Suspense>
-      <CartAnchorTemporaryDrawer
-        onDrawerToggle={handleDrawerToggle}
-        open={drawerState.cart}
-      />
       <MainBox
         component="main"
         width="100%"

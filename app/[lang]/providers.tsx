@@ -19,9 +19,9 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
+import { DrawerStoreProvider } from "@/providers/drawer-store-provider";
 import type { I18nDict } from "@/providers/i18n-store-provider";
 import { I18nStoreProvider } from "@/providers/i18n-store-provider";
-import { MenuStoreProvider } from "@/providers/menu-store-provider";
 import { OrderSearchStoreProvider } from "@/providers/order-search-store-provider";
 import SWRProvider from "@/providers/SWRProvider";
 import { ViewStoreProvider } from "@/providers/view-store-provider";
@@ -71,11 +71,11 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
             <SWRProvider fallback={fallback}>
               <AuthStoreProvider>
                 <DialogStoreProvider>
-                  <MenuStoreProvider>
+                  <DrawerStoreProvider>
                     <OrderSearchStoreProvider>
                       <ViewStoreProvider>{children}</ViewStoreProvider>
                     </OrderSearchStoreProvider>
-                  </MenuStoreProvider>
+                  </DrawerStoreProvider>
                 </DialogStoreProvider>
               </AuthStoreProvider>
             </SWRProvider>

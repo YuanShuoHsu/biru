@@ -16,13 +16,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useDrawerStore } from "@/providers/drawer-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import type { DrawerType } from "@/types/drawer";
 import type { RouteParams } from "@/types/routeParams";
 
+import { handleDrawerToggle } from "@/utils/drawer";
 import { createOrderPaths } from "@/utils/orderPaths";
 
 const DrawerBox = styled(Box)({
@@ -51,19 +52,12 @@ const StickyFooter = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface CartAnchorTemporaryDrawerProps {
-  onDrawerToggle: (
-    type: DrawerType,
-    open: boolean,
-  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
-  open: boolean;
-}
-
-const CartAnchorTemporaryDrawer = ({
-  onDrawerToggle,
-  open,
-}: CartAnchorTemporaryDrawerProps) => {
+const CartAnchorTemporaryDrawer = () => {
   const { isCartEmpty, cartTotalAmount } = useCartStore();
+
+  const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
+  const open = drawer.cart;
+  const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
   const { dict } = useI18nStore((state) => state);
 
@@ -120,7 +114,7 @@ const CartAnchorTemporaryDrawer = ({
           component={Link}
           fullWidth
           href={actionHref}
-          onClick={onDrawerToggle("cart", false)}
+          onClick={handleCartClose}
           variant="contained"
         >
           {actionLabel}
@@ -133,7 +127,7 @@ const CartAnchorTemporaryDrawer = ({
     <Drawer
       anchor="right"
       ModalProps={{ keepMounted: true }}
-      onClose={onDrawerToggle("cart", false)}
+      onClose={handleCartClose}
       open={open}
     >
       {drawerList}

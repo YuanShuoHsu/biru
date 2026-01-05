@@ -45,9 +45,9 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useDrawerStore } from "@/providers/drawer-store-provider";
 import { type I18nDict, useI18nStore } from "@/providers/i18n-store-provider";
 
-import type { DrawerType } from "@/types/drawer";
 import type { MenuItem } from "@/types/menuItem";
 import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
@@ -60,6 +60,7 @@ import {
   getProfileMenuItems,
 } from "@/utils/account";
 import { getAuthMenuItems } from "@/utils/auth";
+import { handleDrawerToggle } from "@/utils/drawer";
 import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
 
@@ -256,21 +257,16 @@ const ListItemLink = ({
   </StyledListItemButton>
 );
 
-interface NavTemporaryDrawerProps {
-  onDrawerToggle: (
-    type: DrawerType,
-    open: boolean,
-  ) => (event: React.MouseEvent | React.KeyboardEvent) => void;
-  open: boolean;
-}
-
-const NavTemporaryDrawer = ({
-  onDrawerToggle,
-  open,
-}: NavTemporaryDrawerProps) => {
+const NavTemporaryDrawer = () => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
   const { isSignedIn } = useAuthStore((state) => state);
+
+  const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
+  const open = drawer.nav;
+  const handleNavClose = handleDrawerToggle(setDrawerOpen, "nav", false);
+
+  const { dict } = useI18nStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
@@ -278,8 +274,6 @@ const NavTemporaryDrawer = ({
     useParams<RouteParams>();
   const pathname = usePathname();
   const router = useRouter();
-
-  const { dict } = useI18nStore((state) => state);
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
@@ -402,8 +396,8 @@ const NavTemporaryDrawer = ({
 
   const list = (
     <StyledBox
-      onClick={onDrawerToggle("nav", false)}
-      onKeyDown={onDrawerToggle("nav", false)}
+      onClick={handleNavClose}
+      onKeyDown={handleNavClose}
       role="presentation"
     >
       <Toolbar />
@@ -415,7 +409,7 @@ const NavTemporaryDrawer = ({
   return (
     <Drawer
       ModalProps={{ keepMounted: true }}
-      onClose={onDrawerToggle("nav", false)}
+      onClose={handleNavClose}
       open={open}
     >
       {list}
