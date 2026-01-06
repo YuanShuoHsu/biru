@@ -1,8 +1,13 @@
 // From https://bitbucket.org/atlassian/atlaskit-mk-2/raw/4ad0e56649c3e6c973e226b7efaeb28cb240ccb0/packages/core/select/src/data/countries.js
 
-import type { CountryType } from "@/types/countries";
+import type { CountryOption, CountryType } from "@/types/countries";
 
-export const DEFAULT_COUNTRY_PHONE = "886";
+export const DEFAULT_COUNTRY: CountryOption = {
+  code: "TW",
+  label: "Taiwan",
+  phone: "886",
+  firstLetter: "T",
+};
 
 export const DEFAULT_NATIONAL_MASK = "0000000000";
 export const DEFAULT_NATIONAL_PLACEHOLDER = "0123456789";
@@ -431,3 +436,12 @@ export const countries: readonly CountryType[] = [
   { code: "ZM", label: "Zambia", phone: "260" },
   { code: "ZW", label: "Zimbabwe", phone: "263" },
 ];
+
+export const COUNTRY_OPTIONS: CountryOption[] = countries.map((option) => {
+  const firstLetter = option.label[0].toUpperCase();
+
+  return {
+    firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
+    ...option,
+  };
+});

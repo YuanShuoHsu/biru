@@ -10,10 +10,11 @@ import dayjs, { Dayjs } from "dayjs";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import * as z from "zod";
 
-import { createSignupFormSchema, type FormState } from "./definitions";
+import { createSignupFormSchema } from "./definitions";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
@@ -24,6 +25,8 @@ import TextMaskCustom from "@/components/TextMaskCustom";
 
 import { GENDER_LABELS, GENDER_VALUES } from "@/constants/gender";
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   CheckCircleOutline,
@@ -61,7 +64,7 @@ import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { getDefaultCountryCode } from "@/utils/countries";
+import { getDefaultCountry } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -94,39 +97,13 @@ interface PasswordRule {
   label: string;
 }
 
-interface SignUpFormData {
-  lastName: string;
-  firstName: string;
-  birthDate: string;
-  gender: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  countryCode: string;
-  phone: string;
-  isSubscribed: boolean;
-}
-
 interface AuthSignUpProps {
   lang: Locale;
   redirect?: string;
 }
 
 const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
-  const defaultCountryCode = getDefaultCountryCode(lang);
-
-  const [form, setForm] = useState<SignUpFormData>({
-    lastName: "",
-    firstName: "",
-    birthDate: "",
-    gender: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-    countryCode: defaultCountryCode,
-    phone: "",
-    isSubscribed: true,
-  });
+  const defaultCountry = getDefaultCountry(lang);
 
   const [showPassword, setShowPassword] = useState({
     password: false,
@@ -135,18 +112,40 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   const [isGenderFocused, setIsGenderFocused] = useState(false);
 
-  const [state, setState] = useState<FormState>();
-
   const { setIsAuthLoading } = useAuthStore((state) => state);
 
   const { dict } = useI18nStore((state) => state);
   const signupFormSchema = createSignupFormSchema(dict);
 
+  type SignupFormData = z.infer<typeof signupFormSchema>;
+
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+    watch,
+  } = useForm<SignupFormData>({
+    defaultValues: {
+      lastName: "",
+      firstName: "",
+      birthDate: "",
+      gender: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+      country: defaultCountry,
+      phone: "",
+      isSubscribed: true,
+    },
+    resolver: zodResolver(signupFormSchema),
+  });
+
   const router = useRouter();
 
   const { isMutating, trigger } = useSWRMutation(
     "/api/users",
-    sendRequest<UserResponseDto, Omit<SignUpFormData, "confirmPassword">>({
+    sendRequest<UserResponseDto, Omit<SignupFormData, "confirmPassword">>({
       credentials: "include",
     }),
   );
@@ -158,25 +157,29 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     value,
   }));
 
-  const hasPassword = form.password.length > 0;
-  const hasConfirmPassword = form.confirmPassword.length > 0;
+  const password = watch("password");
+  const confirmPassword = watch("confirmPassword");
+  const country = watch("country");
+
+  const hasPassword = password.length > 0;
+  const hasConfirmPassword = confirmPassword.length > 0;
   const passwordsMatch =
-    hasPassword && hasConfirmPassword && form.password === form.confirmPassword;
+    hasPassword && hasConfirmPassword && password === confirmPassword;
 
   const passwordRules: PasswordRule[] = [
     {
       key: "minLength",
-      passed: form.password.length >= 8,
+      passed: password.length >= 8,
       label: dict.validation.password.minLength,
     },
     {
       key: "letter",
-      passed: /[a-zA-Z]/.test(form.password),
+      passed: /[a-zA-Z]/.test(password),
       label: dict.validation.password.letter,
     },
     {
       key: "number",
-      passed: /\d/.test(form.password),
+      passed: /\d/.test(password),
       label: dict.validation.password.number,
     },
   ];
@@ -280,52 +283,29 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       );
     });
 
+  const handleBirthDateChange =
+    (onChange: (value: string) => void) => (newValue: Dayjs | null) => {
+      onChange(newValue?.isValid() ? newValue.format("YYYY-MM-DD") : "");
+    };
+
+  const handleGenderFocus = () => setIsGenderFocused(true);
+  const handleGenderBlur = () => setIsGenderFocused(false);
+
   const handleClickShowPassword = (key: "password" | "confirmPassword") => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => event.preventDefault();
-
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const handleChange = ({
-    target: { checked, name, type, value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
-
-  const handleBirthDateChange = (value: Dayjs | null) =>
-    setForm((prev) => ({
-      ...prev,
-      birthDate: value?.isValid() ? value.format("YYYY-MM-DD") : "",
-    }));
-
-  const handleCountryCodeChange = (code: string) =>
-    setForm((prev) => ({ ...prev, countryCode: code }));
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const validatedFields = signupFormSchema.safeParse(form);
-
-    if (!validatedFields.success) {
-      const { fieldErrors } = z.flattenError(validatedFields.error);
-      setState({ errors: fieldErrors });
-
-      return;
-    }
-
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const onSubmit = handleSubmit(async ({ confirmPassword: _, ...rest }) => {
     setIsAuthLoading(true);
 
     try {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { confirmPassword, ...data } = form;
-      const { email } = await trigger(data);
+      const { email } = await trigger(rest);
 
       const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
         [QueryParamKey.Email]: email,
@@ -337,10 +317,10 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     } finally {
       setIsAuthLoading(false);
     }
-  };
+  });
 
   return (
-    <FormCard component="form" onSubmit={handleSubmit}>
+    <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -359,59 +339,58 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         <Stack direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
-            error={!!state?.errors?.lastName}
+            error={!!errors.lastName}
             fullWidth
-            helperText={state?.errors?.lastName?.join("\n")}
+            helperText={errors.lastName?.message}
             label={dict.auth.lastName.label}
-            name="lastName"
-            onChange={handleChange}
             placeholder={dict.auth.lastName.placeholder}
-            value={form.lastName}
+            {...register("lastName")}
           />
           <TextField
             autoComplete="given-name"
-            error={!!state?.errors?.firstName}
+            error={!!errors.firstName}
             fullWidth
-            helperText={state?.errors?.firstName?.join("\n")}
+            helperText={errors.firstName?.message}
             label={dict.auth.firstName.label}
-            name="firstName"
-            onChange={handleChange}
             placeholder={dict.auth.firstName.placeholder}
             required
-            value={form.firstName}
+            {...register("firstName")}
           />
         </Stack>
-        <DatePicker
-          disableFuture
-          label={dict.auth.birthDate.label}
-          maxDate={today}
+        <Controller
+          control={control}
           name="birthDate"
-          onChange={handleBirthDateChange}
-          openTo="year"
-          slotProps={{
-            textField: {
-              autoComplete: "bday",
-              error: !!state?.errors?.birthDate,
-              helperText: state?.errors?.birthDate?.join("\n"),
-              placeholder: dict.auth.birthDate.placeholder,
-              required: true,
-            },
-          }}
-          value={form.birthDate ? dayjs(form.birthDate) : null}
-          views={["year", "month", "day"]}
-          yearsOrder="desc"
+          render={({ field: { onChange, value }, fieldState: { error } }) => (
+            <DatePicker
+              disableFuture
+              label={dict.auth.birthDate.label}
+              maxDate={today}
+              onChange={handleBirthDateChange(onChange)}
+              openTo="year"
+              slotProps={{
+                textField: {
+                  autoComplete: "bday",
+                  error: !!error,
+                  helperText: error?.message,
+                  placeholder: dict.auth.birthDate.placeholder,
+                  required: true,
+                },
+              }}
+              value={value ? dayjs(value) : null}
+              views={["year", "month", "day"]}
+              yearsOrder="desc"
+            />
+          )}
         />
         {/* Incorrect use of <label for=FORM_ELEMENT> */}
         <TextField
           autoComplete="sex"
-          error={!!state?.errors?.gender}
+          defaultValue=""
+          error={!!errors.gender}
           fullWidth
           label={dict.auth.gender.label}
-          helperText={state?.errors?.gender?.join("\n")}
-          name="gender"
-          onBlur={() => setIsGenderFocused(false)}
-          onChange={handleChange}
-          onFocus={() => setIsGenderFocused(true)}
+          helperText={errors.gender?.message}
+          onFocus={handleGenderFocus}
           required
           select
           slotProps={{
@@ -431,7 +410,9 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
               },
             },
           }}
-          value={form.gender}
+          {...register("gender", {
+            onBlur: handleGenderBlur,
+          })}
         >
           {genderOptions.map(({ label, value }) => (
             <MenuItem key={value} value={value}>
@@ -441,16 +422,14 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         </TextField>
         <TextField
           autoComplete="email"
-          error={!!state?.errors?.email}
+          error={!!errors.email}
           fullWidth
-          helperText={state?.errors?.email?.join("\n")}
+          helperText={errors.email?.message}
           label={dict.auth.email.label}
-          name="email"
-          onChange={handleChange}
           placeholder={dict.auth.email.placeholder}
           required
           type="email"
-          value={form.email}
+          {...register("email")}
         />
         <TextField
           autoComplete="new-password"
@@ -458,8 +437,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           fullWidth
           helperText={passwordHelperContent}
           label={dict.auth.password.label}
-          name="password"
-          onChange={handleChange}
+          placeholder={dict.auth.password.placeholder}
           required
           slotProps={{
             formHelperText: { component: "div" },
@@ -484,8 +462,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
             },
           }}
           type={showPassword.password ? "text" : "password"}
-          value={form.password}
-          placeholder={dict.auth.password.placeholder}
+          {...register("password")}
         />
         <TextField
           autoComplete="new-password"
@@ -493,8 +470,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           fullWidth
           helperText={confirmPasswordHelperContent}
           label={dict.auth.confirmPassword.label}
-          name="confirmPassword"
-          onChange={handleChange}
+          placeholder={dict.auth.confirmPassword.placeholder}
           required
           slotProps={{
             formHelperText: { component: "div" },
@@ -523,43 +499,64 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
             },
           }}
           type={showPassword.confirmPassword ? "text" : "password"}
-          value={form.confirmPassword}
-          placeholder={dict.auth.confirmPassword.placeholder}
+          {...register("confirmPassword")}
         />
         <Grid container spacing={2}>
           <Grid size={{ xs: 6, sm: 4 }}>
-            <CountrySelect lang={lang} onChange={handleCountryCodeChange} />
+            <Controller
+              control={control}
+              name="country"
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <CountrySelect
+                  error={!!error}
+                  helperText={error?.message}
+                  onChange={onChange}
+                  value={value}
+                />
+              )}
+            />
           </Grid>
           <Grid size={{ xs: 6, sm: 8 }}>
-            <TextField
-              autoComplete="tel"
-              error={!!state?.errors?.phone}
-              fullWidth
-              helperText={state?.errors?.phone?.join("\n")}
-              inputMode="tel"
-              label={dict.auth.phone}
+            <Controller
+              control={control}
               name="phone"
-              onChange={handleChange}
-              required
-              slotProps={{
-                input: {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  inputComponent: TextMaskCustom as any,
-                  inputProps: { countryCode: form.countryCode },
-                },
-              }}
-              type="tel"
-              value={form.phone}
+              render={({
+                field: { onChange, value },
+                fieldState: { error },
+              }) => (
+                <TextField
+                  autoComplete="tel"
+                  error={!!error}
+                  fullWidth
+                  helperText={error?.message}
+                  label={dict.auth.phone}
+                  onChange={onChange}
+                  required
+                  slotProps={{
+                    input: {
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      inputComponent: TextMaskCustom as any,
+                      inputProps: { countryCode: country.code },
+                    },
+                  }}
+                  type="tel"
+                  value={value}
+                />
+              )}
             />
           </Grid>
         </Grid>
         <FormControlLabel
           control={
-            <Checkbox
-              checked={form.isSubscribed}
+            <Controller
+              control={control}
               name="isSubscribed"
-              onChange={handleChange}
-              size="small"
+              render={({ field: { onChange, value } }) => (
+                <Checkbox checked={value} onChange={onChange} size="small" />
+              )}
             />
           }
           label={

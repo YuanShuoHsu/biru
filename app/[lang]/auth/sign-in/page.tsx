@@ -1,8 +1,11 @@
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import AuthSignIn from ".";
 
 import { hasLocale } from "@/app/[lang]/dictionaries";
+
+import { REMEMBER_ME } from "@/constants/sign-in";
 
 const AuthSignInPage = async ({
   params,
@@ -19,7 +22,12 @@ const AuthSignInPage = async ({
       ? redirect
       : undefined;
 
-  return <AuthSignIn lang={lang} redirect={safeRedirect} />;
+  const cookieStore = await cookies();
+  const rememberMe = cookieStore.get(REMEMBER_ME)?.value === "true";
+
+  return (
+    <AuthSignIn rememberMe={rememberMe} lang={lang} redirect={safeRedirect} />
+  );
 };
 
 export default AuthSignInPage;

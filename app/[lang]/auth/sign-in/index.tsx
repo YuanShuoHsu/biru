@@ -4,21 +4,23 @@
 
 "use client";
 
+import Cookies from "js-cookie";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { startTransition, useEffect, useMemo, useState } from "react";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import * as z from "zod";
 
-import { createSigninFormSchema, type FormState } from "./definitions";
+import { createSigninFormSchema } from "./definitions";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 
-import { REMEMBER_ME } from "@/constants/sign-in";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -45,6 +47,7 @@ import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
+import { REMEMBER_ME } from "@/constants/sign-in";
 import { fetchProfile } from "@/utils/auth";
 import { sendRequest } from "@/utils/fetcher";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -72,27 +75,35 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 interface AuthSignInProps {
   lang: Locale;
   redirect?: string;
+  rememberMe: boolean;
 }
 
-const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    rememberMe: false,
-  });
-
+const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
-
-  const [state, setState] = useState<FormState>();
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore((state) => state);
 
   const { dict } = useI18nStore((state) => state);
+  const signinFormSchema = createSigninFormSchema(dict);
+
+  type SigninFormData = z.infer<typeof signinFormSchema>;
+
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+    register,
+  } = useForm<SigninFormData>({
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe,
+    },
+    resolver: zodResolver(signinFormSchema),
+  });
 
   const router = useRouter();
-
-  const signinFormSchema = useMemo(() => createSigninFormSchema(dict), [dict]);
 
   const { isMutating: isMutatingAccessToken, trigger: triggerAccessToken } =
     useSWRMutation<AuthResponseDto, Error, string, LoginDto>(
@@ -110,59 +121,26 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
 
   const isSubmitting = isMutatingAccessToken || isMutatingProfile;
 
-  useEffect(() => {
-    const stored = localStorage.getItem(REMEMBER_ME);
-    const nextValue = stored === null ? true : stored === "true";
-
-    if (stored === null) localStorage.setItem(REMEMBER_ME, "true");
-
-    startTransition(() => {
-      setForm((prev) =>
-        prev.rememberMe === nextValue
-          ? prev
-          : { ...prev, rememberMe: nextValue },
-      );
-    });
-  }, []);
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
   ) => event.preventDefault();
-
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const handleChange = ({
-    target: { checked, name, type, value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    const nextValue = type === "checkbox" ? checked : value;
+  const handleRememberMeChange =
+    (onChange: (value: boolean) => void) =>
+    ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+      Cookies.set(REMEMBER_ME, String(checked), { expires: 365 });
+      onChange(checked);
+    };
 
-    setForm((prev) => {
-      if (name === "rememberMe" && type === "checkbox")
-        localStorage.setItem(REMEMBER_ME, String(nextValue));
-
-      return { ...prev, [name]: nextValue };
-    });
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    const validatedFields = signinFormSchema.safeParse(form);
-
-    if (!validatedFields.success) {
-      const { fieldErrors } = z.flattenError(validatedFields.error);
-      setState({ errors: fieldErrors });
-
-      return;
-    }
-
+  const onSubmit = handleSubmit(async (data) => {
     setIsAuthLoading(true);
 
     try {
-      const { access_token } = await triggerAccessToken(form);
+      const { access_token } = await triggerAccessToken(data);
       setAccessToken(access_token);
 
       const profile = await triggerProfile(access_token);
@@ -175,10 +153,10 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
     } finally {
       setIsAuthLoading(false);
     }
-  };
+  });
 
   return (
-    <FormCard component="form" onSubmit={handleSubmit}>
+    <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -196,25 +174,21 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
         <Divider>{dict.auth.or}</Divider>
         <TextField
           autoComplete="email"
-          error={!!state?.errors?.email}
+          error={!!errors.email}
           fullWidth
-          helperText={state?.errors?.email?.join("\n")}
+          helperText={errors.email?.message}
           label={dict.auth.email.label}
-          name="email"
-          onChange={handleChange}
           placeholder={dict.auth.email.placeholder}
           required
           type="email"
-          value={form.email}
+          {...register("email")}
         />
         <TextField
           autoComplete="current-password"
-          error={!!state?.errors?.password}
+          error={!!errors.password}
           fullWidth
-          helperText={state?.errors?.password?.join("\n")}
+          helperText={errors.password?.message}
           label={dict.auth.password.label}
-          name="password"
-          onChange={handleChange}
           required
           slotProps={{
             input: {
@@ -238,8 +212,8 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
             },
           }}
           type={showPassword ? "text" : "password"}
-          value={form.password}
           placeholder={dict.auth.password.placeholder}
+          {...register("password")}
         />
         <Stack
           flexDirection="row"
@@ -249,11 +223,16 @@ const AuthSignIn = ({ lang, redirect }: AuthSignInProps) => {
         >
           <FormControlLabel
             control={
-              <Checkbox
-                checked={form.rememberMe}
+              <Controller
+                control={control}
                 name="rememberMe"
-                onChange={handleChange}
-                size="small"
+                render={({ field: { onChange, value } }) => (
+                  <Checkbox
+                    checked={value}
+                    onChange={handleRememberMeChange(onChange)}
+                    size="small"
+                  />
+                )}
               />
             }
             label={

@@ -1,24 +1,24 @@
 import { getExampleNumber } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 
+import { Locale } from "@/app/[lang]/dictionaries";
+
 import {
   countries,
-  DEFAULT_COUNTRY_PHONE,
+  DEFAULT_COUNTRY,
   DEFAULT_NATIONAL_MASK,
   DEFAULT_NATIONAL_PLACEHOLDER,
 } from "@/constants/countries";
-import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
+import { countryCodeLocaleMap } from "@/constants/locale";
 
 import type { CountryType } from "@/types/countries";
 
 export const formatPhone = (phone: CountryType["phone"]) => `+${phone}`;
 
-export const getDefaultCountryCode = (locale: string) => {
-  const countryCode = countryCodeLocaleMap[locale as LocaleEnum];
-  const matchedCountry = countries.find(({ code }) => code === countryCode);
-  const phone = matchedCountry?.phone || DEFAULT_COUNTRY_PHONE;
+export const getDefaultCountry = (lang: Locale) => {
+  const countryCode = countryCodeLocaleMap[lang];
 
-  return formatPhone(phone);
+  return countries.find(({ code }) => code === countryCode) || DEFAULT_COUNTRY;
 };
 
 export const toDigits = (value: string) => value.replace(/\D/g, "");

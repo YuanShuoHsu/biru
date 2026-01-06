@@ -1,6 +1,7 @@
 // https://nextjs.org/docs/app/guides/authentication
 
 import dayjs from "dayjs";
+import type { CountryCode } from "libphonenumber-js";
 import * as z from "zod";
 
 import { GENDER_VALUES } from "@/constants/gender";
@@ -45,7 +46,11 @@ export const createSignupFormSchema = (dict: I18nDict) => {
           if (date.isAfter(today)) addBirthDateIssue(ctx, "maxDate");
           if (date.isBefore(minDate)) addBirthDateIssue(ctx, "minDate");
         }),
-      gender: z.enum(GENDER_VALUES, { error: dict.validation.gender.required }),
+      gender: z
+        .union([z.enum(GENDER_VALUES), z.literal("")])
+        .refine((value) => value !== "", {
+          message: dict.validation.gender.required,
+        }),
       email: z.email({ error: dict.validation.email.invalid }).trim(),
       password: z
         .string()
@@ -57,9 +62,17 @@ export const createSignupFormSchema = (dict: I18nDict) => {
         .string()
         .min(1, { error: dict.validation.confirmPassword.required })
         .trim(),
-      countryCode: z
-        .string()
-        .min(1, { error: dict.validation.countryCode.required }),
+      country: z
+        .object({
+          code: z.custom<CountryCode>(),
+          label: z.string(),
+          phone: z.string(),
+          firstLetter: z.string(),
+          suggested: z.boolean().optional(),
+        })
+        .refine(({ code }) => code.length > 0, {
+          message: dict.validation.countryCode.required,
+        }),
       phone: z
         .string()
         .min(1, { error: dict.validation.phone.required })
@@ -71,10 +84,10 @@ export const createSignupFormSchema = (dict: I18nDict) => {
       message: dict.validation.confirmPassword.mismatch,
     })
     .refine(
-      ({ countryCode, phone }) => {
+      ({ country, phone }) => {
         const phoneLength = toDigits(phone).length;
 
-        const { placeholder } = getPhoneFormatting(countryCode);
+        const { placeholder } = getPhoneFormatting(country.code);
         const expectedLength = toDigits(placeholder).length;
 
         return phoneLength === expectedLength;

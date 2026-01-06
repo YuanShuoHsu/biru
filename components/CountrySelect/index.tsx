@@ -10,10 +10,7 @@ import parse from "autosuggest-highlight/parse";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
-import { countries } from "@/constants/countries";
-import { countryCodeLocaleMap, LocaleEnum } from "@/constants/locale";
+import { countries, COUNTRY_OPTIONS } from "@/constants/countries";
 
 import {
   Autocomplete,
@@ -93,6 +90,26 @@ const CountryOptionBox = styled(CountryOptionRoot, {
     : "transparent",
 }));
 
+const ImageBox = styled(Box)(({ theme }) => ({
+  position: "relative",
+  width: theme.spacing(2.5),
+  height: theme.spacing(2.5),
+  flexShrink: 0,
+  overflow: "hidden",
+}));
+
+const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
+  <Image
+    alt={label}
+    fill
+    loading="lazy"
+    sizes="(min-width: 808px) 50vw, 100vw"
+    src={`/images/flags/w20/${code.toLowerCase()}.png`}
+    style={{ objectFit: "contain" }}
+    unoptimized
+  />
+);
+
 const HighlightTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "highlight",
 })<TypographyProps<"span"> & { highlight: boolean }>(
@@ -111,54 +128,26 @@ const filter = createFilterOptions<CountryOption>({
   stringify: getCountryLabel,
 });
 
-const FlagImage = ({ code, label }: Pick<CountryType, "code" | "label">) => (
-  <Image
-    alt={label}
-    fill
-    loading="lazy"
-    sizes="(min-width: 808px) 50vw, 100vw"
-    src={`/images/flags/w20/${code.toLowerCase()}.png`}
-    style={{
-      objectFit: "contain",
-    }}
-    unoptimized
-  />
-);
-
 interface CountrySelectProps {
-  lang: Locale;
-  onChange: (code: string) => void;
+  error: boolean;
+  helperText: React.ReactNode;
+  onChange: (value: CountryOption) => void;
+  value: CountryOption;
 }
 
-const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
+const CountrySelect = ({
+  error,
+  helperText,
+  onChange,
+  value,
+}: CountrySelectProps) => {
+  const { code, label, phone } = value;
+
   const hint = useRef("");
 
   const { dict } = useI18nStore((state) => state);
 
-  const options = countries.map((option) => {
-    const firstLetter = option.label[0].toUpperCase();
-
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? "0-9" : firstLetter,
-      ...option,
-    };
-  });
-
-  const matchedCountry = options.find(
-    ({ code }) => code === countryCodeLocaleMap[lang as LocaleEnum],
-  );
-
-  const defaultCountry = matchedCountry || {
-    code: "TW",
-    label: "Taiwan",
-    phone: "886",
-    firstLetter: "T",
-  };
-
-  const [value, setValue] = useState<CountryOption>(defaultCountry);
-  const [inputValue, setInputValue] = useState(
-    formatPhone(defaultCountry.phone),
-  );
+  const [inputValue, setInputValue] = useState(formatPhone(phone));
 
   return (
     <Autocomplete
@@ -167,7 +156,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       disablePortal
       filterOptions={(options, params) => {
         const { inputValue } = params;
-        if (value && inputValue === formatPhone(value.phone)) return options;
+        if (inputValue === formatPhone(phone)) return options;
 
         return filter(options, params);
       }}
@@ -179,11 +168,10 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       id="country-select-demo"
       inputValue={inputValue}
       onChange={(_, newValue: CountryOption) => {
-        setValue(newValue);
-
-        const formattedPhone = formatPhone(newValue.phone);
+        const phone = newValue ? newValue.phone : "";
+        const formattedPhone = formatPhone(phone);
         setInputValue(formattedPhone);
-        onChange(formattedPhone);
+        onChange(newValue);
       }}
       onClose={() => {
         hint.current = "";
@@ -191,7 +179,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
       onInputChange={(_, newInputValue, reason) => {
         if (reason === "reset") return;
         if (reason === "blur") {
-          setInputValue(formatPhone(value.phone));
+          setInputValue(formatPhone(phone));
           return;
         }
 
@@ -205,7 +193,7 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
           }
         }
       }}
-      options={options.sort(
+      options={COUNTRY_OPTIONS.sort(
         (a, b) => -b.firstLetter.localeCompare(a.firstLetter),
       )}
       renderGroup={(params) => (
@@ -219,9 +207,10 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
           <HintTypography>{hint.current}</HintTypography>
           <TextField
             {...params}
+            error={error}
+            helperText={helperText}
             label={dict.auth.chooseCountry}
-            onChange={(event) => {
-              const newValue = event.target.value;
+            onChange={({ target: { value: newValue } }) => {
               setInputValue(newValue);
 
               const matchingOption = countries.find((option) =>
@@ -242,12 +231,10 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
               },
               input: {
                 ...params.InputProps,
-                startAdornment: value ? (
+                startAdornment: (
                   <StyledInputAdornment position="start">
-                    <FlagImage code={value.code} label={value.label} />
+                    <FlagImage code={code} label={label} />
                   </StyledInputAdornment>
-                ) : (
-                  params.InputProps.startAdornment
                 ),
               },
             }}
@@ -270,7 +257,9 @@ const CountrySelect = ({ lang, onChange }: CountrySelectProps) => {
 
         return (
           <CountryOptionBox key={key} selected={selected} {...optionProps}>
-            <FlagImage code={code} label={label} />
+            <ImageBox>
+              <FlagImage code={code} label={label} />
+            </ImageBox>
             <Box component="div">
               {parts.map(({ highlight, text }, index) => (
                 <HighlightTypography
