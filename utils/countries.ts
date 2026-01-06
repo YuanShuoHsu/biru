@@ -5,6 +5,7 @@ import { Locale } from "@/app/[lang]/dictionaries";
 
 import {
   countries,
+  COUNTRY_OPTIONS,
   DEFAULT_COUNTRY,
   DEFAULT_NATIONAL_MASK,
   DEFAULT_NATIONAL_PLACEHOLDER,
@@ -18,7 +19,9 @@ export const formatPhone = (phone: CountryType["phone"]) => `+${phone}`;
 export const getDefaultCountry = (lang: Locale) => {
   const countryCode = countryCodeLocaleMap[lang];
 
-  return countries.find(({ code }) => code === countryCode) || DEFAULT_COUNTRY;
+  return (
+    COUNTRY_OPTIONS.find(({ code }) => code === countryCode) || DEFAULT_COUNTRY
+  );
 };
 
 export const toDigits = (value: string) => value.replace(/\D/g, "");

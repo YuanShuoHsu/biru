@@ -73,7 +73,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
         .refine(({ code }) => code.length > 0, {
           message: dict.validation.countryCode.required,
         }),
-      phone: z
+      phoneNumber: z
         .string()
         .min(1, { error: dict.validation.phone.required })
         .trim(),
@@ -84,15 +84,15 @@ export const createSignupFormSchema = (dict: I18nDict) => {
       message: dict.validation.confirmPassword.mismatch,
     })
     .refine(
-      ({ country, phone }) => {
-        const phoneLength = toDigits(phone).length;
+      ({ country, phoneNumber }) => {
+        const phoneLength = toDigits(phoneNumber).length;
 
         const { placeholder } = getPhoneFormatting(country.code);
         const expectedLength = toDigits(placeholder).length;
 
         return phoneLength === expectedLength;
       },
-      { path: ["phone"], message: dict.validation.phone.invalid },
+      { path: ["phoneNumber"], message: dict.validation.phone.invalid },
     );
 };
 
@@ -107,7 +107,7 @@ export type FormState =
         password?: string[];
         confirmPassword?: string[];
         countryCode?: string[];
-        phone?: string[];
+        phoneNumber?: string[];
         isSubscribed?: string[];
       };
       message?: string;

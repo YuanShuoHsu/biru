@@ -7,6 +7,7 @@
 "use client";
 
 import dayjs, { Dayjs } from "dayjs";
+import type { CountryCode } from "libphonenumber-js";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useState } from "react";
@@ -119,6 +120,12 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
+  type SignupPayload = Omit<SignupFormData, "confirmPassword" | "country"> & {
+    countryCode: CountryCode;
+    countryLabel: string;
+    countryPhone: string;
+  };
+
   const {
     control,
     formState: { errors },
@@ -135,7 +142,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       password: "",
       confirmPassword: "",
       country: defaultCountry,
-      phone: "",
+      phoneNumber: "",
       isSubscribed: true,
     },
     resolver: zodResolver(signupFormSchema),
@@ -145,7 +152,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   const { isMutating, trigger } = useSWRMutation(
     "/api/users",
-    sendRequest<UserResponseDto, Omit<SignupFormData, "confirmPassword">>({
+    sendRequest<UserResponseDto, SignupPayload>({
       credentials: "include",
     }),
   );
@@ -300,24 +307,37 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onSubmit = handleSubmit(async ({ confirmPassword: _, ...rest }) => {
-    setIsAuthLoading(true);
+  const onSubmit = handleSubmit(
+    async ({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      confirmPassword: _,
+      country: { code, label, phone },
+      ...rest
+    }) => {
+      setIsAuthLoading(true);
 
-    try {
-      const { email } = await trigger(rest);
+      const payload = {
+        ...rest,
+        countryCode: code,
+        countryLabel: label,
+        countryPhone: phone,
+      };
 
-      const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
-        [QueryParamKey.Email]: email,
-        [QueryParamKey.Redirect]: redirect,
-      });
+      try {
+        const { email } = await trigger(payload);
 
-      router.replace(verifyEmailHref);
-    } catch {
-    } finally {
-      setIsAuthLoading(false);
-    }
-  });
+        const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
+          [QueryParamKey.Email]: email,
+          [QueryParamKey.Redirect]: redirect,
+        });
+
+        router.replace(verifyEmailHref);
+      } catch {
+      } finally {
+        setIsAuthLoading(false);
+      }
+    },
+  );
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>
@@ -522,7 +542,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           <Grid size={{ xs: 6, sm: 8 }}>
             <Controller
               control={control}
-              name="phone"
+              name="phoneNumber"
               render={({
                 field: { onChange, value },
                 fieldState: { error },
