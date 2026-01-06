@@ -22,11 +22,10 @@ import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
 
-import type { Option } from "@/types/menu";
+import type { Menu, Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
 
 import { interpolate } from "@/utils/i18n";
@@ -61,6 +60,7 @@ interface CardDialogContentProps {
   name: string;
   description: string;
   imageUrl: string;
+  menus: Menu[];
   options: Option[];
   price: number;
   stock: number | null;
@@ -69,13 +69,11 @@ interface CardDialogContentProps {
 const CardDialogContent = React.forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, name, description, imageUrl, options, price, stock }, ref) => {
+>(({ id, name, description, imageUrl, menus, options, price, stock }, ref) => {
   const [rawQuantity, setRawQuantity] = useState(1);
 
   const { getChoiceAvailableQuantity, getCartItemTotalQuantity } =
     useCartStore();
-
-  const { menus } = useMenuStore((state) => state);
 
   const initialChoices = options.reduce<Record<string, string[]>>(
     (acc, { id: optionId, choices: optionChoices, multiple, required }) => {

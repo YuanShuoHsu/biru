@@ -21,6 +21,7 @@ import { alpha, styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
+import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import { useCartStore } from "@/stores/useCartStore";
@@ -142,6 +143,7 @@ const ActionAreaCard = ({
   const { updateCartItem } = useCartStore();
   const { setDialog } = useDialogStore((state) => state);
   const { dict } = useI18nStore((state) => state);
+  const { menus } = useMenuStore((state) => state);
   const { view } = useViewStore((state) => state);
   const viewDirection = ViewDirections[view];
 
@@ -167,6 +169,7 @@ const ActionAreaCard = ({
           name={name}
           description={description}
           imageUrl={imageUrl}
+          menus={menus}
           options={options}
           price={price}
           stock={stock}
