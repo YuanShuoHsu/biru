@@ -187,7 +187,7 @@ const breadcrumbsMap = (
         },
       ],
       disabled: true,
-      icon: Login,
+      icon: AccountCircle,
       label: dict.auth.label,
       to: "/auth",
     },
