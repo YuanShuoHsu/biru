@@ -134,7 +134,7 @@
       "options": {
         "female": "女性",
         "male": "男性",
-        "notDisclosed": "不願透露"
+        "other": "不願透露"
       }
     },
     "hasAccount": "已經有帳號？",

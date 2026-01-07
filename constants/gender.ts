@@ -1,19 +1,19 @@
 enum GenderEnum {
   Female = "FEMALE",
   Male = "MALE",
-  NotDisclosed = "NOT_DISCLOSED",
+  Other = "OTHER",
 }
 
-type GenderLabel = "female" | "male" | "notDisclosed";
+type GenderLabel = "female" | "male" | "other";
 
 export const GENDER_LABELS: Record<GenderEnum, GenderLabel> = {
   [GenderEnum.Female]: "female",
   [GenderEnum.Male]: "male",
-  [GenderEnum.NotDisclosed]: "notDisclosed",
+  [GenderEnum.Other]: "other",
 };
 
 export const GENDER_VALUES = [
   GenderEnum.Female,
   GenderEnum.Male,
-  GenderEnum.NotDisclosed,
+  GenderEnum.Other,
 ] as const;

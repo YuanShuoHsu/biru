@@ -65,7 +65,7 @@ import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { getDefaultCountry } from "@/utils/countries";
+import { formatPhone, getDefaultCountry } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -320,7 +320,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         ...rest,
         countryCode: code,
         countryLabel: label,
-        countryPhone: phone,
+        countryPhone: formatPhone(phone),
       };
 
       try {

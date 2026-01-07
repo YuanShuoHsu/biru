@@ -134,7 +134,7 @@
       "options": {
         "female": "여성",
         "male": "남성",
-        "notDisclosed": "비공개"
+        "other": "비공개"
       }
     },
     "hasAccount": "이미 계정이 있으신가요?",

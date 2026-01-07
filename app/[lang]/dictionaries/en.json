@@ -134,7 +134,7 @@
       "options": {
         "female": "Female",
         "male": "Male",
-        "notDisclosed": "Prefer not to say"
+        "other": "Prefer not to say"
       }
     },
     "hasAccount": "Already have an account?",
