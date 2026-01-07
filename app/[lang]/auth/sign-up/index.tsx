@@ -78,6 +78,7 @@ const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: theme.spacing(2),
 }));
 
@@ -260,12 +261,13 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     LEGAL_LINK_TYPES.map((type) => [
       `{${type}}`,
       <MuiLink
-        key={type}
         component={NextLink}
         href={handleQueryParam(`/${lang}/company/${type}`, {
           [QueryParamKey.Back]: `/${lang}/auth/sign-up`,
           [QueryParamKey.Redirect]: redirect,
         })}
+        key={type}
+        underline="hover"
       >
         {dict.company.legal[type].label}
       </MuiLink>,
@@ -355,8 +357,8 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       />
       <StyledCardContent>
         <GoogleButton action="signUp" lang={lang} redirect={redirect} />
-        <Divider>{dict.auth.or}</Divider>
-        <Stack direction={langNameDirection} spacing={2}>
+        <Divider flexItem>{dict.auth.or}</Divider>
+        <Stack width="100%" direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
             error={!!errors.lastName}
@@ -391,6 +393,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
                 textField: {
                   autoComplete: "bday",
                   error: !!error,
+                  fullWidth: true,
                   helperText: error?.message,
                   placeholder: dict.auth.birthDate.placeholder,
                   required: true,
@@ -521,7 +524,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           type={showPassword.confirmPassword ? "text" : "password"}
           {...register("confirmPassword")}
         />
-        <Grid container spacing={2}>
+        <Grid width="100%" container spacing={2}>
           <Grid size={{ xs: 6, sm: 4 }}>
             <Controller
               control={control}
@@ -569,20 +572,28 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
             />
           </Grid>
         </Grid>
-        <FormControlLabel
-          control={
-            <Controller
-              control={control}
-              name="isSubscribed"
-              render={({ field: { onChange, value } }) => (
-                <Checkbox checked={value} onChange={onChange} size="small" />
-              )}
-            />
-          }
-          label={
-            <Typography variant="body2">{dict.auth.emailUpdates}</Typography>
-          }
-        />
+        <Stack
+          width="100%"
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap={1}
+        >
+          <FormControlLabel
+            control={
+              <Controller
+                control={control}
+                name="isSubscribed"
+                render={({ field: { onChange, value } }) => (
+                  <Checkbox checked={value} onChange={onChange} size="small" />
+                )}
+              />
+            }
+            label={
+              <Typography variant="body2">{dict.auth.emailUpdates}</Typography>
+            }
+          />
+        </Stack>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
@@ -600,13 +611,14 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           {legalConsent}
         </Typography>
         <Divider flexItem />
-        <Stack flexDirection="row" alignItems="center" gap={1}>
+        <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{dict.auth.hasAccount}</Typography>
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-in`, {
               [QueryParamKey.Redirect]: redirect,
             })}
+            underline="hover"
             variant="body2"
           >
             {dict.auth.signIn.label}

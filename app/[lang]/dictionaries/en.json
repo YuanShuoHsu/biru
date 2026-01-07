@@ -184,7 +184,8 @@
       "resendSuccess": "Verification email sent again",
       "sent": "Verification email sent",
       "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
-      "title": "Check your email"
+      "title": "Check your email",
+      "wrongEmail": "Entered the wrong email?"
     }
   },
   "cart": {

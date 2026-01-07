@@ -60,6 +60,7 @@ const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: theme.spacing(2),
 }));
 
@@ -171,7 +172,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
       />
       <StyledCardContent>
         <GoogleButton action="signIn" lang={lang} redirect={redirect} />
-        <Divider>{dict.auth.or}</Divider>
+        <Divider flexItem>{dict.auth.or}</Divider>
         <TextField
           autoComplete="email"
           error={!!errors.email}
@@ -216,6 +217,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
           {...register("password")}
         />
         <Stack
+          width="100%"
           flexDirection="row"
           justifyContent="space-between"
           alignItems="center"
@@ -244,6 +246,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
             href={handleQueryParam(`/${lang}/auth/forgot-password`, {
               [QueryParamKey.Redirect]: redirect,
             })}
+            underline="hover"
             variant="body2"
           >
             {dict.auth.forgotPassword.label}
@@ -261,17 +264,20 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
         >
           {dict.auth.signIn.label}
         </Button>
-        <Typography variant="body2">
-          {dict.auth.noAccount}{" "}
+        <Divider flexItem />
+        <Stack flexDirection="row" alignItems="center" gap={0.5}>
+          <Typography variant="body2">{dict.auth.noAccount}</Typography>
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-up`, {
               [QueryParamKey.Redirect]: redirect,
             })}
+            underline="hover"
+            variant="body2"
           >
             {dict.auth.signUp.label}
           </MuiLink>
-        </Typography>
+        </Stack>
       </StyledCardActions>
     </FormCard>
   );
