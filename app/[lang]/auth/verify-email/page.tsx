@@ -4,6 +4,9 @@ import AuthVerifyEmail from ".";
 
 import { hasLocale } from "@/app/[lang]/dictionaries";
 
+import { getErrorMessage } from "@/utils/errors";
+import { sendRequest } from "@/utils/fetcher";
+
 const AuthVerifyEmailPage = async ({
   params,
   searchParams,
@@ -12,16 +15,39 @@ const AuthVerifyEmailPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { email, redirect } = await searchParams;
+  const { email, redirect: redirectUrl, token } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : undefined;
   const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+    typeof redirectUrl === "string" && redirectUrl.startsWith("/")
+      ? redirectUrl
       : undefined;
+  const safeToken = typeof token === "string" ? token : undefined;
+
+  if (!safeEmail && !safeToken) notFound();
+
+  let errorMessage: string | undefined;
+
+  if (safeToken)
+    try {
+      await sendRequest<unknown, { token: string }>()(
+        "/api/mail/verify-email",
+        {
+          arg: { token: safeToken },
+        },
+      );
+    } catch (error) {
+      errorMessage = getErrorMessage(error);
+    }
 
   return (
-    <AuthVerifyEmail email={safeEmail} lang={lang} redirect={safeRedirect} />
+    <AuthVerifyEmail
+      email={safeEmail}
+      errorMessage={errorMessage}
+      lang={lang}
+      redirect={safeRedirect}
+      token={safeToken}
+    />
   );
 };
 

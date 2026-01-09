@@ -2,7 +2,7 @@
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
 import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
@@ -34,15 +34,17 @@ const LanguageMenu = () => {
   );
   const open = Boolean(anchorElLanguage);
 
-  const pathname = usePathname();
-  const { lang: currentLang } = useParams();
-
   const { dict } = useI18nStore((state) => state);
+
+  const { lang: currentLang } = useParams();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const switchPath = (lang: Locale) => {
     const rest = pathname.split("/").slice(2).join("/");
+    const search = searchParams.toString();
 
-    return `/${lang}${rest ? `/${rest}` : ""}`;
+    return `/${lang}${rest ? `/${rest}` : ""}${search ? `?${search}` : ""}`;
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>

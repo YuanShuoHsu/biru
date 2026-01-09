@@ -179,12 +179,16 @@
     "verifyEmail": {
       "backToSignIn": "返回登入",
       "checkSpam": "沒收到？請檢查垃圾郵件或稍後再試。",
+      "countdown": "{text}（{seconds}s）",
       "enterEmail": "請輸入電子郵件後再重新寄送",
       "resend": "重新寄送驗證信",
       "resendSuccess": "已重新寄送驗證信",
       "sent": "驗證信已寄出",
       "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
       "title": "驗證信已寄出",
+      "verificationFailed": "驗證失敗，連結可能無效或已過期。",
+      "verifiedSubtitle": "您現在可以登入您的帳號了。",
+      "verifiedTitle": "電子郵件已驗證",
       "wrongEmail": "填錯信箱？"
     }
   },

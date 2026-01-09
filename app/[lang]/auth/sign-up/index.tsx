@@ -125,6 +125,8 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     countryCode: CountryCode;
     countryLabel: string;
     countryPhone: string;
+    lang: Locale;
+    redirect?: string;
   };
 
   const {
@@ -318,11 +320,13 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     }) => {
       setIsAuthLoading(true);
 
-      const payload = {
+      const payload: SignupPayload = {
         ...rest,
         countryCode: code,
         countryLabel: label,
         countryPhone: formatPhone(phone),
+        lang,
+        ...(redirect && { redirect }),
       };
 
       try {

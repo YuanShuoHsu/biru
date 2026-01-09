@@ -88,7 +88,9 @@ const HideAppBar = () => {
         </Stack>
         <Stack direction="row" alignItems="center" gap={0.5}>
           <ModeToggle />
-          <LanguageMenu />
+          <Suspense>
+            <LanguageMenu />
+          </Suspense>
           {!isMaintenanceMode && (
             <Suspense>
               <AccountMenu />
