@@ -16,7 +16,7 @@ const AuthVerifyEmailPage = async ({
 
   const { email, id, redirect, token } = await searchParams;
 
-  const safeEmail = typeof email === "string" ? email : undefined;
+  const safeEmail = typeof email === "string" ? email : "";
   const safeId = typeof id === "string" ? id : undefined;
   const safeRedirect =
     typeof redirect === "string" && redirect.startsWith("/")

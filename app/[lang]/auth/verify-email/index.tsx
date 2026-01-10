@@ -6,7 +6,11 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 
-import { CheckCircle, Error, MarkEmailRead } from "@mui/icons-material";
+import {
+  MarkEmailRead,
+  MarkEmailUnread,
+  ReportGmailerrorred,
+} from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -74,7 +78,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 interface AuthVerifyEmailProps {
-  email?: string;
+  email: string;
   errorMessage: string;
   lang: Locale;
   redirect?: string;
@@ -134,7 +138,7 @@ const AuthVerifyEmail = ({
       startCountdown(COUNTDOWN_DURATION);
       setCountdown(COUNTDOWN_DURATION);
 
-      await triggerResend({ email: email! });
+      await triggerResend({ email });
       enqueueSnackbar(dict.auth.verifyEmail.resendSuccess, {
         variant: "success",
       });
@@ -143,174 +147,167 @@ const AuthVerifyEmail = ({
     }
   });
 
-  if (token) {
-    if (errorMessage) {
-      return (
-        <FormCard>
-          <StyledCardHeader
-            title={
-              <Typography
-                color="error"
-                fontWeight="bold"
-                textAlign="center"
-                variant="h6"
-              >
-                {dict.auth.verifyEmail.title}
-              </Typography>
-            }
-          />
-          <StyledCardContent>
-            <StyledAvatar errorMessage={errorMessage}>
-              <Error fontSize="large" />
-            </StyledAvatar>
-            <Stack spacing={1} alignItems="center">
-              <Typography textAlign="center">
-                {dict.auth.verifyEmail.verificationFailed}
-              </Typography>
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                textAlign="center"
-              >
-                {errorMessage}
-              </Typography>
-            </Stack>
-          </StyledCardContent>
-          <StyledCardActions disableSpacing>
-            <Button
-              component={NextLink}
-              fullWidth
-              href={handleQueryParam(`/${lang}/auth/sign-in`, {
-                [QueryParamKey.Redirect]: redirect,
-              })}
-              size="large"
-              variant="contained"
-            >
-              {dict.auth.verifyEmail.backToSignIn}
-            </Button>
-          </StyledCardActions>
-        </FormCard>
-      );
-    }
+  const isFailed = Boolean(errorMessage && token);
+  const isVerified = Boolean(!errorMessage && token);
 
-    return (
-      <FormCard>
-        <StyledCardHeader
-          title={
-            <Typography
-              color="primary"
-              fontWeight="bold"
-              textAlign="center"
-              variant="h6"
-            >
-              {dict.auth.verifyEmail.verifiedTitle}
-            </Typography>
-          }
-        />
-        <StyledCardContent>
-          <StyledAvatar>
-            <CheckCircle fontSize="large" />
-          </StyledAvatar>
-          <Typography textAlign="center">
-            {dict.auth.verifyEmail.verifiedSubtitle}
-          </Typography>
-        </StyledCardContent>
-        <StyledCardActions disableSpacing>
+  const status = isFailed ? "failed" : isVerified ? "verified" : "default";
+
+  const signInHref = handleQueryParam(`/${lang}/auth/sign-in`, {
+    [QueryParamKey.Redirect]: redirect,
+  });
+
+  const contents = {
+    default: {
+      actions: (
+        <>
           <Button
-            component={NextLink}
+            disabled={isMutatingResend || !email || isCountingDown}
             fullWidth
-            href={handleQueryParam(`/${lang}/auth/sign-in`, {
-              [QueryParamKey.Redirect]: redirect,
-            })}
+            loading={isMutatingResend}
+            loadingPosition="start"
             size="large"
             type="submit"
             variant="contained"
           >
-            {dict.auth.signIn.label}
+            {isCountingDown
+              ? interpolate(dict.auth.verifyEmail.countdown, {
+                  seconds: countdown,
+                  text: dict.auth.verifyEmail.resend,
+                })
+              : dict.auth.verifyEmail.resend}
           </Button>
-        </StyledCardActions>
-      </FormCard>
-    );
-  }
-
-  return (
-    <FormCard component="form" onSubmit={onSubmit}>
-      <StyledCardHeader
-        title={
-          <Typography
-            color="primary"
-            fontWeight="bold"
-            textAlign="center"
-            variant="h6"
+          <Button
+            component={NextLink}
+            fullWidth
+            href={signInHref}
+            size="large"
+            variant="outlined"
           >
-            {dict.auth.verifyEmail.title}
-          </Typography>
-        }
-      />
-      <StyledCardContent>
-        <StyledAvatar>
-          <MarkEmailRead fontSize="large" />
-        </StyledAvatar>
+            {dict.auth.verifyEmail.backToSignIn}
+          </Button>
+          <Divider flexItem />
+          <Stack flexDirection="row" alignItems="center" gap={0.5}>
+            <Typography variant="body2">
+              {dict.auth.verifyEmail.wrongEmail}
+            </Typography>
+            <MuiLink
+              component={NextLink}
+              href={handleQueryParam(`/${lang}/auth/sign-up`, {
+                [QueryParamKey.Redirect]: redirect,
+              })}
+              underline="hover"
+              variant="body2"
+            >
+              {dict.auth.signUp.label}
+            </MuiLink>
+          </Stack>
+        </>
+      ),
+      body: (
         <Stack spacing={1} alignItems="center">
           <Typography textAlign="center">
             {interpolate(dict.auth.verifyEmail.subtitle, {
-              email: email || "",
+              email,
             })}
           </Typography>
           <Typography
-            variant="caption"
             color="text.secondary"
             textAlign="center"
+            variant="caption"
           >
             {dict.auth.verifyEmail.checkSpam}
           </Typography>
         </Stack>
-      </StyledCardContent>
-      <StyledCardActions disableSpacing>
-        <Button
-          disabled={isMutatingResend || !email || isCountingDown}
-          fullWidth
-          loading={isMutatingResend}
-          loadingPosition="start"
-          size="large"
-          type="submit"
-          variant="contained"
+      ),
+      icon: <MarkEmailUnread fontSize="large" />,
+      title: (
+        <Typography
+          color="primary"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h6"
         >
-          {isCountingDown
-            ? interpolate(dict.auth.verifyEmail.countdown, {
-                seconds: countdown,
-                text: dict.auth.verifyEmail.resend,
-              })
-            : dict.auth.verifyEmail.resend}
-        </Button>
+          {dict.auth.verifyEmail.title}
+        </Typography>
+      ),
+    },
+    failed: {
+      actions: (
         <Button
           component={NextLink}
           fullWidth
-          href={handleQueryParam(`/${lang}/auth/sign-in`, {
-            [QueryParamKey.Redirect]: redirect,
-          })}
+          href={signInHref}
           size="large"
-          variant="outlined"
+          variant="contained"
         >
           {dict.auth.verifyEmail.backToSignIn}
         </Button>
-        <Divider flexItem />
-        <Stack flexDirection="row" alignItems="center" gap={0.5}>
-          <Typography variant="body2">
-            {dict.auth.verifyEmail.wrongEmail}
-          </Typography>
-          <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${lang}/auth/sign-up`, {
-              [QueryParamKey.Redirect]: redirect,
-            })}
-            underline="hover"
-            variant="body2"
+      ),
+      body: (
+        <Stack spacing={1} alignItems="center">
+          {dict.auth.verifyEmail.failedSubtitle}
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            variant="caption"
           >
-            {dict.auth.signUp.label}
-          </MuiLink>
+            {errorMessage}
+          </Typography>
         </Stack>
-      </StyledCardActions>
+      ),
+      icon: <ReportGmailerrorred fontSize="large" />,
+      title: (
+        <Typography
+          color="error"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h6"
+        >
+          {dict.auth.verifyEmail.failedTitle}
+        </Typography>
+      ),
+    },
+    verified: {
+      actions: (
+        <Button
+          component={NextLink}
+          fullWidth
+          href={signInHref}
+          size="large"
+          variant="contained"
+        >
+          {dict.auth.verifyEmail.backToSignIn}
+        </Button>
+      ),
+      body: (
+        <Typography textAlign="center">
+          {dict.auth.verifyEmail.verifiedSubtitle}
+        </Typography>
+      ),
+      icon: <MarkEmailRead fontSize="large" />,
+      title: (
+        <Typography
+          color="primary"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h6"
+        >
+          {dict.auth.verifyEmail.verifiedTitle}
+        </Typography>
+      ),
+    },
+  };
+
+  const content = contents[status];
+
+  return (
+    <FormCard component="form" onSubmit={onSubmit}>
+      <StyledCardHeader title={content.title} />
+      <StyledCardContent>
+        <StyledAvatar errorMessage={errorMessage}>{content.icon}</StyledAvatar>
+        {content.body}
+      </StyledCardContent>
+      <StyledCardActions disableSpacing>{content.actions}</StyledCardActions>
     </FormCard>
   );
 };
