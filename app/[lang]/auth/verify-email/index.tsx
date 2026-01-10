@@ -18,7 +18,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
@@ -48,6 +48,21 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
 }));
+
+const StyledAvatar = styled(Avatar, {
+  shouldForwardProp: (prop) => prop !== "errorMessage",
+})<{ errorMessage?: string }>(({ errorMessage, theme }) => {
+  const color = errorMessage
+    ? theme.palette.error.main
+    : theme.palette.primary.main;
+
+  return {
+    backgroundColor: alpha(color, 0.2),
+    color,
+    height: theme.spacing(7),
+    width: theme.spacing(7),
+  };
+});
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -145,16 +160,9 @@ const AuthVerifyEmail = ({
             }
           />
           <StyledCardContent>
-            <Avatar
-              sx={{
-                bgcolor: "error.light",
-                color: "error.main",
-                height: 64,
-                width: 64,
-              }}
-            >
-              <Error sx={{ fontSize: 32 }} />
-            </Avatar>
+            <StyledAvatar errorMessage={errorMessage}>
+              <Error fontSize="large" />
+            </StyledAvatar>
             <Stack spacing={1} alignItems="center">
               <Typography textAlign="center">
                 {dict.auth.verifyEmail.verificationFailed}
@@ -200,16 +208,9 @@ const AuthVerifyEmail = ({
           }
         />
         <StyledCardContent>
-          <Avatar
-            sx={{
-              bgcolor: "primary.light",
-              color: "primary.main",
-              height: 64,
-              width: 64,
-            }}
-          >
-            <CheckCircle sx={{ fontSize: 32 }} />
-          </Avatar>
+          <StyledAvatar>
+            <CheckCircle fontSize="large" />
+          </StyledAvatar>
           <Typography textAlign="center">
             {dict.auth.verifyEmail.verifiedSubtitle}
           </Typography>
@@ -247,16 +248,9 @@ const AuthVerifyEmail = ({
         }
       />
       <StyledCardContent>
-        <Avatar
-          sx={{
-            bgcolor: "primary.light",
-            color: "primary.main",
-            height: 64,
-            width: 64,
-          }}
-        >
-          <MarkEmailRead sx={{ fontSize: 32 }} />
-        </Avatar>
+        <StyledAvatar>
+          <MarkEmailRead fontSize="large" />
+        </StyledAvatar>
         <Stack spacing={1} alignItems="center">
           <Typography textAlign="center">
             {interpolate(dict.auth.verifyEmail.subtitle, {

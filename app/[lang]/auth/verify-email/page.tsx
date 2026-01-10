@@ -14,13 +14,13 @@ const AuthVerifyEmailPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { email, id, redirect: redirectUrl, token } = await searchParams;
+  const { email, id, redirect, token } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : undefined;
   const safeId = typeof id === "string" ? id : undefined;
   const safeRedirect =
-    typeof redirectUrl === "string" && redirectUrl.startsWith("/")
-      ? redirectUrl
+    typeof redirect === "string" && redirect.startsWith("/")
+      ? redirect
       : undefined;
   const safeToken = typeof token === "string" ? token : undefined;
 
