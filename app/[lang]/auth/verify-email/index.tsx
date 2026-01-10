@@ -2,7 +2,7 @@
 
 import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 
@@ -23,11 +23,19 @@ import { styled } from "@mui/material/styles";
 import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
+
+import { COUNTDOWN_DURATION } from "@/constants/verifyEmail";
+
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import {
+  clearCountdown,
+  getCountdown,
+  startCountdown,
+} from "@/utils/verifyEmail";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -79,18 +87,38 @@ const AuthVerifyEmail = ({
       }),
     );
 
+  const updateCountdown = useCallback(() => {
+    const remaining = getCountdown();
+
+    if (remaining > 0) {
+      setCountdown(remaining);
+    } else {
+      setCountdown(0);
+      clearCountdown();
+    }
+  }, []);
+
+  useEffect(() => {
+    updateCountdown();
+  }, [updateCountdown]);
+
   const isCountingDown = countdown > 0;
 
   useEffect(() => {
-    if (isCountingDown) {
-      const timer = setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [countdown, isCountingDown]);
+    if (!isCountingDown) return;
+
+    const timer = setInterval(() => {
+      updateCountdown();
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [isCountingDown, updateCountdown]);
 
   const onSubmit = handleSubmit(async () => {
     try {
-      setCountdown(60);
+      startCountdown(COUNTDOWN_DURATION);
+      setCountdown(COUNTDOWN_DURATION);
+
       await triggerResend({ email: email! });
       enqueueSnackbar(dict.auth.verifyEmail.resendSuccess, {
         variant: "success",
