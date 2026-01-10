@@ -1,5 +1,20 @@
 import { COUNTDOWN_KEY } from "@/constants/verifyEmail";
 
+import { getErrorMessage } from "@/utils/errors";
+import { sendRequest } from "@/utils/fetcher";
+
+export const verifyEmailToken = async (token: string) => {
+  try {
+    await sendRequest<unknown, { token: string }>()("/api/mail/verify-email", {
+      arg: { token },
+    });
+
+    return "";
+  } catch (error) {
+    return getErrorMessage(error);
+  }
+};
+
 export const getCountdown = () => {
   const stored = localStorage.getItem(COUNTDOWN_KEY);
   if (!stored) return 0;

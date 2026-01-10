@@ -60,7 +60,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface AuthVerifyEmailProps {
   email?: string;
-  errorMessage?: string;
+  errorMessage: string;
   lang: Locale;
   redirect?: string;
   token?: string;

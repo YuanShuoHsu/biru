@@ -126,7 +126,6 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     countryLabel: string;
     countryPhone: string;
     lang: Locale;
-    redirect?: string;
   };
 
   const {
@@ -326,14 +325,14 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         countryLabel: label,
         countryPhone: formatPhone(phone),
         lang,
-        ...(redirect && { redirect }),
       };
 
       try {
-        const { email } = await trigger(payload);
+        const { email, id } = await trigger(payload);
 
         const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
           [QueryParamKey.Email]: email,
+          [QueryParamKey.Id]: id,
           [QueryParamKey.Redirect]: redirect,
         });
 
