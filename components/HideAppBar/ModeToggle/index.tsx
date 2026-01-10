@@ -1,13 +1,30 @@
 "use client";
 
+// https://mui.com/material-ui/customization/css-theme-variables/configuration/
 // https://mui.com/material-ui/customization/dark-mode/#ToggleColorMode.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
-import { useColorScheme } from "@mui/material/styles";
+import { styled, useColorScheme } from "@mui/material/styles";
 
 import { useI18nStore } from "@/providers/i18n-store-provider";
+
+const StyledDarkMode = styled(DarkMode)(({ theme }) => ({
+  display: "block",
+
+  ...theme.applyStyles("dark", {
+    display: "none",
+  }),
+}));
+
+const StyledLightMode = styled(LightMode)(({ theme }) => ({
+  display: "none",
+
+  ...theme.applyStyles("dark", {
+    display: "block",
+  }),
+}));
 
 const ModeToggle = () => {
   const { mode, setMode } = useColorScheme();
@@ -34,7 +51,8 @@ const ModeToggle = () => {
           loading={isLoading}
           onClick={handleModeToggle}
         >
-          {isLight ? <DarkMode /> : <LightMode />}
+          <StyledDarkMode />
+          <StyledLightMode />
         </IconButton>
       </span>
     </Tooltip>
