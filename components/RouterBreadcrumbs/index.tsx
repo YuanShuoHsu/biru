@@ -12,6 +12,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import {
   AccountCircle,
   Business,
+  Email,
   Gavel,
   Group,
   HelpOutline,
@@ -174,6 +175,11 @@ const breadcrumbsMap = (
           icon: PersonAdd,
           label: dict.auth.signUp.label,
           to: "/sign-up",
+        },
+        {
+          icon: Email,
+          label: dict.auth.verifyEmail.label,
+          to: "/verify-email",
         },
         {
           icon: HelpOutline,

@@ -181,6 +181,7 @@
       "checkSpam": "没收到？请检查垃圾邮件或稍后再试。",
       "countdown": "{text}（{seconds}s）",
       "enterEmail": "请输入电子邮件后再重新发送",
+      "label": "验证电子邮件",
       "resend": "重新发送验证邮件",
       "resendSuccess": "已重新发送验证邮件",
       "sent": "验证邮件已寄出",

@@ -181,6 +181,7 @@
       "checkSpam": "Didn't get it? Check spam or try resending in a moment.",
       "countdown": "{text} ({seconds}s)",
       "enterEmail": "Enter your email before resending",
+      "label": "Verify email",
       "resend": "Resend verification email",
       "resendSuccess": "Verification email sent again",
       "sent": "Verification email sent",
