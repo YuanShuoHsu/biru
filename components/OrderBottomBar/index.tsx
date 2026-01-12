@@ -14,9 +14,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type { RouteParams } from "@/types/routeParams";
 
@@ -43,7 +42,9 @@ const StyledChip = styled(Chip)(({ theme }) => ({
 }));
 
 const OrderBottomBar = () => {
-  const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore();
+  const { isCartEmpty, cartTotalAmount, cartTotalQuantity } = useCartStore(
+    (state) => state,
+  );
 
   const { dict } = useI18nStore((state) => state);
 

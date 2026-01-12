@@ -16,10 +16,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type { RouteParams } from "@/types/routeParams";
 
@@ -53,7 +52,7 @@ const StickyFooter = styled(Box)(({ theme }) => ({
 }));
 
 const CartAnchorTemporaryDrawer = () => {
-  const { isCartEmpty, cartTotalAmount } = useCartStore();
+  const { isCartEmpty, cartTotalAmount } = useCartStore((state) => state);
 
   const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
   const open = drawer.cart;

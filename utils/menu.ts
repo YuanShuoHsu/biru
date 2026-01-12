@@ -1,7 +1,5 @@
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { useCartStore } from "@/stores/useCartStore";
-
 import type { Choice, Menu, MenuItem, Option } from "@/types/menu";
 
 export const getItemKey = (
@@ -67,9 +65,13 @@ export const getLimitingChoicesCap = (
   id: string,
   choices: Record<string, string[]>,
   lang: Locale,
+  getChoiceAvailableQuantity: (
+    choiceId: string,
+    choiceStock: number | null,
+    isShared: boolean,
+    itemId: string,
+  ) => number,
 ): OptionLimitResult => {
-  const { getChoiceAvailableQuantity } = useCartStore.getState();
-
   const item = findItemById(menus, id);
   if (!item) return { cap: Infinity, names: [] };
 

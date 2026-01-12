@@ -18,6 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
+import { CartStoreProvider } from "@/providers/cart-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
 import { DrawerStoreProvider } from "@/providers/drawer-store-provider";
 import type { I18nDict } from "@/providers/i18n-store-provider";
@@ -70,13 +71,15 @@ const Providers = ({ children, dict, fallback, lang }: ProvidersProps) => (
           >
             <SWRProvider fallback={fallback}>
               <AuthStoreProvider>
-                <DialogStoreProvider>
-                  <DrawerStoreProvider>
-                    <OrderSearchStoreProvider>
-                      <ViewStoreProvider>{children}</ViewStoreProvider>
-                    </OrderSearchStoreProvider>
-                  </DrawerStoreProvider>
-                </DialogStoreProvider>
+                <CartStoreProvider>
+                  <DialogStoreProvider>
+                    <DrawerStoreProvider>
+                      <OrderSearchStoreProvider>
+                        <ViewStoreProvider>{children}</ViewStoreProvider>
+                      </OrderSearchStoreProvider>
+                    </DrawerStoreProvider>
+                  </DialogStoreProvider>
+                </CartStoreProvider>
               </AuthStoreProvider>
             </SWRProvider>
           </SnackbarProvider>

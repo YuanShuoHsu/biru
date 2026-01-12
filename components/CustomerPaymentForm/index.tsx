@@ -20,10 +20,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type {
   CreateEcpayDto,
@@ -67,7 +66,9 @@ const CustomerPaymentForm = () => {
 
   const router = useRouter();
 
-  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore();
+  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
+    (state) => state,
+  );
   const { menus } = useMenuStore((state) => state);
 
   const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);

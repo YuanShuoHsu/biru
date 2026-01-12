@@ -20,10 +20,9 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type { Menu, Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
@@ -72,8 +71,9 @@ const CardDialogContent = React.forwardRef<
 >(({ id, name, description, imageUrl, menus, options, price, stock }, ref) => {
   const [rawQuantity, setRawQuantity] = useState(1);
 
-  const { getChoiceAvailableQuantity, getCartItemTotalQuantity } =
-    useCartStore();
+  const { getCartItemTotalQuantity, getChoiceAvailableQuantity } = useCartStore(
+    (state) => state,
+  );
 
   const initialChoices = options.reduce<Record<string, string[]>>(
     (acc, { id: optionId, choices: optionChoices, multiple, required }) => {
@@ -115,7 +115,7 @@ const CardDialogContent = React.forwardRef<
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(menus, id, choices, lang);
+    getLimitingChoicesCap(menus, id, choices, lang, getChoiceAvailableQuantity);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0

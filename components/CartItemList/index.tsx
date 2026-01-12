@@ -4,9 +4,8 @@ import CartItemRow from "./CartItemRow";
 
 import { Divider, List, NoSsr, Typography } from "@mui/material";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import { getItemKey } from "@/utils/menu";
 
@@ -15,7 +14,7 @@ interface CartItemListProps {
 }
 
 const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
-  const { isCartEmpty, cartItemsList } = useCartStore();
+  const { isCartEmpty, cartItemsList } = useCartStore((state) => state);
 
   const { dict } = useI18nStore((state) => state);
 

@@ -3,15 +3,14 @@ import CustomizedBadges from "@/components/CustomizedBadges";
 import { ShoppingCart } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import { handleDrawerToggle } from "@/utils/drawer";
 
 const CartIconButton = () => {
-  const { cartTotalQuantity } = useCartStore();
+  const { cartTotalQuantity } = useCartStore((state) => state);
 
   const { setDrawerOpen } = useDrawerStore((state) => state);
   const handleCartOpen = handleDrawerToggle(setDrawerOpen, "cart", true);

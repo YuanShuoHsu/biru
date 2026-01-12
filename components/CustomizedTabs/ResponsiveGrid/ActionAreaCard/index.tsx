@@ -19,12 +19,11 @@ import {
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 import type { Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
@@ -140,7 +139,7 @@ const ActionAreaCard = ({
 
   const { lang } = useParams<RouteParams>();
 
-  const { updateCartItem } = useCartStore();
+  const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);
   const { dict } = useI18nStore((state) => state);
   const { menus } = useMenuStore((state) => state);

@@ -17,9 +17,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { useCartStore } from "@/stores/useCartStore";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
@@ -51,7 +50,7 @@ const CustomizedAccordions = () => {
   const [expanded, setExpanded] = useState<string | false>("panel1");
   const isPanel1Expanded = expanded === "panel1";
 
-  const { cartTotalAmount } = useCartStore();
+  const { cartTotalAmount } = useCartStore((state) => state);
 
   const { dict } = useI18nStore((state) => state);
 

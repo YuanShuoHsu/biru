@@ -2,9 +2,10 @@ import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
-import { CartItem, useCartStore } from "@/stores/useCartStore";
+import type { CartItem } from "@/stores/cart-store";
 
 import { interpolate } from "@/utils/i18n";
 import { getTypographyVariant } from "@/utils/soldOut";
@@ -72,7 +73,7 @@ const CartItemSoldOut = ({
 
   const { dict } = useI18nStore((state) => state);
 
-  const { deleteCartItem, updateCartItem } = useCartStore();
+  const { deleteCartItem, updateCartItem } = useCartStore((state) => state);
 
   const targetQuantity = quantity + availableToAdd;
   const shouldDeleteItem = availableToAdd < 0 && targetQuantity <= 0;
