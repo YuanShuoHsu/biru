@@ -57,6 +57,7 @@ interface CartItemSoldOutProps {
   itemStockCapLeft: number;
   limitingChoicesLabel: string;
   optionCapLeft: number;
+  unavailable: boolean;
 }
 
 const CartItemSoldOut = ({
@@ -65,6 +66,7 @@ const CartItemSoldOut = ({
   itemStockCapLeft,
   limitingChoicesLabel,
   optionCapLeft,
+  unavailable,
 }: CartItemSoldOutProps) => {
   const { extraCost, price, quantity } = item;
 
@@ -78,13 +80,15 @@ const CartItemSoldOut = ({
   const showOverlay = shouldDeleteItem || shouldEditItem;
 
   const message = shouldDeleteItem
-    ? itemStockCapLeft === availableToAdd
-      ? interpolate(dict.common.soldOut, { label: "" })
-      : optionCapLeft === availableToAdd
-        ? interpolate(dict.common.soldOut, {
-            label: `${limitingChoicesLabel}\n`,
-          })
-        : ""
+    ? unavailable
+      ? dict.common.unavailable
+      : itemStockCapLeft === availableToAdd
+        ? interpolate(dict.common.soldOut, { label: "" })
+        : optionCapLeft === availableToAdd
+          ? interpolate(dict.common.soldOut, {
+              label: `${limitingChoicesLabel}\n`,
+            })
+          : ""
     : shouldEditItem
       ? itemStockCapLeft === availableToAdd
         ? interpolate(dict.cart.quantityExceedsStock, {

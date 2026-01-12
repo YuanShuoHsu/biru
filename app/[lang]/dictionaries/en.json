@@ -212,7 +212,8 @@
     "multiply": "×",
     "reachStockLimit": "Stock limit reached {label}",
     "soldOut": "{label} Sold out",
-    "totalAmount": "Total"
+    "totalAmount": "Total",
+    "unavailable": "Unavailable"
   },
   "company": {
     "about": {

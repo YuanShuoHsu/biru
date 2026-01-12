@@ -153,6 +153,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
         itemStockCapLeft={itemStockCapLeft}
         limitingChoicesLabel={limitingChoicesLabel}
         optionCapLeft={optionCapLeft}
+        unavailable={!itemName}
       />
       <Grid
         container
