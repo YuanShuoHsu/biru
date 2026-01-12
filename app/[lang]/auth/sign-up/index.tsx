@@ -565,7 +565,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
                     input: {
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       inputComponent: TextMaskCustom as any,
-                      inputProps: { countryCode: country.code },
+                      inputProps: { countryCode: country.phone },
                     },
                   }}
                   type="tel"
