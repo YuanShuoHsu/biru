@@ -65,7 +65,7 @@ import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { formatPhone, getDefaultCountry } from "@/utils/countries";
+import { formatPhone, getDefaultCountry, toDigits } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -315,6 +315,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmPassword: _,
       country: { code, label, phone },
+      phoneNumber,
       ...rest
     }) => {
       setIsAuthLoading(true);
@@ -325,6 +326,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         countryLabel: label,
         countryPhone: formatPhone(phone),
         lang,
+        phoneNumber: toDigits(phoneNumber),
       };
 
       try {

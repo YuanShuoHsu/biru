@@ -4,6 +4,8 @@
 // https://mui.com/material-ui/customization/dark-mode/#ToggleColorMode.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
+import { useSyncExternalStore } from "react";
+
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { styled, useColorScheme } from "@mui/material/styles";
@@ -26,14 +28,28 @@ const StyledLightMode = styled(LightMode)(({ theme }) => ({
   }),
 }));
 
+const useIsMounted = () =>
+  useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
+
 const ModeToggle = () => {
+  const mounted = useIsMounted();
+
   const { mode, setMode } = useColorScheme();
 
   const { dict } = useI18nStore((state) => state);
 
-  const isLoading = !mode;
+  const isLoading = !mounted || !mode;
   const isLight = mode === "light";
-  const tooltipTitle = isLight ? dict.appBar.darkMode : dict.appBar.lightMode;
+
+  const tooltipTitle = isLoading
+    ? ""
+    : isLight
+      ? dict.appBar.darkMode
+      : dict.appBar.lightMode;
 
   const handleModeToggle = () => {
     if (isLoading) return;
