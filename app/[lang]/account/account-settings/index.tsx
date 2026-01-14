@@ -276,7 +276,7 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image}
+                src={profile.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -382,10 +382,9 @@ const AccountSettings = ({ lang, currentURL }: AccountSettingsProps) => {
                     icon={PhoneIphone}
                     label={dict.auth.phone}
                     status={verificationChip(profile.phoneVerified)}
-                    value={profile.phone || dict.common.empty}
+                    value={profile.phoneNumber || dict.common.empty}
                   />
                 </Stack>
-
                 <Stack
                   direction="row"
                   flexWrap="wrap"
