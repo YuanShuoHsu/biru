@@ -31,7 +31,12 @@ export const fetcher = async <T = unknown>(
   init?: RequestInit,
 ): Promise<T> => {
   const url = resolveUrl(input);
-  const res = await fetch(url, init);
+
+  const headers = new Headers(init?.headers);
+  if (typeof document !== "undefined" && !headers.has("Accept-Language"))
+    headers.set("Accept-Language", document.documentElement.lang);
+
+  const res = await fetch(url, { ...init, headers });
 
   const contentType = res.headers.get("content-type") || "";
 

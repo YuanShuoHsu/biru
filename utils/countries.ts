@@ -1,7 +1,7 @@
 import { getExampleNumber } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 
-import { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/app/[lang]/dictionaries";
 
 import {
   countries,
