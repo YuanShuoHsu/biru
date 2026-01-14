@@ -104,7 +104,7 @@ const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
             </Typography>
             <Divider />
             <Stack alignItems="center" direction="row" gap={2}>
-              <Avatar alt={name} src={profile.image}>
+              <Avatar alt={name} src={profile.image || undefined}>
                 {avatarText}
               </Avatar>
               <Stack>

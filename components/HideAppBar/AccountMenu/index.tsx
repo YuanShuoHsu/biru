@@ -194,7 +194,7 @@ const AccountMenu = () => {
               <StyledAvatar
                 alt={displayName}
                 isSignedIn={isSignedIn}
-                src={profile?.image}
+                src={profile?.image || undefined}
               >
                 {avatarChild}
               </StyledAvatar>

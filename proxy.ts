@@ -68,6 +68,6 @@ export const proxy = (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/((?!api|_next/data|_next/static|_next/image|apple-icon.png|favicon.ico|icon\\.svg|icon-192x192\\.png|icon-512x512\\.png|manifest\\.webmanifest|opengraph-image\\.jpg|twitter-image\\.jpg|sitemap.xml|robots.txt|\\.well-known|images).*)",
+    "/((?!api|_next/data|_next/static|_next/image|apple-icon.png|favicon.ico|icon\\.svg|icon-192x192\\.png|icon-512x512\\.png|manifest\\.webmanifest|opengraph-image\\.jpg|twitter-image\\.jpg|[^/]+/opengraph-image\\.jpg|[^/]+/twitter-image\\.jpg|sitemap.xml|robots.txt|\\.well-known|images).*)",
   ],
 };

@@ -264,7 +264,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image}
+                src={profile.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -378,7 +378,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                     icon={PhoneIphone}
                     label={dict.auth.phone}
                     status={verificationChip(profile.phoneVerified)}
-                    value={profile.phone || dict.common.empty}
+                    value={profile.phoneNumber || dict.common.empty}
                   />
                 </Stack>
               </CardContent>

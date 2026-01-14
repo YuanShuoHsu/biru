@@ -140,7 +140,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
       profile.firstName,
       profile.lastName,
       profile.email,
-      profile.phone,
+      profile.phoneNumber,
       profile.image,
       profile.emailVerified,
       profile.phoneVerified,
@@ -279,7 +279,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image}
+                src={profile.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -364,10 +364,9 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
                     icon={PhoneIphone}
                     label={dict.auth.phone}
                     status={verificationChip(profile.phoneVerified)}
-                    value={profile.phone || dict.common.empty}
+                    value={profile.phoneNumber || dict.common.empty}
                   />
                 </Stack>
-
                 <Stack
                   direction="row"
                   flexWrap="wrap"
