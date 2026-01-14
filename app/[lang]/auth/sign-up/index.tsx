@@ -125,7 +125,6 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     countryCode: CountryCode;
     countryLabel: string;
     countryPhone: string;
-    lang: Locale;
   };
 
   const {
@@ -325,7 +324,6 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         countryCode: code,
         countryLabel: label,
         countryPhone: formatPhone(phone),
-        lang,
         phoneNumber: toDigits(phoneNumber),
       };
 
