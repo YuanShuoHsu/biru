@@ -1,6 +1,5 @@
 import { cache } from "react";
 
-import { getErrorMessage } from "./errors";
 import { fetcher } from "./fetcher";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
@@ -27,8 +26,7 @@ export const getStores = cache(async () => {
     });
 
     return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error(getErrorMessage(error));
+  } catch {
     return [];
   }
 });

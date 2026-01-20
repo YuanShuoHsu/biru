@@ -1,6 +1,5 @@
 import { cache } from "react";
 
-import { getErrorMessage } from "./errors";
 import { fetcher } from "./fetcher";
 
 import type { Menu } from "@/types/menu";
@@ -12,8 +11,7 @@ export const getMenus = cache(async (storeId: string) => {
     });
 
     return Array.isArray(data) ? data : [];
-  } catch (error) {
-    console.error(getErrorMessage(error));
+  } catch {
     return [];
   }
 });
