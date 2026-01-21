@@ -71,7 +71,10 @@ export const sendRequest =
   async (url: string, { arg }: { arg?: TReq } = {}): Promise<TRes> =>
     fetcher<TRes>(url, {
       ...(arg !== undefined && { body: JSON.stringify(arg) }),
-      headers: { "Content-Type": "application/json" },
       method: "POST",
       ...init,
+      headers: {
+        "Content-Type": "application/json",
+        ...init?.headers,
+      },
     });
