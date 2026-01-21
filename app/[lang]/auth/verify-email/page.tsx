@@ -26,7 +26,8 @@ const AuthVerifyEmailPage = async ({
 
   if ((!safeEmail || !safeId) && !safeToken) notFound();
 
-  const errorMessage = safeToken ? await verifyEmailToken(safeToken, lang) : "";
+  const errorMessage =
+    safeId && safeToken ? await verifyEmailToken(safeId, safeToken, lang) : "";
 
   return (
     <AuthVerifyEmail
