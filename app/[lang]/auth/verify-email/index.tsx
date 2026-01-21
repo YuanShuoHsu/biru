@@ -99,7 +99,7 @@ const AuthVerifyEmail = ({
   const { dict } = useI18nStore((state) => state);
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
-    useSWRMutation<unknown, Error, string, { email: string }>(
+    useSWRMutation<void, Error, string, { email: string }>(
       "/api/auth/resend",
       sendRequest({
         credentials: "include",

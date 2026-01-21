@@ -30,7 +30,7 @@ const Newsletter = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { isMutating, trigger } = useSWRMutation<
-    unknown,
+    void,
     Error,
     string,
     { email: string }

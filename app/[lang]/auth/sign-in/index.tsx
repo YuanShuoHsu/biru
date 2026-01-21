@@ -121,10 +121,10 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     );
 
   const { trigger: triggerResend } = useSWRMutation<
-    unknown,
+    void,
     Error,
     string,
-    { email: string }
+    { email: string; id: string; redirect?: string }
   >(
     "/api/auth/resend",
     sendRequest({
@@ -164,12 +164,18 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     } catch (err) {
       const error = err as FetchError;
       if (error.status === 403 && error.info?.id) {
-        await triggerResend({ email: data.email });
+        const id = error.info.id;
+
+        await triggerResend({
+          email: data.email,
+          id,
+          ...(redirect && { redirect }),
+        });
 
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
             email: data.email,
-            id: error.info.id,
+            id,
             [QueryParamKey.Redirect]: redirect,
           }),
         );
