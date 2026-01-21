@@ -120,6 +120,18 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
       (_, { arg }) => fetchProfile(arg),
     );
 
+  const { trigger: triggerResend } = useSWRMutation<
+    unknown,
+    Error,
+    string,
+    { email: string }
+  >(
+    "/api/auth/resend",
+    sendRequest({
+      credentials: "include",
+    }),
+  );
+
   const isSubmitting = isMutatingAccessToken || isMutatingProfile;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -152,6 +164,8 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     } catch (err) {
       const error = err as FetchError;
       if (error.status === 403 && error.info?.id) {
+        await triggerResend({ email: data.email });
+
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
             email: data.email,

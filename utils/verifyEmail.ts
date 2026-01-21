@@ -9,7 +9,7 @@ export const verifyEmailToken = async (token: string, lang: Locale) => {
   try {
     await sendRequest<unknown, { token: string }>({
       headers: { "Accept-Language": lang },
-    })("/api/mail/verify-email", {
+    })("/api/mail/verify", {
       arg: { token },
     });
 

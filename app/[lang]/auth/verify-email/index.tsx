@@ -100,7 +100,7 @@ const AuthVerifyEmail = ({
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
     useSWRMutation<unknown, Error, string, { email: string }>(
-      "/api/auth/resend-verification",
+      "/api/auth/resend",
       sendRequest({
         credentials: "include",
       }),
