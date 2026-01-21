@@ -6,9 +6,10 @@
 interface ErrorInfo {
   message: string;
   documentation_url?: string;
+  id?: string;
 }
 
-interface FetchError extends Error {
+export interface FetchError extends Error {
   info?: ErrorInfo;
   status?: number;
 }

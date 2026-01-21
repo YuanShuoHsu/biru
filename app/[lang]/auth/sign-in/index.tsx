@@ -49,7 +49,7 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { REMEMBER_ME } from "@/constants/sign-in";
 import { fetchProfile } from "@/utils/auth";
-import { sendRequest } from "@/utils/fetcher";
+import { FetchError, sendRequest } from "@/utils/fetcher";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -149,7 +149,20 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
 
       enqueueSnackbar(dict.auth.signIn.success, { variant: "success" });
       router.replace(redirect || `/${lang}`);
-    } catch {
+    } catch (err) {
+      const error = err as FetchError;
+      if (error.status === 403 && error.info?.id) {
+        router.replace(
+          handleQueryParam(`/${lang}/auth/verify-email`, {
+            email: data.email,
+            id: error.info.id,
+            [QueryParamKey.Redirect]: redirect,
+          }),
+        );
+
+        return;
+      }
+
       clearAuth();
     } finally {
       setIsAuthLoading(false);
