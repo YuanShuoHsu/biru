@@ -6,15 +6,15 @@ import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 
 export const verifyEmailToken = async (
-  id: string,
+  identifier: string,
   token: string,
   lang: Locale,
 ) => {
   try {
-    await sendRequest<void, { id: string; token: string }>({
+    await sendRequest<void, { identifier: string; token: string }>({
       headers: { "Accept-Language": lang },
     })("/api/mails/verify", {
-      arg: { id, token },
+      arg: { identifier, token },
     });
 
     return "";

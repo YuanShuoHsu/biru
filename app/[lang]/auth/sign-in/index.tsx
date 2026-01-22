@@ -124,7 +124,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     void,
     Error,
     string,
-    { email: string; id: string; redirect?: string }
+    { identifier: string; redirect?: string }
   >(
     "/api/auth/resend",
     sendRequest({
@@ -164,18 +164,17 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     } catch (err) {
       const error = err as FetchError;
       if (error.status === 403 && error.info?.id) {
-        const id = error.info.id;
+        const identifier = error.info.id;
 
         await triggerResend({
-          email: data.email,
-          id,
+          identifier,
           ...(redirect && { redirect }),
         });
 
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
             email: data.email,
-            id,
+            [QueryParamKey.Identifier]: identifier,
             [QueryParamKey.Redirect]: redirect,
           }),
         );

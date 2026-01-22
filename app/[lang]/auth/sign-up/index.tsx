@@ -334,7 +334,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
         const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
           [QueryParamKey.Email]: email,
-          [QueryParamKey.Id]: id,
+          [QueryParamKey.Identifier]: id,
           [QueryParamKey.Redirect]: redirect,
         });
 

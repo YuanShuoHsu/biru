@@ -79,7 +79,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 interface AuthVerifyEmailProps {
   email: string;
   errorMessage: string;
-  id: string;
+  identifier: string;
   lang: Locale;
   redirect?: string;
   token: string;
@@ -88,7 +88,7 @@ interface AuthVerifyEmailProps {
 const AuthVerifyEmail = ({
   email,
   errorMessage,
-  id,
+  identifier,
   lang,
   redirect,
   token,
@@ -104,7 +104,7 @@ const AuthVerifyEmail = ({
       void,
       Error,
       string,
-      { email: string; id: string; redirect?: string }
+      { identifier: string; redirect?: string }
     >(
       "/api/mails/resend",
       sendRequest({
@@ -144,7 +144,10 @@ const AuthVerifyEmail = ({
       startCountdown(COUNTDOWN_DURATION);
       setCountdown(COUNTDOWN_DURATION);
 
-      await triggerResend({ email, id, ...(redirect && { redirect }) });
+      await triggerResend({
+        identifier,
+        ...(redirect && { redirect }),
+      });
     } catch {
     } finally {
     }
