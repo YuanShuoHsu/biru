@@ -4,17 +4,40 @@ import "server-only";
 
 import { LocaleEnum } from "@/constants/locale";
 
+const dictionariesList = [
+  "appBar",
+  "account",
+  "auth",
+  "cart",
+  "common",
+  "company",
+  "dialog",
+  "home",
+  "maintenance",
+  "order",
+  "validation",
+] as const;
+
+const loadDictionary = async (locale: string) => {
+  const result = await Promise.all(
+    dictionariesList.map((fileName) =>
+      import(`./dictionaries/${locale}/${fileName}.json`).then(
+        (m) => m.default,
+      ),
+    ),
+  );
+
+  return Object.fromEntries(
+    dictionariesList.map((key, index) => [key, result[index]]),
+  );
+};
+
 export const dictionaries = {
-  [LocaleEnum.ZhTW]: () =>
-    import("./dictionaries/zh-TW.json").then((module) => module.default),
-  [LocaleEnum.En]: () =>
-    import("./dictionaries/en.json").then((module) => module.default),
-  [LocaleEnum.Ja]: () =>
-    import("./dictionaries/ja.json").then((module) => module.default),
-  [LocaleEnum.Ko]: () =>
-    import("./dictionaries/ko.json").then((module) => module.default),
-  [LocaleEnum.ZhCN]: () =>
-    import("./dictionaries/zh-CN.json").then((module) => module.default),
+  [LocaleEnum.ZhTW]: () => loadDictionary("zh-TW"),
+  [LocaleEnum.En]: () => loadDictionary("en"),
+  [LocaleEnum.Ja]: () => loadDictionary("ja"),
+  [LocaleEnum.Ko]: () => loadDictionary("ko"),
+  [LocaleEnum.ZhCN]: () => loadDictionary("zh-CN"),
 };
 
 export type Locale = keyof typeof dictionaries;
