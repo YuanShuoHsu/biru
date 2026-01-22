@@ -19,17 +19,15 @@ const dictionariesList = [
 ] as const;
 
 const loadDictionary = async (locale: string) => {
-  const result = await Promise.all(
+  const entries = await Promise.all(
     dictionariesList.map((fileName) =>
       import(`./dictionaries/${locale}/${fileName}.json`).then(
-        (m) => m.default,
+        ({ default: dictionary }) => [fileName, dictionary],
       ),
     ),
   );
 
-  return Object.fromEntries(
-    dictionariesList.map((key, index) => [key, result[index]]),
-  );
+  return Object.fromEntries(entries);
 };
 
 export const dictionaries = {
