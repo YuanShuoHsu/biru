@@ -13,7 +13,7 @@ export const verifyEmailToken = async (
   try {
     await sendRequest<void, { id: string; token: string }>({
       headers: { "Accept-Language": lang },
-    })("/api/mail/verify", {
+    })("/api/mails/verify", {
       arg: { id, token },
     });
 

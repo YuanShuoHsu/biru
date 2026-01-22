@@ -106,7 +106,7 @@ const AuthVerifyEmail = ({
       string,
       { email: string; id: string; redirect?: string }
     >(
-      "/api/mail/resend",
+      "/api/mails/resend",
       sendRequest({
         credentials: "include",
       }),
