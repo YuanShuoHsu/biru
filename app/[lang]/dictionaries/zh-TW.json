@@ -185,7 +185,6 @@
       "failedSubtitle": "連結可能無效或已過期。",
       "label": "驗證電子郵件",
       "resend": "重新寄送驗證信",
-      "resendSuccess": "已重新寄送驗證信",
       "sent": "驗證信已寄出",
       "subtitle": "我們已寄出驗證信到 {email}，請前往信箱完成驗證才能登入。",
       "title": "驗證信已寄出",

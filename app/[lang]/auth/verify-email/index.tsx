@@ -1,7 +1,6 @@
 "use client";
 
 import NextLink from "next/link";
-import { enqueueSnackbar } from "notistack";
 import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
@@ -80,14 +79,16 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 interface AuthVerifyEmailProps {
   email: string;
   errorMessage: string;
+  id: string;
   lang: Locale;
   redirect?: string;
-  token?: string;
+  token: string;
 }
 
 const AuthVerifyEmail = ({
   email,
   errorMessage,
+  id,
   lang,
   redirect,
   token,
@@ -99,8 +100,13 @@ const AuthVerifyEmail = ({
   const { dict } = useI18nStore((state) => state);
 
   const { isMutating: isMutatingResend, trigger: triggerResend } =
-    useSWRMutation<void, Error, string, { email: string }>(
-      "/api/auth/resend",
+    useSWRMutation<
+      void,
+      Error,
+      string,
+      { email: string; id: string; redirect?: string }
+    >(
+      "/api/mail/resend",
       sendRequest({
         credentials: "include",
       }),
@@ -138,10 +144,7 @@ const AuthVerifyEmail = ({
       startCountdown(COUNTDOWN_DURATION);
       setCountdown(COUNTDOWN_DURATION);
 
-      await triggerResend({ email });
-      enqueueSnackbar(dict.auth.verifyEmail.resendSuccess, {
-        variant: "success",
-      });
+      await triggerResend({ email, id, ...(redirect && { redirect }) });
     } catch {
     } finally {
     }
@@ -161,7 +164,7 @@ const AuthVerifyEmail = ({
       actions: (
         <>
           <Button
-            disabled={isMutatingResend || !email || isCountingDown}
+            disabled={isMutatingResend || isCountingDown}
             fullWidth
             loading={isMutatingResend}
             loadingPosition="start"

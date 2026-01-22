@@ -185,7 +185,6 @@
       "failedSubtitle": "The link may be invalid or expired.",
       "label": "Verify email",
       "resend": "Resend verification email",
-      "resendSuccess": "Verification email sent again",
       "sent": "Verification email sent",
       "subtitle": "We sent a verification link to {email}. Please verify before signing in.",
       "title": "Check your email",
