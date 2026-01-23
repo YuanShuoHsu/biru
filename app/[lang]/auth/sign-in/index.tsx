@@ -126,7 +126,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     string,
     { identifier: string; redirect?: string }
   >(
-    "/api/auth/resend",
+    "/api/mails/resend",
     sendRequest({
       credentials: "include",
     }),
@@ -173,7 +173,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
 
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
-            email: data.email,
+            [QueryParamKey.Email]: data.email,
             [QueryParamKey.Identifier]: identifier,
             [QueryParamKey.Redirect]: redirect,
           }),
