@@ -74,7 +74,7 @@ interface CartItemRowProps {
 }
 
 const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
-  const { id, amount, choices, extraCost, imageUrl, price, quantity } = item;
+  const { id, amount, choices, extraCost, image, price, quantity } = item;
 
   const { dict } = useI18nStore((state) => state);
 
@@ -178,13 +178,13 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
         >
           <StyledListItemAvatar>
             <ImageBox>
-              {imageUrl && (
+              {image && (
                 <Image
                   alt={itemName}
                   draggable={false}
                   fill
                   sizes="(min-width: 808px) 50vw, 100vw"
-                  src={imageUrl}
+                  src={image}
                   style={{ objectFit: "cover" }}
                 />
               )}

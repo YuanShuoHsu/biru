@@ -116,7 +116,7 @@ export interface ActionAreaCardProps {
   id: string;
   name: string;
   description: string;
-  imageUrl: string;
+  image: string | null;
   options: Option[];
   price: number;
   stock: number | null;
@@ -128,7 +128,7 @@ const ActionAreaCard = ({
   id,
   name,
   description,
-  imageUrl,
+  image,
   options,
   price,
   stock,
@@ -167,7 +167,7 @@ const ActionAreaCard = ({
           id={id}
           name={name}
           description={description}
-          imageUrl={imageUrl}
+          image={image}
           menus={menus}
           options={options}
           price={price}
@@ -187,7 +187,7 @@ const ActionAreaCard = ({
           id,
           amount,
           extraCost,
-          imageUrl,
+          image,
           price,
           quantity,
           choices,
@@ -223,14 +223,14 @@ const ActionAreaCard = ({
               size="small"
             />
           )}
-          {imageUrl && (
+          {image && (
             <Image
               alt={name}
               draggable={false}
               fill
               priority
               sizes="(min-width: 808px) 50vw, 100vw"
-              src={imageUrl}
+              src={image}
               style={{ objectFit: "cover" }}
             />
           )}

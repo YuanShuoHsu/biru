@@ -5,6 +5,8 @@ interface Ingredient {
   key: string;
   name: Record<Locale, string>;
   createdAt: Date;
+  menuItemId?: string;
+  menuItemOptionChoiceId?: string;
   unit: Record<Locale, string>;
   updatedAt: Date;
   usage: number;
@@ -19,6 +21,7 @@ export interface Choice {
   ingredients: Ingredient[];
   isActive: boolean;
   isShared: boolean;
+  menuItemOptionId: string;
   sold: number;
   stock: number | null;
   updatedAt: Date;
@@ -31,6 +34,7 @@ export interface Option {
   choices: Choice[];
   createdAt: Date;
   isActive: boolean;
+  menuItemId: string;
   multiple: boolean;
   required: boolean;
   updatedAt: Date;
@@ -42,9 +46,10 @@ export interface MenuItem {
   name: Record<Locale, string>;
   createdAt: Date;
   description: Record<Locale, string>;
-  imageUrl: string;
+  image: string | null;
   ingredients: Ingredient[];
   isActive: boolean;
+  menuId: string;
   options: Option[];
   price: number;
   sold: number;

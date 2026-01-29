@@ -7,7 +7,7 @@ export interface CartItem {
   id: string;
   amount: number;
   extraCost: number;
-  imageUrl: string;
+  image: string | null;
   price: number;
   quantity: number;
   choices: Record<string, string[]>;

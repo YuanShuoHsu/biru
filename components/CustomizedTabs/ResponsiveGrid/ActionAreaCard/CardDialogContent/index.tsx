@@ -58,7 +58,7 @@ interface CardDialogContentProps {
   id: string;
   name: string;
   description: string;
-  imageUrl: string;
+  image: string | null;
   menus: Menu[];
   options: Option[];
   price: number;
@@ -68,7 +68,7 @@ interface CardDialogContentProps {
 const CardDialogContent = React.forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ id, name, description, imageUrl, menus, options, price, stock }, ref) => {
+>(({ id, name, description, image, menus, options, price, stock }, ref) => {
   const [rawQuantity, setRawQuantity] = useState(1);
 
   const { getCartItemTotalQuantity, getChoiceAvailableQuantity } = useCartStore(
@@ -199,13 +199,13 @@ const CardDialogContent = React.forwardRef<
   return (
     <Stack direction="column" gap={2}>
       <ImageBox>
-        {imageUrl && (
+        {image && (
           <Image
             alt={name}
             draggable={false}
             fill
             sizes="(min-width: 808px) 50vw, 100vw"
-            src={imageUrl}
+            src={image}
             style={{ objectFit: "cover" }}
           />
         )}
