@@ -31,6 +31,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
 
   return z
     .object({
+      image: z.string().trim().optional(),
       lastName: z.string().trim().optional(),
       firstName: z
         .string()

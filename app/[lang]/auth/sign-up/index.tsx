@@ -10,7 +10,7 @@ import dayjs, { Dayjs } from "dayjs";
 import type { CountryCode } from "libphonenumber-js";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import * as z from "zod";
@@ -23,6 +23,9 @@ import CountrySelect from "@/components/CountrySelect";
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 import TextMaskCustom from "@/components/TextMaskCustom";
+import UploadAvatars, {
+  type UploadAvatarsHandle,
+} from "@/components/UploadAvatars";
 
 import { GENDER_LABELS, GENDER_VALUES } from "@/constants/gender";
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
@@ -149,6 +152,8 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     },
     resolver: zodResolver(signupFormSchema),
   });
+
+  const uploadAvatarsRef = useRef<UploadAvatarsHandle>(null);
 
   const router = useRouter();
 
@@ -320,11 +325,14 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     }) => {
       setIsAuthLoading(true);
 
+      const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
+
       const payload: SignupPayload = {
         ...rest,
         countryCode: code,
         countryLabel: label,
         countryPhone: formatPhone(phone),
+        ...(image && { image }),
         phoneNumber: toDigits(phoneNumber),
         ...(redirect && { redirect }),
       };
@@ -363,6 +371,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       <StyledCardContent>
         <GoogleButton action="signUp" lang={lang} redirect={redirect} />
         <Divider flexItem>{dict.auth.or}</Divider>
+        <UploadAvatars ref={uploadAvatarsRef} />
         <Stack width="100%" direction={langNameDirection} spacing={2}>
           <TextField
             autoComplete="family-name"
