@@ -3,23 +3,32 @@
 
 import { forwardRef, useImperativeHandle, useState } from "react";
 
-import { Avatar, ButtonBase, type ButtonBaseProps } from "@mui/material";
+import { CameraAlt } from "@mui/icons-material";
+import {
+  Avatar,
+  ButtonBase,
+  IconButton,
+  type ButtonBaseProps,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledButtonBase = styled(ButtonBase)<ButtonBaseProps>(() => ({
-  borderRadius: "40px",
+import BadgeAvatars from "../BadgeAvatars";
+
+const StyledButtonBase = styled(ButtonBase)<ButtonBaseProps>({
+  borderRadius: "50%",
 
   "&:has(:focus-visible)": {
     outline: "2px solid",
     outlineOffset: "2px",
   },
-}));
+});
 
-const StyledAvatar = styled(Avatar)(() => ({
+const StyledAvatar = styled(Avatar)(({ theme }) => ({
   width: "100%",
   maxWidth: "100px",
   height: "auto",
   aspectRatio: "1/1",
+  transition: theme.transitions.create(["background-color"]),
 }));
 
 const VisuallyHiddenInput = styled("input")({
@@ -65,12 +74,20 @@ const UploadAvatars = forwardRef<UploadAvatarsHandle>((_, ref) => {
       role={undefined}
       tabIndex={-1}
     >
-      <StyledAvatar alt="Upload new avatar" src={avatarSrc} />
-      <VisuallyHiddenInput
-        accept="image/*"
-        onChange={handleAvatarChange}
-        type="file"
-      />
+      <BadgeAvatars
+        badgeContent={
+          <IconButton aria-label="cameraAlt" component="span" size="small">
+            <CameraAlt fontSize="inherit" />
+          </IconButton>
+        }
+      >
+        <StyledAvatar alt="Upload new avatar" src={avatarSrc} />
+        <VisuallyHiddenInput
+          accept="image/*"
+          onChange={handleAvatarChange}
+          type="file"
+        />
+      </BadgeAvatars>
     </StyledButtonBase>
   );
 });

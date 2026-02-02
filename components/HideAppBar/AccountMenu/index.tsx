@@ -190,7 +190,7 @@ const AccountMenu = () => {
             loading={isAuthLoading}
             onClick={handleClick}
           >
-            <BadgeAvatars invisible={!isSignedIn}>
+            <BadgeAvatars invisible={!isSignedIn} variant="dot">
               <StyledAvatar
                 alt={displayName}
                 isSignedIn={isSignedIn}
