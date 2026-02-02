@@ -10,6 +10,7 @@
     "required": "确认密码为必填。"
   },
   "countryCode": {
+    "invalid": "国码无效。",
     "required": "国家码为必填。"
   },
   "email": {

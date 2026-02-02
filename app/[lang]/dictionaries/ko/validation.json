@@ -10,6 +10,7 @@
     "required": "비밀번호 확인은 필수입니다."
   },
   "countryCode": {
+    "invalid": "국가 코드가 유효하지 않습니다.",
     "required": "국가 코드는 필수입니다."
   },
   "email": {

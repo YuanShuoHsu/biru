@@ -1,12 +1,13 @@
 // https://mui.com/material-ui/react-text-field/#FormattedInputs.tsx
 
+import type { CountryCode } from "libphonenumber-js";
 import React, { useImperativeHandle, useRef } from "react";
 import { IMaskInput } from "react-imask";
 
 import { getPhoneFormatting } from "@/utils/countries";
 
 interface CustomProps {
-  countryCode: string;
+  countryCode: CountryCode;
   name: string;
   onChange: (event: { target: { name: string; value: string } }) => void;
 }

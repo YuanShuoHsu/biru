@@ -7,7 +7,7 @@
 "use client";
 
 import dayjs, { Dayjs } from "dayjs";
-import type { CountryCode } from "libphonenumber-js";
+import { parsePhoneNumberWithError } from "libphonenumber-js";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useRef, useState } from "react";
@@ -68,7 +68,7 @@ import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { formatPhone, getDefaultCountry, toDigits } from "@/utils/countries";
+import { getDefaultCountry } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -125,9 +125,6 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
   type SignupPayload = Omit<SignupFormData, "confirmPassword" | "country"> & {
-    countryCode: CountryCode;
-    countryLabel: string;
-    countryPhone: string;
     redirect?: string;
   };
 
@@ -319,7 +316,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     async ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmPassword: _,
-      country: { code, label, phone },
+      country: { code },
       phoneNumber,
       ...rest
     }) => {
@@ -327,13 +324,12 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
       const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
+      const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
+
       const payload: SignupPayload = {
         ...rest,
-        countryCode: code,
-        countryLabel: label,
-        countryPhone: formatPhone(phone),
         ...(image && { image }),
-        phoneNumber: toDigits(phoneNumber),
+        phoneNumber: parsedPhoneNumber.number,
         ...(redirect && { redirect }),
       };
 
@@ -576,7 +572,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
                     input: {
                       // eslint-disable-next-line @typescript-eslint/no-explicit-any
                       inputComponent: TextMaskCustom as any,
-                      inputProps: { countryCode: country.phone },
+                      inputProps: { countryCode: country.code },
                     },
                   }}
                   type="tel"

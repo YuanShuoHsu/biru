@@ -1,14 +1,16 @@
 // https://nextjs.org/docs/app/guides/authentication
 
 import dayjs from "dayjs";
-import type { CountryCode } from "libphonenumber-js";
+import {
+  type CountryCode,
+  isSupportedCountry,
+  isValidPhoneNumber,
+} from "libphonenumber-js";
 import * as z from "zod";
 
 import { GENDER_VALUES } from "@/constants/gender";
 
 import type { I18nDict } from "@/providers/i18n-store-provider";
-
-import { getPhoneFormatting, toDigits } from "@/utils/countries";
 
 const today = dayjs();
 const minDate = dayjs("1900-01-01");
@@ -40,6 +42,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
       birthDate: z
         .string()
         .min(1, { error: dict.validation.birthDate.required })
+        .trim()
         .superRefine((value, ctx) => {
           const date = dayjs(value);
 
@@ -63,17 +66,27 @@ export const createSignupFormSchema = (dict: I18nDict) => {
         .string()
         .min(1, { error: dict.validation.confirmPassword.required })
         .trim(),
-      country: z
-        .object({
-          code: z.custom<CountryCode>(),
-          label: z.string(),
-          phone: z.string(),
-          firstLetter: z.string(),
-          suggested: z.boolean().optional(),
-        })
-        .refine(({ code }) => code.length > 0, {
-          message: dict.validation.countryCode.required,
+      country: z.object({
+        code: z.custom<CountryCode>().superRefine((value, ctx) => {
+          if (!value) {
+            ctx.addIssue({
+              code: "custom",
+              message: dict.validation.countryCode.required,
+            });
+            return;
+          }
+          if (!isSupportedCountry(value)) {
+            ctx.addIssue({
+              code: "custom",
+              message: dict.validation.countryCode.invalid,
+            });
+          }
         }),
+        label: z.string(),
+        phone: z.string(),
+        firstLetter: z.string(),
+        suggested: z.boolean().optional(),
+      }),
       phoneNumber: z
         .string()
         .min(1, { error: dict.validation.phone.required })
@@ -86,12 +99,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
     })
     .refine(
       ({ country, phoneNumber }) => {
-        const phoneLength = toDigits(phoneNumber).length;
-
-        const { placeholder } = getPhoneFormatting(country.code);
-        const expectedLength = toDigits(placeholder).length;
-
-        return phoneLength === expectedLength;
+        return isValidPhoneNumber(phoneNumber, country.code);
       },
       { path: ["phoneNumber"], message: dict.validation.phone.invalid },
     );
@@ -100,6 +108,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
 export type FormState =
   | {
       errors?: {
+        image?: string[];
         lastName?: string[];
         firstName?: string[];
         birthDate?: string[];
@@ -107,7 +116,9 @@ export type FormState =
         email?: string[];
         password?: string[];
         confirmPassword?: string[];
-        countryCode?: string[];
+        country?: {
+          code?: string[];
+        };
         phoneNumber?: string[];
         isSubscribed?: string[];
       };

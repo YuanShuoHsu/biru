@@ -10,6 +10,7 @@
     "required": "Confirm password is required."
   },
   "countryCode": {
+    "invalid": "Invalid country code.",
     "required": "Country code is required."
   },
   "email": {

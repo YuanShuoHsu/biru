@@ -10,7 +10,8 @@
     "required": "確認用パスワードは必須です。"
   },
   "countryCode": {
-    "required": "国コードは必須です。"
+    "invalid": "国コードが無効です。",
+    "required": "国コードは必須です."
   },
   "email": {
     "invalid": "有効なメールアドレスを入力してください。"
