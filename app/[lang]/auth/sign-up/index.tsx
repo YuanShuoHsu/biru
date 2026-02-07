@@ -115,7 +115,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
-  type SignupPayload = Omit<SignupFormData, "confirmPassword" | "country"> & {
+  type SignupPayload = Omit<SignupFormData, "confirmPassword"> & {
     redirect?: string;
   };
 
@@ -136,7 +136,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       confirmPassword: "",
       // country: defaultCountry,
       // phoneNumber: "",
-      isSubscribed: true,
+      emailSubscribed: true,
     },
     resolver: zodResolver(signupFormSchema),
   });
@@ -584,7 +584,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
             control={
               <Controller
                 control={control}
-                name="isSubscribed"
+                name="emailSubscribed"
                 render={({ field: { onChange, value } }) => (
                   <Checkbox checked={value} onChange={onChange} size="small" />
                 )}

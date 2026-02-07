@@ -88,7 +88,7 @@ export const createSignupFormSchema = (dict: I18nDict) => {
       //   .string()
       //   .min(1, { error: dict.validation.phone.required })
       //   .trim(),
-      isSubscribed: z.boolean(),
+      emailSubscribed: z.boolean(),
     })
     .refine(({ password, confirmPassword }) => password === confirmPassword, {
       path: ["confirmPassword"],
@@ -117,7 +117,7 @@ export type FormState =
         //   code?: string[];
         // };
         // phoneNumber?: string[];
-        isSubscribed?: string[];
+        emailSubscribed?: string[];
       };
       message?: string;
     }
