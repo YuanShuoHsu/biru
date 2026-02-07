@@ -6,8 +6,6 @@
 
 "use client";
 
-import dayjs, { Dayjs } from "dayjs";
-import { parsePhoneNumberWithError } from "libphonenumber-js";
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { Fragment, useRef, useState } from "react";
@@ -19,15 +17,12 @@ import { createSignupFormSchema } from "./definitions";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import CountrySelect from "@/components/CountrySelect";
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
-import TextMaskCustom from "@/components/TextMaskCustom";
 import UploadAvatars, {
   type UploadAvatarsHandle,
 } from "@/components/UploadAvatars";
 
-import { GENDER_LABELS, GENDER_VALUES } from "@/constants/gender";
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,28 +42,24 @@ import {
   Checkbox,
   Divider,
   FormControlLabel,
-  Grid,
   IconButton,
   InputAdornment,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  MenuItem,
   Link as MuiLink,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { getDefaultCountry } from "@/utils/countries";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
@@ -94,7 +85,7 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const today = dayjs();
+// const today = dayjs();
 
 interface PasswordRule {
   key: string;
@@ -108,14 +99,14 @@ interface AuthSignUpProps {
 }
 
 const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
-  const defaultCountry = getDefaultCountry(lang);
+  // const defaultCountry = getDefaultCountry(lang);
 
   const [showPassword, setShowPassword] = useState({
     password: false,
     confirmPassword: false,
   });
 
-  const [isGenderFocused, setIsGenderFocused] = useState(false);
+  // const [isGenderFocused, setIsGenderFocused] = useState(false);
 
   const { setIsAuthLoading } = useAuthStore((state) => state);
 
@@ -138,13 +129,13 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     defaultValues: {
       lastName: "",
       firstName: "",
-      birthDate: "",
-      gender: "",
+      // birthDate: "",
+      // gender: "",
       email: "",
       password: "",
       confirmPassword: "",
-      country: defaultCountry,
-      phoneNumber: "",
+      // country: defaultCountry,
+      // phoneNumber: "",
       isSubscribed: true,
     },
     resolver: zodResolver(signupFormSchema),
@@ -163,14 +154,14 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
 
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
 
-  const genderOptions = GENDER_VALUES.map((value) => ({
-    label: dict.auth.gender.options[GENDER_LABELS[value]],
-    value,
-  }));
+  // const genderOptions = GENDER_VALUES.map((value) => ({
+  //   label: dict.auth.gender.options[GENDER_LABELS[value]],
+  //   value,
+  // }));
 
   const password = watch("password");
   const confirmPassword = watch("confirmPassword");
-  const country = watch("country");
+  // const country = watch("country");
 
   const hasPassword = password.length > 0;
   const hasConfirmPassword = confirmPassword.length > 0;
@@ -295,13 +286,13 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
       );
     });
 
-  const handleBirthDateChange =
-    (onChange: (value: string) => void) => (newValue: Dayjs | null) => {
-      onChange(newValue?.isValid() ? newValue.format("YYYY-MM-DD") : "");
-    };
+  // const handleBirthDateChange =
+  //   (onChange: (value: string) => void) => (newValue: Dayjs | null) => {
+  //     onChange(newValue?.isValid() ? newValue.format("YYYY-MM-DD") : "");
+  //   };
 
-  const handleGenderFocus = () => setIsGenderFocused(true);
-  const handleGenderBlur = () => setIsGenderFocused(false);
+  // const handleGenderFocus = () => setIsGenderFocused(true);
+  // const handleGenderBlur = () => setIsGenderFocused(false);
 
   const handleClickShowPassword = (key: "password" | "confirmPassword") => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -316,20 +307,20 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
     async ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmPassword: _,
-      country: { code },
-      phoneNumber,
+      // country: { code },
+      // phoneNumber,
       ...rest
     }) => {
       setIsAuthLoading(true);
 
       const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
-      const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
+      // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
       const payload: SignupPayload = {
         ...rest,
         ...(image && { image }),
-        phoneNumber: parsedPhoneNumber.number,
+        // phoneNumber: parsedPhoneNumber.number,
         ...(redirect && { redirect }),
       };
 
@@ -389,7 +380,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
             {...register("firstName")}
           />
         </Stack>
-        <Controller
+        {/* <Controller
           control={control}
           name="birthDate"
           render={({ field: { onChange, value }, fieldState: { error } }) => (
@@ -414,9 +405,9 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
               yearsOrder="desc"
             />
           )}
-        />
+        /> */}
         {/* Incorrect use of <label for=FORM_ELEMENT> */}
-        <TextField
+        {/* <TextField
           autoComplete="sex"
           defaultValue=""
           error={!!errors.gender}
@@ -452,7 +443,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
               {label}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
         <TextField
           autoComplete="email"
           error={!!errors.email}
@@ -534,7 +525,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           type={showPassword.confirmPassword ? "text" : "password"}
           {...register("confirmPassword")}
         />
-        <Grid width="100%" container spacing={2}>
+        {/* <Grid width="100%" container spacing={2}>
           <Grid size={{ xs: 6, sm: 4 }}>
             <Controller
               control={control}
@@ -581,7 +572,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
               )}
             />
           </Grid>
-        </Grid>
+        </Grid> */}
         <Stack
           width="100%"
           flexDirection="row"
