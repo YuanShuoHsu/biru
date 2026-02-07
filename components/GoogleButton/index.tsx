@@ -45,17 +45,17 @@ type GoogleAction = "signIn" | "signUp";
 interface GoogleButtonProps {
   action: GoogleAction;
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const GoogleButton = ({ action, lang, redirect }: GoogleButtonProps) => {
+const GoogleButton = ({ action, lang, redirectTo }: GoogleButtonProps) => {
   const { dict } = useI18nStore((state) => state);
 
   const label = dict.auth.google[action];
 
   const href = handleQueryParam("/api/auth/google", {
     [QueryParamKey.Lang]: lang,
-    [QueryParamKey.Redirect]: redirect,
+    [QueryParamKey.RedirectTo]: redirectTo,
   });
 
   return (

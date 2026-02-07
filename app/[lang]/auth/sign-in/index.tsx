@@ -75,11 +75,11 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface AuthSignInProps {
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
   rememberMe: boolean;
 }
 
-const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
+const AuthSignIn = ({ lang, redirectTo, rememberMe }: AuthSignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
@@ -124,7 +124,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
     void,
     Error,
     string,
-    { identifier: string; redirect?: string }
+    { identifier: string; redirectTo?: string }
   >(
     "/api/mails/resend",
     sendRequest({
@@ -160,7 +160,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
       setProfile(profile);
 
       enqueueSnackbar(dict.auth.signIn.success, { variant: "success" });
-      router.replace(redirect || `/${lang}`);
+      router.replace(redirectTo || `/${lang}`);
     } catch (err) {
       const error = err as FetchError;
       if (error.status === 403 && error.info?.id) {
@@ -168,14 +168,14 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
 
         await triggerResend({
           identifier,
-          ...(redirect && { redirect }),
+          ...(redirectTo && { redirectTo }),
         });
 
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
             [QueryParamKey.Email]: data.email,
             [QueryParamKey.Identifier]: identifier,
-            [QueryParamKey.Redirect]: redirect,
+            [QueryParamKey.RedirectTo]: redirectTo,
           }),
         );
 
@@ -203,7 +203,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signIn" lang={lang} redirect={redirect} />
+        <GoogleButton action="signIn" lang={lang} redirectTo={redirectTo} />
         <Divider flexItem>{dict.auth.or}</Divider>
         <TextField
           autoComplete="email"
@@ -276,7 +276,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/forgot-password`, {
-              [QueryParamKey.Redirect]: redirect,
+              [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"
             variant="body2"
@@ -302,7 +302,7 @@ const AuthSignIn = ({ lang, redirect, rememberMe }: AuthSignInProps) => {
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-up`, {
-              [QueryParamKey.Redirect]: redirect,
+              [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"
             variant="body2"

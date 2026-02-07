@@ -14,15 +14,18 @@ const CompanyLegalTermsPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { back, redirect } = await searchParams;
+  const { back, redirectTo } = await searchParams;
 
   const safeBack =
     typeof back === "string" && back.startsWith("/") ? back : undefined;
-  const safeRedirect = typeof redirect === "string" ? redirect : undefined;
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
+      : undefined;
 
   return (
     <>
-      <BackButton back={safeBack} lang={lang} redirect={safeRedirect} />
+      <BackButton back={safeBack} lang={lang} redirectTo={safeRedirectTo} />
       <CompanyLegalTerms lang={lang} />
     </>
   );

@@ -112,7 +112,7 @@ const AccountMenu = () => {
   const search = searchParams.toString();
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
-  const redirectParam = searchParams.get("redirect");
+  const redirectParam = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith(`/${lang}/account`);
   const isAuthPage = pathname.startsWith(`/${lang}/auth`);
   const isCompanyPage = pathname.startsWith(`/${lang}/company`);
@@ -128,7 +128,7 @@ const AccountMenu = () => {
     if (!isSignedIn) {
       router.push(
         handleQueryParam(`/${lang}/auth/sign-in`, {
-          [QueryParamKey.Redirect]: redirectTarget,
+          [QueryParamKey.RedirectTo]: redirectTarget,
         }),
       );
 

@@ -143,7 +143,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
       profile.phoneNumber,
       profile.image,
       profile.emailVerified,
-      profile.phoneVerified,
+      profile.phoneNumberVerified,
     ];
 
     const score = points.filter(Boolean).length;
@@ -238,7 +238,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
             <Button
               component={NextLink}
               href={handleQueryParam(`/${lang}/auth/sign-in`, {
-                [QueryParamKey.Redirect]: currentURL,
+                [QueryParamKey.RedirectTo]: currentURL,
               })}
               startIcon={<Login />}
               variant="contained"
@@ -363,7 +363,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
                   <InfoRow
                     icon={PhoneIphone}
                     label={dict.auth.phone}
-                    status={verificationChip(profile.phoneVerified)}
+                    status={verificationChip(profile.phoneNumberVerified)}
                     value={profile.phoneNumber || dict.common.empty}
                   />
                 </Stack>
@@ -382,7 +382,7 @@ const AccountProfile = ({ lang, currentURL }: AccountProfileProps) => {
                     variant="outlined"
                   />
                   {verificationChip(profile.emailVerified)}
-                  {verificationChip(profile.phoneVerified)}
+                  {verificationChip(profile.phoneNumberVerified)}
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button

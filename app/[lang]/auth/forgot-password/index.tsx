@@ -50,10 +50,10 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface AuthForgotPasswordProps {
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const AuthForgotPassword = ({ lang, redirect }: AuthForgotPasswordProps) => {
+const AuthForgotPassword = ({ lang, redirectTo }: AuthForgotPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
   });
@@ -116,7 +116,7 @@ const AuthForgotPassword = ({ lang, redirect }: AuthForgotPasswordProps) => {
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-in`, {
-              [QueryParamKey.Redirect]: redirect,
+              [QueryParamKey.RedirectTo]: redirectTo,
             })}
           >
             {dict.auth.signIn.label}

@@ -14,15 +14,15 @@ import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 interface BackButtonProps {
   back?: string;
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const BackButton = ({ back, lang, redirect }: BackButtonProps) => {
+const BackButton = ({ back, lang, redirectTo }: BackButtonProps) => {
   const { dict } = useI18nStore((state) => state);
 
   const href =
-    back && redirect
-      ? handleQueryParam(back, { [QueryParamKey.Redirect]: redirect })
+    back && redirectTo
+      ? handleQueryParam(back, { [QueryParamKey.RedirectTo]: redirectTo })
       : back || `/${lang}`;
 
   const backLabel = dict.company.legal.back;

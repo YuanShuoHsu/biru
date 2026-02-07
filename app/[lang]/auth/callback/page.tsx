@@ -30,7 +30,7 @@ function AuthCallbackContent({
       const accessToken =
         searchParams.get("token") || searchParams.get("access_token");
       const error = searchParams.get("error");
-      const redirect = searchParams.get("redirect");
+      const redirectTo = searchParams.get("redirectTo");
       // Use lang from route params or search params
       const currentLang = lang || searchParams.get("lang") || "en";
 
@@ -43,7 +43,7 @@ function AuthCallbackContent({
           { variant: "error" },
         );
         router.replace(
-          `/${currentLang}/auth/sign-in${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`,
+          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
         setHasHandledCallback(true);
         return;
@@ -55,7 +55,7 @@ function AuthCallbackContent({
           variant: "error",
         });
         router.replace(
-          `/${currentLang}/auth/sign-in${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`,
+          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
         setHasHandledCallback(true);
         return;
@@ -76,7 +76,7 @@ function AuthCallbackContent({
         });
 
         // Redirect to intended page or home
-        router.replace(redirect || `/${currentLang}`);
+        router.replace(redirectTo || `/${currentLang}`);
       } catch (err) {
         console.error("Failed to fetch profile:", err);
         enqueueSnackbar("Failed to load user profile. Please try again.", {
@@ -84,7 +84,7 @@ function AuthCallbackContent({
         });
         clearAuth();
         router.replace(
-          `/${currentLang}/auth/sign-in${redirect ? `?redirect=${encodeURIComponent(redirect)}` : ""}`,
+          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
       } finally {
         setIsAuthLoading(false);

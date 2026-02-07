@@ -9,18 +9,21 @@ const CompanyLegalPrivacyPage = async ({
   searchParams,
 }: PageProps<"/[lang]">) => {
   const { lang } = await params;
-  const { back, redirect } = await searchParams;
+  const { back, redirectTo } = await searchParams;
 
   const safeBack =
     typeof back === "string" && back.startsWith("/") ? back : undefined;
-  const safeRedirect = typeof redirect === "string" ? redirect : undefined;
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
+      : undefined;
 
   return (
     <>
       <BackButton
         back={safeBack}
         lang={lang as Locale}
-        redirect={safeRedirect}
+        redirectTo={safeRedirectTo}
       />
       <CompanyLegalPrivacy lang={lang as Locale} />
     </>

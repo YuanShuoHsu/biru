@@ -14,13 +14,13 @@ const AuthVerifyEmailPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { email, identifier, redirect, token } = await searchParams;
+  const { email, identifier, redirectTo, token } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : "";
   const safeIdentifier = typeof identifier === "string" ? identifier : "";
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
   const safeToken = typeof token === "string" ? token : "";
 
@@ -37,7 +37,7 @@ const AuthVerifyEmailPage = async ({
       errorMessage={errorMessage}
       identifier={safeIdentifier}
       lang={lang}
-      redirect={safeRedirect}
+      redirectTo={safeRedirectTo}
       token={safeToken}
     />
   );

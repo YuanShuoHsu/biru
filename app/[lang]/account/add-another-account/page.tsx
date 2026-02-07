@@ -12,14 +12,14 @@ const AccountAddAnotherAccountPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { redirect } = await searchParams;
+  const { redirectTo } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
 
-  return <AddAnotherAccount lang={lang} redirect={safeRedirect} />;
+  return <AddAnotherAccount lang={lang} redirectTo={safeRedirectTo} />;
 };
 
 export default AccountAddAnotherAccountPage;

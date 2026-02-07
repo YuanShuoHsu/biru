@@ -12,14 +12,14 @@ const AuthResetPasswordPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { redirect } = await searchParams;
+  const { redirectTo } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
 
-  return <AuthResetPassword lang={lang} redirect={safeRedirect} />;
+  return <AuthResetPassword lang={lang} redirectTo={safeRedirectTo} />;
 };
 
 export default AuthResetPasswordPage;

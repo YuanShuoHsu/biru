@@ -3,7 +3,7 @@ export enum QueryParamKey {
   Email = "email",
   Identifier = "identifier",
   Lang = "lang",
-  Redirect = "redirect",
+  RedirectTo = "redirectTo",
 }
 
 export const handleQueryParam = (

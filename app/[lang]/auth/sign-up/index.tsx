@@ -95,10 +95,10 @@ interface PasswordRule {
 
 interface AuthSignUpProps {
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
+const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
   // const defaultCountry = getDefaultCountry(lang);
 
   const [showPassword, setShowPassword] = useState({
@@ -116,7 +116,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
   type SignupPayload = Omit<SignupFormData, "confirmPassword"> & {
-    redirect?: string;
+    redirectTo?: string;
   };
 
   const {
@@ -258,7 +258,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         component={NextLink}
         href={handleQueryParam(`/${lang}/company/${type}`, {
           [QueryParamKey.Back]: `/${lang}/auth/sign-up`,
-          [QueryParamKey.Redirect]: redirect,
+          [QueryParamKey.RedirectTo]: redirectTo,
         })}
         key={type}
         underline="hover"
@@ -321,7 +321,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         ...rest,
         ...(image && { image }),
         // phoneNumber: parsedPhoneNumber.number,
-        ...(redirect && { redirect }),
+        ...(redirectTo && { redirectTo }),
       };
 
       try {
@@ -330,7 +330,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
           [QueryParamKey.Email]: email,
           [QueryParamKey.Identifier]: id,
-          [QueryParamKey.Redirect]: redirect,
+          [QueryParamKey.RedirectTo]: redirectTo,
         });
 
         router.replace(verifyEmailHref);
@@ -356,7 +356,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signUp" lang={lang} redirect={redirect} />
+        <GoogleButton action="signUp" lang={lang} redirectTo={redirectTo} />
         <Divider flexItem>{dict.auth.or}</Divider>
         <UploadAvatars ref={uploadAvatarsRef} />
         <Stack width="100%" direction={langNameDirection} spacing={2}>
@@ -617,7 +617,7 @@ const AuthSignUp = ({ lang, redirect }: AuthSignUpProps) => {
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-in`, {
-              [QueryParamKey.Redirect]: redirect,
+              [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"
             variant="body2"

@@ -281,12 +281,12 @@ const NavTemporaryDrawer = () => {
   const search = searchParams.toString();
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
-  const redirectParam = searchParams.get("redirect");
+  const redirectParam = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith(`/${lang}/account`);
   const isAuthPage = pathname.startsWith(`/${lang}/auth`);
   const isCompanyPage = pathname.startsWith(`/${lang}/company`);
 
-  const redirect =
+  const redirectTo =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
       ? redirectParam
       : currentURL;
@@ -300,7 +300,7 @@ const NavTemporaryDrawer = () => {
     getLogoutMenuItem(dict, { isMutatingLogout, onLogout: handleLogout }),
   ];
 
-  const authChildren = getAuthMenuItems(dict, redirect);
+  const authChildren = getAuthMenuItems(dict, redirectTo);
 
   const dineInChildren = [
     ...(mode === ORDER_MODE.DineIn && storeSlug && storeName

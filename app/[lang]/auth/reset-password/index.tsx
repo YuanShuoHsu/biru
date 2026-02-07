@@ -55,10 +55,10 @@ type ResetPasswordField = "newPassword" | "confirmNewPassword";
 
 interface AuthResetPasswordProps {
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const AuthResetPassword = ({ lang, redirect }: AuthResetPasswordProps) => {
+const AuthResetPassword = ({ lang, redirectTo }: AuthResetPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
     newPassword: "",
@@ -210,7 +210,7 @@ const AuthResetPassword = ({ lang, redirect }: AuthResetPasswordProps) => {
           <MuiLink
             component={NextLink}
             href={handleQueryParam(`/${lang}/auth/sign-up`, {
-              [QueryParamKey.Redirect]: redirect,
+              [QueryParamKey.RedirectTo]: redirectTo,
             })}
           >
             {dict.auth.signUp.label}

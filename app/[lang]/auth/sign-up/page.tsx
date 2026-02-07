@@ -12,14 +12,14 @@ const AuthSignUpPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { redirect } = await searchParams;
+  const { redirectTo } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
 
-  return <AuthSignUp lang={lang} redirect={safeRedirect} />;
+  return <AuthSignUp lang={lang} redirectTo={safeRedirectTo} />;
 };
 
 export default AuthSignUpPage;

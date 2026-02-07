@@ -199,7 +199,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
             <Button
               component={NextLink}
               href={handleQueryParam(`/${lang}/auth/sign-in`, {
-                [QueryParamKey.Redirect]: currentURL,
+                [QueryParamKey.RedirectTo]: currentURL,
               })}
               startIcon={<Login />}
               variant="contained"
@@ -221,11 +221,11 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
 
   const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
     [QueryParamKey.Email]: profile.email,
-    [QueryParamKey.Redirect]: currentURL,
+    [QueryParamKey.RedirectTo]: currentURL,
   });
 
   const forgotPasswordHref = handleQueryParam(`/${lang}/auth/forgot-password`, {
-    [QueryParamKey.Redirect]: currentURL,
+    [QueryParamKey.RedirectTo]: currentURL,
   });
 
   const settingsHref = `/${lang}/account/account-settings`;
@@ -328,7 +328,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                 justifyContent="flex-end"
               >
                 {verificationChip(profile.emailVerified)}
-                {verificationChip(profile.phoneVerified)}
+                {verificationChip(profile.phoneNumberVerified)}
               </Stack>
               <Stack
                 direction="row"
@@ -377,7 +377,7 @@ const MyAccount = ({ lang, currentURL }: MyAccountProps) => {
                   <InfoRow
                     icon={PhoneIphone}
                     label={dict.auth.phone}
-                    status={verificationChip(profile.phoneVerified)}
+                    status={verificationChip(profile.phoneNumberVerified)}
                     value={profile.phoneNumber || dict.common.empty}
                   />
                 </Stack>

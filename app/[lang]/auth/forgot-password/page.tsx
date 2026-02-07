@@ -12,14 +12,14 @@ const AuthForgotPasswordPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { redirect } = await searchParams;
+  const { redirectTo } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
 
-  return <AuthForgotPassword lang={lang} redirect={safeRedirect} />;
+  return <AuthForgotPassword lang={lang} redirectTo={safeRedirectTo} />;
 };
 
 export default AuthForgotPasswordPage;

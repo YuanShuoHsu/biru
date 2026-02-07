@@ -81,7 +81,7 @@ interface AuthVerifyEmailProps {
   errorMessage: string;
   identifier: string;
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
   token: string;
 }
 
@@ -90,7 +90,7 @@ const AuthVerifyEmail = ({
   errorMessage,
   identifier,
   lang,
-  redirect,
+  redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
   const [countdown, setCountdown] = useState(0);
@@ -104,7 +104,7 @@ const AuthVerifyEmail = ({
       void,
       Error,
       string,
-      { identifier: string; redirect?: string }
+      { identifier: string; redirectTo?: string }
     >(
       "/api/mails/resend",
       sendRequest({
@@ -146,7 +146,7 @@ const AuthVerifyEmail = ({
 
       await triggerResend({
         identifier,
-        ...(redirect && { redirect }),
+        ...(redirectTo && { redirectTo }),
       });
     } catch {
     } finally {
@@ -159,7 +159,7 @@ const AuthVerifyEmail = ({
   const status = isFailed ? "failed" : isVerified ? "verified" : "default";
 
   const signInHref = handleQueryParam(`/${lang}/auth/sign-in`, {
-    [QueryParamKey.Redirect]: redirect,
+    [QueryParamKey.RedirectTo]: redirectTo,
   });
 
   const contents = {
@@ -199,7 +199,7 @@ const AuthVerifyEmail = ({
             <MuiLink
               component={NextLink}
               href={handleQueryParam(`/${lang}/auth/sign-up`, {
-                [QueryParamKey.Redirect]: redirect,
+                [QueryParamKey.RedirectTo]: redirectTo,
               })}
               underline="hover"
               variant="body2"

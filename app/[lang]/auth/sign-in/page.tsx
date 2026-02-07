@@ -15,18 +15,22 @@ const AuthSignInPage = async ({
 
   if (!hasLocale(lang)) notFound();
 
-  const { redirect } = await searchParams;
+  const { redirectTo } = await searchParams;
 
-  const safeRedirect =
-    typeof redirect === "string" && redirect.startsWith("/")
-      ? redirect
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
       : undefined;
 
   const cookieStore = await cookies();
   const rememberMe = cookieStore.get(REMEMBER_ME)?.value === "true";
 
   return (
-    <AuthSignIn rememberMe={rememberMe} lang={lang} redirect={safeRedirect} />
+    <AuthSignIn
+      rememberMe={rememberMe}
+      lang={lang}
+      redirectTo={safeRedirectTo}
+    />
   );
 };
 

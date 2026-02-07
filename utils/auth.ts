@@ -39,20 +39,20 @@ export const getDisplayName = (
 
 export const getAuthMenuItems = (
   dict: I18nDict,
-  redirect?: string,
+  redirectTo?: string,
 ): MenuItem[] => [
   {
     icon: Login,
     label: dict.auth.signIn.label,
     to: handleQueryParam("/sign-in", {
-      [QueryParamKey.Redirect]: redirect,
+      [QueryParamKey.RedirectTo]: redirectTo,
     }),
   },
   {
     icon: PersonAdd,
     label: dict.auth.signUp.label,
     to: handleQueryParam("/sign-up", {
-      [QueryParamKey.Redirect]: redirect,
+      [QueryParamKey.RedirectTo]: redirectTo,
     }),
   },
 ];

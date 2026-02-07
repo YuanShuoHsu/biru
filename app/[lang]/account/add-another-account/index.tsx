@@ -53,22 +53,22 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 
 interface AddAnotherAccountProps {
   lang: Locale;
-  redirect?: string;
+  redirectTo?: string;
 }
 
-const AddAnotherAccount = ({ lang, redirect }: AddAnotherAccountProps) => {
+const AddAnotherAccount = ({ lang, redirectTo }: AddAnotherAccountProps) => {
   const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
   const { dict } = useI18nStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
   const router = useRouter();
 
-  const safeRedirect =
-    redirect && redirect !== `/${lang}/account/add-another-account`
-      ? redirect
+  const safeRedirectTo =
+    redirectTo && redirectTo !== `/${lang}/account/add-another-account`
+      ? redirectTo
       : `/${lang}/account/my-account`;
 
   const signInHref = handleQueryParam(`/${lang}/auth/sign-in`, {
-    [QueryParamKey.Redirect]: safeRedirect,
+    [QueryParamKey.RedirectTo]: safeRedirectTo,
   });
 
   const handleCancel = () => router.push(`/${lang}/account/my-account`);
