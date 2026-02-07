@@ -18,7 +18,6 @@ import { createSignupFormSchema } from "./definitions";
 import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
-import GoogleButton from "@/components/GoogleButton";
 import UploadAvatars, {
   type UploadAvatarsHandle,
 } from "@/components/UploadAvatars";
@@ -60,6 +59,7 @@ import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { UserResponseDto } from "@/types/users/user-response.dto";
 
+import GoogleButton from "@/components/GoogleButton";
 import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";

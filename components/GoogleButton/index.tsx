@@ -6,6 +6,8 @@ import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { Button } from "@mui/material";
 
+import { useI18nStore } from "@/providers/i18n-store-provider";
+
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const GoogleIcon = () => (
@@ -38,13 +40,7 @@ const GoogleIcon = () => (
   </svg>
 );
 
-type GoogleAction = "signIn" | "signUp" | "continue";
-
-const ACTION_LABEL: Record<GoogleAction, string> = {
-  signIn: "Sign in",
-  signUp: "Sign up",
-  continue: "Continue",
-};
+type GoogleAction = "signIn" | "signUp";
 
 interface GoogleButtonProps {
   action: GoogleAction;
@@ -53,7 +49,9 @@ interface GoogleButtonProps {
 }
 
 const GoogleButton = ({ action, lang, redirect }: GoogleButtonProps) => {
-  const label = `${ACTION_LABEL[action]} with Google`;
+  const { dict } = useI18nStore((state) => state);
+
+  const label = dict.auth.google[action];
 
   const href = handleQueryParam("/api/auth/google", {
     [QueryParamKey.Lang]: lang,
