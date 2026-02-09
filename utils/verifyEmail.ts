@@ -5,16 +5,12 @@ import { COUNTDOWN_KEY } from "@/constants/verifyEmail";
 import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 
-export const verifyEmailToken = async (
-  identifier: string,
-  token: string,
-  lang: Locale,
-) => {
+export const verifyEmailToken = async (lang: Locale, token: string) => {
   try {
-    await sendRequest<void, { identifier: string; token: string }>({
+    await sendRequest<void, { token: string }>({
       headers: { "Accept-Language": lang },
     })("/api/mails/verify", {
-      arg: { identifier, token },
+      arg: { token },
     });
 
     return "";
