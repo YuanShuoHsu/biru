@@ -211,17 +211,13 @@ const AuthVerifyEmail = ({
       ),
       body: (
         <Stack spacing={1} alignItems="center">
-          <Typography textAlign="center">
-            {interpolate(dict.auth.verifyEmail.subtitle, {
-              email,
-            })}
-          </Typography>
+          <Typography textAlign="center">{email}</Typography>
           <Typography
             color="text.secondary"
             textAlign="center"
             variant="caption"
           >
-            {dict.auth.verifyEmail.checkSpam}
+            {dict.auth.verifyEmail.confirmationText}
           </Typography>
         </Stack>
       ),
@@ -249,7 +245,18 @@ const AuthVerifyEmail = ({
           {dict.auth.verifyEmail.backToSignIn}
         </Button>
       ),
-      body: <Typography textAlign="center">{errorMessage}</Typography>,
+      body: (
+        <Stack spacing={1} alignItems="center">
+          <Typography textAlign="center">{email}</Typography>
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            variant="caption"
+          >
+            {errorMessage}
+          </Typography>
+        </Stack>
+      ),
       icon: <ReportGmailerrorred fontSize="large" />,
       title: (
         <Typography
@@ -275,14 +282,21 @@ const AuthVerifyEmail = ({
         </Button>
       ),
       body: (
-        <Typography textAlign="center">
-          {dict.auth.verifyEmail.verifiedSubtitle}
-        </Typography>
+        <Stack spacing={1} alignItems="center">
+          <Typography textAlign="center">{email}</Typography>
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            variant="caption"
+          >
+            {dict.auth.verifyEmail.signInText}
+          </Typography>
+        </Stack>
       ),
-      icon: <MarkEmailRead fontSize="large" />,
+      icon: <MarkEmailRead color="success" fontSize="large" />,
       title: (
         <Typography
-          color="primary"
+          color="success"
           fontWeight="bold"
           textAlign="center"
           variant="h6"
