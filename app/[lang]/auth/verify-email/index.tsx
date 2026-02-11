@@ -249,18 +249,7 @@ const AuthVerifyEmail = ({
           {dict.auth.verifyEmail.backToSignIn}
         </Button>
       ),
-      body: (
-        <Stack spacing={1} alignItems="center">
-          {dict.auth.verifyEmail.failedSubtitle}
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {errorMessage}
-          </Typography>
-        </Stack>
-      ),
+      body: <Typography textAlign="center">{errorMessage}</Typography>,
       icon: <ReportGmailerrorred fontSize="large" />,
       title: (
         <Typography
