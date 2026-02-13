@@ -5,6 +5,8 @@ import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 
+import type { Locale } from "@/app/[lang]/dictionaries";
+
 import {
   MarkEmailRead,
   MarkEmailUnread,
@@ -22,8 +24,6 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
-
-import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
 
@@ -53,17 +53,15 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 }));
 
 const StyledAvatar = styled(Avatar, {
-  shouldForwardProp: (prop) => prop !== "errorMessage",
-})<{ errorMessage?: string }>(({ errorMessage, theme }) => {
-  const color = errorMessage
-    ? theme.palette.error.main
-    : theme.palette.primary.main;
+  shouldForwardProp: (prop) => prop !== "color",
+})<{ color: "error" | "primary" }>(({ color, theme }) => {
+  const mainColor = theme.palette[color].main;
 
   return {
-    backgroundColor: alpha(color, 0.2),
-    color,
-    height: theme.spacing(7),
     width: theme.spacing(7),
+    height: theme.spacing(7),
+    backgroundColor: alpha(mainColor, 0.2),
+    color: mainColor,
   };
 });
 
@@ -221,7 +219,7 @@ const AuthVerifyEmail = ({
           </Typography>
         </Stack>
       ),
-      icon: <MarkEmailUnread fontSize="large" />,
+      icon: MarkEmailUnread,
       title: (
         <Typography
           color="primary"
@@ -257,7 +255,7 @@ const AuthVerifyEmail = ({
           </Typography>
         </Stack>
       ),
-      icon: <ReportGmailerrorred fontSize="large" />,
+      icon: ReportGmailerrorred,
       title: (
         <Typography
           color="error"
@@ -293,10 +291,10 @@ const AuthVerifyEmail = ({
           </Typography>
         </Stack>
       ),
-      icon: <MarkEmailRead color="success" fontSize="large" />,
+      icon: MarkEmailRead,
       title: (
         <Typography
-          color="success"
+          color="primary"
           fontWeight="bold"
           textAlign="center"
           variant="h6"
@@ -308,12 +306,15 @@ const AuthVerifyEmail = ({
   };
 
   const content = contents[status];
+  const Icon = content.icon;
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader title={content.title} />
       <StyledCardContent>
-        <StyledAvatar errorMessage={errorMessage}>{content.icon}</StyledAvatar>
+        <StyledAvatar color={isFailed ? "error" : "primary"}>
+          <Icon fontSize="large" />
+        </StyledAvatar>
         {content.body}
       </StyledCardContent>
       <StyledCardActions disableSpacing>{content.actions}</StyledCardActions>
