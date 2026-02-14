@@ -9,8 +9,14 @@
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import { Fragment, useRef, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import {
+  type BaseSyntheticEvent,
+  Fragment,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
+import { Controller, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
 import { createSignupFormSchema } from "./definitions";
@@ -116,7 +122,6 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
     formState: { errors, isSubmitting },
     handleSubmit,
     register,
-    watch,
   } = useForm<SignupFormData>({
     defaultValues: {
       lastName: "",
@@ -144,8 +149,8 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
   //   value,
   // }));
 
-  const password = watch("password");
-  const confirmPassword = watch("confirmPassword");
+  const password = useWatch({ control, name: "password" });
+  const confirmPassword = useWatch({ control, name: "confirmPassword" });
   // const country = watch("country");
 
   const hasPassword = password.length > 0;
@@ -288,40 +293,38 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const onSubmit = handleSubmit(
+  const onSubmitHandler = useCallback(
     async ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmPassword: _,
       // country: { code },
       // phoneNumber,
       ...rest
-    }) => {
+    }: SignupFormData) => {
       const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
       // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
-      const { data, error } = await authClient.signUp.email(
-        {
-          ...rest,
-          // birthDate,
-          callbackURL: redirectTo,
-          // gender,
-          image,
-          lang,
-          name: (lang === "en"
-            ? [rest.firstName, rest.lastName]
-            : [rest.lastName, rest.firstName]
-          )
-            .filter(Boolean)
-            .join(" "),
-          // phoneNumber,
-        },
-        {
+      const { data, error } = await authClient.signUp.email({
+        ...rest,
+        // birthDate,
+        callbackURL: redirectTo,
+        // gender,
+        image,
+        lang,
+        name: (lang === "en"
+          ? [rest.firstName, rest.lastName]
+          : [rest.lastName, rest.firstName]
+        )
+          .filter(Boolean)
+          .join(" "),
+        // phoneNumber,
+        fetchOptions: {
           headers: {
             "Accept-Language": lang,
           },
         },
-      );
+      });
 
       if (error?.code) {
         const message = getErrorMessage(error.code, lang);
@@ -338,7 +341,11 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
 
       router.push(verifyEmailHref);
     },
+    [lang, redirectTo, router],
   );
+
+  const onSubmit = (event: BaseSyntheticEvent) =>
+    handleSubmit(onSubmitHandler)(event);
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>
