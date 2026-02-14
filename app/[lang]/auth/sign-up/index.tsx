@@ -9,13 +9,7 @@
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
-import {
-  type BaseSyntheticEvent,
-  Fragment,
-  useCallback,
-  useRef,
-  useState,
-} from "react";
+import { type BaseSyntheticEvent, useCallback, useRef, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
@@ -29,7 +23,7 @@ import UploadAvatars, {
   type UploadAvatarsHandle,
 } from "@/components/UploadAvatars";
 
-import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
+import { LegalLinkType } from "@/constants/legal";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -42,7 +36,6 @@ import {
   VisibilityOff,
 } from "@mui/icons-material";
 import {
-  Box,
   Button,
   CardActions,
   CardContent,
@@ -88,6 +81,10 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
 }));
+
+const StyledTypography = styled(Typography)({
+  whiteSpace: "pre-line",
+});
 
 // const today = dayjs();
 
@@ -237,46 +234,19 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
     hasConfirmPassword,
   );
 
-  const legalConsentText = interpolate(dict.auth.legalConsent, {
-    action: dict.auth.signUp.label,
-    terms: `{${LegalLinkType.Terms}}`,
-    privacy: `{${LegalLinkType.Privacy}}`,
-  });
-
-  const legalPlaceholders = Object.fromEntries(
-    LEGAL_LINK_TYPES.map((type) => [
-      `{${type}}`,
-      <MuiLink
-        component={NextLink}
-        href={handleQueryParam(`/${lang}/company/${type}`, {
-          [QueryParamKey.Back]: `/${lang}/auth/sign-up`,
-          [QueryParamKey.RedirectTo]: redirectTo,
-        })}
-        key={type}
-        underline="hover"
-      >
-        {dict.company.legal[type].label}
-      </MuiLink>,
-    ]),
+  const renderLegalLink = (type: LegalLinkType) => (
+    <MuiLink
+      component={NextLink}
+      href={handleQueryParam(`/${lang}/company/${type}`, {
+        [QueryParamKey.Back]: `/${lang}/auth/sign-up`,
+        [QueryParamKey.RedirectTo]: redirectTo,
+      })}
+      key={type}
+      underline="hover"
+    >
+      {dict.company.legal[type].label}
+    </MuiLink>
   );
-
-  const legalSegmentPattern = new RegExp(
-    `(\\n|${LEGAL_LINK_TYPES.map((type) => `{${type}}`).join("|")})`,
-    "g",
-  );
-
-  const legalConsent = legalConsentText
-    .split(legalSegmentPattern)
-    .map((segment, index) => {
-      if (segment === "\n")
-        return <Box component="br" key={`legal-${index}`} />;
-
-      return (
-        legalPlaceholders[segment] || (
-          <Fragment key={`legal-${index}`}>{segment}</Fragment>
-        )
-      );
-    });
 
   // const handleBirthDateChange =
   //   (onChange: (value: string) => void) => (newValue: Dayjs | null) => {
@@ -616,9 +586,17 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
         >
           {dict.auth.signUp.label}
         </Button>
-        <Typography variant="caption" color="text.secondary" align="center">
-          {legalConsent}
-        </Typography>
+        <StyledTypography
+          align="center"
+          color="text.secondary"
+          variant="caption"
+        >
+          {interpolate(dict.auth.legalConsent, {
+            action: dict.auth.signUp.label,
+            terms: renderLegalLink(LegalLinkType.Terms),
+            privacy: renderLegalLink(LegalLinkType.Privacy),
+          })}
+        </StyledTypography>
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{dict.auth.hasAccount}</Typography>
