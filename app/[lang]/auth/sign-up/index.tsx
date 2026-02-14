@@ -149,8 +149,10 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
   //   value,
   // }));
 
-  const password = useWatch({ control, name: "password" });
-  const confirmPassword = useWatch({ control, name: "confirmPassword" });
+  const [password, confirmPassword] = useWatch({
+    control,
+    name: ["password", "confirmPassword"],
+  });
   // const country = watch("country");
 
   const hasPassword = password.length > 0;
