@@ -8,9 +8,9 @@
 
 import NextLink from "next/link";
 import { useRouter } from "next/navigation";
+import { enqueueSnackbar } from "notistack";
 import { Fragment, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import useSWRMutation from "swr/mutation";
 import * as z from "zod";
 
 import { createSignupFormSchema } from "./definitions";
@@ -18,6 +18,7 @@ import { createSignupFormSchema } from "./definitions";
 import type { Locale } from "@/app/[lang]/dictionaries";
 
 import FormCard from "@/components/FormCard";
+import GoogleButton from "@/components/GoogleButton";
 import UploadAvatars, {
   type UploadAvatarsHandle,
 } from "@/components/UploadAvatars";
@@ -25,6 +26,8 @@ import UploadAvatars, {
 import { LEGAL_LINK_TYPES, LegalLinkType } from "@/constants/legal";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
   CheckCircleOutline,
@@ -54,13 +57,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
-import { UserResponseDto } from "@/types/users/user-response.dto";
-
-import GoogleButton from "@/components/GoogleButton";
-import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
@@ -108,20 +106,14 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
 
   // const [isGenderFocused, setIsGenderFocused] = useState(false);
 
-  const { setIsAuthLoading } = useAuthStore((state) => state);
-
   const { dict } = useI18nStore((state) => state);
   const signupFormSchema = createSignupFormSchema(dict);
 
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
-  type SignupPayload = Omit<SignupFormData, "confirmPassword"> & {
-    redirectTo?: string;
-  };
-
   const {
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
     watch,
@@ -144,13 +136,6 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
   const uploadAvatarsRef = useRef<UploadAvatarsHandle>(null);
 
   const router = useRouter();
-
-  const { isMutating, trigger } = useSWRMutation(
-    "/api/users",
-    sendRequest<UserResponseDto, SignupPayload>({
-      credentials: "include",
-    }),
-  );
 
   const langNameDirection = lang === "en" ? "row-reverse" : "row";
 
@@ -311,33 +296,37 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
       // phoneNumber,
       ...rest
     }) => {
-      setIsAuthLoading(true);
-
       const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
       // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
-      const payload: SignupPayload = {
+      const { data, error } = await authClient.signUp.email({
         ...rest,
-        ...(image && { image }),
-        // phoneNumber: parsedPhoneNumber.number,
-        ...(redirectTo && { redirectTo }),
-      };
+        // birthDate,
+        callbackURL: redirectTo,
+        // gender,
+        image,
+        lang,
+        name: `${rest.firstName} ${rest.lastName}`.trim(),
+        // phoneNumber,
+      });
 
-      try {
-        const { email, id } = await trigger(payload);
+      console.log(data, error);
 
-        const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
-          [QueryParamKey.Email]: email,
-          [QueryParamKey.Identifier]: id,
-          [QueryParamKey.RedirectTo]: redirectTo,
-        });
+      if (error?.code) {
+        const message = getErrorMessage(error.code, lang);
+        enqueueSnackbar(message, { variant: "error" });
 
-        router.replace(verifyEmailHref);
-      } catch {
-      } finally {
-        setIsAuthLoading(false);
+        return;
       }
+
+      const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
+        [QueryParamKey.Email]: rest.email,
+        [QueryParamKey.Identifier]: data?.user.id,
+        [QueryParamKey.RedirectTo]: redirectTo,
+      });
+
+      router.replace(verifyEmailHref);
     },
   );
 
@@ -598,9 +587,9 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
-          disabled={isMutating}
+          disabled={isSubmitting}
           fullWidth
-          loading={isMutating}
+          loading={isSubmitting}
           loadingPosition="start"
           size="large"
           type="submit"

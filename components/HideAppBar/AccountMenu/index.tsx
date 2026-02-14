@@ -10,8 +10,7 @@ import {
   useRouter,
   useSearchParams,
 } from "next/navigation";
-import type { MouseEvent } from "react";
-import { useState } from "react";
+import { useState, type MouseEvent } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
@@ -187,7 +186,6 @@ const AccountMenu = () => {
             aria-label="account of current user"
             color="inherit"
             disabled={isAuthLoading}
-            loading={isAuthLoading}
             onClick={handleClick}
           >
             <BadgeAvatars invisible={!isSignedIn} variant="dot">

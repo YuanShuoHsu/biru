@@ -4,8 +4,6 @@
 // https://mui.com/material-ui/customization/dark-mode/#ToggleColorMode.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
-import { useSyncExternalStore } from "react";
-
 import { DarkMode, LightMode } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 import { styled, useColorScheme } from "@mui/material/styles";
@@ -28,34 +26,20 @@ const StyledLightMode = styled(LightMode)(({ theme }) => ({
   }),
 }));
 
-const useIsMounted = () =>
-  useSyncExternalStore(
-    () => () => {},
-    () => true,
-    () => false,
-  );
-
 const ModeToggle = () => {
-  const mounted = useIsMounted();
-
   const { mode, setMode } = useColorScheme();
 
   const { dict } = useI18nStore((state) => state);
 
-  const isLoading = !mounted || !mode;
   const isLight = mode === "light";
 
-  const tooltipTitle = isLoading
+  const tooltipTitle = !mode
     ? ""
     : isLight
       ? dict.appBar.darkMode
       : dict.appBar.lightMode;
 
-  const handleModeToggle = () => {
-    if (isLoading) return;
-
-    setMode(isLight ? "dark" : "light");
-  };
+  const handleModeToggle = () => setMode(isLight ? "dark" : "light");
 
   return (
     <Tooltip title={tooltipTitle}>
@@ -63,8 +47,7 @@ const ModeToggle = () => {
         <IconButton
           aria-label={tooltipTitle}
           color="inherit"
-          disabled={isLoading}
-          loading={isLoading}
+          disabled={!mode}
           onClick={handleModeToggle}
         >
           <StyledDarkMode />
