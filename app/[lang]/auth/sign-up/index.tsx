@@ -300,21 +300,28 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
 
       // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
-      const { data, error } = await authClient.signUp.email({
-        ...rest,
-        // birthDate,
-        callbackURL: redirectTo,
-        // gender,
-        image,
-        lang,
-        name: (lang === "en"
-          ? [rest.firstName, rest.lastName]
-          : [rest.lastName, rest.firstName]
-        )
-          .filter(Boolean)
-          .join(" "),
-        // phoneNumber,
-      });
+      const { data, error } = await authClient.signUp.email(
+        {
+          ...rest,
+          // birthDate,
+          callbackURL: redirectTo,
+          // gender,
+          image,
+          lang,
+          name: (lang === "en"
+            ? [rest.firstName, rest.lastName]
+            : [rest.lastName, rest.firstName]
+          )
+            .filter(Boolean)
+            .join(" "),
+          // phoneNumber,
+        },
+        {
+          headers: {
+            "Accept-Language": lang,
+          },
+        },
+      );
 
       if (error?.code) {
         const message = getErrorMessage(error.code, lang);
