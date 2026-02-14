@@ -316,8 +316,6 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
         // phoneNumber,
       });
 
-      console.log(data, error);
-
       if (error?.code) {
         const message = getErrorMessage(error.code, lang);
         enqueueSnackbar(message, { variant: "error" });
