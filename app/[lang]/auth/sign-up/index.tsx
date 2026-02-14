@@ -307,7 +307,12 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
         // gender,
         image,
         lang,
-        name: `${rest.firstName} ${rest.lastName}`.trim(),
+        name: (lang === "en"
+          ? [rest.firstName, rest.lastName]
+          : [rest.lastName, rest.firstName]
+        )
+          .filter(Boolean)
+          .join(" "),
         // phoneNumber,
       });
 
