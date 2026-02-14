@@ -331,7 +331,7 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
         [QueryParamKey.RedirectTo]: redirectTo,
       });
 
-      router.replace(verifyEmailHref);
+      router.push(verifyEmailHref);
     },
   );
 
