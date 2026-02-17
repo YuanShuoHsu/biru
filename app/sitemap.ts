@@ -2,7 +2,7 @@
 
 import type { MetadataRoute } from "next";
 
-import { getSiteMeta } from "./lib/siteMeta";
+import { getSiteMeta } from "@/utils/siteMeta";
 
 import { i18n } from "@/i18n-config";
 

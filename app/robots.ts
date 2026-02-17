@@ -2,7 +2,7 @@
 
 import type { MetadataRoute } from "next";
 
-import { getSiteMeta } from "./lib/siteMeta";
+import { getSiteMeta } from "@/utils/siteMeta";
 
 export default function robots(): MetadataRoute.Robots {
   const { isBlockedHost, siteUrl } = getSiteMeta();
