@@ -174,7 +174,6 @@ const AuthSignIn = ({ lang, redirectTo, rememberMe }: AuthSignInProps) => {
         router.replace(
           handleQueryParam(`/${lang}/auth/verify-email`, {
             [QueryParamKey.Email]: data.email,
-            [QueryParamKey.Identifier]: identifier,
             [QueryParamKey.RedirectTo]: redirectTo,
           }),
         );

@@ -1,11 +1,16 @@
 "use client";
 
 import NextLink from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { enqueueSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
-import useSWRMutation from "swr/mutation";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
+
+import FormCard from "@/components/FormCard";
+
+import useCountdown from "@/hooks/useCountdown";
+
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
   MarkEmailRead,
@@ -25,20 +30,10 @@ import {
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
-import FormCard from "@/components/FormCard";
-
-import { COUNTDOWN_DURATION } from "@/constants/verifyEmail";
-
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
-import { sendRequest } from "@/utils/fetcher";
 import { interpolate } from "@/utils/i18n";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
-import {
-  clearCountdown,
-  getCountdown,
-  startCountdown,
-} from "@/utils/verifyEmail";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -77,7 +72,6 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 interface AuthVerifyEmailProps {
   email: string;
   errorMessage: string;
-  identifier: string;
   lang: Locale;
   redirectTo?: string;
   token: string;
@@ -86,69 +80,40 @@ interface AuthVerifyEmailProps {
 const AuthVerifyEmail = ({
   email,
   errorMessage,
-  identifier,
   lang,
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
-  const [countdown, setCountdown] = useState(0);
-
-  const { handleSubmit } = useForm();
+  const {
+    formState: { isSubmitting },
+    handleSubmit,
+  } = useForm();
 
   const { dict } = useI18nStore((state) => state);
 
-  const { isMutating: isMutatingResend, trigger: triggerResend } =
-    useSWRMutation<
-      void,
-      Error,
-      string,
-      { identifier: string; redirectTo?: string }
-    >(
-      "/api/mails/resend",
-      sendRequest({
-        credentials: "include",
-      }),
-    );
-
-  const updateCountdown = useCallback(() => {
-    const remaining = getCountdown();
-
-    if (remaining > 0) {
-      setCountdown(remaining);
-    } else {
-      setCountdown(0);
-      clearCountdown();
-    }
-  }, []);
-
-  useEffect(() => {
-    updateCountdown();
-  }, [updateCountdown]);
-
-  const isCountingDown = countdown > 0;
-
-  useEffect(() => {
-    if (!isCountingDown) return;
-
-    const timer = setInterval(() => {
-      updateCountdown();
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [isCountingDown, updateCountdown]);
+  const { countdown, isCountingDown, startCountdown } = useCountdown({
+    key: "biru-resend-email",
+  });
 
   const onSubmit = handleSubmit(async () => {
-    try {
-      startCountdown(COUNTDOWN_DURATION);
-      setCountdown(COUNTDOWN_DURATION);
+    const { error } = await authClient.sendVerificationEmail({
+      email,
+      ...(redirectTo && { callbackURL: redirectTo }),
+      fetchOptions: {
+        headers: {
+          "Accept-Language": lang,
+        },
+      },
+    });
 
-      await triggerResend({
-        identifier,
-        ...(redirectTo && { redirectTo }),
-      });
-    } catch {
-    } finally {
+    if (error?.code) {
+      const message = getErrorMessage(error.code, lang);
+      enqueueSnackbar(message, { variant: "error" });
+
+      return;
     }
+
+    startCountdown();
   });
 
   const isFailed = Boolean(errorMessage && token);
@@ -165,9 +130,9 @@ const AuthVerifyEmail = ({
       actions: (
         <>
           <Button
-            disabled={isMutatingResend || isCountingDown}
+            disabled={isSubmitting || isCountingDown}
             fullWidth
-            loading={isMutatingResend}
+            loading={isSubmitting}
             loadingPosition="start"
             size="large"
             type="submit"

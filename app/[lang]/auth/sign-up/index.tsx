@@ -277,7 +277,7 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
 
       // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
-      const { data, error } = await authClient.signUp.email({
+      const { error } = await authClient.signUp.email({
         ...rest,
         // birthDate,
         callbackURL: redirectTo,
@@ -307,7 +307,6 @@ const AuthSignUp = ({ lang, redirectTo }: AuthSignUpProps) => {
 
       const verifyEmailHref = handleQueryParam(`/${lang}/auth/verify-email`, {
         [QueryParamKey.Email]: rest.email,
-        [QueryParamKey.Identifier]: data?.user.id,
         [QueryParamKey.RedirectTo]: redirectTo,
       });
 

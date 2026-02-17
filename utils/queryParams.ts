@@ -1,7 +1,6 @@
 export enum QueryParamKey {
   Back = "back",
   Email = "email",
-  Identifier = "identifier",
   Lang = "lang",
   RedirectTo = "redirectTo",
 }
