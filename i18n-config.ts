@@ -1,3 +1,5 @@
+// https://github.com/vercel/next.js/tree/canary/examples/i18n-routing
+
 import { LocaleEnum } from "@/enums/Locale";
 
 export const i18n = {

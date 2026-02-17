@@ -1,3 +1,4 @@
+// https://github.com/vercel/next.js/tree/canary/examples/i18n-routing
 // https://mui.com/material-ui/react-app-bar/#system-MenuAppBar.tsx
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
@@ -17,17 +18,17 @@ import { styled } from "@mui/material/styles";
 
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
-const languages = i18n.locales.map((lang) => ({
-  lang,
-  label: languageLocaleMap[lang],
-}));
-
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
 
   [theme.breakpoints.up("sm")]: {
     marginTop: theme.spacing(7),
   },
+}));
+
+const languages = i18n.locales.map((lang) => ({
+  lang,
+  label: languageLocaleMap[lang],
 }));
 
 const LanguageMenu = () => {
@@ -42,11 +43,14 @@ const LanguageMenu = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const switchPath = (lang: Locale) => {
-    const rest = pathname.split("/").slice(2).join("/");
+  const redirectedPathname = (lang: Locale) => {
+    if (!pathname) return "/";
+
+    const segments = pathname.split("/");
+    segments[1] = lang;
     const search = searchParams.toString();
 
-    return `/${lang}${rest ? `/${rest}` : ""}${search ? `?${search}` : ""}`;
+    return `${segments.join("/")}${search ? `?${search}` : ""}`;
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
@@ -87,7 +91,7 @@ const LanguageMenu = () => {
         {languages.map(({ label, lang }) => (
           <MenuItem
             component={Link}
-            href={switchPath(lang)}
+            href={redirectedPathname(lang)}
             key={lang}
             onClick={handleClose}
             replace
