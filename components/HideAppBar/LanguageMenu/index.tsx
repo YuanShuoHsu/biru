@@ -7,7 +7,9 @@ import { useState } from "react";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { languageLocaleMap, locales } from "@/constants/locale";
+import { languageLocaleMap } from "@/constants/locale";
+
+import { i18n } from "@/i18n-config";
 
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
@@ -15,7 +17,7 @@ import { styled } from "@mui/material/styles";
 
 import { useI18nStore } from "@/providers/i18n-store-provider";
 
-const languages = locales.map((lang) => ({
+const languages = i18n.locales.map((lang) => ({
   lang,
   label: languageLocaleMap[lang],
 }));

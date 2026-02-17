@@ -3,7 +3,7 @@ import { handleQueryParam, QueryParamKey } from "./queryParams";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { LocaleEnum } from "@/constants/locale";
+import { LocaleEnum } from "@/enums/Locale";
 
 import { Login, PersonAdd } from "@mui/icons-material";
 

@@ -1,3 +1,4 @@
+// https://github.com/vercel/next.js/tree/canary/examples/i18n-routing
 // https://nextjs.org/docs/app/building-your-application/routing/internationalization
 // https://nextjs.org/docs/app/api-reference/file-conventions/proxy
 
@@ -7,24 +8,29 @@ import Negotiator from "negotiator";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { defaultLocale, locales } from "./constants/locale";
+import { i18n } from "./i18n-config";
 
 import { match } from "@formatjs/intl-localematcher";
 
-const getLocale = (request: NextRequest) => {
-  const headers = {
-    "accept-language": request.headers.get("accept-language") || "",
-  };
+const getLocale = (request: NextRequest): string | undefined => {
+  const negotiatorHeaders: Record<string, string> = {};
+  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
-  const languages = new Negotiator({ headers }).languages();
+  const locales = Array.from(i18n.locales);
 
-  return match(languages, locales, defaultLocale);
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
+    locales,
+  );
+
+  const locale = match(languages, locales, i18n.defaultLocale);
+
+  return locale;
 };
 
 export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
-  const pathnameLocale = locales.find(
+  const pathnameLocale = i18n.locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
   const pathnameHasLocale = Boolean(pathnameLocale);

@@ -3,7 +3,9 @@
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { LocaleEnum, defaultLocale } from "@/constants/locale";
+import { LocaleEnum } from "@/enums/Locale";
+
+import { i18n } from "@/i18n-config";
 
 import {
   Box,
@@ -546,7 +548,7 @@ interface CompanyLegalTermsProps {
 }
 
 const CompanyLegalTerms = ({ lang }: CompanyLegalTermsProps) => {
-  const content = termsByLocale[lang] ?? termsByLocale[defaultLocale];
+  const content = termsByLocale[lang] ?? termsByLocale[i18n.defaultLocale];
 
   return (
     <Box component="section" display="flex" flexDirection="column" gap={2}>

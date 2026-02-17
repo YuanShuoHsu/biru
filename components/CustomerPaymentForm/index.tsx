@@ -8,7 +8,9 @@ import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
 import type { Locale } from "@/app/[lang]/dictionaries";
 
-import { ecpayLocaleMap, LocaleEnum } from "@/constants/locale";
+import { ecpayLocaleMap } from "@/constants/locale";
+
+import { LocaleEnum } from "@/enums/Locale";
 
 import {
   Button,

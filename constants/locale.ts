@@ -1,24 +1,8 @@
 import type { Locale } from "@/app/[lang]/dictionaries";
 
+import { LocaleEnum } from "@/enums/Locale";
+
 import type { EcpayLanguage } from "@/types/ecpay/createEcpayDto";
-
-export enum LocaleEnum {
-  ZhTW = "zh-TW",
-  En = "en",
-  Ja = "ja",
-  Ko = "ko",
-  ZhCN = "zh-CN",
-}
-
-export const locales = [
-  LocaleEnum.ZhTW,
-  LocaleEnum.En,
-  LocaleEnum.Ja,
-  LocaleEnum.Ko,
-  LocaleEnum.ZhCN,
-] as const;
-
-export const defaultLocale = LocaleEnum.ZhTW;
 
 export const countryCodeLocaleMap: Record<LocaleEnum, string> = {
   [LocaleEnum.ZhTW]: "TW",

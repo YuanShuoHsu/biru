@@ -1,15 +1,6 @@
-export enum RoleEnum {
-  Admin = "admin",
-  Manager = "manager",
-  Staff = "staff",
-  User = "user",
-}
+import { RoleEnum } from "@/enums/Role";
 
-export const roles = [
-  RoleEnum.Admin,
-  RoleEnum.Manager,
-  RoleEnum.Staff,
-  RoleEnum.User,
-] as const;
-
-export const defaultRole = RoleEnum.User;
+export const role = {
+  defaultRole: RoleEnum.User,
+  roles: [RoleEnum.Admin, RoleEnum.Manager, RoleEnum.Staff, RoleEnum.User],
+} as const;

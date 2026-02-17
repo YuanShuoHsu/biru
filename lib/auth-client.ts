@@ -1,8 +1,11 @@
 import { inferAdditionalFields } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 
-import { defaultLocale, LocaleEnum, locales } from "@/constants/locale";
-import { defaultRole, roles } from "@/constants/role";
+import { role } from "@/constants/role";
+
+import { LocaleEnum } from "@/enums/Locale";
+
+import { i18n } from "@/i18n-config";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_NEXT_URL,
@@ -19,18 +22,18 @@ export const authClient = createAuthClient({
           required: true,
         },
         lang: {
-          type: [...locales],
+          type: [...i18n.locales],
           required: true,
-          defaultValue: defaultLocale,
+          defaultValue: i18n.defaultLocale,
         },
         lastName: {
           type: "string",
           required: false,
         },
         role: {
-          type: [...roles],
+          type: [...role.roles],
           required: true,
-          defaultValue: defaultRole,
+          defaultValue: role.defaultRole,
           input: false,
         },
       },

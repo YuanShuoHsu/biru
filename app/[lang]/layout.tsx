@@ -5,13 +5,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 
-import "./globals.css";
-
 import AppLayout from "./appLayout";
 import { getDictionary, hasLocale } from "./dictionaries";
+import "./globals.css";
 import Providers from "./providers";
 
-import { locales } from "@/constants/locale";
+import { i18n } from "@/i18n-config";
 
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
@@ -36,7 +35,7 @@ export const metadata: Metadata = {
 };
 
 export const generateStaticParams = async () =>
-  locales.map((lang) => ({ lang }));
+  i18n.locales.map((lang) => ({ lang }));
 
 const RootLayout = async ({ children, params }: LayoutProps<"/[lang]">) => {
   const { lang } = await params;

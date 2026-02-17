@@ -2,7 +2,7 @@
 
 import "server-only";
 
-import { LocaleEnum } from "@/constants/locale";
+import { LocaleEnum } from "@/enums/Locale";
 
 const dictionariesList = [
   "appBar",
