@@ -2,11 +2,12 @@
 // https://next-intl.dev/docs/usage/configuration
 // https://next-intl.dev/docs/workflows/typescript
 
-import enMessages from "@/app/[locale]/dictionaries";
 import { Formats, hasLocale } from "next-intl";
 import { getRequestConfig } from "next-intl/server";
 
 import { routing } from "@/i18n/routing";
+
+import enMessages from "@/messages";
 
 export const formats = {
   dateTime: {
@@ -39,11 +40,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await Promise.all(
       Object.keys(enMessages).map(async (namespace) => [
         namespace,
-        (
-          await import(
-            `../app/[locale]/dictionaries/${locale}/${namespace}.json`
-          )
-        ).default,
+        (await import(`../messages/${locale}/${namespace}.json`)).default,
       ]),
     ),
   );
@@ -52,5 +49,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
     formats,
     locale,
     messages,
+    // timeZone: "Asia/Taipei",
   };
 });

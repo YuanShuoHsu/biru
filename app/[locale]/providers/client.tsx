@@ -3,7 +3,6 @@
 
 "use client";
 
-import { NextIntlClientProvider } from "next-intl";
 import { closeSnackbar, SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
@@ -34,13 +33,17 @@ import "dayjs/locale/ko";
 import "dayjs/locale/zh-cn";
 import "dayjs/locale/zh-tw";
 
-interface ProvidersProps {
+interface ClientProvidersProps {
   children: React.ReactNode;
   fallback: SWRConfiguration["fallback"];
   locale: Locale;
 }
 
-const Providers = ({ children, fallback, locale }: ProvidersProps) => (
+const ClientProviders = ({
+  children,
+  fallback,
+  locale,
+}: ClientProvidersProps) => (
   <AppRouterCacheProvider options={{ enableCssLayer: true }}>
     <ThemeProvider theme={theme}>
       <LocalizationProvider
@@ -48,43 +51,41 @@ const Providers = ({ children, fallback, locale }: ProvidersProps) => (
         dateAdapter={AdapterDayjs}
       >
         <CssBaseline />
-        <NextIntlClientProvider locale={locale}>
-          <SnackbarProvider
-            action={(snackbarId) => (
-              <IconButton
-                aria-label="close"
-                color="inherit"
-                onClick={() => closeSnackbar(snackbarId)}
-                size="small"
-              >
-                <Close fontSize="small" />
-              </IconButton>
-            )}
-            anchorOrigin={{ vertical: "top", horizontal: "right" }}
-            classes={{
-              containerAnchorOriginTopRight:
-                "notistack-container-top-right-offset",
-            }}
-            maxSnack={3}
-          >
-            <SWRProvider fallback={fallback}>
-              <AuthStoreProvider>
-                <CartStoreProvider>
-                  <DialogStoreProvider>
-                    <DrawerStoreProvider>
-                      <OrderSearchStoreProvider>
-                        <ViewStoreProvider>{children}</ViewStoreProvider>
-                      </OrderSearchStoreProvider>
-                    </DrawerStoreProvider>
-                  </DialogStoreProvider>
-                </CartStoreProvider>
-              </AuthStoreProvider>
-            </SWRProvider>
-          </SnackbarProvider>
-        </NextIntlClientProvider>
+        <SnackbarProvider
+          action={(snackbarId) => (
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              onClick={() => closeSnackbar(snackbarId)}
+              size="small"
+            >
+              <Close fontSize="small" />
+            </IconButton>
+          )}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          classes={{
+            containerAnchorOriginTopRight:
+              "notistack-container-top-right-offset",
+          }}
+          maxSnack={3}
+        >
+          <SWRProvider fallback={fallback}>
+            <AuthStoreProvider>
+              <CartStoreProvider>
+                <DialogStoreProvider>
+                  <DrawerStoreProvider>
+                    <OrderSearchStoreProvider>
+                      <ViewStoreProvider>{children}</ViewStoreProvider>
+                    </OrderSearchStoreProvider>
+                  </DrawerStoreProvider>
+                </DialogStoreProvider>
+              </CartStoreProvider>
+            </AuthStoreProvider>
+          </SWRProvider>
+        </SnackbarProvider>
       </LocalizationProvider>
     </ThemeProvider>
   </AppRouterCacheProvider>
 );
 
-export default Providers;
+export default ClientProviders;
