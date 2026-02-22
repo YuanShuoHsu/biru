@@ -24,14 +24,14 @@ interface BrandMarkProps {
 }
 
 const BrandMark = ({ color }: BrandMarkProps) => {
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
   return (
     <MuiLink
       minWidth={0}
       color="inherit"
       component={NextLink}
-      href={`/${lang}`}
+      href={`/${locale}`}
       display="flex"
       alignItems="center"
       gap={1}

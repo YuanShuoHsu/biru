@@ -3,6 +3,7 @@
 
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useParams, usePathname } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
@@ -15,8 +16,6 @@ import {
   Stepper,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
@@ -73,22 +72,22 @@ const createStepPathMap = (
 };
 
 const HorizontalLinearStepper = () => {
-  const { dict } = useI18nStore((state) => state);
+  const tOrder = useTranslations("order");
 
-  const { lang, mode, storeSlug, tableNumber, partySize } =
+  const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
 
   const pathname = usePathname();
 
   const stepPaths = createStepPathMap(mode, storeSlug, tableNumber, partySize);
   const activeStep = stepPaths.findIndex(
-    (path) => pathname === `/${lang}${path}`,
+    (path) => pathname === `/${locale}${path}`,
   );
 
   const steps = [
-    dict.order.label,
-    dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
-    dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
+    tOrder("label"),
+    tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
+    tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
   ];
 
   return (

@@ -1,13 +1,14 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-IconBreadcrumbs.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
+import { useTranslations } from "next-intl";
 import NextLink from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import useSWR from "swr";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import { ORDER_MODE } from "@/constants/orderMode";
+
+import type { Locale } from "@/i18n/routing";
 
 import {
   AccountCircle,
@@ -40,13 +41,8 @@ import {
 } from "@mui/material";
 import { styled, type Theme } from "@mui/material/styles";
 
-import { type I18nDict, useI18nStore } from "@/providers/i18n-store-provider";
-
-import type { OrderMode } from "@/types/orderMode";
-import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
-import type { Store, StoreName, StoreSlug } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
+import type { Store } from "@/types/stores";
 
 import { getStoreName } from "@/utils/stores";
 
@@ -59,14 +55,18 @@ interface BreadcrumbItem {
   to: string;
 }
 
-const breadcrumbsMap = (
-  dict: I18nDict,
-  mode: OrderMode,
-  storeSlug: StoreSlug,
-  tableNumber: TableNumber,
-  partySize: PartySize,
-  storeName: StoreName,
-): BreadcrumbItem[] => {
+const useBreadcrumbs = (): BreadcrumbItem[] => {
+  const { locale, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
+
+  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const storeName = getStoreName(locale, stores, storeSlug);
+
+  const tAccount = useTranslations("account");
+  const tAuth = useTranslations("auth");
+  const tCompany = useTranslations("company");
+  const tOrder = useTranslations("order");
+
   const isPickup = mode === ORDER_MODE.Pickup;
 
   const dineInChildren: BreadcrumbItem[] = [
@@ -74,12 +74,12 @@ const breadcrumbsMap = (
       children: [
         {
           icon: Payment,
-          label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
+          label: tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
           to: "/checkout",
         },
         {
           icon: Pets,
-          label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
+          label: tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
           to: "/complete",
         },
       ],
@@ -92,12 +92,12 @@ const breadcrumbsMap = (
   const pickupChildren: BreadcrumbItem[] = [
     {
       icon: Payment,
-      label: dict.order.mode.storeSlug.tableNumber.stepper.checkout.label,
+      label: tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
       to: "/checkout",
     },
     {
       icon: Pets,
-      label: dict.order.mode.storeSlug.tableNumber.stepper.complete.label,
+      label: tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
       to: "/complete",
     },
   ];
@@ -129,8 +129,8 @@ const breadcrumbsMap = (
       disabled: !isPickup,
       icon: isPickup ? LocalMall : Restaurant,
       label: isPickup
-        ? dict.order.mode.pickup.label
-        : dict.order.mode.dineIn.label,
+        ? tOrder("mode.pickup.label")
+        : tOrder("mode.dineIn.label"),
       to: `/${mode}`,
     },
   ];
@@ -140,91 +140,91 @@ const breadcrumbsMap = (
       children: [
         {
           icon: Group,
-          label: dict.account.accountMenu.profile,
+          label: tAccount("accountMenu.profile"),
           to: "/profile",
         },
         {
           icon: Person,
-          label: dict.account.accountMenu.myAccount,
+          label: tAccount("accountMenu.myAccount"),
           to: "/my-account",
         },
         {
           icon: PersonAdd,
-          label: dict.account.accountMenu.addAnotherAccount,
+          label: tAccount("accountMenu.addAnotherAccount"),
           to: "/add-another-account",
         },
         {
           icon: Settings,
-          label: dict.account.accountSettings.label,
+          label: tAccount("accountSettings.label"),
           to: "/account-settings",
         },
       ],
       disabled: true,
       icon: AccountCircle,
-      label: dict.account.label,
+      label: tAccount("label"),
       to: "/account",
     },
     {
       children: [
         {
           icon: Login,
-          label: dict.auth.signIn.label,
+          label: tAuth("signIn.label"),
           to: "/sign-in",
         },
         {
           icon: PersonAdd,
-          label: dict.auth.signUp.label,
+          label: tAuth("signUp.label"),
           to: "/sign-up",
         },
         {
           icon: Email,
-          label: dict.auth.verifyEmail.label,
+          label: tAuth("verifyEmail.label"),
           to: "/verify-email",
         },
         {
           icon: HelpOutline,
-          label: dict.auth.forgotPassword.label,
+          label: tAuth("forgotPassword.label"),
           to: "/forgot-password",
         },
         {
           icon: LockReset,
-          label: dict.auth.resetPassword.label,
+          label: tAuth("resetPassword.label"),
           to: "/reset-password",
         },
       ],
       disabled: true,
       icon: AccountCircle,
-      label: dict.auth.label,
+      label: tAuth("label"),
       to: "/auth",
     },
     {
       children: [
         {
           icon: Info,
-          label: dict.company.about.label,
+          label: tCompany("about.label"),
           to: "/about",
         },
         {
           icon: Gavel,
-          label: dict.company.legal.terms.label,
+          label: tCompany("legal.terms.label"),
           to: "/terms",
         },
         {
           icon: Policy,
-          label: dict.company.legal.privacy.label,
+          label: tCompany("legal.privacy.label"),
           to: "/privacy",
         },
       ],
       disabled: true,
       icon: Business,
-      label: dict.company.label,
+      label: tCompany("label"),
       to: "/company",
     },
     {
       children: orderChildren,
       disabled: true,
       icon: ShoppingCart,
-      label: dict.order.label,
+      label: tOrder("label"),
       to: "/order",
     },
   ];
@@ -288,7 +288,7 @@ const findBreadcrumb = (
 const findHiddenTo = (
   startIndex: number,
   pathnames: string[],
-  lang: Locale,
+  locale: Locale,
   breadcrumbs: BreadcrumbItem[],
 ): string | undefined => {
   const nextIndex = startIndex + 1;
@@ -298,36 +298,24 @@ const findHiddenTo = (
   const { hidden = false } = findBreadcrumb(breadcrumbs, nextMatchPath) || {};
   if (!hidden) return;
 
-  const nextTo = findHiddenTo(nextIndex, pathnames, lang, breadcrumbs);
-  if (!nextTo) return `/${lang}${nextMatchPath}`;
+  const nextTo = findHiddenTo(nextIndex, pathnames, locale, breadcrumbs);
+  if (!nextTo) return `/${locale}${nextMatchPath}`;
 
   return nextTo;
 };
 
 const RouterBreadcrumbs = () => {
-  const { lang, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
-  const storeName = getStoreName(lang, stores, storeSlug);
-
-  const { dict } = useI18nStore((state) => state);
-  const breadcrumbs = breadcrumbsMap(
-    dict,
-    mode,
-    storeSlug,
-    tableNumber,
-    partySize,
-    storeName,
-  );
+  const breadcrumbs = useBreadcrumbs();
 
   const pathname = usePathname();
-  const pathnames = pathname.split("/").filter((x) => x && x !== lang);
+  const pathnames = pathname.split("/").filter((x) => x && x !== locale);
 
   const segments = pathnames.flatMap((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");
     const matchPath = `/${segmentPath}`;
-    const baseTo = `/${lang}/${segmentPath}`;
+    const baseTo = `/${locale}/${segmentPath}`;
 
     const {
       disabled = false,
@@ -337,7 +325,7 @@ const RouterBreadcrumbs = () => {
     } = findBreadcrumb(breadcrumbs, matchPath) || {};
     if (hidden) return [];
 
-    const hiddenTo = findHiddenTo(index, pathnames, lang, breadcrumbs);
+    const hiddenTo = findHiddenTo(index, pathnames, locale, breadcrumbs);
     const to = hiddenTo || baseTo;
 
     return [{ disabled, icon, label, to }];

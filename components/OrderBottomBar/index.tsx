@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
@@ -15,11 +16,9 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { RouteParams } from "@/types/routeParams";
 
-import { interpolate } from "@/utils/i18n";
 import { createOrderPaths } from "@/utils/orderPaths";
 
 const StyledBox = styled(Box)({
@@ -46,15 +45,16 @@ const OrderBottomBar = () => {
     (state) => state,
   );
 
-  const { dict } = useI18nStore((state) => state);
+  const tCart = useTranslations("cart");
+  const tCommon = useTranslations("common");
 
-  const { lang, mode, storeSlug, tableNumber, partySize } =
+  const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
 
   const pathname = usePathname();
 
   const { checkoutPath } = createOrderPaths({
-    lang,
+    locale,
     mode,
     storeSlug,
     tableNumber,
@@ -83,7 +83,7 @@ const OrderBottomBar = () => {
         >
           <Stack flexDirection="row" alignItems="center" gap={1}>
             <Typography component="span" fontWeight="bold" variant="subtitle1">
-              {interpolate(dict.cart.totalQuantity, {
+              {tCart("totalQuantity", {
                 quantity: cartTotalQuantity,
               })}
             </Typography>
@@ -91,10 +91,10 @@ const OrderBottomBar = () => {
               /
             </Typography>
             <Typography component="span" fontWeight="bold" variant="subtitle1">
-              {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
+              {tCommon("currency")} {cartTotalAmount.toLocaleString(locale)}
             </Typography>
           </Stack>
-          <StyledChip label={dict.cart.checkout} variant="outlined" />
+          <StyledChip label={tCart("checkout")} variant="outlined" />
         </StyledButton>
       </StyledBox>
     </Fade>

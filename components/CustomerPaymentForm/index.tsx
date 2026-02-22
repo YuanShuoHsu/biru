@@ -1,16 +1,17 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import { ecpayLocaleMap } from "@/constants/locale";
 
 import { LocaleEnum } from "@/enums/Locale";
+
+import type { Locale } from "@/i18n/routing";
 
 import {
   Button,
@@ -23,7 +24,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import type {
@@ -61,9 +61,7 @@ const CustomerPaymentForm = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
-  const { dict } = useI18nStore((state) => state);
-
-  const { lang, tableNumber } = useParams<RouteParams>();
+  const { locale, tableNumber } = useParams<RouteParams>();
   // const isDineIn = mode === ORDER_MODE.DineIn;
 
   const router = useRouter();
@@ -74,6 +72,8 @@ const CustomerPaymentForm = () => {
   const { menus } = useMenuStore((state) => state);
 
   const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);
+
+  const tCommon = useTranslations("common");
 
   const handleInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -89,7 +89,7 @@ const CustomerPaymentForm = () => {
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
-    const completeUrl = `${baseUrl}/${lang}/order/${tableNumber}/complete`;
+    const completeUrl = `${baseUrl}/${locale}/order/${tableNumber}/complete`;
 
     const dto = {
       base: {
@@ -111,14 +111,14 @@ const CustomerPaymentForm = () => {
             );
             const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
 
-            return `${itemName} ${formattedChoices} ${dict.common.multiply} ${quantity}`;
+            return `${itemName} ${formattedChoices} ${tCommon("multiply")} ${quantity}`;
           })
           .join("#"),
         ChoosePayment: payment as CreateEcpayDto["base"]["ChoosePayment"],
         ClientBackURL: completeUrl,
         OrderResultURL: completeUrl,
         NeedExtraPaidInfo: "Y" as const,
-        Language: getEcpayLanguage(lang),
+        Language: getEcpayLanguage(locale),
       },
     };
 
@@ -151,8 +151,8 @@ const CustomerPaymentForm = () => {
           variant="h6"
         >
           {/* {isDineIn
-            ? interpolate(dict.common.tableNumber, { tableNumber })
-            : dict.order.mode.pickup.label} */}
+            ? tCommon("tableNumber", { tableNumber })
+            : tOrder("mode.pickup.label")} */}
           桌號 {tableNumber}
         </Typography>
       </Stack>

@@ -1,0 +1,51 @@
+import { setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+
+import AuthVerifyEmail from ".";
+
+import type { Locale } from "@/i18n/routing";
+
+import { verifyEmailToken } from "@/utils/verifyEmail";
+
+interface AuthVerifyEmailPageProps {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{
+    email?: string;
+    redirectTo?: string;
+    token?: string;
+  }>;
+}
+
+const AuthVerifyEmailPage = async ({
+  params,
+  searchParams,
+}: AuthVerifyEmailPageProps) => {
+  const { locale } = await params;
+
+  setRequestLocale(locale);
+
+  const { email, redirectTo, token } = await searchParams;
+
+  const safeEmail = typeof email === "string" ? email : "";
+  const safeRedirectTo =
+    typeof redirectTo === "string" && redirectTo.startsWith("/")
+      ? redirectTo
+      : undefined;
+  const safeToken = typeof token === "string" ? token : "";
+
+  if (!safeEmail && !safeToken) notFound();
+
+  const errorMessage = safeToken ? await verifyEmailToken(locale, safeToken) : "";
+
+  return (
+    <AuthVerifyEmail
+      email={safeEmail}
+      errorMessage={errorMessage}
+      locale={locale}
+      redirectTo={safeRedirectTo}
+      token={safeToken}
+    />
+  );
+};
+
+export default AuthVerifyEmailPage;

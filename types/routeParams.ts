@@ -3,10 +3,10 @@ import type { PartySize } from "./partySize";
 import type { StoreSlug } from "./stores";
 import type { TableNumber } from "./tableNumbers";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 interface RouteParam {
-  lang: Locale;
+  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;

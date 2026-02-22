@@ -2,40 +2,27 @@
 // https://nextjs.org/docs/app/building-your-application/routing/internationalization
 // https://nextjs.org/docs/app/api-reference/file-conventions/proxy
 
-// https://next-intl.dev/docs/getting-started/app-router/without-i18n-routing
+// https://next-intl.dev/docs/getting-started/app-router
+// https://next-intl.dev/docs/routing/middleware
 
-import Negotiator from "negotiator";
+import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { i18n } from "./i18n-config";
+import { routing } from "./i18n/routing";
 
-import { match } from "@formatjs/intl-localematcher";
-
-const getLocale = (request: NextRequest): string | undefined => {
-  const negotiatorHeaders: Record<string, string> = {};
-  request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
-
-  const locales = Array.from(i18n.locales);
-
-  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
-    locales,
-  );
-
-  const locale = match(languages, locales, i18n.defaultLocale);
-
-  return locale;
-};
+const handleI18nRouting = createMiddleware(routing);
 
 export const proxy = (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
-  const pathnameLocale = i18n.locales.find(
+  const pathnameLocale = routing.locales.find(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`,
   );
-  const pathnameHasLocale = Boolean(pathnameLocale);
 
-  const locale = getLocale(request);
+  const locale = pathnameLocale || routing.defaultLocale;
+
+  const response = handleI18nRouting(request);
 
   const hasAuthHint = request.cookies.get("biru-auth")?.value === "true";
 
@@ -56,24 +43,19 @@ export const proxy = (request: NextRequest) => {
   const isMaintenancePath =
     pathnameLocale && pathname === `/${pathnameLocale}/maintenance`;
   if (isMaintenanceMode) {
-    if (isMaintenancePath) return;
+    if (isMaintenancePath) return response;
 
-    request.nextUrl.pathname = `/${pathnameLocale || locale}/maintenance`;
+    request.nextUrl.pathname = `/${locale}/maintenance`;
     return NextResponse.redirect(request.nextUrl);
   }
   if (isMaintenancePath) {
-    request.nextUrl.pathname = `/${pathnameLocale}`;
+    request.nextUrl.pathname = `/${locale}`;
     return NextResponse.redirect(request.nextUrl);
   }
 
-  if (pathnameHasLocale) return;
-
-  request.nextUrl.pathname = `/${locale}${pathname}`;
-  return NextResponse.redirect(request.nextUrl);
+  return response;
 };
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/data|_next/static|_next/image|apple-icon.png|favicon.ico|icon\\.svg|icon-192x192\\.png|icon-512x512\\.png|manifest\\.webmanifest|opengraph-image\\.jpg|twitter-image\\.jpg|[^/]+/opengraph-image\\.jpg|[^/]+/twitter-image\\.jpg|sitemap.xml|robots.txt|\\.well-known|images).*)",
-  ],
+  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
 };

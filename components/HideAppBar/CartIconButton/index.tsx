@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import CustomizedBadges from "@/components/CustomizedBadges";
 
 import { ShoppingCart } from "@mui/icons-material";
@@ -5,7 +7,6 @@ import { IconButton, Tooltip } from "@mui/material";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { handleDrawerToggle } from "@/utils/drawer";
 
@@ -15,10 +16,10 @@ const CartIconButton = () => {
   const { setDrawerOpen } = useDrawerStore((state) => state);
   const handleCartOpen = handleDrawerToggle(setDrawerOpen, "cart", true);
 
-  const { dict } = useI18nStore((state) => state);
+  const tAppBar = useTranslations("appBar");
 
   return (
-    <Tooltip title={dict.appBar.cart}>
+    <Tooltip title={tAppBar("cart")}>
       <IconButton aria-label="cart" color="inherit" onClick={handleCartOpen}>
         <CustomizedBadges badgeContent={cartTotalQuantity}>
           <ShoppingCart />

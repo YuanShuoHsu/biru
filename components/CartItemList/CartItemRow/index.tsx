@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
@@ -20,14 +21,12 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { type CartItem } from "@/stores/cart-store";
 
 import type { RouteParams } from "@/types/routeParams";
 
-import { interpolate } from "@/utils/i18n";
 import {
   getChoiceNames,
   getItemName,
@@ -76,16 +75,16 @@ interface CartItemRowProps {
 const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { id, amount, choices, extraCost, image, price, quantity } = item;
 
-  const { dict } = useI18nStore((state) => state);
+  const tCommon = useTranslations("common");
 
   const { menus } = useMenuStore((state) => state);
 
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
-  const itemName = getItemName(menus, id, lang);
-  const choiceNames = getChoiceNames(menus, id, choices, lang, {
-    colon: dict.common.colon,
-    delimiter: dict.common.delimiter,
+  const itemName = getItemName(menus, id, locale);
+  const choiceNames = getChoiceNames(menus, id, choices, locale, {
+    colon: tCommon("colon"),
+    delimiter: tCommon("delimiter"),
   });
 
   const {
@@ -103,11 +102,11 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(menus, id, choices, lang, getChoiceAvailableQuantity);
+    getLimitingChoicesCap(menus, id, choices, locale, getChoiceAvailableQuantity);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0
-      ? limitingChoiceNames.join(dict.common.delimiter)
+      ? limitingChoiceNames.join(tCommon("delimiter"))
       : "";
 
   const availableToAdd = Math.min(
@@ -118,13 +117,11 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const formHelperText =
     perItemCapLeft === availableToAdd
-      ? interpolate(dict.common.maxQuantity, { quantity: MAX_QUANTITY })
+      ? tCommon("maxQuantity", { quantity: MAX_QUANTITY })
       : itemStockCapLeft === availableToAdd
-        ? interpolate(dict.common.reachStockLimit, { label: "" })
+        ? tCommon("reachStockLimit", { label: "" })
         : optionCapLeft === availableToAdd
-          ? interpolate(dict.common.reachStockLimit, {
-              label: limitingChoicesLabel,
-            })
+          ? tCommon("reachStockLimit", { label: limitingChoicesLabel })
           : "";
 
   const canDecrease = quantity > 1;
@@ -204,7 +201,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
             fontWeight="bold"
             variant="body2"
           >
-            {dict.common.currency} {amount.toLocaleString(lang)}
+            {tCommon("currency")} {amount.toLocaleString(locale)}
           </Typography>
         </Grid>
         <Grid

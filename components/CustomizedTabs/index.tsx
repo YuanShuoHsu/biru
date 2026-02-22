@@ -4,6 +4,7 @@
 "use client";
 
 import dayjs from "dayjs";
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -26,7 +27,6 @@ import {
 import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
@@ -71,14 +71,14 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const { dict } = useI18nStore((state) => state);
+  const tOrder = useTranslations("order");
 
   const { orderSearchText } = useOrderSearchStore((state) => state);
   const searchText = orderSearchText.trim().toLowerCase();
 
   const { menus } = useMenuStore((state) => state);
 
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
@@ -87,7 +87,7 @@ const CustomizedTabs = () => {
   const categoryGroups = menus
     .map(({ id, name, items }) => ({
       id,
-      label: name[lang],
+      label: name[locale],
       items: items.filter(({ isActive }) => isActive),
     }))
     .filter(({ items }) => items.length > 0);
@@ -103,7 +103,7 @@ const CustomizedTabs = () => {
       ? {
           id: TOP_SOLD,
           items: topSoldItems,
-          label: dict.order.mode.storeSlug.tableNumber.topSold,
+          label: tOrder("mode.storeSlug.tableNumber.topSold"),
         }
       : null;
 
@@ -117,7 +117,7 @@ const CustomizedTabs = () => {
       ? {
           id: LATEST,
           items: latestItems,
-          label: dict.order.mode.storeSlug.tableNumber.latest,
+          label: tOrder("mode.storeSlug.tableNumber.latest"),
         }
       : null;
 
@@ -131,7 +131,7 @@ const CustomizedTabs = () => {
     .map((group) => ({
       ...group,
       items: group.items.filter(({ name }) =>
-        name[lang].toLowerCase().includes(searchText),
+        name[locale].toLowerCase().includes(searchText),
       ),
     }))
     .filter(

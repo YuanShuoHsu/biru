@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import CartItemRow from "./CartItemRow";
@@ -5,7 +6,6 @@ import CartItemRow from "./CartItemRow";
 import { Divider, List, NoSsr, Typography } from "@mui/material";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { getItemKey } from "@/utils/menu";
 
@@ -16,16 +16,16 @@ interface CartItemListProps {
 const CartItemList = ({ forceXsLayout = false }: CartItemListProps) => {
   const { isCartEmpty, cartItemsList } = useCartStore((state) => state);
 
-  const { dict } = useI18nStore((state) => state);
+  const tCommon = useTranslations("common");
 
-  const loading = <Typography padding={2}>{dict.common.loading}</Typography>;
+  const loading = <Typography padding={2}>{tCommon("loading")}</Typography>;
 
   return (
     <List disablePadding>
       <NoSsr defer fallback={loading}>
         {isCartEmpty ? (
           <Typography padding={2} variant="body1">
-            {dict.common.empty}
+            {tCommon("empty")}
           </Typography>
         ) : (
           cartItemsList.map((item, index) => {

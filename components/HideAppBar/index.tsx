@@ -52,7 +52,7 @@ const HideAppBar = () => {
   const handleNavOpen = handleDrawerToggle(setDrawerOpen, "nav", true);
 
   const pathname = usePathname();
-  const { lang, mode, storeSlug, tableNumber, partySize } =
+  const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
 
   const trigger = useScrollTrigger({
@@ -60,7 +60,7 @@ const HideAppBar = () => {
   });
 
   const { isOrderRoute: showShoppingCartButton } = createOrderPaths({
-    lang,
+    locale,
     mode,
     storeSlug,
     tableNumber,

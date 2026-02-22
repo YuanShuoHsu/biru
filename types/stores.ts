@@ -1,4 +1,4 @@
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 export interface Store {
   id: string;

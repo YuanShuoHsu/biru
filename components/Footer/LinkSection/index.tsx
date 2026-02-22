@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import NextLink from "next/link";
 import { useParams } from "next/navigation";
 
@@ -17,17 +18,12 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
-import { useI18nStore, type I18nDict } from "@/providers/i18n-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { RouteParams } from "@/types/routeParams";
 
-import {
-  getAccountMenuItems,
-  getLogoutMenuItem,
-  getProfileMenuItems,
-} from "@/utils/account";
-import { getAuthMenuItems } from "@/utils/auth";
+import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
+import { getAuthMenuItems, getLogoutMenuItem } from "@/utils/auth";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -53,91 +49,77 @@ const SectionSkeleton = () => (
   </Stack>
 );
 
-const footerItemsMap = ({
-  accountChildren,
-  authChildren,
-  dict,
-  isAuthLoading,
-  isSignedIn,
-}: {
-  accountChildren: MenuItem[];
-  authChildren: MenuItem[];
-  dict: I18nDict;
-  isAuthLoading: boolean;
-  isSignedIn: boolean;
-}): MenuItem[] => [
-  {
-    children: [
-      {
-        label: dict.order.mode.pickup.label,
-        to: `/${ORDER_MODE.Pickup}`,
-      },
-    ],
-    label: dict.order.label,
-    to: "/order",
-  },
-  isAuthLoading
-    ? { slot: () => <SectionSkeleton /> }
-    : {
-        ...(isSignedIn
-          ? {
-              children: accountChildren,
-              label: dict.account.label,
-              to: "/account",
-            }
-          : {
-              children: authChildren,
-              label: dict.auth.label,
-              to: "/auth",
-            }),
-      },
-  {
-    children: [
-      {
-        label: dict.company.about.label,
-        to: `/about`,
-      },
-      {
-        label: dict.company.legal.terms.label,
-        to: `/terms`,
-      },
-      {
-        label: dict.company.legal.privacy.label,
-        to: `/privacy`,
-      },
-    ],
-    label: dict.company.label,
-    to: "/company",
-  },
-];
-
-const LinkSection = () => {
+const useFooterItems = (): MenuItem[] => {
   const { isAuthLoading, isSignedIn } = useAuthStore((state) => state);
-
-  const { dict } = useI18nStore((state) => state);
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const { lang } = useParams<RouteParams>();
+  const tOrder = useTranslations("order");
+  const tAuth = useTranslations("auth");
+  const tAccount = useTranslations("account");
+  const tCompany = useTranslations("company");
 
-  const authChildren = getAuthMenuItems(dict).map(({ label, to }) => ({
+  const authChildren = getAuthMenuItems(tAuth).map(({ label, to }) => ({
     label,
     to,
   }));
 
   const accountChildren = [
-    ...getProfileMenuItems(dict),
-    ...getAccountMenuItems(dict),
-    getLogoutMenuItem(dict, { isMutatingLogout, onLogout: handleLogout }),
+    ...getProfileMenuItems(tAccount),
+    ...getAccountMenuItems(tAccount),
+    getLogoutMenuItem(tAuth, { isMutatingLogout, onLogout: handleLogout }),
   ];
 
-  const footerItems = footerItemsMap({
-    accountChildren,
-    authChildren,
-    dict,
-    isAuthLoading,
-    isSignedIn,
-  });
+  return [
+    {
+      children: [
+        {
+          label: tOrder("mode.pickup.label"),
+          to: `/${ORDER_MODE.Pickup}`,
+        },
+      ],
+      label: tOrder("label"),
+      to: "/order",
+    },
+    isAuthLoading
+      ? { slot: () => <SectionSkeleton /> }
+      : {
+          ...(isSignedIn
+            ? {
+                children: accountChildren,
+                label: tAccount("label"),
+                to: "/account",
+              }
+            : {
+                children: authChildren,
+                label: tAuth("label"),
+                to: "/auth",
+              }),
+        },
+    {
+      children: [
+        {
+          label: tCompany("about.label"),
+          to: `/about`,
+        },
+        {
+          label: tCompany("legal.terms.label"),
+          to: `/terms`,
+        },
+        {
+          label: tCompany("legal.privacy.label"),
+          to: `/privacy`,
+        },
+      ],
+      label: tCompany("label"),
+      to: "/company",
+    },
+  ];
+};
+
+const LinkSection = () => {
+  const { locale } = useParams<RouteParams>();
+  const footerItems = useFooterItems();
 
   return (
     <>
@@ -157,7 +139,7 @@ const LinkSection = () => {
                       color="text.secondary"
                       component={onClick ? "button" : NextLink}
                       href={
-                        onClick ? undefined : `/${lang}${parentTo}${childTo}`
+                        onClick ? undefined : `/${locale}${parentTo}${childTo}`
                       }
                       key={onClick ? childLabel : childTo}
                       onClick={onClick}

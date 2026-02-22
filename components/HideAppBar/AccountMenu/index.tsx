@@ -3,6 +3,7 @@
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
+import { useTranslations } from "next-intl";
 import NextLink from "next/link";
 import {
   useParams,
@@ -30,17 +31,12 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 import { RouteParams } from "@/types/routeParams";
 
-import {
-  getAccountMenuItems,
-  getLogoutMenuItem,
-  getProfileMenuItems,
-} from "@/utils/account";
-import { getDisplayName } from "@/utils/auth";
+import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
+import { getDisplayName, getLogoutMenuItem } from "@/utils/auth";
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledAvatar = styled(Avatar, {
@@ -93,15 +89,16 @@ const AccountMenu = () => {
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
-  const displayName = getDisplayName(lang, profile);
+  const displayName = getDisplayName(locale, profile);
   const avatarChild = !isSignedIn ? <AccountCircle /> : displayName[0];
 
-  const { dict } = useI18nStore((state) => state);
+  const tAccount = useTranslations("account");
+  const tAuth = useTranslations("auth");
   const tooltipTitle = isSignedIn
-    ? dict.account.accountSettings.label
-    : dict.auth.signIn.label;
+    ? tAccount("accountSettings.label")
+    : tAuth("signIn.label");
 
   const pathname = usePathname();
 
@@ -112,9 +109,9 @@ const AccountMenu = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const redirectParam = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith(`/${lang}/account`);
-  const isAuthPage = pathname.startsWith(`/${lang}/auth`);
-  const isCompanyPage = pathname.startsWith(`/${lang}/company`);
+  const isAccountPage = pathname.startsWith(`/${locale}/account`);
+  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
+  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
 
   const redirectTarget =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
@@ -126,7 +123,7 @@ const AccountMenu = () => {
 
     if (!isSignedIn) {
       router.push(
-        handleQueryParam(`/${lang}/auth/sign-in`, {
+        handleQueryParam(`/${locale}/auth/sign-in`, {
           [QueryParamKey.RedirectTo]: redirectTarget,
         }),
       );
@@ -139,10 +136,10 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const profileMenuItems = getProfileMenuItems(dict);
+  const profileMenuItems = getProfileMenuItems(tAccount);
   const accountMenuItems = [
-    ...getAccountMenuItems(dict),
-    getLogoutMenuItem(dict, {
+    ...getAccountMenuItems(tAccount),
+    getLogoutMenuItem(tAuth, {
       isMutatingLogout,
       onLogout: handleLogout,
     }),
@@ -151,7 +148,7 @@ const AccountMenu = () => {
   const renderMenuItems = (items: MenuItemData[]) =>
     items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
       const key = to || index;
-      const href = to && `/${lang}/account${to}`;
+      const href = to && `/${locale}/account${to}`;
 
       const selected = href
         ? pathname === href || pathname.startsWith(`${href}/`)

@@ -6,12 +6,12 @@
 # https://mui.com/material-ui/customization/color/
 
 唇 霞染胭脂 pink[100] (#f8bbd0) 粉
-大橘為重 暖陽淺橘 orange[100] (#ffe0b2) 橘
+大橘為重 暖陽淺橘 orange[100] (#ffe0b2) 橘
 身側 羽柔暖棕 brown[200] (#bcaaa4) 淺棕
 背毛 焦香摩卡 brown[700] (#5d4037) 深棕 // 需要試試 600
 胸毛 凝霜素白 grey[50] (#fafafa) 白
 法令紋 錦夜墨痕 grey[900] (#212121) 黑
-眼 霧織灰藍 blueGrey[500] (#607d8b) 灰藍
+眼 霧織灰藍 blueGrey[500] (#607d8b) 灰藍
 ```
 
 ## Next.js
@@ -63,23 +63,6 @@ Generating route types...
 ✓ Route types generated successfully
 
 Success! Created biru at /Users/xuyuanshi/Desktop/biru
-```
-
-## Prettier
-
-```bash
-# https://prettier.io/docs/install
-pnpm add --save-dev --save-exact prettier
-node --eval "fs.writeFileSync('.prettierrc','{}\n')"
-node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
-pnpm exec prettier . --write
-npx prettier . --check
-
-# https://prettier.io/docs/configuration
-# https://json.schemastore.org/prettierrc
-
-# .prettierrc
-{}
 ```
 
 ## Editor
@@ -224,6 +207,23 @@ node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
 }
 ```
 
+## Prettier
+
+```bash
+# https://prettier.io/docs/install
+pnpm add --save-dev --save-exact prettier
+node --eval "fs.writeFileSync('.prettierrc','{}\n')"
+node --eval "fs.writeFileSync('.prettierignore','# Ignore artifacts:\nbuild\ncoverage\n')"
+pnpm exec prettier . --write
+npx prettier . --check
+
+# https://prettier.io/docs/configuration
+# https://json.schemastore.org/prettierrc
+
+# .prettierrc
+{}
+```
+
 ## Material UI
 
 ```bash
@@ -237,25 +237,18 @@ pnpm add @mui/material-nextjs @emotion/cache
 # https://mui.com/material-ui/customization/theme-components/
 ```
 
-## notistack
-
-```bash
-# https://notistack.com/
-pnpm add notistack
-```
-
-## Swiper
-
-```bash
-# https://swiperjs.com/get-started
-pnpm add swiper
-```
-
 ## SWR
 
 ```bash
 # https://swr.vercel.app/docs/getting-started
 pnpm add swr
+```
+
+## Zod
+
+```bash
+# https://zod.dev/
+pnpm add zod
 ```
 
 ## Zustand
@@ -267,25 +260,11 @@ pnpm add zustand
 # https://zustand.docs.pmnd.rs/guides/nextjs
 ```
 
-## match
+## next-intl
 
 ```bash
-# https://nextjs.org/docs/app/building-your-application/routing/internationalization
-pnpm add @formatjs/intl-localematcher
-```
-
-## negotiator
-
-```bash
-# https://nextjs.org/docs/app/building-your-application/routing/internationalization
-
-# https://www.npmjs.com/package/negotiator
-# https://github.com/jshttp/negotiator
-pnpm add negotiator
-
-# https://www.npmjs.com/package/@types/negotiator
-# https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/negotiator
-pnpm add -D @types/negotiator
+# https://next-intl.dev/docs/getting-started/app-router
+pnpm add next-intl
 ```
 
 ## autosuggest-highlight
@@ -305,6 +284,21 @@ pnpm add @mui/x-date-pickers
 pnpm add dayjs
 ```
 
+## libphonenumber-js
+
+```bash
+# https://www.npmjs.com/package/libphonenumber-js
+# https://gitlab.com/catamphetamine/libphonenumber-js
+pnpm add libphonenumber-js
+```
+
+## notistack
+
+```bash
+# https://notistack.com/
+pnpm add notistack
+```
+
 ## react-imask
 
 ```bash
@@ -314,14 +308,6 @@ pnpm add dayjs
 pnpm add react-imask
 ```
 
-## libphonenumber-js
-
-```bash
-# https://www.npmjs.com/package/libphonenumber-js
-# https://gitlab.com/catamphetamine/libphonenumber-js
-pnpm add libphonenumber-js
-```
-
 ## socket.io-client
 
 ```bash
@@ -329,11 +315,11 @@ pnpm add libphonenumber-js
 pnpm add socket.io-client
 ```
 
-## Zod
+## Swiper
 
 ```bash
-# https://zod.dev/
-pnpm add zod
+# https://swiperjs.com/get-started
+pnpm add swiper
 ```
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).

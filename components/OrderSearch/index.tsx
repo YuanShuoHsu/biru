@@ -1,11 +1,11 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 import { Clear, Search } from "@mui/icons-material";
 import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
-import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 const StyledIconButton = styled(IconButton, {
@@ -17,7 +17,7 @@ const StyledIconButton = styled(IconButton, {
 }));
 
 const OrderSearch = () => {
-  const { dict } = useI18nStore((state) => state);
+  const tOrder = useTranslations("order");
 
   const { clearOrderSearchText, orderSearchText, setOrderSearchText } =
     useOrderSearchStore((state) => state);
@@ -39,7 +39,7 @@ const OrderSearch = () => {
     <TextField
       fullWidth
       onChange={handleChange}
-      placeholder={dict.order.mode.storeSlug.tableNumber.search.placeholder}
+      placeholder={tOrder("mode.storeSlug.tableNumber.search.placeholder")}
       slotProps={{
         input: {
           startAdornment: (

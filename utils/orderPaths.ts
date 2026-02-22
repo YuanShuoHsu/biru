@@ -1,6 +1,6 @@
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import { ORDER_MODE } from "@/constants/orderMode";
+
+import type { Locale } from "@/i18n/routing";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { PartySize } from "@/types/partySize";
@@ -8,14 +8,14 @@ import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 export const createOrderPaths = ({
-  lang,
+  locale,
   mode,
   storeSlug,
   tableNumber,
   partySize,
   pathname,
 }: {
-  lang: Locale;
+  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;
@@ -24,7 +24,7 @@ export const createOrderPaths = ({
 }) => {
   const isPickup = mode === ORDER_MODE.Pickup;
 
-  const basePath = `/${lang}/order/${mode}/${storeSlug}${
+  const basePath = `/${locale}/order/${mode}/${storeSlug}${
     isPickup ? "" : `/${tableNumber}`
   }`;
   const menuPath = isPickup ? basePath : `${basePath}/${partySize}`;

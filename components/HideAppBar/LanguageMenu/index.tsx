@@ -2,21 +2,18 @@
 // https://mui.com/material-ui/react-app-bar/#system-MenuAppBar.tsx
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import { languageLocaleMap } from "@/constants/locale";
 
-import { i18n } from "@/i18n-config";
+import { type Locale, routing } from "@/i18n/routing";
 
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 const StyledMenu = styled(Menu)(({ theme }) => ({
   marginTop: theme.spacing(6),
@@ -26,9 +23,9 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 }));
 
-const languages = i18n.locales.map((lang) => ({
-  lang,
-  label: languageLocaleMap[lang],
+const languages = routing.locales.map((locale) => ({
+  locale,
+  label: languageLocaleMap[locale],
 }));
 
 const LanguageMenu = () => {
@@ -37,17 +34,17 @@ const LanguageMenu = () => {
   );
   const open = Boolean(anchorElLanguage);
 
-  const { dict } = useI18nStore((state) => state);
+  const tAppBar = useTranslations("appBar");
 
-  const { lang: currentLang } = useParams();
+  const { locale: currentLang } = useParams();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const redirectedPathname = (lang: Locale) => {
+  const redirectedPathname = (locale: Locale) => {
     if (!pathname) return "/";
 
     const segments = pathname.split("/");
-    segments[1] = lang;
+    segments[1] = locale;
     const search = searchParams.toString();
 
     return `${segments.join("/")}${search ? `?${search}` : ""}`;
@@ -60,7 +57,7 @@ const LanguageMenu = () => {
 
   return (
     <>
-      <Tooltip title={dict.appBar.languageSwitcher}>
+      <Tooltip title={tAppBar("languageSwitcher")}>
         <IconButton
           aria-controls={open ? "language-menu" : undefined}
           aria-expanded={open ? "true" : undefined}
@@ -88,14 +85,14 @@ const LanguageMenu = () => {
           vertical: "top",
         }}
       >
-        {languages.map(({ label, lang }) => (
+        {languages.map(({ label, locale }) => (
           <MenuItem
             component={Link}
-            href={redirectedPathname(lang)}
-            key={lang}
+            href={redirectedPathname(locale)}
+            key={locale}
             onClick={handleClose}
             replace
-            selected={lang === currentLang}
+            selected={locale === currentLang}
           >
             {label}
           </MenuItem>

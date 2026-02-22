@@ -1,49 +1,44 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
-
-import type { Locale } from "@/app/[lang]/dictionaries";
 
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
-import { MenuItem, TextField } from "@mui/material";
+import type { Locale } from "@/i18n/routing";
 
-import { useI18nStore } from "@/providers/i18n-store-provider";
+import { MenuItem, TextField } from "@mui/material";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-import { interpolate } from "@/utils/i18n";
-
 interface OrderModeDineInStoreSlugTableNumberSelectProps {
-  lang: Locale;
+  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;
 }
 
 const OrderModeDineInStoreSlugTableNumberSelect = ({
-  lang,
+  locale,
   mode,
   storeSlug,
   tableNumber,
 }: OrderModeDineInStoreSlugTableNumberSelectProps) => {
-  const { dict } = useI18nStore((state) => state);
+  const tOrder = useTranslations("order");
 
   const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(
-      `/${lang}/order/${mode}/${storeSlug}/${tableNumber}/${event.target.value}`,
+      `/${locale}/order/${mode}/${storeSlug}/${tableNumber}/${event.target.value}`,
     );
 
   return (
     <TextField
       fullWidth
-      label={
-        dict.order.mode.dineIn.storeSlug.tableNumber.partySize.select.label
-      }
+      label={tOrder("mode.dineIn.storeSlug.tableNumber.partySize.select.label")}
       name="partySize"
       onChange={handleChange}
       required
@@ -54,9 +49,8 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
       {Array.from({ length: PARTY_SIZE_MAX }, (_, index) => index + 1).map(
         (count) => (
           <MenuItem key={count} value={count}>
-            {interpolate(
-              dict.order.mode.dineIn.storeSlug.tableNumber.partySize.select
-                .value,
+            {tOrder(
+              "mode.dineIn.storeSlug.tableNumber.partySize.select.value",
               {
                 count,
               },

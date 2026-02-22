@@ -1,4 +1,4 @@
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 interface Ingredient {
   id: string;

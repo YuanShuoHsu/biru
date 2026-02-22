@@ -1,9 +1,8 @@
+import { useTranslations } from "next-intl";
+
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { interpolate } from "@/utils/i18n";
 import { getTypographyVariant } from "@/utils/soldOut";
 
 const StyledButton = styled(Button, {
@@ -38,10 +37,10 @@ interface ItemSoldOutProps {
 }
 
 const ItemSoldOut = ({ isItemOutOfStock }: ItemSoldOutProps) => {
-  const { dict } = useI18nStore((state) => state);
+  const tCommon = useTranslations("common");
 
   const message = isItemOutOfStock
-    ? interpolate(dict.common.soldOut, {
+    ? tCommon("soldOut", {
         label: "",
       })
     : "";

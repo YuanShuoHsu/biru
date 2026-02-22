@@ -2,6 +2,7 @@
 // https://mui.com/material-ui/react-list/#NestedList.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
+import { useTranslations } from "next-intl";
 import NextLink from "next/link";
 import {
   useParams,
@@ -46,7 +47,6 @@ import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
-import { type I18nDict, useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { PartySize } from "@/types/partySize";
@@ -54,14 +54,9 @@ import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-import {
-  getAccountMenuItems,
-  getLogoutMenuItem,
-  getProfileMenuItems,
-} from "@/utils/account";
-import { getAuthMenuItems } from "@/utils/auth";
+import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
+import { getAuthMenuItems, getLogoutMenuItem } from "@/utils/auth";
 import { handleDrawerToggle } from "@/utils/drawer";
-import { interpolate } from "@/utils/i18n";
 import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
@@ -116,7 +111,7 @@ const StyledExpandMore = styled(ExpandMore, {
 }));
 
 const createDineInSlot = (
-  dict: I18nDict,
+  tOrder: ReturnType<typeof useTranslations<"order">>,
   storeName: StoreName,
   tableNumber?: TableNumber,
   partySize?: PartySize,
@@ -145,10 +140,9 @@ const createDineInSlot = (
                 <TableBar />
               </ListItemIcon>
               <ListItemText
-                primary={interpolate(
-                  dict.order.mode.dineIn.storeSlug.tableNumber.value,
-                  { tableNumber },
-                )}
+                primary={tOrder("mode.dineIn.storeSlug.tableNumber.value", {
+                  tableNumber,
+                })}
               />
             </Stack>
           )}
@@ -158,9 +152,8 @@ const createDineInSlot = (
                 {partySize === "1" ? <Person /> : <Group />}
               </ListItemIcon>
               <ListItemText
-                primary={interpolate(
-                  dict.order.mode.dineIn.storeSlug.tableNumber.partySize.select
-                    .value,
+                primary={tOrder(
+                  "mode.dineIn.storeSlug.tableNumber.partySize.select.value",
                   { count: partySize },
                 )}
               />
@@ -170,7 +163,7 @@ const createDineInSlot = (
         <StyledChip
           color="primary"
           icon={<Restaurant />}
-          label={dict.order.mode.dineIn.label}
+          label={tOrder("mode.dineIn.label")}
           size="small"
           variant="outlined"
         />
@@ -186,7 +179,10 @@ const dividerSlot: MenuItem = {
 interface NavItemsMapOptions {
   accountChildren: MenuItem[];
   authChildren: MenuItem[];
-  dict: I18nDict;
+  tHome: ReturnType<typeof useTranslations>;
+  tOrder: ReturnType<typeof useTranslations>;
+  tAccount: ReturnType<typeof useTranslations>;
+  tAuth: ReturnType<typeof useTranslations>;
   dineInChildren: MenuItem[];
   isSignedIn: boolean;
 }
@@ -194,28 +190,31 @@ interface NavItemsMapOptions {
 const navItemsMap = ({
   accountChildren,
   authChildren,
-  dict,
+  tHome,
+  tOrder,
+  tAccount,
+  tAuth,
   dineInChildren,
   isSignedIn,
 }: NavItemsMapOptions): MenuItem[] => [
-  { icon: Home, label: dict.home.label, to: "/" },
+  { icon: Home, label: tHome("label"), to: "/" },
   {
     children: dineInChildren,
     icon: ShoppingCart,
-    label: dict.order.label,
+    label: tOrder("label"),
     to: "/order",
   },
   isSignedIn
     ? {
         children: accountChildren,
         icon: AccountCircle,
-        label: dict.account.label,
+        label: tAccount("label"),
         to: "/account",
       }
     : {
         children: authChildren,
         icon: AccountCircle,
-        label: dict.auth.label,
+        label: tAuth("label"),
         to: "/auth",
       },
 ];
@@ -266,11 +265,14 @@ const NavTemporaryDrawer = () => {
   const open = drawer.nav;
   const handleNavClose = handleDrawerToggle(setDrawerOpen, "nav", false);
 
-  const { dict } = useI18nStore((state) => state);
+  const tHome = useTranslations("home");
+  const tOrder = useTranslations("order");
+  const tAuth = useTranslations("auth");
+  const tAccount = useTranslations("account");
 
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const { lang, mode, storeSlug, tableNumber, partySize } =
+  const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
   const pathname = usePathname();
   const router = useRouter();
@@ -282,32 +284,32 @@ const NavTemporaryDrawer = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const redirectParam = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith(`/${lang}/account`);
-  const isAuthPage = pathname.startsWith(`/${lang}/auth`);
-  const isCompanyPage = pathname.startsWith(`/${lang}/company`);
+  const isAccountPage = pathname.startsWith(`/${locale}/account`);
+  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
+  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
 
   const redirectTo =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
       ? redirectParam
       : currentURL;
 
-  const storeName = getStoreName(lang, stores, storeSlug);
+  const storeName = getStoreName(locale, stores, storeSlug);
 
   const accountChildren = [
-    ...getProfileMenuItems(dict),
+    ...getProfileMenuItems(tAccount),
     dividerSlot,
-    ...getAccountMenuItems(dict),
-    getLogoutMenuItem(dict, { isMutatingLogout, onLogout: handleLogout }),
+    ...getAccountMenuItems(tAccount),
+    getLogoutMenuItem(tAuth, { isMutatingLogout, onLogout: handleLogout }),
   ];
 
-  const authChildren = getAuthMenuItems(dict, redirectTo);
+  const authChildren = getAuthMenuItems(tAuth, redirectTo);
 
   const dineInChildren = [
     ...(mode === ORDER_MODE.DineIn && storeSlug && storeName
       ? [
-          createDineInSlot(dict, storeName, tableNumber, partySize, () =>
+          createDineInSlot(tOrder, storeName, tableNumber, partySize, () =>
             router.push(
-              `/${[lang, "order", mode, storeSlug, tableNumber, partySize]
+              `/${[locale, "order", mode, storeSlug, tableNumber, partySize]
                 .filter(Boolean)
                 .join("/")}`,
             ),
@@ -316,7 +318,7 @@ const NavTemporaryDrawer = () => {
       : []),
     {
       icon: LocalMall,
-      label: dict.order.mode.pickup.label,
+      label: tOrder("mode.pickup.label"),
       to: "/pickup",
     },
   ];
@@ -324,7 +326,10 @@ const NavTemporaryDrawer = () => {
   const navItems = navItemsMap({
     accountChildren,
     authChildren,
-    dict,
+    tHome,
+    tOrder,
+    tAccount,
+    tAuth,
     dineInChildren,
     isSignedIn,
   });
@@ -340,7 +345,7 @@ const NavTemporaryDrawer = () => {
       const parentPrefix = parentPath === "/" ? "" : parentPath;
       const basePath = toPath ? `${parentPrefix}${toPath}` : parentPath;
       const pathWithLang =
-        basePath === "/" ? `/${lang}` : `/${lang}${basePath}`;
+        basePath === "/" ? `/${locale}` : `/${locale}${basePath}`;
 
       const isExpandable = Boolean(children?.length);
       const href =

@@ -1,13 +1,13 @@
+import type { useTranslations } from "next-intl";
+
 import { fetcher } from "./fetcher";
 import { handleQueryParam, QueryParamKey } from "./queryParams";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import { LocaleEnum } from "@/enums/Locale";
 
-import { Login, PersonAdd } from "@mui/icons-material";
+import { Locale } from "@/i18n/routing";
 
-import type { I18nDict } from "@/providers/i18n-store-provider";
+import { Login, Logout, PersonAdd } from "@mui/icons-material";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
@@ -20,13 +20,33 @@ export const fetchProfile = (accessToken: string) =>
     credentials: "include",
   });
 
+export const getAuthMenuItems = (
+  tAuth: ReturnType<typeof useTranslations>,
+  redirectTo?: string,
+): MenuItem[] => [
+  {
+    icon: Login,
+    label: tAuth("signIn.label"),
+    to: handleQueryParam("/sign-in", {
+      [QueryParamKey.RedirectTo]: redirectTo,
+    }),
+  },
+  {
+    icon: PersonAdd,
+    label: tAuth("signUp.label"),
+    to: handleQueryParam("/sign-up", {
+      [QueryParamKey.RedirectTo]: redirectTo,
+    }),
+  },
+];
+
 export const getDisplayName = (
-  lang: Locale,
+  locale: Locale,
   profile: UserResponseDto | null,
 ) => {
   if (!profile) return "";
 
-  const showFamilyNameFirst = lang !== LocaleEnum.En;
+  const showFamilyNameFirst = locale !== LocaleEnum.En;
 
   const nameParts = showFamilyNameFirst
     ? [profile.lastName, profile.firstName]
@@ -37,22 +57,15 @@ export const getDisplayName = (
   return name || profile.email || "";
 };
 
-export const getAuthMenuItems = (
-  dict: I18nDict,
-  redirectTo?: string,
-): MenuItem[] => [
+export const getLogoutMenuItem = (
+  tAuth: ReturnType<typeof useTranslations>,
   {
-    icon: Login,
-    label: dict.auth.signIn.label,
-    to: handleQueryParam("/sign-in", {
-      [QueryParamKey.RedirectTo]: redirectTo,
-    }),
-  },
-  {
-    icon: PersonAdd,
-    label: dict.auth.signUp.label,
-    to: handleQueryParam("/sign-up", {
-      [QueryParamKey.RedirectTo]: redirectTo,
-    }),
-  },
-];
+    isMutatingLogout,
+    onLogout,
+  }: { isMutatingLogout?: boolean; onLogout: () => void },
+): MenuItem => ({
+  disabled: isMutatingLogout,
+  icon: Logout,
+  label: tAuth("signOut.label"),
+  onClick: onLogout,
+});

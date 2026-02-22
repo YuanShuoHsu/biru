@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
@@ -8,8 +9,6 @@ import BrandMark from "@/components/BrandMark";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { sendRequest } from "@/utils/fetcher";
 
@@ -25,7 +24,8 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 const Newsletter = () => {
   const [form, setForm] = useState({ email: "" });
 
-  const { dict } = useI18nStore((state) => state);
+  const tAuth = useTranslations("auth");
+  const tHome = useTranslations("home");
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +49,7 @@ const Newsletter = () => {
 
     const trimmedEmail = form.email.trim();
     if (!trimmedEmail || !isLikelyEmail(trimmedEmail)) {
-      enqueueSnackbar(dict.home.footer.newsletter.invalidEmail, {
+      enqueueSnackbar(tHome("footer.newsletter.invalidEmail"), {
         variant: "warning",
       });
       return;
@@ -59,7 +59,7 @@ const Newsletter = () => {
       await trigger({ email: trimmedEmail });
 
       setForm({ email: "" });
-      enqueueSnackbar(dict.home.footer.newsletter.success, {
+      enqueueSnackbar(tHome("footer.newsletter.success"), {
         variant: "success",
       });
     } catch {
@@ -71,10 +71,10 @@ const Newsletter = () => {
     <StyledGrid size={{ xs: 12, md: 6 }}>
       <BrandMark color="text.primary" />
       <Typography color="text.primary" variant="subtitle2">
-        {dict.home.footer.newsletter.title}
+        {tHome("footer.newsletter.title")}
       </Typography>
       <Typography color="text.secondary" variant="body2">
-        {dict.home.footer.newsletter.subtitle}
+        {tHome("footer.newsletter.subtitle")}
       </Typography>
       <Box
         component="form"
@@ -86,10 +86,10 @@ const Newsletter = () => {
       >
         <TextField
           autoComplete="email"
-          label={dict.auth.email.label}
+          label={tAuth("email.label")}
           name="email"
           onChange={handleChange}
-          placeholder={dict.auth.email.placeholder}
+          placeholder={tAuth("email.placeholder")}
           required
           size="small"
           sx={{
@@ -108,7 +108,7 @@ const Newsletter = () => {
           type="submit"
           variant="outlined"
         >
-          {dict.home.footer.newsletter.action}
+          {tHome("footer.newsletter.action")}
         </Button>
       </Box>
     </StyledGrid>

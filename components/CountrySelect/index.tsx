@@ -7,6 +7,7 @@
 
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
 
@@ -23,8 +24,6 @@ import {
   type BoxProps,
 } from "@mui/material";
 import { darken, lighten, styled } from "@mui/material/styles";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { CountryOption, CountryType } from "@/types/countries";
 
@@ -145,7 +144,7 @@ const CountrySelect = ({
 
   const hint = useRef("");
 
-  const { dict } = useI18nStore((state) => state);
+  const tAuth = useTranslations("auth");
 
   const [inputValue, setInputValue] = useState(formatPhone(phone));
 
@@ -209,7 +208,7 @@ const CountrySelect = ({
             {...params}
             error={error}
             helperText={helperText}
-            label={dict.auth.chooseCountry}
+            label={tAuth("chooseCountry")}
             onChange={({ target: { value: newValue } }) => {
               setInputValue(newValue);
 

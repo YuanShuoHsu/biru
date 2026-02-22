@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useRef } from "react";
@@ -21,7 +22,6 @@ import { alpha, styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
@@ -137,16 +137,20 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
   const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);
-  const { dict } = useI18nStore((state) => state);
   const { menus } = useMenuStore((state) => state);
   const { view } = useViewStore((state) => state);
+
+  const tCommon = useTranslations("common");
+  const tDialog = useTranslations("dialog");
+  const tOrder = useTranslations("order");
+
   const viewDirection = ViewDirections[view];
 
-  const displayPrice = price.toLocaleString(lang);
+  const displayPrice = price.toLocaleString(locale);
 
   // const sizes = options?.find(({ id }) => id === "size")?.choices;
 
@@ -160,8 +164,8 @@ const ActionAreaCard = ({
     if (isItemOutOfStock) return;
 
     setDialog({
-      cancelText: dict.dialog.close,
-      confirmText: dict.dialog.addToCart,
+      cancelText: tDialog("close"),
+      confirmText: tDialog("addToCart"),
       content: (
         <CardDialogContent
           id={id}
@@ -210,7 +214,7 @@ const ActionAreaCard = ({
         <ImageBox viewDirection={viewDirection}>
           {topSoldRank !== undefined && (
             <TopSoldChip
-              label={`${dict.order.mode.storeSlug.tableNumber.top} ${topSoldRank + 1}`}
+              label={`${tOrder("mode.storeSlug.tableNumber.top")} ${topSoldRank + 1}`}
               icon={<FavoriteBorder />}
               rank={topSoldRank}
               size="small"
@@ -218,7 +222,7 @@ const ActionAreaCard = ({
           )}
           {showLatest && (
             <LatestChip
-              label={dict.order.mode.storeSlug.tableNumber.new}
+              label={tOrder("mode.storeSlug.tableNumber.new")}
               icon={<AutoAwesome />}
               size="small"
             />
@@ -240,13 +244,13 @@ const ActionAreaCard = ({
           <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
             {/* {sizes?.map(({ name }) => (
               <SizeOptionChip
-                key={name[lang]}
-                label={name[lang]}
+                key={name[locale]}
+                label={name[locale]}
                 size="small"
               />
             ))} */}
             <Typography color="text.primary" variant="subtitle2">
-              {`${dict.common.currency} ${displayPrice} ${hasExtraCost ? dict.common.from : ""}`}
+              {`${tCommon("currency")} ${displayPrice} ${hasExtraCost ? tCommon("from") : ""}`}
             </Typography>
           </Stack>
           {description && (

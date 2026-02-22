@@ -1,43 +1,42 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 import { MenuItem, TextField } from "@mui/material";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { Store, StoreSlug } from "@/types/stores";
 
 interface OrderModePickupStoreSlugSelectProps {
-  lang: Locale;
+  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
 }
 
 const OrderModePickupStoreSlugSelect = ({
-  lang,
+  locale,
   mode,
   storeSlug,
 }: OrderModePickupStoreSlugSelectProps) => {
-  const { dict } = useI18nStore((state) => state);
+  const tOrder = useTranslations("order");
 
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/${lang}/order/${mode}/${event.target.value}`);
+    router.push(`/${locale}/order/${mode}/${event.target.value}`);
 
   return (
     <TextField
       // error={!!state?.errors?.storeSlug}
       fullWidth
       // helperText={state?.errors?.storeSlug}
-      label={dict.order.mode.pickup.select.label}
+      label={tOrder("mode.pickup.select.label")}
       name="storeSlug"
       onChange={handleChange}
       required
@@ -47,7 +46,7 @@ const OrderModePickupStoreSlugSelect = ({
     >
       {stores.map(({ id, name, slug }) => (
         <MenuItem key={id} value={slug}>
-          {name[lang]}
+          {name[locale]}
         </MenuItem>
       ))}
     </TextField>

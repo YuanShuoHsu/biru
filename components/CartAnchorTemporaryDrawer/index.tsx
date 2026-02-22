@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 
@@ -18,7 +19,6 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { RouteParams } from "@/types/routeParams";
 
@@ -58,15 +58,16 @@ const CartAnchorTemporaryDrawer = () => {
   const open = drawer.cart;
   const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
-  const { dict } = useI18nStore((state) => state);
+  const tCart = useTranslations("cart");
+  const tCommon = useTranslations("common");
 
-  const { lang, mode, storeSlug, tableNumber, partySize } =
+  const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
 
   const pathname = usePathname();
 
   const { checkoutPath, menuPath } = createOrderPaths({
-    lang,
+    locale,
     mode,
     storeSlug,
     tableNumber,
@@ -78,15 +79,13 @@ const CartAnchorTemporaryDrawer = () => {
 
   const actionDisabled = !isCheckoutPage && isCartEmpty;
   const actionHref = isCheckoutPage ? menuPath : checkoutPath;
-  const actionLabel = isCheckoutPage
-    ? dict.cart.backToOrder
-    : dict.cart.checkout;
+  const actionLabel = isCheckoutPage ? tCart("backToOrder") : tCart("checkout");
 
   const drawerList = (
     <DrawerBox role="presentation">
       <StickyHeader>
         <Toolbar>
-          <Typography variant="h6">{dict.cart.title}</Typography>
+          <Typography variant="h6">{tCart("title")}</Typography>
         </Toolbar>
       </StickyHeader>
       <CartItemList forceXsLayout />
@@ -97,7 +96,7 @@ const CartAnchorTemporaryDrawer = () => {
           alignItems="center"
         >
           <Typography component="span" variant="subtitle1">
-            {dict.common.totalAmount}
+            {tCommon("totalAmount")}
           </Typography>
           <Typography
             color="primary"
@@ -105,7 +104,7 @@ const CartAnchorTemporaryDrawer = () => {
             fontWeight="bold"
             variant="h6"
           >
-            {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
+            {tCommon("currency")} {cartTotalAmount.toLocaleString(locale)}
           </Typography>
         </Stack>
         <Button

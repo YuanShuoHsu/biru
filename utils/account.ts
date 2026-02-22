@@ -1,45 +1,36 @@
-import { Logout, PersonAdd, Settings } from "@mui/icons-material";
-import { Avatar } from "@mui/material";
+import type { useTranslations } from "next-intl";
 
-import type { I18nDict } from "@/providers/i18n-store-provider";
+import { PersonAdd, Settings } from "@mui/icons-material";
+import { Avatar } from "@mui/material";
 
 import type { MenuItem } from "@/types/menuItem";
 
-export const getProfileMenuItems = (dict: I18nDict): MenuItem[] => [
+export const getProfileMenuItems = (
+  tAccount: ReturnType<typeof useTranslations>,
+): MenuItem[] => [
   {
     icon: Avatar,
-    label: dict.account.accountMenu.profile,
+    label: tAccount("accountMenu.profile"),
     to: "/profile",
   },
   {
     icon: Avatar,
-    label: dict.account.accountMenu.myAccount,
+    label: tAccount("accountMenu.myAccount"),
     to: "/my-account",
   },
 ];
 
-export const getAccountMenuItems = (dict: I18nDict): MenuItem[] => [
+export const getAccountMenuItems = (
+  tAccount: ReturnType<typeof useTranslations>,
+): MenuItem[] => [
   {
     icon: PersonAdd,
-    label: dict.account.accountMenu.addAnotherAccount,
+    label: tAccount("accountMenu.addAnotherAccount"),
     to: "/add-another-account",
   },
   {
     icon: Settings,
-    label: dict.account.accountMenu.settings,
+    label: tAccount("accountSettings.label"),
     to: "/account-settings",
   },
 ];
-
-export const getLogoutMenuItem = (
-  dict: I18nDict,
-  {
-    isMutatingLogout,
-    onLogout,
-  }: { isMutatingLogout?: boolean; onLogout: () => void },
-): MenuItem => ({
-  disabled: isMutatingLogout,
-  icon: Logout,
-  label: dict.auth.signOut.label,
-  onClick: onLogout,
-});

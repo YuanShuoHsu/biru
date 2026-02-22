@@ -5,7 +5,7 @@ import { role } from "@/constants/role";
 
 import { LocaleEnum } from "@/enums/Locale";
 
-import { i18n } from "@/i18n-config";
+import { type Locale, routing } from "@/i18n/routing";
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_NEXT_URL,
@@ -22,9 +22,9 @@ export const authClient = createAuthClient({
           required: true,
         },
         lang: {
-          type: [...i18n.locales],
+          type: [...routing.locales],
           required: true,
-          defaultValue: i18n.defaultLocale,
+          defaultValue: routing.defaultLocale,
         },
         lastName: {
           type: "string",
@@ -42,7 +42,7 @@ export const authClient = createAuthClient({
 });
 
 type ErrorTypes = Partial<
-  Record<keyof typeof authClient.$ERROR_CODES, Record<LocaleEnum, string>>
+  Record<keyof typeof authClient.$ERROR_CODES, Record<Locale, string>>
 >;
 
 const errorCodes = {
@@ -56,9 +56,9 @@ const errorCodes = {
   },
 } satisfies ErrorTypes;
 
-export const getErrorMessage = (code: string, lang: LocaleEnum) => {
+export const getErrorMessage = (code: string, locale: Locale) => {
   if (code in errorCodes)
-    return errorCodes[code as keyof typeof errorCodes][lang];
+    return errorCodes[code as keyof typeof errorCodes][locale];
 
   return "";
 };

@@ -2,6 +2,7 @@
 
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 
@@ -18,7 +19,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 const StyledAccordion = styled(Accordion)(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
@@ -52,9 +52,9 @@ const CustomizedAccordions = () => {
 
   const { cartTotalAmount } = useCartStore((state) => state);
 
-  const { dict } = useI18nStore((state) => state);
+  const tCommon = useTranslations("common");
 
-  const { lang } = useParams();
+  const { locale } = useParams();
 
   const handleChange =
     (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) =>
@@ -69,7 +69,7 @@ const CustomizedAccordions = () => {
     >
       <StyledAccordionSummary aria-controls="panel1-content" id="panel1-header">
         <Typography component="span" flex={1} variant="subtitle1">
-          {dict.common.totalAmount}
+          {tCommon("totalAmount")}
         </Typography>
         <Typography
           color="primary"
@@ -79,7 +79,7 @@ const CustomizedAccordions = () => {
           textAlign="center"
           variant="h6"
         >
-          {dict.common.currency} {cartTotalAmount.toLocaleString(lang)}
+          {tCommon("currency")} {cartTotalAmount.toLocaleString(locale)}
         </Typography>
         <Box flex={1} display="flex" justifyContent="flex-end">
           <StyledExpandMore expanded={isPanel1Expanded} />

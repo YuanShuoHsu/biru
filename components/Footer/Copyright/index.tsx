@@ -1,17 +1,15 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Typography } from "@mui/material";
 
-import { useI18nStore } from "@/providers/i18n-store-provider";
-
-import { interpolate } from "@/utils/i18n";
-
 const Copyright = () => {
-  const { dict } = useI18nStore((state) => state);
+  const tHome = useTranslations("home");
 
-  const copyrightLine = interpolate(dict.home.footer.copyright, {
+  const copyrightLine = tHome("footer.copyright", {
     year: new Date().getFullYear(),
-    brand: dict.home.footer.brand,
+    brand: tHome("footer.brand"),
   });
 
   return (

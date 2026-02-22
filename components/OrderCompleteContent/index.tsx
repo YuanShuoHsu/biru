@@ -8,7 +8,7 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 import type { RouteParams } from "@/types/routeParams";
 
 const OrderCompleteContent = () => {
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
   const router = useRouter();
 
   // TODO: wire real status when available
@@ -53,7 +53,7 @@ const OrderCompleteContent = () => {
         <Button
           variant="contained"
           sx={{ mt: 4 }}
-          onClick={() => router.push(`/${lang}`)}
+          onClick={() => router.push(`/${locale}`)}
         >
           回首頁
         </Button>

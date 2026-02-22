@@ -1,4 +1,4 @@
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 import type { Choice, Menu, MenuItem, Option } from "@/types/menu";
 
@@ -23,12 +23,12 @@ const findItemById = (menus: Menu[], itemId: string): MenuItem | undefined =>
 export const getItemName = (
   menus: Menu[],
   itemId: string,
-  lang: Locale,
+  locale: Locale,
 ): string => {
   const item = findItemById(menus, itemId);
   if (!item) return "";
 
-  return item.name[lang];
+  return item.name[locale];
 };
 
 export const getItemStock = (menus: Menu[], itemId: string): number | null => {
@@ -46,11 +46,11 @@ const findOptionChoiceById = (
 const getOptionChoiceName = (
   option: Option,
   choiceId: string,
-  lang: Locale,
+  locale: Locale,
 ): string => {
   const choice = findOptionChoiceById(option, choiceId);
 
-  return choice?.name[lang] || "";
+  return choice?.name[locale] || "";
 };
 
 const findItemOptionById = (
@@ -64,7 +64,7 @@ export const getLimitingChoicesCap = (
   menus: Menu[],
   id: string,
   choices: Record<string, string[]>,
-  lang: Locale,
+  locale: Locale,
   getChoiceAvailableQuantity: (
     choiceId: string,
     choiceStock: number | null,
@@ -94,7 +94,7 @@ export const getLimitingChoicesCap = (
           id,
         );
 
-        const localizedName = name[lang];
+        const localizedName = name[locale];
 
         if (available < acc.cap) {
           acc.names = [localizedName];
@@ -124,7 +124,7 @@ export const getChoiceNames = (
   menus: Menu[],
   itemId: string,
   choices: Record<string, string[]>,
-  lang: Locale,
+  locale: Locale,
   { colon, delimiter, joinWith = "\n" }: CommonSeparators,
 ): string => {
   const item = findItemById(menus, itemId);
@@ -138,11 +138,11 @@ export const getChoiceNames = (
       if (!option) return [];
 
       const choiceNames = choiceIds
-        .map((choiceId) => getOptionChoiceName(option, choiceId, lang))
+        .map((choiceId) => getOptionChoiceName(option, choiceId, locale))
         .filter(Boolean)
         .join(delimiter);
 
-      return choiceNames ? [`${option.name[lang]}${colon}${choiceNames}`] : [];
+      return choiceNames ? [`${option.name[locale]}${colon}${choiceNames}`] : [];
     })
     .join(joinWith);
 };

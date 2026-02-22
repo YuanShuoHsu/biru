@@ -21,7 +21,7 @@ const ResponsiveGrid = ({
   showLatest,
   showTopSold,
 }: ResponsiveGridProps) => {
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
   const { view } = useViewStore((state) => state);
   const viewGridSizes = ViewGridSizes[view];
@@ -33,8 +33,8 @@ const ResponsiveGrid = ({
           <Grid display="flex" key={id} size={viewGridSizes}>
             <ActionAreaCard
               id={id}
-              name={name[lang]}
-              description={description[lang]}
+              name={name[locale]}
+              description={description[locale]}
               image={image}
               options={options}
               price={price}

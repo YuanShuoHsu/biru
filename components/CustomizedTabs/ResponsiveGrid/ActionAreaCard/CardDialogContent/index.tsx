@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import React, { useEffect, useImperativeHandle, useState } from "react";
@@ -22,12 +23,10 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { Menu, Option } from "@/types/menu";
 import type { RouteParams } from "@/types/routeParams";
 
-import { interpolate } from "@/utils/i18n";
 import { getLimitingChoicesCap } from "@/utils/menu";
 
 const ImageBox = styled(Box)(({ theme }) => ({
@@ -104,9 +103,10 @@ const CardDialogContent = React.forwardRef<
   const [choices, setChoices] =
     useState<Record<string, string[]>>(initialChoices);
 
-  const { lang } = useParams<RouteParams>();
+  const { locale } = useParams<RouteParams>();
 
-  const { dict } = useI18nStore((state) => state);
+  const tCommon = useTranslations("common");
+  const tDialog = useTranslations("dialog");
 
   const cartItemTotalQuantity = getCartItemTotalQuantity(id);
   const itemStockLeft = stock === null ? Infinity : stock;
@@ -115,11 +115,11 @@ const CardDialogContent = React.forwardRef<
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(menus, id, choices, lang, getChoiceAvailableQuantity);
+    getLimitingChoicesCap(menus, id, choices, locale, getChoiceAvailableQuantity);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0
-      ? limitingChoiceNames.join(dict.common.delimiter)
+      ? limitingChoiceNames.join(tCommon("delimiter"))
       : "";
 
   const availableToAdd = Math.min(
@@ -157,20 +157,20 @@ const CardDialogContent = React.forwardRef<
   );
 
   const amount = (price + extraCost) * quantity;
-  const displayPrice = amount.toLocaleString(lang);
+  const displayPrice = amount.toLocaleString(locale);
 
   const isAtLimit = quantity >= availableToAdd;
 
   const formHelperText =
     perItemCapLeft === availableToAdd
-      ? interpolate(dict.common.maxQuantity, { quantity: MAX_QUANTITY })
+      ? tCommon("maxQuantity", { quantity: MAX_QUANTITY })
       : itemStockCapLeft === availableToAdd
-        ? interpolate(dict.dialog.maxStock, {
+        ? tDialog("maxStock", {
             label: "",
             quantity: availableToAdd,
           })
         : optionCapLeft === availableToAdd
-          ? interpolate(dict.dialog.maxStock, {
+          ? tDialog("maxStock", {
               label: limitingChoicesLabel,
               quantity: availableToAdd,
             })
@@ -232,7 +232,7 @@ const CardDialogContent = React.forwardRef<
 
           return (
             <StyledFormControl key={optionId}>
-              <FormLabel>{optionName[lang]}</FormLabel>
+              <FormLabel>{optionName[locale]}</FormLabel>
               <Stack direction="row" flexWrap="wrap" gap={1}>
                 {filteredOptionChoices.map(
                   ({
@@ -290,7 +290,7 @@ const CardDialogContent = React.forwardRef<
                             gap={1}
                           >
                             <Typography component="span" variant="body2">
-                              {choiceName[lang]}
+                              {choiceName[locale]}
                             </Typography>
                             {extraCost > 0 && (
                               <>
@@ -298,7 +298,7 @@ const CardDialogContent = React.forwardRef<
                                   /
                                 </Typography>
                                 <Typography component="span" variant="caption">
-                                  {dict.common.currency} {extraCost}
+                                  {tCommon("currency")} {extraCost}
                                 </Typography>
                               </>
                             )}
@@ -323,7 +323,7 @@ const CardDialogContent = React.forwardRef<
             fontWeight="bold"
             variant="h6"
           >
-            {dict.common.currency} {displayPrice}
+            {tCommon("currency")} {displayPrice}
           </Typography>
         </Grid>
         <Grid size={{ xs: 7 }}>

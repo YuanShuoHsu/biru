@@ -2,9 +2,9 @@
 
 import type { MetadataRoute } from "next";
 
-import { getSiteMeta } from "@/utils/siteMeta";
+import { routing } from "@/i18n/routing";
 
-import { i18n } from "@/i18n-config";
+import { getSiteMeta } from "@/utils/siteMeta";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const { isBlockedHost, siteUrl } = getSiteMeta();
@@ -13,10 +13,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const lastModified = new Date();
   const alternates = Object.fromEntries(
-    i18n.locales.map((locale) => [locale, `${siteUrl}/${locale}`]),
+    routing.locales.map((locale) => [locale, `${siteUrl}/${locale}`]),
   );
 
-  return i18n.locales.map((locale) => ({
+  return routing.locales.map((locale) => ({
     url: `${siteUrl}/${locale}`,
     lastModified,
     alternates: {

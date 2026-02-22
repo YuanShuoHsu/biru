@@ -1,12 +1,11 @@
 // https://developers.google.com/identity/branding-guidelines?hl=zh-tw
 
+import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
+import type { Locale } from "@/i18n/routing";
 
 import { Button } from "@mui/material";
-
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
@@ -44,17 +43,17 @@ type GoogleAction = "signIn" | "signUp";
 
 interface GoogleButtonProps {
   action: GoogleAction;
-  lang: Locale;
+  locale: Locale;
   redirectTo?: string;
 }
 
-const GoogleButton = ({ action, lang, redirectTo }: GoogleButtonProps) => {
-  const { dict } = useI18nStore((state) => state);
+const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
+  const tAuth = useTranslations("auth");
 
-  const label = dict.auth.google[action];
+  const label = tAuth(`google.${action}`);
 
   const href = handleQueryParam("/api/auth/google", {
-    [QueryParamKey.Lang]: lang,
+    [QueryParamKey.Locale]: locale,
     [QueryParamKey.RedirectTo]: redirectTo,
   });
 

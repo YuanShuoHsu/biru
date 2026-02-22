@@ -1,8 +1,6 @@
 import { type CountryCode, getExampleNumber } from "libphonenumber-js";
 import examples from "libphonenumber-js/mobile/examples";
 
-import type { Locale } from "@/app/[lang]/dictionaries";
-
 import {
   COUNTRY_OPTIONS,
   DEFAULT_COUNTRY,
@@ -11,12 +9,14 @@ import {
 } from "@/constants/countries";
 import { countryCodeLocaleMap } from "@/constants/locale";
 
+import type { Locale } from "@/i18n/routing";
+
 import type { CountryType } from "@/types/countries";
 
 export const formatPhone = (phone: CountryType["phone"]) => `+${phone}`;
 
-export const getDefaultCountry = (lang: Locale) => {
-  const countryCode = countryCodeLocaleMap[lang];
+export const getDefaultCountry = (locale: Locale) => {
+  const countryCode = countryCodeLocaleMap[locale];
 
   return (
     COUNTRY_OPTIONS.find(({ code }) => code === countryCode) || DEFAULT_COUNTRY

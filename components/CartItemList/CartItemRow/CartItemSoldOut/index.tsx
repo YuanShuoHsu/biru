@@ -1,13 +1,13 @@
+import { useTranslations } from "next-intl";
+
 import { Delete, Edit } from "@mui/icons-material";
 import { Box, Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useI18nStore } from "@/providers/i18n-store-provider";
 
 import type { CartItem } from "@/stores/cart-store";
 
-import { interpolate } from "@/utils/i18n";
 import { getTypographyVariant } from "@/utils/soldOut";
 
 const StyledButton = styled(Button, {
@@ -71,7 +71,8 @@ const CartItemSoldOut = ({
 }: CartItemSoldOutProps) => {
   const { extraCost, price, quantity } = item;
 
-  const { dict } = useI18nStore((state) => state);
+  const tCart = useTranslations("cart");
+  const tCommon = useTranslations("common");
 
   const { deleteCartItem, updateCartItem } = useCartStore((state) => state);
 
@@ -82,22 +83,17 @@ const CartItemSoldOut = ({
 
   const message = shouldDeleteItem
     ? unavailable
-      ? dict.common.unavailable
+      ? tCommon("unavailable")
       : itemStockCapLeft === availableToAdd
-        ? interpolate(dict.common.soldOut, { label: "" })
+        ? tCommon("soldOut", { label: "" })
         : optionCapLeft === availableToAdd
-          ? interpolate(dict.common.soldOut, {
-              label: `${limitingChoicesLabel}\n`,
-            })
+          ? tCommon("soldOut", { label: `${limitingChoicesLabel}\n` })
           : ""
     : shouldEditItem
       ? itemStockCapLeft === availableToAdd
-        ? interpolate(dict.cart.quantityExceedsStock, {
-            label: "",
-            stock: targetQuantity,
-          })
+        ? tCart("quantityExceedsStock", { label: "", stock: targetQuantity })
         : optionCapLeft === availableToAdd
-          ? interpolate(dict.cart.quantityExceedsStock, {
+          ? tCart("quantityExceedsStock", {
               label: `${limitingChoicesLabel}\n`,
               stock: targetQuantity,
             })
