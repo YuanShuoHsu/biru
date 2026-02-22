@@ -113,7 +113,8 @@ const AccountProfile = ({ locale, currentURL }: AccountProfileProps) => {
   const tCommon = useTranslations("common");
 
   const name = useMemo(
-    () => getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
+    () =>
+      getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
     [tAccount, locale, profile],
   );
 

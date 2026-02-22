@@ -15,7 +15,10 @@ const AccountAccountSettingsPage = async ({
   params,
   searchParams,
 }: AccountAccountSettingsPageProps) => {
-  const [{ locale }, { redirectTo }] = await Promise.all([params, searchParams]);
+  const [{ locale }, { redirectTo }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   setRequestLocale(locale);
 

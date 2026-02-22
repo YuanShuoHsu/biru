@@ -11,7 +11,10 @@ interface MyAccountPageProps {
 }
 
 const MyAccountPage = async ({ params, searchParams }: MyAccountPageProps) => {
-  const [{ locale }, { redirectTo }] = await Promise.all([params, searchParams]);
+  const [{ locale }, { redirectTo }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   setRequestLocale(locale);
 

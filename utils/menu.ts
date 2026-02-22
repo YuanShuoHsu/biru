@@ -142,7 +142,9 @@ export const getChoiceNames = (
         .filter(Boolean)
         .join(delimiter);
 
-      return choiceNames ? [`${option.name[locale]}${colon}${choiceNames}`] : [];
+      return choiceNames
+        ? [`${option.name[locale]}${colon}${choiceNames}`]
+        : [];
     })
     .join(joinWith);
 };

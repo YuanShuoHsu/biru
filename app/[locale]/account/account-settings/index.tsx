@@ -146,7 +146,8 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
   const updatedAt = formatDate(profile?.updatedAt);
 
   const name = useMemo(
-    () => getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
+    () =>
+      getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
     [tAccount, locale, profile],
   );
 
@@ -244,9 +245,12 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
     [QueryParamKey.RedirectTo]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(`/${locale}/auth/forgot-password`, {
-    [QueryParamKey.RedirectTo]: currentURL,
-  });
+  const forgotPasswordHref = handleQueryParam(
+    `/${locale}/auth/forgot-password`,
+    {
+      [QueryParamKey.RedirectTo]: currentURL,
+    },
+  );
 
   return (
     <Stack gap={3}>

@@ -13,7 +13,7 @@ const AboutPage = async ({ params }: AboutPageProps) => {
 
   setRequestLocale(locale);
 
-  return <About locale={locale} />;
+  return <About />;
 };
 
 export default AboutPage;

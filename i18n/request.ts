@@ -39,8 +39,11 @@ export default getRequestConfig(async ({ requestLocale }) => {
     await Promise.all(
       Object.keys(enMessages).map(async (namespace) => [
         namespace,
-        (await import(`../app/[locale]/dictionaries/${locale}/${namespace}.json`))
-          .default,
+        (
+          await import(
+            `../app/[locale]/dictionaries/${locale}/${namespace}.json`
+          )
+        ).default,
       ]),
     ),
   );

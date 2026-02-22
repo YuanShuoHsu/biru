@@ -226,9 +226,12 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
     [QueryParamKey.RedirectTo]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(`/${locale}/auth/forgot-password`, {
-    [QueryParamKey.RedirectTo]: currentURL,
-  });
+  const forgotPasswordHref = handleQueryParam(
+    `/${locale}/auth/forgot-password`,
+    {
+      [QueryParamKey.RedirectTo]: currentURL,
+    },
+  );
 
   const settingsHref = `/${locale}/account/account-settings`;
   const profileHref = `/${locale}/account/profile`;

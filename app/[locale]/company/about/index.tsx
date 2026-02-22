@@ -1,7 +1,5 @@
 "use client";
 
-import type { Locale } from "@/i18n/routing";
-
 import {
   Avatar,
   Box,
@@ -12,11 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 
-interface AboutProps {
-  locale: Locale;
-}
-
-const About = ({ locale }: AboutProps) => {
+const About = () => {
   return (
     <Box>
       <Box

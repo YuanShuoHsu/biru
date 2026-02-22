@@ -52,7 +52,10 @@ interface AuthForgotPasswordProps {
   redirectTo?: string;
 }
 
-const AuthForgotPassword = ({ locale, redirectTo }: AuthForgotPasswordProps) => {
+const AuthForgotPassword = ({
+  locale,
+  redirectTo,
+}: AuthForgotPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
   });
