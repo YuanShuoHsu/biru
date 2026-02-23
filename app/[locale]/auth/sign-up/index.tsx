@@ -8,7 +8,13 @@
 
 import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
-import { type BaseSyntheticEvent, useCallback, useRef, useState } from "react";
+import {
+  type BaseSyntheticEvent,
+  type ReactNode,
+  useCallback,
+  useRef,
+  useState,
+} from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
@@ -107,7 +113,6 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   // const [isGenderFocused, setIsGenderFocused] = useState(false);
 
   const tAuth = useTranslations("auth");
-  const tCompany = useTranslations("company");
   const tValidation = useTranslations("validation");
   const signupFormSchema = createSignupFormSchema(tValidation);
 
@@ -233,7 +238,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     hasConfirmPassword,
   );
 
-  const renderLegalLink = (type: LegalLinkType) => (
+  const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => (
     <MuiLink
       component={Link}
       href={handleQueryParam(`/company/${type}`, {
@@ -243,7 +248,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
       key={type}
       underline="hover"
     >
-      {tCompany(`legal.${type}.label`)}
+      {chunks}
     </MuiLink>
   );
 
@@ -591,8 +596,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         >
           {tAuth.rich("legalConsent", {
             action: tAuth("signUp.label"),
-            terms: () => renderLegalLink(LegalLinkType.Terms),
-            privacy: () => renderLegalLink(LegalLinkType.Privacy),
+            terms: (chunks) => renderLegalLink(chunks, LegalLinkType.Terms),
+            privacy: (chunks) => renderLegalLink(chunks, LegalLinkType.Privacy),
           })}
         </StyledTypography>
         <Divider flexItem />
