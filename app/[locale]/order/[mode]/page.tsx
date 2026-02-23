@@ -21,13 +21,7 @@ const OrderModePage = async ({ params }: OrderModePageProps) => {
 
   if (mode !== ORDER_MODE.Pickup) return notFound();
 
-  return (
-    <OrderModePickupStoreSlugSelect
-      locale={locale}
-      mode={mode}
-      storeSlug={storeSlug}
-    />
-  );
+  return <OrderModePickupStoreSlugSelect mode={mode} storeSlug={storeSlug} />;
 };
 
 export default OrderModePage;

@@ -4,14 +4,12 @@
 
 "use client";
 
+import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
 import FormCard from "@/components/FormCard";
-
-import type { Locale } from "@/i18n/routing";
 
 import {
   Button,
@@ -48,14 +46,10 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 interface AuthForgotPasswordProps {
-  locale: Locale;
   redirectTo?: string;
 }
 
-const AuthForgotPassword = ({
-  locale,
-  redirectTo,
-}: AuthForgotPasswordProps) => {
+const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
   });
@@ -116,8 +110,8 @@ const AuthForgotPassword = ({
         <Typography variant="body2">
           {tAuth("rememberedPassword")}{" "}
           <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${locale}/auth/sign-in`, {
+            component={Link}
+            href={handleQueryParam("/auth/sign-in", {
               [QueryParamKey.RedirectTo]: redirectTo,
             })}
           >

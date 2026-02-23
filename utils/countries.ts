@@ -7,7 +7,7 @@ import {
   DEFAULT_NATIONAL_MASK,
   DEFAULT_NATIONAL_PLACEHOLDER,
 } from "@/constants/countries";
-import { countryCodeLocaleMap } from "@/constants/locale";
+import { locales } from "@/constants/locale";
 
 import type { Locale } from "@/i18n/routing";
 
@@ -16,7 +16,7 @@ import type { CountryType } from "@/types/countries";
 export const formatPhone = (phone: CountryType["phone"]) => `+${phone}`;
 
 export const getDefaultCountry = (locale: Locale) => {
-  const countryCode = countryCodeLocaleMap[locale];
+  const countryCode = locales[locale].countryCode;
 
   return (
     COUNTRY_OPTIONS.find(({ code }) => code === countryCode) || DEFAULT_COUNTRY

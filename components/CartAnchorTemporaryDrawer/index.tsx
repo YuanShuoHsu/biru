@@ -1,10 +1,11 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
+
+import { Link, usePathname } from "@/i18n/navigation";
 
 import {
   Box,
@@ -53,21 +54,18 @@ const StickyFooter = styled(Box)(({ theme }) => ({
 
 const CartAnchorTemporaryDrawer = () => {
   const { isCartEmpty, cartTotalAmount } = useCartStore((state) => state);
-
   const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
   const open = drawer.cart;
   const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
+  const locale = useLocale();
+  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
+  const pathname = usePathname();
+
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
 
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
-
-  const pathname = usePathname();
-
   const { checkoutPath, menuPath } = createOrderPaths({
-    locale,
     mode,
     storeSlug,
     tableNumber,

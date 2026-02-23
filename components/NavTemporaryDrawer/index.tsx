@@ -3,19 +3,14 @@
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useLogout } from "@/hooks/useLogout";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
 import {
   AccountCircle,
@@ -240,7 +235,7 @@ const ListItemLink = ({
   ...other
 }: ListItemLinkProps) => (
   <StyledListItemButton
-    {...(href ? { component: NextLink, href } : {})}
+    {...(href ? { component: Link, href } : {})}
     level={level}
     onClick={onClick}
     selected={selected}
@@ -309,7 +304,7 @@ const NavTemporaryDrawer = () => {
       ? [
           createDineInSlot(tOrder, storeName, tableNumber, partySize, () =>
             router.push(
-              `/${[locale, "order", mode, storeSlug, tableNumber, partySize]
+              `/${["order", mode, storeSlug, tableNumber, partySize]
                 .filter(Boolean)
                 .join("/")}`,
             ),
@@ -344,20 +339,15 @@ const NavTemporaryDrawer = () => {
 
       const parentPrefix = parentPath === "/" ? "" : parentPath;
       const basePath = toPath ? `${parentPrefix}${toPath}` : parentPath;
-      const pathWithLang =
-        basePath === "/" ? `/${locale}` : `/${locale}${basePath}`;
-
       const isExpandable = Boolean(children?.length);
-      const href =
-        to && !isExpandable ? `${pathWithLang}${toSearch}` : undefined;
+      const href = to && !isExpandable ? `${basePath}${toSearch}` : undefined;
 
       const itemKey = toPath || `${label}-${level}`;
       const open = Boolean(isExpandable && openMap[itemKey]);
       const selected =
         basePath === "/"
-          ? pathname === pathWithLang
-          : pathname === pathWithLang ||
-            pathname.startsWith(`${pathWithLang}/`);
+          ? pathname === basePath
+          : pathname === basePath || pathname.startsWith(`${basePath}/`);
 
       const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
         if (isExpandable) {

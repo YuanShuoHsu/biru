@@ -5,8 +5,6 @@
 "use client";
 
 import Cookies from "js-cookie";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -20,6 +18,7 @@ import GoogleButton from "@/components/GoogleButton";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -161,7 +160,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
       setProfile(profile);
 
       enqueueSnackbar(tAuth("signIn.success"), { variant: "success" });
-      router.replace(redirectTo || `/${locale}`);
+      router.replace(redirectTo || "/");
     } catch (err) {
       const error = err as FetchError;
       if (error.status === 403 && error.info?.id) {
@@ -173,7 +172,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         });
 
         router.replace(
-          handleQueryParam(`/${locale}/auth/verify-email`, {
+          handleQueryParam("/auth/verify-email", {
             [QueryParamKey.Email]: data.email,
             [QueryParamKey.RedirectTo]: redirectTo,
           }),
@@ -274,8 +273,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
             }
           />
           <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${locale}/auth/forgot-password`, {
+            component={Link}
+            href={handleQueryParam("/auth/forgot-password", {
               [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"
@@ -300,8 +299,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("noAccount")}</Typography>
           <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${locale}/auth/sign-up`, {
+            component={Link}
+            href={handleQueryParam("/auth/sign-up", {
               [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"

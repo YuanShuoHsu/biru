@@ -7,8 +7,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { type BaseSyntheticEvent, useCallback, useRef, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
@@ -26,6 +24,7 @@ import { LegalLinkType } from "@/constants/legal";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Link, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -236,9 +235,9 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
   const renderLegalLink = (type: LegalLinkType) => (
     <MuiLink
-      component={NextLink}
-      href={handleQueryParam(`/${locale}/company/${type}`, {
-        [QueryParamKey.Back]: `/${locale}/auth/sign-up`,
+      component={Link}
+      href={handleQueryParam(`/company/${type}`, {
+        [QueryParamKey.Back]: "/auth/sign-up",
         [QueryParamKey.RedirectTo]: redirectTo,
       })}
       key={type}
@@ -305,7 +304,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         return;
       }
 
-      const verifyEmailHref = handleQueryParam(`/${locale}/auth/verify-email`, {
+      const verifyEmailHref = handleQueryParam("/auth/verify-email", {
         [QueryParamKey.Email]: rest.email,
         [QueryParamKey.RedirectTo]: redirectTo,
       });
@@ -600,8 +599,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("hasAccount")}</Typography>
           <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${locale}/auth/sign-in`, {
+            component={Link}
+            href={handleQueryParam("/auth/sign-in", {
               [QueryParamKey.RedirectTo]: redirectTo,
             })}
             underline="hover"

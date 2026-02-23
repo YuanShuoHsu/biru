@@ -25,7 +25,7 @@ const AuthForgotPasswordPage = async ({
       ? redirectTo
       : undefined;
 
-  return <AuthForgotPassword locale={locale} redirectTo={safeRedirectTo} />;
+  return <AuthForgotPassword redirectTo={safeRedirectTo} />;
 };
 
 export default AuthForgotPasswordPage;

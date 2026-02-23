@@ -3,19 +3,14 @@ import { SWRConfiguration } from "swr";
 
 import ClientProviders from "./client";
 
-import type { Locale } from "@/i18n/routing";
-
 interface ProvidersProps {
   children: React.ReactNode;
   fallback: SWRConfiguration["fallback"];
-  locale: Locale;
 }
 
-const Providers = ({ children, fallback, locale }: ProvidersProps) => (
+const Providers = ({ children, fallback }: ProvidersProps) => (
   <NextIntlClientProvider>
-    <ClientProviders fallback={fallback} locale={locale}>
-      {children}
-    </ClientProviders>
+    <ClientProviders fallback={fallback}>{children}</ClientProviders>
   </NextIntlClientProvider>
 );
 

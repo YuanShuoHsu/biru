@@ -1,11 +1,10 @@
 // https://developers.google.com/identity/branding-guidelines?hl=zh-tw
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 import type { Locale } from "@/i18n/routing";
 
-import { Button } from "@mui/material";
+import { Button, Link } from "@mui/material";
 
 import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 

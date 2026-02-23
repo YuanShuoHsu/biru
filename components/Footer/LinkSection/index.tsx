@@ -1,12 +1,12 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useLogout } from "@/hooks/useLogout";
+
+import { Link } from "@/i18n/navigation";
 
 import {
   Grid,
@@ -20,7 +20,6 @@ import { styled } from "@mui/material/styles";
 import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
-import type { RouteParams } from "@/types/routeParams";
 
 import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
 import { getAuthMenuItems, getLogoutMenuItem } from "@/utils/auth";
@@ -118,7 +117,6 @@ const useFooterItems = (): MenuItem[] => {
 };
 
 const LinkSection = () => {
-  const { locale } = useParams<RouteParams>();
   const footerItems = useFooterItems();
 
   return (
@@ -137,10 +135,8 @@ const LinkSection = () => {
                   ({ label: childLabel, onClick, to: childTo }) => (
                     <MuiLink
                       color="text.secondary"
-                      component={onClick ? "button" : NextLink}
-                      href={
-                        onClick ? undefined : `/${locale}${parentTo}${childTo}`
-                      }
+                      component={onClick ? "button" : Link}
+                      href={onClick ? undefined : `${parentTo}${childTo}`}
                       key={onClick ? childLabel : childTo}
                       onClick={onClick}
                       underline="hover"

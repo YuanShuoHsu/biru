@@ -1,16 +1,17 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
-import { ecpayLocaleMap } from "@/constants/locale";
+import { locales } from "@/constants/locale";
 
 import { LocaleEnum } from "@/enums/Locale";
 
+import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import {
@@ -36,7 +37,7 @@ import type { RouteParams } from "@/types/routeParams";
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
 const getEcpayLanguage = (locale: Locale): EcpayLanguage =>
-  ecpayLocaleMap[locale];
+  locales[locale].ecpay;
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
   fetch(url, {

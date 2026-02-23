@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Suspense } from "react";
 
 import CustomizedDialogs from "@/components/CustomizedDialogs";
@@ -12,6 +12,8 @@ import ScrollTop from "@/components/ScrollTop";
 import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { useAuthInitializer } from "@/hooks/useAuthInitializer";
+
+import { usePathname } from "@/i18n/navigation";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
@@ -32,14 +34,12 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   useAuthInitializer();
 
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
   const pathname = usePathname();
 
-  const isHome = pathname === `/${locale}`;
+  const isHome = pathname === "/";
 
   const { isMenuRoute } = createOrderPaths({
-    locale,
     mode,
     storeSlug,
     tableNumber,

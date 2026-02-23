@@ -1,11 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
-import type { Locale } from "@/i18n/routing";
+import { useRouter } from "@/i18n/navigation";
 
 import { MenuItem, TextField } from "@mui/material";
 
@@ -14,14 +13,12 @@ import type { StoreSlug } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
 interface OrderModeDineInStoreSlugTableNumberSelectProps {
-  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
   tableNumber: TableNumber;
 }
 
 const OrderModeDineInStoreSlugTableNumberSelect = ({
-  locale,
   mode,
   storeSlug,
   tableNumber,
@@ -32,7 +29,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(
-      `/${locale}/order/${mode}/${storeSlug}/${tableNumber}/${event.target.value}`,
+      `/order/${mode}/${storeSlug}/${tableNumber}/${event.target.value}`,
     );
 
   return (

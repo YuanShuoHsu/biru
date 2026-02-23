@@ -31,7 +31,6 @@ const OrderModeStoreSlugTableNumberPage = async ({
 
   return (
     <OrderModeDineInStoreSlugTableNumberSelect
-      locale={locale}
       mode={mode}
       storeSlug={storeSlug}
       tableNumber={tableNumber}

@@ -2,15 +2,13 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 
 import FormCard from "@/components/FormCard";
 
 import { useLogout } from "@/hooks/useLogout";
 
-import type { Locale } from "@/i18n/routing";
+import { Link, useRouter } from "@/i18n/navigation";
 
 import { Login, PersonAdd } from "@mui/icons-material";
 import {
@@ -52,27 +50,28 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 }));
 
 interface AddAnotherAccountProps {
-  locale: Locale;
   redirectTo?: string;
 }
 
-const AddAnotherAccount = ({ locale, redirectTo }: AddAnotherAccountProps) => {
+const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
   const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
+
+  const locale = useLocale();
   const router = useRouter();
 
   const tAccount = useTranslations("account");
 
   const safeRedirectTo =
-    redirectTo && redirectTo !== `/${locale}/account/add-another-account`
+    redirectTo && redirectTo !== "/account/add-another-account"
       ? redirectTo
-      : `/${locale}/account/my-account`;
+      : "/account/my-account";
 
-  const signInHref = handleQueryParam(`/${locale}/auth/sign-in`, {
+  const signInHref = handleQueryParam("/auth/sign-in", {
     [QueryParamKey.RedirectTo]: safeRedirectTo,
   });
 
-  const handleCancel = () => router.push(`/${locale}/account/my-account`);
+  const handleCancel = () => router.push("/account/my-account");
 
   const handleSignOutAndContinue = async () => {
     await handleLogout();
@@ -146,7 +145,7 @@ const AddAnotherAccount = ({ locale, redirectTo }: AddAnotherAccountProps) => {
         ) : (
           <>
             <Button
-              component={NextLink}
+              component={Link}
               fullWidth
               href={signInHref}
               startIcon={<Login />}

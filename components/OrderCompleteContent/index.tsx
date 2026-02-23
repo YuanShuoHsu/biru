@@ -1,14 +1,11 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
-import type { RouteParams } from "@/types/routeParams";
-
 const OrderCompleteContent = () => {
-  const { locale } = useParams<RouteParams>();
   const router = useRouter();
 
   // TODO: wire real status when available
@@ -53,7 +50,7 @@ const OrderCompleteContent = () => {
         <Button
           variant="contained"
           sx={{ mt: 4 }}
-          onClick={() => router.push(`/${locale}`)}
+          onClick={() => router.push("/")}
         >
           回首頁
         </Button>

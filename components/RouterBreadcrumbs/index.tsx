@@ -2,12 +2,12 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
+import { Link, usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import {
@@ -248,7 +248,7 @@ interface LinkRouterProps extends MuiLinkProps {
 }
 
 const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
-  <MuiLink component={NextLink} href={to} {...props} />
+  <MuiLink component={Link} href={to} {...props} />
 );
 
 const iconTextBaseStyles = (theme: Theme) => ({
@@ -299,7 +299,7 @@ const findHiddenTo = (
   if (!hidden) return;
 
   const nextTo = findHiddenTo(nextIndex, pathnames, locale, breadcrumbs);
-  if (!nextTo) return `/${locale}${nextMatchPath}`;
+  if (!nextTo) return nextMatchPath;
 
   return nextTo;
 };
@@ -310,12 +310,12 @@ const RouterBreadcrumbs = () => {
   const breadcrumbs = useBreadcrumbs();
 
   const pathname = usePathname();
-  const pathnames = pathname.split("/").filter((x) => x && x !== locale);
+  const pathnames = pathname.split("/").filter((x) => x);
 
   const segments = pathnames.flatMap((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");
     const matchPath = `/${segmentPath}`;
-    const baseTo = `/${locale}/${segmentPath}`;
+    const baseTo = `/${segmentPath}`;
 
     const {
       disabled = false,

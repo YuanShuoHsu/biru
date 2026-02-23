@@ -27,7 +27,7 @@ const AccountProfilePage = async ({
     ? `${pathname}?${new URLSearchParams({ redirectTo })}`
     : pathname;
 
-  return <AccountProfile currentURL={currentURL} locale={locale} />;
+  return <AccountProfile currentURL={currentURL} />;
 };
 
 export default AccountProfilePage;

@@ -2,7 +2,7 @@
 
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
 
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 import { Suspense } from "react";
 
 import BrandMark from "@/components/BrandMark";
@@ -13,6 +13,8 @@ import LanguageMenu from "./LanguageMenu";
 import ModeToggle from "./ModeToggle";
 
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
+
+import { usePathname } from "@/i18n/navigation";
 
 import { Menu } from "@mui/icons-material";
 import {
@@ -52,15 +54,13 @@ const HideAppBar = () => {
   const handleNavOpen = handleDrawerToggle(setDrawerOpen, "nav", true);
 
   const pathname = usePathname();
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
 
   const { isOrderRoute: showShoppingCartButton } = createOrderPaths({
-    locale,
     mode,
     storeSlug,
     tableNumber,

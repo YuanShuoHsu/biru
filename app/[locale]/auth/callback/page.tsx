@@ -31,7 +31,7 @@ export default async function AuthCallbackPage({
         </Stack>
       }
     >
-      <AuthCallback locale={locale} />
+      <AuthCallback />
     </Suspense>
   );
 }

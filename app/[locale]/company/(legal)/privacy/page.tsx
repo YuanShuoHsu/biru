@@ -30,11 +30,7 @@ const CompanyLegalPrivacyPage = async ({
 
   return (
     <>
-      <BackButton
-        back={safeBack}
-        locale={locale as Locale}
-        redirectTo={safeRedirectTo}
-      />
+      <BackButton back={safeBack} redirectTo={safeRedirectTo} />
       <CompanyLegalPrivacy locale={locale} />
     </>
   );

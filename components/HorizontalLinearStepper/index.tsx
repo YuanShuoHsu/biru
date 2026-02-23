@@ -4,9 +4,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams, usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
+
+import { usePathname } from "@/i18n/navigation";
 
 import {
   Step,

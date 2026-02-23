@@ -4,18 +4,14 @@
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
 import { useLogout } from "@/hooks/useLogout";
+
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
 import { AccountCircle } from "@mui/icons-material";
 import {
@@ -109,9 +105,9 @@ const AccountMenu = () => {
   const currentURL = search ? `${pathname}?${search}` : pathname;
 
   const redirectParam = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith(`/${locale}/account`);
-  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
-  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
+  const isAccountPage = pathname.startsWith("/account");
+  const isAuthPage = pathname.startsWith("/auth");
+  const isCompanyPage = pathname.startsWith("/company");
 
   const redirectTarget =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
@@ -123,7 +119,7 @@ const AccountMenu = () => {
 
     if (!isSignedIn) {
       router.push(
-        handleQueryParam(`/${locale}/auth/sign-in`, {
+        handleQueryParam("/auth/sign-in", {
           [QueryParamKey.RedirectTo]: redirectTarget,
         }),
       );
@@ -148,7 +144,7 @@ const AccountMenu = () => {
   const renderMenuItems = (items: MenuItemData[]) =>
     items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
       const key = to || index;
-      const href = to && `/${locale}/account${to}`;
+      const href = to && `/account${to}`;
 
       const selected = href
         ? pathname === href || pathname.startsWith(`${href}/`)
@@ -160,7 +156,7 @@ const AccountMenu = () => {
           key={key}
           onClick={onClick}
           selected={selected}
-          {...(href ? { component: NextLink, href } : {})}
+          {...(href ? { component: Link, href } : {})}
         >
           {Icon && (
             <ListItemIcon>

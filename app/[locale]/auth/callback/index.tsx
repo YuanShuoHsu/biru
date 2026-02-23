@@ -1,10 +1,10 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
-import type { Locale } from "@/i18n/routing";
+import { useRouter } from "@/i18n/navigation";
 
 import { CircularProgress, Stack, Typography } from "@mui/material";
 
@@ -14,11 +14,7 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
 
-interface AuthCallbackProps {
-  locale: Locale;
-}
-
-const AuthCallback = ({ locale }: AuthCallbackProps) => {
+const AuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { setAccessToken, setProfile, setIsAuthLoading, clearAuth } =
@@ -33,7 +29,6 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
         searchParams.get("token") || searchParams.get("access_token");
       const error = searchParams.get("error");
       const redirectTo = searchParams.get("redirectTo");
-      const currentLang = locale || searchParams.get("locale") || "en";
 
       if (error) {
         enqueueSnackbar(
@@ -43,7 +38,7 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
           { variant: "error" },
         );
         router.replace(
-          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
         setHasHandledCallback(true);
         return;
@@ -54,7 +49,7 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
           variant: "error",
         });
         router.replace(
-          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
         setHasHandledCallback(true);
         return;
@@ -71,7 +66,7 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
           variant: "success",
         });
 
-        router.replace(redirectTo || `/${currentLang}`);
+        router.replace(redirectTo || "/");
       } catch (err) {
         console.error("Failed to fetch profile:", err);
         enqueueSnackbar("Failed to load user profile. Please try again.", {
@@ -79,7 +74,7 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
         });
         clearAuth();
         router.replace(
-          `/${currentLang}/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
+          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
         );
       } finally {
         setIsAuthLoading(false);
@@ -96,7 +91,6 @@ const AuthCallback = ({ locale }: AuthCallbackProps) => {
     setProfile,
     setIsAuthLoading,
     clearAuth,
-    locale,
   ]);
 
   return (

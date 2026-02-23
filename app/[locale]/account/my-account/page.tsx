@@ -23,7 +23,7 @@ const MyAccountPage = async ({ params, searchParams }: MyAccountPageProps) => {
     ? `${pathname}?${new URLSearchParams({ redirectTo })}`
     : pathname;
 
-  return <MyAccount currentURL={currentURL} locale={locale} />;
+  return <MyAccount currentURL={currentURL} />;
 };
 
 export default MyAccountPage;

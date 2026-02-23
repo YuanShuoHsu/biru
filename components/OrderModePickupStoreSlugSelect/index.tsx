@@ -1,35 +1,36 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import useSWR from "swr";
 
-import type { Locale } from "@/i18n/routing";
+import { useRouter } from "@/i18n/navigation";
 
 import { MenuItem, TextField } from "@mui/material";
 
 import type { OrderMode } from "@/types/orderMode";
+import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreSlug } from "@/types/stores";
 
 interface OrderModePickupStoreSlugSelectProps {
-  locale: Locale;
   mode: OrderMode;
   storeSlug: StoreSlug;
 }
 
 const OrderModePickupStoreSlugSelect = ({
-  locale,
   mode,
   storeSlug,
 }: OrderModePickupStoreSlugSelectProps) => {
-  const tOrder = useTranslations("order");
+  const { locale } = useParams<RouteParams>();
 
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
+  const tOrder = useTranslations("order");
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/${locale}/order/${mode}/${event.target.value}`);
+    router.push(`/order/${mode}/${event.target.value}`);
 
   return (
     <TextField

@@ -25,7 +25,7 @@ const AccountAddAnotherAccountPage = async ({
       ? redirectTo
       : undefined;
 
-  return <AddAnotherAccount locale={locale} redirectTo={safeRedirectTo} />;
+  return <AddAnotherAccount redirectTo={safeRedirectTo} />;
 };
 
 export default AccountAddAnotherAccountPage;

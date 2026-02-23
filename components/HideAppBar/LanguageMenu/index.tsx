@@ -3,13 +3,13 @@
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
 import { useTranslations } from "next-intl";
-import Link from "next/link";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { languageLocaleMap } from "@/constants/locale";
+import { locales } from "@/constants/locale";
 
-import { type Locale, routing } from "@/i18n/routing";
+import { Link, usePathname } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 
 import { Language } from "@mui/icons-material";
 import { IconButton, Menu, MenuItem, Tooltip } from "@mui/material";
@@ -25,7 +25,7 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
 
 const languages = routing.locales.map((locale) => ({
   locale,
-  label: languageLocaleMap[locale],
+  label: locales[locale].label,
 }));
 
 const LanguageMenu = () => {
@@ -40,14 +40,11 @@ const LanguageMenu = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const redirectedPathname = (locale: Locale) => {
+  const redirectedPathname = () => {
     if (!pathname) return "/";
 
-    const segments = pathname.split("/");
-    segments[1] = locale;
     const search = searchParams.toString();
-
-    return `${segments.join("/")}${search ? `?${search}` : ""}`;
+    return `${pathname}${search ? `?${search}` : ""}`;
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
@@ -88,8 +85,9 @@ const LanguageMenu = () => {
         {languages.map(({ label, locale }) => (
           <MenuItem
             component={Link}
-            href={redirectedPathname(locale)}
+            href={redirectedPathname()}
             key={locale}
+            locale={locale}
             onClick={handleClose}
             replace
             selected={locale === currentLang}

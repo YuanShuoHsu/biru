@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 
@@ -9,6 +8,7 @@ import FormCard from "@/components/FormCard";
 
 import useCountdown from "@/hooks/useCountdown";
 
+import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -119,7 +119,7 @@ const AuthVerifyEmail = ({
 
   const status = isFailed ? "failed" : isVerified ? "verified" : "default";
 
-  const signInHref = handleQueryParam(`/${locale}/auth/sign-in`, {
+  const signInHref = handleQueryParam("/auth/sign-in", {
     [QueryParamKey.RedirectTo]: redirectTo,
   });
 
@@ -144,7 +144,7 @@ const AuthVerifyEmail = ({
               : tAuth("verifyEmail.resend")}
           </Button>
           <Button
-            component={NextLink}
+            component={Link}
             fullWidth
             href={signInHref}
             size="large"
@@ -158,8 +158,8 @@ const AuthVerifyEmail = ({
               {tAuth("verifyEmail.wrongEmail")}
             </Typography>
             <MuiLink
-              component={NextLink}
-              href={handleQueryParam(`/${locale}/auth/sign-up`, {
+              component={Link}
+              href={handleQueryParam("/auth/sign-up", {
                 [QueryParamKey.RedirectTo]: redirectTo,
               })}
               underline="hover"
@@ -197,7 +197,7 @@ const AuthVerifyEmail = ({
     failed: {
       actions: (
         <Button
-          component={NextLink}
+          component={Link}
           fullWidth
           href={signInHref}
           size="large"
@@ -233,7 +233,7 @@ const AuthVerifyEmail = ({
     verified: {
       actions: (
         <Button
-          component={NextLink}
+          component={Link}
           fullWidth
           href={signInHref}
           size="large"

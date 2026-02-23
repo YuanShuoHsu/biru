@@ -51,7 +51,7 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <Providers fallback={fallback} locale={locale}>
+        <Providers fallback={fallback}>
           <AppLayout>{children}</AppLayout>
         </Providers>
       </body>

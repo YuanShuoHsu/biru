@@ -2,10 +2,12 @@
 
 "use client";
 
-import NextLink from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo } from "react";
 
-import type { Locale } from "@/i18n/routing";
+import { useLogout } from "@/hooks/useLogout";
+
+import { Link } from "@/i18n/navigation";
 
 import {
   CheckCircle,
@@ -40,11 +42,7 @@ import {
 } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
-import { useLogout } from "@/hooks/useLogout";
-
 import { useAuthStore } from "@/providers/auth-store-provider";
-
-import { useTranslations } from "next-intl";
 
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
@@ -98,13 +96,14 @@ const formatRole = (role?: UserResponseDto["role"]) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface MyAccountProps {
-  locale: Locale;
   currentURL: string;
 }
 
-const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
+const MyAccount = ({ currentURL }: MyAccountProps) => {
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
+
+  const locale = useLocale();
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
@@ -199,8 +198,8 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
               {tAccount("myAccount.empty")}
             </Typography>
             <Button
-              component={NextLink}
-              href={handleQueryParam(`/${locale}/auth/sign-in`, {
+              component={Link}
+              href={handleQueryParam("/auth/sign-in", {
                 [QueryParamKey.RedirectTo]: currentURL,
               })}
               startIcon={<Login />}
@@ -221,20 +220,17 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
     getDisplayName(locale, profile) || tAccount("profile.placeholderName");
   const initial = name.charAt(0).toUpperCase();
 
-  const verifyEmailHref = handleQueryParam(`/${locale}/auth/verify-email`, {
+  const verifyEmailHref = handleQueryParam("/auth/verify-email", {
     [QueryParamKey.Email]: profile.email,
     [QueryParamKey.RedirectTo]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(
-    `/${locale}/auth/forgot-password`,
-    {
-      [QueryParamKey.RedirectTo]: currentURL,
-    },
-  );
+  const forgotPasswordHref = handleQueryParam("/auth/forgot-password", {
+    [QueryParamKey.RedirectTo]: currentURL,
+  });
 
-  const settingsHref = `/${locale}/account/account-settings`;
-  const profileHref = `/${locale}/account/profile`;
+  const settingsHref = "/account/account-settings";
+  const profileHref = "/account/profile";
 
   const handleToggleColorMode = () => {
     if (isModeLoading) return;
@@ -342,7 +338,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
                 justifyContent="flex-end"
               >
                 <Button
-                  component={NextLink}
+                  component={Link}
                   href={settingsHref}
                   size="small"
                   startIcon={<Settings />}
@@ -351,7 +347,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
                   {tAccount("accountSettings.label")}
                 </Button>
                 <Button
-                  component={NextLink}
+                  component={Link}
                   href={profileHref}
                   size="small"
                   startIcon={<Person />}
@@ -395,7 +391,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
                 <Stack gap={1.5}>
                   {!profile.emailVerified && (
                     <Button
-                      component={NextLink}
+                      component={Link}
                       href={verifyEmailHref}
                       startIcon={<Security />}
                       variant="outlined"
@@ -404,7 +400,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
                     </Button>
                   )}
                   <Button
-                    component={NextLink}
+                    component={Link}
                     href={forgotPasswordHref}
                     startIcon={<LockReset />}
                     variant="outlined"
@@ -434,7 +430,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={NextLink}
+                    component={Link}
                     href={profileHref}
                     startIcon={<Person />}
                     variant="outlined"
@@ -442,7 +438,7 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
                     {tAccount("myAccount.actions.profile")}
                   </Button>
                   <Button
-                    component={NextLink}
+                    component={Link}
                     href={settingsHref}
                     startIcon={<Settings />}
                     variant="outlined"
@@ -499,16 +495,16 @@ const MyAccount = ({ locale, currentURL }: MyAccountProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={NextLink}
-                    href={`/${locale}/company/terms`}
+                    component={Link}
+                    href="/company/terms"
                     startIcon={<Gavel />}
                     variant="outlined"
                   >
                     {tAccount("myAccount.actions.terms")}
                   </Button>
                   <Button
-                    component={NextLink}
-                    href={`/${locale}/company/privacy`}
+                    component={Link}
+                    href="/company/privacy"
                     startIcon={<Policy />}
                     variant="outlined"
                   >

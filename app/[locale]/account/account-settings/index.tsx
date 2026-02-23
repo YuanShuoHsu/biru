@@ -2,13 +2,14 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
-import NextLink from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { startTransition, useEffect, useMemo, useState } from "react";
 
-import type { Locale } from "@/i18n/routing";
-
 import { REMEMBER_ME } from "@/constants/sign-in";
+
+import { useLogout } from "@/hooks/useLogout";
+
+import { Link } from "@/i18n/navigation";
 
 import {
   AccountCircle,
@@ -41,8 +42,6 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-
-import { useLogout } from "@/hooks/useLogout";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
@@ -98,15 +97,16 @@ const formatRole = (role?: UserResponseDto["role"]) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface AccountSettingsProps {
-  locale: Locale;
   currentURL: string;
 }
 
-const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
+const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   const [rememberMeByDefault, setRememberMeByDefault] = useState(true);
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
+
+  const locale = useLocale();
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
@@ -225,8 +225,8 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
               {tAccount("accountSettings.empty")}
             </Typography>
             <Button
-              component={NextLink}
-              href={handleQueryParam(`/${locale}/auth/sign-in`, {
+              component={Link}
+              href={handleQueryParam("/auth/sign-in", {
                 [QueryParamKey.RedirectTo]: currentURL,
               })}
               startIcon={<Settings />}
@@ -240,17 +240,14 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
     );
   }
 
-  const verifyEmailHref = handleQueryParam(`/${locale}/auth/verify-email`, {
+  const verifyEmailHref = handleQueryParam("/auth/verify-email", {
     [QueryParamKey.Email]: profile.email,
     [QueryParamKey.RedirectTo]: currentURL,
   });
 
-  const forgotPasswordHref = handleQueryParam(
-    `/${locale}/auth/forgot-password`,
-    {
-      [QueryParamKey.RedirectTo]: currentURL,
-    },
-  );
+  const forgotPasswordHref = handleQueryParam("/auth/forgot-password", {
+    [QueryParamKey.RedirectTo]: currentURL,
+  });
 
   return (
     <Stack gap={3}>
@@ -347,7 +344,7 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
               </Stack>
               {!profile.emailVerified && (
                 <Button
-                  component={NextLink}
+                  component={Link}
                   href={verifyEmailHref}
                   size="small"
                   startIcon={<Security />}
@@ -406,8 +403,8 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button
-                  component={NextLink}
-                  href={`/${locale}/account/profile`}
+                  component={Link}
+                  href="/account/profile"
                   startIcon={<AccountCircle />}
                   variant="outlined"
                 >
@@ -422,7 +419,7 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={NextLink}
+                    component={Link}
                     href={forgotPasswordHref}
                     startIcon={<LockReset />}
                     variant="outlined"
@@ -490,16 +487,16 @@ const AccountSettings = ({ locale, currentURL }: AccountSettingsProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={NextLink}
-                    href={`/${locale}/company/terms`}
+                    component={Link}
+                    href="/company/terms"
                     startIcon={<Gavel />}
                     variant="outlined"
                   >
                     {tAccount("accountSettings.actions.terms")}
                   </Button>
                   <Button
-                    component={NextLink}
-                    href={`/${locale}/company/privacy`}
+                    component={Link}
+                    href="/company/privacy"
                     startIcon={<Policy />}
                     variant="outlined"
                   >

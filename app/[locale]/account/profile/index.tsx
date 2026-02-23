@@ -4,11 +4,10 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
-import NextLink from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
-import type { Locale } from "@/i18n/routing";
+import { Link } from "@/i18n/navigation";
 
 import {
   CheckCircle,
@@ -99,14 +98,15 @@ const InfoRow = ({ icon: Icon, label, status, value }: InfoRowProps) => (
 );
 
 interface AccountProfileProps {
-  locale: Locale;
   currentURL: string;
 }
 
-const AccountProfile = ({ locale, currentURL }: AccountProfileProps) => {
+const AccountProfile = ({ currentURL }: AccountProfileProps) => {
   const [preferences, setPreferences] = useState(preferenceDefaults);
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+
+  const locale = useLocale();
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
@@ -236,8 +236,8 @@ const AccountProfile = ({ locale, currentURL }: AccountProfileProps) => {
               {tAccount("profile.empty")}
             </Typography>
             <Button
-              component={NextLink}
-              href={handleQueryParam(`/${locale}/auth/sign-in`, {
+              component={Link}
+              href={handleQueryParam("/auth/sign-in", {
                 [QueryParamKey.RedirectTo]: currentURL,
               })}
               startIcon={<Login />}
@@ -386,8 +386,8 @@ const AccountProfile = ({ locale, currentURL }: AccountProfileProps) => {
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button
-                  component={NextLink}
-                  href={`/${locale}/account/account-settings`}
+                  component={Link}
+                  href="/account/account-settings"
                   startIcon={<Settings />}
                   variant="outlined"
                 >
