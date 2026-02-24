@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 
 import {
   Box,
@@ -107,7 +107,6 @@ const CartAnchorTemporaryDrawer = () => {
         </Stack>
         <Button
           disabled={actionDisabled}
-          component={Link}
           fullWidth
           href={actionHref}
           onClick={handleCartClose}

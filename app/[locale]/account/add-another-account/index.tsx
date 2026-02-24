@@ -6,9 +6,11 @@ import { useLocale, useTranslations } from "next-intl";
 
 import FormCard from "@/components/FormCard";
 
+import { query } from "@/constants/query";
+
 import { useLogout } from "@/hooks/useLogout";
 
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import { Login, PersonAdd } from "@mui/icons-material";
 import {
@@ -27,7 +29,7 @@ import { styled } from "@mui/material/styles";
 import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { getDisplayName } from "@/utils/auth";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -62,20 +64,15 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
 
   const tAccount = useTranslations("account");
 
-  const safeRedirectTo =
-    redirectTo && redirectTo !== "/account/add-another-account"
-      ? redirectTo
-      : "/account/my-account";
-
-  const signInHref = handleQueryParam("/auth/sign-in", {
-    [QueryParamKey.RedirectTo]: safeRedirectTo,
+  const { href } = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTo,
   });
 
   const handleCancel = () => router.push("/account/my-account");
 
   const handleSignOutAndContinue = async () => {
     await handleLogout();
-    router.push(signInHref);
+    router.push(href);
   };
 
   const name = getDisplayName(locale, profile);
@@ -145,9 +142,8 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
         ) : (
           <>
             <Button
-              component={Link}
               fullWidth
-              href={signInHref}
+              href={href}
               startIcon={<Login />}
               variant="contained"
             >

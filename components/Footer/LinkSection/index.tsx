@@ -4,25 +4,16 @@ import { useTranslations } from "next-intl";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { useLogout } from "@/hooks/useLogout";
+import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
-import { Link } from "@/i18n/navigation";
-
-import {
-  Grid,
-  Link as MuiLink,
-  Skeleton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Grid, Link, Skeleton, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 
-import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
-import { getAuthMenuItems, getLogoutMenuItem } from "@/utils/auth";
+import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -51,22 +42,17 @@ const SectionSkeleton = () => (
 const useFooterItems = (): MenuItem[] => {
   const { isAuthLoading, isSignedIn } = useAuthStore((state) => state);
 
-  const { handleLogout, isMutatingLogout } = useLogout();
-
   const tOrder = useTranslations("order");
   const tAuth = useTranslations("auth");
   const tAccount = useTranslations("account");
   const tCompany = useTranslations("company");
 
-  const authChildren = getAuthMenuItems(tAuth).map(({ label, to }) => ({
-    label,
-    to,
-  }));
+  const authChildren = useAuthMenuItems();
 
   const accountChildren = [
-    ...getProfileMenuItems(tAccount),
-    ...getAccountMenuItems(tAccount),
-    getLogoutMenuItem(tAuth, { isMutatingLogout, onLogout: handleLogout }),
+    ...useProfileMenuItems(),
+    ...useAccountMenuItems(),
+    useLogoutMenuItem(),
   ];
 
   return [
@@ -133,17 +119,18 @@ const LinkSection = () => {
                 </Typography>
                 {children?.map(
                   ({ label: childLabel, onClick, to: childTo }) => (
-                    <MuiLink
+                    <Link
                       color="text.secondary"
-                      component={onClick ? "button" : Link}
-                      href={onClick ? undefined : `${parentTo}${childTo}`}
+                      {...(onClick
+                        ? { component: "button" }
+                        : { href: `${parentTo}${childTo}` })}
                       key={onClick ? childLabel : childTo}
                       onClick={onClick}
                       underline="hover"
                       variant="body2"
                     >
                       {childLabel}
-                    </MuiLink>
+                    </Link>
                   ),
                 )}
               </>

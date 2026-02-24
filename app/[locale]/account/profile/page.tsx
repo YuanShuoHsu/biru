@@ -4,7 +4,11 @@ import { setRequestLocale } from "next-intl/server";
 
 import AccountProfile from ".";
 
+import { query } from "@/constants/query";
+
 import type { Locale } from "@/i18n/routing";
+
+import { getHref } from "@/utils/href";
 
 interface AccountProfilePageProps {
   params: Promise<{ locale: Locale }>;
@@ -22,10 +26,9 @@ const AccountProfilePage = async ({
 
   setRequestLocale(locale);
 
-  const pathname = `/${locale}/account/profile`;
-  const currentURL = redirectTo
-    ? `${pathname}?${new URLSearchParams({ redirectTo })}`
-    : pathname;
+  const { href: currentURL } = getHref(`/${locale}/account/profile`, {
+    [query.redirectTo]: redirectTo,
+  });
 
   return <AccountProfile currentURL={currentURL} />;
 };

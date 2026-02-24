@@ -1,12 +1,16 @@
+"use client";
+
 // https://developers.google.com/identity/branding-guidelines?hl=zh-tw
 
 import { useTranslations } from "next-intl";
 
+import { query } from "@/constants/query";
+
 import type { Locale } from "@/i18n/routing";
 
-import { Button, Link } from "@mui/material";
+import { Button } from "@mui/material";
 
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 const GoogleIcon = () => (
   <svg
@@ -51,15 +55,14 @@ const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
 
   const label = tAuth(`google.${action}`);
 
-  const href = handleQueryParam("/api/auth/google", {
-    [QueryParamKey.Locale]: locale,
-    [QueryParamKey.RedirectTo]: redirectTo,
+  const { href } = getHref("/api/auth/google", {
+    [query.locale]: locale,
+    [query.redirectTo]: redirectTo,
   });
 
   return (
     <Button
       aria-label={label}
-      component={Link}
       fullWidth
       href={href}
       size="large"

@@ -22,7 +22,7 @@ const CompanyLegalPrivacyPage = async ({
   const { back, redirectTo } = await searchParams;
 
   const safeBack =
-    typeof back === "string" && back.startsWith("/") ? back : undefined;
+    typeof back === "string" && back.startsWith("/") ? back : "/";
   const safeRedirectTo =
     typeof redirectTo === "string" && redirectTo.startsWith("/")
       ? redirectTo

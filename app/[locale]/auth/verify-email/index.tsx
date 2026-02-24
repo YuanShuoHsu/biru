@@ -6,9 +6,10 @@ import { useForm } from "react-hook-form";
 
 import FormCard from "@/components/FormCard";
 
+import { query } from "@/constants/query";
+
 import useCountdown from "@/hooks/useCountdown";
 
-import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -25,13 +26,13 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Link as MuiLink,
+  Link,
   Stack,
   Typography,
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -93,6 +94,13 @@ const AuthVerifyEmail = ({
     key: "biru-resend-email",
   });
 
+  const { href: signInHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTo,
+  });
+  const { href: signUpHref } = getHref("/auth/sign-up", {
+    [query.redirectTo]: redirectTo,
+  });
+
   const onSubmit = handleSubmit(async () => {
     const { error } = await authClient.sendVerificationEmail({
       email,
@@ -119,10 +127,6 @@ const AuthVerifyEmail = ({
 
   const status = isFailed ? "failed" : isVerified ? "verified" : "default";
 
-  const signInHref = handleQueryParam("/auth/sign-in", {
-    [QueryParamKey.RedirectTo]: redirectTo,
-  });
-
   const contents = {
     default: {
       actions: (
@@ -143,35 +147,22 @@ const AuthVerifyEmail = ({
                 })
               : tAuth("verifyEmail.resend")}
           </Button>
-          <Button
-            component={Link}
-            fullWidth
-            href={signInHref}
-            size="large"
-            variant="outlined"
-          >
+          <Button fullWidth href={signInHref} size="large" variant="outlined">
             {tAuth("verifyEmail.backToSignIn")}
           </Button>
           <Divider flexItem />
-          <Stack flexDirection="row" alignItems="center" gap={0.5}>
+          <Stack alignItems="center" flexDirection="row" gap={0.5}>
             <Typography variant="body2">
               {tAuth("verifyEmail.wrongEmail")}
             </Typography>
-            <MuiLink
-              component={Link}
-              href={handleQueryParam("/auth/sign-up", {
-                [QueryParamKey.RedirectTo]: redirectTo,
-              })}
-              underline="hover"
-              variant="body2"
-            >
+            <Link href={signUpHref} underline="hover" variant="body2">
               {tAuth("signUp.label")}
-            </MuiLink>
+            </Link>
           </Stack>
         </>
       ),
       body: (
-        <Stack spacing={1} alignItems="center">
+        <Stack alignItems="center" spacing={1}>
           <Typography textAlign="center">{email}</Typography>
           <Typography
             color="text.secondary"
@@ -196,18 +187,12 @@ const AuthVerifyEmail = ({
     },
     failed: {
       actions: (
-        <Button
-          component={Link}
-          fullWidth
-          href={signInHref}
-          size="large"
-          variant="contained"
-        >
+        <Button fullWidth href={signInHref} size="large" variant="contained">
           {tAuth("verifyEmail.backToSignIn")}
         </Button>
       ),
       body: (
-        <Stack spacing={1} alignItems="center">
+        <Stack alignItems="center" spacing={1}>
           <Typography textAlign="center">{email}</Typography>
           <Typography
             color="text.secondary"
@@ -232,18 +217,12 @@ const AuthVerifyEmail = ({
     },
     verified: {
       actions: (
-        <Button
-          component={Link}
-          fullWidth
-          href={signInHref}
-          size="large"
-          variant="contained"
-        >
+        <Button fullWidth href={signInHref} size="large" variant="contained">
           {tAuth("verifyEmail.backToSignIn")}
         </Button>
       ),
       body: (
-        <Stack spacing={1} alignItems="center">
+        <Stack alignItems="center" spacing={1}>
           <Typography textAlign="center">{email}</Typography>
           <Typography
             color="text.secondary"

@@ -4,26 +4,26 @@
 
 "use client";
 
-import { Link } from "@/i18n/navigation";
 import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
 import FormCard from "@/components/FormCard";
 
+import { query } from "@/constants/query";
+
 import {
   Button,
   CardActions,
   CardContent,
   CardHeader,
-  Link as MuiLink,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -109,14 +109,14 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
         </Button>
         <Typography variant="body2">
           {tAuth("rememberedPassword")}{" "}
-          <MuiLink
-            component={Link}
-            href={handleQueryParam("/auth/sign-in", {
-              [QueryParamKey.RedirectTo]: redirectTo,
-            })}
+          <Link
+            href={{
+              pathname: "/auth/sign-in",
+              query: { [query.redirectTo]: redirectTo },
+            }}
           >
             {tAuth("signIn.label")}
-          </MuiLink>
+          </Link>
         </Typography>
       </StyledCardActions>
     </FormCard>

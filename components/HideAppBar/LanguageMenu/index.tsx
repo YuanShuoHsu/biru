@@ -3,12 +3,14 @@
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
 import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { useState } from "react";
 
 import { locales } from "@/constants/locale";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { useHref } from "@/hooks/useHref";
+
+import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
 import { Language } from "@mui/icons-material";
@@ -34,18 +36,11 @@ const LanguageMenu = () => {
   );
   const open = Boolean(anchorElLanguage);
 
-  const tAppBar = useTranslations("appBar");
+  const { href: currentURL } = useHref();
 
   const { locale: currentLang } = useParams();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  const redirectedPathname = () => {
-    if (!pathname) return "/";
-
-    const search = searchParams.toString();
-    return `${pathname}${search ? `?${search}` : ""}`;
-  };
+  const tAppBar = useTranslations("appBar");
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) =>
     setAnchorElLanguage(event.currentTarget);
@@ -85,7 +80,7 @@ const LanguageMenu = () => {
         {languages.map(({ label, locale }) => (
           <MenuItem
             component={Link}
-            href={redirectedPathname()}
+            href={currentURL}
             key={locale}
             locale={locale}
             onClick={handleClose}

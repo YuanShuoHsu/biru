@@ -3,14 +3,19 @@
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
 import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { useLogout } from "@/hooks/useLogout";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
+import { useHref } from "@/hooks/useHref";
 
 import {
   AccountCircle,
@@ -30,6 +35,7 @@ import {
   Collapse,
   Divider,
   Drawer,
+  Link,
   List,
   ListItemButton,
   type ListItemButtonProps,
@@ -49,8 +55,7 @@ import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
-import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
-import { getAuthMenuItems, getLogoutMenuItem } from "@/utils/auth";
+import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 import { handleDrawerToggle } from "@/utils/drawer";
 import { getStoreName } from "@/utils/stores";
 
@@ -265,8 +270,6 @@ const NavTemporaryDrawer = () => {
   const tAuth = useTranslations("auth");
   const tAccount = useTranslations("account");
 
-  const { handleLogout, isMutatingLogout } = useLogout();
-
   const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
   const pathname = usePathname();
@@ -275,29 +278,28 @@ const NavTemporaryDrawer = () => {
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
   const searchParams = useSearchParams();
-  const search = searchParams.toString();
-  const currentURL = search ? `${pathname}?${search}` : pathname;
+  const { href: currentURL } = useHref();
 
-  const redirectParam = searchParams.get("redirectTo");
+  const redirectTo = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith(`/${locale}/account`);
   const isAuthPage = pathname.startsWith(`/${locale}/auth`);
   const isCompanyPage = pathname.startsWith(`/${locale}/company`);
 
-  const redirectTo =
-    (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
-      ? redirectParam
+  const redirect =
+    (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
+      ? redirectTo
       : currentURL;
 
   const storeName = getStoreName(locale, stores, storeSlug);
 
-  const accountChildren = [
-    ...getProfileMenuItems(tAccount),
-    dividerSlot,
-    ...getAccountMenuItems(tAccount),
-    getLogoutMenuItem(tAuth, { isMutatingLogout, onLogout: handleLogout }),
-  ];
+  const authChildren = useAuthMenuItems(redirect);
 
-  const authChildren = getAuthMenuItems(tAuth, redirectTo);
+  const accountChildren = [
+    ...useProfileMenuItems(),
+    dividerSlot,
+    ...useAccountMenuItems(),
+    useLogoutMenuItem(),
+  ];
 
   const dineInChildren = [
     ...(mode === ORDER_MODE.DineIn && storeSlug && storeName
@@ -314,7 +316,7 @@ const NavTemporaryDrawer = () => {
     {
       icon: LocalMall,
       label: tOrder("mode.pickup.label"),
-      to: "/pickup",
+      to: `/${ORDER_MODE.Pickup}`,
     },
   ];
 
@@ -335,12 +337,14 @@ const NavTemporaryDrawer = () => {
   const renderItems = (items: MenuItem[], level = 0, parentPath = "/") =>
     items.map(({ children, disabled, icon, label, onClick, slot, to }) => {
       const [toPath, toSearchParams] = to?.split("?") || [];
-      const toSearch = toSearchParams ? `?${toSearchParams}` : "";
+      const search = toSearchParams || "";
+      const queryString = search ? `?${search}` : "";
 
       const parentPrefix = parentPath === "/" ? "" : parentPath;
       const basePath = toPath ? `${parentPrefix}${toPath}` : parentPath;
       const isExpandable = Boolean(children?.length);
-      const href = to && !isExpandable ? `${basePath}${toSearch}` : undefined;
+      const href =
+        to && !isExpandable ? `${basePath}${queryString}` : undefined;
 
       const itemKey = toPath || `${label}-${level}`;
       const open = Boolean(isExpandable && openMap[itemKey]);

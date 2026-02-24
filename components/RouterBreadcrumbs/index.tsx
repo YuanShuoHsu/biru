@@ -7,7 +7,7 @@ import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import {
@@ -34,8 +34,7 @@ import {
 } from "@mui/icons-material";
 import {
   Breadcrumbs,
-  Link as MuiLink,
-  type LinkProps as MuiLinkProps,
+  Link,
   type SvgIconProps,
   Typography,
 } from "@mui/material";
@@ -242,15 +241,6 @@ const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   },
 }));
 
-interface LinkRouterProps extends MuiLinkProps {
-  to: string;
-  replace?: boolean;
-}
-
-const LinkRouter = ({ to, ...props }: LinkRouterProps) => (
-  <MuiLink component={Link} href={to} {...props} />
-);
-
 const iconTextBaseStyles = (theme: Theme) => ({
   display: "flex",
   alignItems: "center",
@@ -261,7 +251,7 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
 }));
 
-const StyledLinkRouter = styled(LinkRouter)(({ theme }) => ({
+const StyledLink = styled(Link)(({ theme }) => ({
   ...iconTextBaseStyles(theme),
 }));
 
@@ -346,15 +336,15 @@ const RouterBreadcrumbs = () => {
             {label}
           </StyledTypography>
         ) : (
-          <StyledLinkRouter
+          <StyledLink
             color="text.secondary"
+            href={to}
             key={to}
-            to={to}
             underline="always"
           >
             <Icon fontSize="inherit" />
             {label}
-          </StyledLinkRouter>
+          </StyledLink>
         );
       })}
     </StyledBreadcrumbs>

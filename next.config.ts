@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // 暫時的假資料記得刪掉
+  // https://nextjs.org/docs/app/building-your-application/optimizing/images
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

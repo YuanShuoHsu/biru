@@ -5,6 +5,7 @@
 "use client";
 
 import Cookies from "js-cookie";
+import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -16,9 +17,12 @@ import { createSigninFormSchema } from "./definitions";
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 
+import { query } from "@/constants/query";
+import { REMEMBER_ME } from "@/constants/sign-in";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -32,7 +36,7 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
-  Link as MuiLink,
+  Link,
   Stack,
   TextField,
   Typography,
@@ -40,16 +44,13 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
-import { useTranslations } from "next-intl";
 
 import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
 import type { LoginDto } from "@/types/auth/login.dto";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { REMEMBER_ME } from "@/constants/sign-in";
 import { fetchProfile } from "@/utils/auth";
 import { FetchError, sendRequest } from "@/utils/fetcher";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -171,12 +172,13 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           ...(redirectTo && { redirectTo }),
         });
 
-        router.replace(
-          handleQueryParam("/auth/verify-email", {
-            [QueryParamKey.Email]: data.email,
-            [QueryParamKey.RedirectTo]: redirectTo,
-          }),
-        );
+        router.replace({
+          pathname: "/auth/verify-email",
+          query: {
+            [query.email]: data.email,
+            [query.redirectTo]: redirectTo,
+          },
+        });
 
         return;
       }
@@ -272,16 +274,16 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
               <Typography variant="body2">{tAuth("rememberMe")}</Typography>
             }
           />
-          <MuiLink
-            component={Link}
-            href={handleQueryParam("/auth/forgot-password", {
-              [QueryParamKey.RedirectTo]: redirectTo,
-            })}
+          <Link
+            href={{
+              pathname: "/auth/forgot-password",
+              query: { [query.redirectTo]: redirectTo },
+            }}
             underline="hover"
             variant="body2"
           >
             {tAuth("forgotPassword.label")}
-          </MuiLink>
+          </Link>
         </Stack>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
@@ -298,16 +300,16 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("noAccount")}</Typography>
-          <MuiLink
-            component={Link}
-            href={handleQueryParam("/auth/sign-up", {
-              [QueryParamKey.RedirectTo]: redirectTo,
-            })}
+          <Link
+            href={{
+              pathname: "/auth/sign-up",
+              query: { [query.redirectTo]: redirectTo },
+            }}
             underline="hover"
             variant="body2"
           >
             {tAuth("signUp.label")}
-          </MuiLink>
+          </Link>
         </Stack>
       </StyledCardActions>
     </FormCard>

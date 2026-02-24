@@ -195,10 +195,10 @@ const CountrySelect = ({
       options={COUNTRY_OPTIONS.sort(
         (a, b) => -b.firstLetter.localeCompare(a.firstLetter),
       )}
-      renderGroup={(params) => (
-        <Box component="li" key={params.key}>
-          <GroupHeader>{params.group}</GroupHeader>
-          <GroupItems>{params.children}</GroupItems>
+      renderGroup={({ key, group, children }) => (
+        <Box component="li" key={key}>
+          <GroupHeader>{group}</GroupHeader>
+          <GroupItems>{children}</GroupItems>
         </Box>
       )}
       renderInput={(params) => (

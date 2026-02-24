@@ -1,8 +1,11 @@
 // https://mui.com/material-ui/customization/breakpoints/
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
 // https://mui.com/material-ui/customization/css-theme-variables/usage/#typescript
+// https://mui.com/material-ui/integrations/routing/
 // https://mui.com/x/react-date-pickers/quickstart/#typescript
 // https://mui.com/x/react-date-pickers/quickstart/#date-value-types
+
+import LinkBehavior from "@/components/LinkBehavior";
 
 import {
   APP_BAR_TOOLBAR_HEIGHT,
@@ -10,6 +13,7 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
 
+import type { LinkProps } from "@mui/material/Link";
 import { createTheme } from "@mui/material/styles";
 import type {} from "@mui/material/themeCssVarsAugmentation";
 import type {} from "@mui/x-date-pickers/AdapterDayjs";
@@ -79,6 +83,16 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      } as LinkProps,
+    },
     MuiCssBaseline: {
       styleOverrides: (theme) => ({
         ".notistack-container-top-right-offset": {

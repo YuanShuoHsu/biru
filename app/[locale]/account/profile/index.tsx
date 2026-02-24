@@ -7,7 +7,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
-import { Link } from "@/i18n/navigation";
+import { query } from "@/constants/query";
 
 import {
   CheckCircle,
@@ -41,7 +41,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 type PreferenceKey = "newsletter" | "orderUpdates" | "recommendations";
 
@@ -105,6 +105,10 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
   const [preferences, setPreferences] = useState(preferenceDefaults);
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+
+  const { href: signInHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: currentURL,
+  });
 
   const locale = useLocale();
 
@@ -235,14 +239,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
             <Typography color="text.secondary" variant="body2">
               {tAccount("profile.empty")}
             </Typography>
-            <Button
-              component={Link}
-              href={handleQueryParam("/auth/sign-in", {
-                [QueryParamKey.RedirectTo]: currentURL,
-              })}
-              startIcon={<Login />}
-              variant="contained"
-            >
+            <Button href={signInHref} startIcon={<Login />} variant="contained">
               {tAuth("signIn.label")}
             </Button>
           </Stack>
@@ -386,7 +383,6 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button
-                  component={Link}
                   href="/account/account-settings"
                   startIcon={<Settings />}
                   variant="outlined"

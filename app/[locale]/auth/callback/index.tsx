@@ -4,6 +4,8 @@ import { useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 
+import { query } from "@/constants/query";
+
 import { useRouter } from "@/i18n/navigation";
 
 import { CircularProgress, Stack, Typography } from "@mui/material";
@@ -13,6 +15,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
+import { getHref } from "@/utils/href";
 
 const AuthCallback = () => {
   const router = useRouter();
@@ -37,9 +40,10 @@ const AuthCallback = () => {
             : "Google login failed. Please try again.",
           { variant: "error" },
         );
-        router.replace(
-          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-        );
+        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+          [query.redirectTo]: redirectTo,
+        });
+        router.replace(signInRedirectHref);
         setHasHandledCallback(true);
         return;
       }
@@ -48,9 +52,10 @@ const AuthCallback = () => {
         enqueueSnackbar("Authentication failed. Please try again.", {
           variant: "error",
         });
-        router.replace(
-          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-        );
+        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+          [query.redirectTo]: redirectTo,
+        });
+        router.replace(signInRedirectHref);
         setHasHandledCallback(true);
         return;
       }
@@ -73,9 +78,10 @@ const AuthCallback = () => {
           variant: "error",
         });
         clearAuth();
-        router.replace(
-          `/auth/sign-in${redirectTo ? `?redirectTo=${encodeURIComponent(redirectTo)}` : ""}`,
-        );
+        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+          [query.redirectTo]: redirectTo,
+        });
+        router.replace(signInRedirectHref);
       } finally {
         setIsAuthLoading(false);
         setHasHandledCallback(true);

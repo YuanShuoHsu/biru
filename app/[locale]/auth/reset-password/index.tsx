@@ -1,17 +1,18 @@
 // https://nextjs.org/docs/app/guides/authentication
 // https://mui.com/toolpad/core/react-sign-in-page/
+// https://nextjs.org/docs/app/guides/authentication
+// https://mui.com/toolpad/core/react-sign-in-page/
 // https://mui.com/store/sign-in/
 
 "use client";
 
 import { useTranslations } from "next-intl";
-import NextLink from "next/link";
 import { enqueueSnackbar } from "notistack";
 import React, { useState } from "react";
 
 import FormCard from "@/components/FormCard";
 
-import type { Locale } from "@/i18n/routing";
+import { query } from "@/constants/query";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -21,14 +22,13 @@ import {
   CardHeader,
   IconButton,
   InputAdornment,
-  Link as MuiLink,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -53,11 +53,10 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 type ResetPasswordField = "newPassword" | "confirmNewPassword";
 
 interface AuthResetPasswordProps {
-  locale: Locale;
   redirectTo?: string;
 }
 
-const AuthResetPassword = ({ locale, redirectTo }: AuthResetPasswordProps) => {
+const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
     newPassword: "",
@@ -206,14 +205,14 @@ const AuthResetPassword = ({ locale, redirectTo }: AuthResetPasswordProps) => {
         </Button>
         <Typography variant="body2">
           {tAuth("noAccount")}{" "}
-          <MuiLink
-            component={NextLink}
-            href={handleQueryParam(`/${locale}/auth/sign-up`, {
-              [QueryParamKey.RedirectTo]: redirectTo,
-            })}
+          <Link
+            href={{
+              pathname: "/auth/sign-up",
+              query: { [query.redirectTo]: redirectTo },
+            }}
           >
             {tAuth("signUp.label")}
-          </MuiLink>
+          </Link>
         </Typography>
       </StyledCardActions>
     </FormCard>

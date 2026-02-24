@@ -2,10 +2,7 @@
 
 import Image from "next/image";
 
-import { Link } from "@/i18n/navigation";
-
-import { Box, Link as MuiLink, Typography } from "@mui/material";
-import type { TypographyProps } from "@mui/material/Typography";
+import { Box, Link, Typography, type TypographyProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const ImageBox = styled(Box)(({ theme }) => ({
@@ -22,10 +19,9 @@ interface BrandMarkProps {
 }
 
 const BrandMark = ({ color }: BrandMarkProps) => (
-  <MuiLink
+  <Link
     minWidth={0}
     color="inherit"
-    component={Link}
     href="/"
     display="flex"
     alignItems="center"
@@ -46,7 +42,7 @@ const BrandMark = ({ color }: BrandMarkProps) => (
     <Typography color={color} component="span" noWrap variant="h6">
       Biru Coffee
     </Typography>
-  </MuiLink>
+  </Link>
 );
 
 export default BrandMark;

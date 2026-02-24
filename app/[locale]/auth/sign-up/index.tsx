@@ -27,10 +27,11 @@ import UploadAvatars, {
 } from "@/components/UploadAvatars";
 
 import { LegalLinkType } from "@/constants/legal";
+import { query } from "@/constants/query";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -51,18 +52,16 @@ import {
   FormControlLabel,
   IconButton,
   InputAdornment,
+  Link,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Link as MuiLink,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -239,17 +238,19 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   );
 
   const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => (
-    <MuiLink
-      component={Link}
-      href={handleQueryParam(`/company/${type}`, {
-        [QueryParamKey.Back]: "/auth/sign-up",
-        [QueryParamKey.RedirectTo]: redirectTo,
-      })}
+    <Link
+      href={{
+        pathname: `/company/${type}`,
+        query: {
+          [query.back]: "/auth/sign-up",
+          [query.redirectTo]: redirectTo,
+        },
+      }}
       key={type}
       underline="hover"
     >
       {chunks}
-    </MuiLink>
+    </Link>
   );
 
   // const handleBirthDateChange =
@@ -309,10 +310,13 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         return;
       }
 
-      const verifyEmailHref = handleQueryParam("/auth/verify-email", {
-        [QueryParamKey.Email]: rest.email,
-        [QueryParamKey.RedirectTo]: redirectTo,
-      });
+      const verifyEmailHref = {
+        pathname: "/auth/verify-email",
+        query: {
+          [query.email]: rest.email,
+          [query.redirectTo]: redirectTo,
+        },
+      };
 
       router.push(verifyEmailHref);
     },
@@ -603,16 +607,16 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("hasAccount")}</Typography>
-          <MuiLink
-            component={Link}
-            href={handleQueryParam("/auth/sign-in", {
-              [QueryParamKey.RedirectTo]: redirectTo,
-            })}
+          <Link
+            href={{
+              pathname: "/auth/sign-in",
+              query: { [query.redirectTo]: redirectTo },
+            }}
             underline="hover"
             variant="body2"
           >
             {tAuth("signIn.label")}
-          </MuiLink>
+          </Link>
         </Stack>
       </StyledCardActions>
     </FormCard>

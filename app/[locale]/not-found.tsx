@@ -2,9 +2,7 @@
 
 "use client";
 
-import { Link } from "@/i18n/navigation";
-
-import { Box, Link as MuiLink, Typography } from "@mui/material";
+import { Box, Link, Typography } from "@mui/material";
 
 const NotFound = () => (
   <Box>
@@ -14,9 +12,9 @@ const NotFound = () => (
     <Typography color="text.primary" variant="body1">
       Could not find requested resource
     </Typography>
-    <MuiLink color="text.primary" component={Link} href="/">
+    <Link color="text.primary" href="/">
       Return Home
-    </MuiLink>
+    </Link>
   </Box>
 );
 

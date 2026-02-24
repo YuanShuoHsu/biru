@@ -2,29 +2,27 @@
 
 import { useTranslations } from "next-intl";
 
-import { Link } from "@/i18n/navigation";
+import { query } from "@/constants/query";
 
 import { KeyboardArrowLeft } from "@mui/icons-material";
 import { Button } from "@mui/material";
 
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 interface BackButtonProps {
-  back?: string;
+  back: string;
   redirectTo?: string;
 }
 
 const BackButton = ({ back, redirectTo }: BackButtonProps) => {
   const tCompany = useTranslations("company");
 
-  const href =
-    back && redirectTo
-      ? handleQueryParam(back, { [QueryParamKey.RedirectTo]: redirectTo })
-      : back || "/";
+  const { href } = getHref(back, {
+    [query.redirectTo]: redirectTo,
+  });
 
   return (
     <Button
-      component={Link}
       href={href}
       size="small"
       startIcon={<KeyboardArrowLeft fontSize="small" />}

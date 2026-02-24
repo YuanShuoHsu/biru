@@ -25,7 +25,7 @@ const AuthResetPasswordPage = async ({
       ? redirectTo
       : undefined;
 
-  return <AuthResetPassword locale={locale} redirectTo={safeRedirectTo} />;
+  return <AuthResetPassword redirectTo={safeRedirectTo} />;
 };
 
 export default AuthResetPasswordPage;

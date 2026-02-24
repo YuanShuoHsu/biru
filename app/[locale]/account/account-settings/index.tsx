@@ -5,11 +5,10 @@
 import { useLocale, useTranslations } from "next-intl";
 import { startTransition, useEffect, useMemo, useState } from "react";
 
+import { query } from "@/constants/query";
 import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useLogout } from "@/hooks/useLogout";
-
-import { Link } from "@/i18n/navigation";
 
 import {
   AccountCircle,
@@ -48,7 +47,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { getHref } from "@/utils/href";
 
 interface SettingRowProps {
   icon: React.ElementType;
@@ -145,6 +144,19 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   const memberSince = formatDate(profile?.createdAt);
   const updatedAt = formatDate(profile?.updatedAt);
 
+  const { href: signInHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: currentURL,
+  });
+
+  const { href: verifyEmailHref } = getHref("/auth/verify-email", {
+    [query.email]: profile?.email,
+    [query.redirectTo]: currentURL,
+  });
+
+  const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
+    [query.redirectTo]: currentURL,
+  });
+
   const name = useMemo(
     () =>
       getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
@@ -225,10 +237,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
               {tAccount("accountSettings.empty")}
             </Typography>
             <Button
-              component={Link}
-              href={handleQueryParam("/auth/sign-in", {
-                [QueryParamKey.RedirectTo]: currentURL,
-              })}
+              href={signInHref}
               startIcon={<Settings />}
               variant="contained"
             >
@@ -239,15 +248,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
       </Card>
     );
   }
-
-  const verifyEmailHref = handleQueryParam("/auth/verify-email", {
-    [QueryParamKey.Email]: profile.email,
-    [QueryParamKey.RedirectTo]: currentURL,
-  });
-
-  const forgotPasswordHref = handleQueryParam("/auth/forgot-password", {
-    [QueryParamKey.RedirectTo]: currentURL,
-  });
 
   return (
     <Stack gap={3}>
@@ -344,7 +344,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
               </Stack>
               {!profile.emailVerified && (
                 <Button
-                  component={Link}
                   href={verifyEmailHref}
                   size="small"
                   startIcon={<Security />}
@@ -403,7 +402,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button
-                  component={Link}
                   href="/account/profile"
                   startIcon={<AccountCircle />}
                   variant="outlined"
@@ -419,7 +417,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={Link}
                     href={forgotPasswordHref}
                     startIcon={<LockReset />}
                     variant="outlined"
@@ -487,7 +484,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
               <CardContent>
                 <Stack gap={1.5}>
                   <Button
-                    component={Link}
                     href="/company/terms"
                     startIcon={<Gavel />}
                     variant="outlined"
@@ -495,7 +491,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                     {tAccount("accountSettings.actions.terms")}
                   </Button>
                   <Button
-                    component={Link}
                     href="/company/privacy"
                     startIcon={<Policy />}
                     variant="outlined"

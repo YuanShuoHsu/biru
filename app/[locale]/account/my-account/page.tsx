@@ -1,9 +1,14 @@
 // vibe coding 未來要修正
 
+import { setRequestLocale } from "next-intl/server";
+
 import MyAccount from ".";
 
+import { query } from "@/constants/query";
+
 import type { Locale } from "@/i18n/routing";
-import { setRequestLocale } from "next-intl/server";
+
+import { getHref } from "@/utils/href";
 
 interface MyAccountPageProps {
   params: Promise<{ locale: Locale }>;
@@ -18,10 +23,9 @@ const MyAccountPage = async ({ params, searchParams }: MyAccountPageProps) => {
 
   setRequestLocale(locale);
 
-  const pathname = `/${locale}/account/my-account`;
-  const currentURL = redirectTo
-    ? `${pathname}?${new URLSearchParams({ redirectTo })}`
-    : pathname;
+  const { href: currentURL } = getHref(`/${locale}/account/my-account`, {
+    [query.redirectTo]: redirectTo,
+  });
 
   return <MyAccount currentURL={currentURL} />;
 };

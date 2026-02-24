@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 
 import {
   Box,
@@ -73,7 +73,6 @@ const OrderBottomBar = () => {
         zIndex={(theme) => theme.zIndex.appBar - 1}
       >
         <StyledButton
-          component={Link}
           disabled={isCartEmpty}
           fullWidth
           href={checkoutPath}

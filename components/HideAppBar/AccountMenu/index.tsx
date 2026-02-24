@@ -9,7 +9,10 @@ import { useState, type MouseEvent } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
-import { useLogout } from "@/hooks/useLogout";
+import { query } from "@/constants/query";
+
+import { useLogoutMenuItem } from "@/hooks/useAuth";
+import { useHref } from "@/hooks/useHref";
 
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
@@ -31,9 +34,9 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 import { RouteParams } from "@/types/routeParams";
 
-import { getAccountMenuItems, getProfileMenuItems } from "@/utils/account";
-import { getDisplayName, getLogoutMenuItem } from "@/utils/auth";
-import { handleQueryParam, QueryParamKey } from "@/utils/queryParams";
+import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
+import { getDisplayName } from "@/utils/auth";
+import { getHref } from "@/utils/href";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -83,8 +86,6 @@ const AccountMenu = () => {
 
   const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
 
-  const { handleLogout, isMutatingLogout } = useLogout();
-
   const { locale } = useParams<RouteParams>();
 
   const displayName = getDisplayName(locale, profile);
@@ -101,28 +102,26 @@ const AccountMenu = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const search = searchParams.toString();
-  const currentURL = search ? `${pathname}?${search}` : pathname;
-
-  const redirectParam = searchParams.get("redirectTo");
+  const { href: currentURL } = useHref();
+  const redirectTo = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith("/account");
   const isAuthPage = pathname.startsWith("/auth");
   const isCompanyPage = pathname.startsWith("/company");
 
   const redirectTarget =
-    (isAccountPage || isAuthPage || isCompanyPage) && redirectParam
-      ? redirectParam
+    (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
+      ? redirectTo
       : currentURL;
+
+  const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTarget,
+  });
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     if (isAuthLoading) return;
 
     if (!isSignedIn) {
-      router.push(
-        handleQueryParam("/auth/sign-in", {
-          [QueryParamKey.RedirectTo]: redirectTarget,
-        }),
-      );
+      router.push(signInRedirectHref);
 
       return;
     }
@@ -132,14 +131,8 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const profileMenuItems = getProfileMenuItems(tAccount);
-  const accountMenuItems = [
-    ...getAccountMenuItems(tAccount),
-    getLogoutMenuItem(tAuth, {
-      isMutatingLogout,
-      onLogout: handleLogout,
-    }),
-  ];
+  const profileMenuItems = useProfileMenuItems();
+  const accountMenuItems = [...useAccountMenuItems(), useLogoutMenuItem()];
 
   const renderMenuItems = (items: MenuItemData[]) =>
     items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
