@@ -24,6 +24,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
+import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -52,6 +53,10 @@ interface AuthForgotPasswordProps {
 const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
   const [form, setForm] = useState({
     email: "",
+  });
+
+  const { href: signInHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTo,
   });
 
   const tAuth = useTranslations("auth");
@@ -109,14 +114,7 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
         </Button>
         <Typography variant="body2">
           {tAuth("rememberedPassword")}{" "}
-          <Link
-            href={{
-              pathname: "/auth/sign-in",
-              query: { [query.redirectTo]: redirectTo },
-            }}
-          >
-            {tAuth("signIn.label")}
-          </Link>
+          <Link href={signInHref}>{tAuth("signIn.label")}</Link>
         </Typography>
       </StyledCardActions>
     </FormCard>

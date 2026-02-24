@@ -62,17 +62,17 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
   const locale = useLocale();
   const router = useRouter();
 
-  const tAccount = useTranslations("account");
-
-  const { href } = getHref("/auth/sign-in", {
+  const { href: signInHref } = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
   });
+
+  const tAccount = useTranslations("account");
 
   const handleCancel = () => router.push("/account/my-account");
 
   const handleSignOutAndContinue = async () => {
     await handleLogout();
-    router.push(href);
+    router.push(signInHref);
   };
 
   const name = getDisplayName(locale, profile);
@@ -143,7 +143,7 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
           <>
             <Button
               fullWidth
-              href={href}
+              href={signInHref}
               startIcon={<Login />}
               variant="contained"
             >

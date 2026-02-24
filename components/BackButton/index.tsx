@@ -17,13 +17,13 @@ interface BackButtonProps {
 const BackButton = ({ back, redirectTo }: BackButtonProps) => {
   const tCompany = useTranslations("company");
 
-  const { href } = getHref(back, {
+  const { href: backHref } = getHref(back, {
     [query.redirectTo]: redirectTo,
   });
 
   return (
     <Button
-      href={href}
+      href={backHref}
       size="small"
       startIcon={<KeyboardArrowLeft fontSize="small" />}
       variant="outlined"

@@ -51,6 +51,7 @@ import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { fetchProfile } from "@/utils/auth";
 import { FetchError, sendRequest } from "@/utils/fetcher";
+import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -84,6 +85,14 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
   const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
     useAuthStore((state) => state);
+
+  const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
+    [query.redirectTo]: redirectTo,
+  });
+
+  const { href: signUpHref } = getHref("/auth/sign-up", {
+    [query.redirectTo]: redirectTo,
+  });
 
   const tAuth = useTranslations("auth");
   const tValidation = useTranslations("validation");
@@ -274,14 +283,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
               <Typography variant="body2">{tAuth("rememberMe")}</Typography>
             }
           />
-          <Link
-            href={{
-              pathname: "/auth/forgot-password",
-              query: { [query.redirectTo]: redirectTo },
-            }}
-            underline="hover"
-            variant="body2"
-          >
+          <Link href={forgotPasswordHref} underline="hover" variant="body2">
             {tAuth("forgotPassword.label")}
           </Link>
         </Stack>
@@ -300,14 +302,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("noAccount")}</Typography>
-          <Link
-            href={{
-              pathname: "/auth/sign-up",
-              query: { [query.redirectTo]: redirectTo },
-            }}
-            underline="hover"
-            variant="body2"
-          >
+          <Link href={signUpHref} underline="hover" variant="body2">
             {tAuth("signUp.label")}
           </Link>
         </Stack>

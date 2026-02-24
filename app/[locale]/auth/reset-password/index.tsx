@@ -29,6 +29,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { getErrorMessage } from "@/utils/errors";
+import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -68,6 +69,10 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
   >({
     newPassword: false,
     confirmNewPassword: false,
+  });
+
+  const { href: signUpHref } = getHref("/auth/sign-up", {
+    [query.redirectTo]: redirectTo,
   });
 
   const tAuth = useTranslations("auth");
@@ -205,14 +210,7 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
         </Button>
         <Typography variant="body2">
           {tAuth("noAccount")}{" "}
-          <Link
-            href={{
-              pathname: "/auth/sign-up",
-              query: { [query.redirectTo]: redirectTo },
-            }}
-          >
-            {tAuth("signUp.label")}
-          </Link>
+          <Link href={signUpHref}>{tAuth("signUp.label")}</Link>
         </Typography>
       </StyledCardActions>
     </FormCard>

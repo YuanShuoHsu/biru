@@ -63,6 +63,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { getHref } from "@/utils/href";
+
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
   padding: theme.spacing(2),
   paddingBottom: 0,
@@ -110,6 +112,10 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   });
 
   // const [isGenderFocused, setIsGenderFocused] = useState(false);
+
+  const { href: signInHref } = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTo,
+  });
 
   const tAuth = useTranslations("auth");
   const tValidation = useTranslations("validation");
@@ -237,21 +243,18 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     hasConfirmPassword,
   );
 
-  const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => (
-    <Link
-      href={{
-        pathname: `/company/${type}`,
-        query: {
-          [query.back]: "/auth/sign-up",
-          [query.redirectTo]: redirectTo,
-        },
-      }}
-      key={type}
-      underline="hover"
-    >
-      {chunks}
-    </Link>
-  );
+  const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => {
+    const { href: legalHref } = getHref(`/company/${type}`, {
+      [query.back]: "/auth/sign-up",
+      [query.redirectTo]: redirectTo,
+    });
+
+    return (
+      <Link href={legalHref} key={type} underline="hover">
+        {chunks}
+      </Link>
+    );
+  };
 
   // const handleBirthDateChange =
   //   (onChange: (value: string) => void) => (newValue: Dayjs | null) => {
@@ -607,14 +610,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         <Divider flexItem />
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("hasAccount")}</Typography>
-          <Link
-            href={{
-              pathname: "/auth/sign-in",
-              query: { [query.redirectTo]: redirectTo },
-            }}
-            underline="hover"
-            variant="body2"
-          >
+          <Link href={signInHref} underline="hover" variant="body2">
             {tAuth("signIn.label")}
           </Link>
         </Stack>

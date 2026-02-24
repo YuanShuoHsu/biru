@@ -55,7 +55,7 @@ const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
 
   const label = tAuth(`google.${action}`);
 
-  const { href } = getHref("/api/auth/google", {
+  const { href: googleHref } = getHref("/api/auth/google", {
     [query.locale]: locale,
     [query.redirectTo]: redirectTo,
   });
@@ -64,7 +64,7 @@ const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
     <Button
       aria-label={label}
       fullWidth
-      href={href}
+      href={googleHref}
       size="large"
       startIcon={<GoogleIcon />}
       variant="outlined"
