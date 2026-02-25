@@ -9,7 +9,6 @@ import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import useSWRMutation from "swr/mutation";
 import * as z from "zod";
 
 import { useSigninFormSchema } from "./definitions";
@@ -24,6 +23,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
+
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -43,14 +44,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
-
-import type { AuthResponseDto } from "@/types/auth/auth-response.dto";
-import type { LoginDto } from "@/types/auth/login.dto";
-import type { UserResponseDto } from "@/types/users/user-response.dto";
-
-import { fetchProfile } from "@/utils/auth";
-import { FetchError, sendRequest } from "@/utils/fetcher";
 import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -83,9 +76,6 @@ interface AuthSignInProps {
 const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
-    useAuthStore((state) => state);
-
   const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
     [query.redirectTo]: redirectTo,
   });
@@ -101,7 +91,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
   } = useForm<SigninFormData>({
@@ -114,34 +104,6 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   });
 
   const router = useRouter();
-
-  const { isMutating: isMutatingAccessToken, trigger: triggerAccessToken } =
-    useSWRMutation<AuthResponseDto, Error, string, LoginDto>(
-      "/api/auth/login",
-      sendRequest({
-        credentials: "include",
-      }),
-    );
-
-  const { isMutating: isMutatingProfile, trigger: triggerProfile } =
-    useSWRMutation<UserResponseDto, Error, string, string>(
-      "/api/auth/profile",
-      (_, { arg }) => fetchProfile(arg),
-    );
-
-  const { trigger: triggerResend } = useSWRMutation<
-    void,
-    Error,
-    string,
-    { identifier: string; redirectTo?: string }
-  >(
-    "/api/mails/resend",
-    sendRequest({
-      credentials: "include",
-    }),
-  );
-
-  const isSubmitting = isMutatingAccessToken || isMutatingProfile;
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -159,28 +121,19 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     };
 
   const onSubmit = handleSubmit(async (data) => {
-    setIsAuthLoading(true);
+    const { error } = await authClient.signIn.email({
+      ...data,
+      callbackURL: redirectTo,
+      fetchOptions: {
+        headers: {
+          "Accept-Language": locale,
+        },
+      },
+    });
 
-    try {
-      const { access_token } = await triggerAccessToken(data);
-      setAccessToken(access_token);
-
-      const profile = await triggerProfile(access_token);
-      setProfile(profile);
-
-      enqueueSnackbar(tAuth("signIn.success"), { variant: "success" });
-      router.replace(redirectTo || "/");
-    } catch (err) {
-      const error = err as FetchError;
-      if (error.status === 403 && error.info?.id) {
-        const identifier = error.info.id;
-
-        await triggerResend({
-          identifier,
-          ...(redirectTo && { redirectTo }),
-        });
-
-        router.replace({
+    if (error?.code) {
+      if (error.code === "EMAIL_NOT_VERIFIED") {
+        router.push({
           pathname: "/auth/verify-email",
           query: {
             [query.email]: data.email,
@@ -191,10 +144,14 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         return;
       }
 
-      clearAuth();
-    } finally {
-      setIsAuthLoading(false);
+      const message = getErrorMessage(error.code, locale);
+      enqueueSnackbar(message, { variant: "error" });
+
+      return;
     }
+
+    enqueueSnackbar(tAuth("signIn.success"), { variant: "success" });
+    router.replace(redirectTo || "/");
   });
 
   return (
