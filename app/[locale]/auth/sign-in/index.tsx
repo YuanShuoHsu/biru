@@ -12,7 +12,7 @@ import { Controller, useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
 import * as z from "zod";
 
-import { createSigninFormSchema } from "./definitions";
+import { useSigninFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
@@ -95,9 +95,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   });
 
   const tAuth = useTranslations("auth");
-  const tValidation = useTranslations("validation");
-  const signinFormSchema = createSigninFormSchema(tValidation);
 
+  const signinFormSchema = useSigninFormSchema();
   type SigninFormData = z.infer<typeof signinFormSchema>;
 
   const {

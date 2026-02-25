@@ -1,12 +1,12 @@
 // https://nextjs.org/docs/app/guides/authentication
 
-import type { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import * as z from "zod";
 
-export const createSigninFormSchema = (
-  tValidation: ReturnType<typeof useTranslations<"validation">>,
-) =>
-  z.object({
+export const useSigninFormSchema = () => {
+  const tValidation = useTranslations("validation");
+
+  return z.object({
     email: z.email({ error: tValidation("email.invalid") }).trim(),
     password: z
       .string()
@@ -16,8 +16,9 @@ export const createSigninFormSchema = (
       .trim(),
     rememberMe: z.boolean(),
   });
+};
 
-export type FormState =
+export type SigninFormState =
   | {
       errors?: {
         email?: string[];

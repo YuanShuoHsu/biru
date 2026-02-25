@@ -5,7 +5,7 @@
 //   isSupportedCountry,
 //   isValidPhoneNumber,
 // } from "libphonenumber-js";
-import type { useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import * as z from "zod";
 
 // const today = dayjs();
@@ -13,9 +13,8 @@ import * as z from "zod";
 
 // type BirthDateError = "invalidDate" | "maxDate" | "minDate";
 
-export const createSignupFormSchema = (
-  tValidation: ReturnType<typeof useTranslations<"validation">>,
-) => {
+export const useSignupFormSchema = () => {
+  const tValidation = useTranslations("validation");
   // const birthDateMessageMap: Record<BirthDateError, string> = {
   //   invalidDate: dict.validation.birthDate.invalid,
   //   maxDate: dict.validation.birthDate.maxDate,
@@ -103,7 +102,7 @@ export const createSignupFormSchema = (
   // );
 };
 
-export type FormState =
+export type SignupFormState =
   | {
       errors?: {
         image?: string[];

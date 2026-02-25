@@ -2,17 +2,20 @@
 
 import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
+import { z } from "zod";
+
+import { useNewsletterFormSchema } from "./definitions";
 
 import BrandMark from "@/components/BrandMark";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { sendRequest } from "@/utils/fetcher";
-
-const isLikelyEmail = (value: string) => /^\S+@\S+\.\S+$/.test(value);
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -22,10 +25,21 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 }));
 
 const Newsletter = () => {
-  const [form, setForm] = useState({ email: "" });
-
   const tAuth = useTranslations("auth");
   const tHome = useTranslations("home");
+
+  const newsletterFormSchema = useNewsletterFormSchema();
+  type NewsletterFormData = z.infer<typeof newsletterFormSchema>;
+
+  const {
+    formState: { errors },
+    handleSubmit,
+    register,
+    reset,
+  } = useForm<NewsletterFormData>({
+    defaultValues: { email: "" },
+    resolver: zodResolver(newsletterFormSchema),
+  });
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -36,36 +50,18 @@ const Newsletter = () => {
     { email: string }
   >("/api/newsletter", sendRequest());
 
-  const handleChange = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isMutating) return;
-
-    const trimmedEmail = form.email.trim();
-    if (!trimmedEmail || !isLikelyEmail(trimmedEmail)) {
-      enqueueSnackbar(tHome("footer.newsletter.invalidEmail"), {
-        variant: "warning",
-      });
-      return;
-    }
-
+  const onSubmit = handleSubmit(async (data) => {
     try {
-      await trigger({ email: trimmedEmail });
+      await trigger({ email: data.email });
 
-      setForm({ email: "" });
+      reset();
       enqueueSnackbar(tHome("footer.newsletter.success"), {
         variant: "success",
       });
     } catch {
-      return;
+    } finally {
     }
-  };
+  });
 
   return (
     <StyledGrid size={{ xs: 12, md: 6 }}>
@@ -81,14 +77,14 @@ const Newsletter = () => {
         display="flex"
         flexDirection={{ xs: "column", sm: "row" }}
         gap={1}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
         width="100%"
       >
         <TextField
           autoComplete="email"
+          error={!!errors.email}
+          helperText={errors.email?.message}
           label={tAuth("email.label")}
-          name="email"
-          onChange={handleChange}
           placeholder={tAuth("email.placeholder")}
           required
           size="small"
@@ -98,7 +94,7 @@ const Newsletter = () => {
             },
           }}
           type="email"
-          value={form.email}
+          {...register("email")}
         />
         <Button
           disabled={isMutating}

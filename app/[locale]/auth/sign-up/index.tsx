@@ -18,7 +18,7 @@ import {
 import { Controller, useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
-import { createSignupFormSchema } from "./definitions";
+import { useSignupFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
@@ -119,8 +119,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
   const tAuth = useTranslations("auth");
   const tValidation = useTranslations("validation");
-  const signupFormSchema = createSignupFormSchema(tValidation);
 
+  const signupFormSchema = useSignupFormSchema();
   type SignupFormData = z.infer<typeof signupFormSchema>;
 
   const {
