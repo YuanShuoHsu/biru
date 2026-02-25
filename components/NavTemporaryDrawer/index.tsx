@@ -3,19 +3,15 @@
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx
 
 import { useTranslations } from "next-intl";
-import {
-  useParams,
-  usePathname,
-  useRouter,
-  useSearchParams,
-} from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
-import { useHref } from "@/hooks/useHref";
+
+import { usePathname } from "@/i18n/navigation";
 
 import {
   AccountCircle,
@@ -193,11 +189,11 @@ const DineInMenuItem = ({
 const useNavItems = () => {
   const { isSignedIn } = useAuthStore((state) => state);
 
-  const { href: currentURL } = useHref();
-
   const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
+
   const pathname = usePathname();
+
   const router = useRouter();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
@@ -205,9 +201,9 @@ const useNavItems = () => {
   const searchParams = useSearchParams();
 
   const redirectTo = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith(`/${locale}/account`);
-  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
-  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
+  const isAccountPage = pathname.startsWith("/account");
+  const isAuthPage = pathname.startsWith("/auth");
+  const isCompanyPage = pathname.startsWith("/company");
 
   const accountChildren = [
     ...useProfileMenuItems(),
@@ -219,7 +215,7 @@ const useNavItems = () => {
   const redirect =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
       ? redirectTo
-      : currentURL;
+      : pathname;
 
   const authChildren = useAuthMenuItems(redirect);
 

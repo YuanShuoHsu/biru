@@ -12,7 +12,6 @@ import BadgeAvatars from "@/components/BadgeAvatars";
 import { query } from "@/constants/query";
 
 import { useLogoutMenuItem } from "@/hooks/useAuth";
-import { useHref } from "@/hooks/useHref";
 
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
@@ -102,7 +101,6 @@ const AccountMenu = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const { href: currentURL } = useHref();
   const redirectTo = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith("/account");
   const isAuthPage = pathname.startsWith("/auth");
@@ -111,7 +109,7 @@ const AccountMenu = () => {
   const redirectTarget =
     (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
       ? redirectTo
-      : currentURL;
+      : pathname;
 
   const { href: signInRedirectHref } = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTarget,
