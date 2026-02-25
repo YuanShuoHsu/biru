@@ -15,11 +15,11 @@ import { getHref } from "@/utils/href";
 export const useAuthMenuItems = (redirectTo?: string): MenuItem[] => {
   const tAuth = useTranslations("auth");
 
-  const { href: signInTo } = getHref("/auth/sign-in", {
+  const { href: signInTo } = getHref("/sign-in", {
     [query.redirectTo]: redirectTo,
   });
 
-  const { href: signUpTo } = getHref("/auth/sign-up", {
+  const { href: signUpTo } = getHref("/sign-up", {
     [query.redirectTo]: redirectTo,
   });
 
