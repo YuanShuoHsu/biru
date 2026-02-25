@@ -19,12 +19,16 @@ import { useHref } from "@/hooks/useHref";
 
 import {
   AccountCircle,
+  Business,
+  Description,
   ExpandMore,
   Group,
   Home,
+  Info,
   LocalMall,
   Person,
   Restaurant,
+  Security,
   ShoppingCart,
   Storefront,
   TableBar,
@@ -51,10 +55,10 @@ import { useDrawerStore } from "@/providers/drawer-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { PartySize } from "@/types/partySize";
-import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreName } from "@/types/stores";
 import type { TableNumber } from "@/types/tableNumbers";
 
+import { RouteParams } from "@/types/routeParams";
 import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 import { handleDrawerToggle } from "@/utils/drawer";
 import { getStoreName } from "@/utils/stores";
@@ -110,14 +114,28 @@ const StyledExpandMore = styled(ExpandMore, {
   transition: theme.transitions.create("transform"),
 }));
 
-const createDineInSlot = (
-  tOrder: ReturnType<typeof useTranslations<"order">>,
-  storeName: StoreName,
-  tableNumber?: TableNumber,
-  partySize?: PartySize,
-  onClick?: () => void,
-): MenuItem => ({
-  slot: ({ level }) => (
+const dividerSlot: MenuItem = {
+  slot: ({ level }) => <StyledDivider level={level} />,
+};
+
+interface DineInMenuItemProps {
+  level: number;
+  onClick?: () => void;
+  partySize?: PartySize;
+  storeName: StoreName;
+  tableNumber?: TableNumber;
+}
+
+const DineInMenuItem = ({
+  level,
+  onClick,
+  partySize,
+  storeName,
+  tableNumber,
+}: DineInMenuItemProps) => {
+  const tOrder = useTranslations("order");
+
+  return (
     <StyledListItemButton level={level} onClick={onClick} selected={true}>
       <Stack
         width="100%"
@@ -169,55 +187,126 @@ const createDineInSlot = (
         />
       </Stack>
     </StyledListItemButton>
-  ),
-});
-
-const dividerSlot: MenuItem = {
-  slot: ({ level }) => <StyledDivider level={level} />,
+  );
 };
 
-interface NavItemsMapOptions {
-  accountChildren: MenuItem[];
-  authChildren: MenuItem[];
-  tHome: ReturnType<typeof useTranslations>;
-  tOrder: ReturnType<typeof useTranslations>;
-  tAccount: ReturnType<typeof useTranslations>;
-  tAuth: ReturnType<typeof useTranslations>;
-  dineInChildren: MenuItem[];
-  isSignedIn: boolean;
-}
+const useNavItems = () => {
+  const { isSignedIn } = useAuthStore((state) => state);
 
-const navItemsMap = ({
-  accountChildren,
-  authChildren,
-  tHome,
-  tOrder,
-  tAccount,
-  tAuth,
-  dineInChildren,
-  isSignedIn,
-}: NavItemsMapOptions): MenuItem[] => [
-  { icon: Home, label: tHome("label"), to: "/" },
-  {
-    children: dineInChildren,
-    icon: ShoppingCart,
-    label: tOrder("label"),
-    to: "/order",
-  },
-  isSignedIn
-    ? {
-        children: accountChildren,
-        icon: AccountCircle,
-        label: tAccount("label"),
-        to: "/account",
-      }
-    : {
-        children: authChildren,
-        icon: AccountCircle,
-        label: tAuth("label"),
-        to: "/auth",
-      },
-];
+  const { href: currentURL } = useHref();
+
+  const { locale, mode, storeSlug, tableNumber, partySize } =
+    useParams<RouteParams>();
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+
+  const searchParams = useSearchParams();
+
+  const redirectTo = searchParams.get("redirectTo");
+  const isAccountPage = pathname.startsWith(`/${locale}/account`);
+  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
+  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
+
+  const accountChildren = [
+    ...useProfileMenuItems(),
+    dividerSlot,
+    ...useAccountMenuItems(),
+    useLogoutMenuItem(),
+  ];
+
+  const redirect =
+    (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
+      ? redirectTo
+      : currentURL;
+
+  const authChildren = useAuthMenuItems(redirect);
+
+  const storeName = getStoreName(locale, stores, storeSlug);
+
+  const tHome = useTranslations("home");
+  const tOrder = useTranslations("order");
+  const tAuth = useTranslations("auth");
+  const tAccount = useTranslations("account");
+  const tCompany = useTranslations("company");
+
+  const dineInChildren: MenuItem[] = [
+    ...(mode === ORDER_MODE.DineIn && storeSlug && storeName
+      ? [
+          {
+            slot: ({ level }: { level: number }) => (
+              <DineInMenuItem
+                level={level}
+                onClick={() =>
+                  router.push(
+                    `/${["order", mode, storeSlug, tableNumber, partySize]
+                      .filter(Boolean)
+                      .join("/")}`,
+                  )
+                }
+                partySize={partySize}
+                storeName={storeName}
+                tableNumber={tableNumber}
+              />
+            ),
+          },
+        ]
+      : []),
+    {
+      icon: LocalMall,
+      label: tOrder("mode.pickup.label"),
+      to: `/${ORDER_MODE.Pickup}`,
+    },
+  ];
+
+  const navItems: MenuItem[] = [
+    { icon: Home, label: tHome("label"), to: "/" },
+    {
+      children: dineInChildren,
+      icon: ShoppingCart,
+      label: tOrder("label"),
+      to: "/order",
+    },
+    isSignedIn
+      ? {
+          children: accountChildren,
+          icon: AccountCircle,
+          label: tAccount("label"),
+          to: "/account",
+        }
+      : {
+          children: authChildren,
+          icon: AccountCircle,
+          label: tAuth("label"),
+          to: "/auth",
+        },
+    {
+      children: [
+        {
+          icon: Info,
+          label: tCompany("about.label"),
+          to: "/about",
+        },
+        {
+          icon: Description,
+          label: tCompany("legal.terms.label"),
+          to: "/terms",
+        },
+        {
+          icon: Security,
+          label: tCompany("legal.privacy.label"),
+          to: "/privacy",
+        },
+      ],
+      icon: Business,
+      label: tCompany("label"),
+      to: "/company",
+    },
+  ];
+
+  return navItems;
+};
 
 interface ListItemLinkProps extends ListItemButtonProps {
   href?: string;
@@ -259,77 +348,13 @@ const ListItemLink = ({
 const NavTemporaryDrawer = () => {
   const [openMap, setOpenMap] = useState<Record<string, boolean>>({});
 
-  const { isSignedIn } = useAuthStore((state) => state);
-
   const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
   const open = drawer.nav;
   const handleNavClose = handleDrawerToggle(setDrawerOpen, "nav", false);
 
-  const tHome = useTranslations("home");
-  const tOrder = useTranslations("order");
-  const tAuth = useTranslations("auth");
-  const tAccount = useTranslations("account");
+  const navItems = useNavItems();
 
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
   const pathname = usePathname();
-  const router = useRouter();
-
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
-
-  const searchParams = useSearchParams();
-  const { href: currentURL } = useHref();
-
-  const redirectTo = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith(`/${locale}/account`);
-  const isAuthPage = pathname.startsWith(`/${locale}/auth`);
-  const isCompanyPage = pathname.startsWith(`/${locale}/company`);
-
-  const redirect =
-    (isAccountPage || isAuthPage || isCompanyPage) && redirectTo
-      ? redirectTo
-      : currentURL;
-
-  const storeName = getStoreName(locale, stores, storeSlug);
-
-  const authChildren = useAuthMenuItems(redirect);
-
-  const accountChildren = [
-    ...useProfileMenuItems(),
-    dividerSlot,
-    ...useAccountMenuItems(),
-    useLogoutMenuItem(),
-  ];
-
-  const dineInChildren = [
-    ...(mode === ORDER_MODE.DineIn && storeSlug && storeName
-      ? [
-          createDineInSlot(tOrder, storeName, tableNumber, partySize, () =>
-            router.push(
-              `/${["order", mode, storeSlug, tableNumber, partySize]
-                .filter(Boolean)
-                .join("/")}`,
-            ),
-          ),
-        ]
-      : []),
-    {
-      icon: LocalMall,
-      label: tOrder("mode.pickup.label"),
-      to: `/${ORDER_MODE.Pickup}`,
-    },
-  ];
-
-  const navItems = navItemsMap({
-    accountChildren,
-    authChildren,
-    tHome,
-    tOrder,
-    tAccount,
-    tAuth,
-    dineInChildren,
-    isSignedIn,
-  });
 
   const handleIconButtonToggle = (key: string) =>
     setOpenMap((prev) => ({ ...prev, [key]: !prev[key] }));
