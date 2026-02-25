@@ -18,6 +18,7 @@ import {
   CardContent,
   CardHeader,
   Link,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -112,10 +113,12 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
         <Button fullWidth size="large" type="submit" variant="contained">
           {tAuth("sendPasswordResetLink")}
         </Button>
-        <Typography variant="body2">
-          {tAuth("rememberedPassword")}{" "}
-          <Link href={signInHref}>{tAuth("signIn.label")}</Link>
-        </Typography>
+        <Stack flexDirection="row" alignItems="center" gap={0.5}>
+          <Typography variant="body2">{tAuth("rememberedPassword")}</Typography>
+          <Link href={signInHref} underline="hover" variant="body2">
+            {tAuth("signIn.label")}
+          </Link>
+        </Stack>
       </StyledCardActions>
     </FormCard>
   );

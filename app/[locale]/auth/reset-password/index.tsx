@@ -23,6 +23,7 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -208,10 +209,12 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
         <Button fullWidth size="large" type="submit" variant="contained">
           {tAuth("resetPassword.label")}
         </Button>
-        <Typography variant="body2">
-          {tAuth("noAccount")}{" "}
-          <Link href={signUpHref}>{tAuth("signUp.label")}</Link>
-        </Typography>
+        <Stack flexDirection="row" alignItems="center" gap={0.5}>
+          <Typography variant="body2">{tAuth("noAccount")}</Typography>
+          <Link href={signUpHref} underline="hover" variant="body2">
+            {tAuth("signUp.label")}
+          </Link>
+        </Stack>
       </StyledCardActions>
     </FormCard>
   );
