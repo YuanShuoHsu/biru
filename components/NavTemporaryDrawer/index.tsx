@@ -8,6 +8,7 @@ import { Fragment, useState } from "react";
 import useSWR from "swr";
 
 import { ORDER_MODE } from "@/constants/orderMode";
+import { query } from "@/constants/query";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
@@ -57,6 +58,7 @@ import type { TableNumber } from "@/types/tableNumbers";
 import { RouteParams } from "@/types/routeParams";
 import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 import { handleDrawerToggle } from "@/utils/drawer";
+import { getHref } from "@/utils/href";
 import { getStoreName } from "@/utils/stores";
 
 const StyledBox = styled(Box)({
@@ -287,12 +289,18 @@ const useNavItems = () => {
         {
           icon: Description,
           label: tCompany("legal.terms.label"),
-          to: "/terms",
+          to: getHref("/terms", {
+            [query.back]: pathname,
+            [query.redirectTo]: redirectTo,
+          }).href,
         },
         {
           icon: Security,
           label: tCompany("legal.privacy.label"),
-          to: "/privacy",
+          to: getHref("/privacy", {
+            [query.back]: pathname,
+            [query.redirectTo]: redirectTo,
+          }).href,
         },
       ],
       icon: Business,
