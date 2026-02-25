@@ -8,9 +8,7 @@ import { useState } from "react";
 
 import { locales } from "@/constants/locale";
 
-import { useHref } from "@/hooks/useHref";
-
-import { Link } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
 import { Language } from "@mui/icons-material";
@@ -36,9 +34,9 @@ const LanguageMenu = () => {
   );
   const open = Boolean(anchorElLanguage);
 
-  const { href: currentURL } = useHref();
-
   const { locale: currentLang } = useParams();
+
+  const pathname = usePathname();
 
   const tAppBar = useTranslations("appBar");
 
@@ -80,7 +78,7 @@ const LanguageMenu = () => {
         {languages.map(({ label, locale }) => (
           <MenuItem
             component={Link}
-            href={currentURL}
+            href={pathname}
             key={locale}
             locale={locale}
             onClick={handleClose}
