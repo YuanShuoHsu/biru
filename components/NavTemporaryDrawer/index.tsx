@@ -292,7 +292,7 @@ const useNavItems = () => {
           to: getHref("/terms", {
             [query.back]: pathname,
             [query.redirectTo]: redirectTo,
-          }).href,
+          }),
         },
         {
           icon: Security,
@@ -300,7 +300,7 @@ const useNavItems = () => {
           to: getHref("/privacy", {
             [query.back]: pathname,
             [query.redirectTo]: redirectTo,
-          }).href,
+          }),
         },
       ],
       icon: Business,
