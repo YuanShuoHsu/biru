@@ -8,7 +8,6 @@ import useSWR from "swr";
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { usePathname } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 
 import {
   AccountCircle,
@@ -44,6 +43,32 @@ import type { RouteParams } from "@/types/routeParams";
 import type { Store } from "@/types/stores";
 
 import { getStoreName } from "@/utils/stores";
+
+const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  transition: "none",
+
+  "& .MuiBreadcrumbs-separator": {
+    transition: theme.transitions.create("color"),
+  },
+
+  "& .MuiSvgIcon-root": {
+    transition: "none",
+  },
+}));
+
+const iconTextBaseStyles = (theme: Theme) => ({
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+});
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  ...iconTextBaseStyles(theme),
+}));
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  ...iconTextBaseStyles(theme),
+}));
 
 interface BreadcrumbItem {
   children?: BreadcrumbItem[];
@@ -229,32 +254,6 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
   ];
 };
 
-const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
-  transition: "none",
-
-  "& .MuiBreadcrumbs-separator": {
-    transition: theme.transitions.create("color"),
-  },
-
-  "& .MuiSvgIcon-root": {
-    transition: "none",
-  },
-}));
-
-const iconTextBaseStyles = (theme: Theme) => ({
-  display: "flex",
-  alignItems: "center",
-  gap: theme.spacing(0.5),
-});
-
-const StyledTypography = styled(Typography)(({ theme }) => ({
-  ...iconTextBaseStyles(theme),
-}));
-
-const StyledLink = styled(Link)(({ theme }) => ({
-  ...iconTextBaseStyles(theme),
-}));
-
 const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
@@ -278,7 +277,6 @@ const findBreadcrumb = (
 const findHiddenTo = (
   startIndex: number,
   pathnames: string[],
-  locale: Locale,
   breadcrumbs: BreadcrumbItem[],
 ): string | undefined => {
   const nextIndex = startIndex + 1;
@@ -288,15 +286,13 @@ const findHiddenTo = (
   const { hidden = false } = findBreadcrumb(breadcrumbs, nextMatchPath) || {};
   if (!hidden) return;
 
-  const nextTo = findHiddenTo(nextIndex, pathnames, locale, breadcrumbs);
+  const nextTo = findHiddenTo(nextIndex, pathnames, breadcrumbs);
   if (!nextTo) return nextMatchPath;
 
   return nextTo;
 };
 
 const RouterBreadcrumbs = () => {
-  const { locale } = useParams<RouteParams>();
-
   const breadcrumbs = useBreadcrumbs();
 
   const pathname = usePathname();
@@ -315,7 +311,7 @@ const RouterBreadcrumbs = () => {
     } = findBreadcrumb(breadcrumbs, matchPath) || {};
     if (hidden) return [];
 
-    const hiddenTo = findHiddenTo(index, pathnames, locale, breadcrumbs);
+    const hiddenTo = findHiddenTo(index, pathnames, breadcrumbs);
     const to = hiddenTo || baseTo;
 
     return [{ disabled, icon, label, to }];
