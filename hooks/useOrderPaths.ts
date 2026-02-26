@@ -1,23 +1,17 @@
+"use client";
+
+import { useParams } from "next/navigation";
+
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import type { OrderMode } from "@/types/orderMode";
-import type { PartySize } from "@/types/partySize";
-import type { StoreSlug } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
+import { usePathname } from "@/i18n/navigation";
 
-export const createOrderPaths = ({
-  mode,
-  storeSlug,
-  tableNumber,
-  partySize,
-  pathname,
-}: {
-  mode: OrderMode;
-  storeSlug: StoreSlug;
-  tableNumber: TableNumber;
-  partySize: PartySize;
-  pathname: string;
-}) => {
+import type { RouteParams } from "@/types/routeParams";
+
+export const useOrderPaths = () => {
+  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
+  const pathname = usePathname();
+
   const isPickup = mode === ORDER_MODE.Pickup;
 
   const basePath = `/order/${mode}/${storeSlug}${

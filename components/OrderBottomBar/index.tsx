@@ -1,9 +1,8 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
 
-import { usePathname } from "@/i18n/navigation";
+import { useOrderPaths } from "@/hooks/useOrderPaths";
 
 import {
   Box,
@@ -17,10 +16,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-
-import type { RouteParams } from "@/types/routeParams";
-
-import { createOrderPaths } from "@/utils/orderPaths";
 
 const StyledBox = styled(Box)({
   pointerEvents: "none",
@@ -47,19 +42,11 @@ const OrderBottomBar = () => {
   );
 
   const locale = useLocale();
-  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
-  const pathname = usePathname();
+
+  const { checkoutPath } = useOrderPaths();
 
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
-
-  const { checkoutPath } = createOrderPaths({
-    mode,
-    storeSlug,
-    tableNumber,
-    partySize,
-    pathname,
-  });
 
   return (
     <Fade in={!isCartEmpty}>

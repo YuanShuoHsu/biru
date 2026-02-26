@@ -1,9 +1,10 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
+
+import { useOrderPaths } from "@/hooks/useOrderPaths";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -21,10 +22,7 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 
-import type { RouteParams } from "@/types/routeParams";
-
 import { handleDrawerToggle } from "@/utils/drawer";
-import { createOrderPaths } from "@/utils/orderPaths";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -59,19 +57,13 @@ const CartAnchorTemporaryDrawer = () => {
   const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
   const locale = useLocale();
-  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
+
+  const { checkoutPath, menuPath } = useOrderPaths();
+
   const pathname = usePathname();
 
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
-
-  const { checkoutPath, menuPath } = createOrderPaths({
-    mode,
-    storeSlug,
-    tableNumber,
-    partySize,
-    pathname,
-  });
 
   const isCheckoutPage = pathname === checkoutPath;
 

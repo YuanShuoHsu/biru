@@ -1,6 +1,5 @@
 "use client";
 
-import { useParams } from "next/navigation";
 import { Suspense } from "react";
 
 import CustomizedDialogs from "@/components/CustomizedDialogs";
@@ -12,16 +11,13 @@ import ScrollTop from "@/components/ScrollTop";
 import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { useAuthInitializer } from "@/hooks/useAuthInitializer";
+import { useOrderPaths } from "@/hooks/useOrderPaths";
 
 import { usePathname } from "@/i18n/navigation";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
 import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import type { RouteParams } from "@/types/routeParams";
-
-import { createOrderPaths } from "@/utils/orderPaths";
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
   transition: theme.transitions.create("background-color"),
@@ -34,18 +30,11 @@ interface AppLayoutProps {
 const AppLayout = ({ children }: AppLayoutProps) => {
   useAuthInitializer();
 
-  const { mode, storeSlug, tableNumber, partySize } = useParams<RouteParams>();
+  const { isMenuRoute } = useOrderPaths();
+
   const pathname = usePathname();
 
   const isHome = pathname === "/";
-
-  const { isMenuRoute } = createOrderPaths({
-    mode,
-    storeSlug,
-    tableNumber,
-    partySize,
-    pathname,
-  });
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
