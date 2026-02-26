@@ -13,10 +13,11 @@ const getRemainingSeconds = (key: string): number => {
   const expiresAt = Number(stored);
   const remaining = Math.ceil((expiresAt - Date.now()) / 1000);
 
-  return remaining > 0 ? remaining : 0;
+  return Math.max(0, remaining);
 };
 
 interface UseCountdownOptions {
+  autoStart?: boolean;
   duration?: number;
   key: string;
 }
@@ -28,10 +29,11 @@ interface UseCountdownReturn {
 }
 
 const useCountdown = ({
+  autoStart = false,
   duration = COUNTDOWN_DURATION,
   key,
 }: UseCountdownOptions): UseCountdownReturn => {
-  const [countdown, setCountdown] = useState(() => getRemainingSeconds(key));
+  const [countdown, setCountdown] = useState(autoStart ? duration : 0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const clearTimer = useCallback(() => {
@@ -58,8 +60,8 @@ const useCountdown = ({
 
   const startCountdown = useCallback(() => {
     const expiresAt = Date.now() + duration * 1000;
-
     localStorage.setItem(key, String(expiresAt));
+
     setCountdown(duration);
     startTimer();
   }, [duration, key, startTimer]);

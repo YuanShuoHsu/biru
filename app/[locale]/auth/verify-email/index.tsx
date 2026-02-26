@@ -68,6 +68,14 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const VERIFY_STATUS = {
+  DEFAULT: "default",
+  FAILED: "failed",
+  VERIFIED: "verified",
+} as const;
+
+type VerifyStatus = (typeof VERIFY_STATUS)[keyof typeof VERIFY_STATUS];
+
 interface AuthVerifyEmailProps {
   email: string;
   errorMessage: string;
@@ -83,6 +91,19 @@ const AuthVerifyEmail = ({
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
+  const isFailed = Boolean(errorMessage && token);
+  const isVerified = Boolean(!errorMessage && token);
+  const status: VerifyStatus = isFailed
+    ? VERIFY_STATUS.FAILED
+    : isVerified
+      ? VERIFY_STATUS.VERIFIED
+      : VERIFY_STATUS.DEFAULT;
+
+  const { countdown, isCountingDown, startCountdown } = useCountdown({
+    autoStart: status === VERIFY_STATUS.DEFAULT,
+    key: "biru-resend-email",
+  });
+
   const {
     formState: { isSubmitting },
     handleSubmit,
@@ -90,21 +111,17 @@ const AuthVerifyEmail = ({
 
   const tAuth = useTranslations("auth");
 
-  const { countdown, isCountingDown, startCountdown } = useCountdown({
-    key: "biru-resend-email",
-  });
-
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
   });
-  const { href: signUpHref } = getHref("/auth/sign-up", {
+  const signUpHref = getHref("/auth/sign-up", {
     [query.redirectTo]: redirectTo,
   });
 
   const onSubmit = handleSubmit(async () => {
     const { error } = await authClient.sendVerificationEmail({
+      callbackURL: redirectTo,
       email,
-      ...(redirectTo && { callbackURL: redirectTo }),
       fetchOptions: {
         headers: {
           "Accept-Language": locale,
@@ -122,13 +139,17 @@ const AuthVerifyEmail = ({
     startCountdown();
   });
 
-  const isFailed = Boolean(errorMessage && token);
-  const isVerified = Boolean(!errorMessage && token);
-
-  const status = isFailed ? "failed" : isVerified ? "verified" : "default";
-
-  const contents = {
-    default: {
+  const configs: Record<
+    VerifyStatus,
+    {
+      actions: React.ReactNode;
+      color: "error" | "primary";
+      icon: React.ElementType;
+      subtitle: React.ReactNode;
+      title: React.ReactNode;
+    }
+  > = {
+    [VERIFY_STATUS.DEFAULT]: {
       actions: (
         <>
           <Button
@@ -140,7 +161,7 @@ const AuthVerifyEmail = ({
             type="submit"
             variant="contained"
           >
-            {isCountingDown
+            {isCountingDown && countdown > 0
               ? tAuth("verifyEmail.countdown", {
                   seconds: countdown,
                   text: tAuth("verifyEmail.resend"),
@@ -161,105 +182,68 @@ const AuthVerifyEmail = ({
           </Stack>
         </>
       ),
-      body: (
-        <Stack alignItems="center" spacing={1}>
-          <Typography textAlign="center">{email}</Typography>
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {tAuth("verifyEmail.confirmationText")}
-          </Typography>
-        </Stack>
-      ),
+      color: "primary",
       icon: MarkEmailUnread,
-      title: (
-        <Typography
-          color="primary"
-          fontWeight="bold"
-          textAlign="center"
-          variant="h6"
-        >
-          {tAuth("verifyEmail.title")}
-        </Typography>
-      ),
+      subtitle: tAuth("verifyEmail.confirmationText"),
+      title: tAuth("verifyEmail.title"),
     },
-    failed: {
+    [VERIFY_STATUS.FAILED]: {
       actions: (
         <Button fullWidth href={signInHref} size="large" variant="contained">
           {tAuth("verifyEmail.backToSignIn")}
         </Button>
       ),
-      body: (
-        <Stack alignItems="center" spacing={1}>
-          <Typography textAlign="center">{email}</Typography>
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {errorMessage}
-          </Typography>
-        </Stack>
-      ),
+      color: "error",
       icon: ReportGmailerrorred,
-      title: (
-        <Typography
-          color="error"
-          fontWeight="bold"
-          textAlign="center"
-          variant="h6"
-        >
-          {tAuth("verifyEmail.failedTitle")}
-        </Typography>
-      ),
+      subtitle: errorMessage,
+      title: tAuth("verifyEmail.failedTitle"),
     },
-    verified: {
+    [VERIFY_STATUS.VERIFIED]: {
       actions: (
         <Button fullWidth href={signInHref} size="large" variant="contained">
           {tAuth("verifyEmail.backToSignIn")}
         </Button>
       ),
-      body: (
-        <Stack alignItems="center" spacing={1}>
-          <Typography textAlign="center">{email}</Typography>
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {tAuth("verifyEmail.signInText")}
-          </Typography>
-        </Stack>
-      ),
+      color: "primary",
       icon: MarkEmailRead,
-      title: (
-        <Typography
-          color="primary"
-          fontWeight="bold"
-          textAlign="center"
-          variant="h6"
-        >
-          {tAuth("verifyEmail.verifiedTitle")}
-        </Typography>
-      ),
+      subtitle: tAuth("verifyEmail.signInText"),
+      title: tAuth("verifyEmail.verifiedTitle"),
     },
   };
 
-  const content = contents[status];
-  const Icon = content.icon;
+  const config = configs[status];
+  const Icon = config.icon;
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>
-      <StyledCardHeader title={content.title} />
+      <StyledCardHeader
+        title={
+          <Typography
+            color={config.color}
+            fontWeight="bold"
+            textAlign="center"
+            variant="h6"
+          >
+            {config.title}
+          </Typography>
+        }
+      />
       <StyledCardContent>
-        <StyledAvatar color={isFailed ? "error" : "primary"}>
+        <StyledAvatar color={config.color}>
           <Icon fontSize="large" />
         </StyledAvatar>
-        {content.body}
+        <Stack alignItems="center" spacing={1}>
+          <Typography textAlign="center">{email}</Typography>
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            variant="caption"
+          >
+            {config.subtitle}
+          </Typography>
+        </Stack>
       </StyledCardContent>
-      <StyledCardActions disableSpacing>{content.actions}</StyledCardActions>
+      <StyledCardActions disableSpacing>{config.actions}</StyledCardActions>
     </FormCard>
   );
 };
