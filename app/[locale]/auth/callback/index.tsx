@@ -40,7 +40,7 @@ const AuthCallback = () => {
             : "Google login failed. Please try again.",
           { variant: "error" },
         );
-        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+        const signInRedirectHref = getHref("/auth/sign-in", {
           [query.redirectTo]: redirectTo,
         });
         router.replace(signInRedirectHref);
@@ -52,7 +52,7 @@ const AuthCallback = () => {
         enqueueSnackbar("Authentication failed. Please try again.", {
           variant: "error",
         });
-        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+        const signInRedirectHref = getHref("/auth/sign-in", {
           [query.redirectTo]: redirectTo,
         });
         router.replace(signInRedirectHref);
@@ -78,7 +78,7 @@ const AuthCallback = () => {
           variant: "error",
         });
         clearAuth();
-        const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+        const signInRedirectHref = getHref("/auth/sign-in", {
           [query.redirectTo]: redirectTo,
         });
         router.replace(signInRedirectHref);

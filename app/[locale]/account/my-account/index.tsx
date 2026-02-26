@@ -103,16 +103,16 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 
-  const { href: verifyEmailHref } = getHref("/auth/verify-email", {
+  const verifyEmailHref = getHref("/auth/verify-email", {
     [query.email]: profile?.email,
     [query.redirectTo]: currentURL,
   });
 
-  const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
+  const forgotPasswordHref = getHref("/auth/forgot-password", {
     [query.redirectTo]: currentURL,
   });
 

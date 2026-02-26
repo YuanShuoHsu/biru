@@ -62,7 +62,7 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
   const locale = useLocale();
   const router = useRouter();
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
   });
 

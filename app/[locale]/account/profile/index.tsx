@@ -106,7 +106,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
 
   const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 

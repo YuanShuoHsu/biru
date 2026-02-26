@@ -144,16 +144,16 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   const memberSince = formatDate(profile?.createdAt);
   const updatedAt = formatDate(profile?.updatedAt);
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 
-  const { href: verifyEmailHref } = getHref("/auth/verify-email", {
+  const verifyEmailHref = getHref("/auth/verify-email", {
     [query.email]: profile?.email,
     [query.redirectTo]: currentURL,
   });
 
-  const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
+  const forgotPasswordHref = getHref("/auth/forgot-password", {
     [query.redirectTo]: currentURL,
   });
 

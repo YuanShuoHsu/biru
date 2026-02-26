@@ -56,7 +56,7 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
     email: "",
   });
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
   });
 

@@ -113,7 +113,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
   // const [isGenderFocused, setIsGenderFocused] = useState(false);
 
-  const { href: signInHref } = getHref("/auth/sign-in", {
+  const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
   });
 
@@ -244,7 +244,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   );
 
   const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => {
-    const { href: legalHref } = getHref(`/company/${type}`, {
+    const legalHref = getHref(`/company/${type}`, {
       [query.back]: "/auth/sign-up",
       [query.redirectTo]: redirectTo,
     });

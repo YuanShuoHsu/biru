@@ -9,12 +9,8 @@ export const getHref = (
   });
 
   const search = searchParams.toString();
-  const queryString = search ? `?${search}` : "";
-  const href = `${pathname}${queryString}`;
+  const query = search ? `?${search}` : "";
+  const href = `${pathname}${query}`;
 
-  return {
-    href,
-    queryString,
-    search,
-  };
+  return href;
 };

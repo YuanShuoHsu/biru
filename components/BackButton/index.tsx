@@ -17,7 +17,7 @@ interface BackButtonProps {
 const BackButton = ({ back, redirectTo }: BackButtonProps) => {
   const tCompany = useTranslations("company");
 
-  const { href: backHref } = getHref(back, {
+  const backHref = getHref(back, {
     [query.redirectTo]: redirectTo,
   });
 

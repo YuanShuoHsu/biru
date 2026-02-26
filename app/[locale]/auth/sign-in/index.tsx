@@ -76,11 +76,11 @@ interface AuthSignInProps {
 const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const { href: forgotPasswordHref } = getHref("/auth/forgot-password", {
+  const forgotPasswordHref = getHref("/auth/forgot-password", {
     [query.redirectTo]: redirectTo,
   });
 
-  const { href: signUpHref } = getHref("/auth/sign-up", {
+  const signUpHref = getHref("/auth/sign-up", {
     [query.redirectTo]: redirectTo,
   });
 

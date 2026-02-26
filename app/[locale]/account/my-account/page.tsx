@@ -23,7 +23,7 @@ const MyAccountPage = async ({ params, searchParams }: MyAccountPageProps) => {
 
   setRequestLocale(locale);
 
-  const { href: currentURL } = getHref(`/${locale}/account/my-account`, {
+  const currentURL = getHref(`/${locale}/account/my-account`, {
     [query.redirectTo]: redirectTo,
   });
 

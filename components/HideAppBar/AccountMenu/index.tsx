@@ -111,7 +111,7 @@ const AccountMenu = () => {
       ? redirectTo
       : pathname;
 
-  const { href: signInRedirectHref } = getHref("/auth/sign-in", {
+  const signInRedirectHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTarget,
   });
 

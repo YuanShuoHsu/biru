@@ -72,7 +72,7 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
     confirmNewPassword: false,
   });
 
-  const { href: signUpHref } = getHref("/auth/sign-up", {
+  const signUpHref = getHref("/auth/sign-up", {
     [query.redirectTo]: redirectTo,
   });
 
