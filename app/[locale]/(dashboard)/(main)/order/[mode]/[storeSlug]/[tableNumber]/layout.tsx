@@ -1,10 +1,11 @@
+import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { tableNumbers } from "@/constants/tableNumbers";
 
-import type { Locale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 
 interface OrderModeStoreSlugTableNumberLayoutProps {
   children: React.ReactNode;
@@ -21,8 +22,9 @@ const OrderModeStoreSlugTableNumberLayout = async ({
   params,
 }: OrderModeStoreSlugTableNumberLayoutProps) => {
   const { locale, mode, storeSlug, tableNumber } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
 
-  setRequestLocale(locale as Locale);
+  setRequestLocale(locale);
 
   const isNumeric = /^(0|[1-9]\d*)$/.test(tableNumber);
   if (!isNumeric) return notFound();

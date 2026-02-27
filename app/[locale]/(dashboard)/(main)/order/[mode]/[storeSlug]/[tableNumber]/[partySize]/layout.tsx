@@ -1,10 +1,11 @@
+import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
-import type { Locale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 
 interface OrderModeStoreSlugTableNumberPartySizeLayoutProps {
   children: React.ReactNode;
@@ -22,8 +23,9 @@ const OrderModeStoreSlugTableNumberPartySizeLayout = async ({
   params,
 }: OrderModeStoreSlugTableNumberPartySizeLayoutProps) => {
   const { locale, mode, partySize } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
 
-  setRequestLocale(locale as Locale);
+  setRequestLocale(locale);
 
   if (mode !== ORDER_MODE.DineIn) return notFound();
 

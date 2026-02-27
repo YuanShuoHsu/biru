@@ -1,3 +1,4 @@
+import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
@@ -5,7 +6,7 @@ import MenuSocketInitializer from "./MenuSocketInitializer";
 
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 
-import type { Locale } from "@/i18n/routing";
+import { routing } from "@/i18n/routing";
 
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 
@@ -26,8 +27,9 @@ const OrderModeStoreSlugLayout = async ({
   params,
 }: OrderModeStoreSlugLayoutProps) => {
   const { locale, storeSlug } = await params;
+  if (!hasLocale(routing.locales, locale)) notFound();
 
-  setRequestLocale(locale as Locale);
+  setRequestLocale(locale);
 
   const stores = await getStores();
 

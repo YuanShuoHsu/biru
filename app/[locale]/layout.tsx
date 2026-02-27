@@ -9,7 +9,6 @@ import { notFound } from "next/navigation";
 
 import "./globals.css";
 
-import AppLayout from "@/components/AppLayout";
 import AppProviders from "@/components/AppProviders";
 
 import { routing } from "@/i18n/routing";
@@ -52,9 +51,7 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <AppProviders fallback={fallback}>
-          <AppLayout>{children}</AppLayout>
-        </AppProviders>
+        <AppProviders fallback={fallback}>{children}</AppProviders>
       </body>
     </html>
   );
