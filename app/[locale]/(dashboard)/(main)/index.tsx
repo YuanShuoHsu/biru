@@ -13,8 +13,6 @@ const MainDashboardHeader = () => {
 
   return (
     <Stack
-      padding={2}
-      height="100%"
       flexWrap={{ xs: "wrap", sm: "nowrap" }}
       direction="row"
       justifyContent="space-between"

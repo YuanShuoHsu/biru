@@ -10,7 +10,7 @@ import ScrollTop from "@/components/ScrollTop";
 import { useAuthInitializer } from "@/hooks/useAuthInitializer";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, type BoxProps, Fab, Toolbar } from "@mui/material";
+import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -39,7 +39,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         bgcolor="background.default"
       >
         <Toolbar id="back-to-top-anchor" />
-        {children}
+        <Stack padding={2} height="100%" gap={2}>
+          {children}
+        </Stack>
       </MainBox>
       <ScrollTop>
         <Fab aria-label="scroll back to top" size="small">
