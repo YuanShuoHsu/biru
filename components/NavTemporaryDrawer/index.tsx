@@ -1,3 +1,5 @@
+"use client";
+
 // https://mui.com/material-ui/react-drawer/#AnchorTemporaryDrawer.tsx
 // https://mui.com/material-ui/react-list/#NestedList.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#RouterBreadcrumbs.tsx

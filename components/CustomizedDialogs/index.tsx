@@ -1,5 +1,7 @@
 // https://mui.com/material-ui/react-dialog/#system-CustomizedDialogs.tsx
 
+"use client";
+
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 

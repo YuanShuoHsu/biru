@@ -1,3 +1,5 @@
+"use client";
+
 // https://mui.com/material-ui/react-app-bar/#system-BackToTop.tsx
 
 import { Box, Fade, useScrollTrigger } from "@mui/material";
