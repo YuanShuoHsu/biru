@@ -8,8 +8,6 @@ import FormCard from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
-import useCountdown from "@/hooks/useCountdown";
-
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -31,6 +29,8 @@ import {
   Typography,
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
+
+import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
 
@@ -99,15 +99,16 @@ const AuthVerifyEmail = ({
       ? VERIFY_STATUS.VERIFIED
       : VERIFY_STATUS.DEFAULT;
 
-  const { countdown, isCountingDown, startCountdown } = useCountdown({
-    autoStart: status === VERIFY_STATUS.DEFAULT,
-    key: "biru-resend-email",
-  });
-
   const {
     formState: { isSubmitting },
     handleSubmit,
   } = useForm();
+
+  const startCountdown = useCountdownStore((state) => state.startCountdown);
+  const countdown = useCountdownStore(
+    (state) => state.items["verify-email"] ?? 0,
+  );
+  const isCountingDown = countdown > 0;
 
   const tAuth = useTranslations("auth");
 
@@ -136,7 +137,7 @@ const AuthVerifyEmail = ({
       return;
     }
 
-    startCountdown();
+    startCountdown("verify-email");
   });
 
   const configs: Record<

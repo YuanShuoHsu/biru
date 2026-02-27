@@ -13,6 +13,7 @@ import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
 import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import { CartStoreProvider } from "@/providers/cart-store-provider";
+import { CountdownStoreProvider } from "@/providers/countdown-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
 import { DrawerStoreProvider } from "@/providers/drawer-store-provider";
 import { OrderSearchStoreProvider } from "@/providers/order-search-store-provider";
@@ -51,13 +52,15 @@ const AppClientProviders = ({
         <SWRProvider fallback={fallback}>
           <AuthStoreProvider>
             <CartStoreProvider>
-              <DialogStoreProvider>
-                <DrawerStoreProvider>
-                  <OrderSearchStoreProvider>
-                    <ViewStoreProvider>{children}</ViewStoreProvider>
-                  </OrderSearchStoreProvider>
-                </DrawerStoreProvider>
-              </DialogStoreProvider>
+              <CountdownStoreProvider>
+                <DialogStoreProvider>
+                  <DrawerStoreProvider>
+                    <OrderSearchStoreProvider>
+                      <ViewStoreProvider>{children}</ViewStoreProvider>
+                    </OrderSearchStoreProvider>
+                  </DrawerStoreProvider>
+                </DialogStoreProvider>
+              </CountdownStoreProvider>
             </CartStoreProvider>
           </AuthStoreProvider>
         </SWRProvider>

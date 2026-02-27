@@ -63,6 +63,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCountdownStore } from "@/providers/countdown-store-provider";
+
 import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -112,6 +114,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   });
 
   // const [isGenderFocused, setIsGenderFocused] = useState(false);
+
+  const { startCountdown } = useCountdownStore((state) => state);
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
@@ -313,6 +317,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         return;
       }
 
+      startCountdown("verify-email");
+
       const verifyEmailHref = {
         pathname: "/auth/verify-email",
         query: {
@@ -323,7 +329,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
       router.push(verifyEmailHref);
     },
-    [locale, redirectTo, router],
+    [locale, redirectTo, router, startCountdown],
   );
 
   const onSubmit = (event: BaseSyntheticEvent) =>

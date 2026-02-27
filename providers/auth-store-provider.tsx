@@ -15,14 +15,14 @@ const AuthStoreContext = createContext<StoreApi<AuthStore> | undefined>(
   undefined,
 );
 
-interface AuthStoreProviderProps {
-  children: ReactNode;
-}
-
 const AuthInitializer = ({ children }: { children: ReactNode }) => {
   useAuthInitializer();
   return <>{children}</>;
 };
+
+interface AuthStoreProviderProps {
+  children: ReactNode;
+}
 
 export const AuthStoreProvider = ({ children }: AuthStoreProviderProps) => {
   const [store] = useState(() => createAuthStore(defaultInitState));
