@@ -3,6 +3,8 @@
 import { type ReactNode, createContext, useContext, useState } from "react";
 import { type StoreApi, useStore } from "zustand";
 
+import { useAuthInitializer } from "@/hooks/useAuthInitializer";
+
 import {
   type AuthStore,
   createAuthStore,
@@ -17,12 +19,17 @@ interface AuthStoreProviderProps {
   children: ReactNode;
 }
 
+const AuthInitializer = ({ children }: { children: ReactNode }) => {
+  useAuthInitializer();
+  return <>{children}</>;
+};
+
 export const AuthStoreProvider = ({ children }: AuthStoreProviderProps) => {
   const [store] = useState(() => createAuthStore(defaultInitState));
 
   return (
     <AuthStoreContext.Provider value={store}>
-      {children}
+      <AuthInitializer>{children}</AuthInitializer>
     </AuthStoreContext.Provider>
   );
 };
