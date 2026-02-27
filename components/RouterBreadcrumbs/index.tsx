@@ -1,6 +1,8 @@
 // https://mui.com/material-ui/react-breadcrumbs/#system-IconBreadcrumbs.tsx
 // https://mui.com/material-ui/react-breadcrumbs/#system-RouterBreadcrumbs.tsx
 
+"use client";
+
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
