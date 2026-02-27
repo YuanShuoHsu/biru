@@ -3,11 +3,11 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import MainDashboardHeader from ".";
+import DashboardHeader from ".";
 
 import { routing } from "@/i18n/routing";
 
-const MainDashboardLayout = async ({
+const DashboardLayout = async ({
   children,
   params,
 }: LayoutProps<"/[locale]">) => {
@@ -18,10 +18,10 @@ const MainDashboardLayout = async ({
 
   return (
     <Stack padding={2} height="100%" gap={2}>
-      <MainDashboardHeader />
+      <DashboardHeader />
       {children}
     </Stack>
   );
 };
 
-export default MainDashboardLayout;
+export default DashboardLayout;

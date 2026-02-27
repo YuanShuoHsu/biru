@@ -8,7 +8,7 @@ import { useOrderPaths } from "@/hooks/useOrderPaths";
 
 import { Stack } from "@mui/material";
 
-const MainDashboardHeader = () => {
+const DashboardHeader = () => {
   const { isMenuRoute } = useOrderPaths();
 
   return (
@@ -36,4 +36,4 @@ const MainDashboardHeader = () => {
   );
 };
 
-export default MainDashboardHeader;
+export default DashboardHeader;
