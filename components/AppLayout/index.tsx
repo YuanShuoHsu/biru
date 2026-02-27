@@ -6,11 +6,11 @@ import CustomizedDialogs from "@/components/CustomizedDialogs";
 import HideAppBar from "@/components/HideAppBar";
 import NavTemporaryDrawer from "@/components/NavTemporaryDrawer";
 import ScrollTop from "@/components/ScrollTop";
+
 import { useAuthInitializer } from "@/hooks/useAuthInitializer";
-import { usePathname } from "@/i18n/navigation";
 
 import { KeyboardArrowUp } from "@mui/icons-material";
-import { Box, type BoxProps, Fab, Stack, Toolbar } from "@mui/material";
+import { Box, type BoxProps, Fab, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const MainBox = styled(Box)<BoxProps>(({ theme }) => ({
@@ -23,9 +23,6 @@ interface AppLayoutProps {
 
 const AppLayout = ({ children }: AppLayoutProps) => {
   useAuthInitializer();
-
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
 
   return (
     <Box display="flex">
@@ -42,13 +39,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         bgcolor="background.default"
       >
         <Toolbar id="back-to-top-anchor" />
-        {isHomePage ? (
-          children
-        ) : (
-          <Stack padding={2} height="100%" gap={2}>
-            {children}
-          </Stack>
-        )}
+        {children}
       </MainBox>
       <ScrollTop>
         <Fab aria-label="scroll back to top" size="small">

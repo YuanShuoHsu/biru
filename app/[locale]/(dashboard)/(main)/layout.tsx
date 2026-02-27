@@ -1,3 +1,4 @@
+import { Stack } from "@mui/material";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -16,10 +17,10 @@ const MainDashboardLayout = async ({
   setRequestLocale(locale);
 
   return (
-    <>
+    <Stack padding={2} height="100%" gap={2}>
       <MainDashboardHeader />
       {children}
-    </>
+    </Stack>
   );
 };
 
