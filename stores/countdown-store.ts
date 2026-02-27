@@ -82,7 +82,10 @@ export const createCountdownStore = (
 
         const schedule = (key: string) => {
           stopInterval(key);
-          intervalMap.set(key, setInterval(() => tick(key), 1000));
+          intervalMap.set(
+            key,
+            setInterval(() => tick(key), 1000),
+          );
         };
 
         return {
