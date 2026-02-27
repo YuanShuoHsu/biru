@@ -18,6 +18,7 @@ No test suite is currently configured.
 ## Environment Variables
 
 Copy and configure `.env` with:
+
 - `NEXT_PUBLIC_NEXT_URL` – Frontend base URL (e.g. `http://localhost:3000`)
 - `NEXT_PUBLIC_NEST_URL` – NestJS backend URL (e.g. `http://localhost:3001`)
 - `NEXT_PUBLIC_MAINTENANCE` – Maintenance mode flag
@@ -81,14 +82,14 @@ All providers are composed in `app/[locale]/providers/` — server providers (`i
 
 ### Key Utility Locations
 
-| Concern | Location |
-|---|---|
+| Concern             | Location                                                      |
+| ------------------- | ------------------------------------------------------------- |
 | URL/path generation | `utils/href.ts`, `hooks/useHref.ts`, `hooks/useOrderPaths.ts` |
-| Menu data helpers | `utils/menu.ts` (item lookup, stock calc) |
-| Auth utilities | `utils/auth.ts` |
-| Error extraction | `utils/errors.ts` |
-| Country data | `utils/countries.ts`, `constants/countries.ts` |
-| SSR store hydration | `utils/stores.ts` |
+| Menu data helpers   | `utils/menu.ts` (item lookup, stock calc)                     |
+| Auth utilities      | `utils/auth.ts`                                               |
+| Error extraction    | `utils/errors.ts`                                             |
+| Country data        | `utils/countries.ts`, `constants/countries.ts`                |
+| SSR store hydration | `utils/stores.ts`                                             |
 
 ### Component Conventions
 

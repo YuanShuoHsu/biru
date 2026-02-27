@@ -1,12 +1,11 @@
 // https://mui.com/material-ui/integrations/nextjs/
-// https://mui.com/x/react-date-pickers/adapters-locale/#LocalizationDayjs.tsx
 
 "use client";
 
 import { closeSnackbar, SnackbarProvider } from "notistack";
 import { SWRConfiguration } from "swr";
 
-import Locales from "@/components/Locales";
+import LocaleProvider from "@/components/LocaleProvider";
 
 import { Close } from "@mui/icons-material";
 import { CssBaseline, IconButton } from "@mui/material";
@@ -20,20 +19,17 @@ import { OrderSearchStoreProvider } from "@/providers/order-search-store-provide
 import SWRProvider from "@/providers/SWRProvider";
 import { ViewStoreProvider } from "@/providers/view-store-provider";
 
-import "dayjs/locale/en";
-import "dayjs/locale/ja";
-import "dayjs/locale/ko";
-import "dayjs/locale/zh-cn";
-import "dayjs/locale/zh-tw";
-
-interface ClientProvidersProps {
+interface AppClientProvidersProps {
   children: React.ReactNode;
   fallback: SWRConfiguration["fallback"];
 }
 
-const ClientProviders = ({ children, fallback }: ClientProvidersProps) => (
+const AppClientProviders = ({
+  children,
+  fallback,
+}: AppClientProvidersProps) => (
   <AppRouterCacheProvider options={{ enableCssLayer: true }}>
-    <Locales>
+    <LocaleProvider>
       <CssBaseline />
       <SnackbarProvider
         action={(snackbarId) => (
@@ -66,8 +62,8 @@ const ClientProviders = ({ children, fallback }: ClientProvidersProps) => (
           </AuthStoreProvider>
         </SWRProvider>
       </SnackbarProvider>
-    </Locales>
+    </LocaleProvider>
   </AppRouterCacheProvider>
 );
 
-export default ClientProviders;
+export default AppClientProviders;

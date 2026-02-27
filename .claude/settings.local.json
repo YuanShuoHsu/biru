@@ -1,9 +1,5 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(find:*)",
-      "Bash(cat:*)",
-      "Bash(pnpm run:*)"
-    ]
+    "allow": ["Bash(find:*)", "Bash(cat:*)", "Bash(pnpm run:*)"]
   }
 }

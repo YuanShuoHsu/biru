@@ -8,9 +8,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { notFound } from "next/navigation";
 
 import "./globals.css";
-import Providers from "./providers";
 
 import AppLayout from "@/components/AppLayout";
+import AppProviders from "@/components/AppProviders";
 
 import { routing } from "@/i18n/routing";
 
@@ -52,9 +52,9 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <Providers fallback={fallback}>
+        <AppProviders fallback={fallback}>
           <AppLayout>{children}</AppLayout>
-        </Providers>
+        </AppProviders>
       </body>
     </html>
   );

@@ -1,4 +1,5 @@
 // https://mui.com/material-ui/guides/localization/#Locales.tsx
+// https://mui.com/x/react-date-pickers/adapters-locale/#LocalizationDayjs.tsx
 
 "use client";
 
@@ -13,11 +14,17 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import theme from "@/theme";
 
-interface LocalesProps {
+import "dayjs/locale/en";
+import "dayjs/locale/ja";
+import "dayjs/locale/ko";
+import "dayjs/locale/zh-cn";
+import "dayjs/locale/zh-tw";
+
+interface LocaleProviderProps {
   children: React.ReactNode;
 }
 
-const Locales = ({ children }: LocalesProps) => {
+const LocaleProvider = ({ children }: LocaleProviderProps) => {
   const locale = useLocale();
 
   const themeWithLocale = useMemo(
@@ -37,4 +44,4 @@ const Locales = ({ children }: LocalesProps) => {
   );
 };
 
-export default Locales;
+export default LocaleProvider;
