@@ -99,16 +99,14 @@ const AuthVerifyEmail = ({
       ? VERIFY_STATUS.VERIFIED
       : VERIFY_STATUS.DEFAULT;
 
+  const { items, startCountdown } = useCountdownStore((state) => state);
+  const countdown = items["verify-email"];
+  const isCountingDown = countdown > 0;
+
   const {
     formState: { isSubmitting },
     handleSubmit,
   } = useForm();
-
-  const startCountdown = useCountdownStore((state) => state.startCountdown);
-  const countdown = useCountdownStore(
-    (state) => state.items["verify-email"] ?? 0,
-  );
-  const isCountingDown = countdown > 0;
 
   const tAuth = useTranslations("auth");
 
@@ -162,7 +160,7 @@ const AuthVerifyEmail = ({
             type="submit"
             variant="contained"
           >
-            {isCountingDown && countdown > 0
+            {isCountingDown
               ? tAuth("verifyEmail.countdown", {
                   seconds: countdown,
                   text: tAuth("verifyEmail.resend"),

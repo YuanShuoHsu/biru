@@ -1,3 +1,5 @@
+// https://zustand.docs.pmnd.rs/reference/integrations/persisting-store-data
+
 import { type PersistStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
@@ -6,28 +8,19 @@ interface CountdownState {
 }
 
 interface CountdownActions {
-  startCountdown: (key: string, durationInSeconds?: number) => void;
   clearCountdown: (key: string) => void;
+  startCountdown: (key: string, durationInSeconds?: number) => void;
 }
 
 export type CountdownStore = CountdownState & CountdownActions;
 
-const COUNTDOWN_DURATION = 60;
-
-export const defaultInitState: CountdownState = {
-  items: {},
-};
-
-const intervalMap = new Map<string, ReturnType<typeof setInterval>>();
-
-const countdownStorage: PersistStorage<CountdownState> = {
+const storage: PersistStorage<CountdownState> = {
   getItem: (name) => {
     const raw = localStorage.getItem(name);
     if (!raw) return null;
 
-    const { expiresAt } = JSON.parse(raw) as {
-      expiresAt: Record<string, number>;
-    };
+    const { expiresAt }: { expiresAt: Record<string, number> } =
+      JSON.parse(raw);
     const now = Date.now();
     const items: Record<string, number> = {};
 
@@ -51,9 +44,17 @@ const countdownStorage: PersistStorage<CountdownState> = {
   removeItem: (name) => localStorage.removeItem(name),
 };
 
+const COUNTDOWN_DURATION = 60;
+
+export const defaultInitState: CountdownState = {
+  items: {},
+};
+
 export const createCountdownStore = (
   initState: CountdownState = defaultInitState,
 ) => {
+  const intervalMap = new Map<string, ReturnType<typeof setInterval>>();
+
   return createStore<CountdownStore>()(
     persist(
       (set, get) => {
@@ -67,6 +68,7 @@ export const createCountdownStore = (
           set((state) => {
             const items = { ...state.items };
             delete items[key];
+
             return { items };
           });
         };
@@ -80,7 +82,7 @@ export const createCountdownStore = (
           }
         };
 
-        const schedule = (key: string) => {
+        const scheduleInterval = (key: string) => {
           stopInterval(key);
           intervalMap.set(
             key,
@@ -90,25 +92,26 @@ export const createCountdownStore = (
 
         return {
           ...initState,
+          clearCountdown: deleteKey,
           startCountdown: (key, durationInSeconds = COUNTDOWN_DURATION) => {
             set((state) => ({
               items: { ...state.items, [key]: durationInSeconds },
             }));
-            schedule(key);
+            scheduleInterval(key);
           },
-          clearCountdown: deleteKey,
         };
       },
       {
         name: "biru-countdown-storage",
-        storage: countdownStorage,
-        partialize: (state) => ({ items: state.items }),
         onRehydrateStorage: () => (state) => {
           if (!state) return;
+
           for (const [key, secs] of Object.entries(state.items)) {
             state.startCountdown(key, secs);
           }
         },
+        partialize: (state) => ({ items: state.items }),
+        storage,
       },
     ),
   );
