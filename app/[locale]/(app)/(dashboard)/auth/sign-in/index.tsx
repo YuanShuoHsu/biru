@@ -86,7 +86,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     [query.redirectTo]: redirectTo,
   });
 
-  const { startCountdown } = useCountdownStore((state) => state);
+  const { items, startCountdown } = useCountdownStore((state) => state);
 
   const signinFormSchema = useSigninFormSchema();
   type SigninFormData = z.infer<typeof signinFormSchema>;
@@ -137,7 +137,19 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
     if (error?.code) {
       if (error.code === "EMAIL_NOT_VERIFIED") {
-        startCountdown("verify-email");
+        if (!items["verify-email"]) {
+          await authClient.sendVerificationEmail({
+            callbackURL: redirectTo,
+            email: data.email,
+            fetchOptions: {
+              headers: {
+                "Accept-Language": locale,
+              },
+            },
+          });
+
+          startCountdown("verify-email");
+        }
 
         router.push({
           pathname: "/auth/verify-email",
