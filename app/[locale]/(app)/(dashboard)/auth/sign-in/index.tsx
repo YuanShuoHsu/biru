@@ -44,6 +44,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCountdownStore } from "@/providers/countdown-store-provider";
+
 import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -84,7 +86,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     [query.redirectTo]: redirectTo,
   });
 
-  const tAuth = useTranslations("auth");
+  const { startCountdown } = useCountdownStore((state) => state);
 
   const signinFormSchema = useSigninFormSchema();
   type SigninFormData = z.infer<typeof signinFormSchema>;
@@ -104,6 +106,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   });
 
   const router = useRouter();
+
+  const tAuth = useTranslations("auth");
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -133,6 +137,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
     if (error?.code) {
       if (error.code === "EMAIL_NOT_VERIFIED") {
+        startCountdown("verify-email");
+
         router.push({
           pathname: "/auth/verify-email",
           query: {
