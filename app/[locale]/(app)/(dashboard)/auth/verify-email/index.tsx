@@ -234,9 +234,11 @@ const AuthVerifyEmail = ({
     [VERIFY_STATUS.VERIFIED]: {
       actions: (
         <Button fullWidth href={signInHref} size="large" variant="contained">
-          {tAuth("verifyEmail.verified.actions", {
-            seconds: redirectCountdown,
-          })}
+          {redirectCountdown
+            ? tAuth("verifyEmail.verified.actions", {
+                seconds: redirectCountdown,
+              })
+            : tAuth("signIn.label")}
         </Button>
       ),
       color: "primary",
