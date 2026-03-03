@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import FormCard from "@/components/FormCard";
@@ -72,13 +73,13 @@ const VERIFY_STATUS = {
   DEFAULT: "default",
   FAILED: "failed",
   VERIFIED: "verified",
+  VERIFYING: "verifying",
 } as const;
 
 type VerifyStatus = (typeof VERIFY_STATUS)[keyof typeof VERIFY_STATUS];
 
 interface AuthVerifyEmailProps {
   email: string;
-  errorMessage: string;
   locale: Locale;
   redirectTo?: string;
   token: string;
@@ -86,18 +87,42 @@ interface AuthVerifyEmailProps {
 
 const AuthVerifyEmail = ({
   email,
-  errorMessage,
   locale,
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
-  const isFailed = Boolean(errorMessage && token);
-  const isVerified = Boolean(!errorMessage && token);
-  const status: VerifyStatus = isFailed
-    ? VERIFY_STATUS.FAILED
-    : isVerified
-      ? VERIFY_STATUS.VERIFIED
-      : VERIFY_STATUS.DEFAULT;
+  const [errorMessage, setErrorMessage] = useState("");
+  const [status, setStatus] = useState<VerifyStatus>(
+    token ? VERIFY_STATUS.VERIFYING : VERIFY_STATUS.DEFAULT,
+  );
+
+  useEffect(() => {
+    if (!token) return;
+
+    const verifyToken = async () => {
+      setStatus(VERIFY_STATUS.VERIFYING);
+
+      const { error } = await authClient.verifyEmail({
+        query: { token },
+        fetchOptions: {
+          headers: {
+            "Accept-Language": locale,
+          },
+        },
+      });
+
+      if (error?.code) {
+        setErrorMessage(getErrorMessage(error.code, locale));
+        setStatus(VERIFY_STATUS.FAILED);
+
+        return;
+      }
+
+      setStatus(VERIFY_STATUS.VERIFIED);
+    };
+
+    verifyToken();
+  }, [locale, token]);
 
   const { items, startCountdown } = useCountdownStore((state) => state);
   const countdown = items["verify-email"];
@@ -184,7 +209,7 @@ const AuthVerifyEmail = ({
       color: "primary",
       icon: MarkEmailUnread,
       subtitle: tAuth("verifyEmail.confirmationText"),
-      title: tAuth("verifyEmail.title"),
+      title: tAuth("verifyEmail.default.title"),
     },
     [VERIFY_STATUS.FAILED]: {
       actions: (
@@ -195,7 +220,7 @@ const AuthVerifyEmail = ({
       color: "error",
       icon: ReportGmailerrorred,
       subtitle: errorMessage,
-      title: tAuth("verifyEmail.failedTitle"),
+      title: tAuth("verifyEmail.failed.title"),
     },
     [VERIFY_STATUS.VERIFIED]: {
       actions: (
@@ -206,7 +231,18 @@ const AuthVerifyEmail = ({
       color: "primary",
       icon: MarkEmailRead,
       subtitle: tAuth("verifyEmail.signInText"),
-      title: tAuth("verifyEmail.verifiedTitle"),
+      title: tAuth("verifyEmail.verified.title"),
+    },
+    [VERIFY_STATUS.VERIFYING]: {
+      actions: (
+        <Button disabled fullWidth loading size="large" variant="contained">
+          {tAuth("verifyEmail.verifying.title")}
+        </Button>
+      ),
+      color: "primary",
+      icon: MarkEmailUnread,
+      subtitle: tAuth("verifyEmail.verifying.subtitle"),
+      title: tAuth("verifyEmail.verifying.title"),
     },
   };
 

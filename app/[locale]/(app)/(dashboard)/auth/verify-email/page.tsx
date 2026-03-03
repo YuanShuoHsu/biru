@@ -5,8 +5,6 @@ import AuthVerifyEmail from ".";
 
 import type { Locale } from "@/i18n/routing";
 
-import { verifyEmailToken } from "@/utils/verifyEmail";
-
 interface AuthVerifyEmailPageProps {
   params: Promise<{ locale: Locale }>;
   searchParams: Promise<{
@@ -35,14 +33,9 @@ const AuthVerifyEmailPage = async ({
 
   if (!safeEmail && !safeToken) notFound();
 
-  const errorMessage = safeToken
-    ? await verifyEmailToken(locale, safeToken)
-    : "";
-
   return (
     <AuthVerifyEmail
       email={safeEmail}
-      errorMessage={errorMessage}
       locale={locale}
       redirectTo={safeRedirectTo}
       token={safeToken}

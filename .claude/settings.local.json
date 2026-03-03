@@ -5,7 +5,8 @@
       "Bash(cat:*)",
       "Bash(pnpm run:*)",
       "mcp__ide__getDiagnostics",
-      "WebSearch"
+      "WebSearch",
+      "Bash(wc:*)"
     ]
   }
 }
