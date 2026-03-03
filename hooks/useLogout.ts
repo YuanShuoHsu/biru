@@ -4,32 +4,24 @@ import { useState } from "react";
 
 import { authClient } from "@/lib/auth-client";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
-
 export const useLogout = () => {
-  const { clearAuth } = useAuthStore((state) => state);
   const [isMutatingLogout, setIsMutatingLogout] = useState(false);
 
-  const tAuth = useTranslations("auth");
   const { enqueueSnackbar } = useSnackbar();
+
+  const tAuth = useTranslations("auth");
 
   const handleLogout = async () => {
     setIsMutatingLogout(true);
 
-    try {
-      await authClient.signOut();
-      enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
-    } catch {
-      return;
-    } finally {
-      clearAuth();
-      setIsMutatingLogout(false);
-    }
+    await authClient.signOut();
+
+    enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
+    setIsMutatingLogout(false);
   };
 
   return {
     handleLogout,
     isMutatingLogout,
-    triggerLogout: handleLogout,
   };
 };

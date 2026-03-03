@@ -2,11 +2,15 @@ import { LocaleEnum } from "@/enums/Locale";
 
 import { Locale } from "@/i18n/routing";
 
-import type { UserResponseDto } from "@/types/users/user-response.dto";
+interface DisplayProfile {
+  firstName?: string | null;
+  lastName?: string | null;
+  email?: string | null;
+}
 
 export const getDisplayName = (
   locale: Locale,
-  profile: UserResponseDto | null,
+  profile?: DisplayProfile | null,
 ) => {
   if (!profile) return "";
 

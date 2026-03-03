@@ -11,7 +11,6 @@ import { Close } from "@mui/icons-material";
 import { CssBaseline, IconButton } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
-import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import { CartStoreProvider } from "@/providers/cart-store-provider";
 import { CountdownStoreProvider } from "@/providers/countdown-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
@@ -50,19 +49,17 @@ const AppClientProviders = ({
         maxSnack={3}
       >
         <SWRProvider fallback={fallback}>
-          <AuthStoreProvider>
-            <CartStoreProvider>
-              <CountdownStoreProvider>
-                <DialogStoreProvider>
-                  <DrawerStoreProvider>
-                    <OrderSearchStoreProvider>
-                      <ViewStoreProvider>{children}</ViewStoreProvider>
-                    </OrderSearchStoreProvider>
-                  </DrawerStoreProvider>
-                </DialogStoreProvider>
-              </CountdownStoreProvider>
-            </CartStoreProvider>
-          </AuthStoreProvider>
+          <CartStoreProvider>
+            <CountdownStoreProvider>
+              <DialogStoreProvider>
+                <DrawerStoreProvider>
+                  <OrderSearchStoreProvider>
+                    <ViewStoreProvider>{children}</ViewStoreProvider>
+                  </OrderSearchStoreProvider>
+                </DrawerStoreProvider>
+              </DialogStoreProvider>
+            </CountdownStoreProvider>
+          </CartStoreProvider>
         </SWRProvider>
       </SnackbarProvider>
     </LocaleProvider>

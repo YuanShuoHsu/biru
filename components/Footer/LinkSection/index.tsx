@@ -9,7 +9,7 @@ import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 import { Grid, Link, Skeleton, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
+import { authClient } from "@/lib/auth-client";
 
 import type { MenuItem } from "@/types/menuItem";
 
@@ -40,7 +40,7 @@ const SectionSkeleton = () => (
 );
 
 const useFooterItems = (): MenuItem[] => {
-  const { isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+  const { data, isPending } = authClient.useSession();
 
   const tOrder = useTranslations("order");
   const tAuth = useTranslations("auth");
@@ -66,10 +66,10 @@ const useFooterItems = (): MenuItem[] => {
       label: tOrder("label"),
       to: "/order",
     },
-    isAuthLoading
+    isPending
       ? { slot: () => <SectionSkeleton /> }
       : {
-          ...(isSignedIn
+          ...(data
             ? {
                 children: accountChildren,
                 label: tAccount("label"),

@@ -26,7 +26,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
+import { authClient } from "@/lib/auth-client";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -56,11 +56,13 @@ interface AddAnotherAccountProps {
 }
 
 const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
-  const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
+  const locale = useLocale();
+
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const locale = useLocale();
   const router = useRouter();
+
+  const { data, isPending } = authClient.useSession();
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
@@ -75,7 +77,7 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
     router.push(signInHref);
   };
 
-  const name = getDisplayName(locale, profile);
+  const name = getDisplayName(locale, data?.user);
   const avatarText = name ? name.charAt(0).toUpperCase() : "U";
 
   return (
@@ -93,15 +95,15 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
         }
       />
       <StyledCardContent>
-        {isAuthLoading && <LinearProgress />}
-        {!isAuthLoading && isSignedIn && profile ? (
+        {isPending && <LinearProgress />}
+        {!isPending && data?.user ? (
           <>
             <Typography color="text.secondary" variant="body2">
               {tAccount("addAnotherAccount.signedInNotice")}
             </Typography>
             <Divider />
             <Stack alignItems="center" direction="row" gap={2}>
-              <Avatar alt={name} src={profile.image || undefined}>
+              <Avatar alt={name} src={data.user.image || undefined}>
                 {avatarText}
               </Avatar>
               <Stack>
@@ -109,13 +111,13 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
                   {tAccount("addAnotherAccount.currentAccount")}
                 </Typography>
                 <Typography fontWeight={600} variant="body1">
-                  {name || profile.email || ""}
+                  {name || data.user.email || ""}
                 </Typography>
               </Stack>
             </Stack>
           </>
         ) : (
-          !isAuthLoading && (
+          !isPending && (
             <Typography color="text.secondary" variant="body2">
               {tAccount("addAnotherAccount.signedOutNotice")}
             </Typography>
@@ -123,7 +125,7 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
         )}
       </StyledCardContent>
       <StyledCardActions disableSpacing>
-        {!isAuthLoading && isSignedIn ? (
+        {!isPending && data?.user ? (
           <>
             <Button
               disabled={isMutatingLogout}

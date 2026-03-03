@@ -49,7 +49,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
+import { authClient } from "@/lib/auth-client";
+
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
@@ -191,14 +192,14 @@ const DineInMenuItem = ({
 };
 
 const useNavItems = () => {
-  const { isSignedIn } = useAuthStore((state) => state);
-
   const { locale, mode, storeSlug, tableNumber, partySize } =
     useParams<RouteParams>();
 
   const pathname = usePathname();
 
   const router = useRouter();
+
+  const { data } = authClient.useSession();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
 
@@ -268,7 +269,7 @@ const useNavItems = () => {
       label: tOrder("label"),
       to: "/order",
     },
-    isSignedIn
+    data
       ? {
           children: accountChildren,
           icon: AccountCircle,

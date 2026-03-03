@@ -10,7 +10,9 @@
       "Bash(code:*)",
       "WebFetch(domain:antigravity.google)",
       "Bash(node:*)",
-      "Bash(pnpm add:*)"
+      "Bash(pnpm add:*)",
+      "Bash(pnpm build:*)",
+      "Bash(ls:*)"
     ]
   }
 }

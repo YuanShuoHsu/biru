@@ -18,7 +18,6 @@ import {
   Logout,
   MailOutline,
   Person,
-  PhoneIphone,
   Policy,
   Security,
   Settings,
@@ -32,7 +31,6 @@ import {
   CardContent,
   CardHeader,
   Chip,
-  Divider,
   Grid,
   LinearProgress,
   Skeleton,
@@ -42,9 +40,7 @@ import {
 } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
-
-import type { UserResponseDto } from "@/types/users/user-response.dto";
+import { authClient } from "@/lib/auth-client";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -92,7 +88,7 @@ const InfoRow = ({ icon: Icon, label, status, value }: InfoRowProps) => (
   </Stack>
 );
 
-const formatRole = (role?: UserResponseDto["role"]) =>
+const formatRole = (role?: string) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface MyAccountProps {
@@ -100,15 +96,16 @@ interface MyAccountProps {
 }
 
 const MyAccount = ({ currentURL }: MyAccountProps) => {
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
   const { handleLogout, isMutatingLogout } = useLogout();
+
+  const { data, isPending } = authClient.useSession();
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 
   const verifyEmailHref = getHref("/auth/verify-email", {
-    [query.email]: profile?.email,
+    [query.email]: data?.user?.email,
     [query.redirectTo]: currentURL,
   });
 
@@ -128,10 +125,10 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
   const isDarkMode = mode === "dark";
 
   const formatDate = useMemo(
-    () => (value?: string | null) => {
+    () => (value?: Date | string | null) => {
       if (!value) return null;
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return value;
+      const date = value instanceof Date ? value : new Date(value);
+      if (Number.isNaN(date.getTime())) return null;
       return new Intl.DateTimeFormat(locale, {
         dateStyle: "medium",
       }).format(date);
@@ -157,7 +154,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
     />
   );
 
-  if (isAuthLoading) {
+  if (isPending) {
     return (
       <Stack gap={3}>
         <LinearProgress />
@@ -198,7 +195,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
     );
   }
 
-  if (!isSignedIn || !profile) {
+  if (!data?.user) {
     return (
       <Card>
         <CardHeader title={tAccount("myAccount.title")} />
@@ -219,11 +216,13 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
     );
   }
 
-  const memberSince = formatDate(profile.createdAt);
-  const updatedAt = formatDate(profile.updatedAt);
+  const user = data.user;
+
+  const memberSince = formatDate(user.createdAt);
+  const updatedAt = formatDate(user.updatedAt);
 
   const name =
-    getDisplayName(locale, profile) || tAccount("profile.placeholderName");
+    getDisplayName(locale, user) || tAccount("profile.placeholderName");
   const initial = name.charAt(0).toUpperCase();
 
   const settingsHref = "/account/account-settings";
@@ -262,7 +261,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image || undefined}
+                src={user.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -306,7 +305,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
                   )}
                   <Chip
                     color="default"
-                    label={formatRole(profile.role)}
+                    label={formatRole(user.role)}
                     size="small"
                     variant="outlined"
                   />
@@ -325,8 +324,8 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
                 gap={1}
                 justifyContent="flex-end"
               >
-                {verificationChip(profile.emailVerified)}
-                {verificationChip(profile.phoneNumberVerified)}
+                {verificationChip(user.emailVerified)}
+                {/* {verificationChip(user.phoneNumberVerified)} */}
               </Stack>
               <Stack
                 direction="row"
@@ -366,16 +365,16 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
                   <InfoRow
                     icon={MailOutline}
                     label={tAuth("email.label")}
-                    status={verificationChip(profile.emailVerified)}
-                    value={profile.email || tCommon("empty")}
+                    status={verificationChip(user.emailVerified)}
+                    value={user.email || tCommon("empty")}
                   />
-                  <Divider flexItem />
+                  {/* <Divider flexItem />
                   <InfoRow
                     icon={PhoneIphone}
                     label={tAuth("phone")}
-                    status={verificationChip(profile.phoneNumberVerified)}
-                    value={profile.phoneNumber || tCommon("empty")}
-                  />
+                    status={verificationChip(user.phoneNumberVerified)}
+                    value={user.phoneNumber || tCommon("empty")}
+                  /> */}
                 </Stack>
               </CardContent>
             </Card>
@@ -384,7 +383,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
               <CardHeader title={tAccount("myAccount.sections.security")} />
               <CardContent>
                 <Stack gap={1.5}>
-                  {!profile.emailVerified && (
+                  {!user.emailVerified && (
                     <Button
                       href={verifyEmailHref}
                       startIcon={<Security />}
@@ -463,8 +462,10 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
                       checked={isDarkMode}
                       color="primary"
                       disabled={isModeLoading}
-                      inputProps={{
-                        "aria-label": tAccount("myAccount.colorMode.label"),
+                      slotProps={{
+                        input: {
+                          "aria-label": tAccount("myAccount.colorMode.label"),
+                        },
                       }}
                       onChange={handleToggleColorMode}
                       size="small"

@@ -15,6 +15,8 @@ import { useLogoutMenuItem } from "@/hooks/useAuth";
 
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
+import { authClient } from "@/lib/auth-client";
+
 import { AccountCircle } from "@mui/icons-material";
 import {
   Avatar,
@@ -27,8 +29,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 import { RouteParams } from "@/types/routeParams";
@@ -83,16 +83,16 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { isAuthLoading, isSignedIn, profile } = useAuthStore((state) => state);
+  const { data, isPending } = authClient.useSession();
 
   const { locale } = useParams<RouteParams>();
 
-  const displayName = getDisplayName(locale, profile);
-  const avatarChild = !isSignedIn ? <AccountCircle /> : displayName[0];
+  const displayName = getDisplayName(locale, data?.user);
+  const avatarChild = !data ? <AccountCircle /> : displayName[0];
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
-  const tooltipTitle = isSignedIn
+  const tooltipTitle = data
     ? tAccount("accountSettings.label")
     : tAuth("signIn.label");
 
@@ -116,9 +116,9 @@ const AccountMenu = () => {
   });
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    if (isAuthLoading) return;
+    if (isPending) return;
 
-    if (!isSignedIn) {
+    if (!data) {
       router.push(signInRedirectHref);
 
       return;
@@ -169,14 +169,14 @@ const AccountMenu = () => {
             aria-haspopup="true"
             aria-label="account of current user"
             color="inherit"
-            disabled={isAuthLoading}
+            disabled={isPending}
             onClick={handleClick}
           >
-            <BadgeAvatars invisible={!isSignedIn} variant="dot">
+            <BadgeAvatars invisible={!data} variant="dot">
               <StyledAvatar
                 alt={displayName}
-                isSignedIn={isSignedIn}
-                src={profile?.image || undefined}
+                isSignedIn={!!data}
+                src={data?.user.image || undefined}
               >
                 {avatarChild}
               </StyledAvatar>

@@ -14,7 +14,6 @@ import {
   ErrorOutline,
   Login,
   MailOutline,
-  PhoneIphone,
   Settings,
   Shield,
   Update,
@@ -36,9 +35,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
-
-import type { UserResponseDto } from "@/types/users/user-response.dto";
+import { authClient } from "@/lib/auth-client";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -51,7 +48,7 @@ const preferenceDefaults: Record<PreferenceKey, boolean> = {
   recommendations: false,
 };
 
-const formatRole = (role?: UserResponseDto["role"]) =>
+const formatRole = (role?: string) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface InfoRowProps {
@@ -104,7 +101,7 @@ interface AccountProfileProps {
 const AccountProfile = ({ currentURL }: AccountProfileProps) => {
   const [preferences, setPreferences] = useState(preferenceDefaults);
 
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+  const { data, isPending } = authClient.useSession();
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
@@ -118,17 +115,17 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
 
   const name = useMemo(
     () =>
-      getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
-    [tAccount, locale, profile],
+      getDisplayName(locale, data?.user) || tAccount("profile.placeholderName"),
+    [tAccount, locale, data?.user],
   );
 
   const initial = name.charAt(0).toUpperCase();
 
   const formatDate = useMemo(
-    () => (value?: string | null) => {
+    () => (value?: Date | string | null) => {
       if (!value) return null;
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return value;
+      const date = value instanceof Date ? value : new Date(value);
+      if (Number.isNaN(date.getTime())) return null;
       return new Intl.DateTimeFormat(locale, {
         dateStyle: "medium",
       }).format(date);
@@ -136,25 +133,25 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
     [locale],
   );
 
-  const memberSince = formatDate(profile?.createdAt);
-  const updatedAt = formatDate(profile?.updatedAt);
+  const memberSince = formatDate(data?.user?.createdAt);
+  const updatedAt = formatDate(data?.user?.updatedAt);
 
-  const completion = useMemo(() => {
-    if (!profile) return 0;
+  const completion = (() => {
+    if (!data?.user) return 0;
 
     const points = [
-      profile.firstName,
-      profile.lastName,
-      profile.email,
-      profile.phoneNumber,
-      profile.image,
-      profile.emailVerified,
-      profile.phoneNumberVerified,
+      data.user.firstName,
+      data.user.lastName,
+      data.user.email,
+      // data.user.phoneNumber,
+      data.user.image,
+      data.user.emailVerified,
+      // data.user.phoneNumberVerified,
     ];
 
     const score = points.filter(Boolean).length;
     return Math.min(100, Math.round((score / points.length) * 100));
-  }, [profile]);
+  })();
 
   const verificationChip = (verified?: boolean) => (
     <Chip
@@ -202,14 +199,14 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
       <Switch
         checked={preferences[key]}
         color="primary"
-        inputProps={{ "aria-label": label }}
+        slotProps={{ input: { "aria-label": label } }}
         onChange={() => togglePreference(key)}
         size="small"
       />
     </Stack>
   );
 
-  if (isAuthLoading) {
+  if (isPending) {
     return (
       <Stack gap={3}>
         <LinearProgress />
@@ -227,7 +224,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
     );
   }
 
-  if (!isSignedIn || !profile) {
+  if (!data?.user) {
     return (
       <Card>
         <CardHeader title={tAccount("accountMenu.profile")} />
@@ -247,6 +244,8 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
       </Card>
     );
   }
+
+  const user = data.user;
 
   return (
     <Stack gap={3}>
@@ -276,7 +275,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image || undefined}
+                src={user.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -310,7 +309,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
                   )}
                   <Chip
                     color="default"
-                    label={formatRole(profile.role)}
+                    label={formatRole(user.role)}
                     size="small"
                     variant="outlined"
                   />
@@ -353,16 +352,16 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
                   <InfoRow
                     icon={MailOutline}
                     label={tAuth("email.label")}
-                    status={verificationChip(profile.emailVerified)}
-                    value={profile.email || tCommon("empty")}
+                    status={verificationChip(user.emailVerified)}
+                    value={user.email || tCommon("empty")}
                   />
-                  <Divider flexItem />
+                  {/* <Divider flexItem />
                   <InfoRow
                     icon={PhoneIphone}
                     label={tAuth("phone")}
-                    status={verificationChip(profile.phoneNumberVerified)}
-                    value={profile.phoneNumber || tCommon("empty")}
-                  />
+                    status={verificationChip(user.phoneNumberVerified)}
+                    value={user.phoneNumber || tCommon("empty")}
+                  /> */}
                 </Stack>
                 <Stack
                   direction="row"
@@ -374,12 +373,12 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
                   <Chip
                     color="default"
                     icon={<Shield fontSize="small" />}
-                    label={formatRole(profile.role)}
+                    label={formatRole(user.role)}
                     size="small"
                     variant="outlined"
                   />
-                  {verificationChip(profile.emailVerified)}
-                  {verificationChip(profile.phoneNumberVerified)}
+                  {verificationChip(user.emailVerified)}
+                  {/* {verificationChip(user.phoneNumberVerified)} */}
                 </Stack>
                 <Divider sx={{ my: 2 }} />
                 <Button

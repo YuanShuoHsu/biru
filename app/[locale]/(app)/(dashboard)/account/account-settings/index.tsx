@@ -10,6 +10,8 @@ import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useLogout } from "@/hooks/useLogout";
 
+import { authClient } from "@/lib/auth-client";
+
 import {
   AccountCircle,
   CheckCircle,
@@ -20,7 +22,6 @@ import {
   Logout,
   MailOutline,
   Person,
-  PhoneIphone,
   Policy,
   Security,
   Settings,
@@ -41,10 +42,6 @@ import {
   Switch,
   Typography,
 } from "@mui/material";
-
-import { useAuthStore } from "@/providers/auth-store-provider";
-
-import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -92,7 +89,7 @@ const SettingRow = ({ icon: Icon, label, status, value }: SettingRowProps) => (
   </Stack>
 );
 
-const formatRole = (role?: UserResponseDto["role"]) =>
+const formatRole = (role?: string) =>
   role ? role.charAt(0) + role.slice(1).toLowerCase() : "User";
 
 interface AccountSettingsProps {
@@ -102,10 +99,11 @@ interface AccountSettingsProps {
 const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   const [rememberMeByDefault, setRememberMeByDefault] = useState(true);
 
-  const { profile, isAuthLoading, isSignedIn } = useAuthStore((state) => state);
+  const locale = useLocale();
+
   const { handleLogout, isMutatingLogout } = useLogout();
 
-  const locale = useLocale();
+  const { data, isPending } = authClient.useSession();
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
@@ -130,10 +128,10 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
     });
 
   const formatDate = useMemo(
-    () => (value?: string | null) => {
+    () => (value?: Date | string | null) => {
       if (!value) return null;
-      const date = new Date(value);
-      if (Number.isNaN(date.getTime())) return value;
+      const date = value instanceof Date ? value : new Date(value);
+      if (Number.isNaN(date.getTime())) return null;
       return new Intl.DateTimeFormat(locale, {
         dateStyle: "medium",
       }).format(date);
@@ -141,15 +139,15 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
     [locale],
   );
 
-  const memberSince = formatDate(profile?.createdAt);
-  const updatedAt = formatDate(profile?.updatedAt);
+  const memberSince = formatDate(data?.user?.createdAt);
+  const updatedAt = formatDate(data?.user?.updatedAt);
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 
   const verifyEmailHref = getHref("/auth/verify-email", {
-    [query.email]: profile?.email,
+    [query.email]: data?.user?.email,
     [query.redirectTo]: currentURL,
   });
 
@@ -159,8 +157,8 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
 
   const name = useMemo(
     () =>
-      getDisplayName(locale, profile) || tAccount("profile.placeholderName"),
-    [tAccount, locale, profile],
+      getDisplayName(locale, data?.user) || tAccount("profile.placeholderName"),
+    [tAccount, locale, data?.user],
   );
 
   const initial = name.charAt(0).toUpperCase();
@@ -183,7 +181,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
     />
   );
 
-  if (isAuthLoading) {
+  if (isPending) {
     return (
       <Stack gap={3}>
         <LinearProgress />
@@ -224,7 +222,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
     );
   }
 
-  if (!isSignedIn || !profile) {
+  if (!data?.user) {
     return (
       <Card>
         <CardHeader title={tAccount("accountSettings.title")} />
@@ -248,6 +246,8 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
       </Card>
     );
   }
+
+  const user = data.user;
 
   return (
     <Stack gap={3}>
@@ -277,7 +277,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
             <Stack alignItems="center" direction="row" gap={2}>
               <Avatar
                 alt={name}
-                src={profile.image || undefined}
+                src={user.image || undefined}
                 sx={(theme) => ({
                   width: theme.spacing(7),
                   height: theme.spacing(7),
@@ -333,16 +333,16 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 gap={1}
                 justifyContent="flex-end"
               >
-                {verificationChip(profile.emailVerified)}
-                {verificationChip(profile.phoneNumberVerified)}
+                {verificationChip(user.emailVerified)}
+                {/* {verificationChip(user.phoneNumberVerified)} */}
                 <Chip
                   color="default"
-                  label={formatRole(profile.role)}
+                  label={formatRole(user.role)}
                   size="small"
                   variant="outlined"
                 />
               </Stack>
-              {!profile.emailVerified && (
+              {!user.emailVerified && (
                 <Button
                   href={verifyEmailHref}
                   size="small"
@@ -374,16 +374,16 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                   <SettingRow
                     icon={MailOutline}
                     label={tAuth("email.label")}
-                    status={verificationChip(profile.emailVerified)}
-                    value={profile.email || tCommon("empty")}
+                    status={verificationChip(user.emailVerified)}
+                    value={user.email || tCommon("empty")}
                   />
-                  <Divider flexItem />
+                  {/* <Divider flexItem />
                   <SettingRow
                     icon={PhoneIphone}
                     label={tAuth("phone")}
-                    status={verificationChip(profile.phoneNumberVerified)}
-                    value={profile.phoneNumber || tCommon("empty")}
-                  />
+                    status={verificationChip(user.phoneNumberVerified)}
+                    value={user.phoneNumber || tCommon("empty")}
+                  /> */}
                 </Stack>
                 <Stack
                   direction="row"
@@ -395,7 +395,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                   <Chip
                     color="default"
                     icon={<Security fontSize="small" />}
-                    label={formatRole(profile.role)}
+                    label={formatRole(user.role)}
                     size="small"
                     variant="outlined"
                   />
@@ -463,10 +463,12 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                   <Switch
                     checked={rememberMeByDefault}
                     color="primary"
-                    inputProps={{
-                      "aria-label": tAccount(
-                        "accountSettings.rememberMe.label",
-                      ),
+                    slotProps={{
+                      input: {
+                        "aria-label": tAccount(
+                          "accountSettings.rememberMe.label",
+                        ),
+                      },
                     }}
                     onChange={handleToggleRememberMe}
                     size="small"
