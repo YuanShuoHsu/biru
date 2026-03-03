@@ -57,6 +57,15 @@ const customErrorCodes: Record<string, Record<Locale, string>> = {
 };
 
 const errorCodes = {
+  INVALID_EMAIL_OR_PASSWORD: {
+    [LocaleEnum.ZhTW]: "電子郵件或密碼錯誤，請重新輸入",
+    [LocaleEnum.En]: "Invalid email or password. Please try again.",
+    [LocaleEnum.Ja]:
+      "メールアドレスまたはパスワードが間違っています。再入力してください",
+    [LocaleEnum.Ko]:
+      "이메일 또는 비밀번호가 올바르지 않습니다. 다시 입력해 주세요",
+    [LocaleEnum.ZhCN]: "电子邮件或密码错误，请重新输入",
+  },
   INVALID_TOKEN: {
     [LocaleEnum.ZhTW]: "驗證連結無效或已過期，請重新寄送",
     [LocaleEnum.En]: "Invalid or expired verification link. Please resend.",

@@ -8,7 +8,9 @@
       "WebSearch",
       "Bash(wc:*)",
       "Bash(code:*)",
-      "WebFetch(domain:antigravity.google)"
+      "WebFetch(domain:antigravity.google)",
+      "Bash(node:*)",
+      "Bash(pnpm add:*)"
     ]
   }
 }
