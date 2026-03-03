@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 
+import { authClient } from "@/lib/auth-client";
+
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-import { AuthResponseDto } from "@/types/auth/auth-response.dto";
-
-import { fetchProfile } from "@/utils/auth";
-import { sendRequest } from "@/utils/fetcher";
+import type { UserResponseDto } from "@/types/users/user-response.dto";
 
 export const useAuthInitializer = () => {
-  const { clearAuth, setAccessToken, setIsAuthLoading, setProfile } =
-    useAuthStore((state) => state);
+  const { clearAuth, setIsAuthLoading, setProfile } = useAuthStore(
+    (state) => state,
+  );
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
@@ -17,24 +17,14 @@ export const useAuthInitializer = () => {
     if (isMaintenanceMode) return;
 
     const initAuthState = async () => {
-      const hasAuthCookie = document.cookie.includes("biru-auth=");
-
-      if (!hasAuthCookie) {
-        setIsAuthLoading(false);
-
-        return;
-      }
-
-      setIsAuthLoading(true);
-
       try {
-        const { access_token } = await sendRequest<AuthResponseDto>({
-          credentials: "include",
-        })("/api/auth/refresh");
-        setAccessToken(access_token);
+        const { data } = await authClient.getSession();
 
-        const profile = await fetchProfile(access_token);
-        setProfile(profile);
+        if (data?.user) {
+          setProfile(data.user as unknown as UserResponseDto);
+        } else {
+          clearAuth();
+        }
       } catch {
         clearAuth();
       } finally {
@@ -43,11 +33,5 @@ export const useAuthInitializer = () => {
     };
 
     initAuthState();
-  }, [
-    clearAuth,
-    isMaintenanceMode,
-    setAccessToken,
-    setIsAuthLoading,
-    setProfile,
-  ]);
+  }, [clearAuth, isMaintenanceMode, setIsAuthLoading, setProfile]);
 };

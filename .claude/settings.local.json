@@ -6,7 +6,9 @@
       "Bash(pnpm run:*)",
       "mcp__ide__getDiagnostics",
       "WebSearch",
-      "Bash(wc:*)"
+      "Bash(wc:*)",
+      "Bash(code:*)",
+      "WebFetch(domain:antigravity.google)"
     ]
   }
 }

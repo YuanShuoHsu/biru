@@ -9,6 +9,7 @@ import FormCard from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
+import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
@@ -91,6 +92,11 @@ const AuthVerifyEmail = ({
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
+  const router = useRouter();
+
+  const { items, startCountdown } = useCountdownStore((state) => state);
+  const redirectCountdown = items["verify-email-redirect"];
+
   const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState<VerifyStatus>(
     token ? VERIFY_STATUS.VERIFYING : VERIFY_STATUS.DEFAULT,
@@ -100,8 +106,6 @@ const AuthVerifyEmail = ({
     if (!token) return;
 
     const verifyToken = async () => {
-      setStatus(VERIFY_STATUS.VERIFYING);
-
       const { error } = await authClient.verifyEmail({
         query: { token },
         fetchOptions: {
@@ -119,12 +123,14 @@ const AuthVerifyEmail = ({
       }
 
       setStatus(VERIFY_STATUS.VERIFIED);
+      startCountdown("verify-email-redirect", 3, () => {
+        router.replace(redirectTo || "/");
+      });
     };
 
     verifyToken();
-  }, [locale, token]);
+  }, [locale, redirectTo, router, startCountdown, token]);
 
-  const { items, startCountdown } = useCountdownStore((state) => state);
   const countdown = items["verify-email"];
   const isCountingDown = countdown > 0;
 
@@ -134,6 +140,28 @@ const AuthVerifyEmail = ({
   } = useForm();
 
   const tAuth = useTranslations("auth");
+
+  const verifyEmailActions = tAuth("verifyEmail.actions");
+  const verifyingTitle = tAuth("verifyEmail.verifying.title");
+
+  const resendButton = (
+    <Button
+      disabled={isSubmitting || isCountingDown}
+      fullWidth
+      loading={isSubmitting}
+      loadingPosition="start"
+      size="large"
+      type="submit"
+      variant="contained"
+    >
+      {isCountingDown
+        ? tAuth("verifyEmail.countdown", {
+            actions: verifyEmailActions,
+            seconds: countdown,
+          })
+        : verifyEmailActions}
+    </Button>
+  );
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTo,
@@ -157,6 +185,9 @@ const AuthVerifyEmail = ({
       const message = getErrorMessage(error.code, locale);
       enqueueSnackbar(message, { variant: "error" });
 
+      if (error.code === "EMAIL_IS_ALREADY_VERIFIED")
+        router.replace(signInHref);
+
       return;
     }
 
@@ -176,29 +207,11 @@ const AuthVerifyEmail = ({
     [VERIFY_STATUS.DEFAULT]: {
       actions: (
         <>
-          <Button
-            disabled={isSubmitting || isCountingDown}
-            fullWidth
-            loading={isSubmitting}
-            loadingPosition="start"
-            size="large"
-            type="submit"
-            variant="contained"
-          >
-            {isCountingDown
-              ? tAuth("verifyEmail.countdown", {
-                  seconds: countdown,
-                  text: tAuth("verifyEmail.resend"),
-                })
-              : tAuth("verifyEmail.resend")}
-          </Button>
-          <Button fullWidth href={signInHref} size="large" variant="outlined">
-            {tAuth("verifyEmail.backToSignIn")}
-          </Button>
+          {resendButton}
           <Divider flexItem />
           <Stack alignItems="center" flexDirection="row" gap={0.5}>
             <Typography variant="body2">
-              {tAuth("verifyEmail.wrongEmail")}
+              {tAuth("verifyEmail.default.wrongEmail")}
             </Typography>
             <Link href={signUpHref} underline="hover" variant="body2">
               {tAuth("signUp.label")}
@@ -208,15 +221,11 @@ const AuthVerifyEmail = ({
       ),
       color: "primary",
       icon: MarkEmailUnread,
-      subtitle: tAuth("verifyEmail.confirmationText"),
+      subtitle: tAuth("verifyEmail.default.subtitle"),
       title: tAuth("verifyEmail.default.title"),
     },
     [VERIFY_STATUS.FAILED]: {
-      actions: (
-        <Button fullWidth href={signInHref} size="large" variant="contained">
-          {tAuth("verifyEmail.backToSignIn")}
-        </Button>
-      ),
+      actions: resendButton,
       color: "error",
       icon: ReportGmailerrorred,
       subtitle: errorMessage,
@@ -225,24 +234,26 @@ const AuthVerifyEmail = ({
     [VERIFY_STATUS.VERIFIED]: {
       actions: (
         <Button fullWidth href={signInHref} size="large" variant="contained">
-          {tAuth("verifyEmail.backToSignIn")}
+          {tAuth("verifyEmail.verified.actions", {
+            seconds: redirectCountdown,
+          })}
         </Button>
       ),
       color: "primary",
       icon: MarkEmailRead,
-      subtitle: tAuth("verifyEmail.signInText"),
+      subtitle: tAuth("verifyEmail.verified.subtitle"),
       title: tAuth("verifyEmail.verified.title"),
     },
     [VERIFY_STATUS.VERIFYING]: {
       actions: (
         <Button disabled fullWidth loading size="large" variant="contained">
-          {tAuth("verifyEmail.verifying.title")}
+          {verifyingTitle}
         </Button>
       ),
       color: "primary",
       icon: MarkEmailUnread,
       subtitle: tAuth("verifyEmail.verifying.subtitle"),
-      title: tAuth("verifyEmail.verifying.title"),
+      title: verifyingTitle,
     },
   };
 

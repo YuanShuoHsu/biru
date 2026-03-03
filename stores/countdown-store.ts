@@ -9,7 +9,11 @@ interface CountdownState {
 
 interface CountdownActions {
   clearCountdown: (key: string) => void;
-  startCountdown: (key: string, durationInSeconds?: number) => void;
+  startCountdown: (
+    key: string,
+    durationInSeconds?: number,
+    onComplete?: () => void,
+  ) => void;
 }
 
 export type CountdownStore = CountdownState & CountdownActions;
@@ -73,31 +77,36 @@ export const createCountdownStore = (
           });
         };
 
-        const tick = (key: string) => {
+        const tick = (key: string, onComplete?: () => void) => {
           const secs = get().items[key];
           if (!secs || secs === 1) {
             deleteKey(key);
+            onComplete?.();
           } else {
             set((state) => ({ items: { ...state.items, [key]: secs - 1 } }));
           }
         };
 
-        const scheduleInterval = (key: string) => {
+        const scheduleInterval = (key: string, onComplete?: () => void) => {
           stopInterval(key);
           intervalMap.set(
             key,
-            setInterval(() => tick(key), 1000),
+            setInterval(() => tick(key, onComplete), 1000),
           );
         };
 
         return {
           ...initState,
           clearCountdown: deleteKey,
-          startCountdown: (key, durationInSeconds = COUNTDOWN_DURATION) => {
+          startCountdown: (
+            key,
+            durationInSeconds = COUNTDOWN_DURATION,
+            onComplete,
+          ) => {
             set((state) => ({
               items: { ...state.items, [key]: durationInSeconds },
             }));
-            scheduleInterval(key);
+            scheduleInterval(key, onComplete);
           },
         };
       },

@@ -45,7 +45,25 @@ type ErrorTypes = Partial<
   Record<keyof typeof authClient.$ERROR_CODES, Record<Locale, string>>
 >;
 
+const customErrorCodes: Record<string, Record<Locale, string>> = {
+  EMAIL_IS_ALREADY_VERIFIED: {
+    [LocaleEnum.ZhTW]: "此信箱已完成驗證，請直接登入",
+    [LocaleEnum.En]: "Email already verified. Please sign in.",
+    [LocaleEnum.Ja]:
+      "このメールアドレスは既に認証済みです。ログインしてください",
+    [LocaleEnum.Ko]: "이미 인증된 이메일입니다. 로그인해 주세요",
+    [LocaleEnum.ZhCN]: "此邮箱已完成验证，请直接登录",
+  },
+};
+
 const errorCodes = {
+  INVALID_TOKEN: {
+    [LocaleEnum.ZhTW]: "驗證連結無效或已過期，請重新寄送",
+    [LocaleEnum.En]: "Invalid or expired verification link. Please resend.",
+    [LocaleEnum.Ja]: "認証リンクが無効または期限切れです。再送してください",
+    [LocaleEnum.Ko]: "유효하지 않거나 만료된 인증 링크입니다. 다시 보내주세요",
+    [LocaleEnum.ZhCN]: "验证链接无效或已过期，请重新发送",
+  },
   USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL: {
     [LocaleEnum.ZhTW]: "此帳號已被註冊，請使用其他信箱",
     [LocaleEnum.En]: "User already registered. Please use another email.",
@@ -59,6 +77,7 @@ const errorCodes = {
 export const getErrorMessage = (code: string, locale: Locale) => {
   if (code in errorCodes)
     return errorCodes[code as keyof typeof errorCodes][locale];
+  if (code in customErrorCodes) return customErrorCodes[code][locale];
 
   return "";
 };

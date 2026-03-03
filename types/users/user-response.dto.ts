@@ -1,3 +1,5 @@
+import type { Locale } from "@/i18n/routing";
+
 import type { Role } from "./role";
 
 export interface UserResponseDto {
@@ -10,6 +12,7 @@ export interface UserResponseDto {
   firstName: string;
   gender: string;
   image: string | null;
+  lang: Locale;
   lastName: string;
   phoneNumber: string | null;
   phoneNumberVerified: boolean;

@@ -349,7 +349,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                   startIcon={<Security />}
                   variant="outlined"
                 >
-                  {tAuth("verifyEmail.resend")}
+                  {tAuth("verifyEmail.default.resend")}
                 </Button>
               )}
             </Stack>

@@ -8,28 +8,28 @@ import { query } from "@/constants/query";
 
 import { useRouter } from "@/i18n/navigation";
 
+import { authClient } from "@/lib/auth-client";
+
 import { CircularProgress, Stack, Typography } from "@mui/material";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { UserResponseDto } from "@/types/users/user-response.dto";
 
-import { fetchProfile } from "@/utils/auth";
 import { getHref } from "@/utils/href";
 
 const AuthCallback = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { setAccessToken, setProfile, setIsAuthLoading, clearAuth } =
-    useAuthStore((state) => state);
+  const { setProfile, setIsAuthLoading, clearAuth } = useAuthStore(
+    (state) => state,
+  );
   const [hasHandledCallback, setHasHandledCallback] = useState(false);
 
   useEffect(() => {
     if (hasHandledCallback) return;
 
     const handleCallback = async () => {
-      const accessToken =
-        searchParams.get("token") || searchParams.get("access_token");
       const error = searchParams.get("error");
       const redirectTo = searchParams.get("redirectTo");
 
@@ -48,32 +48,31 @@ const AuthCallback = () => {
         return;
       }
 
-      if (!accessToken) {
-        enqueueSnackbar("Authentication failed. Please try again.", {
-          variant: "error",
-        });
-        const signInRedirectHref = getHref("/auth/sign-in", {
-          [query.redirectTo]: redirectTo,
-        });
-        router.replace(signInRedirectHref);
-        setHasHandledCallback(true);
-        return;
-      }
-
       setIsAuthLoading(true);
 
       try {
-        setAccessToken(accessToken);
-        const profile: UserResponseDto = await fetchProfile(accessToken);
-        setProfile(profile);
+        const { data } = await authClient.getSession();
 
+        if (!data?.user) {
+          enqueueSnackbar("Authentication failed. Please try again.", {
+            variant: "error",
+          });
+          clearAuth();
+          const signInRedirectHref = getHref("/auth/sign-in", {
+            [query.redirectTo]: redirectTo,
+          });
+          router.replace(signInRedirectHref);
+          return;
+        }
+
+        setProfile(data.user as unknown as UserResponseDto);
         enqueueSnackbar("Successfully signed in with Google!", {
           variant: "success",
         });
 
         router.replace(redirectTo || "/");
       } catch (err) {
-        console.error("Failed to fetch profile:", err);
+        console.error("Failed to get session:", err);
         enqueueSnackbar("Failed to load user profile. Please try again.", {
           variant: "error",
         });
@@ -93,7 +92,6 @@ const AuthCallback = () => {
     hasHandledCallback,
     searchParams,
     router,
-    setAccessToken,
     setProfile,
     setIsAuthLoading,
     clearAuth,
