@@ -49,8 +49,7 @@ const AppClientProviders = ({
         )}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         classes={{
-          containerAnchorOriginTopRight:
-            "notistack-container-top-right-offset",
+          containerAnchorOriginTopRight: "notistack-container-top-right-offset",
         }}
         maxSnack={3}
       >
