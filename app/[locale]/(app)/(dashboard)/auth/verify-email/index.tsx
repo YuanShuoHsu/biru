@@ -4,10 +4,15 @@ import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import * as z from "zod";
+
+import { useVerifyEmailFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 
 import { query } from "@/constants/query";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -28,6 +33,7 @@ import {
   Divider,
   Link,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
@@ -140,10 +146,17 @@ const AuthVerifyEmail = ({
   const countdown = items["verify-email"];
   const isCountingDown = countdown > 0;
 
+  const verifyEmailFormSchema = useVerifyEmailFormSchema();
+  type VerifyEmailFormData = z.infer<typeof verifyEmailFormSchema>;
+
   const {
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
     handleSubmit,
-  } = useForm();
+    register,
+  } = useForm<VerifyEmailFormData>({
+    defaultValues: { email },
+    resolver: zodResolver(verifyEmailFormSchema),
+  });
 
   const tAuth = useTranslations("auth");
 
@@ -286,16 +299,25 @@ const AuthVerifyEmail = ({
         <StyledAvatar color={config.color}>
           <Icon fontSize="large" />
         </StyledAvatar>
-        <Stack alignItems="center" spacing={1}>
-          <Typography textAlign="center">{email}</Typography>
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {config.subtitle}
-          </Typography>
-        </Stack>
+        <Typography
+          color="text.secondary"
+          textAlign="center"
+          variant="caption"
+        >
+          {config.subtitle}
+        </Typography>
+        <TextField
+          autoComplete="email"
+          error={!!errors.email}
+          fullWidth
+          helperText={errors.email?.message}
+          label={tAuth("email.label")}
+          placeholder={tAuth("email.placeholder")}
+          required
+          slotProps={{ input: { readOnly: true } }}
+          type="email"
+          {...register("email")}
+        />
       </StyledCardContent>
       <StyledCardActions disableSpacing>{config.actions}</StyledCardActions>
     </FormCard>
