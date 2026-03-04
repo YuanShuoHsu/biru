@@ -1,20 +1,33 @@
 // https://nextjs.org/docs/app/guides/authentication
 // https://mui.com/toolpad/core/react-sign-in-page/
-// https://nextjs.org/docs/app/guides/authentication
-// https://mui.com/toolpad/core/react-sign-in-page/
 // https://mui.com/store/sign-in/
 
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
-import React, { useState } from "react";
+import { type BaseSyntheticEvent, useCallback, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import * as z from "zod";
+
+import { useResetPasswordFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useRouter } from "@/i18n/navigation";
+
+import { authClient, getErrorMessage } from "@/lib/auth-client";
+
+import {
+  CheckCircleOutline,
+  RadioButtonUnchecked,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Button,
   CardActions,
@@ -23,13 +36,16 @@ import {
   IconButton,
   InputAdornment,
   Link,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { getErrorMessage } from "@/utils/errors";
 import { getHref } from "@/utils/href";
 
 const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
@@ -52,34 +68,121 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-type ResetPasswordField = "newPassword" | "confirmNewPassword";
+interface PasswordRule {
+  key: string;
+  passed: boolean;
+  label: string;
+}
 
 interface AuthResetPasswordProps {
   redirectTo?: string;
+  token: string;
 }
 
-const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
-  const [form, setForm] = useState({
-    email: "",
-    newPassword: "",
-    confirmNewPassword: "",
-  });
-
+const AuthResetPassword = ({ redirectTo, token }: AuthResetPasswordProps) => {
   const [showPassword, setShowPassword] = useState<
-    Record<ResetPasswordField, boolean>
+    Record<"newPassword" | "confirmNewPassword", boolean>
   >({
     newPassword: false,
     confirmNewPassword: false,
   });
 
-  const signUpHref = getHref("/auth/sign-up", {
-    [query.redirectTo]: redirectTo,
-  });
+  const locale = useLocale();
+
+  const router = useRouter();
 
   const tAuth = useTranslations("auth");
+  const tValidation = useTranslations("validation");
 
-  const handleClickShowPassword = (key: ResetPasswordField) => () =>
-    setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
+  const resetPasswordFormSchema = useResetPasswordFormSchema();
+  type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>;
+
+  const {
+    control,
+    formState: { isSubmitting },
+    handleSubmit,
+    register,
+  } = useForm<ResetPasswordFormData>({
+    defaultValues: {
+      newPassword: "",
+      confirmNewPassword: "",
+    },
+    resolver: zodResolver(resetPasswordFormSchema),
+  });
+
+  const [newPassword, confirmNewPassword] = useWatch({
+    control,
+    name: ["newPassword", "confirmNewPassword"],
+  });
+
+  const hasPassword = newPassword.length > 0;
+  const hasConfirmPassword = confirmNewPassword.length > 0;
+  const passwordsMatch =
+    hasPassword && hasConfirmPassword && newPassword === confirmNewPassword;
+
+  const passwordRules: PasswordRule[] = [
+    {
+      key: "minLength",
+      passed: newPassword.length >= 8,
+      label: tValidation("password.minLength"),
+    },
+    {
+      key: "letter",
+      passed: /[a-zA-Z]/.test(newPassword),
+      label: tValidation("password.letter"),
+    },
+    {
+      key: "number",
+      passed: /\d/.test(newPassword),
+      label: tValidation("password.number"),
+    },
+  ];
+
+  const isPasswordError =
+    hasPassword && passwordRules.some(({ passed }) => !passed);
+
+  const confirmPasswordRules: PasswordRule[] = [
+    {
+      key: "match",
+      passed: passwordsMatch,
+      label: tValidation("password.match"),
+    },
+  ];
+
+  const isConfirmPasswordError =
+    hasConfirmPassword && !confirmPasswordRules[0].passed;
+
+  const renderPasswordRules = (rules: PasswordRule[], hasValue: boolean) => (
+    <List dense disablePadding>
+      {rules.map(({ key, label, passed }) => {
+        const color = hasValue
+          ? passed
+            ? "primary.main"
+            : "error.main"
+          : "text.secondary";
+
+        return (
+          <ListItem disablePadding key={key}>
+            <ListItemIcon sx={{ color, minWidth: 28 }}>
+              {passed ? (
+                <CheckCircleOutline fontSize="small" />
+              ) : (
+                <RadioButtonUnchecked fontSize="small" />
+              )}
+            </ListItemIcon>
+            <ListItemText
+              primary={label}
+              slotProps={{ primary: { color, variant: "caption" } }}
+            />
+          </ListItem>
+        );
+      })}
+    </List>
+  );
+
+  const handleClickShowPassword =
+    (key: "newPassword" | "confirmNewPassword") => () =>
+      setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const handleMouseDownPassword = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -88,28 +191,40 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const handleChange = ({
-    target: { checked, name, type, value },
-  }: React.ChangeEvent<HTMLInputElement>) =>
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+  const onSubmitHandler = useCallback(
+    async ({ newPassword }: ResetPasswordFormData) => {
+      if (!token) return;
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+      const { error } = await authClient.resetPassword({
+        newPassword,
+        token,
+        fetchOptions: {
+          headers: {
+            "Accept-Language": locale,
+          },
+        },
+      });
 
-    try {
-      // const { data } = await trigger(form);
-      // console.log(data);
-      // router.push(`/${locale}/orders`);
-    } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
-    }
-  };
+      if (error?.code) {
+        const message = getErrorMessage(error.code, locale);
+        enqueueSnackbar(message, { variant: "error" });
+
+        return;
+      }
+
+      enqueueSnackbar(tAuth("resetPassword.success"), { variant: "success" });
+      router.replace(
+        getHref("/auth/sign-in", { [query.redirectTo]: redirectTo }),
+      );
+    },
+    [locale, redirectTo, router, tAuth, token],
+  );
+
+  const onSubmit = (event: BaseSyntheticEvent) =>
+    handleSubmit(onSubmitHandler)(event);
 
   return (
-    <FormCard component="form" onSubmit={handleSubmit}>
+    <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader
         title={
           <Typography
@@ -124,24 +239,14 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
       />
       <StyledCardContent>
         <TextField
-          autoComplete="email"
-          fullWidth
-          label={tAuth("email.label")}
-          name="email"
-          onChange={handleChange}
-          placeholder={tAuth("email.placeholder")}
-          required
-          type="email"
-          value={form.email}
-        />
-        <TextField
           autoComplete="new-password"
+          error={isPasswordError}
           fullWidth
+          helperText={renderPasswordRules(passwordRules, hasPassword)}
           label={tAuth("newPassword")}
-          name="newPassword"
-          onChange={handleChange}
           required
           slotProps={{
+            formHelperText: { component: "div" },
             input: {
               endAdornment: (
                 <InputAdornment position="start">
@@ -151,10 +256,10 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
                         ? tAuth("hideNewPassword")
                         : tAuth("showNewPassword")
                     }
+                    edge="end"
                     onClick={handleClickShowPassword("newPassword")}
                     onMouseDown={handleMouseDownPassword}
                     onMouseUp={handleMouseUpPassword}
-                    edge="end"
                   >
                     {showPassword.newPassword ? (
                       <VisibilityOff />
@@ -167,16 +272,20 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
             },
           }}
           type={showPassword.newPassword ? "text" : "password"}
-          value={form.newPassword}
+          {...register("newPassword")}
         />
         <TextField
           autoComplete="new-password"
+          error={isConfirmPasswordError}
           fullWidth
+          helperText={renderPasswordRules(
+            confirmPasswordRules,
+            hasConfirmPassword,
+          )}
           label={tAuth("confirmNewPassword")}
-          name="confirmNewPassword"
-          onChange={handleChange}
           required
           slotProps={{
+            formHelperText: { component: "div" },
             input: {
               endAdornment: (
                 <InputAdornment position="start">
@@ -186,10 +295,10 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
                         ? tAuth("hideConfirmNewPassword")
                         : tAuth("showConfirmNewPassword")
                     }
+                    edge="end"
                     onClick={handleClickShowPassword("confirmNewPassword")}
                     onMouseDown={handleMouseDownPassword}
                     onMouseUp={handleMouseUpPassword}
-                    edge="end"
                   >
                     {showPassword.confirmNewPassword ? (
                       <VisibilityOff />
@@ -202,17 +311,29 @@ const AuthResetPassword = ({ redirectTo }: AuthResetPasswordProps) => {
             },
           }}
           type={showPassword.confirmNewPassword ? "text" : "password"}
-          value={form.confirmNewPassword}
+          {...register("confirmNewPassword")}
         />
       </StyledCardContent>
       <StyledCardActions disableSpacing>
-        <Button fullWidth size="large" type="submit" variant="contained">
+        <Button
+          disabled={isSubmitting}
+          fullWidth
+          loading={isSubmitting}
+          loadingPosition="start"
+          size="large"
+          type="submit"
+          variant="contained"
+        >
           {tAuth("resetPassword.label")}
         </Button>
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
-          <Typography variant="body2">{tAuth("noAccount")}</Typography>
-          <Link href={signUpHref} underline="hover" variant="body2">
-            {tAuth("signUp.label")}
+          <Typography variant="body2">{tAuth("rememberedPassword")}</Typography>
+          <Link
+            href={getHref("/auth/sign-in", { [query.redirectTo]: redirectTo })}
+            underline="hover"
+            variant="body2"
+          >
+            {tAuth("signIn.label")}
           </Link>
         </Stack>
       </StyledCardActions>

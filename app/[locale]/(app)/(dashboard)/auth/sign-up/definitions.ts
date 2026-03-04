@@ -101,24 +101,3 @@ export const useSignupFormSchema = () => {
   //   { path: ["phoneNumber"], message: dict.validation.phone.invalid },
   // );
 };
-
-export type SignupFormState =
-  | {
-      errors?: {
-        image?: string[];
-        lastName?: string[];
-        firstName?: string[];
-        // birthDate?: string[];
-        // gender?: string[];
-        email?: string[];
-        password?: string[];
-        confirmPassword?: string[];
-        // country?: {
-        //   code?: string[];
-        // };
-        // phoneNumber?: string[];
-        emailSubscribed?: string[];
-      };
-      message?: string;
-    }
-  | undefined;

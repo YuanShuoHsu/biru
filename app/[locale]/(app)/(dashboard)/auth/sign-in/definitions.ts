@@ -17,14 +17,3 @@ export const useSigninFormSchema = () => {
     rememberMe: z.boolean(),
   });
 };
-
-export type SigninFormState =
-  | {
-      errors?: {
-        email?: string[];
-        password?: string[];
-        rememberMe?: string[];
-      };
-      message?: string;
-    }
-  | undefined;

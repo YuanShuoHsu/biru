@@ -18,7 +18,9 @@
       "WebFetch(domain:www.better-auth.com)",
       "mcp__better-auth__ask-question-about-better-auth",
       "Bash(grep:*)",
-      "mcp__better-auth__search-better-auth-docs"
+      "mcp__better-auth__search-better-auth-docs",
+      "Bash(claude mcp:*)",
+      "Bash(pnpm lint:*)"
     ]
   }
 }
