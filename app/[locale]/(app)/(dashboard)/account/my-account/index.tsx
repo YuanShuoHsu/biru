@@ -178,8 +178,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
   const memberSince = formatDate(user.createdAt);
   const updatedAt = formatDate(user.updatedAt);
 
-  const name =
-    getDisplayName(locale, user) || tAccount("profile.placeholderName");
+  const name = getDisplayName(user) || tAccount("profile.placeholderName");
   const initial = name.charAt(0).toUpperCase();
 
   const settingsHref = "/account/account-settings";

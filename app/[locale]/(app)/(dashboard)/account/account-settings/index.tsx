@@ -154,10 +154,8 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   });
 
   const name = useMemo(
-    () =>
-      getDisplayName(locale, session?.user) ||
-      tAccount("profile.placeholderName"),
-    [tAccount, locale, session?.user],
+    () => getDisplayName(session?.user) || tAccount("profile.placeholderName"),
+    [tAccount, session?.user],
   );
 
   const initial = name.charAt(0).toUpperCase();

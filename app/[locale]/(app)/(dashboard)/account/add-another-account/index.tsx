@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 import FormCard from "@/components/FormCard";
 
@@ -57,8 +57,6 @@ interface AddAnotherAccountProps {
 const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
   const { session } = useAuthStore((state) => state);
 
-  const locale = useLocale();
-
   const { handleLogout, isMutatingLogout } = useLogout();
 
   const router = useRouter();
@@ -76,7 +74,7 @@ const AddAnotherAccount = ({ redirectTo }: AddAnotherAccountProps) => {
     router.push(signInHref);
   };
 
-  const name = getDisplayName(locale, session?.user);
+  const name = getDisplayName(session?.user);
   const avatarText = name ? name.charAt(0).toUpperCase() : "U";
 
   return (

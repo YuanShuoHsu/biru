@@ -5,7 +5,7 @@
 
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 
@@ -86,9 +86,7 @@ const AccountMenu = () => {
 
   const { session } = useAuthStore((state) => state);
 
-  const locale = useLocale();
-
-  const displayName = getDisplayName(locale, session?.user);
+  const displayName = getDisplayName(session?.user);
   const avatarChild = !session ? <AccountCircle /> : displayName[0];
 
   const tAccount = useTranslations("account");
