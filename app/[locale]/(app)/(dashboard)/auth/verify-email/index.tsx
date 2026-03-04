@@ -99,10 +99,13 @@ const AuthVerifyEmail = ({
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
-  const [errorMessage, setErrorMessage] = useState("");
-  const [status, setStatus] = useState<VerifyStatus>(
-    token ? VERIFY_STATUS.VERIFYING : VERIFY_STATUS.DEFAULT,
-  );
+  const [verifyState, setVerifyState] = useState<{
+    errorMessage: string;
+    status: VerifyStatus;
+  }>({
+    errorMessage: "",
+    status: token ? VERIFY_STATUS.VERIFYING : VERIFY_STATUS.DEFAULT,
+  });
 
   const { setSession } = useAuthStore((state) => state);
 
@@ -125,8 +128,10 @@ const AuthVerifyEmail = ({
       });
 
       if (error?.code) {
-        setErrorMessage(getErrorMessage(error.code, locale));
-        setStatus(VERIFY_STATUS.FAILED);
+        setVerifyState({
+          errorMessage: getErrorMessage(error.code, locale),
+          status: VERIFY_STATUS.FAILED,
+        });
 
         return;
       }
@@ -134,7 +139,7 @@ const AuthVerifyEmail = ({
       const { data } = await authClient.getSession();
       setSession(data);
 
-      setStatus(VERIFY_STATUS.VERIFIED);
+      setVerifyState({ errorMessage: "", status: VERIFY_STATUS.VERIFIED });
       startCountdown("verify-email-redirect", 3, () => {
         router.replace(redirectTo || "/");
       });
@@ -247,7 +252,7 @@ const AuthVerifyEmail = ({
       actions: resendButton,
       color: "error",
       icon: ReportGmailerrorred,
-      subtitle: errorMessage,
+      subtitle: verifyState.errorMessage,
       title: tAuth("verifyEmail.failed.title"),
     },
     [VERIFY_STATUS.VERIFIED]: {
@@ -278,7 +283,7 @@ const AuthVerifyEmail = ({
     },
   };
 
-  const config = configs[status];
+  const config = configs[verifyState.status];
   const Icon = config.icon;
 
   return (
@@ -299,11 +304,7 @@ const AuthVerifyEmail = ({
         <StyledAvatar color={config.color}>
           <Icon fontSize="large" />
         </StyledAvatar>
-        <Typography
-          color="text.secondary"
-          textAlign="center"
-          variant="caption"
-        >
+        <Typography color="text.secondary" textAlign="center" variant="caption">
           {config.subtitle}
         </Typography>
         <TextField
