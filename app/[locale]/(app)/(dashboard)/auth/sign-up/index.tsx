@@ -301,7 +301,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           : [rest.lastName, rest.firstName]
         )
           .filter(Boolean)
-          .join(" "),
+          .join(locale === "en" ? " " : ""),
         // phoneNumber,
         fetchOptions: {
           headers: {
