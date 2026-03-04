@@ -32,15 +32,13 @@ import {
   CardHeader,
   Chip,
   Grid,
-  LinearProgress,
-  Skeleton,
   Stack,
   Switch,
   Typography,
 } from "@mui/material";
 import { useColorScheme } from "@mui/material/styles";
 
-import { authClient } from "@/lib/auth-client";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -96,16 +94,16 @@ interface MyAccountProps {
 }
 
 const MyAccount = ({ currentURL }: MyAccountProps) => {
-  const { handleLogout, isMutatingLogout } = useLogout();
+  const { session } = useAuthStore((state) => state);
 
-  const { data, isPending } = authClient.useSession();
+  const { handleLogout, isMutatingLogout } = useLogout();
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
   });
 
   const verifyEmailHref = getHref("/auth/verify-email", {
-    [query.email]: data?.user?.email,
+    [query.email]: session?.user.email,
     [query.redirectTo]: currentURL,
   });
 
@@ -154,48 +152,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
     />
   );
 
-  if (isPending) {
-    return (
-      <Stack gap={3}>
-        <LinearProgress />
-        <Card>
-          <CardContent>
-            <Stack gap={2}>
-              <Skeleton height={24} width="45%" />
-              <Skeleton height={16} width="65%" />
-              <Skeleton height={56} width="100%" />
-            </Stack>
-          </CardContent>
-        </Card>
-        <Grid columnSpacing={2} container rowSpacing={2}>
-          <Grid size={{ xs: 12, md: 7 }}>
-            <Card>
-              <CardContent>
-                <Stack gap={2}>
-                  <Skeleton height={20} width="40%" />
-                  <Skeleton height={56} width="100%" />
-                  <Skeleton height={56} width="100%" />
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-          <Grid size={{ xs: 12, md: 5 }}>
-            <Card>
-              <CardContent>
-                <Stack gap={2}>
-                  <Skeleton height={20} width="55%" />
-                  <Skeleton height={44} width="100%" />
-                  <Skeleton height={44} width="100%" />
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-      </Stack>
-    );
-  }
-
-  if (!data?.user) {
+  if (!session?.user) {
     return (
       <Card>
         <CardHeader title={tAccount("myAccount.title")} />
@@ -216,7 +173,7 @@ const MyAccount = ({ currentURL }: MyAccountProps) => {
     );
   }
 
-  const user = data.user;
+  const user = session.user;
 
   const memberSince = formatDate(user.createdAt);
   const updatedAt = formatDate(user.updatedAt);

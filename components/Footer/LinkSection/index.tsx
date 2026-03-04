@@ -6,10 +6,10 @@ import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
-import { authClient } from "@/lib/auth-client";
-
-import { Grid, Link, Skeleton, Stack, Typography } from "@mui/material";
+import { Grid, Link, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 
@@ -22,25 +22,8 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   alignItems: "flex-start",
 }));
 
-const SectionSkeleton = () => (
-  <Stack gap={1} width="100%">
-    <Typography variant="subtitle2">
-      <Skeleton width="50%" />
-    </Typography>
-    <Typography variant="body2">
-      <Skeleton width="70%" />
-    </Typography>
-    <Typography variant="body2">
-      <Skeleton width="90%" />
-    </Typography>
-    <Typography variant="body2">
-      <Skeleton width="80%" />
-    </Typography>
-  </Stack>
-);
-
 const useFooterItems = (): MenuItem[] => {
-  const { data, isPending } = authClient.useSession();
+  const { session } = useAuthStore((state) => state);
 
   const tAuth = useTranslations("auth");
   const tAccount = useTranslations("account");
@@ -66,21 +49,19 @@ const useFooterItems = (): MenuItem[] => {
       label: tOrder("label"),
       to: "/order",
     },
-    isPending
-      ? { slot: () => <SectionSkeleton /> }
-      : {
-          ...(data
-            ? {
-                children: accountChildren,
-                label: tAccount("label"),
-                to: "/account",
-              }
-            : {
-                children: authChildren,
-                label: tAuth("label"),
-                to: "/auth",
-              }),
-        },
+    {
+      ...(session
+        ? {
+            children: accountChildren,
+            label: tAccount("label"),
+            to: "/account",
+          }
+        : {
+            children: authChildren,
+            label: tAuth("label"),
+            to: "/auth",
+          }),
+    },
     {
       children: [
         {

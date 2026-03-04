@@ -29,13 +29,12 @@ import {
   Divider,
   Grid,
   LinearProgress,
-  Skeleton,
   Stack,
   Switch,
   Typography,
 } from "@mui/material";
 
-import { authClient } from "@/lib/auth-client";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
@@ -101,7 +100,7 @@ interface AccountProfileProps {
 const AccountProfile = ({ currentURL }: AccountProfileProps) => {
   const [preferences, setPreferences] = useState(preferenceDefaults);
 
-  const { data, isPending } = authClient.useSession();
+  const { session } = useAuthStore((state) => state);
 
   const signInHref = getHref("/auth/sign-in", {
     [query.redirectTo]: currentURL,
@@ -115,8 +114,9 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
 
   const name = useMemo(
     () =>
-      getDisplayName(locale, data?.user) || tAccount("profile.placeholderName"),
-    [tAccount, locale, data?.user],
+      getDisplayName(locale, session?.user) ||
+      tAccount("profile.placeholderName"),
+    [tAccount, locale, session?.user],
   );
 
   const initial = name.charAt(0).toUpperCase();
@@ -133,20 +133,20 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
     [locale],
   );
 
-  const memberSince = formatDate(data?.user?.createdAt);
-  const updatedAt = formatDate(data?.user?.updatedAt);
+  const memberSince = formatDate(session?.user?.createdAt);
+  const updatedAt = formatDate(session?.user?.updatedAt);
 
   const completion = (() => {
-    if (!data?.user) return 0;
+    if (!session?.user) return 0;
 
     const points = [
-      data.user.firstName,
-      data.user.lastName,
-      data.user.email,
-      // data.user.phoneNumber,
-      data.user.image,
-      data.user.emailVerified,
-      // data.user.phoneNumberVerified,
+      session.user.firstName,
+      session.user.lastName,
+      session.user.email,
+      // session.user.phoneNumber,
+      session.user.image,
+      session.user.emailVerified,
+      // session.user.phoneNumberVerified,
     ];
 
     const score = points.filter(Boolean).length;
@@ -206,25 +206,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
     </Stack>
   );
 
-  if (isPending) {
-    return (
-      <Stack gap={3}>
-        <LinearProgress />
-        <Card>
-          <CardContent>
-            <Stack gap={2}>
-              <Skeleton height={24} width="50%" />
-              <Skeleton height={32} width="70%" />
-              <Skeleton height={12} width="40%" />
-              <Skeleton height={56} width="100%" />
-            </Stack>
-          </CardContent>
-        </Card>
-      </Stack>
-    );
-  }
-
-  if (!data?.user) {
+  if (!session?.user) {
     return (
       <Card>
         <CardHeader title={tAccount("accountMenu.profile")} />
@@ -245,7 +227,7 @@ const AccountProfile = ({ currentURL }: AccountProfileProps) => {
     );
   }
 
-  const user = data.user;
+  const user = session!.user;
 
   return (
     <Stack gap={3}>

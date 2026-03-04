@@ -10,15 +10,18 @@ import { useRouter } from "@/i18n/navigation";
 
 import { CircularProgress, Stack, Typography } from "@mui/material";
 
-import { authClient } from "@/lib/auth-client";
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { getHref } from "@/utils/href";
 
 const AuthCallback = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { data, isPending } = authClient.useSession();
+  const session = useAuthStore((state) => state.session);
+
   const hasHandledCallback = useRef(false);
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     if (hasHandledCallback.current) return;
@@ -41,9 +44,7 @@ const AuthCallback = () => {
       return;
     }
 
-    if (isPending) return;
-
-    if (data?.user) {
+    if (session?.user) {
       enqueueSnackbar("Successfully signed in with Google!", {
         variant: "success",
       });
@@ -59,7 +60,7 @@ const AuthCallback = () => {
     }
 
     hasHandledCallback.current = true;
-  }, [isPending, data, searchParams, router]);
+  }, [session, searchParams, router]);
 
   return (
     <Stack
