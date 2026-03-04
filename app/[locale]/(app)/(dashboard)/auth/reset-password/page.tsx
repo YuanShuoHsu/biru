@@ -8,6 +8,7 @@ import type { Locale } from "@/i18n/routing";
 interface AuthResetPasswordPageProps {
   params: Promise<{ locale: Locale }>;
   searchParams: Promise<{
+    email?: string;
     error?: string;
     redirectTo?: string;
     token?: string;
@@ -18,22 +19,29 @@ const AuthResetPasswordPage = async ({
   params,
   searchParams,
 }: AuthResetPasswordPageProps) => {
-  const [{ locale }, { error, redirectTo, token }] = await Promise.all([
+  const [{ locale }, { email, error, redirectTo, token }] = await Promise.all([
     params,
     searchParams,
   ]);
 
   setRequestLocale(locale);
 
-  const safeToken = typeof token === "string" ? token : "";
+  const safeEmail = typeof email === "string" ? email : "";
   const safeRedirectTo =
     typeof redirectTo === "string" && redirectTo.startsWith("/")
       ? redirectTo
       : undefined;
+  const safeToken = typeof token === "string" ? token : "";
 
   if (error || !safeToken) notFound();
 
-  return <AuthResetPassword redirectTo={safeRedirectTo} token={safeToken} />;
+  return (
+    <AuthResetPassword
+      email={safeEmail}
+      redirectTo={safeRedirectTo}
+      token={safeToken}
+    />
+  );
 };
 
 export default AuthResetPasswordPage;

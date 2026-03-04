@@ -6,7 +6,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
-import { type BaseSyntheticEvent, useCallback, useState } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import * as z from "zod";
 
@@ -24,11 +24,13 @@ import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
   CheckCircleOutline,
+  LockReset,
   RadioButtonUnchecked,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
 import {
+  Avatar,
   Button,
   CardActions,
   CardContent,
@@ -44,7 +46,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
 import { getHref } from "@/utils/href";
 
@@ -56,8 +58,20 @@ const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: theme.spacing(2),
 }));
+
+const StyledAvatar = styled(Avatar)(({ theme }) => {
+  const mainColor = theme.palette.primary.main;
+
+  return {
+    width: theme.spacing(7),
+    height: theme.spacing(7),
+    backgroundColor: alpha(mainColor, 0.2),
+    color: mainColor,
+  };
+});
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -75,11 +89,16 @@ interface PasswordRule {
 }
 
 interface AuthResetPasswordProps {
+  email: string;
   redirectTo?: string;
   token: string;
 }
 
-const AuthResetPassword = ({ redirectTo, token }: AuthResetPasswordProps) => {
+const AuthResetPassword = ({
+  email,
+  redirectTo,
+  token,
+}: AuthResetPasswordProps) => {
   const [showPassword, setShowPassword] = useState<
     Record<"newPassword" | "confirmNewPassword", boolean>
   >({
@@ -191,12 +210,16 @@ const AuthResetPassword = ({ redirectTo, token }: AuthResetPasswordProps) => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const onSubmitHandler = useCallback(
-    async ({ newPassword }: ResetPasswordFormData) => {
+  const onSubmit = handleSubmit(
+    async ({
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      confirmNewPassword: _,
+      ...data
+    }: ResetPasswordFormData) => {
       if (!token) return;
 
       const { error } = await authClient.resetPassword({
-        newPassword,
+        ...data,
         token,
         fetchOptions: {
           headers: {
@@ -217,11 +240,7 @@ const AuthResetPassword = ({ redirectTo, token }: AuthResetPasswordProps) => {
         getHref("/auth/sign-in", { [query.redirectTo]: redirectTo }),
       );
     },
-    [locale, redirectTo, router, tAuth, token],
   );
-
-  const onSubmit = (event: BaseSyntheticEvent) =>
-    handleSubmit(onSubmitHandler)(event);
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>
@@ -238,6 +257,19 @@ const AuthResetPassword = ({ redirectTo, token }: AuthResetPasswordProps) => {
         }
       />
       <StyledCardContent>
+        <StyledAvatar>
+          <LockReset fontSize="large" />
+        </StyledAvatar>
+        <Stack alignItems="center" spacing={1}>
+          <Typography textAlign="center">{email}</Typography>
+          <Typography
+            color="text.secondary"
+            textAlign="center"
+            variant="caption"
+          >
+            {tAuth("resetPassword.subtitle")}
+          </Typography>
+        </Stack>
         <TextField
           autoComplete="new-password"
           error={isPasswordError}

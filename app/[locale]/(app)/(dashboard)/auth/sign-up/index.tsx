@@ -11,7 +11,6 @@ import { enqueueSnackbar } from "notistack";
 import {
   type BaseSyntheticEvent,
   type ReactNode,
-  useCallback,
   useRef,
   useState,
 } from "react";
@@ -277,60 +276,57 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
     event.preventDefault();
 
-  const onSubmitHandler = useCallback(
-    async ({
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      confirmPassword: _,
-      // country: { code },
+  const onSubmitHandler = async ({
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    confirmPassword: _,
+    // country: { code },
+    // phoneNumber,
+    ...rest
+  }: SignupFormData) => {
+    const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
+
+    // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
+
+    const { error } = await authClient.signUp.email({
+      ...rest,
+      // birthDate,
+      callbackURL: redirectTo,
+      // gender,
+      image,
+      lang: locale,
+      name: (locale === LocaleEnum.En
+        ? [rest.firstName, rest.lastName]
+        : [rest.lastName, rest.firstName]
+      )
+        .filter(Boolean)
+        .join(locale === LocaleEnum.En ? " " : ""),
       // phoneNumber,
-      ...rest
-    }: SignupFormData) => {
-      const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
-
-      // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
-
-      const { error } = await authClient.signUp.email({
-        ...rest,
-        // birthDate,
-        callbackURL: redirectTo,
-        // gender,
-        image,
-        lang: locale,
-        name: (locale === LocaleEnum.En
-          ? [rest.firstName, rest.lastName]
-          : [rest.lastName, rest.firstName]
-        )
-          .filter(Boolean)
-          .join(locale === LocaleEnum.En ? " " : ""),
-        // phoneNumber,
-        fetchOptions: {
-          headers: {
-            "Accept-Language": locale,
-          },
+      fetchOptions: {
+        headers: {
+          "Accept-Language": locale,
         },
-      });
+      },
+    });
 
-      if (error?.code) {
-        const message = getErrorMessage(error.code, locale);
-        enqueueSnackbar(message, { variant: "error" });
+    if (error?.code) {
+      const message = getErrorMessage(error.code, locale);
+      enqueueSnackbar(message, { variant: "error" });
 
-        return;
-      }
+      return;
+    }
 
-      startCountdown("verify-email");
+    startCountdown("verify-email");
 
-      const verifyEmailHref = {
-        pathname: "/auth/verify-email",
-        query: {
-          [query.email]: rest.email,
-          [query.redirectTo]: redirectTo,
-        },
-      };
+    const verifyEmailHref = {
+      pathname: "/auth/verify-email",
+      query: {
+        [query.email]: rest.email,
+        [query.redirectTo]: redirectTo,
+      },
+    };
 
-      router.push(verifyEmailHref);
-    },
-    [locale, redirectTo, router, startCountdown],
-  );
+    router.push(verifyEmailHref);
+  };
 
   const onSubmit = (event: BaseSyntheticEvent) =>
     handleSubmit(onSubmitHandler)(event);

@@ -6,7 +6,6 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
-import { type BaseSyntheticEvent, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
@@ -44,6 +43,7 @@ const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: theme.spacing(2),
 }));
 
@@ -86,31 +86,25 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
     [query.redirectTo]: redirectTo,
   });
 
-  const onSubmitHandler = useCallback(
-    async ({ email }: ForgotPasswordFormData) => {
-      const { error } = await authClient.requestPasswordReset({
-        email,
-        redirectTo,
-        fetchOptions: {
-          headers: { "Accept-Language": locale },
-        },
+  const onSubmit = handleSubmit(async (data: ForgotPasswordFormData) => {
+    const { error } = await authClient.requestPasswordReset({
+      ...data,
+      redirectTo,
+      fetchOptions: {
+        headers: { "Accept-Language": locale },
+      },
+    });
+
+    if (error?.code) {
+      enqueueSnackbar(getErrorMessage(error.code, locale), {
+        variant: "error",
       });
 
-      if (error?.code) {
-        enqueueSnackbar(getErrorMessage(error.code, locale), {
-          variant: "error",
-        });
+      return;
+    }
 
-        return;
-      }
-
-      startCountdown("forgot-password");
-    },
-    [locale, redirectTo, startCountdown],
-  );
-
-  const onSubmit = (event: BaseSyntheticEvent) =>
-    handleSubmit(onSubmitHandler)(event);
+    startCountdown("forgot-password");
+  });
 
   return (
     <FormCard component="form" onSubmit={onSubmit}>

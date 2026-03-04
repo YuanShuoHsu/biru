@@ -124,7 +124,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
       onChange(checked);
     };
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data: SigninFormData) => {
     const { error } = await authClient.signIn.email({
       ...data,
       callbackURL: redirectTo,
