@@ -1,6 +1,5 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import { useRef } from "react";
 
 import CardDialogContent, {
@@ -26,7 +25,6 @@ import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { Option } from "@/types/menu";
-import type { RouteParams } from "@/types/routeParams";
 import { ViewDirection, ViewDirections } from "@/types/view";
 
 const StyledCard = styled(Card)({
@@ -137,7 +135,7 @@ const ActionAreaCard = ({
 }: ActionAreaCardProps) => {
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
-  const { locale } = useParams<RouteParams>();
+  const locale = useLocale();
 
   const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);

@@ -22,12 +22,10 @@ interface CustomizedBadgesProps extends BadgeProps {
   children: React.ReactNode;
 }
 
-const CustomizedBadges = ({ children, ...rest }: CustomizedBadgesProps) => {
-  return (
-    <StyledBadge color="secondary" {...rest}>
-      {children}
-    </StyledBadge>
-  );
-};
+const CustomizedBadges = ({ children, ...rest }: CustomizedBadgesProps) => (
+  <StyledBadge color="secondary" {...rest}>
+    {children}
+  </StyledBadge>
+);
 
 export default CustomizedBadges;

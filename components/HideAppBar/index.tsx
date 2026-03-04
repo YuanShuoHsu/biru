@@ -1,6 +1,6 @@
-"use client";
-
 // https://mui.com/material-ui/react-app-bar/#system-HideAppBar.tsx
+
+"use client";
 
 import { Suspense } from "react";
 

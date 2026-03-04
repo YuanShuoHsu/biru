@@ -1,7 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import useSWR from "swr";
 
 import { useRouter } from "@/i18n/navigation";
@@ -9,7 +8,6 @@ import { useRouter } from "@/i18n/navigation";
 import { MenuItem, TextField } from "@mui/material";
 
 import type { OrderMode } from "@/types/orderMode";
-import type { RouteParams } from "@/types/routeParams";
 import type { Store, StoreSlug } from "@/types/stores";
 
 interface OrderModePickupStoreSlugSelectProps {
@@ -21,7 +19,7 @@ const OrderModePickupStoreSlugSelect = ({
   mode,
   storeSlug,
 }: OrderModePickupStoreSlugSelectProps) => {
-  const { locale } = useParams<RouteParams>();
+  const locale = useLocale();
 
   const router = useRouter();
 

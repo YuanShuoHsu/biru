@@ -1,6 +1,5 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 import React, { useEffect, useImperativeHandle, useState } from "react";
 
 import { MAX_QUANTITY } from "@/constants/cart";
@@ -25,7 +24,6 @@ import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import type { Menu, Option } from "@/types/menu";
-import type { RouteParams } from "@/types/routeParams";
 
 import { getLimitingChoicesCap } from "@/utils/menu";
 
@@ -103,7 +101,7 @@ const CardDialogContent = React.forwardRef<
   const [choices, setChoices] =
     useState<Record<string, string[]>>(initialChoices);
 
-  const { locale } = useParams<RouteParams>();
+  const locale = useLocale();
 
   const tCommon = useTranslations("common");
   const tDialog = useTranslations("dialog");

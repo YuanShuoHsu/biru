@@ -2,8 +2,9 @@
 // https://mui.com/material-ui/react-app-bar/#system-MenuAppBar.tsx
 // https://mui.com/material-ui/react-app-bar/#system-ResponsiveAppBar.tsx
 
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import { locales } from "@/constants/locale";
@@ -36,8 +37,9 @@ const LanguageMenu = () => {
   );
   const open = Boolean(anchorElLanguage);
 
-  const { locale: currentLang } = useParams();
   const href = useHref();
+
+  const currentLocale = useLocale();
 
   const tAppBar = useTranslations("appBar");
 
@@ -84,7 +86,7 @@ const LanguageMenu = () => {
             locale={locale}
             onClick={handleClose}
             replace
-            selected={locale === currentLang}
+            selected={locale === currentLocale}
           >
             {label}
           </MenuItem>

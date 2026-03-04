@@ -1,4 +1,4 @@
-import { useParams } from "next/navigation";
+import { useLocale } from "next-intl";
 
 import ActionAreaCard from "./ActionAreaCard";
 
@@ -7,7 +7,6 @@ import { Grid } from "@mui/material";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { MenuItem } from "@/types/menu";
-import type { RouteParams } from "@/types/routeParams";
 import { ViewGridSizes } from "@/types/view";
 
 interface ResponsiveGridProps {
@@ -21,7 +20,7 @@ const ResponsiveGrid = ({
   showLatest,
   showTopSold,
 }: ResponsiveGridProps) => {
-  const { locale } = useParams<RouteParams>();
+  const locale = useLocale();
 
   const { view } = useViewStore((state) => state);
   const viewGridSizes = ViewGridSizes[view];

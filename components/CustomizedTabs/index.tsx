@@ -4,8 +4,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
@@ -29,8 +28,6 @@ import { styled } from "@mui/material/styles";
 
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
-
-import type { RouteParams } from "@/types/routeParams";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -71,18 +68,18 @@ const a11yProps = (index: number) => ({
 });
 
 const CustomizedTabs = () => {
-  const tOrder = useTranslations("order");
+  const locale = useLocale();
+
+  const { menus } = useMenuStore((state) => state);
 
   const { orderSearchText } = useOrderSearchStore((state) => state);
   const searchText = orderSearchText.trim().toLowerCase();
 
-  const { menus } = useMenuStore((state) => state);
-
-  const { locale } = useParams<RouteParams>();
-
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
+
+  const tOrder = useTranslations("order");
 
   const categoryGroups = menus
     .map(({ id, name, items }) => ({

@@ -12,7 +12,10 @@
       "Bash(node:*)",
       "Bash(pnpm add:*)",
       "Bash(pnpm build:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:www.answeroverflow.com)",
+      "WebFetch(domain:www.better-auth.com)"
     ]
   }
 }

@@ -1,6 +1,5 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useParams } from "next/navigation";
 
 import CartItemSoldOut from "./CartItemSoldOut";
 
@@ -24,8 +23,6 @@ import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import { type CartItem } from "@/stores/cart-store";
-
-import type { RouteParams } from "@/types/routeParams";
 
 import {
   getChoiceNames,
@@ -79,7 +76,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const { menus } = useMenuStore((state) => state);
 
-  const { locale } = useParams<RouteParams>();
+  const locale = useLocale();
 
   const itemName = getItemName(menus, id, locale);
   const choiceNames = getChoiceNames(menus, id, choices, locale, {

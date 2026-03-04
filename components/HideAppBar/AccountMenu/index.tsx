@@ -3,8 +3,10 @@
 // https://mui.com/material-ui/react-menu/#AccountMenu.tsx
 // https://mui.com/material-ui/react-tooltip/#DisabledTooltips.tsx
 
-import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+"use client";
+
+import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useState, type MouseEvent } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
@@ -31,7 +33,6 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
-import { RouteParams } from "@/types/routeParams";
 
 import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 import { getDisplayName } from "@/utils/auth";
@@ -46,7 +47,7 @@ const StyledAvatar = styled(Avatar, {
     ? theme.vars.palette.background.paper
     : "transparent",
   color: isSignedIn ? theme.vars.palette.primary.main : "inherit",
-  transition: theme.transitions.create(["color", "background-color"]),
+  transition: theme.transitions.create(["background-color", "color"]),
 
   ...(isSignedIn && {
     [theme.getColorSchemeSelector("dark")]: {
@@ -83,9 +84,9 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { data, isPending } = authClient.useSession();
+  const locale = useLocale();
 
-  const { locale } = useParams<RouteParams>();
+  const { data, isPending } = authClient.useSession();
 
   const displayName = getDisplayName(locale, data?.user);
   const avatarChild = !data ? <AccountCircle /> : displayName[0];

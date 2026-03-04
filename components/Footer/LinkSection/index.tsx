@@ -6,10 +6,10 @@ import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
+import { authClient } from "@/lib/auth-client";
+
 import { Grid, Link, Skeleton, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-import { authClient } from "@/lib/auth-client";
 
 import type { MenuItem } from "@/types/menuItem";
 
@@ -42,10 +42,10 @@ const SectionSkeleton = () => (
 const useFooterItems = (): MenuItem[] => {
   const { data, isPending } = authClient.useSession();
 
-  const tOrder = useTranslations("order");
   const tAuth = useTranslations("auth");
   const tAccount = useTranslations("account");
   const tCompany = useTranslations("company");
+  const tOrder = useTranslations("order");
 
   const authChildren = useAuthMenuItems();
 
