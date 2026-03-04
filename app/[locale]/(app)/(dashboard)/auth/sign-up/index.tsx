@@ -29,6 +29,8 @@ import UploadAvatars, {
 import { LegalLinkType } from "@/constants/legal";
 import { query } from "@/constants/query";
 
+import { LocaleEnum } from "@/enums/Locale";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRouter } from "@/i18n/navigation";
@@ -151,8 +153,6 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   const uploadAvatarsRef = useRef<UploadAvatarsHandle>(null);
 
   const router = useRouter();
-
-  const langNameDirection = locale === "en" ? "row-reverse" : "row";
 
   // const genderOptions = GENDER_VALUES.map((value) => ({
   //   label: tAuth("gender.options")[GENDER_LABELS[value]],
@@ -296,12 +296,12 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         // gender,
         image,
         lang: locale,
-        name: (locale === "en"
+        name: (locale === LocaleEnum.En
           ? [rest.firstName, rest.lastName]
           : [rest.lastName, rest.firstName]
         )
           .filter(Boolean)
-          .join(locale === "en" ? " " : ""),
+          .join(locale === LocaleEnum.En ? " " : ""),
         // phoneNumber,
         fetchOptions: {
           headers: {
@@ -353,7 +353,11 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         <GoogleButton action="signUp" locale={locale} redirectTo={redirectTo} />
         <Divider flexItem>{tAuth("or")}</Divider>
         <UploadAvatars ref={uploadAvatarsRef} />
-        <Stack width="100%" direction={langNameDirection} spacing={2}>
+        <Stack
+          width="100%"
+          direction={locale === LocaleEnum.En ? "row-reverse" : "row"}
+          spacing={2}
+        >
           <TextField
             autoComplete="family-name"
             error={!!errors.lastName}
