@@ -1,17 +1,30 @@
 import { NextIntlClientProvider } from "next-intl";
-import { SWRConfiguration } from "swr";
+import { headers } from "next/headers";
 
 import AppClientProviders from "./AppClientProviders";
 
+import { authClient } from "@/lib/auth-client";
+
+import { getStores } from "@/utils/stores";
+
 interface AppProvidersProps {
   children: React.ReactNode;
-  fallback: SWRConfiguration["fallback"];
 }
 
-const AppProviders = ({ children, fallback }: AppProvidersProps) => (
-  <NextIntlClientProvider>
-    <AppClientProviders fallback={fallback}>{children}</AppClientProviders>
-  </NextIntlClientProvider>
-);
+const AppProviders = async ({ children }: AppProvidersProps) => {
+  const [stores, { data: initialSession }] = await Promise.all([
+    getStores(),
+    authClient.getSession({ fetchOptions: { headers: await headers() } }),
+  ]);
+  const fallback = { "/api/stores": stores };
+
+  return (
+    <NextIntlClientProvider>
+      <AppClientProviders fallback={fallback} initialSession={initialSession}>
+        {children}
+      </AppClientProviders>
+    </NextIntlClientProvider>
+  );
+};
 
 export default AppProviders;

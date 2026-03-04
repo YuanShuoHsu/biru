@@ -4,8 +4,12 @@ import { useState } from "react";
 
 import { authClient } from "@/lib/auth-client";
 
+import { useAuthStore } from "@/providers/auth-store-provider";
+
 export const useLogout = () => {
   const [isMutatingLogout, setIsMutatingLogout] = useState(false);
+
+  const { setSession } = useAuthStore((state) => state);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -16,6 +20,7 @@ export const useLogout = () => {
 
     await authClient.signOut();
 
+    setSession(null);
     enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
     setIsMutatingLogout(false);
   };

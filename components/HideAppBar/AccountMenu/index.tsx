@@ -17,8 +17,6 @@ import { useLogoutMenuItem } from "@/hooks/useAuth";
 
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 
-import { authClient } from "@/lib/auth-client";
-
 import { AccountCircle } from "@mui/icons-material";
 import {
   Avatar,
@@ -31,6 +29,8 @@ import {
   Tooltip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 
@@ -84,16 +84,16 @@ const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
+  const { session } = useAuthStore((state) => state);
+
   const locale = useLocale();
 
-  const { data, isPending } = authClient.useSession();
-
-  const displayName = getDisplayName(locale, data?.user);
-  const avatarChild = !data ? <AccountCircle /> : displayName[0];
+  const displayName = getDisplayName(locale, session?.user);
+  const avatarChild = !session ? <AccountCircle /> : displayName[0];
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
-  const tooltipTitle = data
+  const tooltipTitle = session
     ? tAccount("accountSettings.label")
     : tAuth("signIn.label");
 
@@ -117,9 +117,7 @@ const AccountMenu = () => {
   });
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    if (isPending) return;
-
-    if (!data) {
+    if (!session) {
       router.push(signInRedirectHref);
 
       return;
@@ -170,14 +168,13 @@ const AccountMenu = () => {
             aria-haspopup="true"
             aria-label="account of current user"
             color="inherit"
-            disabled={isPending}
             onClick={handleClick}
           >
-            <BadgeAvatars invisible={!data} variant="dot">
+            <BadgeAvatars invisible={!session} variant="dot">
               <StyledAvatar
                 alt={displayName}
-                isSignedIn={!!data}
-                src={data?.user.image || undefined}
+                isSignedIn={!!session}
+                src={session?.user.image || undefined}
               >
                 {avatarChild}
               </StyledAvatar>

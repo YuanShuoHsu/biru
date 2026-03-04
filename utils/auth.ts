@@ -1,26 +1,21 @@
 import { LocaleEnum } from "@/enums/Locale";
 
-import { Locale } from "@/i18n/routing";
+import type { Locale } from "@/i18n/routing";
 
-interface DisplayProfile {
-  firstName?: string | null;
-  lastName?: string | null;
-  email?: string | null;
-}
+import type { Session } from "@/stores/auth-store";
 
 export const getDisplayName = (
   locale: Locale,
-  profile?: DisplayProfile | null,
+  user?: Session["user"] | null,
 ) => {
-  if (!profile) return "";
+  if (!user) return "";
 
-  const showFamilyNameFirst = locale !== LocaleEnum.En;
-
-  const nameParts = showFamilyNameFirst
-    ? [profile.lastName, profile.firstName]
-    : [profile.firstName, profile.lastName];
+  const nameParts =
+    locale !== LocaleEnum.En
+      ? [user.lastName, user.firstName]
+      : [user.firstName, user.lastName];
 
   const name = nameParts.filter(Boolean).join(" ");
 
-  return name || profile.email || "";
+  return name || user.email || "";
 };

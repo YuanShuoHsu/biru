@@ -15,8 +15,6 @@ import { routing } from "@/i18n/routing";
 
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
-import { getStores } from "@/utils/stores";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -42,16 +40,13 @@ const RootLayout = async ({ children, params }: LayoutProps<"/[locale]">) => {
 
   setRequestLocale(locale);
 
-  const stores = await getStores();
-  const fallback = { "/api/stores": stores };
-
   return (
     <html data-scroll-behavior="smooth" lang={locale} suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <InitColorSchemeScript attribute="class" />
-        <AppProviders fallback={fallback}>{children}</AppProviders>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );

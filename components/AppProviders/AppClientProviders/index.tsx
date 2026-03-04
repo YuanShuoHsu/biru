@@ -11,6 +11,7 @@ import { Close } from "@mui/icons-material";
 import { CssBaseline, IconButton } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v15-appRouter";
 
+import { AuthStoreProvider } from "@/providers/auth-store-provider";
 import { CartStoreProvider } from "@/providers/cart-store-provider";
 import { CountdownStoreProvider } from "@/providers/countdown-store-provider";
 import { DialogStoreProvider } from "@/providers/dialog-store-provider";
@@ -19,14 +20,18 @@ import { OrderSearchStoreProvider } from "@/providers/order-search-store-provide
 import SWRProvider from "@/providers/SWRProvider";
 import { ViewStoreProvider } from "@/providers/view-store-provider";
 
+import type { Session } from "@/stores/auth-store";
+
 interface AppClientProvidersProps {
   children: React.ReactNode;
   fallback: SWRConfiguration["fallback"];
+  initialSession: Session | null;
 }
 
 const AppClientProviders = ({
   children,
   fallback,
+  initialSession,
 }: AppClientProvidersProps) => (
   <AppRouterCacheProvider options={{ enableCssLayer: true }}>
     <LocaleProvider>
@@ -44,22 +49,25 @@ const AppClientProviders = ({
         )}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
         classes={{
-          containerAnchorOriginTopRight: "notistack-container-top-right-offset",
+          containerAnchorOriginTopRight:
+            "notistack-container-top-right-offset",
         }}
         maxSnack={3}
       >
         <SWRProvider fallback={fallback}>
-          <CartStoreProvider>
-            <CountdownStoreProvider>
-              <DialogStoreProvider>
-                <DrawerStoreProvider>
-                  <OrderSearchStoreProvider>
-                    <ViewStoreProvider>{children}</ViewStoreProvider>
-                  </OrderSearchStoreProvider>
-                </DrawerStoreProvider>
-              </DialogStoreProvider>
-            </CountdownStoreProvider>
-          </CartStoreProvider>
+          <AuthStoreProvider initialSession={initialSession}>
+            <CartStoreProvider>
+              <CountdownStoreProvider>
+                <DialogStoreProvider>
+                  <DrawerStoreProvider>
+                    <OrderSearchStoreProvider>
+                      <ViewStoreProvider>{children}</ViewStoreProvider>
+                    </OrderSearchStoreProvider>
+                  </DrawerStoreProvider>
+                </DialogStoreProvider>
+              </CountdownStoreProvider>
+            </CartStoreProvider>
+          </AuthStoreProvider>
         </SWRProvider>
       </SnackbarProvider>
     </LocaleProvider>
