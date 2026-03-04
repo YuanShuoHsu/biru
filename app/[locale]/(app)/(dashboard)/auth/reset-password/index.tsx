@@ -24,13 +24,11 @@ import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
   CheckCircleOutline,
-  LockReset,
   RadioButtonUnchecked,
   Visibility,
   VisibilityOff,
 } from "@mui/icons-material";
 import {
-  Avatar,
   Button,
   CardActions,
   CardContent,
@@ -46,7 +44,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 import { getHref } from "@/utils/href";
 
@@ -61,17 +59,6 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
 }));
-
-const StyledAvatar = styled(Avatar)(({ theme }) => {
-  const mainColor = theme.palette.primary.main;
-
-  return {
-    width: theme.spacing(7),
-    height: theme.spacing(7),
-    backgroundColor: alpha(mainColor, 0.2),
-    color: mainColor,
-  };
-});
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -118,11 +105,12 @@ const AuthResetPassword = ({
 
   const {
     control,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
     handleSubmit,
     register,
   } = useForm<ResetPasswordFormData>({
     defaultValues: {
+      email,
       newPassword: "",
       confirmNewPassword: "",
     },
@@ -213,6 +201,8 @@ const AuthResetPassword = ({
   const onSubmit = handleSubmit(
     async ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      email: __,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmNewPassword: _,
       ...data
     }: ResetPasswordFormData) => {
@@ -257,19 +247,18 @@ const AuthResetPassword = ({
         }
       />
       <StyledCardContent>
-        <StyledAvatar>
-          <LockReset fontSize="large" />
-        </StyledAvatar>
-        <Stack alignItems="center" spacing={1}>
-          <Typography textAlign="center">{email}</Typography>
-          <Typography
-            color="text.secondary"
-            textAlign="center"
-            variant="caption"
-          >
-            {tAuth("resetPassword.subtitle")}
-          </Typography>
-        </Stack>
+        <TextField
+          autoComplete="email"
+          error={!!errors.email}
+          fullWidth
+          helperText={errors.email?.message}
+          label={tAuth("email.label")}
+          placeholder={tAuth("email.placeholder")}
+          required
+          slotProps={{ input: { readOnly: true } }}
+          type="email"
+          {...register("email")}
+        />
         <TextField
           autoComplete="new-password"
           error={isPasswordError}

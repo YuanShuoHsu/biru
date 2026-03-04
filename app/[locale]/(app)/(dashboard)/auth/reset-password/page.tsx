@@ -33,7 +33,7 @@ const AuthResetPasswordPage = async ({
       : undefined;
   const safeToken = typeof token === "string" ? token : "";
 
-  if (error || !safeToken) notFound();
+  if (error || !safeEmail || !safeToken) notFound();
 
   return (
     <AuthResetPassword

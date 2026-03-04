@@ -6,6 +6,7 @@ export const useResetPasswordFormSchema = () => {
 
   return z
     .object({
+      email: z.string().optional(),
       newPassword: z
         .string()
         .min(8, { error: tValidation("password.minLength") })
