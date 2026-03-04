@@ -32,6 +32,7 @@ import {
 } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
+import { useAuthStore } from "@/providers/auth-store-provider";
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
@@ -92,15 +93,17 @@ const AuthVerifyEmail = ({
   redirectTo,
   token,
 }: AuthVerifyEmailProps) => {
-  const router = useRouter();
-
-  const { items, startCountdown } = useCountdownStore((state) => state);
-  const redirectCountdown = items["verify-email-redirect"];
-
   const [errorMessage, setErrorMessage] = useState("");
   const [status, setStatus] = useState<VerifyStatus>(
     token ? VERIFY_STATUS.VERIFYING : VERIFY_STATUS.DEFAULT,
   );
+
+  const { setSession } = useAuthStore((state) => state);
+
+  const { items, startCountdown } = useCountdownStore((state) => state);
+  const redirectCountdown = items["verify-email-redirect"];
+
+  const router = useRouter();
 
   useEffect(() => {
     if (!token) return;
@@ -122,6 +125,9 @@ const AuthVerifyEmail = ({
         return;
       }
 
+      const { data } = await authClient.getSession();
+      setSession(data);
+
       setStatus(VERIFY_STATUS.VERIFIED);
       startCountdown("verify-email-redirect", 3, () => {
         router.replace(redirectTo || "/");
@@ -129,7 +135,7 @@ const AuthVerifyEmail = ({
     };
 
     verifyToken();
-  }, [locale, redirectTo, router, startCountdown, token]);
+  }, [locale, redirectTo, router, setSession, startCountdown, token]);
 
   const countdown = items["verify-email"];
   const isCountingDown = countdown > 0;
