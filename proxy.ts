@@ -5,6 +5,7 @@
 // https://next-intl.dev/docs/getting-started/app-router
 // https://next-intl.dev/docs/routing/middleware
 
+import { getSessionCookie } from "better-auth/cookies";
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
@@ -24,17 +25,17 @@ export const proxy = (request: NextRequest) => {
 
   const response = handleI18nRouting(request);
 
-  const hasAuthHint = request.cookies.get("biru-auth")?.value === "true";
+  const sessionCookie = getSessionCookie(request);
 
   const isAuthPage = pathname.includes("/auth");
   const isAccountPage = pathname.includes("/account");
 
-  if (hasAuthHint && isAuthPage)
+  if (sessionCookie && isAuthPage)
     return NextResponse.redirect(
       new URL(`/${locale}/account/my-account`, request.url),
     );
 
-  if (!hasAuthHint && isAccountPage)
+  if (!sessionCookie && isAccountPage)
     return NextResponse.redirect(
       new URL(`/${locale}/auth/sign-in`, request.url),
     );

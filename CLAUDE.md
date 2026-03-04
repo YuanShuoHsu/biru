@@ -76,8 +76,8 @@ All providers are composed in `app/[locale]/providers/` — server providers (`i
 ### Authentication
 
 - `lib/auth-client.ts` configures the better-auth client with custom user fields: `firstName`, `lastName`, `lang` (locale), `emailSubscribed`, `role`
-- Auth state is initialized via `hooks/useAuthInitializer.ts` on client mount
-- Access token stored in cookie `biru-auth`
+- Auth state is initialized server-side via `AuthStoreProvider` with `initialSession`
+- Session stored in cookie `better-auth.session_token` (managed by better-auth); checked in `proxy.ts` via `getSessionCookie`
 - `hooks/useAuth.ts` composes auth-related navigation menu items
 
 ### Key Utility Locations
