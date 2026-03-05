@@ -118,14 +118,10 @@ const AuthVerifyEmail = ({
     if (!token) return;
 
     const verifyToken = async () => {
-      const { error } = await authClient.verifyEmail({
-        query: { token },
-        fetchOptions: {
-          headers: {
-            "Accept-Language": locale,
-          },
-        },
-      });
+      const { error } = await authClient.verifyEmail(
+        { query: { token } },
+        { headers: { "Accept-Language": locale } },
+      );
 
       if (error?.code) {
         setVerifyState({
@@ -195,15 +191,10 @@ const AuthVerifyEmail = ({
   });
 
   const onSubmit = handleSubmit(async () => {
-    const { error } = await authClient.sendVerificationEmail({
-      callbackURL: redirectTo,
-      email,
-      fetchOptions: {
-        headers: {
-          "Accept-Language": locale,
-        },
-      },
-    });
+    const { error } = await authClient.sendVerificationEmail(
+      { callbackURL: redirectTo, email },
+      { headers: { "Accept-Language": locale } },
+    );
 
     if (error?.code) {
       const message = getErrorMessage(error.code, locale);

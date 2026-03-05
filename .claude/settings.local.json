@@ -21,7 +21,9 @@
       "mcp__better-auth__search-better-auth-docs",
       "Bash(claude mcp:*)",
       "Bash(pnpm lint:*)",
-      "WebFetch(domain:vercel.com)"
+      "WebFetch(domain:vercel.com)",
+      "WebFetch(domain:better-auth.com)",
+      "mcp__mui-mcp__useMuiDocs"
     ]
   }
 }

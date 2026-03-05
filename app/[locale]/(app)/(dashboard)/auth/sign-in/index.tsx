@@ -125,28 +125,18 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     };
 
   const onSubmit = handleSubmit(async (data: SigninFormData) => {
-    const { error } = await authClient.signIn.email({
-      ...data,
-      callbackURL: redirectTo,
-      fetchOptions: {
-        headers: {
-          "Accept-Language": locale,
-        },
-      },
-    });
+    const { error } = await authClient.signIn.email(
+      { ...data, callbackURL: redirectTo },
+      { headers: { "Accept-Language": locale } },
+    );
 
     if (error?.code) {
       if (error.code === "EMAIL_NOT_VERIFIED") {
         if (!items["verify-email"]) {
-          await authClient.sendVerificationEmail({
-            callbackURL: redirectTo,
-            email: data.email,
-            fetchOptions: {
-              headers: {
-                "Accept-Language": locale,
-              },
-            },
-          });
+          await authClient.sendVerificationEmail(
+            { callbackURL: redirectTo, email: data.email },
+            { headers: { "Accept-Language": locale } },
+          );
 
           startCountdown("verify-email");
         }

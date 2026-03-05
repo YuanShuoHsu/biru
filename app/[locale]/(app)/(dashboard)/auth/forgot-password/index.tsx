@@ -87,13 +87,10 @@ const AuthForgotPassword = ({ redirectTo }: AuthForgotPasswordProps) => {
   });
 
   const onSubmit = handleSubmit(async (data: ForgotPasswordFormData) => {
-    const { error } = await authClient.requestPasswordReset({
-      ...data,
-      redirectTo,
-      fetchOptions: {
-        headers: { "Accept-Language": locale },
-      },
-    });
+    const { error } = await authClient.requestPasswordReset(
+      { ...data, redirectTo },
+      { headers: { "Accept-Language": locale } },
+    );
 
     if (error?.code) {
       enqueueSnackbar(getErrorMessage(error.code, locale), {

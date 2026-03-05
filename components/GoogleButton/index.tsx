@@ -3,14 +3,14 @@
 // https://developers.google.com/identity/branding-guidelines?hl=zh-tw
 
 import { useTranslations } from "next-intl";
-
-import { query } from "@/constants/query";
+import { enqueueSnackbar } from "notistack";
+import { useState } from "react";
 
 import type { Locale } from "@/i18n/routing";
 
-import { Button } from "@mui/material";
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
-import { getHref } from "@/utils/href";
+import { Button } from "@mui/material";
 
 const GoogleIcon = () => (
   <svg
@@ -51,20 +51,40 @@ interface GoogleButtonProps {
 }
 
 const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const tAuth = useTranslations("auth");
 
   const label = tAuth(`google.${action}`);
 
-  const googleHref = getHref("/api/auth/google", {
-    [query.locale]: locale,
-    [query.redirectTo]: redirectTo,
-  });
+  const callbackURL = `${process.env.NEXT_PUBLIC_NEXT_URL}/${locale}${redirectTo || ""}`;
+
+  const handleClick = async () => {
+    await authClient.signIn.social(
+      { provider: "google", callbackURL },
+      {
+        onError: ({ error }) => {
+          enqueueSnackbar(getErrorMessage(error.code, locale), {
+            variant: "error",
+          });
+          setIsLoading(false);
+        },
+        onRequest: () => setIsLoading(true),
+        onSuccess: () => {
+          sessionStorage.setItem("oauth_snackbar", "google");
+        },
+      },
+    );
+  };
 
   return (
     <Button
       aria-label={label}
+      disabled={isLoading}
       fullWidth
-      href={googleHref}
+      loading={isLoading}
+      loadingPosition="start"
+      onClick={handleClick}
       size="large"
       startIcon={<GoogleIcon />}
       variant="outlined"

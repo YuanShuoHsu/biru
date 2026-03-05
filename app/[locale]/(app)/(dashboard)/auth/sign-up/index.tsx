@@ -287,26 +287,24 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
     // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
-    const { error } = await authClient.signUp.email({
-      ...rest,
-      // birthDate,
-      callbackURL: redirectTo,
-      // gender,
-      image,
-      lang: locale,
-      name: (locale === LocaleEnum.En
-        ? [rest.firstName, rest.lastName]
-        : [rest.lastName, rest.firstName]
-      )
-        .filter(Boolean)
-        .join(locale === LocaleEnum.En ? " " : ""),
-      // phoneNumber,
-      fetchOptions: {
-        headers: {
-          "Accept-Language": locale,
-        },
+    const { error } = await authClient.signUp.email(
+      {
+        ...rest,
+        // birthDate,
+        callbackURL: redirectTo,
+        // gender,
+        image,
+        lang: locale,
+        name: (locale === LocaleEnum.En
+          ? [rest.firstName, rest.lastName]
+          : [rest.lastName, rest.firstName]
+        )
+          .filter(Boolean)
+          .join(locale === LocaleEnum.En ? " " : ""),
+        // phoneNumber,
       },
-    });
+      { headers: { "Accept-Language": locale } },
+    );
 
     if (error?.code) {
       const message = getErrorMessage(error.code, locale);

@@ -208,15 +208,10 @@ const AuthResetPassword = ({
     }: ResetPasswordFormData) => {
       if (!token) return;
 
-      const { error } = await authClient.resetPassword({
-        ...data,
-        token,
-        fetchOptions: {
-          headers: {
-            "Accept-Language": locale,
-          },
-        },
-      });
+      const { error } = await authClient.resetPassword(
+        { ...data, token },
+        { headers: { "Accept-Language": locale } },
+      );
 
       if (error?.code) {
         const message = getErrorMessage(error.code, locale);
