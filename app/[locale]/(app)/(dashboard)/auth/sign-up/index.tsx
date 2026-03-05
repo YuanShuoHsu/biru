@@ -61,8 +61,11 @@ import { styled } from "@mui/material/styles";
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
-import { handleMouseDownPassword, handleMouseUpPassword } from "@/utils/password";
 import { getHref } from "@/utils/href";
+import {
+  handleMouseDownPassword,
+  handleMouseUpPassword,
+} from "@/utils/password";
 
 const StyledTypography = styled(Typography)({
   whiteSpace: "pre-line",
@@ -164,7 +167,6 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
   const handleClickShowPassword = (key: "password" | "confirmPassword") => () =>
     setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
-
 
   const onSubmitHandler = async ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
