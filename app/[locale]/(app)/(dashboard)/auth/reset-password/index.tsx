@@ -40,11 +40,11 @@ import {
   Typography,
 } from "@mui/material";
 
+import { getHref } from "@/utils/href";
 import {
   handleMouseDownPassword,
   handleMouseUpPassword,
 } from "@/utils/password";
-import { getHref } from "@/utils/href";
 
 interface AuthResetPasswordProps {
   email: string;
