@@ -46,6 +46,7 @@ import {
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
+import { handleMouseDownPassword, handleMouseUpPassword } from "@/utils/password";
 import { getHref } from "@/utils/href";
 
 interface AuthSignInProps {
@@ -90,11 +91,6 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => event.preventDefault();
-  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
-    event.preventDefault();
 
   const handleRememberMeChange =
     (onChange: (value: boolean) => void) =>

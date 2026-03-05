@@ -40,6 +40,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import { handleMouseDownPassword, handleMouseUpPassword } from "@/utils/password";
 import { getHref } from "@/utils/href";
 
 interface AuthResetPasswordProps {
@@ -103,12 +104,6 @@ const AuthResetPassword = ({
     (key: "newPassword" | "confirmNewPassword") => () =>
       setShowPassword((prev) => ({ ...prev, [key]: !prev[key] }));
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => event.preventDefault();
-
-  const handleMouseUpPassword = (event: React.MouseEvent<HTMLButtonElement>) =>
-    event.preventDefault();
 
   const onSubmit = handleSubmit(
     async ({
