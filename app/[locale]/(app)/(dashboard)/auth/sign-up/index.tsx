@@ -21,6 +21,7 @@ import { useSignupFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
+import PasswordRuleList from "@/components/PasswordRuleList";
 import UploadAvatars, {
   type UploadAvatarsHandle,
 } from "@/components/UploadAvatars";
@@ -32,17 +33,14 @@ import { LocaleEnum } from "@/enums/Locale";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { usePasswordValidation } from "@/hooks/usePasswordValidation";
+
 import { useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
-import {
-  CheckCircleOutline,
-  RadioButtonUnchecked,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   CardActions,
@@ -54,10 +52,6 @@ import {
   IconButton,
   InputAdornment,
   Link,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Stack,
   TextField,
   Typography,
@@ -95,12 +89,6 @@ const StyledTypography = styled(Typography)({
 
 // const today = dayjs();
 
-interface PasswordRule {
-  key: string;
-  passed: boolean;
-  label: string;
-}
-
 interface AuthSignUpProps {
   locale: Locale;
   redirectTo?: string;
@@ -123,7 +111,6 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   });
 
   const tAuth = useTranslations("auth");
-  const tValidation = useTranslations("validation");
 
   const signupFormSchema = useSignupFormSchema();
   type SignupFormData = z.infer<typeof signupFormSchema>;
@@ -164,87 +151,14 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
   });
   // const country = watch("country");
 
-  const hasPassword = password.length > 0;
-  const hasConfirmPassword = confirmPassword.length > 0;
-  const passwordsMatch =
-    hasPassword && hasConfirmPassword && password === confirmPassword;
-
-  const passwordRules: PasswordRule[] = [
-    {
-      key: "minLength",
-      passed: password.length >= 8,
-      label: tValidation("password.minLength"),
-    },
-    {
-      key: "letter",
-      passed: /[a-zA-Z]/.test(password),
-      label: tValidation("password.letter"),
-    },
-    {
-      key: "number",
-      passed: /\d/.test(password),
-      label: tValidation("password.number"),
-    },
-  ];
-
-  const isPasswordError =
-    hasPassword && passwordRules.some(({ passed }) => !passed);
-
-  const confirmPasswordRules: PasswordRule[] = [
-    {
-      key: "match",
-      passed: passwordsMatch,
-      label: tValidation("password.match"),
-    },
-  ];
-
-  const isConfirmPasswordError =
-    hasConfirmPassword && !confirmPasswordRules[0].passed;
-
-  const renderPasswordRules = (rules: PasswordRule[], hasValue: boolean) => (
-    <List dense disablePadding>
-      {rules.map(({ key, label, passed }) => {
-        const color = hasValue
-          ? passed
-            ? "primary.main"
-            : "error.main"
-          : "text.secondary";
-
-        return (
-          <ListItem disablePadding key={key}>
-            <ListItemIcon
-              sx={{
-                color,
-                minWidth: 28,
-              }}
-            >
-              {passed ? (
-                <CheckCircleOutline fontSize="small" />
-              ) : (
-                <RadioButtonUnchecked fontSize="small" />
-              )}
-            </ListItemIcon>
-            <ListItemText
-              primary={label}
-              slotProps={{
-                primary: {
-                  color,
-                  variant: "caption",
-                },
-              }}
-            />
-          </ListItem>
-        );
-      })}
-    </List>
-  );
-
-  const passwordHelperContent = renderPasswordRules(passwordRules, hasPassword);
-
-  const confirmPasswordHelperContent = renderPasswordRules(
+  const {
+    passwordRules,
     confirmPasswordRules,
+    isPasswordError,
+    isConfirmPasswordError,
+    hasPassword,
     hasConfirmPassword,
-  );
+  } = usePasswordValidation(password, confirmPassword);
 
   const renderLegalLink = (chunks: ReactNode, type: LegalLinkType) => {
     const legalHref = getHref(`/company/${type}`, {
@@ -451,7 +365,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           autoComplete="new-password"
           error={isPasswordError}
           fullWidth
-          helperText={passwordHelperContent}
+          helperText={<PasswordRuleList hasValue={hasPassword} rules={passwordRules} />}
           label={tAuth("password.label")}
           placeholder={tAuth("password.placeholder")}
           required
@@ -484,7 +398,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           autoComplete="new-password"
           error={isConfirmPasswordError}
           fullWidth
-          helperText={confirmPasswordHelperContent}
+          helperText={<PasswordRuleList hasValue={hasConfirmPassword} rules={confirmPasswordRules} />}
           label={tAuth("confirmPassword.label")}
           placeholder={tAuth("confirmPassword.placeholder")}
           required

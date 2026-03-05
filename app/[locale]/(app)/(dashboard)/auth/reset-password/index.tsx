@@ -13,21 +13,19 @@ import * as z from "zod";
 import { useResetPasswordFormSchema } from "./definitions";
 
 import FormCard from "@/components/FormCard";
+import PasswordRuleList from "@/components/PasswordRuleList";
 
 import { query } from "@/constants/query";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { usePasswordValidation } from "@/hooks/usePasswordValidation";
+
 import { useRouter } from "@/i18n/navigation";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
-import {
-  CheckCircleOutline,
-  RadioButtonUnchecked,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
   CardActions,
@@ -36,10 +34,6 @@ import {
   IconButton,
   InputAdornment,
   Link,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Stack,
   TextField,
   Typography,
@@ -69,12 +63,6 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-interface PasswordRule {
-  key: string;
-  passed: boolean;
-  label: string;
-}
-
 interface AuthResetPasswordProps {
   email: string;
   redirectTo?: string;
@@ -86,9 +74,7 @@ const AuthResetPassword = ({
   redirectTo,
   token,
 }: AuthResetPasswordProps) => {
-  const [showPassword, setShowPassword] = useState<
-    Record<"newPassword" | "confirmNewPassword", boolean>
-  >({
+  const [showPassword, setShowPassword] = useState({
     newPassword: false,
     confirmNewPassword: false,
   });
@@ -98,7 +84,6 @@ const AuthResetPassword = ({
   const router = useRouter();
 
   const tAuth = useTranslations("auth");
-  const tValidation = useTranslations("validation");
 
   const resetPasswordFormSchema = useResetPasswordFormSchema();
   type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>;
@@ -122,70 +107,18 @@ const AuthResetPassword = ({
     name: ["newPassword", "confirmNewPassword"],
   });
 
-  const hasPassword = newPassword.length > 0;
-  const hasConfirmPassword = confirmNewPassword.length > 0;
-  const passwordsMatch =
-    hasPassword && hasConfirmPassword && newPassword === confirmNewPassword;
+  const {
+    passwordRules,
+    confirmPasswordRules,
+    isPasswordError,
+    isConfirmPasswordError,
+    hasPassword,
+    hasConfirmPassword,
+  } = usePasswordValidation(newPassword, confirmNewPassword);
 
-  const passwordRules: PasswordRule[] = [
-    {
-      key: "minLength",
-      passed: newPassword.length >= 8,
-      label: tValidation("password.minLength"),
-    },
-    {
-      key: "letter",
-      passed: /[a-zA-Z]/.test(newPassword),
-      label: tValidation("password.letter"),
-    },
-    {
-      key: "number",
-      passed: /\d/.test(newPassword),
-      label: tValidation("password.number"),
-    },
-  ];
-
-  const isPasswordError =
-    hasPassword && passwordRules.some(({ passed }) => !passed);
-
-  const confirmPasswordRules: PasswordRule[] = [
-    {
-      key: "match",
-      passed: passwordsMatch,
-      label: tValidation("password.match"),
-    },
-  ];
-
-  const isConfirmPasswordError =
-    hasConfirmPassword && !confirmPasswordRules[0].passed;
-
-  const renderPasswordRules = (rules: PasswordRule[], hasValue: boolean) => (
-    <List dense disablePadding>
-      {rules.map(({ key, label, passed }) => {
-        const color = hasValue
-          ? passed
-            ? "primary.main"
-            : "error.main"
-          : "text.secondary";
-
-        return (
-          <ListItem disablePadding key={key}>
-            <ListItemIcon sx={{ color, minWidth: 28 }}>
-              {passed ? (
-                <CheckCircleOutline fontSize="small" />
-              ) : (
-                <RadioButtonUnchecked fontSize="small" />
-              )}
-            </ListItemIcon>
-            <ListItemText
-              primary={label}
-              slotProps={{ primary: { color, variant: "caption" } }}
-            />
-          </ListItem>
-        );
-      })}
-    </List>
-  );
+  const signInHref = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTo,
+  });
 
   const handleClickShowPassword =
     (key: "newPassword" | "confirmNewPassword") => () =>
@@ -221,9 +154,7 @@ const AuthResetPassword = ({
       }
 
       enqueueSnackbar(tAuth("resetPassword.success"), { variant: "success" });
-      router.replace(
-        getHref("/auth/sign-in", { [query.redirectTo]: redirectTo }),
-      );
+      router.replace(signInHref);
     },
   );
 
@@ -258,7 +189,9 @@ const AuthResetPassword = ({
           autoComplete="new-password"
           error={isPasswordError}
           fullWidth
-          helperText={renderPasswordRules(passwordRules, hasPassword)}
+          helperText={
+            <PasswordRuleList hasValue={hasPassword} rules={passwordRules} />
+          }
           label={tAuth("newPassword")}
           required
           slotProps={{
@@ -294,10 +227,12 @@ const AuthResetPassword = ({
           autoComplete="new-password"
           error={isConfirmPasswordError}
           fullWidth
-          helperText={renderPasswordRules(
-            confirmPasswordRules,
-            hasConfirmPassword,
-          )}
+          helperText={
+            <PasswordRuleList
+              hasValue={hasConfirmPassword}
+              rules={confirmPasswordRules}
+            />
+          }
           label={tAuth("confirmNewPassword")}
           required
           slotProps={{
@@ -344,11 +279,7 @@ const AuthResetPassword = ({
         </Button>
         <Stack flexDirection="row" alignItems="center" gap={0.5}>
           <Typography variant="body2">{tAuth("rememberedPassword")}</Typography>
-          <Link
-            href={getHref("/auth/sign-in", { [query.redirectTo]: redirectTo })}
-            underline="hover"
-            variant="body2"
-          >
+          <Link href={signInHref} underline="hover" variant="body2">
             {tAuth("signIn.label")}
           </Link>
         </Stack>
