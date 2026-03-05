@@ -23,18 +23,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
-import {
-  Button,
-  Link,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, Link, Stack, TextField, Typography } from "@mui/material";
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
-
 
 interface AuthForgotPasswordProps {
   redirectTo?: string;

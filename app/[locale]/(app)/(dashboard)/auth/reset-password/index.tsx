@@ -42,7 +42,6 @@ import {
 
 import { getHref } from "@/utils/href";
 
-
 interface AuthResetPasswordProps {
   email: string;
   redirectTo?: string;

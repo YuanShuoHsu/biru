@@ -57,7 +57,6 @@ const StyledAvatar = styled(Avatar, {
   };
 });
 
-
 const VERIFY_STATUS = {
   DEFAULT: "default",
   FAILED: "failed",
