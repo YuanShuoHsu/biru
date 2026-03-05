@@ -8,7 +8,11 @@ import * as z from "zod";
 
 import { useVerifyEmailFormSchema } from "./definitions";
 
-import FormCard from "@/components/FormCard";
+import FormCard, {
+  StyledCardActions,
+  StyledCardContent,
+  StyledCardHeader,
+} from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
@@ -27,9 +31,6 @@ import {
 import {
   Avatar,
   Button,
-  CardActions,
-  CardContent,
-  CardHeader,
   Divider,
   Link,
   Stack,
@@ -42,18 +43,6 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
-
-const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "color",
@@ -68,14 +57,6 @@ const StyledAvatar = styled(Avatar, {
   };
 });
 
-const StyledCardActions = styled(CardActions)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingTop: 0,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
 
 const VERIFY_STATUS = {
   DEFAULT: "default",

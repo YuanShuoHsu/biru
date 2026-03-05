@@ -12,7 +12,11 @@ import * as z from "zod";
 
 import { useResetPasswordFormSchema } from "./definitions";
 
-import FormCard from "@/components/FormCard";
+import FormCard, {
+  StyledCardActions,
+  StyledCardContent,
+  StyledCardHeader,
+} from "@/components/FormCard";
 import PasswordRuleList from "@/components/PasswordRuleList";
 
 import { query } from "@/constants/query";
@@ -28,9 +32,6 @@ import { authClient, getErrorMessage } from "@/lib/auth-client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Button,
-  CardActions,
-  CardContent,
-  CardHeader,
   IconButton,
   InputAdornment,
   Link,
@@ -38,30 +39,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 import { getHref } from "@/utils/href";
 
-const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
-
-const StyledCardActions = styled(CardActions)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingTop: 0,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
 
 interface AuthResetPasswordProps {
   email: string;

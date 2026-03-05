@@ -11,7 +11,11 @@ import * as z from "zod";
 
 import { useForgotPasswordFormSchema } from "./definitions";
 
-import FormCard from "@/components/FormCard";
+import FormCard, {
+  StyledCardActions,
+  StyledCardContent,
+  StyledCardHeader,
+} from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
@@ -21,40 +25,16 @@ import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
   Button,
-  CardActions,
-  CardContent,
-  CardHeader,
   Link,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
 
-const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingBottom: 0,
-}));
-
-const StyledCardContent = styled(CardContent)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
-
-const StyledCardActions = styled(CardActions)(({ theme }) => ({
-  padding: theme.spacing(2),
-  paddingTop: 0,
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
 
 interface AuthForgotPasswordProps {
   redirectTo?: string;
