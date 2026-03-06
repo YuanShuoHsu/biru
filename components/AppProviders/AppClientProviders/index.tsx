@@ -50,6 +50,7 @@ const AppClientProviders = ({
           </IconButton>
         )}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        autoHideDuration={3000}
         classes={{
           containerAnchorOriginTopRight: "notistack-container-top-right-offset",
         }}
