@@ -3,9 +3,7 @@
 import { Badge, type BadgeProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledBadge = styled(Badge, {
-  shouldForwardProp: (prop) => prop !== "variant",
-})<BadgeProps>(({ theme, variant }) => ({
+const StyledBadge = styled(Badge)<BadgeProps>(({ theme, variant }) => ({
   ...(variant === "dot" && {
     "& .MuiBadge-badge": {
       backgroundColor: theme.vars.palette.secondary.main,

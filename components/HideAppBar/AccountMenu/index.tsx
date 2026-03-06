@@ -87,7 +87,6 @@ const AccountMenu = () => {
   const { session } = useAuthStore((state) => state);
 
   const displayName = getDisplayName(session?.user);
-  const avatarChild = !session ? <AccountCircle /> : displayName[0];
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
@@ -174,7 +173,7 @@ const AccountMenu = () => {
                 isSignedIn={!!session}
                 src={session?.user.image || undefined}
               >
-                {avatarChild}
+                {!session ? <AccountCircle /> : displayName[0]}
               </StyledAvatar>
             </BadgeAvatars>
           </IconButton>
