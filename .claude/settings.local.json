@@ -23,7 +23,9 @@
       "Bash(pnpm lint:*)",
       "WebFetch(domain:vercel.com)",
       "WebFetch(domain:better-auth.com)",
-      "mcp__mui-mcp__useMuiDocs"
+      "mcp__mui-mcp__useMuiDocs",
+      "Bash(grep \"\"version\"\":*)",
+      "Bash(lsof:*)"
     ]
   }
 }

@@ -236,7 +236,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signUp" locale={locale} redirectTo={redirectTo} />
+        <GoogleButton action="signUp" redirectTo={redirectTo} />
         <Divider flexItem>{tAuth("or")}</Divider>
         <UploadAvatars ref={uploadAvatarsRef} />
         <Stack

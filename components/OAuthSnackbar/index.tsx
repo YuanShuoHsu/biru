@@ -1,20 +1,33 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { enqueueSnackbar } from "notistack";
 import { useEffect } from "react";
 
+import { query } from "@/constants/query";
+
 const OAuthSnackbar = () => {
+  const pathname = usePathname();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
   const tAuth = useTranslations("auth");
 
   useEffect(() => {
-    const provider = sessionStorage.getItem("oauth_snackbar");
+    const provider = searchParams.get(query.oauth);
     if (!provider) return;
 
-    sessionStorage.removeItem("oauth_snackbar");
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete(query.oauth);
+    const search = newParams.toString();
+    router.replace(`${pathname}${search ? `?${search}` : ""}`);
+
     if (provider === "google")
       enqueueSnackbar(tAuth("google.success"), { variant: "success" });
-  }, [tAuth]);
+  }, [pathname, router, searchParams, tAuth]);
 
   return null;
 };

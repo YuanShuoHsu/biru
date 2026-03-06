@@ -3,6 +3,7 @@
 "use client";
 
 import { closeSnackbar, SnackbarProvider } from "notistack";
+import { Suspense } from "react";
 import { SWRConfiguration } from "swr";
 
 import LocaleProvider from "@/components/LocaleProvider";
@@ -54,7 +55,9 @@ const AppClientProviders = ({
         }}
         maxSnack={3}
       >
-        <OAuthSnackbar />
+        <Suspense>
+          <OAuthSnackbar />
+        </Suspense>
         <SWRProvider fallback={fallback}>
           <AuthStoreProvider initialSession={initialSession}>
             <CartStoreProvider>

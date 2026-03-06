@@ -2,15 +2,17 @@
 
 // https://developers.google.com/identity/branding-guidelines?hl=zh-tw
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 
-import type { Locale } from "@/i18n/routing";
+import { query } from "@/constants/query";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { Button } from "@mui/material";
+
+import { getHref } from "@/utils/href";
 
 const GoogleIcon = () => (
   <svg
@@ -46,18 +48,20 @@ type GoogleAction = "signIn" | "signUp";
 
 interface GoogleButtonProps {
   action: GoogleAction;
-  locale: Locale;
   redirectTo?: string;
 }
 
-const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
+const GoogleButton = ({ action, redirectTo }: GoogleButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
-  const tAuth = useTranslations("auth");
+  const locale = useLocale();
 
+  const tAuth = useTranslations("auth");
   const label = tAuth(`google.${action}`);
 
-  const callbackURL = `${process.env.NEXT_PUBLIC_NEXT_URL}/${locale}${redirectTo || ""}`;
+  const callbackURL =
+    process.env.NEXT_PUBLIC_NEXT_URL +
+    getHref(redirectTo || "/", { [query.oauth]: "google" });
 
   const handleClick = async () => {
     await authClient.signIn.social(
@@ -70,9 +74,6 @@ const GoogleButton = ({ action, locale, redirectTo }: GoogleButtonProps) => {
           setIsLoading(false);
         },
         onRequest: () => setIsLoading(true),
-        onSuccess: () => {
-          sessionStorage.setItem("oauth_snackbar", "google");
-        },
       },
     );
   };

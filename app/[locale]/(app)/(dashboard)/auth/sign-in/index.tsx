@@ -154,7 +154,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
         }
       />
       <StyledCardContent>
-        <GoogleButton action="signIn" locale={locale} redirectTo={redirectTo} />
+        <GoogleButton action="signIn" redirectTo={redirectTo} />
         <Divider flexItem>{tAuth("or")}</Divider>
         <TextField
           autoComplete="email"
