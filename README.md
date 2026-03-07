@@ -248,8 +248,13 @@ pnpm add @mui/material-nextjs @emotion/cache
 # https://github.com/react-hook-form/react-hook-form
 pnpm add react-hook-form
 pnpm add @hookform/resolvers
+```
 
-pnpm add js-cookie
+## better-auth
+
+```bash
+# https://www.better-auth.com/
+pnpm add better-auth
 ```
 
 ## SWR
@@ -297,6 +302,13 @@ pnpm add @mui/x-date-pickers
 
 # https://day.js.org/
 pnpm add dayjs
+```
+
+## js-cookie
+
+```bash
+pnpm add js-cookie
+pnpm add -D @types/js-cookie
 ```
 
 ## libphonenumber-js
