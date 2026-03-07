@@ -1,8 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
-import { useOrderPaths } from "@/hooks/useOrderPaths";
+import { usePathname } from "@/i18n/navigation";
 
 import {
   Box,
@@ -42,8 +43,11 @@ const OrderBottomBar = () => {
   );
 
   const locale = useLocale();
-
-  const { checkoutPath } = useOrderPaths();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const query = search ? `?${search}` : "";
+  const checkoutHref = `${pathname}/checkout${query}`;
 
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
@@ -62,7 +66,7 @@ const OrderBottomBar = () => {
         <StyledButton
           disabled={isCartEmpty}
           fullWidth
-          href={checkoutPath}
+          href={checkoutHref}
           size="large"
           variant="contained"
         >

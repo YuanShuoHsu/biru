@@ -1,21 +1,21 @@
 import { setRequestLocale } from "next-intl/server";
 
-import OrderCompleteContent from "@/components/OrderCompleteContent";
-
 import type { Locale } from "@/i18n/routing";
 
-interface OrderModeStoreSlugCompleteProps {
+import OrderModeStoreSlugComplete from ".";
+
+interface OrderModeStoreSlugCompletePageProps {
   params: Promise<{ locale: Locale }>;
 }
 
-const OrderModeStoreSlugComplete = async ({
+const OrderModeStoreSlugCompletePage = async ({
   params,
-}: OrderModeStoreSlugCompleteProps) => {
+}: OrderModeStoreSlugCompletePageProps) => {
   const { locale } = await params;
 
   setRequestLocale(locale);
 
-  return <OrderCompleteContent />;
+  return <OrderModeStoreSlugComplete />;
 };
 
-export default OrderModeStoreSlugComplete;
+export default OrderModeStoreSlugCompletePage;

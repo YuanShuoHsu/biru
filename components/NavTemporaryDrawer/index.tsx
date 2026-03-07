@@ -53,9 +53,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
-import type { PartySize } from "@/types/partySize";
 import type { Store, StoreName } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
 
 import { RouteParams } from "@/types/routeParams";
 import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
@@ -121,9 +119,9 @@ const dividerSlot: MenuItem = {
 interface DineInMenuItemProps {
   level: number;
   onClick?: () => void;
-  partySize?: PartySize;
+  partySize?: string | null;
   storeName: StoreName;
-  tableNumber?: TableNumber;
+  tableNumber?: string | null;
 }
 
 const DineInMenuItem = ({
@@ -193,8 +191,7 @@ const DineInMenuItem = ({
 const useNavItems = () => {
   const { session } = useAuthStore((state) => state);
 
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { locale, mode, storeSlug } = useParams<RouteParams>();
 
   const pathname = usePathname();
 
@@ -204,6 +201,8 @@ const useNavItems = () => {
 
   const searchParams = useSearchParams();
 
+  const tableNumber = searchParams.get("tableNumber");
+  const partySize = searchParams.get("partySize");
   const redirectTo = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith("/account");
   const isAuthPage = pathname.startsWith("/auth");
@@ -240,9 +239,10 @@ const useNavItems = () => {
                 level={level}
                 onClick={() =>
                   router.push(
-                    `/${["order", mode, storeSlug, tableNumber, partySize]
-                      .filter(Boolean)
-                      .join("/")}`,
+                    getHref(`/order/${mode}/${storeSlug}`, {
+                      tableNumber,
+                      partySize,
+                    }),
                   )
                 }
                 partySize={partySize}

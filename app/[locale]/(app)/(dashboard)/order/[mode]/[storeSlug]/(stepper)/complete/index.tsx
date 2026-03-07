@@ -5,7 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { CheckCircleOutline, ErrorOutline } from "@mui/icons-material";
 import { Box, Button, Paper, Typography } from "@mui/material";
 
-const OrderCompleteContent = () => {
+const OrderModeStoreSlugComplete = () => {
   const router = useRouter();
 
   // TODO: wire real status when available
@@ -59,4 +59,4 @@ const OrderCompleteContent = () => {
   );
 };
 
-export default OrderCompleteContent;
+export default OrderModeStoreSlugComplete;

@@ -31,7 +31,6 @@ import {
   Settings,
   ShoppingCart,
   Storefront,
-  TableBar,
 } from "@mui/icons-material";
 import {
   Breadcrumbs,
@@ -82,8 +81,7 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { locale, mode, storeSlug } = useParams<RouteParams>();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
   const storeName = getStoreName(locale, stores, storeSlug);
@@ -95,27 +93,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
 
   const isPickup = mode === ORDER_MODE.Pickup;
 
-  const dineInChildren: BreadcrumbItem[] = [
-    {
-      children: [
-        {
-          icon: Payment,
-          label: tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
-          to: "/checkout",
-        },
-        {
-          icon: Pets,
-          label: tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
-          to: "/complete",
-        },
-      ],
-      icon: partySize === "1" ? Person : Group,
-      label: partySize,
-      to: `/${partySize}`,
-    },
-  ];
-
-  const pickupChildren: BreadcrumbItem[] = [
+  const storeChildren: BreadcrumbItem[] = [
     {
       icon: Payment,
       label: tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
@@ -127,17 +105,6 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
       to: "/complete",
     },
   ];
-
-  const storeChildren: BreadcrumbItem[] = isPickup
-    ? pickupChildren
-    : [
-        {
-          children: dineInChildren,
-          icon: TableBar,
-          label: tableNumber,
-          to: `/${tableNumber}`,
-        },
-      ];
 
   const modeChildren: BreadcrumbItem[] = [
     {

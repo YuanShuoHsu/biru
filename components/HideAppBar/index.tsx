@@ -13,7 +13,7 @@ import ModeToggle from "./ModeToggle";
 
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 
-import { useOrderPaths } from "@/hooks/useOrderPaths";
+import { useParams } from "next/navigation";
 
 import { Menu } from "@mui/icons-material";
 import {
@@ -49,11 +49,11 @@ const HideAppBar = () => {
   const { setDrawerOpen } = useDrawerStore((state) => state);
   const handleNavOpen = handleDrawerToggle(setDrawerOpen, "nav", true);
 
+  const { storeSlug } = useParams();
+
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
-
-  const { isOrderRoute: showShoppingCartButton } = useOrderPaths();
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
@@ -83,7 +83,7 @@ const HideAppBar = () => {
               <AccountMenu />
             </Suspense>
           )}
-          {showShoppingCartButton && <CartIconButton />}
+          {!!storeSlug && <CartIconButton />}
         </Stack>
       </StyledToolbar>
     </StyledAppBar>

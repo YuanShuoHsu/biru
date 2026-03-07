@@ -2,7 +2,7 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import OrderStepperLayout from "@/components/OrderStepperLayout";
+import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
 
 import { routing } from "@/i18n/routing";
 
@@ -24,7 +24,12 @@ const OrderModeStoreSlugStepperLayout = async ({
 
   setRequestLocale(locale);
 
-  return <OrderStepperLayout>{children}</OrderStepperLayout>;
+  return (
+    <>
+      <HorizontalLinearStepper />
+      {children}
+    </>
+  );
 };
 
 export default OrderModeStoreSlugStepperLayout;

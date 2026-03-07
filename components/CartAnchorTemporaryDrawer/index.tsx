@@ -1,10 +1,9 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
-
-import { useOrderPaths } from "@/hooks/useOrderPaths";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -57,18 +56,23 @@ const CartAnchorTemporaryDrawer = () => {
   const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
   const locale = useLocale();
-
-  const { checkoutPath, menuPath } = useOrderPaths();
-
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const search = searchParams.toString();
+  const query = search ? `?${search}` : "";
 
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
 
-  const isCheckoutPage = pathname === checkoutPath;
+  const isCheckoutPage = pathname.endsWith("/checkout");
+  const basePath = isCheckoutPage
+    ? pathname.slice(0, -"/checkout".length)
+    : pathname;
+  const menuHref = `${basePath}${query}`;
+  const checkoutHref = `${basePath}/checkout${query}`;
 
   const actionDisabled = !isCheckoutPage && isCartEmpty;
-  const actionHref = isCheckoutPage ? menuPath : checkoutPath;
+  const actionHref = isCheckoutPage ? menuHref : checkoutHref;
   const actionLabel = isCheckoutPage ? tCart("backToOrder") : tCart("checkout");
 
   const drawerList = (

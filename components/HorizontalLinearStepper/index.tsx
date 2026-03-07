@@ -6,8 +6,6 @@
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
-import { ORDER_MODE } from "@/constants/orderMode";
-
 import { usePathname } from "@/i18n/navigation";
 
 import {
@@ -19,11 +17,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { OrderMode } from "@/types/orderMode";
-import type { PartySize } from "@/types/partySize";
 import type { RouteParams } from "@/types/routeParams";
-import type { StoreSlug } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
 
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -59,30 +53,16 @@ const StyledStepLabel = styled(StepLabel)(({ theme }) => ({
   },
 }));
 
-const createStepPathMap = (
-  mode: OrderMode,
-  storeSlug: StoreSlug,
-  tableNumber?: TableNumber,
-  partySize?: PartySize,
-): string[] => {
-  const base =
-    mode === ORDER_MODE.Pickup
-      ? `/order/${mode}/${storeSlug}`
-      : `/order/${mode}/${storeSlug}/${tableNumber}/${partySize}`;
-
-  return [base, `${base}/checkout`, `${base}/complete`];
-};
-
 const HorizontalLinearStepper = () => {
   const tOrder = useTranslations("order");
 
-  const { locale, mode, storeSlug, tableNumber, partySize } =
-    useParams<RouteParams>();
+  const { locale, mode, storeSlug } = useParams<RouteParams>();
 
   const pathname = usePathname();
 
-  const stepPaths = createStepPathMap(mode, storeSlug, tableNumber, partySize);
-  const activeStep = stepPaths.findIndex(
+  const base = `/order/${mode}/${storeSlug}`;
+  const stepPathnames = [base, `${base}/checkout`, `${base}/complete`];
+  const activeStep = stepPathnames.findIndex(
     (path) => pathname === `/${locale}${path}`,
   );
 

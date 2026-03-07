@@ -3,15 +3,19 @@ import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 
-import DashboardActions from "@/components/DashboardActions";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 
 import { routing } from "@/i18n/routing";
 
+interface DashboardLayoutProps extends LayoutProps<"/[locale]"> {
+  toolbar: React.ReactNode;
+}
+
 const DashboardLayout = async ({
   children,
   params,
-}: LayoutProps<"/[locale]">) => {
+  toolbar,
+}: DashboardLayoutProps) => {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
@@ -27,8 +31,7 @@ const DashboardLayout = async ({
         gap={2}
       >
         <RouterBreadcrumbs />
-        {/* TODO: move dashboard actions */}
-        <DashboardActions />
+        {toolbar}
       </Stack>
       {children}
     </Stack>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
@@ -11,7 +11,7 @@ import { locales } from "@/constants/locale";
 
 import { LocaleEnum } from "@/enums/Locale";
 
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import {
@@ -62,10 +62,17 @@ const CustomerPaymentForm = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
-  const { locale, tableNumber } = useParams<RouteParams>();
-  // const isDineIn = mode === ORDER_MODE.DineIn;
+  const { locale } = useParams<RouteParams>();
 
   const router = useRouter();
+
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tableNumber = searchParams.get("tableNumber");
+  const search = searchParams.toString();
+  const query = search ? `?${search}` : "";
+  const completePath = `${pathname.replace("/checkout", "/complete")}${query}`;
+  // const isDineIn = mode === ORDER_MODE.DineIn;
 
   const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
     (state) => state,
@@ -85,12 +92,12 @@ const CustomerPaymentForm = () => {
     event.preventDefault();
 
     if (payment === "Cash") {
-      router.replace(`/order/${tableNumber}/complete`);
+      router.replace(completePath);
       return;
     }
 
     const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
-    const completeUrl = `${baseUrl}/${locale}/order/${tableNumber}/complete`;
+    const completeUrl = `${baseUrl}/${locale}${completePath}`;
 
     const dto = {
       base: {

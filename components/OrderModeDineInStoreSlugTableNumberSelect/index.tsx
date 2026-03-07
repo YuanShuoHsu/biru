@@ -10,12 +10,11 @@ import { MenuItem, TextField } from "@mui/material";
 
 import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
-import type { TableNumber } from "@/types/tableNumbers";
 
 interface OrderModeDineInStoreSlugTableNumberSelectProps {
   mode: OrderMode;
   storeSlug: StoreSlug;
-  tableNumber: TableNumber;
+  tableNumber: string;
 }
 
 const OrderModeDineInStoreSlugTableNumberSelect = ({
@@ -29,7 +28,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(
-      `/order/${mode}/${storeSlug}/${tableNumber}/${event.target.value}`,
+      `/order/${mode}/${storeSlug}?tableNumber=${tableNumber}&partySize=${event.target.value}`,
     );
 
   return (
