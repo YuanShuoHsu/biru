@@ -127,8 +127,8 @@ const Banner = () => (
           <Image
             alt={`Slide ${index + 1}`}
             fill
-            priority
-            sizes="(min-width: 808px) 50vw, 100vw"
+            priority={index === 0}
+            sizes="100vw"
             src="/images/IMG_4590.jpg"
             style={{
               objectFit: "cover",
