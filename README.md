@@ -205,6 +205,10 @@ node --eval "fs.writeFileSync('.husky/pre-commit','pnpm exec lint-staged\n')"
     "**/*": "prettier --write --ignore-unknown"
   }
 }
+
+pnpm format
+pnpm lint
+pnpm exec lint-staged
 ```
 
 ## Prettier
@@ -235,6 +239,17 @@ pnpm add @mui/icons-material
 pnpm add @mui/material-nextjs @emotion/cache
 
 # https://mui.com/material-ui/customization/theme-components/
+```
+
+## React Hook Form
+
+```bash
+# https://react-hook-form.com/
+# https://github.com/react-hook-form/react-hook-form
+pnpm add react-hook-form
+pnpm add @hookform/resolvers
+
+pnpm add js-cookie
 ```
 
 ## SWR
