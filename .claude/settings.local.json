@@ -25,7 +25,8 @@
       "WebFetch(domain:better-auth.com)",
       "mcp__mui-mcp__useMuiDocs",
       "Bash(grep \"\"version\"\":*)",
-      "Bash(lsof:*)"
+      "Bash(lsof:*)",
+      "Bash(pnpm info:*)"
     ]
   }
 }
