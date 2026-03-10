@@ -18,11 +18,15 @@ export const useLogout = () => {
   const handleLogout = async () => {
     setIsMutatingLogout(true);
 
-    await authClient.signOut();
-
-    setSession(null);
-    enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
-    setIsMutatingLogout(false);
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          setSession(null);
+          enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
+          setIsMutatingLogout(false);
+        },
+      },
+    });
   };
 
   return {
