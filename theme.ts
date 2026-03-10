@@ -83,15 +83,33 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiButton: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          textTransform: "none",
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+            "color",
+          ]),
+        }),
+      },
+    },
     MuiButtonBase: {
       defaultProps: {
         LinkComponent: LinkBehavior,
       },
     },
-    MuiLink: {
-      defaultProps: {
-        component: LinkBehavior,
-      } as LinkProps,
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+            "color",
+          ]),
+        }),
+      },
     },
     MuiCssBaseline: {
       styleOverrides: (theme) => ({
@@ -107,29 +125,6 @@ const theme = createTheme({
           },
         },
       }),
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          textTransform: "none",
-          transition: theme.transitions.create([
-            "background-color",
-            "border-color",
-            "color",
-          ]),
-        }),
-      },
-    },
-    MuiChip: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          transition: theme.transitions.create([
-            "background-color",
-            "border-color",
-            "color",
-          ]),
-        }),
-      },
     },
     MuiDivider: {
       styleOverrides: {
@@ -160,6 +155,11 @@ const theme = createTheme({
           ]),
         }),
       },
+    },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      } as LinkProps,
     },
     MuiOutlinedInput: {
       styleOverrides: {
