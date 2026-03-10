@@ -44,6 +44,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useAuthStore } from "@/providers/auth-store-provider";
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
@@ -68,6 +69,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   const signUpHref = getHref("/auth/sign-up", {
     [query.redirectTo]: redirectTo,
   });
+
+  const { setSession } = useAuthStore((state) => state);
 
   const { items, startCountdown } = useCountdownStore((state) => state);
 
@@ -103,7 +106,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
   const onSubmit = handleSubmit(async (data: SigninFormData) => {
     const { error } = await authClient.signIn.email(
-      { ...data, callbackURL: redirectTo },
+      { ...data },
       { headers: { "Accept-Language": locale } },
     );
 
@@ -134,6 +137,9 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
 
       return;
     }
+
+    const { data: session } = await authClient.getSession();
+    setSession(session);
 
     enqueueSnackbar(tAuth("signIn.success"), { variant: "success" });
     router.replace(redirectTo || "/");
