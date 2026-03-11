@@ -1,34 +1,6 @@
 {
   "permissions": {
-    "allow": [
-      "Bash(find:*)",
-      "Bash(cat:*)",
-      "Bash(pnpm run:*)",
-      "mcp__ide__getDiagnostics",
-      "WebSearch",
-      "Bash(wc:*)",
-      "Bash(code:*)",
-      "WebFetch(domain:antigravity.google)",
-      "Bash(node:*)",
-      "Bash(pnpm add:*)",
-      "Bash(pnpm build:*)",
-      "Bash(ls:*)",
-      "WebFetch(domain:github.com)",
-      "WebFetch(domain:www.answeroverflow.com)",
-      "WebFetch(domain:www.better-auth.com)",
-      "mcp__better-auth__ask-question-about-better-auth",
-      "Bash(grep:*)",
-      "mcp__better-auth__search-better-auth-docs",
-      "Bash(claude mcp:*)",
-      "Bash(pnpm lint:*)",
-      "WebFetch(domain:vercel.com)",
-      "WebFetch(domain:better-auth.com)",
-      "mcp__mui-mcp__useMuiDocs",
-      "Bash(grep \"\"version\"\":*)",
-      "Bash(lsof:*)",
-      "Bash(pnpm info:*)",
-      "Bash(cd /Users/xuyuanshi/Desktop/biru-api && npx tsc --noEmit 2>&1 | grep -A2 \"onExistingUserSignUp\\\\|auth/index\")",
-      "Bash(grep -n \"redirect\\\\|session\" /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/my-account/page.tsx /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/profile/page.tsx /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/account-settings/page.tsx 2>/dev/null)"
-    ]
+    "allow": ["Bash(*)"],
+    "deny": ["Bash(git *)"]
   }
 }
