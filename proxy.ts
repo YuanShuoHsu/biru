@@ -30,15 +30,17 @@ export const proxy = (request: NextRequest) => {
   const isAuthPage = pathname.includes("/auth");
   const isAccountPage = pathname.includes("/account");
 
-  if (sessionCookie && isAuthPage)
-    return NextResponse.redirect(
-      new URL(`/${locale}/account/my-account`, request.url),
-    );
+  if (sessionCookie && isAuthPage) {
+    request.nextUrl.pathname = `/${locale}/account/my-account`;
 
-  if (!sessionCookie && isAccountPage)
-    return NextResponse.redirect(
-      new URL(`/${locale}/auth/sign-in`, request.url),
-    );
+    return NextResponse.redirect(request.nextUrl);
+  }
+
+  if (!sessionCookie && isAccountPage) {
+    request.nextUrl.pathname = `/${locale}/auth/sign-in`;
+
+    return NextResponse.redirect(request.nextUrl);
+  }
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
   const isMaintenancePath =

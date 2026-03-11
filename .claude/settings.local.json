@@ -26,7 +26,9 @@
       "mcp__mui-mcp__useMuiDocs",
       "Bash(grep \"\"version\"\":*)",
       "Bash(lsof:*)",
-      "Bash(pnpm info:*)"
+      "Bash(pnpm info:*)",
+      "Bash(cd /Users/xuyuanshi/Desktop/biru-api && npx tsc --noEmit 2>&1 | grep -A2 \"onExistingUserSignUp\\\\|auth/index\")",
+      "Bash(grep -n \"redirect\\\\|session\" /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/my-account/page.tsx /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/profile/page.tsx /Users/xuyuanshi/Desktop/biru/app/[locale]/\\\\\\(app\\\\\\)/\\\\\\(dashboard\\\\\\)/account/account-settings/page.tsx 2>/dev/null)"
     ]
   }
 }
