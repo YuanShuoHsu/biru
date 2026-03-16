@@ -10,11 +10,11 @@
     "required": "確認密碼為必填。"
   },
   "countryCode": {
-    "invalid": "國碼無效。",
+    "invalid": "國家代碼無效。",
     "required": "國碼為必填。"
   },
   "email": {
-    "invalid": "請輸入有效的電子郵件。"
+    "invalid": "電子郵件無效。"
   },
   "firstName": {
     "minLength": "名字至少需要 1 個字元。"

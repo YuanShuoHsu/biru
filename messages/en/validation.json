@@ -10,11 +10,11 @@
     "required": "Confirm password is required."
   },
   "countryCode": {
-    "invalid": "Invalid country code.",
+    "invalid": "Country code is not valid.",
     "required": "Country code is required."
   },
   "email": {
-    "invalid": "Please enter a valid email."
+    "invalid": "Email is not valid."
   },
   "firstName": {
     "minLength": "First name must be at least 1 character long."
