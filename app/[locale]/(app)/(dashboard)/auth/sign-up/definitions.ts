@@ -103,3 +103,5 @@ export const useSignupFormSchema = () => {
   //   { path: ["phoneNumber"], message: dict.validation.phone.invalid },
   // );
 };
+
+export type SignupForm = z.infer<ReturnType<typeof useSignupFormSchema>>;

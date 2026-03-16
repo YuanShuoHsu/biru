@@ -19,3 +19,5 @@ export const useSigninFormSchema = () => {
     rememberMe: z.boolean(),
   });
 };
+
+export type SigninForm = z.infer<ReturnType<typeof useSigninFormSchema>>;

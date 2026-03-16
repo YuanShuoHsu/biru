@@ -4,9 +4,10 @@ import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
-import { z } from "zod";
-
-import { useNewsletterFormSchema } from "./definitions";
+import {
+  type NewsletterForm,
+  useNewsletterFormSchema,
+} from "./definitions";
 
 import BrandMark from "@/components/BrandMark";
 
@@ -29,14 +30,13 @@ const Newsletter = () => {
   const tHome = useTranslations("home");
 
   const newsletterFormSchema = useNewsletterFormSchema();
-  type NewsletterFormData = z.infer<typeof newsletterFormSchema>;
 
   const {
     formState: { errors },
     handleSubmit,
     register,
     reset,
-  } = useForm<NewsletterFormData>({
+  } = useForm<NewsletterForm>({
     defaultValues: { email: "" },
     resolver: zodResolver(newsletterFormSchema),
   });

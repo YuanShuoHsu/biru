@@ -8,9 +8,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import * as z from "zod";
-
-import { useResetPasswordFormSchema } from "./definitions";
+import {
+  type ResetPasswordForm,
+  useResetPasswordFormSchema,
+} from "./definitions";
 
 import FormCard, {
   StyledCardActions,
@@ -69,14 +70,13 @@ const AuthResetPassword = ({
   const tAuth = useTranslations("auth");
 
   const resetPasswordFormSchema = useResetPasswordFormSchema();
-  type ResetPasswordFormData = z.infer<typeof resetPasswordFormSchema>;
 
   const {
     control,
     formState: { errors, isSubmitting },
     handleSubmit,
     register,
-  } = useForm<ResetPasswordFormData>({
+  } = useForm<ResetPasswordForm>({
     defaultValues: {
       email,
       newPassword: "",
@@ -114,7 +114,7 @@ const AuthResetPassword = ({
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       confirmNewPassword: _,
       ...data
-    }: ResetPasswordFormData) => {
+    }: ResetPasswordForm) => {
       if (!token) return;
 
       const { error } = await authClient.resetPassword(

@@ -9,9 +9,7 @@ import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
-
-import { useSigninFormSchema } from "./definitions";
+import { type SigninForm, useSigninFormSchema } from "./definitions";
 
 import FormCard, {
   StyledCardActions,
@@ -75,14 +73,13 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
   const { items, startCountdown } = useCountdownStore((state) => state);
 
   const signinFormSchema = useSigninFormSchema();
-  type SigninFormData = z.infer<typeof signinFormSchema>;
 
   const {
     control,
     formState: { errors, isSubmitting },
     handleSubmit,
     register,
-  } = useForm<SigninFormData>({
+  } = useForm<SigninForm>({
     defaultValues: {
       email: "",
       password: "",
@@ -104,7 +101,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
       onChange(checked);
     };
 
-  const onSubmit = handleSubmit(async (data: SigninFormData) => {
+  const onSubmit = handleSubmit(async (data: SigninForm) => {
     const { error } = await authClient.signIn.email(
       { ...data },
       { headers: { "Accept-Language": locale } },
