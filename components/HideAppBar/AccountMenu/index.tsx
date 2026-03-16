@@ -47,6 +47,7 @@ const StyledAvatar = styled(Avatar, {
     ? theme.vars.palette.background.paper
     : "transparent",
   color: isSignedIn ? theme.vars.palette.primary.main : "inherit",
+  fontSize: 12,
   transition: theme.transitions.create(["background-color", "color"]),
 
   ...(isSignedIn && {
