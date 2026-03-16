@@ -4,10 +4,7 @@ import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import useSWRMutation from "swr/mutation";
-import {
-  type NewsletterForm,
-  useNewsletterFormSchema,
-} from "./definitions";
+import { type NewsletterForm, useNewsletterFormSchema } from "./definitions";
 
 import BrandMark from "@/components/BrandMark";
 
