@@ -83,6 +83,13 @@ const theme = createTheme({
     },
   },
   components: {
+    MuiAvatar: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create(["background-color", "color"]),
+        }),
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
