@@ -15,7 +15,7 @@ import { PASSWORD_MIN_LENGTH } from "@/constants/password";
 
 // type BirthDateError = "invalidDate" | "maxDate" | "minDate";
 
-export const useSignupFormSchema = () => {
+export const useSignUpFormSchema = () => {
   const tValidation = useTranslations("validation");
   // const birthDateMessageMap: Record<BirthDateError, string> = {
   //   invalidDate: dict.validation.birthDate.invalid,
@@ -104,4 +104,4 @@ export const useSignupFormSchema = () => {
   // );
 };
 
-export type SignupForm = z.infer<ReturnType<typeof useSignupFormSchema>>;
+export type SignUpForm = z.infer<ReturnType<typeof useSignUpFormSchema>>;

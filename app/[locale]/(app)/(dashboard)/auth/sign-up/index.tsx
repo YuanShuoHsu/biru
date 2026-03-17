@@ -15,7 +15,7 @@ import {
   useState,
 } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
-import { type SignupForm, useSignupFormSchema } from "./definitions";
+import { type SignUpForm, useSignUpFormSchema } from "./definitions";
 
 import FormCard, {
   StyledCardActions,
@@ -94,14 +94,14 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
 
   const tAuth = useTranslations("auth");
 
-  const signupFormSchema = useSignupFormSchema();
+  const signUpFormSchema = useSignUpFormSchema();
 
   const {
     control,
     formState: { errors, isSubmitting },
     handleSubmit,
     register,
-  } = useForm<SignupForm>({
+  } = useForm<SignUpForm>({
     defaultValues: {
       lastName: "",
       firstName: "",
@@ -114,7 +114,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
       // phoneNumber: "",
       emailSubscribed: true,
     },
-    resolver: zodResolver(signupFormSchema),
+    resolver: zodResolver(signUpFormSchema),
   });
 
   const uploadAvatarsRef = useRef<UploadAvatarsHandle>(null);
@@ -171,7 +171,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     // country: { code },
     // phoneNumber,
     ...rest
-  }: SignupForm) => {
+  }: SignUpForm) => {
     const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
     // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);

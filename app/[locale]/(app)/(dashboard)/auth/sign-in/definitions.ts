@@ -5,7 +5,7 @@ import * as z from "zod";
 
 import { PASSWORD_MIN_LENGTH } from "@/constants/password";
 
-export const useSigninFormSchema = () => {
+export const useSignInFormSchema = () => {
   const tValidation = useTranslations("validation");
 
   return z.object({
@@ -20,4 +20,4 @@ export const useSigninFormSchema = () => {
   });
 };
 
-export type SigninForm = z.infer<ReturnType<typeof useSigninFormSchema>>;
+export type SignInForm = z.infer<ReturnType<typeof useSignInFormSchema>>;
