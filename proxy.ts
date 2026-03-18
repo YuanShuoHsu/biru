@@ -25,6 +25,22 @@ export const proxy = (request: NextRequest) => {
 
   const response = handleI18nRouting(request);
 
+  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
+  const isMaintenancePath =
+    pathnameLocale && pathname === `/${pathnameLocale}/maintenance`;
+
+  if (isMaintenanceMode) {
+    if (isMaintenancePath) return response;
+
+    request.nextUrl.pathname = `/${locale}/maintenance`;
+    return NextResponse.redirect(request.nextUrl);
+  }
+
+  if (isMaintenancePath) {
+    request.nextUrl.pathname = `/${locale}`;
+    return NextResponse.redirect(request.nextUrl);
+  }
+
   const sessionCookie = getSessionCookie(request);
 
   const isAuthPage = pathname.includes("/auth");
@@ -39,20 +55,6 @@ export const proxy = (request: NextRequest) => {
   if (!sessionCookie && isAccountPage) {
     request.nextUrl.pathname = `/${locale}/auth/sign-in`;
 
-    return NextResponse.redirect(request.nextUrl);
-  }
-
-  const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
-  const isMaintenancePath =
-    pathnameLocale && pathname === `/${pathnameLocale}/maintenance`;
-  if (isMaintenanceMode) {
-    if (isMaintenancePath) return response;
-
-    request.nextUrl.pathname = `/${locale}/maintenance`;
-    return NextResponse.redirect(request.nextUrl);
-  }
-  if (isMaintenancePath) {
-    request.nextUrl.pathname = `/${locale}`;
     return NextResponse.redirect(request.nextUrl);
   }
 
