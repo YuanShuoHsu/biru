@@ -94,7 +94,6 @@ const Newsletter = () => {
           {...register("email")}
         />
         <Button
-          disabled={isMutating}
           loading={isMutating}
           loadingPosition="start"
           size="small"
