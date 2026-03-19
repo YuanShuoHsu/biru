@@ -146,7 +146,7 @@ const AuthVerifyEmail = ({
       disabled={isCountingDown}
       fullWidth
       loading={isSubmitting}
-      loadingPosition="start"
+      loadingPosition="end"
       size="large"
       type="submit"
       variant="contained"
@@ -240,7 +240,7 @@ const AuthVerifyEmail = ({
     },
     [VERIFY_STATUS.VERIFYING]: {
       actions: (
-        <Button disabled fullWidth loading size="large" variant="contained">
+        <Button disabled fullWidth loading loadingPosition="end" size="large" variant="contained">
           {verifyingTitle}
         </Button>
       ),
