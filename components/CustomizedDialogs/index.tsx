@@ -3,6 +3,7 @@
 
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
@@ -47,13 +48,11 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 
 const CustomizedDialogs = () => {
   const [cancelLoading, setCancelLoading] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const loading = cancelLoading || confirmLoading;
 
   const {
     cancelText,
     confirmDisabled,
+    confirmLoading,
     confirmText,
     content,
     contentText,
@@ -62,10 +61,15 @@ const CustomizedDialogs = () => {
     onConfirm,
     open,
     resetDialog,
+    setDialog,
     title,
   } = useDialogStore((state) => state);
 
+  const loading = cancelLoading || confirmLoading;
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const tDialog = useTranslations("dialog");
 
   const handleClose = () => {
     if (loading) return;
@@ -82,7 +86,8 @@ const CustomizedDialogs = () => {
       await onCancel?.();
       handleClose();
     } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+      const message = getErrorMessage(error);
+      enqueueSnackbar(message, { variant: "error" });
     } finally {
       setCancelLoading(false);
     }
@@ -91,15 +96,16 @@ const CustomizedDialogs = () => {
   const handleConfirm = async () => {
     if (loading) return;
 
-    setConfirmLoading(true);
+    setDialog({ confirmLoading: true });
 
     try {
       await onConfirm?.();
       handleClose();
     } catch (error) {
-      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+      const message = getErrorMessage(error);
+      enqueueSnackbar(message, { variant: "error" });
     } finally {
-      setConfirmLoading(false);
+      setDialog({ confirmLoading: false });
     }
   };
 
@@ -126,24 +132,28 @@ const CustomizedDialogs = () => {
         {content}
       </DialogContent>
       <DialogActions>
-        <Button
-          loading={cancelLoading}
-          loadingPosition="end"
-          onClick={handleCancel}
-        >
-          {cancelText}
-        </Button>
-        <Button
-          autoFocus
-          disabled={confirmDisabled}
-          form={formId}
-          loading={confirmLoading}
-          loadingPosition="end"
-          onClick={formId ? undefined : handleConfirm}
-          type={formId ? "submit" : "button"}
-        >
-          {confirmText}
-        </Button>
+        {cancelText !== undefined && (
+          <Button
+            loading={cancelLoading}
+            loadingPosition="end"
+            onClick={handleCancel}
+          >
+            {cancelText || tDialog("cancel")}
+          </Button>
+        )}
+        {confirmText !== undefined && (
+          <Button
+            autoFocus
+            disabled={confirmDisabled}
+            form={formId}
+            loading={confirmLoading}
+            loadingPosition="end"
+            onClick={formId ? undefined : handleConfirm}
+            type={formId ? "submit" : "button"}
+          >
+            {confirmText || tDialog("confirm")}
+          </Button>
+        )}
       </DialogActions>
     </BootstrapDialog>
   );
