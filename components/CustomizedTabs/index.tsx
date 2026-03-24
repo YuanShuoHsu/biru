@@ -152,10 +152,6 @@ const CustomizedTabs = () => {
   const handleChange = (_: React.SyntheticEvent, newIndex: number) =>
     setSelectedId(filteredGroups[newIndex].id);
 
-  const tabList = filteredGroups.map(({ id, label }, index) => (
-    <Tab key={id} label={label} {...a11yProps(index)} />
-  ));
-
   return (
     <Stack gap={2}>
       {/* hook.js:608 Skipping auto-scroll behavior due to `position: sticky` or `position: fixed` on element */}
@@ -167,7 +163,9 @@ const CustomizedTabs = () => {
         value={displayIndex}
         variant="scrollable"
       >
-        {tabList}
+        {filteredGroups.map(({ id, label }, index) => (
+          <Tab key={id} label={label} {...a11yProps(index)} />
+        ))}
       </HorizontalTabs>
       {filteredGroups.map(({ id, items }, index) => (
         <TabPanel index={index} key={id} value={displayIndex}>
