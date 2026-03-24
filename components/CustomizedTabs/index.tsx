@@ -8,7 +8,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import ResponsiveGrid from "./ResponsiveGrid";
-import TabPanel from "./TabPanel";
+
+import TabPanel from "@/components/TabPanel";
 
 import {
   APP_BAR_TOOLBAR_HEIGHT,
@@ -28,6 +29,8 @@ import { styled } from "@mui/material/styles";
 
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
+
+import { a11yProps } from "@/utils/tab";
 
 const HorizontalTabs = styled(Tabs, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -61,11 +64,6 @@ const HorizontalTabs = styled(Tabs, {
     transition: theme.transitions.create("color"),
   },
 }));
-
-const a11yProps = (index: number) => ({
-  id: `simple-tab-${index}`,
-  "aria-controls": `simple-tabpanel-${index}`,
-});
 
 const CustomizedTabs = () => {
   const locale = useLocale();
