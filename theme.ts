@@ -90,6 +90,16 @@ const theme = createTheme({
         }),
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: ({ theme }) => ({
+          transition: theme.transitions.create([
+            "background-color",
+            "border-color",
+          ]),
+        }),
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: ({ theme }) => ({
