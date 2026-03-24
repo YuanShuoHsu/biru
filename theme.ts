@@ -193,6 +193,21 @@ const theme = createTheme({
         }),
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
+    MuiTabs: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          borderBottom: `1px solid ${theme.vars.palette.divider}`,
+          transition: theme.transitions.create("border-color"),
+        }),
+      },
+    },
     MuiSvgIcon: {
       styleOverrides: {
         root: ({ theme }) => ({
