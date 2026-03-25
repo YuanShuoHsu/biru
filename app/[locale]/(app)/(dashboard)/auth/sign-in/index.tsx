@@ -177,6 +177,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           fullWidth
           helperText={errors.password?.message}
           label={tAuth("password.label")}
+          placeholder={tAuth("password.placeholder")}
           required
           slotProps={{
             input: {
@@ -200,7 +201,6 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
             },
           }}
           type={showPassword ? "text" : "password"}
-          placeholder={tAuth("password.placeholder")}
           {...register("password")}
         />
         <Stack

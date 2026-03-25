@@ -172,7 +172,8 @@ const AuthResetPassword = ({
           helperText={
             <PasswordRuleList hasValue={hasPassword} rules={passwordRules} />
           }
-          label={tAuth("newPassword")}
+          label={tAuth("newPassword.label")}
+          placeholder={tAuth("newPassword.placeholder")}
           required
           slotProps={{
             formHelperText: { component: "div" },
@@ -213,7 +214,8 @@ const AuthResetPassword = ({
               rules={confirmPasswordRules}
             />
           }
-          label={tAuth("confirmNewPassword")}
+          label={tAuth("confirmNewPassword.label")}
+          placeholder={tAuth("confirmNewPassword.placeholder")}
           required
           slotProps={{
             formHelperText: { component: "div" },
