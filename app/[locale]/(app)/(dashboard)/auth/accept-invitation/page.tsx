@@ -9,7 +9,7 @@ interface AuthAcceptInvitationPageProps {
   params: Promise<{ locale: Locale }>;
   searchParams: Promise<{
     email?: string;
-    token?: string;
+    id?: string;
   }>;
 }
 
@@ -21,15 +21,15 @@ const AuthAcceptInvitationPage = async ({
 
   setRequestLocale(locale);
 
-  const { email, token } = await searchParams;
+  const { email, id } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : "";
-  const safeToken = typeof token === "string" ? token : "";
+  const safeInvitationId = typeof id === "string" ? id : "";
 
-  if (!safeToken || !safeEmail) notFound();
+  if (!safeEmail || !safeInvitationId) notFound();
 
   return (
-    <AuthAcceptInvitation email={safeEmail} locale={locale} token={safeToken} />
+    <AuthAcceptInvitation email={safeEmail} invitationId={safeInvitationId} />
   );
 };
 

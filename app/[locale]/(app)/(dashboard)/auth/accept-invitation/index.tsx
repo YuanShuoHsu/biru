@@ -1,7 +1,14 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+
+import {
+  type AcceptInvitationForm,
+  useAcceptInvitationFormSchema,
+} from "./definitions";
 
 import FormCard, {
   StyledCardActions,
@@ -11,12 +18,12 @@ import FormCard, {
 
 import { query } from "@/constants/query";
 
+import { useHref } from "@/hooks/useHref";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { useRouter } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
-
-import { getHref } from "@/utils/href";
 
 import {
   CheckCircle,
@@ -27,6 +34,8 @@ import { Avatar, Button, TextField, Typography } from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
+
+import { getHref } from "@/utils/href";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "color",
@@ -51,14 +60,12 @@ type AcceptStatus = (typeof ACCEPT_STATUS)[keyof typeof ACCEPT_STATUS];
 
 interface AuthAcceptInvitationProps {
   email: string;
-  locale: Locale;
-  token: string;
+  invitationId: string;
 }
 
 const AuthAcceptInvitation = ({
   email,
-  locale,
-  token,
+  invitationId,
 }: AuthAcceptInvitationProps) => {
   const [state, setState] = useState<{
     errorMessage: string;
@@ -71,26 +78,44 @@ const AuthAcceptInvitation = ({
   const { items, startCountdown } = useCountdownStore((state) => state);
   const redirectCountdown = items["accept-invitation-redirect"];
 
+  const locale = useLocale();
+
   const router = useRouter();
 
+  const currentHref = useHref();
+
   const tAuth = useTranslations("auth");
+
+  const acceptInvitationFormSchema = useAcceptInvitationFormSchema();
+  const {
+    formState: { errors },
+    register,
+  } = useForm<AcceptInvitationForm>({
+    defaultValues: { email },
+    resolver: zodResolver(acceptInvitationFormSchema),
+  });
 
   const verifyingTitle = tAuth("acceptInvitation.verifying.title");
 
   useEffect(() => {
     const accept = async () => {
       await authClient.organization.acceptInvitation(
-        { invitationId: token },
+        { invitationId },
         {
           headers: { "Accept-Language": locale },
           onError: ({ error: { code } }) => {
             if (code === "UNAUTHORIZED") {
-              const redirectTo = `/auth/accept-invitation?${new URLSearchParams({ email, token })}`;
+              enqueueSnackbar(getErrorMessage(code, locale), {
+                variant: "error",
+              });
+
               router.replace(
-                getHref("/auth/sign-in", { [query.redirectTo]: redirectTo }),
+                getHref("/auth/sign-in", { [query.redirectTo]: currentHref }),
               );
+
               return;
             }
+
             setState({
               errorMessage: getErrorMessage(code, locale),
               status: ACCEPT_STATUS.FAILED,
@@ -99,7 +124,7 @@ const AuthAcceptInvitation = ({
           onSuccess: () => {
             setState({ errorMessage: "", status: ACCEPT_STATUS.ACCEPTED });
             startCountdown("accept-invitation-redirect", 3, () => {
-              router.replace("/");
+              router.replace(process.env.NEXT_PUBLIC_ADMIN_URL!);
             });
           },
         },
@@ -107,7 +132,7 @@ const AuthAcceptInvitation = ({
     };
 
     accept();
-  }, [email, locale, router, startCountdown, token]);
+  }, [currentHref, invitationId, locale, router, startCountdown]);
 
   const configs: Record<
     AcceptStatus,
@@ -119,31 +144,13 @@ const AuthAcceptInvitation = ({
       title: string;
     }
   > = {
-    [ACCEPT_STATUS.VERIFYING]: {
-      actions: (
-        <Button
-          disabled
-          fullWidth
-          loading
-          loadingPosition="end"
-          size="large"
-          variant="contained"
-        >
-          {verifyingTitle}
-        </Button>
-      ),
-      color: "primary",
-      icon: GroupAdd,
-      subtitle: tAuth("acceptInvitation.verifying.subtitle"),
-      title: verifyingTitle,
-    },
     [ACCEPT_STATUS.ACCEPTED]: {
       actions: (
         <Button
           fullWidth
           size="large"
           variant="contained"
-          onClick={() => router.replace("/")}
+          onClick={() => router.replace(process.env.NEXT_PUBLIC_ADMIN_URL!)}
         >
           {redirectCountdown
             ? tAuth("acceptInvitation.accepted.actions", {
@@ -173,6 +180,23 @@ const AuthAcceptInvitation = ({
       subtitle: state.errorMessage,
       title: tAuth("acceptInvitation.failed.title"),
     },
+    [ACCEPT_STATUS.VERIFYING]: {
+      actions: (
+        <Button
+          fullWidth
+          loading
+          loadingPosition="end"
+          size="large"
+          variant="contained"
+        >
+          {verifyingTitle}
+        </Button>
+      ),
+      color: "primary",
+      icon: GroupAdd,
+      subtitle: tAuth("acceptInvitation.verifying.subtitle"),
+      title: verifyingTitle,
+    },
   };
 
   const config = configs[state.status];
@@ -200,11 +224,16 @@ const AuthAcceptInvitation = ({
           {config.subtitle}
         </Typography>
         <TextField
+          autoComplete="email"
+          error={!!errors.email}
           fullWidth
+          helperText={errors.email?.message}
           label={tAuth("email.label")}
+          placeholder={tAuth("email.placeholder")}
+          required
           slotProps={{ input: { readOnly: true } }}
           type="email"
-          value={email}
+          {...register("email")}
         />
       </StyledCardContent>
       <StyledCardActions disableSpacing>{config.actions}</StyledCardActions>
