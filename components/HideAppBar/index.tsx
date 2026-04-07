@@ -2,18 +2,17 @@
 
 "use client";
 
+import { useParams } from "next/navigation";
 import { Suspense } from "react";
-
-import BrandMark from "@/components/BrandMark";
 
 import AccountMenu from "./AccountMenu";
 import CartIconButton from "./CartIconButton";
 import LanguageMenu from "./LanguageMenu";
 import ModeToggle from "./ModeToggle";
 
-import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
+import BrandMark from "@/components/BrandMark";
 
-import { useParams } from "next/navigation";
+import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
 
 import { Menu } from "@mui/icons-material";
 import {
