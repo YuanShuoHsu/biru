@@ -8,7 +8,7 @@ import { Suspense } from "react";
 import AccountMenu from "./AccountMenu";
 import CartIconButton from "./CartIconButton";
 import LanguageMenu from "./LanguageMenu";
-import ModeToggle from "./ModeToggle";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 import BrandMark from "@/components/BrandMark";
 
@@ -73,7 +73,7 @@ const HideAppBar = () => {
           <BrandMark />
         </Stack>
         <Stack direction="row" alignItems="center" gap={0.5}>
-          <ModeToggle />
+          <ThemeSwitcher />
           <Suspense>
             <LanguageMenu />
           </Suspense>
