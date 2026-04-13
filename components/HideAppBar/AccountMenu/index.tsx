@@ -11,11 +11,9 @@ import { useState, type MouseEvent } from "react";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
-import { query } from "@/constants/query";
+import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
-import { useLogoutMenuItem } from "@/hooks/useAuth";
-
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 
 import { AccountCircle } from "@mui/icons-material";
 import {
@@ -24,9 +22,12 @@ import {
   IconButton,
   ListItemIcon,
   ListItemText,
+  ListSubheader,
   Menu,
   MenuItem,
+  Stack,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -36,7 +37,6 @@ import type { MenuItem as MenuItemData } from "@/types/menuItem";
 
 import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
 import { getDisplayName } from "@/utils/auth";
-import { getHref } from "@/utils/href";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -64,21 +64,58 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
     marginTop: theme.spacing(7),
   },
 
-  "& .MuiPaper-root": {
-    "& .MuiAvatar-root": {
-      width: theme.spacing(2.5),
-      height: theme.spacing(2.5),
-    },
-
-    "& .MuiListItemIcon-root": {
-      minWidth: 0,
-    },
-
-    "& .MuiMenuItem-root": {
-      gap: theme.spacing(2),
-    },
+  "& .MuiDivider-root": {
+    marginBlock: theme.spacing(0.5),
   },
 }));
+
+const StyledListSubheader = styled(ListSubheader)(({ theme }) => ({
+  backgroundImage: "var(--Paper-overlay)",
+  display: "flex",
+  alignItems: "center",
+  gap: theme.spacing(2),
+}));
+
+const StyledHeaderAvatar = styled(StyledAvatar)(({ theme }) => ({
+  width: 36,
+  height: 36,
+  border: `1px solid ${theme.vars.palette.primary.main}`,
+  fontSize: 18,
+
+  [theme.getColorSchemeSelector("dark")]: {
+    borderColor: theme.vars.palette.common.white,
+  },
+}));
+
+const renderMenuItems = (
+  pathname: string,
+  basePath: string,
+  items: MenuItemData[],
+) =>
+  items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
+    const key = to || index;
+    const href = to && `${basePath}${to}`;
+    const selected = href
+      ? pathname === href || pathname.startsWith(`${href}/`)
+      : false;
+
+    return (
+      <MenuItem
+        disabled={disabled}
+        key={key}
+        onClick={onClick}
+        selected={selected}
+        {...(href ? { component: Link, href } : {})}
+      >
+        {Icon && (
+          <ListItemIcon>
+            <Icon fontSize="small" />
+          </ListItemIcon>
+        )}
+        <ListItemText primary={label} />
+      </MenuItem>
+    );
+  });
 
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -96,8 +133,6 @@ const AccountMenu = () => {
 
   const pathname = usePathname();
 
-  const router = useRouter();
-
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
   const isAccountPage = pathname.startsWith("/account");
@@ -110,51 +145,15 @@ const AccountMenu = () => {
       ? redirectTo
       : pathname;
 
-  const signInRedirectHref = getHref("/auth/sign-in", {
-    [query.redirectTo]: redirectTarget,
-  });
-
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    if (!session) {
-      router.push(signInRedirectHref);
-
-      return;
-    }
-
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => setAnchorEl(null);
 
+  const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
   const profileMenuItems = useProfileMenuItems();
   const accountMenuItems = [...useAccountMenuItems(), useLogoutMenuItem()];
-
-  const renderMenuItems = (items: MenuItemData[]) =>
-    items.map(({ disabled, icon: Icon, label, onClick, to }, index) => {
-      const key = to || index;
-      const href = to && `/account${to}`;
-
-      const selected = href
-        ? pathname === href || pathname.startsWith(`${href}/`)
-        : false;
-
-      return (
-        <MenuItem
-          disabled={disabled}
-          key={key}
-          onClick={onClick}
-          selected={selected}
-          {...(href ? { component: Link, href } : {})}
-        >
-          {Icon && (
-            <ListItemIcon>
-              <Icon fontSize="small" />
-            </ListItemIcon>
-          )}
-          <ListItemText primary={label} />
-        </MenuItem>
-      );
-    });
 
   return (
     <>
@@ -190,9 +189,33 @@ const AccountMenu = () => {
         open={open}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
       >
-        {renderMenuItems(profileMenuItems)}
+        {session && (
+          <StyledListSubheader>
+            <StyledHeaderAvatar
+              alt={displayName}
+              isSignedIn
+              src={session.user.image || undefined}
+            >
+              {displayName[0]}
+            </StyledHeaderAvatar>
+            <Stack gap={1}>
+              <Typography fontWeight="bold" variant="body2">
+                {displayName}
+              </Typography>
+              <Typography color="text.secondary" variant="caption">
+                {session.user.email}
+              </Typography>
+            </Stack>
+          </StyledListSubheader>
+        )}
+        {!session && (
+          <StyledListSubheader>{tAuth("label")}</StyledListSubheader>
+        )}
         <Divider />
-        {renderMenuItems(accountMenuItems)}
+        {session && renderMenuItems(pathname, "/account", profileMenuItems)}
+        {session && <Divider />}
+        {session && renderMenuItems(pathname, "/account", accountMenuItems)}
+        {!session && renderMenuItems(pathname, "/auth", authMenuItems)}
       </StyledMenu>
     </>
   );
