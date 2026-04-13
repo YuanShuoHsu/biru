@@ -35,7 +35,10 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 
-import { useAccountMenuItems, useProfileMenuItems } from "@/utils/account";
+import {
+  useAccountSettingsMenuItem,
+  useAddAnotherAccountMenuItem,
+} from "@/utils/account";
 import { getDisplayName } from "@/utils/auth";
 
 const StyledAvatar = styled(Avatar, {
@@ -129,7 +132,7 @@ const AccountMenu = () => {
   const tAuth = useTranslations("auth");
   const tooltipTitle = session
     ? tAccount("accountSettings.label")
-    : tAuth("signIn.label");
+    : tAuth("label");
 
   const pathname = usePathname();
 
@@ -152,8 +155,9 @@ const AccountMenu = () => {
   const handleClose = () => setAnchorEl(null);
 
   const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
-  const profileMenuItems = useProfileMenuItems();
-  const accountMenuItems = [...useAccountMenuItems(), useLogoutMenuItem()];
+  const accountSettingsItem = useAccountSettingsMenuItem();
+  const addAnotherAccountItem = useAddAnotherAccountMenuItem();
+  const logoutMenuItem = useLogoutMenuItem();
 
   return (
     <>
@@ -212,9 +216,14 @@ const AccountMenu = () => {
           <StyledListSubheader>{tAuth("label")}</StyledListSubheader>
         )}
         <Divider />
-        {session && renderMenuItems(pathname, "/account", profileMenuItems)}
+        {session &&
+          renderMenuItems(pathname, "/account", [
+            accountSettingsItem,
+            logoutMenuItem,
+          ])}
         {session && <Divider />}
-        {session && renderMenuItems(pathname, "/account", accountMenuItems)}
+        {session &&
+          renderMenuItems(pathname, "/account", [addAnotherAccountItem])}
         {!session && renderMenuItems(pathname, "/auth", authMenuItems)}
       </StyledMenu>
     </>

@@ -16,14 +16,12 @@ import {
   Business,
   Email,
   Gavel,
-  Group,
   HelpOutline,
   Info,
   LocalMall,
   LockReset,
   Login,
   Payment,
-  Person,
   PersonAdd,
   Pets,
   Policy,
@@ -131,16 +129,6 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
   return [
     {
       children: [
-        {
-          icon: Group,
-          label: tAccount("accountMenu.profile"),
-          to: "/profile",
-        },
-        {
-          icon: Person,
-          label: tAccount("accountMenu.myAccount"),
-          to: "/my-account",
-        },
         {
           icon: PersonAdd,
           label: tAccount("accountMenu.addAnotherAccount"),
