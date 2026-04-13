@@ -43,15 +43,7 @@ export const proxy = (request: NextRequest) => {
 
   const sessionCookie = getSessionCookie(request);
 
-  const isAuthPage = pathname.includes("/auth");
   const isAccountPage = pathname.includes("/account");
-  const isAcceptInvitationPath = pathname.includes("/auth/accept-invitation");
-
-  if (sessionCookie && isAuthPage && !isAcceptInvitationPath) {
-    request.nextUrl.pathname = `/${locale}/account/my-account`;
-
-    return NextResponse.redirect(request.nextUrl);
-  }
 
   if (!sessionCookie && isAccountPage) {
     request.nextUrl.pathname = `/${locale}/auth/sign-in`;

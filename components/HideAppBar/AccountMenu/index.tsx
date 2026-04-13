@@ -130,9 +130,7 @@ const AccountMenu = () => {
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
-  const tooltipTitle = session
-    ? tAccount("accountSettings.label")
-    : tAuth("label");
+  const tooltipTitle = session ? tAccount("label") : tAuth("label");
 
   const pathname = usePathname();
 
@@ -154,9 +152,9 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
   const accountSettingsItem = useAccountSettingsMenuItem();
   const addAnotherAccountItem = useAddAnotherAccountMenuItem();
+  const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
   const logoutMenuItem = useLogoutMenuItem();
 
   return (
@@ -202,7 +200,7 @@ const AccountMenu = () => {
             >
               {displayName[0]}
             </StyledHeaderAvatar>
-            <Stack gap={1}>
+            <Stack gap={0.5}>
               <Typography fontWeight="bold" variant="body2">
                 {displayName}
               </Typography>
