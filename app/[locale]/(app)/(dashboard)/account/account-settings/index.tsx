@@ -118,14 +118,12 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
     defaultValues: { email: "" },
   });
 
-  const { data: deviceSessions = [], mutate: mutateDeviceSessions } =
-    useSWR<DeviceSession[]>(
-      session ? "device-sessions" : null,
-      async () => {
-        const { data } = await authClient.multiSession.listDeviceSessions();
-        return data || [];
-      },
-    );
+  const { data: deviceSessions = [], mutate: mutateDeviceSessions } = useSWR<
+    DeviceSession[]
+  >(session ? "device-sessions" : null, async () => {
+    const { data } = await authClient.multiSession.listDeviceSessions();
+    return data || [];
+  });
 
   const otherSessions = deviceSessions.filter(
     ({ session: { token } }) => token !== session?.session.token,
@@ -156,9 +154,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
       return next;
     });
 
-  const handleAvatarChange = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     setAvatarMenuAnchor(null);
@@ -271,10 +267,9 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
           });
         },
         onSuccess: () => {
-          enqueueSnackbar(
-            tAccount("switchSession.success", { email }),
-            { variant: "success" },
-          );
+          enqueueSnackbar(tAccount("switchSession.success", { email }), {
+            variant: "success",
+          });
           window.location.reload();
         },
       },
@@ -303,7 +298,11 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
             <Typography color="text.secondary" variant="body2">
               {tAccount("accountSettings.empty")}
             </Typography>
-            <Button href={signInHref} startIcon={<Person />} variant="contained">
+            <Button
+              href={signInHref}
+              startIcon={<Person />}
+              variant="contained"
+            >
               {tAuth("signIn.label")}
             </Button>
           </Stack>
@@ -395,7 +394,9 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
       </Box>
 
       {/* Desktop sidebar */}
-      <Box sx={{ display: { xs: "none", md: "block" }, width: 256, flexShrink: 0 }}>
+      <Box
+        sx={{ display: { xs: "none", md: "block" }, width: 256, flexShrink: 0 }}
+      >
         <Stack gap={0.5}>
           {navItems.map(({ id, Icon, label }) => (
             <Button
@@ -552,67 +553,78 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                       {tAccount("accountSettings.sessions.empty")}
                     </Typography>
                   ) : (
-                    otherSessions.map(({ session: { token }, user: sessionUser }) => {
-                      const sessionName =
-                        getDisplayName(sessionUser) || sessionUser.email;
-                      const isLoading =
-                        revokingToken === token || switchingToken === token;
+                    otherSessions.map(
+                      ({ session: { token }, user: sessionUser }) => {
+                        const sessionName =
+                          getDisplayName(sessionUser) || sessionUser.email;
+                        const isLoading =
+                          revokingToken === token || switchingToken === token;
 
-                      return (
-                        <Card
-                          key={token}
-                          variant="outlined"
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            p: 2,
-                            gap: 1,
-                          }}
-                        >
-                          <Stack
-                            direction="row"
-                            alignItems="center"
-                            gap={1}
-                            sx={{ flex: 1, minWidth: 0 }}
+                        return (
+                          <Card
+                            key={token}
+                            variant="outlined"
+                            sx={{
+                              display: "flex",
+                              flexDirection: "row",
+                              alignItems: "center",
+                              p: 2,
+                              gap: 1,
+                            }}
                           >
-                            <Avatar
-                              alt={sessionName}
-                              src={sessionUser.image || undefined}
-                              sx={{ width: 32, height: 32, fontSize: 14, flexShrink: 0 }}
+                            <Stack
+                              direction="row"
+                              alignItems="center"
+                              gap={1}
+                              sx={{ flex: 1, minWidth: 0 }}
                             >
-                              {sessionName.charAt(0)}
-                            </Avatar>
-                            <Stack sx={{ minWidth: 0 }}>
-                              <Typography fontWeight={500} noWrap variant="body2">
-                                {sessionName}
-                              </Typography>
-                              <Typography
-                                color="text.secondary"
-                                noWrap
-                                variant="caption"
+                              <Avatar
+                                alt={sessionName}
+                                src={sessionUser.image || undefined}
+                                sx={{
+                                  width: 32,
+                                  height: 32,
+                                  fontSize: 14,
+                                  flexShrink: 0,
+                                }}
                               >
-                                {sessionUser.email}
-                              </Typography>
+                                {sessionName.charAt(0)}
+                              </Avatar>
+                              <Stack sx={{ minWidth: 0 }}>
+                                <Typography
+                                  fontWeight={500}
+                                  noWrap
+                                  variant="body2"
+                                >
+                                  {sessionName}
+                                </Typography>
+                                <Typography
+                                  color="text.secondary"
+                                  noWrap
+                                  variant="caption"
+                                >
+                                  {sessionUser.email}
+                                </Typography>
+                              </Stack>
                             </Stack>
-                          </Stack>
-                          <IconButton
-                            disabled={isLoading}
-                            onClick={(e) =>
-                              setAccountMenuState({
-                                el: e.currentTarget,
-                                token,
-                                email: sessionUser.email,
-                              })
-                            }
-                            size="small"
-                            sx={{ flexShrink: 0, ml: "auto" }}
-                          >
-                            <MoreHoriz />
-                          </IconButton>
-                        </Card>
-                      );
-                    })
+                            <IconButton
+                              disabled={isLoading}
+                              onClick={(e) =>
+                                setAccountMenuState({
+                                  el: e.currentTarget,
+                                  token,
+                                  email: sessionUser.email,
+                                })
+                              }
+                              size="small"
+                              sx={{ flexShrink: 0, ml: "auto" }}
+                            >
+                              <MoreHoriz />
+                            </IconButton>
+                          </Card>
+                        );
+                      },
+                    )
                   )}
                 </Stack>
               </CardContent>
@@ -756,9 +768,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
         {/* API Keys tab */}
         {activeTab === "apiKeys" && (
           <Card>
-            <CardHeader
-              title={tAccount("accountSettings.sections.apiKeys")}
-            />
+            <CardHeader title={tAccount("accountSettings.sections.apiKeys")} />
             <CardContent>
               <Typography color="text.secondary" variant="body2">
                 {tAccount("accountSettings.apiKeys.comingSoon")}
