@@ -5,15 +5,21 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useState, type MouseEvent } from "react";
+import useSWR from "swr";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 
+import { query } from "@/constants/query";
+
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
-import { Link, usePathname } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
+
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { AccountCircle } from "@mui/icons-material";
 import {
@@ -21,13 +27,12 @@ import {
   Divider,
   IconButton,
   ListItemIcon,
+  listItemIconClasses,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
-  Stack,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -40,6 +45,7 @@ import {
   useAddAnotherAccountMenuItem,
 } from "@/utils/account";
 import { getDisplayName } from "@/utils/auth";
+import { getHref } from "@/utils/href";
 
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "isSignedIn",
@@ -76,14 +82,14 @@ const StyledListSubheader = styled(ListSubheader)(({ theme }) => ({
   backgroundImage: "var(--Paper-overlay)",
   display: "flex",
   alignItems: "center",
-  gap: theme.spacing(2),
+
+  [`& .${listItemIconClasses.root}`]: {
+    minWidth: theme.spacing(4.5),
+  },
 }));
 
-const StyledHeaderAvatar = styled(StyledAvatar)(({ theme }) => ({
-  width: 36,
-  height: 36,
+const StyledListAvatar = styled(StyledAvatar)(({ theme }) => ({
   border: `1px solid ${theme.vars.palette.primary.main}`,
-  fontSize: 18,
 
   [theme.getColorSchemeSelector("dark")]: {
     borderColor: theme.vars.palette.common.white,
@@ -120,19 +126,22 @@ const renderMenuItems = (
     );
   });
 
+type DeviceSession = NonNullable<
+  Awaited<ReturnType<typeof authClient.multiSession.listDeviceSessions>>["data"]
+>[number];
+
 const AccountMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
-  const { session } = useAuthStore((state) => state);
-
+  const { session, setSession } = useAuthStore((state) => state);
   const displayName = getDisplayName(session?.user);
 
-  const tAccount = useTranslations("account");
-  const tAuth = useTranslations("auth");
-  const tooltipTitle = session ? tAccount("label") : tAuth("label");
+  const locale = useLocale();
 
   const pathname = usePathname();
+
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
@@ -146,16 +155,65 @@ const AccountMenu = () => {
       ? redirectTo
       : pathname;
 
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const signInRedirectHref = getHref("/auth/sign-in", {
+    [query.redirectTo]: redirectTarget,
+  });
 
-  const handleClose = () => setAnchorEl(null);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const { data: deviceSessions = [] } = useSWR<DeviceSession[]>(
+    session ? "device-sessions" : null,
+    async () => {
+      const { data } = await authClient.multiSession.listDeviceSessions();
+
+      return data || [];
+    },
+  );
+
+  const otherSessions = deviceSessions.filter(
+    ({ session: { token } }) => token !== session?.session.token,
+  );
+
+  const tAccount = useTranslations("account");
+  const tAuth = useTranslations("auth");
+  const tooltipTitle = session ? tAccount("label") : tAuth("label");
 
   const accountSettingsItem = useAccountSettingsMenuItem();
   const addAnotherAccountItem = useAddAnotherAccountMenuItem();
   const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
   const logoutMenuItem = useLogoutMenuItem();
+
+  const handleClick = (event: MouseEvent<HTMLElement>) => {
+    if (!session) {
+      router.push(signInRedirectHref);
+      return;
+    }
+
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => setAnchorEl(null);
+
+  const handleSwitchSession = async (sessionToken: string, email: string) => {
+    await authClient.multiSession.setActive({
+      sessionToken,
+      fetchOptions: {
+        onError: ({ error }) => {
+          enqueueSnackbar(getErrorMessage(error.code, locale), {
+            variant: "error",
+          });
+        },
+        onSuccess: async () => {
+          const { data } = await authClient.getSession();
+          setSession(data);
+
+          enqueueSnackbar(tAccount("switchSession.success", { email }), {
+            variant: "success",
+          });
+        },
+      },
+    });
+  };
 
   return (
     <>
@@ -193,21 +251,20 @@ const AccountMenu = () => {
       >
         {session && (
           <StyledListSubheader>
-            <StyledHeaderAvatar
-              alt={displayName}
-              isSignedIn
-              src={session.user.image || undefined}
-            >
-              {displayName[0]}
-            </StyledHeaderAvatar>
-            <Stack gap={0.5}>
-              <Typography fontWeight="bold" variant="body2">
-                {displayName}
-              </Typography>
-              <Typography color="text.secondary" variant="caption">
-                {session.user.email}
-              </Typography>
-            </Stack>
+            <ListItemIcon>
+              <StyledListAvatar
+                alt={displayName}
+                isSignedIn
+                src={session.user.image || undefined}
+              >
+                {displayName[0]}
+              </StyledListAvatar>
+            </ListItemIcon>
+            <ListItemText
+              primary={displayName}
+              secondary={session.user.email}
+              slotProps={{ secondary: { variant: "caption" } }}
+            />
           </StyledListSubheader>
         )}
         {!session && (
@@ -220,6 +277,33 @@ const AccountMenu = () => {
             logoutMenuItem,
           ])}
         {session && <Divider />}
+        {session &&
+          otherSessions.map(({ session: { token }, user }) => {
+            const name = getDisplayName(user);
+
+            return (
+              <MenuItem
+                key={token}
+                onClick={() => handleSwitchSession(token, user.email)}
+              >
+                <ListItemIcon>
+                  <StyledListAvatar
+                    alt={name}
+                    isSignedIn
+                    src={user.image || undefined}
+                  >
+                    {name[0]}
+                  </StyledListAvatar>
+                </ListItemIcon>
+                <ListItemText
+                  primary={name}
+                  secondary={user.email}
+                  slotProps={{ secondary: { variant: "caption" } }}
+                />
+              </MenuItem>
+            );
+          })}
+        {session && otherSessions.length > 0 && <Divider />}
         {session &&
           renderMenuItems(pathname, "/account", [addAnotherAccountItem])}
         {!session && renderMenuItems(pathname, "/auth", authMenuItems)}

@@ -1,11 +1,10 @@
 {
   "label": "Account",
+  "switchSession": {
+    "success": "Successfully switched to {email}"
+  },
   "accountMenu": {
-    "這邊未來要根據頁面修正": "",
-    "addAnotherAccount": "Add another account",
-    "myAccount": "My account",
-    "profile": "Profile",
-    "settings": "Settings"
+    "addAnotherAccount": "Add another account"
   },
   "addAnotherAccount": {
     "title": "Add another account",
@@ -52,46 +51,10 @@
       "action": "Delete account"
     }
   },
-  "myAccount": {
-    "title": "My account",
-    "subtitle": "Overview and quick actions",
-    "signInCta": "Sign in to manage your account",
-    "empty": "We will show your account overview after you sign in.",
-    "sections": {
-      "overview": "Overview",
-      "security": "Security",
-      "quickActions": "Quick actions",
-      "appearance": "Appearance",
-      "support": "Support"
-    },
-    "actions": {
-      "profile": "View profile",
-      "settings": "Account settings",
-      "verifyEmail": "Verify email",
-      "resetPassword": "Reset password",
-      "terms": "Terms of service",
-      "privacy": "Privacy policy"
-    },
-    "colorMode": {
-      "label": "Color mode",
-      "helper": "Switch between light and dark."
-    }
-  },
   "profile": {
-    "activity": "Recent activity",
-    "completion": "Profile completion",
-    "contact": "Contact",
-    "empty": "We will show your account details after you sign in.",
     "lastUpdated": "Last updated {date}",
-    "localNotice": "Preferences stay on this device for now.",
     "memberSince": "Member since {date}",
-    "newsletter": "Coffee newsletter",
-    "orderUpdates": "Order updates",
     "placeholderName": "Coffee lover",
-    "preferences": "Preferences",
-    "recommendations": "Recommendations",
-    "signInCta": "Sign in to view your profile",
-    "subtitle": "Personal details and preferences",
     "unverified": "Not verified",
     "verified": "Verified"
   }

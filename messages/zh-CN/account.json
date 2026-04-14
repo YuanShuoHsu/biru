@@ -1,11 +1,10 @@
 {
   "label": "账号",
+  "switchSession": {
+    "success": "已成功切换至 {email}"
+  },
   "accountMenu": {
-    "這邊未來要根據頁面修正": "",
-    "addAnotherAccount": "添加其他账号",
-    "myAccount": "我的账号",
-    "profile": "个人资料",
-    "settings": "设置"
+    "addAnotherAccount": "添加其他账号"
   },
   "addAnotherAccount": {
     "title": "添加其他账号",
@@ -52,46 +51,10 @@
       "action": "删除账号"
     }
   },
-  "myAccount": {
-    "title": "我的账号",
-    "subtitle": "账号概览与快捷操作",
-    "signInCta": "登录以管理你的账号",
-    "empty": "登录后将显示你的账号概览。",
-    "sections": {
-      "overview": "概览",
-      "security": "安全",
-      "quickActions": "快捷操作",
-      "appearance": "外观",
-      "support": "支持"
-    },
-    "actions": {
-      "profile": "查看个人资料",
-      "settings": "账号设置",
-      "verifyEmail": "验证电子邮件",
-      "resetPassword": "重置密码",
-      "terms": "服务条款",
-      "privacy": "隐私政策"
-    },
-    "colorMode": {
-      "label": "颜色模式",
-      "helper": "切换浅色/深色模式。"
-    }
-  },
   "profile": {
-    "activity": "最新记录",
-    "completion": "资料完成度",
-    "contact": "联系方式",
-    "empty": "登录后即可查看你的账户资讯。",
     "lastUpdated": "最后更新 {date}",
-    "localNotice": "偏好目前仅会保存在此设备。",
     "memberSince": "加入时间 {date}",
-    "newsletter": "咖啡电子报",
-    "orderUpdates": "订单更新通知",
     "placeholderName": "咖啡同好",
-    "preferences": "偏好设置",
-    "recommendations": "个性化推荐",
-    "signInCta": "登录后查看个人资料",
-    "subtitle": "管理个人信息与偏好",
     "unverified": "未验证",
     "verified": "已验证"
   }

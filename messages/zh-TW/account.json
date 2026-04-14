@@ -1,11 +1,10 @@
 {
   "label": "帳號",
+  "switchSession": {
+    "success": "已成功切換至 {email}"
+  },
   "accountMenu": {
-    "這邊未來要根據頁面修正": "",
-    "addAnotherAccount": "新增其他帳號",
-    "myAccount": "我的帳號",
-    "profile": "個人檔案",
-    "settings": "設定"
+    "addAnotherAccount": "新增其他帳號"
   },
   "addAnotherAccount": {
     "title": "新增其他帳號",
@@ -52,46 +51,10 @@
       "action": "刪除帳號"
     }
   },
-  "myAccount": {
-    "title": "我的帳號",
-    "subtitle": "帳號總覽與快速操作",
-    "signInCta": "登入以管理你的帳號",
-    "empty": "登入後將顯示你的帳號總覽。",
-    "sections": {
-      "overview": "總覽",
-      "security": "安全性",
-      "quickActions": "快速操作",
-      "appearance": "外觀",
-      "support": "支援"
-    },
-    "actions": {
-      "profile": "查看個人檔案",
-      "settings": "帳號設定",
-      "verifyEmail": "驗證電子郵件",
-      "resetPassword": "重設密碼",
-      "terms": "服務條款",
-      "privacy": "隱私權政策"
-    },
-    "colorMode": {
-      "label": "色彩模式",
-      "helper": "切換淺色/深色模式。"
-    }
-  },
   "profile": {
-    "activity": "最新紀錄",
-    "completion": "檔案完成度",
-    "contact": "聯絡方式",
-    "empty": "登入後即可查看你的帳戶資訊。",
     "lastUpdated": "最後更新 {date}",
-    "localNotice": "偏好目前只會儲存在此裝置。",
     "memberSince": "加入時間 {date}",
-    "newsletter": "咖啡電子報",
-    "orderUpdates": "訂單更新通知",
     "placeholderName": "咖啡同好",
-    "preferences": "偏好設定",
-    "recommendations": "個人化推薦",
-    "signInCta": "登入即可查看個人檔案",
-    "subtitle": "管理個人資訊與偏好",
     "unverified": "尚未驗證",
     "verified": "已驗證"
   }
