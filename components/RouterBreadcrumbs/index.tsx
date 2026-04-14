@@ -130,11 +130,6 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
     {
       children: [
         {
-          icon: PersonAdd,
-          label: tAccount("accountMenu.addAnotherAccount"),
-          to: "/add-another-account",
-        },
-        {
           icon: Settings,
           label: tAccount("accountSettings.label"),
           to: "/account-settings",
