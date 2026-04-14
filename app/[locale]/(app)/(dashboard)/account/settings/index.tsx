@@ -12,6 +12,8 @@ import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useLogout } from "@/hooks/useLogout";
 
+import { useRouter } from "@/i18n/navigation";
+
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import {
@@ -101,9 +103,16 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
   const avatarInputRef = useRef<HTMLInputElement>(null);
 
   const { session } = useAuthStore((state) => state);
+
   const locale = useLocale();
+
+  const { handleLogout, isMutatingLogout } = useLogout({
+    onSuccess: () => router.push("/auth/sign-in"),
+  });
+
+  const router = useRouter();
+
   const { enqueueSnackbar } = useSnackbar();
-  const { handleLogout, isMutatingLogout } = useLogout();
 
   const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");

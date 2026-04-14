@@ -1,29 +1,45 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
-import { authClient } from "@/lib/auth-client";
+import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-export const useLogout = () => {
+interface UseLogoutProps {
+  onSuccess?: () => void;
+}
+
+export const useLogout = ({ onSuccess }: UseLogoutProps = {}) => {
   const [isMutatingLogout, setIsMutatingLogout] = useState(false);
 
   const { setSession } = useAuthStore((state) => state);
+
+  const locale = useLocale();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const tAuth = useTranslations("auth");
 
   const handleLogout = async () => {
-    setIsMutatingLogout(true);
-
     await authClient.signOut({
       fetchOptions: {
+        onError: ({ error: { code } }) => {
+          setIsMutatingLogout(false);
+
+          enqueueSnackbar(getErrorMessage(code, locale), {
+            variant: "error",
+          });
+        },
+        onRequest: () => setIsMutatingLogout(true),
         onSuccess: () => {
           setSession(null);
-          enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
+
           setIsMutatingLogout(false);
+
+          enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
+
+          onSuccess?.();
         },
       },
     });

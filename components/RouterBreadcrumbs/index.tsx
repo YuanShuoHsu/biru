@@ -132,7 +132,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
         {
           icon: Settings,
           label: tAccount("accountSettings.label"),
-          to: "/account-settings",
+          to: "/settings",
         },
       ],
       disabled: true,
