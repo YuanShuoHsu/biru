@@ -10,8 +10,7 @@
     },
     "actions": {
       "privacy": "Privacy policy",
-      "terms": "Terms of service",
-      "viewProfile": "View profile"
+      "terms": "Terms of service"
     },
     "avatar": {
       "description": "Click on the avatar to upload a custom one from your files.",
@@ -25,13 +24,11 @@
       "subtitle": "Not available yet.",
       "title": "Delete account"
     },
-    "deviceNotice": "Settings are stored locally on this device.",
     "email": {
       "description": "Enter the email address you want to use to log in.",
       "notice": "Please enter a valid email address.",
       "saveSuccess": "Verification email sent. Please check your inbox."
     },
-    "empty": "We will show settings after you sign in.",
     "fields": {
       "name": "Name"
     },
@@ -50,19 +47,14 @@
     "sections": {
       "account": "Account",
       "danger": "Danger zone",
-      "device": "On this device",
       "security": "Security",
-      "sessions": "Sessions",
       "support": "Support"
     },
     "sessions": {
       "empty": "No other active sessions",
       "revoke": "Sign out",
       "revokeSuccess": "Signed out of {email}"
-    },
-    "signInCta": "Sign in to manage your settings",
-    "subtitle": "Security, sign-in, and device preferences",
-    "title": "Account settings"
+    }
   },
   "addAnotherAccount": {
     "actions": {
