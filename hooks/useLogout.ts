@@ -2,20 +2,22 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
+import { usePathname, useRouter } from "@/i18n/navigation";
+
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
-interface UseLogoutProps {
-  onSuccess?: () => void;
-}
-
-export const useLogout = ({ onSuccess }: UseLogoutProps = {}) => {
+export const useLogout = () => {
   const [isMutatingLogout, setIsMutatingLogout] = useState(false);
 
   const { setSession } = useAuthStore((state) => state);
 
   const locale = useLocale();
+
+  const pathname = usePathname();
+
+  const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -39,7 +41,7 @@ export const useLogout = ({ onSuccess }: UseLogoutProps = {}) => {
 
           enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
 
-          onSuccess?.();
+          if (pathname === "/account/settings") router.replace("/auth/sign-in");
         },
       },
     });

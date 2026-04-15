@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocale, useTranslations } from "next-intl";
+import { useSnackbar } from "notistack";
 import { startTransition, useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
@@ -11,8 +12,6 @@ import { query } from "@/constants/query";
 import { REMEMBER_ME } from "@/constants/sign-in";
 
 import { useLogout } from "@/hooks/useLogout";
-
-import { useRouter } from "@/i18n/navigation";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
@@ -47,8 +46,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
-import { useSnackbar } from "notistack";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
@@ -106,11 +103,7 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
 
   const locale = useLocale();
 
-  const { handleLogout, isMutatingLogout } = useLogout({
-    onSuccess: () => router.push("/auth/sign-in"),
-  });
-
-  const router = useRouter();
+  const { handleLogout, isMutatingLogout } = useLogout();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -355,7 +348,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
         width: "100%",
       }}
     >
-      {/* Hidden file input */}
       <input
         ref={avatarInputRef}
         accept="image/*"
@@ -363,8 +355,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
         type="file"
         onChange={handleAvatarChange}
       />
-
-      {/* Mobile nav dropdown trigger */}
       <Box sx={{ display: { xs: "block", md: "none" } }}>
         <Button
           fullWidth
@@ -401,8 +391,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
           ))}
         </Menu>
       </Box>
-
-      {/* Desktop sidebar */}
       <Box
         sx={{ display: { xs: "none", md: "block" }, width: 256, flexShrink: 0 }}
       >
@@ -421,13 +409,9 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
           ))}
         </Stack>
       </Box>
-
-      {/* Content area */}
       <Stack sx={{ flex: 1, minWidth: 0 }} gap={2}>
-        {/* Account tab */}
         {activeTab === "account" && (
           <>
-            {/* Avatar card */}
             <Card sx={{ pb: 0 }}>
               <Box
                 sx={{
@@ -471,8 +455,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 </MenuItem>
               </Menu>
             </Card>
-
-            {/* Name form card */}
             <form onSubmit={nameForm.handleSubmit(onNameSubmit)}>
               <Card sx={{ pb: 0 }}>
                 <CardHeader
@@ -509,8 +491,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 </Box>
               </Card>
             </form>
-
-            {/* Email form card */}
             <form noValidate onSubmit={emailForm.handleSubmit(onEmailSubmit)}>
               <Card sx={{ pb: 0 }}>
                 <CardHeader
@@ -548,8 +528,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 </Box>
               </Card>
             </form>
-
-            {/* Accounts card */}
             <Card sx={{ pb: 0 }}>
               <CardHeader
                 subheader={tAccount("accountSettings.accounts.description")}
@@ -646,8 +624,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
                 </Button>
               </Box>
             </Card>
-
-            {/* Account ellipsis menu */}
             <Menu
               anchorEl={accountMenuState?.el}
               open={Boolean(accountMenuState)}
@@ -665,8 +641,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
             </Menu>
           </>
         )}
-
-        {/* Security tab */}
         {activeTab === "security" && (
           <Stack gap={2}>
             <Card>
@@ -773,8 +747,6 @@ const AccountSettings = ({ currentURL }: AccountSettingsProps) => {
             </Card>
           </Stack>
         )}
-
-        {/* API Keys tab */}
         {activeTab === "apiKeys" && (
           <Card>
             <CardHeader title={tAccount("accountSettings.sections.apiKeys")} />
