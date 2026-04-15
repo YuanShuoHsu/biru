@@ -74,7 +74,7 @@ const StyledMenu = styled(Menu)(({ theme }) => ({
   },
 
   "& .MuiDivider-root": {
-    marginBlock: theme.spacing(0.5),
+    marginBlock: theme.spacing(1),
   },
 }));
 
