@@ -56,7 +56,9 @@ const CartAnchorTemporaryDrawer = () => {
   const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
 
   const locale = useLocale();
+
   const pathname = usePathname();
+
   const searchParams = useSearchParams();
   const search = searchParams.toString();
   const query = search ? `?${search}` : "";

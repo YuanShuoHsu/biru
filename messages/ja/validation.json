@@ -13,14 +13,21 @@
     "invalid": "国コードが無効です。",
     "required": "国コードは必須です."
   },
+  "currentPassword": {
+    "required": "現在のパスワードは必須です。"
+  },
   "email": {
-    "invalid": "メールアドレスが無効です。"
+    "invalid": "メールアドレスが無効です。",
+    "sameAsCurrent": "新しいメールアドレスは現在のものと異なる必要があります。"
   },
   "firstName": {
     "minLength": "名は1文字以上で入力してください。"
   },
   "gender": {
     "required": "性別は必須です。"
+  },
+  "newPassword": {
+    "minLength": "新しいパスワードは8文字以上で入力してください。"
   },
   "password": {
     "letter": "英字を1文字以上含む。",

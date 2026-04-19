@@ -72,11 +72,11 @@ interface CartItemRowProps {
 const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const { id, amount, choices, extraCost, image, price, quantity } = item;
 
-  const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   const { menus } = useMenuStore((state) => state);
 
-  const locale = useLocale();
+  const tCommon = useTranslations("common");
 
   const itemName = getItemName(menus, id, locale);
   const choiceNames = getChoiceNames(menus, id, choices, locale, {

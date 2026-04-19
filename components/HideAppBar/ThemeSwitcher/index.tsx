@@ -33,6 +33,7 @@ const StyledLightMode = styled(LightMode)(({ theme }) => ({
 
 const ThemeSwitcher = () => {
   const { mode, setMode } = useColorScheme();
+
   const isSsr = useSsr();
 
   const tAppBar = useTranslations("appBar");

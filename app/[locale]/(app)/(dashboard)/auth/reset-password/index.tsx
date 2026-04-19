@@ -67,10 +67,7 @@ const AuthResetPassword = ({
 
   const router = useRouter();
 
-  const tAuth = useTranslations("auth");
-
   const resetPasswordFormSchema = useResetPasswordFormSchema();
-
   const {
     control,
     formState: { errors, isSubmitting },
@@ -84,6 +81,8 @@ const AuthResetPassword = ({
     },
     resolver: zodResolver(resetPasswordFormSchema),
   });
+
+  const tAuth = useTranslations("auth");
 
   const [newPassword, confirmNewPassword] = useWatch({
     control,

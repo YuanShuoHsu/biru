@@ -7,6 +7,8 @@ import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 
+import { useAuthStore } from "@/providers/auth-store-provider";
+
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { usePathname } from "@/i18n/navigation";
@@ -79,12 +81,13 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
+  const { session } = useAuthStore((state) => state);
+
   const { locale, mode, storeSlug } = useParams<RouteParams>();
 
   const { data: stores = [] } = useSWR<Store[]>("/api/stores");
   const storeName = getStoreName(locale, stores, storeSlug);
 
-  const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
   const tCompany = useTranslations("company");
   const tOrder = useTranslations("order");
@@ -130,19 +133,6 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
     {
       children: [
         {
-          icon: Settings,
-          label: tAccount("accountSettings.label"),
-          to: "/settings",
-        },
-      ],
-      disabled: true,
-      icon: AccountCircle,
-      label: tAccount("label"),
-      to: "/account",
-    },
-    {
-      children: [
-        {
           icon: Login,
           label: tAuth("signIn.label"),
           to: "/sign-in",
@@ -166,6 +156,11 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
           icon: LockReset,
           label: tAuth("resetPassword.label"),
           to: "/reset-password",
+        },
+        {
+          icon: Settings,
+          label: tAuth("settings.label"),
+          to: "/settings",
         },
       ],
       disabled: true,

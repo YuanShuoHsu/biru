@@ -41,7 +41,7 @@ export const useLogout = () => {
 
           enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
 
-          if (pathname === "/account/settings") router.replace("/auth/sign-in");
+          if (pathname === "/auth/settings") router.replace("/auth/sign-in");
         },
       },
     });

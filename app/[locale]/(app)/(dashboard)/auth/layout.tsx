@@ -10,14 +10,14 @@ const StyledContainer = styled(Container)({
   justifyContent: "center",
 });
 
-interface MemberAuthLayoutProps {
+interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
-const MemberAuthLayout = ({ children }: MemberAuthLayoutProps) => (
+const AuthLayout = ({ children }: AuthLayoutProps) => (
   <StyledContainer disableGutters maxWidth="sm">
     {children}
   </StyledContainer>
 );
 
-export default MemberAuthLayout;
+export default AuthLayout;

@@ -43,9 +43,9 @@ export const proxy = (request: NextRequest) => {
 
   const sessionCookie = getSessionCookie(request);
 
-  const isAccountPage = pathname.includes("/account");
+  const isSettingsPage = pathname.includes("/auth/settings");
 
-  if (!sessionCookie && isAccountPage) {
+  if (!sessionCookie && isSettingsPage) {
     const redirectTo = pathname.slice(`/${locale}`.length);
     request.nextUrl.pathname = `/${locale}/auth/sign-in`;
     request.nextUrl.searchParams.set("redirectTo", redirectTo);

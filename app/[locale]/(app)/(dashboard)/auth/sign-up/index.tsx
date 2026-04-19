@@ -170,26 +170,34 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     confirmPassword: _,
     // country: { code },
     // phoneNumber,
-    ...rest
+    email,
+    emailSubscribed,
+    firstName,
+    lastName,
+    password,
   }: SignUpForm) => {
     const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
 
+    const name = (
+      locale === LocaleEnum.En ? [firstName, lastName] : [lastName, firstName]
+    )
+      .filter(Boolean)
+      .join(locale === LocaleEnum.En ? " " : "");
     // const parsedPhoneNumber = parsePhoneNumberWithError(phoneNumber, code);
 
     await authClient.signUp.email(
       {
-        ...rest,
         // birthDate,
         callbackURL: redirectTo,
+        email,
+        emailSubscribed,
+        firstName,
         // gender,
         image,
         lang: locale,
-        name: (locale === LocaleEnum.En
-          ? [rest.firstName, rest.lastName]
-          : [rest.lastName, rest.firstName]
-        )
-          .filter(Boolean)
-          .join(locale === LocaleEnum.En ? " " : ""),
+        lastName,
+        name,
+        password,
         // phoneNumber,
       },
       {
@@ -205,7 +213,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           router.push({
             pathname: "/auth/verify-email",
             query: {
-              [query.email]: rest.email,
+              [query.email]: email,
               [query.redirectTo]: redirectTo,
             },
           });

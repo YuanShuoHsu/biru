@@ -142,11 +142,11 @@ const CountrySelect = ({
 }: CountrySelectProps) => {
   const { code, label, phone } = value;
 
+  const [inputValue, setInputValue] = useState(formatPhone(phone));
+
   const hint = useRef("");
 
   const tAuth = useTranslations("auth");
-
-  const [inputValue, setInputValue] = useState(formatPhone(phone));
 
   return (
     <Autocomplete

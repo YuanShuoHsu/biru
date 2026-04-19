@@ -78,13 +78,14 @@ const AuthAcceptInvitation = ({
   const { items, startCountdown } = useCountdownStore((state) => state);
   const redirectCountdown = items["accept-invitation-redirect"];
 
+  const currentHref = useHref();
+
   const locale = useLocale();
 
   const router = useRouter();
 
-  const currentHref = useHref();
-
   const tAuth = useTranslations("auth");
+  const verifyingTitle = tAuth("acceptInvitation.verifying.title");
 
   const acceptInvitationFormSchema = useAcceptInvitationFormSchema();
   const {
@@ -94,8 +95,6 @@ const AuthAcceptInvitation = ({
     defaultValues: { email },
     resolver: zodResolver(acceptInvitationFormSchema),
   });
-
-  const verifyingTitle = tAuth("acceptInvitation.verifying.title");
 
   useEffect(() => {
     const accept = async () => {

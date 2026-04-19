@@ -22,9 +22,9 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
   storeSlug,
   tableNumber,
 }: OrderModeDineInStoreSlugTableNumberSelectProps) => {
-  const tOrder = useTranslations("order");
-
   const router = useRouter();
+
+  const tOrder = useTranslations("order");
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(

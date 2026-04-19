@@ -40,10 +40,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem as MenuItemData } from "@/types/menuItem";
 
-import {
-  useAccountSettingsMenuItem,
-  useAddAnotherAccountMenuItem,
-} from "@/utils/account";
+import { useAddAccountMenuItem, useSettingsMenuItem } from "@/utils/account";
 import { getDisplayName } from "@/utils/auth";
 import { getHref } from "@/utils/href";
 
@@ -145,13 +142,13 @@ const AccountMenu = () => {
 
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
-  const isAccountPage = pathname.startsWith("/account");
+  const isAuthSettingsPage = pathname.startsWith("/auth/settings");
   const isAuthPage = pathname.startsWith("/auth");
   const isCompanyPage = pathname.startsWith("/company");
 
   const redirectTarget = isAuthPage
     ? redirectTo
-    : (isAccountPage || isCompanyPage) && redirectTo
+    : (isAuthSettingsPage || isCompanyPage) && redirectTo
       ? redirectTo
       : pathname;
 
@@ -174,14 +171,15 @@ const AccountMenu = () => {
     ({ session: { token } }) => token !== session?.session.token,
   );
 
-  const tAccount = useTranslations("account");
   const tAuth = useTranslations("auth");
-  const tooltipTitle = session ? tAccount("label") : tAuth("label");
+  const tooltipTitle = session
+    ? tAuth("settings.account.label")
+    : tAuth("label");
 
-  const accountSettingsItem = useAccountSettingsMenuItem();
-  const addAnotherAccountItem = useAddAnotherAccountMenuItem();
+  const addAccountItem = useAddAccountMenuItem();
   const authMenuItems = useAuthMenuItems(redirectTarget || undefined);
   const logoutMenuItem = useLogoutMenuItem();
+  const settingsItem = useSettingsMenuItem();
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     if (!session) {
@@ -207,7 +205,7 @@ const AccountMenu = () => {
           const { data } = await authClient.getSession();
           setSession(data);
 
-          enqueueSnackbar(tAccount("switchSession.success", { email }), {
+          enqueueSnackbar(tAuth("switchSession.success", { email }), {
             variant: "success",
           });
         },
@@ -272,10 +270,7 @@ const AccountMenu = () => {
         )}
         <Divider />
         {session &&
-          renderMenuItems(pathname, "/account", [
-            accountSettingsItem,
-            logoutMenuItem,
-          ])}
+          renderMenuItems(pathname, "/auth", [settingsItem, logoutMenuItem])}
         {session && <Divider />}
         {session &&
           otherSessions.map(({ session: { token }, user }) => {
@@ -304,8 +299,7 @@ const AccountMenu = () => {
             );
           })}
         {session && otherSessions.length > 0 && <Divider />}
-        {session &&
-          renderMenuItems(pathname, "/account", [addAnotherAccountItem])}
+        {session && renderMenuItems(pathname, "/auth", [addAccountItem])}
         {!session && renderMenuItems(pathname, "/auth", authMenuItems)}
       </StyledMenu>
     </>

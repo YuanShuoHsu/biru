@@ -13,10 +13,7 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 
-import {
-  useAccountSettingsMenuItem,
-  useAddAnotherAccountMenuItem,
-} from "@/utils/account";
+import { useAddAccountMenuItem, useSettingsMenuItem } from "@/utils/account";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -29,21 +26,15 @@ const useFooterItems = (): MenuItem[] => {
   const { session } = useAuthStore((state) => state);
 
   const tAuth = useTranslations("auth");
-  const tAccount = useTranslations("account");
   const tCompany = useTranslations("company");
   const tOrder = useTranslations("order");
 
+  const addAccountItem = useAddAccountMenuItem();
   const authChildren = useAuthMenuItems();
-
-  const accountSettingsItem = useAccountSettingsMenuItem();
-  const addAnotherAccountItem = useAddAnotherAccountMenuItem();
   const logoutMenuItem = useLogoutMenuItem();
+  const settingsItem = useSettingsMenuItem();
 
-  const accountChildren = [
-    accountSettingsItem,
-    logoutMenuItem,
-    addAnotherAccountItem,
-  ];
+  const accountChildren = [settingsItem, logoutMenuItem, addAccountItem];
 
   return [
     {
@@ -57,17 +48,9 @@ const useFooterItems = (): MenuItem[] => {
       to: "/order",
     },
     {
-      ...(session
-        ? {
-            children: accountChildren,
-            label: tAccount("label"),
-            to: "/account",
-          }
-        : {
-            children: authChildren,
-            label: tAuth("label"),
-            to: "/auth",
-          }),
+      children: session ? accountChildren : authChildren,
+      label: tAuth("label"),
+      to: "/auth",
     },
     {
       children: [

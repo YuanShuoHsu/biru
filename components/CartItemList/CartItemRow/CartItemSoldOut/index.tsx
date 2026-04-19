@@ -71,10 +71,10 @@ const CartItemSoldOut = ({
 }: CartItemSoldOutProps) => {
   const { extraCost, price, quantity } = item;
 
+  const { deleteCartItem, updateCartItem } = useCartStore((state) => state);
+
   const tCart = useTranslations("cart");
   const tCommon = useTranslations("common");
-
-  const { deleteCartItem, updateCartItem } = useCartStore((state) => state);
 
   const targetQuantity = quantity + availableToAdd;
   const shouldDeleteItem = availableToAdd < 0 && targetQuantity <= 0;

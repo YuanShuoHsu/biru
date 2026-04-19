@@ -66,9 +66,7 @@ const UploadAvatars = forwardRef<UploadAvatarsHandle, UploadAvatarsProps>(
     );
 
     useImperativeHandle(ref, () => ({
-      getValue: () => ({
-        avatarSrc,
-      }),
+      getValue: () => ({ avatarSrc }),
     }));
 
     const handleAvatarChange = async (

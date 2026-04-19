@@ -52,9 +52,9 @@ const CustomizedAccordions = () => {
 
   const { cartTotalAmount } = useCartStore((state) => state);
 
-  const tCommon = useTranslations("common");
-
   const { locale } = useParams();
+
+  const tCommon = useTranslations("common");
 
   const handleChange =
     (panel: string) => (_: React.SyntheticEvent, newExpanded: boolean) =>
