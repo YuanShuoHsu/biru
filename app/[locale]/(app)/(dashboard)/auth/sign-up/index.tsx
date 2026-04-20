@@ -8,12 +8,7 @@
 
 import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
-import {
-  type BaseSyntheticEvent,
-  type ReactNode,
-  useRef,
-  useState,
-} from "react";
+import { type BaseSyntheticEvent, type ReactNode, useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { type SignUpForm, useSignUpFormSchema } from "./definitions";
 
@@ -24,9 +19,7 @@ import FormCard, {
 } from "@/components/FormCard";
 import GoogleButton from "@/components/GoogleButton";
 import PasswordRuleList from "@/components/PasswordRuleList";
-import UploadAvatars, {
-  type UploadAvatarsHandle,
-} from "@/components/UploadAvatars";
+import UploadAvatars from "@/components/UploadAvatars";
 
 import { LegalLinkType } from "@/constants/legal";
 import { query } from "@/constants/query";
@@ -59,6 +52,8 @@ import { styled } from "@mui/material/styles";
 
 import { useCountdownStore } from "@/providers/countdown-store-provider";
 
+import { useUploadAvatarStore } from "@/providers/upload-avatar-store-provider";
+
 import { getHref } from "@/utils/href";
 import {
   handleMouseDownPassword,
@@ -70,6 +65,8 @@ const StyledTypography = styled(Typography)({
 });
 
 // const today = dayjs();
+
+const SIGN_UP_AVATAR_KEY = "sign-up-avatar";
 
 interface AuthSignUpProps {
   locale: Locale;
@@ -115,7 +112,8 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     resolver: zodResolver(signUpFormSchema),
   });
 
-  const uploadAvatarsRef = useRef<UploadAvatarsHandle>(null);
+  const { avatarSrcs } = useUploadAvatarStore((state) => state);
+  const avatarSrc = avatarSrcs[SIGN_UP_AVATAR_KEY];
 
   const router = useRouter();
 
@@ -176,8 +174,6 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     lastName,
     password,
   }: SignUpForm) => {
-    const { avatarSrc: image } = uploadAvatarsRef.current?.getValue() || {};
-
     const name = (
       locale === LocaleEnum.En ? [firstName, lastName] : [lastName, firstName]
     )
@@ -193,7 +189,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         emailSubscribed,
         firstName,
         // gender,
-        image,
+        image: avatarSrc,
         lang: locale,
         lastName,
         name,
@@ -242,7 +238,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
       <StyledCardContent>
         <GoogleButton action="signUp" redirectTo={redirectTo} />
         <Divider flexItem>{tAuth("or")}</Divider>
-        <UploadAvatars ref={uploadAvatarsRef} />
+        <UploadAvatars uploadKey={SIGN_UP_AVATAR_KEY} />
         <Stack
           width="100%"
           direction={locale === LocaleEnum.En ? "row-reverse" : "row"}
