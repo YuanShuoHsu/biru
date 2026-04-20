@@ -21,7 +21,7 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 
-import { handleDrawerToggle } from "@/utils/drawer";
+import { useToggleDrawer } from "@/utils/drawer";
 
 const DrawerBox = styled(Box)({
   width: 250,
@@ -51,9 +51,10 @@ const StickyFooter = styled(Box)(({ theme }) => ({
 
 const CartAnchorTemporaryDrawer = () => {
   const { isCartEmpty, cartTotalAmount } = useCartStore((state) => state);
-  const { drawer, setDrawerOpen } = useDrawerStore((state) => state);
+  const { drawer } = useDrawerStore((state) => state);
   const open = drawer.cart;
-  const handleCartClose = handleDrawerToggle(setDrawerOpen, "cart", false);
+  const toggleDrawer = useToggleDrawer();
+  const handleClose = toggleDrawer("cart", false);
 
   const locale = useLocale();
 
@@ -107,7 +108,7 @@ const CartAnchorTemporaryDrawer = () => {
           disabled={actionDisabled}
           fullWidth
           href={actionHref}
-          onClick={handleCartClose}
+          onClick={handleClose}
           variant="contained"
         >
           {actionLabel}
@@ -120,7 +121,7 @@ const CartAnchorTemporaryDrawer = () => {
     <Drawer
       anchor="right"
       ModalProps={{ keepMounted: true }}
-      onClose={handleCartClose}
+      onClose={handleClose}
       open={open}
     >
       {drawerList}

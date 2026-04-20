@@ -24,9 +24,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useDrawerStore } from "@/providers/drawer-store-provider";
-
-import { handleDrawerToggle } from "@/utils/drawer";
+import { useToggleDrawer } from "@/utils/drawer";
 
 const StyledAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "trigger",
@@ -45,8 +43,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 const HideAppBar = () => {
-  const { setDrawerOpen } = useDrawerStore((state) => state);
-  const handleNavOpen = handleDrawerToggle(setDrawerOpen, "nav", true);
+  const toggleDrawer = useToggleDrawer();
 
   const { storeSlug } = useParams();
 
@@ -65,7 +62,7 @@ const HideAppBar = () => {
               aria-label="open drawer"
               color="inherit"
               edge="start"
-              onClick={handleNavOpen}
+              onClick={toggleDrawer("nav", true)}
             >
               <Menu />
             </IconButton>

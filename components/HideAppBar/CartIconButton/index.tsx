@@ -8,21 +8,23 @@ import { ShoppingCart } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
 
 import { useCartStore } from "@/providers/cart-store-provider";
-import { useDrawerStore } from "@/providers/drawer-store-provider";
 
-import { handleDrawerToggle } from "@/utils/drawer";
+import { useToggleDrawer } from "@/utils/drawer";
 
 const CartIconButton = () => {
   const { cartTotalQuantity } = useCartStore((state) => state);
 
-  const { setDrawerOpen } = useDrawerStore((state) => state);
-  const handleCartOpen = handleDrawerToggle(setDrawerOpen, "cart", true);
+  const toggleDrawer = useToggleDrawer();
 
   const tAppBar = useTranslations("appBar");
 
   return (
     <Tooltip title={tAppBar("cart")}>
-      <IconButton aria-label="cart" color="inherit" onClick={handleCartOpen}>
+      <IconButton
+        aria-label="cart"
+        color="inherit"
+        onClick={toggleDrawer("cart", true)}
+      >
         <CustomizedBadges badgeContent={cartTotalQuantity}>
           <ShoppingCart />
         </CustomizedBadges>
