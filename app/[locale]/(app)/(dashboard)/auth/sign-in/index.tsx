@@ -136,7 +136,8 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           const { data: session } = await authClient.getSession();
           setSession(session);
 
-          enqueueSnackbar(tAuth("signIn.success"), { variant: "success" });
+          enqueueSnackbar(tAuth("signIn.success", { email: data.email }), { variant: "success" });
+
           router.replace(redirectTo || "/");
         },
       },

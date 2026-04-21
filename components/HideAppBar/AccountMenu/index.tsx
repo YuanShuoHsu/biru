@@ -14,6 +14,7 @@ import useSWR from "swr";
 import BadgeAvatars from "@/components/BadgeAvatars";
 
 import { query } from "@/constants/query";
+import { swrKeys } from "@/constants/swr";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
@@ -142,15 +143,11 @@ const AccountMenu = () => {
 
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirectTo");
-  const isAuthSettingsPage = pathname.startsWith("/auth/settings");
   const isAuthPage = pathname.startsWith("/auth");
   const isCompanyPage = pathname.startsWith("/company");
 
-  const redirectTarget = isAuthPage
-    ? redirectTo
-    : (isAuthSettingsPage || isCompanyPage) && redirectTo
-      ? redirectTo
-      : pathname;
+  const redirectTarget =
+    (isAuthPage || isCompanyPage) && redirectTo ? redirectTo : pathname;
 
   const signInRedirectHref = getHref("/auth/sign-in", {
     [query.redirectTo]: redirectTarget,
@@ -159,7 +156,7 @@ const AccountMenu = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   const { data: deviceSessions = [] } = useSWR<DeviceSession[]>(
-    session ? "device-sessions" : null,
+    session ? swrKeys.deviceSessions : null,
     async () => {
       const { data } = await authClient.multiSession.listDeviceSessions();
 
@@ -184,6 +181,7 @@ const AccountMenu = () => {
   const handleClick = (event: MouseEvent<HTMLElement>) => {
     if (!session) {
       router.push(signInRedirectHref);
+
       return;
     }
 

@@ -4,8 +4,6 @@
 
 import { useTranslations } from "next-intl";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import useSWR from "swr";
-
 import SelectedListItem from "./SelectedListItem";
 import { StyledListItemButton } from "./SelectedListItem/ListItemLink";
 
@@ -13,6 +11,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { query } from "@/constants/query";
 
 import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
+import { useStores } from "@/hooks/useStores";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -47,7 +46,6 @@ import { useAuthStore } from "@/providers/auth-store-provider";
 
 import type { MenuItem } from "@/types/menuItem";
 import type { RouteParams } from "@/types/routeParams";
-import type { Store } from "@/types/stores";
 
 import { useAddAccountMenuItem, useSettingsMenuItem } from "@/utils/account";
 import { getHref } from "@/utils/href";
@@ -75,7 +73,7 @@ const DineInMenuItem = () => {
   const tableNumber = searchParams.get("tableNumber");
   const partySize = searchParams.get("partySize");
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const stores = useStores();
   const storeName = getStoreName(locale, stores, storeSlug);
 
   const tOrder = useTranslations("order");

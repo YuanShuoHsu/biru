@@ -5,11 +5,9 @@
 
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
-import useSWR from "swr";
-
-import { useAuthStore } from "@/providers/auth-store-provider";
-
 import { ORDER_MODE } from "@/constants/orderMode";
+
+import { useStores } from "@/hooks/useStores";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -41,7 +39,6 @@ import {
 import { styled, type Theme } from "@mui/material/styles";
 
 import type { RouteParams } from "@/types/routeParams";
-import type { Store } from "@/types/stores";
 
 import { getStoreName } from "@/utils/stores";
 
@@ -81,11 +78,9 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { session } = useAuthStore((state) => state);
-
   const { locale, mode, storeSlug } = useParams<RouteParams>();
 
-  const { data: stores = [] } = useSWR<Store[]>("/api/stores");
+  const stores = useStores();
   const storeName = getStoreName(locale, stores, storeSlug);
 
   const tAuth = useTranslations("auth");

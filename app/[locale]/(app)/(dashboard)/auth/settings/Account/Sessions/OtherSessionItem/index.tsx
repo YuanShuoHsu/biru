@@ -9,6 +9,8 @@ import { useSWRConfig } from "swr";
 
 import SessionItem from "../SessionItem";
 
+import { swrKeys } from "@/constants/swr";
+
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { MoreHoriz } from "@mui/icons-material";
@@ -51,17 +53,17 @@ const OtherSessionItem = ({ token, user }: OtherSessionItemProps) => {
     await authClient.multiSession.setActive({
       sessionToken: token,
       fetchOptions: {
-        onRequest: () => setIsLoading(true),
         onError: ({ error: { code } }) => {
           setIsLoading(false);
 
           enqueueSnackbar(getErrorMessage(code, locale), { variant: "error" });
         },
+        onRequest: () => setIsLoading(true),
         onSuccess: async () => {
           const { data } = await authClient.getSession();
           setSession(data);
 
-          await mutate("device-sessions");
+          await mutate(swrKeys.deviceSessions);
 
           setIsLoading(false);
 
@@ -91,14 +93,14 @@ const OtherSessionItem = ({ token, user }: OtherSessionItemProps) => {
     await authClient.multiSession.revoke({
       sessionToken: token,
       fetchOptions: {
-        onRequest: () => setIsLoading(true),
         onError: ({ error: { code } }) => {
           setIsLoading(false);
 
           enqueueSnackbar(getErrorMessage(code, locale), { variant: "error" });
         },
+        onRequest: () => setIsLoading(true),
         onSuccess: async () => {
-          await mutate("device-sessions");
+          await mutate(swrKeys.deviceSessions);
 
           setIsLoading(false);
 

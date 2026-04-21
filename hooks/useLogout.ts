@@ -1,17 +1,22 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useSWRConfig } from "swr";
+
+import { swrKeys } from "@/constants/swr";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
+import { useDialogStore } from "@/providers/dialog-store-provider";
 
 export const useLogout = () => {
-  const [isMutatingLogout, setIsMutatingLogout] = useState(false);
+  const { session, setSession } = useAuthStore((state) => state);
 
-  const { setSession } = useAuthStore((state) => state);
+  const { setDialog } = useDialogStore((state) => state);
+
+  const { mutate } = useSWRConfig();
 
   const locale = useLocale();
 
@@ -24,31 +29,40 @@ export const useLogout = () => {
   const tAuth = useTranslations("auth");
 
   const handleLogout = async () => {
-    await authClient.signOut({
+    if (!session) return;
+
+    await authClient.multiSession.revoke({
+      sessionToken: session.session.token,
       fetchOptions: {
         onError: ({ error: { code } }) => {
-          setIsMutatingLogout(false);
-
           enqueueSnackbar(getErrorMessage(code, locale), {
             variant: "error",
           });
         },
-        onRequest: () => setIsMutatingLogout(true),
-        onSuccess: () => {
-          setSession(null);
+        onSuccess: async () => {
+          const { data } = await authClient.getSession();
+          setSession(data);
 
-          setIsMutatingLogout(false);
+          await mutate(swrKeys.deviceSessions);
 
           enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
 
-          if (pathname === "/auth/settings") router.replace("/auth/sign-in");
+          if (!data && pathname === "/auth/settings")
+            router.replace("/auth/sign-in");
         },
       },
     });
   };
 
-  return {
-    handleLogout,
-    isMutatingLogout,
-  };
+  const handleLogoutDialog = () =>
+    setDialog({
+      contentText: tAuth("signOut.confirmContentText", {
+        email: session?.user.email || "",
+      }),
+      onConfirm: handleLogout,
+      open: true,
+      title: tAuth("signOut.label"),
+    });
+
+  return { handleLogoutDialog };
 };
