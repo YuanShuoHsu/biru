@@ -9,6 +9,7 @@ import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+
 import { type SignInForm, useSignInFormSchema } from "./definitions";
 
 import FormCard, {
@@ -136,7 +137,9 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           const { data: session } = await authClient.getSession();
           setSession(session);
 
-          enqueueSnackbar(tAuth("signIn.success", { email: data.email }), { variant: "success" });
+          enqueueSnackbar(tAuth("signIn.success", { email: data.email }), {
+            variant: "success",
+          });
 
           router.replace(redirectTo || "/");
         },
