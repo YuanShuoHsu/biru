@@ -192,7 +192,10 @@ const AccountMenu = () => {
 
   const handleClose = () => setAnchorEl(null);
 
-  const handleSetActiveConfirm = async (sessionToken: string, email: string) => {
+  const handleSetActiveConfirm = async (
+    sessionToken: string,
+    email: string,
+  ) => {
     await authClient.multiSession.setActive({
       sessionToken,
       fetchOptions: {
