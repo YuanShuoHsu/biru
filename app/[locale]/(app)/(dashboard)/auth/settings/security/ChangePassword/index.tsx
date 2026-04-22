@@ -10,21 +10,19 @@ import {
   useChangePasswordFormSchema,
 } from "./definitions";
 
-import FormCard, {
-  StyledCardActions,
-  StyledCardContent,
-  StyledCardHeader,
-} from "@/components/FormCard";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
+  Box,
   Button,
+  Card,
+  CardContent,
   IconButton,
   InputAdornment,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -83,126 +81,128 @@ const ChangePassword = () => {
     passwordForm.handleSubmit(onPasswordSubmitHandler)(event);
 
   return (
-    <FormCard component="form" onSubmit={onPasswordSubmit}>
-      <StyledCardHeader
-        title={
-          <Typography color="primary" fontWeight="bold" variant="h6">
-            {tAuth("settings.password.changeLabel")}
-          </Typography>
-        }
-      />
-      <StyledCardContent>
-        <Controller
-          control={passwordForm.control}
-          name="currentPassword"
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              autoComplete="current-password"
-              error={!!fieldState.error}
-              fullWidth
-              helperText={fieldState.error?.message}
-              label={tAuth("settings.password.currentLabel")}
-              placeholder={tAuth("settings.password.currentPlaceholder")}
-              size="small"
-              type="password"
+    <Box>
+      <Typography fontWeight={600} mb={1.5} variant="subtitle2">
+        {tAuth("settings.password.changeLabel")}
+      </Typography>
+      <Card component="form" onSubmit={onPasswordSubmit}>
+        <CardContent>
+          <Stack gap={2}>
+            <Controller
+              control={passwordForm.control}
+              name="currentPassword"
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  autoComplete="current-password"
+                  error={!!fieldState.error}
+                  fullWidth
+                  helperText={fieldState.error?.message}
+                  label={tAuth("settings.password.currentLabel")}
+                  placeholder={tAuth("settings.password.currentPlaceholder")}
+                  size="small"
+                  type="password"
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={passwordForm.control}
-          name="newPassword"
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              autoComplete="new-password"
-              error={!!fieldState.error}
-              fullWidth
-              helperText={fieldState.error?.message}
-              label={tAuth("newPassword.label")}
-              placeholder={tAuth("newPassword.placeholder")}
-              size="small"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label={
-                          showPassword.newPassword
-                            ? tAuth("hideNewPassword")
-                            : tAuth("showNewPassword")
-                        }
-                        edge="end"
-                        onClick={handleClickShowPassword("newPassword")}
-                        size="small"
-                      >
-                        {showPassword.newPassword ? (
-                          <VisibilityOff fontSize="small" />
-                        ) : (
-                          <Visibility fontSize="small" />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              type={showPassword.newPassword ? "text" : "password"}
+            <Controller
+              control={passwordForm.control}
+              name="newPassword"
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  autoComplete="new-password"
+                  error={!!fieldState.error}
+                  fullWidth
+                  helperText={fieldState.error?.message}
+                  label={tAuth("newPassword.label")}
+                  placeholder={tAuth("newPassword.placeholder")}
+                  size="small"
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              showPassword.newPassword
+                                ? tAuth("hideNewPassword")
+                                : tAuth("showNewPassword")
+                            }
+                            edge="end"
+                            onClick={handleClickShowPassword("newPassword")}
+                            size="small"
+                          >
+                            {showPassword.newPassword ? (
+                              <VisibilityOff fontSize="small" />
+                            ) : (
+                              <Visibility fontSize="small" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  type={showPassword.newPassword ? "text" : "password"}
+                />
+              )}
             />
-          )}
-        />
-        <Controller
-          control={passwordForm.control}
-          name="confirmNewPassword"
-          render={({ field, fieldState }) => (
-            <TextField
-              {...field}
-              autoComplete="new-password"
-              error={!!fieldState.error}
-              fullWidth
-              helperText={fieldState.error?.message}
-              label={tAuth("confirmNewPassword.label")}
-              placeholder={tAuth("confirmNewPassword.placeholder")}
-              size="small"
-              slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label={
-                          showPassword.confirmNewPassword
-                            ? tAuth("hideConfirmNewPassword")
-                            : tAuth("showConfirmNewPassword")
-                        }
-                        edge="end"
-                        onClick={handleClickShowPassword("confirmNewPassword")}
-                        size="small"
-                      >
-                        {showPassword.confirmNewPassword ? (
-                          <VisibilityOff fontSize="small" />
-                        ) : (
-                          <Visibility fontSize="small" />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-              }}
-              type={showPassword.confirmNewPassword ? "text" : "password"}
+            <Controller
+              control={passwordForm.control}
+              name="confirmNewPassword"
+              render={({ field, fieldState }) => (
+                <TextField
+                  {...field}
+                  autoComplete="new-password"
+                  error={!!fieldState.error}
+                  fullWidth
+                  helperText={fieldState.error?.message}
+                  label={tAuth("confirmNewPassword.label")}
+                  placeholder={tAuth("confirmNewPassword.placeholder")}
+                  size="small"
+                  slotProps={{
+                    input: {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label={
+                              showPassword.confirmNewPassword
+                                ? tAuth("hideConfirmNewPassword")
+                                : tAuth("showConfirmNewPassword")
+                            }
+                            edge="end"
+                            onClick={handleClickShowPassword(
+                              "confirmNewPassword",
+                            )}
+                            size="small"
+                          >
+                            {showPassword.confirmNewPassword ? (
+                              <VisibilityOff fontSize="small" />
+                            ) : (
+                              <Visibility fontSize="small" />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    },
+                  }}
+                  type={showPassword.confirmNewPassword ? "text" : "password"}
+                />
+              )}
             />
-          )}
-        />
-      </StyledCardContent>
-      <StyledCardActions disableSpacing sx={{ alignItems: "flex-end" }}>
-        <Button
-          loading={isSavingPassword}
-          size="small"
-          type="submit"
-          variant="contained"
-        >
-          {tAuth("settings.password.update")}
-        </Button>
-      </StyledCardActions>
-    </FormCard>
+            <Stack alignItems="flex-end">
+              <Button
+                loading={isSavingPassword}
+                size="small"
+                type="submit"
+                variant="contained"
+              >
+                {tAuth("settings.password.update")}
+              </Button>
+            </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
   );
 };
 

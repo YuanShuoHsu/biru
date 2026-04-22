@@ -1,4 +1,14 @@
-import { Avatar, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { useTranslations } from "next-intl";
+
+import {
+  Avatar,
+  Chip,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { Session } from "@/stores/auth-store";
@@ -22,11 +32,18 @@ const StyledAvatar = styled(Avatar)(({ theme }) => ({
 
 interface SessionItemProps {
   secondaryAction: React.ReactNode;
+  showCurrentChip?: boolean;
   user?: Session["user"] | null;
 }
 
-const SessionItem = ({ secondaryAction, user }: SessionItemProps) => {
+const SessionItem = ({
+  secondaryAction,
+  showCurrentChip,
+  user,
+}: SessionItemProps) => {
   const displayName = getDisplayName(user);
+
+  const tAuth = useTranslations("auth");
 
   return (
     <ListItem disablePadding secondaryAction={secondaryAction}>
@@ -36,7 +53,21 @@ const SessionItem = ({ secondaryAction, user }: SessionItemProps) => {
         </StyledAvatar>
       </ListItemIcon>
       <ListItemText
-        primary={displayName}
+        primary={
+          <Stack alignItems="center" direction="row" gap={1}>
+            <Typography fontWeight={500} variant="body2">
+              {displayName}
+            </Typography>
+            {showCurrentChip && (
+              <Chip
+                color="primary"
+                label={tAuth("settings.sessions.currentSession")}
+                size="small"
+                variant="outlined"
+              />
+            )}
+          </Stack>
+        }
         secondary={user?.email}
         slotProps={{ secondary: { variant: "caption" } }}
       />

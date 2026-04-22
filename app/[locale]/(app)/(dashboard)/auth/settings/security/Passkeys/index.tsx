@@ -11,15 +11,15 @@ import {
   Typography,
 } from "@mui/material";
 
-const Danger = () => {
+const Passkeys = () => {
   const tAuth = useTranslations("auth");
 
   return (
     <Box>
-      <Typography color="error" fontWeight={600} mb={1.5} variant="subtitle2">
-        {tAuth("settings.danger.label")}
+      <Typography fontWeight={600} mb={1.5} variant="subtitle2">
+        {tAuth("settings.passkeys.label")}
       </Typography>
-      <Card sx={{ borderColor: "error.main" }} variant="outlined">
+      <Card>
         <CardContent>
           <Stack
             alignItems={{ sm: "center" }}
@@ -29,20 +29,19 @@ const Danger = () => {
           >
             <Stack>
               <Typography fontWeight={500} variant="body2">
-                {tAuth("settings.danger.title")}
+                {tAuth("settings.passkeys.title")}
               </Typography>
               <Typography color="text.secondary" mt={0.5} variant="caption">
-                {tAuth("settings.danger.subtitle")}
+                {tAuth("settings.passkeys.subtitle")}
               </Typography>
             </Stack>
             <Button
-              color="error"
               disabled
               size="small"
               sx={{ flexShrink: 0 }}
               variant="contained"
             >
-              {tAuth("settings.danger.action")}
+              {tAuth("settings.passkeys.add")}
             </Button>
           </Stack>
         </CardContent>
@@ -51,4 +50,4 @@ const Danger = () => {
   );
 };
 
-export default Danger;
+export default Passkeys;
