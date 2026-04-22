@@ -26,6 +26,6 @@ export const useSettingsMenuItem = (): MenuItem => {
   return {
     icon: Settings,
     label: tAuth("settings.label"),
-    to: "/settings",
+    to: "/settings/account",
   };
 };
