@@ -14,7 +14,9 @@ export const useChangePasswordFormSchema = () => {
         .trim(),
       newPassword: z
         .string()
-        .min(PASSWORD_MIN_LENGTH, { error: tValidation("newPassword.minLength") })
+        .min(PASSWORD_MIN_LENGTH, {
+          error: tValidation("newPassword.minLength"),
+        })
         .regex(/[a-zA-Z]/, { error: tValidation("newPassword.letter") })
         .regex(/[0-9]/, { error: tValidation("newPassword.number") })
         .trim(),
