@@ -31,6 +31,8 @@ export const useLogout = () => {
   const handleLogout = async () => {
     if (!session) return;
 
+    const email = session.user.email;
+
     await authClient.multiSession.revoke({
       sessionToken: session.session.token,
       fetchOptions: {
@@ -45,7 +47,9 @@ export const useLogout = () => {
 
           await mutate(swrKeys.deviceSessions);
 
-          enqueueSnackbar(tAuth("signOut.success"), { variant: "success" });
+          enqueueSnackbar(tAuth("signOut.success", { email }), {
+            variant: "success",
+          });
 
           if (!data && pathname.startsWith("/auth/settings"))
             router.replace("/auth/sign-in");
