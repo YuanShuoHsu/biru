@@ -8,6 +8,11 @@ import useSWR from "swr";
 import OtherSessionItem from "./OtherSessionItem";
 import SessionItem from "./SessionItem";
 
+import FormCard, {
+  StyledCardContent,
+  StyledCardHeader,
+} from "@/components/FormCard";
+
 import { swrKeys } from "@/constants/swr";
 
 import { useRouter } from "@/i18n/navigation";
@@ -15,15 +20,7 @@ import { useRouter } from "@/i18n/navigation";
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { Logout } from "@mui/icons-material";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Divider,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Button, Divider, Stack, Typography } from "@mui/material";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
@@ -99,39 +96,41 @@ const Sessions = () => {
     });
 
   return (
-    <Box>
-      <Typography fontWeight={600} mb={1.5} variant="subtitle2">
-        {tAuth("settings.sessions.label")}
-      </Typography>
-      <Card>
-        <CardContent>
-          <Stack gap={2}>
-            <SessionItem
-              user={session?.user}
-              showCurrentChip
-              secondaryAction={
-                <Button
-                  loading={loading}
-                  loadingPosition="end"
-                  onClick={handleRevokeCurrentSessionDialog}
-                  size="small"
-                  startIcon={<Logout fontSize="small" />}
-                  variant="outlined"
-                >
-                  {tAuth("signOut.label")}
-                </Button>
-              }
-            />
-            {otherSessions.map(({ session: { token }, user }) => (
-              <Fragment key={token}>
-                <Divider flexItem />
-                <OtherSessionItem token={token} user={user} />
-              </Fragment>
-            ))}
-          </Stack>
-        </CardContent>
-      </Card>
-    </Box>
+    <FormCard>
+      <StyledCardHeader
+        title={
+          <Typography color="primary" fontWeight="bold" variant="h6">
+            {tAuth("settings.sessions.label")}
+          </Typography>
+        }
+      />
+      <StyledCardContent>
+        <Stack gap={2} width="100%">
+          <SessionItem
+            user={session?.user}
+            showCurrentChip
+            secondaryAction={
+              <Button
+                loading={loading}
+                loadingPosition="end"
+                onClick={handleRevokeCurrentSessionDialog}
+                size="small"
+                startIcon={<Logout fontSize="small" />}
+                variant="outlined"
+              >
+                {tAuth("signOut.label")}
+              </Button>
+            }
+          />
+          {otherSessions.map(({ session: { token }, user }) => (
+            <Fragment key={token}>
+              <Divider flexItem />
+              <OtherSessionItem token={token} user={user} />
+            </Fragment>
+          ))}
+        </Stack>
+      </StyledCardContent>
+    </FormCard>
   );
 };
 
