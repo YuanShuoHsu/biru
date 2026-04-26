@@ -17,11 +17,9 @@ const AuthAcceptInvitationPage = async ({
   params,
   searchParams,
 }: AuthAcceptInvitationPageProps) => {
-  const { locale } = await params;
+  const [{ locale }, { email, id }] = await Promise.all([params, searchParams]);
 
   setRequestLocale(locale);
-
-  const { email, id } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : "";
   const safeInvitationId = typeof id === "string" ? id : "";

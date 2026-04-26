@@ -21,13 +21,12 @@ const OrderModeStoreSlugPage = async ({
   params,
   searchParams,
 }: OrderModeStoreSlugPageProps) => {
-  const { locale, mode, storeSlug } = await params;
+  const [{ locale, mode, storeSlug }, { tableNumber, partySize }] =
+    await Promise.all([params, searchParams]);
 
   setRequestLocale(locale);
 
   if (mode === ORDER_MODE.Pickup) return <OrderMenuContent />;
-
-  const { tableNumber, partySize } = await searchParams;
 
   const isValidTableNumber = !!tableNumber && /^[1-9]\d*$/.test(tableNumber);
 
