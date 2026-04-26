@@ -15,6 +15,7 @@ import { usePathname } from "@/i18n/navigation";
 import {
   AccountCircle,
   Business,
+  DeleteForever,
   Email,
   Gavel,
   HelpOutline,
@@ -154,6 +155,11 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
           icon: LockReset,
           label: tAuth("resetPassword.label"),
           to: "/reset-password",
+        },
+        {
+          icon: DeleteForever,
+          label: tAuth("deleteAccount.label"),
+          to: "/delete-account",
         },
         {
           children: [
