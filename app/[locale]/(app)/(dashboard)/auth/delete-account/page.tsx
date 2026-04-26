@@ -28,11 +28,10 @@ const AuthDeleteAccountPage = async ({
 
   if (!safeToken) notFound();
 
-  const safeRedirectTo = typeof redirectTo === "string" ? redirectTo : undefined;
+  const safeRedirectTo =
+    typeof redirectTo === "string" ? redirectTo : undefined;
 
-  return (
-    <AuthDeleteAccount redirectTo={safeRedirectTo} token={safeToken} />
-  );
+  return <AuthDeleteAccount redirectTo={safeRedirectTo} token={safeToken} />;
 };
 
 export default AuthDeleteAccountPage;
