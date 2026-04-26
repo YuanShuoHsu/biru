@@ -5,16 +5,16 @@
 // https://next-intl.dev/docs/getting-started/app-router
 // https://next-intl.dev/docs/routing/middleware
 
-import { getSessionCookie } from "better-auth/cookies";
 import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 import { routing } from "./i18n/routing";
+import { authClient } from "./lib/auth-client";
 
 const handleI18nRouting = createMiddleware(routing);
 
-export const proxy = (request: NextRequest) => {
+export const proxy = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
 
   const pathnameLocale = routing.locales.find(
@@ -41,16 +41,21 @@ export const proxy = (request: NextRequest) => {
     return NextResponse.redirect(request.nextUrl);
   }
 
-  const sessionCookie = getSessionCookie(request);
-
   const isAuthSettingsPage = pathname.startsWith(`/${locale}/auth/settings`);
 
-  if (!sessionCookie && isAuthSettingsPage) {
-    const redirectTo = pathname.slice(`/${locale}`.length);
-    request.nextUrl.pathname = `/${locale}/auth/sign-in`;
-    if (redirectTo) request.nextUrl.searchParams.set("redirectTo", redirectTo);
+  if (isAuthSettingsPage) {
+    const { data: session } = await authClient.getSession({
+      fetchOptions: { headers: request.headers },
+    });
 
-    return NextResponse.redirect(request.nextUrl);
+    if (!session) {
+      const redirectTo = pathname.slice(`/${locale}`.length);
+      request.nextUrl.pathname = `/${locale}/auth/sign-in`;
+      if (redirectTo)
+        request.nextUrl.searchParams.set("redirectTo", redirectTo);
+
+      return NextResponse.redirect(request.nextUrl);
+    }
   }
 
   return response;
