@@ -11,12 +11,7 @@ import useListAccounts from "@/hooks/useListAccounts";
 import { authClient, getErrorMessage } from "@/lib/auth-client";
 
 import { Link as LinkIcon, LinkOff as LinkOffIcon } from "@mui/icons-material";
-import {
-  Avatar,
-  Button,
-  ListItemIcon,
-  styled,
-} from "@mui/material";
+import { Avatar, Button, ListItemIcon, styled } from "@mui/material";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
