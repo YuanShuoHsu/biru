@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
-import type { Provider } from "..";
+import { StyledListItem, StyledListItemText } from "@/components/FormCard";
 
 import useListAccounts from "@/hooks/useListAccounts";
 
@@ -14,21 +14,17 @@ import { Link as LinkIcon, LinkOff as LinkOffIcon } from "@mui/icons-material";
 import {
   Avatar,
   Button,
-  ListItem,
   ListItemIcon,
-  ListItemText,
   styled,
 } from "@mui/material";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
+import type { Provider } from "..";
+
 const StyledAvatar = styled(Avatar)(({ theme }) => ({
   backgroundColor: theme.palette.action.selected,
 }));
-
-const StyledListItem = styled(ListItem)({
-  "& .MuiListItemSecondaryAction-root": { right: 0 },
-});
 
 const ProviderRow = ({ id, Icon, label }: Provider) => {
   const [loading, setLoading] = useState(false);
@@ -135,7 +131,7 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
           <Icon />
         </StyledAvatar>
       </ListItemIcon>
-      <ListItemText
+      <StyledListItemText
         primary={label}
         secondary={tAuth("settings.linkedAccounts.subtitle", {
           provider: label,
