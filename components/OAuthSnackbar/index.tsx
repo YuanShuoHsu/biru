@@ -13,11 +13,11 @@ const OAuthSnackbar = () => {
   const router = useRouter();
 
   const searchParams = useSearchParams();
+  const provider = searchParams.get(query.oauth);
 
   const tAuth = useTranslations("auth");
 
   useEffect(() => {
-    const provider = searchParams.get(query.oauth);
     if (!provider) return;
 
     const newParams = new URLSearchParams(searchParams);
@@ -27,7 +27,7 @@ const OAuthSnackbar = () => {
 
     if (provider === "google")
       enqueueSnackbar(tAuth("google.success"), { variant: "success" });
-  }, [pathname, router, searchParams, tAuth]);
+  }, [pathname, provider, router, searchParams, tAuth]);
 
   return null;
 };
