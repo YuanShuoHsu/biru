@@ -18,6 +18,7 @@ import {
   DeleteForever,
   Email,
   Gavel,
+  GroupAdd,
   HelpOutline,
   Info,
   LocalMall,
@@ -160,6 +161,11 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
           icon: DeleteForever,
           label: tAuth("deleteAccount.label"),
           to: "/delete-account",
+        },
+        {
+          icon: GroupAdd,
+          label: tAuth("acceptInvitation.label"),
+          to: "/accept-invitation",
         },
         {
           children: [
