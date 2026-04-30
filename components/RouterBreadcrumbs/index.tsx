@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { useStores } from "@/hooks/useStores";
+import { useOrganization } from "@/hooks/useOrganization";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -44,8 +44,6 @@ import {
 import { styled, type Theme } from "@mui/material/styles";
 
 import type { RouteParams } from "@/types/routeParams";
-
-import { getStoreName } from "@/utils/stores";
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   transition: "none",
@@ -83,10 +81,10 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { locale, mode, storeSlug } = useParams<RouteParams>();
+  const { mode, storeSlug } = useParams<RouteParams>();
 
-  const stores = useStores();
-  const storeName = getStoreName(locale, stores, storeSlug);
+  const organization = useOrganization();
+  const storeName = organization?.name || "";
 
   const tAuth = useTranslations("auth");
   const tCompany = useTranslations("company");
