@@ -4,7 +4,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
@@ -21,7 +21,6 @@ import {
   GroupAdd,
   HelpOutline,
   Info,
-  LocalMall,
   Lock,
   LockReset,
   Login,
@@ -30,7 +29,6 @@ import {
   PersonAdd,
   Pets,
   Policy,
-  Restaurant,
   Settings,
   ShoppingCart,
   Storefront,
@@ -81,7 +79,10 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { mode, storeSlug } = useParams<RouteParams>();
+  const { storeSlug } = useParams<RouteParams>();
+
+  const searchParams = useSearchParams();
+  const mode = searchParams.get("mode");
 
   const organization = useOrganization();
   const storeName = organization?.name || "";
@@ -105,25 +106,13 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
     },
   ];
 
-  const modeChildren: BreadcrumbItem[] = [
+  const orderChildren: BreadcrumbItem[] = [
     {
       children: storeChildren,
       disabled: !isPickup,
       icon: Storefront,
       label: storeName,
       to: `/${storeSlug}`,
-    },
-  ];
-
-  const orderChildren: BreadcrumbItem[] = [
-    {
-      children: modeChildren,
-      disabled: !isPickup,
-      icon: isPickup ? LocalMall : Restaurant,
-      label: isPickup
-        ? tOrder("mode.pickup.label")
-        : tOrder("mode.dineIn.label"),
-      to: `/${mode}`,
     },
   ];
 

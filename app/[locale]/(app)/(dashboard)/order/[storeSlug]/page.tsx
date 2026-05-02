@@ -9,24 +9,29 @@ import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderMode } from "@/types/orderMode";
 import type { StoreSlug } from "@/types/stores";
 
-interface OrderModeStoreSlugPageProps {
-  params: Promise<{ locale: Locale; mode: OrderMode; storeSlug: StoreSlug }>;
-  searchParams: Promise<{ tableNumber?: string; partySize?: string }>;
+interface OrderStoreSlugPageProps {
+  params: Promise<{ locale: Locale; storeSlug: StoreSlug }>;
+  searchParams: Promise<{
+    mode?: string;
+    tableNumber?: string;
+    partySize?: string;
+  }>;
 }
 
-const OrderModeStoreSlugPage = async ({
+const OrderStoreSlugPage = async ({
   params,
   searchParams,
-}: OrderModeStoreSlugPageProps) => {
-  const [{ locale, mode, storeSlug }, { tableNumber, partySize }] =
+}: OrderStoreSlugPageProps) => {
+  const [{ locale, storeSlug }, { mode, tableNumber, partySize }] =
     await Promise.all([params, searchParams]);
 
   setRequestLocale(locale);
 
   if (mode === ORDER_MODE.Pickup) return <OrderMenuContent />;
+
+  if (mode !== ORDER_MODE.DineIn) return notFound();
 
   const isValidTableNumber = !!tableNumber && /^[1-9]\d*$/.test(tableNumber);
 
@@ -35,7 +40,6 @@ const OrderModeStoreSlugPage = async ({
   if (!partySize) {
     return (
       <OrderModeDineInStoreSlugTableNumberSelect
-        mode={mode}
         storeSlug={storeSlug}
         tableNumber={tableNumber}
       />
@@ -53,4 +57,4 @@ const OrderModeStoreSlugPage = async ({
   return <OrderMenuContent />;
 };
 
-export default OrderModeStoreSlugPage;
+export default OrderStoreSlugPage;
