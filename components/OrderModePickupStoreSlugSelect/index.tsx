@@ -29,6 +29,9 @@ const OrderModePickupStoreSlugSelect = () => {
       required
       select
       size="small"
+      slotProps={{
+        select: { displayEmpty: true },
+      }}
       value=""
     >
       {organizations.map(({ id, slug, name }) => (

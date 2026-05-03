@@ -38,6 +38,9 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
       required
       select
       size="small"
+      slotProps={{
+        select: { displayEmpty: true },
+      }}
       value={""}
     >
       {Array.from({ length: PARTY_SIZE_MAX }, (_, index) => index + 1).map(
