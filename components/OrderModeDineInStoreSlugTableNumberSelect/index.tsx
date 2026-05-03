@@ -40,7 +40,22 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
       size="small"
       slotProps={{
         inputLabel: { shrink: true },
-        select: { displayEmpty: true },
+        select: {
+          displayEmpty: true,
+          renderValue: (selected) =>
+            selected ? (
+              tOrder(
+                "mode.dineIn.storeSlug.tableNumber.partySize.select.value",
+                { count: Number(selected) },
+              )
+            ) : (
+              <em>
+                {tOrder(
+                  "mode.dineIn.storeSlug.tableNumber.partySize.select.placeholder",
+                )}
+              </em>
+            ),
+        },
       }}
       value={""}
     >

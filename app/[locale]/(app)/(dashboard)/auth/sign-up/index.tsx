@@ -302,17 +302,17 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           slotProps={{
             select: {
               displayEmpty: isGenderFocused,
-              renderValue: (value: unknown) => {
-                if (!value)
-                  return (
-                    <Typography color="gray">
-                      {tAuth("gender.placeholder")}
-                    </Typography>
-                  );
-
-                return genderOptions.find(
-                  ({ value: optionValue }) => optionValue === value,
-                )?.label;
+              renderValue: (selected) => {
+                const option = genderOptions.find(
+                  ({ value }) => value === selected,
+                );
+                return option ? (
+                  option.label
+                ) : (
+                  <em>
+                    {tAuth("gender.placeholder")}
+                  </em>
+                );
               },
             },
           }}

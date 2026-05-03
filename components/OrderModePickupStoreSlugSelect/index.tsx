@@ -31,7 +31,20 @@ const OrderModePickupStoreSlugSelect = () => {
       size="small"
       slotProps={{
         inputLabel: { shrink: true },
-        select: { displayEmpty: true },
+        select: {
+          displayEmpty: true,
+          renderValue: (selected) => {
+            const organization = organizations.find(
+              ({ slug }) => slug === selected,
+            );
+
+            return organization ? (
+              organization.name
+            ) : (
+              <em>{tOrder("mode.pickup.select.placeholder")}</em>
+            );
+          },
+        },
       }}
       value=""
     >
