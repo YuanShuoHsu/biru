@@ -9,6 +9,7 @@
           "partySize": {
             "select": {
               "label": "来店人数を選択",
+              "placeholder": "あなたの来店人数を選択してください",
               "value": "{count} 名"
             }
           }
@@ -18,7 +19,8 @@
     "pickup": {
       "label": "お持ち帰り",
       "select": {
-        "label": "店舗を選択"
+        "label": "店舗を選択",
+        "placeholder": "あなたの店舗を選択してください"
       }
     },
     "storeSlug": {

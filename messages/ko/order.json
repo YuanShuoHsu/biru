@@ -9,6 +9,7 @@
           "partySize": {
             "select": {
               "label": "인원을 선택하세요",
+              "placeholder": "귀하의 인원을 선택해 주세요",
               "value": "{count} 명"
             }
           }
@@ -18,7 +19,8 @@
     "pickup": {
       "label": "포장 수령",
       "select": {
-        "label": "지점 선택"
+        "label": "지점 선택",
+        "placeholder": "귀하의 지점을 선택해 주세요"
       }
     },
     "storeSlug": {

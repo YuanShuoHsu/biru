@@ -35,6 +35,9 @@ const OrderModePickupStoreSlugSelect = () => {
       }}
       value=""
     >
+      <MenuItem disabled value="">
+        <em>{tOrder("mode.pickup.select.placeholder")}</em>
+      </MenuItem>
       {organizations.map(({ id, slug, name }) => (
         <MenuItem key={id} value={slug}>
           {name}

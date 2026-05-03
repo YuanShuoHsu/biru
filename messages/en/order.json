@@ -9,6 +9,7 @@
           "partySize": {
             "select": {
               "label": "Select party size",
+              "placeholder": "Please select your party size",
               "value": "{count} people"
             }
           }
@@ -18,7 +19,8 @@
     "pickup": {
       "label": "Pickup",
       "select": {
-        "label": "Select a store"
+        "label": "Select a store",
+        "placeholder": "Please select your store"
       }
     },
     "storeSlug": {
