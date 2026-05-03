@@ -45,7 +45,11 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
       value={""}
     >
       <MenuItem disabled value="">
-        <em>{tOrder("mode.dineIn.storeSlug.tableNumber.partySize.select.placeholder")}</em>
+        <em>
+          {tOrder(
+            "mode.dineIn.storeSlug.tableNumber.partySize.select.placeholder",
+          )}
+        </em>
       </MenuItem>
       {Array.from({ length: PARTY_SIZE_MAX }, (_, index) => index + 1).map(
         (count) => (
