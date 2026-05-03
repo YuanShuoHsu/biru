@@ -39,6 +39,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
       select
       size="small"
       slotProps={{
+        inputLabel: { shrink: true },
         select: { displayEmpty: true },
       }}
       value={""}
