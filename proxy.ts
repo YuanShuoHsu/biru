@@ -32,14 +32,13 @@ export const proxy = async (request: NextRequest) => {
   if (isMaintenanceMode) {
     if (isMaintenancePath) return response;
 
-    request.nextUrl.pathname = `/${locale}/maintenance`;
-    return NextResponse.redirect(request.nextUrl);
+    return NextResponse.redirect(
+      new URL(`/${locale}/maintenance`, request.url),
+    );
   }
 
-  if (isMaintenancePath) {
-    request.nextUrl.pathname = `/${locale}`;
-    return NextResponse.redirect(request.nextUrl);
-  }
+  if (isMaintenancePath)
+    return NextResponse.redirect(new URL(`/${locale}`, request.url));
 
   const isAuthSettingsPage = pathname.startsWith(`/${locale}/auth/settings`);
 
@@ -49,12 +48,12 @@ export const proxy = async (request: NextRequest) => {
     });
 
     if (!session) {
-      const redirectTo = pathname.slice(`/${locale}`.length);
-      request.nextUrl.pathname = `/${locale}/auth/sign-in`;
-      if (redirectTo)
-        request.nextUrl.searchParams.set("redirectTo", redirectTo);
+      const redirectTo =
+        pathname.slice(`/${locale}`.length) + request.nextUrl.search;
+      const url = new URL(`/${locale}/auth/sign-in`, request.url);
+      if (redirectTo) url.searchParams.set("redirectTo", redirectTo);
 
-      return NextResponse.redirect(request.nextUrl);
+      return NextResponse.redirect(url);
     }
   }
 
