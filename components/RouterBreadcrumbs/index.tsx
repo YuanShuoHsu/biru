@@ -215,11 +215,14 @@ const findBreadcrumb = (
   breadcrumbs: BreadcrumbItem[],
   targetPath: string,
   parentPath = "",
-): Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label"> | undefined =>
+):
+  | Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label" | "to">
+  | undefined =>
   breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
     const currentPath = `${parentPath}${to}`;
 
-    if (currentPath === targetPath) return [{ disabled, hidden, icon, label }];
+    if (currentPath === targetPath)
+      return [{ disabled, hidden, icon, label, to }];
 
     if (children) {
       const found = findBreadcrumb(children, targetPath, currentPath);
@@ -243,10 +246,7 @@ const findHiddenTo = (
   const { hidden = false } = findBreadcrumb(breadcrumbs, nextMatchPath) || {};
   if (!hidden) return;
 
-  const nextTo = findHiddenTo(nextIndex, pathnames, breadcrumbs);
-  if (!nextTo) return nextMatchPath;
-
-  return nextTo;
+  return findHiddenTo(nextIndex, pathnames, breadcrumbs);
 };
 
 const RouterBreadcrumbs = () => {
@@ -257,19 +257,23 @@ const RouterBreadcrumbs = () => {
 
   const segments = pathnames.flatMap((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");
-    const matchPath = `/${segmentPath}`;
-    const baseTo = `/${segmentPath}`;
+    const path = `/${segmentPath}`;
 
+    const found = findBreadcrumb(breadcrumbs, path);
     const {
       disabled = false,
       hidden = false,
       icon = () => null,
       label = value,
-    } = findBreadcrumb(breadcrumbs, matchPath) || {};
+      to: breadcrumbTo,
+    } = found || {};
     if (hidden) return [];
 
     const hiddenTo = findHiddenTo(index, pathnames, breadcrumbs);
-    const to = hiddenTo || baseTo;
+    const queryString = breadcrumbTo?.includes("?")
+      ? breadcrumbTo.split("?")[1]
+      : undefined;
+    const to = queryString ? `${path}?${queryString}` : hiddenTo || path;
 
     return [{ disabled, icon, label, to }];
   });
