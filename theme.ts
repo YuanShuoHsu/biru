@@ -207,6 +207,14 @@ const theme = createTheme({
         }),
       },
     },
+    MuiPickersOutlinedInput: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          backgroundColor: theme.vars.palette.background.paper,
+          transition: theme.transitions.create("background-color"),
+        }),
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: ({ theme }) => ({
