@@ -11,10 +11,11 @@ import "swiper/css/free-mode";
 
 const SLIDE_COUNT = 10;
 
-const StyledSwiper = styled(Swiper)({
+const StyledSwiper = styled(Swiper)(({ theme }) => ({
   width: "100%",
   height: "100%",
-});
+  borderRadius: theme.shape.borderRadius,
+}));
 
 const StyledSlide = styled(SwiperSlide)(({ theme }) => ({
   position: "relative",
