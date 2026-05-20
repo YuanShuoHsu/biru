@@ -22,7 +22,6 @@ const STATS = [
 const HeroArea = () => (
   <Box sx={{ bgcolor: "#0a1929", color: "white" }}>
     <Container maxWidth="lg">
-      {/* Hero text */}
       <Box
         sx={{
           pt: { xs: 10, sm: 14 },
@@ -33,27 +32,28 @@ const HeroArea = () => (
         }}
       >
         <Typography
-          component="h1"
-          sx={{
-            fontSize: { xs: "2rem", sm: "2.75rem", md: "3.5rem" },
-            fontWeight: 800,
-            lineHeight: 1.15,
-            mb: 3,
-            letterSpacing: "-0.5px",
-          }}
+          component="h2"
+          variant="body2"
+          sx={{ color: "rgba(255,255,255,0.7)", mb: 1 }}
         >
-          We&apos;re on a mission to make great coffee effortless.
+          About us
         </Typography>
         <Typography
-          variant="h6"
-          sx={{ color: "rgba(255,255,255,0.7)", fontWeight: 400 }}
+          component="h1"
+          variant="h2"
+          sx={{ mb: 3, maxWidth: "100%", textAlign: "center" }}
         >
+          We&apos;re on a mission to make{" "}
+          <Box component="span" sx={{ color: "primary.light" }}>
+            great coffee effortless
+          </Box>
+          .
+        </Typography>
+        <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
           We provide tools and spaces to bring a stunning coffee experience to
           life with unrivalled speed and warmth.
         </Typography>
       </Box>
-
-      {/* Photo strip */}
       <Box
         sx={{
           mx: { lg: -3 },
@@ -82,8 +82,6 @@ const HeroArea = () => (
           ))}
         </Stack>
       </Box>
-
-      {/* Stats */}
       <Stack
         direction={{ xs: "column", sm: "row" }}
         justifyContent="center"
