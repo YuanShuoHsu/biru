@@ -37,15 +37,10 @@ const HeroArea = () => (
           fontWeight="bold"
           variant="h2"
         >
-          We&apos;re on a mission to make
-        </Typography>
-        <Typography
-          color="primary"
-          component="h1"
-          fontWeight="bold"
-          variant="h2"
-        >
-          great coffee effortless
+          We&apos;re on a mission to make{" "}
+          <Box color="primary.main" component="span">
+            great coffee effortless
+          </Box>
         </Typography>
       </Stack>
       <Typography color="text.primary" variant="body1">
