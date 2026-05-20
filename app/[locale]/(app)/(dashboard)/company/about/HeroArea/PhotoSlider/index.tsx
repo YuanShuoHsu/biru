@@ -26,7 +26,7 @@ const StyledSlide = styled(SwiperSlide)(({ theme }) => ({
 
 const PhotoSlider = () => (
   <StyledSwiper
-    autoplay={{ delay: 2500, disableOnInteraction: false }}
+    autoplay={{ delay: 0, disableOnInteraction: false }}
     breakpoints={{
       0: { slidesPerView: 1, spaceBetween: 8 },
       600: { slidesPerView: 2, spaceBetween: 12 },
@@ -34,11 +34,15 @@ const PhotoSlider = () => (
       1200: { slidesPerView: 4, spaceBetween: 16 },
     }}
     freeMode={{ sticky: true }}
-    grabCursor
+    grabCursor={true}
     keyboard={{ enabled: true }}
-    loop
+    loop={true}
     modules={[Autoplay, FreeMode, Keyboard]}
+    onSetTransition={(swiper) => {
+      swiper.wrapperEl.style.transitionTimingFunction = "linear";
+    }}
     spaceBetween={8}
+    speed={4000}
   >
     {Array.from({ length: SLIDE_COUNT }, (_, index) => (
       <StyledSlide key={index}>
