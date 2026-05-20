@@ -10,7 +10,9 @@ const SupportSection = () => (
       <Grid container spacing={6}>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <FeedbackOutlinedIcon sx={{ fontSize: 40, color: "primary.main" }} />
+            <FeedbackOutlinedIcon
+              sx={{ fontSize: 40, color: "primary.main" }}
+            />
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Give feedback
             </Typography>
