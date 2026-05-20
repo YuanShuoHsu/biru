@@ -1,6 +1,13 @@
-import { Box, Container, Stack, Typography } from "@mui/material";
-
 import PhotoSlider from "./PhotoSlider";
+
+import { Box, Container, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(5),
+}));
 
 const STATS = [
   { value: "2024", label: "Founded" },
@@ -9,7 +16,7 @@ const STATS = [
 ];
 
 const HeroArea = () => (
-  <Container maxWidth="lg">
+  <StyledContainer maxWidth="lg">
     <Stack alignItems="center" gap={2}>
       <Typography
         color="primary"
@@ -58,7 +65,7 @@ const HeroArea = () => (
         </Box>
       ))}
     </Stack>
-  </Container>
+  </StyledContainer>
 );
 
 export default HeroArea;
