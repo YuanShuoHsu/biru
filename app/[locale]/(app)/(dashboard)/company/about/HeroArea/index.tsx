@@ -20,90 +20,88 @@ const STATS = [
 ];
 
 const HeroArea = () => (
-  <Box sx={{ bgcolor: "#0a1929", color: "white" }}>
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          pt: { xs: 10, sm: 14 },
-          pb: { xs: 8, sm: 12 },
-          textAlign: "center",
-          maxWidth: "md",
-          mx: "auto",
-        }}
+  <Container maxWidth="lg">
+    <Stack alignItems="center" gap={2}>
+      <Typography
+        color="primary"
+        component="h2"
+        fontWeight="bold"
+        variant="body2"
       >
+        About us
+      </Typography>
+      <Stack>
         <Typography
-          component="h2"
-          variant="body2"
-          sx={{ color: "rgba(255,255,255,0.7)", mb: 1 }}
-        >
-          About us
-        </Typography>
-        <Typography
+          color="text.primary"
           component="h1"
+          fontWeight="bold"
           variant="h2"
-          sx={{ mb: 3, maxWidth: "100%", textAlign: "center" }}
         >
-          We&apos;re on a mission to make{" "}
-          <Box component="span" sx={{ color: "primary.light" }}>
-            great coffee effortless
-          </Box>
-          .
+          We&apos;re on a mission to make
         </Typography>
-        <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
-          We provide tools and spaces to bring a stunning coffee experience to
-          life with unrivalled speed and warmth.
-        </Typography>
-      </Box>
-      <Box
-        sx={{
-          mx: { lg: -3 },
-          pb: 2,
-          overflowX: "auto",
-          "&::-webkit-scrollbar": { display: "none" },
-        }}
-      >
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{ px: 2, minWidth: "max-content" }}
+        <Typography
+          color="primary"
+          component="h1"
+          fontWeight="bold"
+          variant="h2"
         >
-          {PHOTO_COLORS.map((color, i) => (
-            <Box
-              key={i}
-              sx={{
-                width: { xs: 160, sm: 200 },
-                height: { xs: 120, sm: 150 },
-                borderRadius: 2,
-                bgcolor: color,
-                flexShrink: 0,
-                opacity: 0.85,
-              }}
-            />
-          ))}
-        </Stack>
-      </Box>
+          great coffee effortless
+        </Typography>
+      </Stack>
+      <Typography color="text.primary" variant="body1">
+        We provide tools and spaces to bring a stunning coffee experience to
+        life with unrivalled speed and warmth.
+      </Typography>
+    </Stack>
+    <Box
+      sx={{
+        mx: { lg: -3 },
+        pb: 2,
+        overflowX: "auto",
+        "&::-webkit-scrollbar": { display: "none" },
+      }}
+    >
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        justifyContent="center"
-        spacing={{ xs: 4, sm: 8 }}
-        sx={{ py: { xs: 6, sm: 8 }, textAlign: "center" }}
+        direction="row"
+        spacing={1}
+        sx={{ px: 2, minWidth: "max-content" }}
       >
-        {STATS.map((s) => (
-          <Box key={s.label}>
-            <Typography
-              variant="h4"
-              sx={{ fontWeight: 800, color: "primary.light" }}
-            >
-              {s.value}
-            </Typography>
-            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
-              {s.label}
-            </Typography>
-          </Box>
+        {PHOTO_COLORS.map((color, i) => (
+          <Box
+            key={i}
+            sx={{
+              width: { xs: 160, sm: 200 },
+              height: { xs: 120, sm: 150 },
+              borderRadius: 2,
+              bgcolor: color,
+              flexShrink: 0,
+              opacity: 0.85,
+            }}
+          />
         ))}
       </Stack>
-    </Container>
-  </Box>
+    </Box>
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      justifyContent="center"
+      spacing={{ xs: 4, sm: 8 }}
+      sx={{ py: { xs: 6, sm: 8 }, textAlign: "center" }}
+    >
+      {STATS.map((s) => (
+        <Box key={s.label}>
+          <Typography
+            variant="h4"
+            sx={{ fontWeight: 800, color: "primary.light" }}
+          >
+            {s.value}
+          </Typography>
+          <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
+            {s.label}
+          </Typography>
+        </Box>
+      ))}
+    </Stack>
+  </Container>
 );
 
 export default HeroArea;
