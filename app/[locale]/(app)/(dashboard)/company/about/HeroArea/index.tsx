@@ -40,7 +40,7 @@ const HeroArea = () => (
           great coffee effortless
         </Box>
       </Typography>
-      <Typography color="text.primary" variant="body1">
+      <Typography color="text.primary" textAlign="center" variant="body1">
         We provide tools and spaces to bring a stunning coffee experience to
         life with unrivalled speed and warmth.
       </Typography>
