@@ -53,7 +53,11 @@ const HeroArea = () => (
         "&::-webkit-scrollbar": { display: "none" },
       }}
     >
-      <Stack direction="row" spacing={1} sx={{ px: 2, minWidth: "max-content" }}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{ px: 2, minWidth: "max-content" }}
+      >
         {PHOTO_COLORS.map((color, i) => (
           <Box
             key={i}
