@@ -54,7 +54,7 @@ const HeroArea = () => (
       gap={10}
     >
       {STATS.map(({ label, value }) => (
-        <Stack key={label} alignItems="center" gap={1}>
+        <Stack key={label} alignItems="center" gap={2}>
           <Typography color="primary.main" fontWeight="bold" variant="h4">
             {value}
           </Typography>
