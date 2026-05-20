@@ -92,7 +92,10 @@ const HeroArea = () => (
       >
         {STATS.map((s) => (
           <Box key={s.label}>
-            <Typography variant="h4" sx={{ fontWeight: 800, color: "primary.light" }}>
+            <Typography
+              variant="h4"
+              sx={{ fontWeight: 800, color: "primary.light" }}
+            >
               {s.value}
             </Typography>
             <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
