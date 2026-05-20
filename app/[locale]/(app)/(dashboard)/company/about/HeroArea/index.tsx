@@ -41,8 +41,8 @@ const HeroArea = () => (
         </Box>
       </Typography>
       <Typography color="text.primary" textAlign="center" variant="body1">
-        We provide tools and spaces to bring a stunning coffee experience to
-        life with unrivalled speed and warmth.
+        We give guests the food, service, and space to bring a stunning dining
+        experience to life with unrivalled warmth and ease.
       </Typography>
     </Stack>
     <PhotoSlider />
@@ -51,14 +51,14 @@ const HeroArea = () => (
       direction="row"
       justifyContent="center"
       alignItems="flex-start"
-      gap={10}
+      gap={5}
     >
       {STATS.map(({ label, value }) => (
         <Stack key={label} alignItems="center" gap={2}>
           <Typography color="primary.main" fontWeight="bold" variant="h4">
             {value}
           </Typography>
-          <Typography color="text.primary" variant="body1">
+          <Typography color="text.secondary" variant="body1">
             {label}
           </Typography>
         </Stack>
