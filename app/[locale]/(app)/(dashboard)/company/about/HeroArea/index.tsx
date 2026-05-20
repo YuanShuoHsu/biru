@@ -11,9 +11,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const STATS = [
-  { value: "2026", label: "Born in Dayuan, Taoyuan" },
+  { value: "2026", label: "Founded in Dayuan, Taoyuan" },
   { value: "100%", label: "Fresh ingredients daily" },
-  { value: "50+", label: "Curated menu items" },
+  { value: "All Day", label: "Brunch through Dinner" },
 ];
 
 const HeroArea = () => (
