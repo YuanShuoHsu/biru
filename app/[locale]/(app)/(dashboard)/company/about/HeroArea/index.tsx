@@ -30,19 +30,19 @@ const HeroArea = () => (
       >
         About us
       </Typography>
-      <Stack>
-        <Typography
-          color="text.primary"
-          component="h1"
-          fontWeight="bold"
-          variant="h2"
-        >
-          We&apos;re on a mission to make{" "}
-          <Box color="primary.main" component="span">
-            great coffee effortless
-          </Box>
-        </Typography>
-      </Stack>
+      <Typography
+        color="text.primary"
+        component="h1"
+        fontWeight="bold"
+        textAlign="center"
+        variant="h2"
+      >
+        We&apos;re on a mission to make
+        <br />
+        <Box color="primary.main" component="span">
+          great coffee effortless
+        </Box>
+      </Typography>
       <Typography color="text.primary" variant="body1">
         We provide tools and spaces to bring a stunning coffee experience to
         life with unrivalled speed and warmth.
