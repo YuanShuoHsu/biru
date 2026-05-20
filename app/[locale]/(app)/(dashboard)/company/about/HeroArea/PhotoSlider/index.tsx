@@ -1,25 +1,16 @@
 "use client";
 
-import { Box } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import Image from "next/image";
 import { Autoplay, FreeMode, Keyboard } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+
+import { Box } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import "swiper/css";
 import "swiper/css/free-mode";
 
-const PHOTO_COLORS = [
-  "#1565c0",
-  "#2e7d32",
-  "#6a1b9a",
-  "#ad1457",
-  "#00838f",
-  "#e65100",
-  "#37474f",
-  "#4e342e",
-  "#283593",
-  "#558b2f",
-];
+const SLIDE_COUNT = 10;
 
 const StyledBox = styled(Box)({
   position: "relative",
@@ -54,16 +45,15 @@ const PhotoSlider = () => (
       slidesPerView="auto"
       spaceBetween={8}
     >
-      {PHOTO_COLORS.map((color, index) => (
+      {Array.from({ length: SLIDE_COUNT }, (_, index) => (
         <StyledSlide key={index}>
-          <Box
-            sx={{
-              width: { xs: 160, sm: 200 },
-              height: { xs: 120, sm: 150 },
-              borderRadius: 2,
-              bgcolor: color,
-              opacity: 0.85,
-            }}
+          <Image
+            alt={`Photo ${index + 1}`}
+            fill
+            priority={index === 0}
+            sizes="(max-width: 600px) 160px, 200px"
+            src="/images/IMG_4590.jpg"
+            style={{ objectFit: "cover" }}
           />
         </StyledSlide>
       ))}
