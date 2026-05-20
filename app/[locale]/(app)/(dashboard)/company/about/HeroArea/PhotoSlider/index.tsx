@@ -15,6 +15,26 @@ const StyledSwiper = styled(Swiper)(({ theme }) => ({
   width: "100%",
   height: "100%",
   borderRadius: theme.shape.borderRadius,
+
+  "&::before, &::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: "20%",
+    pointerEvents: "none",
+    zIndex: 2,
+  },
+
+  "&::before": {
+    left: 0,
+    background: `linear-gradient(to right, ${theme.palette.background.default}, transparent)`,
+  },
+
+  "&::after": {
+    right: 0,
+    background: `linear-gradient(to left, ${theme.palette.background.default}, transparent)`,
+  },
 }));
 
 const StyledSlide = styled(SwiperSlide)(({ theme }) => ({
