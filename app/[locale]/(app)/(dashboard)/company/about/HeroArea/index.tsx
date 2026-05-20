@@ -46,23 +46,21 @@ const HeroArea = () => (
     </Stack>
     <PhotoSlider />
     <Stack
-      direction={{ xs: "column", sm: "row" }}
+      flexWrap="wrap"
+      direction="row"
       justifyContent="center"
-      spacing={{ xs: 4, sm: 8 }}
-      sx={{ py: { xs: 6, sm: 8 }, textAlign: "center" }}
+      alignItems="flex-start"
+      gap={10}
     >
-      {STATS.map((s) => (
-        <Box key={s.label}>
-          <Typography
-            variant="h4"
-            sx={{ fontWeight: 800, color: "primary.light" }}
-          >
-            {s.value}
+      {STATS.map(({ label, value }) => (
+        <Stack key={label} alignItems="center" gap={1}>
+          <Typography color="primary.main" fontWeight="bold" variant="h4">
+            {value}
           </Typography>
-          <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
-            {s.label}
+          <Typography color="text.primary" variant="body1">
+            {label}
           </Typography>
-        </Box>
+        </Stack>
       ))}
     </Stack>
   </StyledContainer>
