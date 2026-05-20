@@ -22,7 +22,7 @@ const HeroArea = () => (
         color="primary"
         component="h2"
         fontWeight="bold"
-        variant="body2"
+        variant="subtitle1"
       >
         About us
       </Typography>
@@ -31,7 +31,7 @@ const HeroArea = () => (
         component="h1"
         fontWeight="bold"
         textAlign="center"
-        variant="h2"
+        variant="h5"
       >
         We&apos;re on a mission to make
         <br />
