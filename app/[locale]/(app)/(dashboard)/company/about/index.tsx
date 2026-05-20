@@ -1,11 +1,11 @@
 "use client";
 
-import CommunitySection from "./components/CommunitySection";
-import StatsSection from "./components/StatsSection";
-import SupportSection from "./components/SupportSection";
-import TeamPhotoStrip from "./components/TeamPhotoStrip";
-import TeamSection from "./components/TeamSection";
-import ValuesSection from "./components/ValuesSection";
+import CommunitySection from "./CommunitySection";
+import StatsSection from "./StatsSection";
+import SupportSection from "./SupportSection";
+import TeamPhotoStrip from "./TeamPhotoStrip";
+import TeamSection from "./TeamSection";
+import ValuesSection from "./ValuesSection";
 
 import Footer from "@/components/Footer";
 
