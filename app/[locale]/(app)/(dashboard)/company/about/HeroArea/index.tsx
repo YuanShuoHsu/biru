@@ -13,17 +13,25 @@ const PHOTO_COLORS = [
   "#558b2f",
 ];
 
+const STATS = [
+  { value: "2024", label: "Founded" },
+  { value: "100%", label: "Remote global team" },
+  { value: "5+", label: "Countries represented" },
+];
+
 const HeroArea = () => (
-  <Box sx={{ bgcolor: "#0a1929" }}>
-    <Box
-      sx={{
-        color: "white",
-        pt: { xs: 10, sm: 14 },
-        pb: { xs: 8, sm: 12 },
-        textAlign: "center",
-      }}
-    >
-      <Container maxWidth="md">
+  <Box sx={{ bgcolor: "#0a1929", color: "white" }}>
+    <Container maxWidth="lg">
+      {/* Hero text */}
+      <Box
+        sx={{
+          pt: { xs: 10, sm: 14 },
+          pb: { xs: 8, sm: 12 },
+          textAlign: "center",
+          maxWidth: "md",
+          mx: "auto",
+        }}
+      >
         <Typography
           component="h1"
           sx={{
@@ -43,36 +51,57 @@ const HeroArea = () => (
           We provide tools and spaces to bring a stunning coffee experience to
           life with unrivalled speed and warmth.
         </Typography>
-      </Container>
-    </Box>
+      </Box>
 
-    <Box
-      sx={{
-        pb: 2,
-        overflowX: "auto",
-        "&::-webkit-scrollbar": { display: "none" },
-      }}
-    >
-      <Stack
-        direction="row"
-        spacing={1}
-        sx={{ px: 2, minWidth: "max-content" }}
+      {/* Photo strip */}
+      <Box
+        sx={{
+          mx: { lg: -3 },
+          pb: 2,
+          overflowX: "auto",
+          "&::-webkit-scrollbar": { display: "none" },
+        }}
       >
-        {PHOTO_COLORS.map((color, i) => (
-          <Box
-            key={i}
-            sx={{
-              width: { xs: 160, sm: 200 },
-              height: { xs: 120, sm: 150 },
-              borderRadius: 2,
-              bgcolor: color,
-              flexShrink: 0,
-              opacity: 0.85,
-            }}
-          />
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ px: 2, minWidth: "max-content" }}
+        >
+          {PHOTO_COLORS.map((color, i) => (
+            <Box
+              key={i}
+              sx={{
+                width: { xs: 160, sm: 200 },
+                height: { xs: 120, sm: 150 },
+                borderRadius: 2,
+                bgcolor: color,
+                flexShrink: 0,
+                opacity: 0.85,
+              }}
+            />
+          ))}
+        </Stack>
+      </Box>
+
+      {/* Stats */}
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="center"
+        spacing={{ xs: 4, sm: 8 }}
+        sx={{ py: { xs: 6, sm: 8 }, textAlign: "center" }}
+      >
+        {STATS.map((s) => (
+          <Box key={s.label}>
+            <Typography variant="h4" sx={{ fontWeight: 800, color: "primary.light" }}>
+              {s.value}
+            </Typography>
+            <Typography variant="body1" sx={{ color: "rgba(255,255,255,0.7)" }}>
+              {s.label}
+            </Typography>
+          </Box>
         ))}
       </Stack>
-    </Box>
+    </Container>
   </Box>
 );
 
