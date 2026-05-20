@@ -11,9 +11,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const STATS = [
-  { value: "2024", label: "Founded" },
-  { value: "100%", label: "Remote global team" },
-  { value: "5+", label: "Countries represented" },
+  { value: "2026", label: "Born in Dayuan, Taoyuan" },
+  { value: "100%", label: "Fresh ingredients daily" },
+  { value: "50+", label: "Curated menu items" },
 ];
 
 const HeroArea = () => (
