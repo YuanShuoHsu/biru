@@ -1,104 +1,216 @@
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import {
   Avatar,
   Box,
+  Button,
   Container,
+  Divider,
   Grid,
   IconButton,
-  Stack,
+  Paper,
+  SvgIcon,
+  type SvgIconProps,
   Typography,
 } from "@mui/material";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
 
-const CORE_TEAM = [
+import GradientBox from "@/components/GradientBox";
+import { Link } from "@/i18n/navigation";
+
+const XIcon = (props: SvgIconProps) => (
+  <SvgIcon fontSize="small" {...props}>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+  </SvgIcon>
+);
+
+interface TeamMember {
+  name: string;
+  title: string;
+  location: string;
+  countryCode: string;
+  github?: string;
+  twitter?: string;
+  bio: string;
+}
+
+const CORE_TEAM: TeamMember[] = [
   {
     name: "Yuan-Shuo Hsu",
     title: "Co-founder, CEO",
-    country: "🇹🇼",
-    avatar: "Y",
+    location: "Taoyuan, Taiwan",
+    countryCode: "tw",
+    github: "https://github.com/",
+    bio: "Building the future of dining, one coffee at a time.",
   },
   {
     name: "Biru Member",
     title: "Co-founder, CTO",
-    country: "🇹🇼",
-    avatar: "B",
+    location: "Taipei, Taiwan",
+    countryCode: "tw",
+    github: "https://github.com/",
+    bio: "Loves coding and great coffee.",
   },
   {
     name: "Biru Member",
     title: "Lead Engineer",
-    country: "🇯🇵",
-    avatar: "B",
+    location: "Tokyo, Japan",
+    countryCode: "jp",
+    github: "https://github.com/",
+    bio: "Passionate about building things that matter.",
   },
   {
     name: "Biru Member",
     title: "Product Designer",
-    country: "🇰🇷",
-    avatar: "B",
+    location: "Seoul, South Korea",
+    countryCode: "kr",
+    github: "https://github.com/",
+    bio: "Designing experiences people love.",
   },
   {
     name: "Biru Member",
     title: "Frontend Engineer",
-    country: "🇺🇸",
-    avatar: "B",
+    location: "San Francisco, US",
+    countryCode: "us",
+    github: "https://github.com/",
+    bio: "Turning ideas into beautiful interfaces.",
   },
   {
     name: "Biru Member",
     title: "Backend Engineer",
-    country: "🇸🇬",
-    avatar: "B",
+    location: "Singapore",
+    countryCode: "sg",
+    github: "https://github.com/",
+    bio: "Making sure everything runs smoothly.",
   },
 ];
 
-const TeamSection = () => (
-  <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.default" }}>
-    <Container maxWidth="lg">
-      <Typography
-        variant="h3"
-        sx={{ fontWeight: 800, mb: 1, textAlign: "center" }}
-      >
-        Team
-      </Typography>
-      <Typography color="text.secondary" sx={{ textAlign: "center", mb: 8 }}>
-        The people behind Biru.
-      </Typography>
-      <Grid container spacing={4}>
-        {CORE_TEAM.map((member, i) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={i}>
-            <Stack spacing={2} alignItems="flex-start">
-              <Avatar
-                sx={{
-                  width: 72,
-                  height: 72,
-                  bgcolor: "primary.main",
-                  fontSize: "1.5rem",
-                  fontWeight: 700,
-                }}
+const TeamSection = () => {
+  const t = useTranslations("company.about.teamSection");
+
+  return (
+    <Box sx={{ py: { xs: 10, sm: 14 } }}>
+      <Container maxWidth="lg">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            alignItems: { xs: "flex-start", sm: "center" },
+            gap: 3,
+            mb: 6,
+          }}
+        >
+          <Box>
+            <Typography
+              component="h2"
+              variant="body2"
+              color="text.secondary"
+              fontWeight="bold"
+            >
+              {t("label")}
+            </Typography>
+            <Typography
+              variant="h2"
+              component="h2"
+              sx={{ maxWidth: 500, fontWeight: 800, my: 1 }}
+            >
+              {t("title")}{" "}
+              <GradientBox component="span">{t("titleHighlight")}</GradientBox>
+            </Typography>
+            <Typography color="text.secondary">{t("description")}</Typography>
+          </Box>
+          <Button
+            component={Link}
+            href="/careers"
+            variant="contained"
+            disableElevation
+            endIcon={<ChevronRightIcon />}
+            sx={{ flexShrink: 0 }}
+          >
+            {t("joinUs")}
+          </Button>
+        </Box>
+
+        <Grid container spacing={2}>
+          {CORE_TEAM.map((member, i) => (
+            <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Paper
+                variant="outlined"
+                sx={{ borderRadius: 2, height: "100%" }}
               >
-                {member.avatar}
-              </Avatar>
-              <Box>
-                <Stack direction="row" alignItems="center" spacing={0.5}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+                <Box sx={{ p: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "flex-start",
+                      mb: 2,
+                    }}
+                  >
+                    <Box title={member.location}>
+                      <Avatar
+                        variant="rounded"
+                        sx={{ width: 70, height: 70, mb: 0.5 }}
+                      >
+                        {member.name[0]}
+                      </Avatar>
+                      <Box sx={{ lineHeight: 0 }}>
+                        <Image
+                          src={`/images/flags/w20/${member.countryCode}.png`}
+                          alt=""
+                          height={20}
+                          width={40}
+                        />
+                      </Box>
+                    </Box>
+                    <Box>
+                      {member.github && (
+                        <IconButton
+                          size="medium"
+                          aria-label={`${member.name} GitHub profile`}
+                          href={member.github}
+                          target="_blank"
+                          rel="noopener"
+                          component="a"
+                        >
+                          <GitHubIcon fontSize="small" />
+                        </IconButton>
+                      )}
+                      {member.twitter && (
+                        <IconButton
+                          size="medium"
+                          aria-label={`${member.name} X profile`}
+                          href={member.twitter}
+                          target="_blank"
+                          rel="noopener"
+                          component="a"
+                        >
+                          <XIcon />
+                        </IconButton>
+                      )}
+                    </Box>
+                  </Box>
+
+                  <Typography variant="body2" fontWeight={500}>
                     {member.name}
                   </Typography>
-                  <Typography>{member.country}</Typography>
-                </Stack>
-                <Typography variant="body2" color="text.secondary">
-                  {member.title}
-                </Typography>
-              </Box>
-              <IconButton
-                size="small"
-                aria-label="GitHub"
-                sx={{ mt: -0.5, p: 0 }}
-              >
-                <GitHubIcon fontSize="small" />
-              </IconButton>
-            </Stack>
-          </Grid>
-        ))}
-      </Grid>
-    </Container>
-  </Box>
-);
+                  <Typography variant="body2" color="text.secondary">
+                    {member.title}
+                  </Typography>
+                  <Divider sx={{ my: 1 }} />
+                  <Typography variant="body2" color="text.secondary">
+                    {member.bio}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
+  );
+};
 
 export default TeamSection;

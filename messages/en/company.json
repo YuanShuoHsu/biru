@@ -21,6 +21,13 @@
       "titleLine2": "great coffee effortless"
     },
     "label": "About",
+    "teamSection": {
+      "label": "Team",
+      "title": "Meet the",
+      "titleHighlight": "Biruers",
+      "description": "Contributing from all corners of Taiwan, Biru is a passionate team & community.",
+      "joinUs": "Join us"
+    },
     "valuesSection": {
       "description": "The Biru Coffee team pact describes the values we embody as a company, which help guide us toward the experiences and results we aim to deliver.",
       "subtitle": "Our values",

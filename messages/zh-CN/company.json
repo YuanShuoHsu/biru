@@ -21,6 +21,13 @@
       "titleLine2": "好咖啡变得轻松自在"
     },
     "label": "关于我们",
+    "teamSection": {
+      "label": "团队",
+      "title": "认识",
+      "titleHighlight": "Biruers",
+      "description": "来自台湾各地，Biru 是一支充满热情的餐饮团队与社群。",
+      "joinUs": "加入我们"
+    },
     "valuesSection": {
       "description": "Biru Coffee 团队共识描绘了我们作为一家公司所践行的价值，并指引我们走向想带给宾客的体验与成果。",
       "subtitle": "我们的价值",
