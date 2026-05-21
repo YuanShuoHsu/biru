@@ -5,13 +5,13 @@ import GradientBox from "@/components/GradientBox";
 
 import { Link } from "@/i18n/navigation";
 
-import { ChevronRight, GitHub } from "@mui/icons-material";
+import { ChevronRight } from "@mui/icons-material";
 import {
   Avatar,
   Button,
   Container,
+  Divider,
   Grid,
-  IconButton,
   Stack,
   SvgIcon,
   type SvgIconProps,
@@ -163,62 +163,25 @@ const Team = () => {
             index,
           ) => (
             <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
+              <StyledBadgeAvatars
+                badgeContent={
+                  <FlagAvatar
+                    alt={location}
+                    src={`/images/flags/w20/${countryCode}.png`}
+                  />
+                }
+                overlap="rectangular"
+                title={location}
               >
-                <StyledBadgeAvatars
-                  badgeContent={
-                    <FlagAvatar
-                      alt={location}
-                      src={`/images/flags/w20/${countryCode}.png`}
-                    />
-                  }
-                  overlap="rectangular"
-                  title={location}
-                >
-                  <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
-                </StyledBadgeAvatars>
-                <Stack direction="row">
-                  {github && (
-                    <IconButton
-                      size="medium"
-                      aria-label={`${name} GitHub profile`}
-                      href={github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      component="a"
-                    >
-                      <GitHub fontSize="small" />
-                    </IconButton>
-                  )}
-                  {twitter && (
-                    <IconButton
-                      size="medium"
-                      aria-label={`${name} X profile`}
-                      href={twitter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      component="a"
-                    >
-                      <XIcon />
-                    </IconButton>
-                  )}
-                </Stack>
-              </Stack>
-              <Stack gap={0.5}>
-                <Typography
-                  color="text.primary"
-                  fontWeight={500}
-                  variant="body2"
-                >
-                  {name}
-                </Typography>
-                <Typography color="text.secondary" variant="body2">
-                  {title}
-                </Typography>
-              </Stack>
+                <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
+              </StyledBadgeAvatars>
+              <Typography color="text.primary" variant="body2">
+                {name}
+              </Typography>
+              <Typography color="text.secondary" variant="body2">
+                {title}
+              </Typography>
+              <Divider />
               <Typography color="text.secondary" variant="body2">
                 {bio}
               </Typography>
