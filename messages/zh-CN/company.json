@@ -22,10 +22,10 @@
     },
     "label": "关于我们",
     "valuesSection": {
-      "description": "Biru 团队共识描绘了我们作为一家公司所践行的价值，并指引我们走向想带给宾客的体验与成果。",
+      "description": "Biru Coffee 团队共识描绘了我们作为一家公司所践行的价值，并指引我们走向想带给宾客的体验与成果。",
       "subtitle": "我们的价值",
       "titleGradient": "团队共识",
-      "titlePrefix": "Biru ",
+      "titlePrefix": "Biru Coffee ",
       "values": {
         "chaseBetter": {
           "description": "我们被持续变得更好的渴望驱动。",

@@ -22,10 +22,10 @@
     },
     "label": "私たちについて",
     "valuesSection": {
-      "description": "Biru のチームパクトは、私たちが会社として体現する価値観を示し、届けたい体験と成果へ向かうための指針です。",
+      "description": "Biru Coffee のチームパクトは、私たちが会社として体現する価値観を示し、届けたい体験と成果へ向かうための指針です。",
       "subtitle": "私たちの価値観",
       "titleGradient": "チームパクト",
-      "titlePrefix": "Biru ",
+      "titlePrefix": "Biru Coffee ",
       "values": {
         "chaseBetter": {
           "description": "私たちは、より良くなり続けたいという尽きない思いに突き動かされています。",
