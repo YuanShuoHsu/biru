@@ -52,9 +52,7 @@ const Hero = () => {
         >
           {t("titleLine1")}
           <br />
-          <GradientBox component="span">
-            {t("titleLine2")}
-          </GradientBox>
+          <GradientBox component="span">{t("titleLine2")}</GradientBox>
         </Typography>
         <Typography color="text.primary" textAlign="center" variant="body1">
           {t("description")}

@@ -74,9 +74,7 @@ const Values = () => {
             variant="h4"
           >
             {t("titlePrefix")}
-            <GradientBox component="span">
-              {t("titleGradient")}
-            </GradientBox>
+            <GradientBox component="span">{t("titleGradient")}</GradientBox>
           </Typography>
           <Typography color="text.secondary" variant="body1">
             {t("description")}
