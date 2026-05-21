@@ -86,7 +86,7 @@ const CORE_TEAM: TeamMember[] = [
   },
 ];
 
-const TeamSection = () => {
+const Team = () => {
   const t = useTranslations("company.about.teamSection");
 
   return (
@@ -213,4 +213,4 @@ const TeamSection = () => {
   );
 };
 
-export default TeamSection;
+export default Team;

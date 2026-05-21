@@ -1,28 +1,28 @@
 "use client";
 
-import { Box, Divider } from "@mui/material";
-import Footer from "@/components/Footer";
-import CommunitySection from "./CommunitySection";
-import HeroArea from "./HeroArea";
-import SupportSection from "./SupportSection";
-import TeamSection from "./TeamSection";
-import ValuesSection from "./ValuesSection";
+import Community from "./Community";
+import Hero from "./Hero";
+import Support from "./Support";
+import Team from "./Team";
+import Values from "./Values";
 
-const About = () => {
-  return (
-    <Box>
-      <HeroArea />
-      <Divider />
-      <ValuesSection />
-      <Divider />
-      <TeamSection />
-      <Divider />
-      <CommunitySection />
-      <Divider />
-      <SupportSection />
-      <Footer />
-    </Box>
-  );
-};
+import Footer from "@/components/Footer";
+
+import { Divider } from "@mui/material";
+
+const About = () => (
+  <>
+    <Hero />
+    <Divider />
+    <Values />
+    <Divider />
+    <Team />
+    <Divider />
+    <Community />
+    <Divider />
+    <Support />
+    <Footer />
+  </>
+);
 
 export default About;

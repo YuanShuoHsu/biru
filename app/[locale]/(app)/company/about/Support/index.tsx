@@ -4,7 +4,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
-const SupportSection = () => (
+const Support = () => (
   <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.default" }}>
     <Container maxWidth="lg">
       <Grid container spacing={6}>
@@ -78,4 +78,4 @@ const SupportSection = () => (
   </Box>
 );
 
-export default SupportSection;
+export default Support;

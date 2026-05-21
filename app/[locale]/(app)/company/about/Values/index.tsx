@@ -52,7 +52,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-const ValuesSection = () => {
+const Values = () => {
   const tCompanyAboutValuesSection = useTranslations(
     "company.about.valuesSection",
   );
@@ -118,4 +118,4 @@ const ValuesSection = () => {
   );
 };
 
-export default ValuesSection;
+export default Values;

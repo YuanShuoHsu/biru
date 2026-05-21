@@ -7,7 +7,7 @@ const COMMUNITY_CONTRIBUTORS = [
   { name: "Contributor D", country: "🇩🇪" },
 ];
 
-const CommunitySection = () => (
+const Community = () => (
   <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.paper" }}>
     <Container maxWidth="lg">
       <Typography
@@ -49,4 +49,4 @@ const CommunitySection = () => (
   </Box>
 );
 
-export default CommunitySection;
+export default Community;

@@ -14,7 +14,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
-const HeroArea = () => {
+const Hero = () => {
   const tCompanyAboutHeroArea = useTranslations("company.about.heroArea");
 
   const STATS = [
@@ -83,4 +83,4 @@ const HeroArea = () => {
   );
 };
 
-export default HeroArea;
+export default Hero;
