@@ -29,6 +29,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const StyledPaper = styled(Paper)(({ theme }) => ({
   height: "100%",
   padding: theme.spacing(2),
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
 }));
 
 const ValuesSection = () => (
