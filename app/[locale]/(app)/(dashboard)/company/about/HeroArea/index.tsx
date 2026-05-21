@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import PhotoSlider from "./PhotoSlider";
 
 import { Box, Container, Stack, Typography } from "@mui/material";
@@ -10,61 +12,73 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
-const STATS = [
-  { value: "2026", label: "Born in Dayuan, Taoyuan" },
-  { value: "100%", label: "Fresh ingredients daily" },
-  { value: "All Day", label: "Brunch to Dinner" },
-];
+const HeroArea = () => {
+  const tCompanyAboutHeroArea = useTranslations("company.about.heroArea");
 
-const HeroArea = () => (
-  <StyledContainer maxWidth="lg">
-    <Stack alignItems="center" gap={2}>
-      <Typography
-        color="primary"
-        component="h2"
-        fontWeight="bold"
-        variant="subtitle1"
+  const STATS = [
+    {
+      label: tCompanyAboutHeroArea("stats.founded.label"),
+      value: tCompanyAboutHeroArea("stats.founded.value"),
+    },
+    {
+      label: tCompanyAboutHeroArea("stats.ingredients.label"),
+      value: tCompanyAboutHeroArea("stats.ingredients.value"),
+    },
+    {
+      label: tCompanyAboutHeroArea("stats.hours.label"),
+      value: tCompanyAboutHeroArea("stats.hours.value"),
+    },
+  ];
+
+  return (
+    <StyledContainer maxWidth="lg">
+      <Stack alignItems="center" gap={2}>
+        <Typography
+          color="primary"
+          component="h2"
+          fontWeight="bold"
+          variant="subtitle1"
+        >
+          {tCompanyAboutHeroArea("subtitle")}
+        </Typography>
+        <Typography
+          color="text.primary"
+          component="h1"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h5"
+        >
+          {tCompanyAboutHeroArea("titleLine1")}
+          <br />
+          <Box color="primary.main" component="span">
+            {tCompanyAboutHeroArea("titleLine2")}
+          </Box>
+        </Typography>
+        <Typography color="text.primary" textAlign="center" variant="body1">
+          {tCompanyAboutHeroArea("description")}
+        </Typography>
+      </Stack>
+      <PhotoSlider />
+      <Stack
+        flexWrap="wrap"
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        gap={5}
       >
-        About us
-      </Typography>
-      <Typography
-        color="text.primary"
-        component="h1"
-        fontWeight="bold"
-        textAlign="center"
-        variant="h5"
-      >
-        We&apos;re on a mission to make
-        <br />
-        <Box color="primary.main" component="span">
-          great coffee effortless
-        </Box>
-      </Typography>
-      <Typography color="text.primary" textAlign="center" variant="body1">
-        We give guests the food, service, and space to bring a stunning dining
-        experience to life with unrivalled warmth and ease.
-      </Typography>
-    </Stack>
-    <PhotoSlider />
-    <Stack
-      flexWrap="wrap"
-      direction="row"
-      justifyContent="center"
-      alignItems="flex-start"
-      gap={5}
-    >
-      {STATS.map(({ label, value }) => (
-        <Stack key={label} alignItems="center" gap={2}>
-          <Typography color="primary.main" fontWeight="bold" variant="h4">
-            {value}
-          </Typography>
-          <Typography color="text.secondary" variant="body1">
-            {label}
-          </Typography>
-        </Stack>
-      ))}
-    </Stack>
-  </StyledContainer>
-);
+        {STATS.map(({ label, value }) => (
+          <Stack key={label} alignItems="center" gap={2}>
+            <Typography color="primary.main" fontWeight="bold" variant="h4">
+              {value}
+            </Typography>
+            <Typography color="text.secondary" variant="body1">
+              {label}
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </StyledContainer>
+  );
+};
 
 export default HeroArea;

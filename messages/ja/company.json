@@ -1,6 +1,26 @@
 {
   "about": {
-    "label": "私たちについて"
+    "label": "私たちについて",
+    "heroArea": {
+      "subtitle": "私たちについて",
+      "titleLine1": "素晴らしいコーヒーを",
+      "titleLine2": "もっと身近に",
+      "description": "料理・サービス・空間を通じて、温かくくつろいだ雰囲気の中で、忘れられないダイニング体験をお届けします。",
+      "stats": {
+        "founded": {
+          "value": "2026",
+          "label": "桃園大園生まれ"
+        },
+        "ingredients": {
+          "value": "100%",
+          "label": "毎日新鮮な食材"
+        },
+        "hours": {
+          "value": "終日",
+          "label": "ブランチからディナーまで"
+        }
+      }
+    }
   },
   "label": "会社概要",
   "legal": {

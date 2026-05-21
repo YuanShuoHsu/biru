@@ -1,6 +1,26 @@
 {
   "about": {
-    "label": "About"
+    "label": "About",
+    "heroArea": {
+      "subtitle": "About us",
+      "titleLine1": "We're on a mission to make",
+      "titleLine2": "great coffee effortless",
+      "description": "We give guests the food, service, and space to bring a stunning dining experience to life with unrivalled warmth and ease.",
+      "stats": {
+        "founded": {
+          "value": "2026",
+          "label": "Born in Dayuan, Taoyuan"
+        },
+        "ingredients": {
+          "value": "100%",
+          "label": "Fresh ingredients daily"
+        },
+        "hours": {
+          "value": "All Day",
+          "label": "Brunch to Dinner"
+        }
+      }
+    }
   },
   "label": "Company",
   "legal": {

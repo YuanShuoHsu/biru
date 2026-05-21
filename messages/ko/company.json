@@ -1,6 +1,26 @@
 {
   "about": {
-    "label": "회사 소개"
+    "label": "회사 소개",
+    "heroArea": {
+      "subtitle": "회사 소개",
+      "titleLine1": "훌륭한 커피를",
+      "titleLine2": "더 쉽게 즐기다",
+      "description": "음식, 서비스, 공간을 통해 따뜻하고 편안한 분위기 속에서 잊지 못할 다이닝 경험을 선사합니다.",
+      "stats": {
+        "founded": {
+          "value": "2026",
+          "label": "타오위안 다위안에서 시작"
+        },
+        "ingredients": {
+          "value": "100%",
+          "label": "매일 신선한 재료"
+        },
+        "hours": {
+          "value": "하루 종일",
+          "label": "브런치부터 디너까지"
+        }
+      }
+    }
   },
   "label": "회사 소개",
   "legal": {
