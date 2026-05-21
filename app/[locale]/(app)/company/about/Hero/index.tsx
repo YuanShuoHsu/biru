@@ -15,20 +15,20 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 }));
 
 const Hero = () => {
-  const t = useTranslations("company.about.hero");
+  const tCompanyAboutHero = useTranslations("company.about.hero");
 
   const STATS = [
     {
-      label: t("stats.founded.label"),
-      value: t("stats.founded.value"),
+      label: tCompanyAboutHero("stats.founded.label"),
+      value: tCompanyAboutHero("stats.founded.value"),
     },
     {
-      label: t("stats.ingredients.label"),
-      value: t("stats.ingredients.value"),
+      label: tCompanyAboutHero("stats.ingredients.label"),
+      value: tCompanyAboutHero("stats.ingredients.value"),
     },
     {
-      label: t("stats.hours.label"),
-      value: t("stats.hours.value"),
+      label: tCompanyAboutHero("stats.hours.label"),
+      value: tCompanyAboutHero("stats.hours.value"),
     },
   ];
 
@@ -41,7 +41,7 @@ const Hero = () => {
           fontWeight="bold"
           variant="subtitle1"
         >
-          {t("subtitle")}
+          {tCompanyAboutHero("subtitle")}
         </Typography>
         <Typography
           color="text.primary"
@@ -50,12 +50,12 @@ const Hero = () => {
           textAlign="center"
           variant="h5"
         >
-          {t("titleLine1")}
+          {tCompanyAboutHero("titleLine1")}
           <br />
-          <GradientBox component="span">{t("titleLine2")}</GradientBox>
+          <GradientBox component="span">{tCompanyAboutHero("titleLine2")}</GradientBox>
         </Typography>
         <Typography color="text.primary" textAlign="center" variant="body1">
-          {t("description")}
+          {tCompanyAboutHero("description")}
         </Typography>
       </Stack>
       <PhotoSlider />

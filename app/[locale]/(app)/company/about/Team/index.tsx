@@ -87,7 +87,7 @@ const CORE_TEAM: TeamMember[] = [
 ];
 
 const Team = () => {
-  const t = useTranslations("company.about.team");
+  const tCompanyAboutTeam = useTranslations("company.about.team");
 
   return (
     <Box sx={{ py: { xs: 10, sm: 14 } }}>
@@ -109,17 +109,17 @@ const Team = () => {
               color="text.secondary"
               fontWeight="bold"
             >
-              {t("label")}
+              {tCompanyAboutTeam("label")}
             </Typography>
             <Typography
               variant="h2"
               component="h2"
               sx={{ maxWidth: 500, fontWeight: 800, my: 1 }}
             >
-              {t("title")}{" "}
-              <GradientBox component="span">{t("titleHighlight")}</GradientBox>
+              {tCompanyAboutTeam("title")}{" "}
+              <GradientBox component="span">{tCompanyAboutTeam("titleHighlight")}</GradientBox>
             </Typography>
-            <Typography color="text.secondary">{t("description")}</Typography>
+            <Typography color="text.secondary">{tCompanyAboutTeam("description")}</Typography>
           </Box>
           <Button
             component={Link}
@@ -129,7 +129,7 @@ const Team = () => {
             endIcon={<ChevronRightIcon />}
             sx={{ flexShrink: 0 }}
           >
-            {t("joinUs")}
+            {tCompanyAboutTeam("joinUs")}
           </Button>
         </Box>
 
