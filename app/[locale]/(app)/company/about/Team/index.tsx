@@ -1,23 +1,24 @@
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { useTranslations } from "next-intl";
+import Image from "next/image";
+
+import GradientBox from "@/components/GradientBox";
+
+import { Link } from "@/i18n/navigation";
+
+import { ChevronRight, GitHub } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
   Container,
-  Divider,
   Grid,
   IconButton,
-  Paper,
+  Stack,
   SvgIcon,
   type SvgIconProps,
   Typography,
 } from "@mui/material";
-import { useTranslations } from "next-intl";
-import Image from "next/image";
-
-import GradientBox from "@/components/GradientBox";
-import { Link } from "@/i18n/navigation";
+import { styled } from "@mui/material/styles";
 
 const XIcon = (props: SvgIconProps) => (
   <SvgIcon fontSize="small" {...props}>
@@ -86,133 +87,138 @@ const CORE_TEAM: TeamMember[] = [
   },
 ];
 
+const StyledContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(6),
+}));
+
+const StyledGrid = styled(Grid)(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(1),
+  padding: theme.spacing(2),
+}));
+
 const Team = () => {
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
   return (
-    <Box sx={{ py: { xs: 10, sm: 14 } }}>
-      <Container maxWidth="lg">
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            justifyContent: "space-between",
-            alignItems: { xs: "flex-start", sm: "center" },
-            gap: 3,
-            mb: 6,
-          }}
+    <Box paddingBlock={{ xs: 10, sm: 14 }}>
+      <StyledContainer maxWidth="lg">
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          gap={3}
         >
-          <Box>
+          <Stack gap={1}>
             <Typography
+              color="primary.main"
               component="h2"
-              variant="body2"
-              color="text.secondary"
               fontWeight="bold"
+              variant="body2"
             >
               {tCompanyAboutTeam("label")}
             </Typography>
             <Typography
-              variant="h2"
+              color="text.primary"
               component="h2"
-              sx={{ maxWidth: 500, fontWeight: 800, my: 1 }}
+              fontWeight={800}
+              variant="h2"
             >
               {tCompanyAboutTeam("title")}{" "}
               <GradientBox component="span">
                 {tCompanyAboutTeam("titleHighlight")}
               </GradientBox>
             </Typography>
-            <Typography color="text.secondary">
+            <Typography color="text.secondary" variant="body1">
               {tCompanyAboutTeam("description")}
             </Typography>
-          </Box>
+          </Stack>
           <Button
             component={Link}
             href="/careers"
             variant="contained"
             disableElevation
-            endIcon={<ChevronRightIcon />}
+            endIcon={<ChevronRight />}
             sx={{ flexShrink: 0 }}
           >
             {tCompanyAboutTeam("joinUs")}
           </Button>
-        </Box>
-
+        </Stack>
         <Grid container spacing={2}>
           {CORE_TEAM.map((member, i) => (
-            <Grid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
-              <Paper
-                variant="outlined"
-                sx={{ borderRadius: 2, height: "100%" }}
+            <StyledGrid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
               >
-                <Box sx={{ p: 2 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                      mb: 2,
-                    }}
+                <Box title={member.location}>
+                  <Avatar
+                    variant="rounded"
+                    sx={{ width: 70, height: 70, mb: 0.5 }}
                   >
-                    <Box title={member.location}>
-                      <Avatar
-                        variant="rounded"
-                        sx={{ width: 70, height: 70, mb: 0.5 }}
-                      >
-                        {member.name[0]}
-                      </Avatar>
-                      <Box sx={{ lineHeight: 0 }}>
-                        <Image
-                          src={`/images/flags/w20/${member.countryCode}.png`}
-                          alt=""
-                          height={20}
-                          width={40}
-                        />
-                      </Box>
-                    </Box>
-                    <Box>
-                      {member.github && (
-                        <IconButton
-                          size="medium"
-                          aria-label={`${member.name} GitHub profile`}
-                          href={member.github}
-                          target="_blank"
-                          rel="noopener"
-                          component="a"
-                        >
-                          <GitHubIcon fontSize="small" />
-                        </IconButton>
-                      )}
-                      {member.twitter && (
-                        <IconButton
-                          size="medium"
-                          aria-label={`${member.name} X profile`}
-                          href={member.twitter}
-                          target="_blank"
-                          rel="noopener"
-                          component="a"
-                        >
-                          <XIcon />
-                        </IconButton>
-                      )}
-                    </Box>
+                    {member.name[0]}
+                  </Avatar>
+                  <Box sx={{ lineHeight: 0 }}>
+                    <Image
+                      src={`/images/flags/w20/${member.countryCode}.png`}
+                      alt=""
+                      height={20}
+                      width={40}
+                    />
                   </Box>
-
-                  <Typography variant="body2" fontWeight={500}>
-                    {member.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {member.title}
-                  </Typography>
-                  <Divider sx={{ my: 1 }} />
-                  <Typography variant="body2" color="text.secondary">
-                    {member.bio}
-                  </Typography>
                 </Box>
-              </Paper>
-            </Grid>
+                <Stack direction="row">
+                  {member.github && (
+                    <IconButton
+                      size="medium"
+                      aria-label={`${member.name} GitHub profile`}
+                      href={member.github}
+                      target="_blank"
+                      rel="noopener"
+                      component="a"
+                    >
+                      <GitHub fontSize="small" />
+                    </IconButton>
+                  )}
+                  {member.twitter && (
+                    <IconButton
+                      size="medium"
+                      aria-label={`${member.name} X profile`}
+                      href={member.twitter}
+                      target="_blank"
+                      rel="noopener"
+                      component="a"
+                    >
+                      <XIcon />
+                    </IconButton>
+                  )}
+                </Stack>
+              </Stack>
+              <Stack gap={0.5}>
+                <Typography
+                  color="text.primary"
+                  fontWeight={500}
+                  variant="body2"
+                >
+                  {member.name}
+                </Typography>
+                <Typography color="text.secondary" variant="body2">
+                  {member.title}
+                </Typography>
+              </Stack>
+              <Typography color="text.secondary" variant="body2">
+                {member.bio}
+              </Typography>
+            </StyledGrid>
           ))}
         </Grid>
-      </Container>
+      </StyledContainer>
     </Box>
   );
 };

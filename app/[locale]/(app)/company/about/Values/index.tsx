@@ -10,7 +10,7 @@ import {
   type SvgIconComponent,
 } from "@mui/icons-material";
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { alpha, styled } from "@mui/material/styles";
 
 type ValueKey =
   | "userObsessed"
@@ -31,25 +31,22 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const IconWrapper = styled(Box)(({ theme }) => ({
-  alignItems: "center",
-  backgroundColor: theme.palette.primary.main + "14",
-  borderRadius: theme.shape.borderRadius,
-  display: "inline-flex",
-  padding: theme.spacing(1),
-  "& svg": {
-    color: theme.palette.primary.main,
-    fontSize: "1.25rem",
-  },
-}));
-
 const StyledGrid = styled(Grid)(({ theme }) => ({
+  padding: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
-  padding: theme.spacing(2),
+}));
+
+const IconBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1),
+  backgroundColor: alpha(theme.palette.primary.main, 0.2),
+  borderRadius: theme.shape.borderRadius,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 }));
 
 const Values = () => {
@@ -89,9 +86,9 @@ const Values = () => {
             return (
               <StyledGrid key={key} size={{ xs: 12, md: 3 }}>
                 <Stack alignItems="center" direction="row" gap={1}>
-                  <IconWrapper>
-                    <Icon />
-                  </IconWrapper>
+                  <IconBox>
+                    <Icon color="primary" fontSize="small" />
+                  </IconBox>
                   <Typography
                     color="text.primary"
                     component="h3"
