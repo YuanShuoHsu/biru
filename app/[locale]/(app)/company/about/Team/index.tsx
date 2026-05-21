@@ -13,76 +13,68 @@ import {
   Divider,
   Grid,
   Stack,
-  SvgIcon,
-  type SvgIconProps,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const XIcon = (props: SvgIconProps) => (
-  <SvgIcon fontSize="small" {...props}>
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-  </SvgIcon>
-);
-
 interface TeamMember {
-  name: string;
-  title: string;
-  location: string;
+  bio: string;
   countryCode: string;
   github?: string;
+  location: string;
+  name: string;
+  title: string;
   twitter?: string;
-  bio: string;
 }
 
 const TEAM_MEMBERS: TeamMember[] = [
   {
+    bio: "Building the future of dining, one coffee at a time.",
+    countryCode: "tw",
+    github: "https://github.com/",
+    location: "Taoyuan, Taiwan",
     name: "Yuan-Shuo Hsu",
     title: "Co-founder, CEO",
-    location: "Taoyuan, Taiwan",
-    countryCode: "tw",
-    github: "https://github.com/",
-    bio: "Building the future of dining, one coffee at a time.",
   },
   {
+    bio: "Loves coding and great coffee.",
+    countryCode: "tw",
+    github: "https://github.com/",
+    location: "Taipei, Taiwan",
     name: "Biru Member",
     title: "Co-founder, CTO",
-    location: "Taipei, Taiwan",
-    countryCode: "tw",
-    github: "https://github.com/",
-    bio: "Loves coding and great coffee.",
   },
   {
-    name: "Biru Member",
-    title: "Lead Engineer",
-    location: "Tokyo, Japan",
+    bio: "Passionate about building things that matter.",
     countryCode: "jp",
     github: "https://github.com/",
-    bio: "Passionate about building things that matter.",
+    location: "Tokyo, Japan",
+    name: "Biru Member",
+    title: "Lead Engineer",
   },
   {
-    name: "Biru Member",
-    title: "Product Designer",
-    location: "Seoul, South Korea",
+    bio: "Designing experiences people love.",
     countryCode: "kr",
     github: "https://github.com/",
-    bio: "Designing experiences people love.",
+    location: "Seoul, South Korea",
+    name: "Biru Member",
+    title: "Product Designer",
   },
   {
-    name: "Biru Member",
-    title: "Frontend Engineer",
-    location: "San Francisco, US",
+    bio: "Turning ideas into beautiful interfaces.",
     countryCode: "us",
     github: "https://github.com/",
-    bio: "Turning ideas into beautiful interfaces.",
+    location: "San Francisco, US",
+    name: "Biru Member",
+    title: "Frontend Engineer",
   },
   {
-    name: "Biru Member",
-    title: "Backend Engineer",
-    location: "Singapore",
+    bio: "Making sure everything runs smoothly.",
     countryCode: "sg",
     github: "https://github.com/",
-    bio: "Making sure everything runs smoothly.",
+    location: "Singapore",
+    name: "Biru Member",
+    title: "Backend Engineer",
   },
 ];
 
@@ -159,32 +151,38 @@ const Team = () => {
         </Button>
       </Stack>
       <Grid container spacing={2}>
-        {TEAM_MEMBERS.map(({ bio, countryCode, location, name, title }, index) => (
-          <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-            <StyledBadgeAvatars
-              badgeContent={
-                <FlagAvatar
-                  alt={location}
-                  src={`/images/flags/w20/${countryCode}.png`}
-                />
-              }
-              overlap="rectangular"
-              title={location}
-            >
-              <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
-            </StyledBadgeAvatars>
-            <Typography color="text.primary" fontWeight="bold" variant="body2">
-              {name}
-            </Typography>
-            <Typography color="text.primary" variant="body2">
-              {title}
-            </Typography>
-            <Divider />
-            <Typography color="text.secondary" variant="body2">
-              {bio}
-            </Typography>
-          </StyledGrid>
-        ))}
+        {TEAM_MEMBERS.map(
+          ({ bio, countryCode, location, name, title }, index) => (
+            <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+              <StyledBadgeAvatars
+                badgeContent={
+                  <FlagAvatar
+                    alt={location}
+                    src={`/images/flags/w20/${countryCode}.png`}
+                  />
+                }
+                overlap="rectangular"
+                title={location}
+              >
+                <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
+              </StyledBadgeAvatars>
+              <Typography
+                color="text.primary"
+                fontWeight="bold"
+                variant="body2"
+              >
+                {name}
+              </Typography>
+              <Typography color="text.primary" variant="body2">
+                {title}
+              </Typography>
+              <Divider />
+              <Typography color="text.secondary" variant="body2">
+                {bio}
+              </Typography>
+            </StyledGrid>
+          ),
+        )}
       </Grid>
     </StyledContainer>
   );
