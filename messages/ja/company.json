@@ -1,6 +1,6 @@
 {
   "about": {
-    "heroArea": {
+    "hero": {
       "description": "料理、サービス、空間に、比類ない温かさと心地よさを添えて、心を奪うようなダイニング体験をかたちにします。",
       "stats": {
         "founded": {
@@ -21,14 +21,14 @@
       "titleLine2": "素晴らしいコーヒーを気軽にすること"
     },
     "label": "私たちについて",
-    "teamSection": {
+    "team": {
       "label": "チーム",
       "title": "紹介します",
       "titleHighlight": "Biruers",
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",
       "joinUs": "採用情報"
     },
-    "valuesSection": {
+    "values": {
       "description": "Biru Coffee のチームパクトは、私たちが会社として体現する価値観を示し、届けたい体験と成果へ向かうための指針です。",
       "subtitle": "私たちの価値観",
       "titleGradient": "チームパクト",

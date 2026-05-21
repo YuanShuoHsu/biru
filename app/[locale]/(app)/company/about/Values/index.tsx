@@ -53,9 +53,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 }));
 
 const Values = () => {
-  const tCompanyAboutValuesSection = useTranslations(
-    "company.about.valuesSection",
-  );
+  const t = useTranslations("company.about.values");
 
   return (
     <Box paddingBlock={5} bgcolor="background.paper">
@@ -67,7 +65,7 @@ const Values = () => {
             fontWeight="bold"
             variant="body2"
           >
-            {tCompanyAboutValuesSection("subtitle")}
+            {t("subtitle")}
           </Typography>
           <Typography
             color="text.primary"
@@ -75,18 +73,18 @@ const Values = () => {
             fontWeight="bold"
             variant="h4"
           >
-            {tCompanyAboutValuesSection("titlePrefix")}
+            {t("titlePrefix")}
             <GradientBox component="span">
-              {tCompanyAboutValuesSection("titleGradient")}
+              {t("titleGradient")}
             </GradientBox>
           </Typography>
           <Typography color="text.secondary" variant="body1">
-            {tCompanyAboutValuesSection("description")}
+            {t("description")}
           </Typography>
         </Stack>
         <Grid container spacing={2}>
           {VALUE_KEYS.map(({ icon: Icon, key }) => {
-            const title = tCompanyAboutValuesSection(`values.${key}.title`);
+            const title = t(`values.${key}.title`);
 
             return (
               <StyledGrid key={key} size={{ xs: 12, md: 3 }}>
@@ -107,7 +105,7 @@ const Values = () => {
                   </Typography>
                 </Stack>
                 <Typography color="text.secondary" variant="body2">
-                  {tCompanyAboutValuesSection(`values.${key}.description`)}
+                  {t(`values.${key}.description`)}
                 </Typography>
               </StyledGrid>
             );

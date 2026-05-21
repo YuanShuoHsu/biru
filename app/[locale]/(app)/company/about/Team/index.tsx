@@ -87,7 +87,7 @@ const CORE_TEAM: TeamMember[] = [
 ];
 
 const Team = () => {
-  const t = useTranslations("company.about.teamSection");
+  const t = useTranslations("company.about.team");
 
   return (
     <Box sx={{ py: { xs: 10, sm: 14 } }}>
