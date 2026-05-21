@@ -177,10 +177,14 @@ const Team = () => {
               >
                 <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
               </StyledBadgeAvatars>
-              <Typography color="text.primary" variant="body2">
+              <Typography
+                color="text.primary"
+                fontWeight="bold"
+                variant="body2"
+              >
                 {name}
               </Typography>
-              <Typography color="text.secondary" variant="body2">
+              <Typography color="text.primary" variant="body2">
                 {title}
               </Typography>
               <Divider />
