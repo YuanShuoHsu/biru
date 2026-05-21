@@ -22,10 +22,20 @@ const VALUES = [
 const ValuesSection = () => (
   <Box paddingBlock={5} bgcolor="background.paper">
     <Container maxWidth="lg">
-      <Typography variant="body2" sx={{ fontWeight: 700, mb: 1 }}>
+      <Typography
+        color="primary.main"
+        component="h2"
+        fontWeight="bold"
+        variant="body2"
+      >
         Our values
       </Typography>
-      <Typography variant="h2" sx={{ maxWidth: 500, mb: 2 }}>
+      <Typography
+        color="text.primary"
+        component="h2"
+        fontWeight="bold"
+        variant="h4"
+      >
         The Biru{" "}
         <Box
           component="span"
@@ -40,26 +50,19 @@ const ValuesSection = () => (
           team pact
         </Box>
       </Typography>
-      <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600 }}>
+      <Typography color="text.secondary" variant="body1">
         The Biru team pact describes the values we embody as a company, which
         help guide us toward the experiences and results we aim to deliver.
       </Typography>
       <Grid container spacing={3}>
         {VALUES.map((v) => (
           <Grid key={v.title} size={{ xs: 12, md: 3 }}>
-            <Paper
-              variant="outlined"
-              sx={{ borderRadius: 2, overflow: "hidden", height: "100%" }}
-            >
+            <Paper variant="outlined">
               <Box sx={{ p: 2 }}>
-                <Typography
-                  component="h3"
-                  variant="body2"
-                  sx={{ fontWeight: 700, mb: 1 }}
-                >
+                <Typography component="h3" fontWeight="bold" variant="body2">
                   {v.title}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography color="text.secondary" variant="body2">
                   {v.desc}
                 </Typography>
               </Box>
