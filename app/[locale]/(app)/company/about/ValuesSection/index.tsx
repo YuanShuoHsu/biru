@@ -1,4 +1,4 @@
-import { Box, Container, Grid, Paper, Stack, Typography } from "@mui/material";
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const VALUES = [
@@ -26,9 +26,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  height: "100%",
+const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
+  border: `1px solid ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
@@ -74,19 +75,22 @@ const ValuesSection = () => (
       </Stack>
       <Grid container spacing={2}>
         {VALUES.map(({ description, title }) => (
-          <Grid key={title} size={{ xs: 12, md: 3 }}>
-            <StyledPaper variant="outlined">
-              <Typography component="h3" fontWeight="bold" variant="body2">
-                <Box component="span" color="primary.main">
-                  {title[0]}
-                </Box>
-                {title.slice(1)}
-              </Typography>
-              <Typography color="text.secondary" variant="body2">
-                {description}
-              </Typography>
-            </StyledPaper>
-          </Grid>
+          <StyledGrid key={title} size={{ xs: 12, md: 3 }}>
+            <Typography
+              color="text.primary"
+              component="h3"
+              fontWeight="bold"
+              variant="body2"
+            >
+              <Box component="span" color="primary.main">
+                {title[0]}
+              </Box>
+              {title.slice(1)}
+            </Typography>
+            <Typography color="text.secondary" variant="body2">
+              {description}
+            </Typography>
+          </StyledGrid>
         ))}
       </Grid>
     </StyledContainer>
