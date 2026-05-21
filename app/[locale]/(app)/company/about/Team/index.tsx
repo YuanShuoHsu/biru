@@ -35,7 +35,7 @@ interface TeamMember {
   bio: string;
 }
 
-const CORE_TEAM: TeamMember[] = [
+const TEAM_MEMBERS: TeamMember[] = [
   {
     name: "Yuan-Shuo Hsu",
     title: "Co-founder, CEO",
@@ -159,41 +159,32 @@ const Team = () => {
         </Button>
       </Stack>
       <Grid container spacing={2}>
-        {CORE_TEAM.map(
-          (
-            { bio, countryCode, github, location, name, title, twitter },
-            index,
-          ) => (
-            <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-              <StyledBadgeAvatars
-                badgeContent={
-                  <FlagAvatar
-                    alt={location}
-                    src={`/images/flags/w20/${countryCode}.png`}
-                  />
-                }
-                overlap="rectangular"
-                title={location}
-              >
-                <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
-              </StyledBadgeAvatars>
-              <Typography
-                color="text.primary"
-                fontWeight="bold"
-                variant="body2"
-              >
-                {name}
-              </Typography>
-              <Typography color="text.primary" variant="body2">
-                {title}
-              </Typography>
-              <Divider />
-              <Typography color="text.secondary" variant="body2">
-                {bio}
-              </Typography>
-            </StyledGrid>
-          ),
-        )}
+        {TEAM_MEMBERS.map(({ bio, countryCode, location, name, title }, index) => (
+          <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+            <StyledBadgeAvatars
+              badgeContent={
+                <FlagAvatar
+                  alt={location}
+                  src={`/images/flags/w20/${countryCode}.png`}
+                />
+              }
+              overlap="rectangular"
+              title={location}
+            >
+              <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
+            </StyledBadgeAvatars>
+            <Typography color="text.primary" fontWeight="bold" variant="body2">
+              {name}
+            </Typography>
+            <Typography color="text.primary" variant="body2">
+              {title}
+            </Typography>
+            <Divider />
+            <Typography color="text.secondary" variant="body2">
+              {bio}
+            </Typography>
+          </StyledGrid>
+        ))}
       </Grid>
     </StyledContainer>
   );
