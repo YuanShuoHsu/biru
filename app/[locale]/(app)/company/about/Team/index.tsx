@@ -88,138 +88,133 @@ const CORE_TEAM: TeamMember[] = [
 ];
 
 const StyledContainer = styled(Container)(({ theme }) => ({
+  paddingBlock: theme.spacing(5),
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(6),
+  gap: theme.spacing(5),
 }));
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
+  padding: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
-  padding: theme.spacing(2),
 }));
 
 const Team = () => {
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
   return (
-    <Box paddingBlock={{ xs: 10, sm: 14 }}>
-      <StyledContainer maxWidth="lg">
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "flex-start", sm: "center" }}
-          gap={3}
-        >
-          <Stack gap={1}>
-            <Typography
-              color="primary.main"
-              component="h2"
-              fontWeight="bold"
-              variant="body2"
-            >
-              {tCompanyAboutTeam("label")}
-            </Typography>
-            <Typography
-              color="text.primary"
-              component="h2"
-              fontWeight={800}
-              variant="h2"
-            >
-              {tCompanyAboutTeam("title")}{" "}
-              <GradientBox component="span">
-                {tCompanyAboutTeam("titleHighlight")}
-              </GradientBox>
-            </Typography>
-            <Typography color="text.secondary" variant="body1">
-              {tCompanyAboutTeam("description")}
-            </Typography>
-          </Stack>
-          <Button
-            component={Link}
-            href="/careers"
-            variant="contained"
-            disableElevation
-            endIcon={<ChevronRight />}
-            sx={{ flexShrink: 0 }}
+    <StyledContainer maxWidth="lg">
+      <Stack
+        direction={{ xs: "column", sm: "row" }}
+        justifyContent="space-between"
+        alignItems={{ xs: "flex-start", sm: "center" }}
+        gap={3}
+      >
+        <Stack gap={1}>
+          <Typography
+            color="primary.main"
+            component="h2"
+            fontWeight="bold"
+            variant="body2"
           >
-            {tCompanyAboutTeam("joinUs")}
-          </Button>
+            {tCompanyAboutTeam("label")}
+          </Typography>
+          <Typography
+            color="text.primary"
+            component="h2"
+            fontWeight={800}
+            variant="h2"
+          >
+            {tCompanyAboutTeam("title")}{" "}
+            <GradientBox component="span">
+              {tCompanyAboutTeam("titleHighlight")}
+            </GradientBox>
+          </Typography>
+          <Typography color="text.secondary" variant="body1">
+            {tCompanyAboutTeam("description")}
+          </Typography>
         </Stack>
-        <Grid container spacing={2}>
-          {CORE_TEAM.map((member, i) => (
-            <StyledGrid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
-              <Stack
-                direction="row"
-                justifyContent="space-between"
-                alignItems="flex-start"
-              >
-                <Box title={member.location}>
-                  <Avatar
-                    variant="rounded"
-                    sx={{ width: 70, height: 70, mb: 0.5 }}
-                  >
-                    {member.name[0]}
-                  </Avatar>
-                  <Box sx={{ lineHeight: 0 }}>
-                    <Image
-                      src={`/images/flags/w20/${member.countryCode}.png`}
-                      alt=""
-                      height={20}
-                      width={40}
-                    />
-                  </Box>
-                </Box>
-                <Stack direction="row">
-                  {member.github && (
-                    <IconButton
-                      size="medium"
-                      aria-label={`${member.name} GitHub profile`}
-                      href={member.github}
-                      target="_blank"
-                      rel="noopener"
-                      component="a"
-                    >
-                      <GitHub fontSize="small" />
-                    </IconButton>
-                  )}
-                  {member.twitter && (
-                    <IconButton
-                      size="medium"
-                      aria-label={`${member.name} X profile`}
-                      href={member.twitter}
-                      target="_blank"
-                      rel="noopener"
-                      component="a"
-                    >
-                      <XIcon />
-                    </IconButton>
-                  )}
-                </Stack>
-              </Stack>
-              <Stack gap={0.5}>
-                <Typography
-                  color="text.primary"
-                  fontWeight={500}
-                  variant="body2"
+        <Button
+          component={Link}
+          href="/careers"
+          variant="contained"
+          disableElevation
+          endIcon={<ChevronRight />}
+          sx={{ flexShrink: 0 }}
+        >
+          {tCompanyAboutTeam("joinUs")}
+        </Button>
+      </Stack>
+      <Grid container spacing={2}>
+        {CORE_TEAM.map((member, i) => (
+          <StyledGrid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="flex-start"
+            >
+              <Box title={member.location}>
+                <Avatar
+                  variant="rounded"
+                  sx={{ width: 70, height: 70, mb: 0.5 }}
                 >
-                  {member.name}
-                </Typography>
-                <Typography color="text.secondary" variant="body2">
-                  {member.title}
-                </Typography>
+                  {member.name[0]}
+                </Avatar>
+                <Box sx={{ lineHeight: 0 }}>
+                  <Image
+                    src={`/images/flags/w20/${member.countryCode}.png`}
+                    alt=""
+                    height={20}
+                    width={40}
+                  />
+                </Box>
+              </Box>
+              <Stack direction="row">
+                {member.github && (
+                  <IconButton
+                    size="medium"
+                    aria-label={`${member.name} GitHub profile`}
+                    href={member.github}
+                    target="_blank"
+                    rel="noopener"
+                    component="a"
+                  >
+                    <GitHub fontSize="small" />
+                  </IconButton>
+                )}
+                {member.twitter && (
+                  <IconButton
+                    size="medium"
+                    aria-label={`${member.name} X profile`}
+                    href={member.twitter}
+                    target="_blank"
+                    rel="noopener"
+                    component="a"
+                  >
+                    <XIcon />
+                  </IconButton>
+                )}
               </Stack>
-              <Typography color="text.secondary" variant="body2">
-                {member.bio}
+            </Stack>
+            <Stack gap={0.5}>
+              <Typography color="text.primary" fontWeight={500} variant="body2">
+                {member.name}
               </Typography>
-            </StyledGrid>
-          ))}
-        </Grid>
-      </StyledContainer>
-    </Box>
+              <Typography color="text.secondary" variant="body2">
+                {member.title}
+              </Typography>
+            </Stack>
+            <Typography color="text.secondary" variant="body2">
+              {member.bio}
+            </Typography>
+          </StyledGrid>
+        ))}
+      </Grid>
+    </StyledContainer>
   );
 };
 
