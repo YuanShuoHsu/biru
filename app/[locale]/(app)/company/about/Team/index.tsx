@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
-import Image from "next/image";
 
+import BadgeAvatars from "@/components/BadgeAvatars";
 import GradientBox from "@/components/GradientBox";
 
 import { Link } from "@/i18n/navigation";
@@ -8,7 +8,6 @@ import { Link } from "@/i18n/navigation";
 import { ChevronRight, GitHub } from "@mui/icons-material";
 import {
   Avatar,
-  Box,
   Button,
   Container,
   Grid,
@@ -103,6 +102,11 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const FlagAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(3),
+  height: theme.spacing(3),
+}));
+
 const Team = () => {
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -143,69 +147,81 @@ const Team = () => {
         </Button>
       </Stack>
       <Grid container spacing={2}>
-        {CORE_TEAM.map((member, index) => (
-          <StyledGrid key={`${index}`} size={{ xs: 12, sm: 6, md: 3 }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="flex-start"
-            >
-              <Box title={member.location}>
-                <Avatar
-                  variant="rounded"
-                  sx={{ width: 70, height: 70, mb: 0.5 }}
+        {CORE_TEAM.map(
+          (
+            { bio, countryCode, github, location, name, title, twitter },
+            index,
+          ) => (
+            <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+              >
+                <BadgeAvatars
+                  badgeContent={
+                    <FlagAvatar
+                      alt={location}
+                      src={`/images/flags/w20/${countryCode}.png`}
+                    />
+                  }
+                  overlap="rectangular"
+                  title={location}
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      transform: "translateX(50%)",
+                    },
+                  }}
                 >
-                  {member.name[0]}
-                </Avatar>
-                <Box sx={{ lineHeight: 0 }}>
-                  <Image
-                    src={`/images/flags/w20/${member.countryCode}.png`}
-                    alt=""
-                    height={20}
-                    width={40}
-                  />
-                </Box>
-              </Box>
-              <Stack direction="row">
-                {member.github && (
-                  <IconButton
-                    size="medium"
-                    aria-label={`${member.name} GitHub profile`}
-                    href={member.github}
-                    target="_blank"
-                    rel="noopener"
-                    component="a"
-                  >
-                    <GitHub fontSize="small" />
-                  </IconButton>
-                )}
-                {member.twitter && (
-                  <IconButton
-                    size="medium"
-                    aria-label={`${member.name} X profile`}
-                    href={member.twitter}
-                    target="_blank"
-                    rel="noopener"
-                    component="a"
-                  >
-                    <XIcon />
-                  </IconButton>
-                )}
+                  <Avatar variant="rounded" sx={{ width: 70, height: 70 }}>
+                    {name[0]}
+                  </Avatar>
+                </BadgeAvatars>
+                <Stack direction="row">
+                  {github && (
+                    <IconButton
+                      size="medium"
+                      aria-label={`${name} GitHub profile`}
+                      href={github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      component="a"
+                    >
+                      <GitHub fontSize="small" />
+                    </IconButton>
+                  )}
+                  {twitter && (
+                    <IconButton
+                      size="medium"
+                      aria-label={`${name} X profile`}
+                      href={twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      component="a"
+                    >
+                      <XIcon />
+                    </IconButton>
+                  )}
+                </Stack>
               </Stack>
-            </Stack>
-            <Stack gap={0.5}>
-              <Typography color="text.primary" fontWeight={500} variant="body2">
-                {member.name}
-              </Typography>
+              <Stack gap={0.5}>
+                <Typography
+                  color="text.primary"
+                  fontWeight={500}
+                  variant="body2"
+                >
+                  {name}
+                </Typography>
+                <Typography color="text.secondary" variant="body2">
+                  {title}
+                </Typography>
+              </Stack>
               <Typography color="text.secondary" variant="body2">
-                {member.title}
+                {bio}
               </Typography>
-            </Stack>
-            <Typography color="text.secondary" variant="body2">
-              {member.bio}
-            </Typography>
-          </StyledGrid>
-        ))}
+            </StyledGrid>
+          ),
+        )}
       </Grid>
     </StyledContainer>
   );
