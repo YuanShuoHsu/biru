@@ -1,23 +1,47 @@
 {
   "about": {
-    "label": "關於我們",
     "heroArea": {
-      "subtitle": "關於我們",
-      "titleLine1": "我們的使命是讓",
-      "titleLine2": "美好咖啡輕鬆實現",
       "description": "我們為每位賓客提供美食、服務與空間，以無與倫比的溫度與從容，打造令人難忘的用餐體驗。",
       "stats": {
         "founded": {
-          "value": "2026",
-          "label": "創立於桃園大園"
-        },
-        "ingredients": {
-          "value": "100%",
-          "label": "每日新鮮食材"
+          "label": "創立於桃園大園",
+          "value": "2026"
         },
         "hours": {
-          "value": "全天候",
-          "label": "早午餐到晚餐"
+          "label": "早午餐到晚餐",
+          "value": "全天候"
+        },
+        "ingredients": {
+          "label": "每日新鮮食材",
+          "value": "100%"
+        }
+      },
+      "subtitle": "關於我們",
+      "titleLine1": "我們的使命是讓",
+      "titleLine2": "美好咖啡輕鬆實現"
+    },
+    "label": "關於我們",
+    "valuesSection": {
+      "description": "Biru 團隊共識描繪了我們作為一家公司所實踐的價值，並指引我們走向想帶給賓客的體驗與成果。",
+      "subtitle": "我們的價值",
+      "titleGradient": "團隊共識",
+      "titlePrefix": "Biru ",
+      "values": {
+        "chaseBetter": {
+          "description": "我們被持續變得更好的渴望驅動。",
+          "title": "追求「更好」"
+        },
+        "keepItSimple": {
+          "description": "我們不走制式企業風格，而我們喜歡這樣。",
+          "title": "保持簡單"
+        },
+        "trustAndDeliver": {
+          "description": "我們選擇培養凝聚力，作為成就事情的核心。",
+          "title": "彼此信任，一起交付"
+        },
+        "userObsessed": {
+          "description": "我們始終記得自己服務的是誰，以及為什麼服務。",
+          "title": "以使用者為中心"
         }
       }
     }

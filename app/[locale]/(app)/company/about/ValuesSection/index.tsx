@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import GradientBox from "@/components/GradientBox";
 
 import {
@@ -10,29 +12,18 @@ import {
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const VALUES: { description: string; icon: SvgIconComponent; title: string }[] =
-  [
-    {
-      description: "We never lose sight of who we're serving and why.",
-      icon: Favorite,
-      title: "User-obsessed",
-    },
-    {
-      description: "We're so not corporate—and we like it that way.",
-      icon: Tune,
-      title: "Keep it simple",
-    },
-    {
-      description: "We're driven by an unending desire to improve.",
-      icon: TrendingUp,
-      title: 'Chase "better"',
-    },
-    {
-      description: "We choose to cultivate unity as the core of achievement.",
-      icon: RocketLaunch,
-      title: "Trust and deliver together",
-    },
-  ];
+type ValueKey =
+  | "userObsessed"
+  | "keepItSimple"
+  | "chaseBetter"
+  | "trustAndDeliver";
+
+const VALUE_KEYS: { icon: SvgIconComponent; key: ValueKey }[] = [
+  { icon: Favorite, key: "userObsessed" },
+  { icon: Tune, key: "keepItSimple" },
+  { icon: TrendingUp, key: "chaseBetter" },
+  { icon: RocketLaunch, key: "trustAndDeliver" },
+];
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
@@ -61,58 +52,70 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-const ValuesSection = () => (
-  <Box paddingBlock={5} bgcolor="background.paper">
-    <StyledContainer maxWidth="lg">
-      <Stack gap={1}>
-        <Typography
-          color="primary.main"
-          component="h2"
-          fontWeight="bold"
-          variant="body2"
-        >
-          Our values
-        </Typography>
-        <Typography
-          color="text.primary"
-          component="h2"
-          fontWeight="bold"
-          variant="h4"
-        >
-          The Biru <GradientBox component="span">team pact</GradientBox>
-        </Typography>
-        <Typography color="text.secondary" variant="body1">
-          The Biru team pact describes the values we embody as a company, which
-          help guide us toward the experiences and results we aim to deliver.
-        </Typography>
-      </Stack>
-      <Grid container spacing={2}>
-        {VALUES.map(({ description, icon: Icon, title }) => (
-          <StyledGrid key={title} size={{ xs: 12, md: 3 }}>
-            <Stack alignItems="center" direction="row" gap={1}>
-              <IconWrapper>
-                <Icon />
-              </IconWrapper>
-              <Typography
-                color="text.primary"
-                component="h3"
-                fontWeight="bold"
-                variant="body2"
-              >
-                <Box component="span" color="primary.main">
-                  {title[0]}
-                </Box>
-                {title.slice(1)}
-              </Typography>
-            </Stack>
-            <Typography color="text.secondary" variant="body2">
-              {description}
-            </Typography>
-          </StyledGrid>
-        ))}
-      </Grid>
-    </StyledContainer>
-  </Box>
-);
+const ValuesSection = () => {
+  const tCompanyAboutValuesSection = useTranslations(
+    "company.about.valuesSection",
+  );
+
+  return (
+    <Box paddingBlock={5} bgcolor="background.paper">
+      <StyledContainer maxWidth="lg">
+        <Stack gap={1}>
+          <Typography
+            color="primary.main"
+            component="h2"
+            fontWeight="bold"
+            variant="body2"
+          >
+            {tCompanyAboutValuesSection("subtitle")}
+          </Typography>
+          <Typography
+            color="text.primary"
+            component="h2"
+            fontWeight="bold"
+            variant="h4"
+          >
+            {tCompanyAboutValuesSection("titlePrefix")}
+            <GradientBox component="span">
+              {tCompanyAboutValuesSection("titleGradient")}
+            </GradientBox>
+          </Typography>
+          <Typography color="text.secondary" variant="body1">
+            {tCompanyAboutValuesSection("description")}
+          </Typography>
+        </Stack>
+        <Grid container spacing={2}>
+          {VALUE_KEYS.map(({ icon: Icon, key }) => {
+            const title = tCompanyAboutValuesSection(`values.${key}.title`);
+
+            return (
+              <StyledGrid key={key} size={{ xs: 12, md: 3 }}>
+                <Stack alignItems="center" direction="row" gap={1}>
+                  <IconWrapper>
+                    <Icon />
+                  </IconWrapper>
+                  <Typography
+                    color="text.primary"
+                    component="h3"
+                    fontWeight="bold"
+                    variant="body2"
+                  >
+                    <Box component="span" color="primary.main">
+                      {title[0]}
+                    </Box>
+                    {title.slice(1)}
+                  </Typography>
+                </Stack>
+                <Typography color="text.secondary" variant="body2">
+                  {tCompanyAboutValuesSection(`values.${key}.description`)}
+                </Typography>
+              </StyledGrid>
+            );
+          })}
+        </Grid>
+      </StyledContainer>
+    </Box>
+  );
+};
 
 export default ValuesSection;

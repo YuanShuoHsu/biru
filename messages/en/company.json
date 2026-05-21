@@ -1,23 +1,47 @@
 {
   "about": {
-    "label": "About",
     "heroArea": {
-      "subtitle": "About us",
-      "titleLine1": "We're on a mission to make",
-      "titleLine2": "great coffee effortless",
       "description": "We give guests the food, service, and space to bring a stunning dining experience to life with unrivalled warmth and ease.",
       "stats": {
         "founded": {
-          "value": "2026",
-          "label": "Born in Dayuan, Taoyuan"
-        },
-        "ingredients": {
-          "value": "100%",
-          "label": "Fresh ingredients daily"
+          "label": "Born in Dayuan, Taoyuan",
+          "value": "2026"
         },
         "hours": {
-          "value": "All Day",
-          "label": "Brunch to Dinner"
+          "label": "Brunch to Dinner",
+          "value": "All Day"
+        },
+        "ingredients": {
+          "label": "Fresh ingredients daily",
+          "value": "100%"
+        }
+      },
+      "subtitle": "About us",
+      "titleLine1": "We're on a mission to make",
+      "titleLine2": "great coffee effortless"
+    },
+    "label": "About",
+    "valuesSection": {
+      "description": "The Biru team pact describes the values we embody as a company, which help guide us toward the experiences and results we aim to deliver.",
+      "subtitle": "Our values",
+      "titleGradient": "team pact",
+      "titlePrefix": "The Biru ",
+      "values": {
+        "chaseBetter": {
+          "description": "We're driven by an unending desire to improve.",
+          "title": "Chase \"better\""
+        },
+        "keepItSimple": {
+          "description": "We're so not corporate—and we like it that way.",
+          "title": "Keep it simple"
+        },
+        "trustAndDeliver": {
+          "description": "We choose to cultivate unity as the core of achievement.",
+          "title": "Trust and deliver together"
+        },
+        "userObsessed": {
+          "description": "We never lose sight of who we're serving and why.",
+          "title": "User-obsessed"
         }
       }
     }

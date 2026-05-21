@@ -1,23 +1,47 @@
 {
   "about": {
-    "label": "회사 소개",
     "heroArea": {
-      "subtitle": "회사 소개",
-      "titleLine1": "훌륭한 커피를",
-      "titleLine2": "더 쉽게 즐기다",
       "description": "음식, 서비스, 공간을 통해 따뜻하고 편안한 분위기 속에서 잊지 못할 다이닝 경험을 선사합니다.",
       "stats": {
         "founded": {
-          "value": "2026",
-          "label": "타오위안 다위안에서 시작"
-        },
-        "ingredients": {
-          "value": "100%",
-          "label": "매일 신선한 재료"
+          "label": "타오위안 다위안에서 시작",
+          "value": "2026"
         },
         "hours": {
-          "value": "하루 종일",
-          "label": "브런치부터 디너까지"
+          "label": "브런치부터 디너까지",
+          "value": "하루 종일"
+        },
+        "ingredients": {
+          "label": "매일 신선한 재료",
+          "value": "100%"
+        }
+      },
+      "subtitle": "회사 소개",
+      "titleLine1": "훌륭한 커피를",
+      "titleLine2": "더 쉽게 즐기다"
+    },
+    "label": "회사 소개",
+    "valuesSection": {
+      "description": "Biru 팀 팩트는 우리가 회사로서 실천하는 가치를 담고 있으며, 우리가 전하고자 하는 경험과 결과로 나아가도록 이끌어 줍니다.",
+      "subtitle": "우리의 가치",
+      "titleGradient": "팀 팩트",
+      "titlePrefix": "Biru ",
+      "values": {
+        "chaseBetter": {
+          "description": "우리는 끊임없이 더 나아지고자 하는 열망으로 움직입니다.",
+          "title": "더 나음을 추구하기"
+        },
+        "keepItSimple": {
+          "description": "우리는 딱딱한 기업 문화와는 거리가 멀고, 그런 방식을 좋아합니다.",
+          "title": "단순하게 유지하기"
+        },
+        "trustAndDeliver": {
+          "description": "우리는 하나됨을 키우는 것이 성과의 핵심이라고 믿습니다.",
+          "title": "신뢰하고 함께 해내기"
+        },
+        "userObsessed": {
+          "description": "우리는 누구를 위해, 왜 일하는지 절대 잊지 않습니다.",
+          "title": "사용자에게 집중하기"
         }
       }
     }
