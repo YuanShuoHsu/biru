@@ -117,9 +117,13 @@ const Team = () => {
               sx={{ maxWidth: 500, fontWeight: 800, my: 1 }}
             >
               {tCompanyAboutTeam("title")}{" "}
-              <GradientBox component="span">{tCompanyAboutTeam("titleHighlight")}</GradientBox>
+              <GradientBox component="span">
+                {tCompanyAboutTeam("titleHighlight")}
+              </GradientBox>
             </Typography>
-            <Typography color="text.secondary">{tCompanyAboutTeam("description")}</Typography>
+            <Typography color="text.secondary">
+              {tCompanyAboutTeam("description")}
+            </Typography>
           </Box>
           <Button
             component={Link}

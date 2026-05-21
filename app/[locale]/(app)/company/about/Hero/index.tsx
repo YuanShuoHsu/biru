@@ -52,7 +52,9 @@ const Hero = () => {
         >
           {tCompanyAboutHero("titleLine1")}
           <br />
-          <GradientBox component="span">{tCompanyAboutHero("titleLine2")}</GradientBox>
+          <GradientBox component="span">
+            {tCompanyAboutHero("titleLine2")}
+          </GradientBox>
         </Typography>
         <Typography color="text.primary" textAlign="center" variant="body1">
           {tCompanyAboutHero("description")}
