@@ -1,24 +1,34 @@
+import type { SvgIconComponent } from "@mui/icons-material";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import TuneIcon from "@mui/icons-material/Tune";
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const VALUES = [
-  {
-    description: "We never lose sight of who we're serving and why.",
-    title: "User-obsessed 💙",
-  },
-  {
-    description: "We're so not corporate—and we like it that way.",
-    title: "Keep it simple 🚫",
-  },
-  {
-    description: "We're driven by an unending desire to improve.",
-    title: 'Chase "better" 🌱',
-  },
-  {
-    description: "We choose to cultivate unity as the core of achievement.",
-    title: "Trust and deliver together 🚀",
-  },
-];
+const VALUES: { description: string; icon: SvgIconComponent; title: string }[] =
+  [
+    {
+      description: "We never lose sight of who we're serving and why.",
+      icon: FavoriteIcon,
+      title: "User-obsessed",
+    },
+    {
+      description: "We're so not corporate—and we like it that way.",
+      icon: TuneIcon,
+      title: "Keep it simple",
+    },
+    {
+      description: "We're driven by an unending desire to improve.",
+      icon: TrendingUpIcon,
+      title: 'Chase "better"',
+    },
+    {
+      description: "We choose to cultivate unity as the core of achievement.",
+      icon: RocketLaunchIcon,
+      title: "Trust and deliver together",
+    },
+  ];
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
@@ -26,13 +36,25 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
+const IconWrapper = styled(Box)(({ theme }) => ({
+  alignItems: "center",
+  backgroundColor: theme.palette.primary.main + "14",
+  borderRadius: theme.shape.borderRadius,
+  display: "inline-flex",
+  padding: theme.spacing(1),
+  "& svg": {
+    color: theme.palette.primary.main,
+    fontSize: "1.25rem",
+  },
+}));
+
 const StyledGrid = styled(Grid)(({ theme }) => ({
-  padding: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
+  padding: theme.spacing(2),
 }));
 
 const ValuesSection = () => (
@@ -68,25 +90,29 @@ const ValuesSection = () => (
           </Box>
         </Typography>
         <Typography color="text.secondary" variant="body1">
-          The Biru team pact descriptionribes the values we embody as a company,
-          which help guide us toward the experiences and results we aim to
-          deliver.
+          The Biru team pact describes the values we embody as a company, which
+          help guide us toward the experiences and results we aim to deliver.
         </Typography>
       </Stack>
       <Grid container spacing={2}>
-        {VALUES.map(({ description, title }) => (
+        {VALUES.map(({ description, icon: Icon, title }) => (
           <StyledGrid key={title} size={{ xs: 12, md: 3 }}>
-            <Typography
-              color="text.primary"
-              component="h3"
-              fontWeight="bold"
-              variant="body2"
-            >
-              <Box component="span" color="primary.main">
-                {title[0]}
-              </Box>
-              {title.slice(1)}
-            </Typography>
+            <Stack alignItems="center" direction="row" gap={1}>
+              <IconWrapper>
+                <Icon />
+              </IconWrapper>
+              <Typography
+                color="text.primary"
+                component="h3"
+                fontWeight="bold"
+                variant="body2"
+              >
+                <Box component="span" color="primary.main">
+                  {title[0]}
+                </Box>
+                {title.slice(1)}
+              </Typography>
+            </Stack>
             <Typography color="text.secondary" variant="body2">
               {description}
             </Typography>
