@@ -1,22 +1,22 @@
-import { Box, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const VALUES = [
   {
+    description: "We never lose sight of who we're serving and why.",
     title: "User-obsessed 💙",
-    desc: "We never lose sight of who we're serving and why.",
   },
   {
+    description: "We're so not corporate—and we like it that way.",
     title: "Keep it simple 🚫",
-    desc: "We're so not corporate—and we like it that way.",
   },
   {
+    description: "We're driven by an unending desire to improve.",
     title: 'Chase "better" 🌱',
-    desc: "We're driven by an unending desire to improve.",
   },
   {
+    description: "We choose to cultivate unity as the core of achievement.",
     title: "Trust and deliver together 🚀",
-    desc: "We choose to cultivate unity as the core of achievement.",
   },
 ];
 
@@ -34,7 +34,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
 const ValuesSection = () => (
   <Box paddingBlock={5} bgcolor="background.paper">
     <StyledContainer maxWidth="lg">
-      <Box>
+      <Stack gap={1}>
         <Typography
           color="primary.main"
           component="h2"
@@ -64,19 +64,23 @@ const ValuesSection = () => (
           </Box>
         </Typography>
         <Typography color="text.secondary" variant="body1">
-          The Biru team pact describes the values we embody as a company, which
-          help guide us toward the experiences and results we aim to deliver.
+          The Biru team pact descriptionribes the values we embody as a company,
+          which help guide us toward the experiences and results we aim to
+          deliver.
         </Typography>
-      </Box>
-      <Grid container spacing={3}>
-        {VALUES.map((v) => (
-          <Grid key={v.title} size={{ xs: 12, md: 3 }}>
+      </Stack>
+      <Grid container spacing={2}>
+        {VALUES.map(({ description, title }) => (
+          <Grid key={title} size={{ xs: 12, md: 3 }}>
             <StyledPaper variant="outlined">
               <Typography component="h3" fontWeight="bold" variant="body2">
-                {v.title}
+                <Box component="span" color="primary.main">
+                  {title[0]}
+                </Box>
+                {title.slice(1)}
               </Typography>
               <Typography color="text.secondary" variant="body2">
-                {v.desc}
+                {description}
               </Typography>
             </StyledPaper>
           </Grid>
