@@ -103,6 +103,8 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 }));
 
 const StyledBadgeAvatars = styled(BadgeAvatars)({
+  alignSelf: "flex-start",
+
   "& .MuiBadge-badge": {
     transform: "translateX(50%)",
   },
