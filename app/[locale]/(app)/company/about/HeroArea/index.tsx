@@ -2,7 +2,9 @@ import { useTranslations } from "next-intl";
 
 import PhotoSlider from "./PhotoSlider";
 
-import { Box, Container, Stack, Typography } from "@mui/material";
+import GradientBox from "@/components/GradientBox";
+
+import { Container, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -50,9 +52,9 @@ const HeroArea = () => {
         >
           {tCompanyAboutHeroArea("titleLine1")}
           <br />
-          <Box color="primary.main" component="span">
+          <GradientBox component="span">
             {tCompanyAboutHeroArea("titleLine2")}
-          </Box>
+          </GradientBox>
         </Typography>
         <Typography color="text.primary" textAlign="center" variant="body1">
           {tCompanyAboutHeroArea("description")}

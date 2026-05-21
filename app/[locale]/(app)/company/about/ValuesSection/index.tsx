@@ -1,8 +1,12 @@
-import type { SvgIconComponent } from "@mui/icons-material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
-import TuneIcon from "@mui/icons-material/Tune";
+import GradientBox from "@/components/GradientBox";
+
+import {
+  Favorite,
+  RocketLaunch,
+  TrendingUp,
+  Tune,
+  type SvgIconComponent,
+} from "@mui/icons-material";
 import { Box, Container, Grid, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -10,22 +14,22 @@ const VALUES: { description: string; icon: SvgIconComponent; title: string }[] =
   [
     {
       description: "We never lose sight of who we're serving and why.",
-      icon: FavoriteIcon,
+      icon: Favorite,
       title: "User-obsessed",
     },
     {
       description: "We're so not corporate—and we like it that way.",
-      icon: TuneIcon,
+      icon: Tune,
       title: "Keep it simple",
     },
     {
       description: "We're driven by an unending desire to improve.",
-      icon: TrendingUpIcon,
+      icon: TrendingUp,
       title: 'Chase "better"',
     },
     {
       description: "We choose to cultivate unity as the core of achievement.",
-      icon: RocketLaunchIcon,
+      icon: RocketLaunch,
       title: "Trust and deliver together",
     },
   ];
@@ -75,19 +79,7 @@ const ValuesSection = () => (
           fontWeight="bold"
           variant="h4"
         >
-          The Biru{" "}
-          <Box
-            component="span"
-            sx={{
-              background: (theme) =>
-                `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main ?? theme.palette.primary.light})`,
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              backgroundClip: "text",
-            }}
-          >
-            team pact
-          </Box>
+          The Biru <GradientBox component="span">team pact</GradientBox>
         </Typography>
         <Typography color="text.secondary" variant="body1">
           The Biru team pact describes the values we embody as a company, which
