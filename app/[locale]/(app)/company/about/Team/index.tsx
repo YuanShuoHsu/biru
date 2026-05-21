@@ -102,9 +102,20 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const StyledBadgeAvatars = styled(BadgeAvatars)({
+  "& .MuiBadge-badge": {
+    transform: "translateX(50%)",
+  },
+});
+
 const FlagAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(3),
   height: theme.spacing(3),
+}));
+
+const MemberAvatar = styled(Avatar)(({ theme }) => ({
+  width: theme.spacing(8.5),
+  height: theme.spacing(8.5),
 }));
 
 const Team = () => {
@@ -141,7 +152,6 @@ const Team = () => {
           variant="contained"
           disableElevation
           endIcon={<ChevronRight />}
-          sx={{ flexShrink: 0 }}
         >
           {tCompanyAboutTeam("joinUs")}
         </Button>
@@ -158,7 +168,7 @@ const Team = () => {
                 justifyContent="space-between"
                 alignItems="flex-start"
               >
-                <BadgeAvatars
+                <StyledBadgeAvatars
                   badgeContent={
                     <FlagAvatar
                       alt={location}
@@ -167,16 +177,9 @@ const Team = () => {
                   }
                   overlap="rectangular"
                   title={location}
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      transform: "translateX(50%)",
-                    },
-                  }}
                 >
-                  <Avatar variant="rounded" sx={{ width: 70, height: 70 }}>
-                    {name[0]}
-                  </Avatar>
-                </BadgeAvatars>
+                  <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
+                </StyledBadgeAvatars>
                 <Stack direction="row">
                   {github && (
                     <IconButton
