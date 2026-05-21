@@ -1,71 +1,69 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Container,
-  Grid,
-  Typography,
-} from "@mui/material";
+import { Box, Container, Grid, Paper, Typography } from "@mui/material";
 
 const VALUES = [
   {
-    emoji: "💙",
-    title: "User-obsessed",
-    desc: "We put customers first in every decision we make — always.",
+    title: "User-obsessed 💙",
+    desc: "We never lose sight of who we're serving and why.",
   },
   {
-    emoji: "🚫",
-    title: "Keep it simple",
-    desc: "Complexity is the enemy. We keep only what is necessary.",
+    title: "Keep it simple 🚫",
+    desc: "We're so not corporate—and we like it that way.",
   },
   {
-    emoji: "🌱",
-    title: 'Chase "better"',
-    desc: "Continuous improvement is our daily commitment.",
+    title: 'Chase "better" 🌱',
+    desc: "We're driven by an unending desire to improve.",
   },
   {
-    emoji: "🚀",
-    title: "Trust and deliver together",
-    desc: "We ship on our promises, every single time.",
+    title: "Trust and deliver together 🚀",
+    desc: "We choose to cultivate unity as the core of achievement.",
   },
 ];
 
 const ValuesSection = () => (
-  <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.paper" }}>
+  <Box paddingBlock={5} bgcolor="background.paper">
     <Container maxWidth="lg">
-      <Typography
-        variant="h3"
-        sx={{ fontWeight: 800, mb: 1, textAlign: "center" }}
-      >
-        The Biru team pact
+      <Typography variant="body2" sx={{ fontWeight: 700, mb: 1 }}>
+        Our values
       </Typography>
-      <Typography color="text.secondary" sx={{ textAlign: "center", mb: 8 }}>
-        The values that guide how we work together and serve our community.
+      <Typography variant="h2" sx={{ maxWidth: 500, mb: 2 }}>
+        The Biru{" "}
+        <Box
+          component="span"
+          sx={{
+            background: (theme) =>
+              `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main ?? theme.palette.primary.light})`,
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+          }}
+        >
+          team pact
+        </Box>
       </Typography>
-      <Grid container spacing={4}>
+      <Typography variant="body1" color="text.secondary" sx={{ maxWidth: 600 }}>
+        The Biru team pact describes the values we embody as a company, which
+        help guide us toward the experiences and results we aim to deliver.
+      </Typography>
+      <Grid container spacing={3}>
         {VALUES.map((v) => (
-          <Grid size={{ xs: 12, sm: 6, md: 3 }} key={v.title}>
-            <Card
+          <Grid key={v.title} size={{ xs: 12, md: 3 }}>
+            <Paper
               variant="outlined"
-              sx={{
-                height: "100%",
-                p: 1,
-                transition: "box-shadow 0.2s",
-                "&:hover": { boxShadow: 4 },
-              }}
+              sx={{ borderRadius: 2, overflow: "hidden", height: "100%" }}
             >
-              <CardContent>
-                <Typography sx={{ fontSize: "2rem", mb: 1 }}>
-                  {v.emoji}
-                </Typography>
-                <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
+              <Box sx={{ p: 2 }}>
+                <Typography
+                  component="h3"
+                  variant="body2"
+                  sx={{ fontWeight: 700, mb: 1 }}
+                >
                   {v.title}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {v.desc}
                 </Typography>
-              </CardContent>
-            </Card>
+              </Box>
+            </Paper>
           </Grid>
         ))}
       </Grid>
