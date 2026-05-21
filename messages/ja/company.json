@@ -22,11 +22,11 @@
     },
     "label": "私たちについて",
     "team": {
-      "label": "チーム",
-      "title": "紹介します",
-      "titleHighlight": "Biruers",
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",
-      "joinUs": "採用情報"
+      "joinUs": "採用情報",
+      "label": "チーム",
+      "titleHighlight": "Biruers",
+      "titlePrefix": "紹介します "
     },
     "values": {
       "description": "Biru Coffee のチームパクトは、私たちが会社として体現する価値観を示し、届けたい体験と成果へ向かうための指針です。",

@@ -108,36 +108,29 @@ const Team = () => {
 
   return (
     <StyledContainer maxWidth="lg">
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems={{ xs: "flex-start", sm: "center" }}
-        gap={3}
-      >
-        <Stack gap={1}>
-          <Typography
-            color="primary.main"
-            component="h2"
-            fontWeight="bold"
-            variant="body2"
-          >
-            {tCompanyAboutTeam("label")}
-          </Typography>
-          <Typography
-            color="text.primary"
-            component="h2"
-            fontWeight={800}
-            variant="h2"
-          >
-            {tCompanyAboutTeam("title")}{" "}
-            <GradientBox component="span">
-              {tCompanyAboutTeam("titleHighlight")}
-            </GradientBox>
-          </Typography>
-          <Typography color="text.secondary" variant="body1">
-            {tCompanyAboutTeam("description")}
-          </Typography>
-        </Stack>
+      <Stack gap={1}>
+        <Typography
+          color="primary.main"
+          component="h2"
+          fontWeight="bold"
+          variant="body2"
+        >
+          {tCompanyAboutTeam("label")}
+        </Typography>
+        <Typography
+          color="text.primary"
+          component="h2"
+          fontWeight="bold"
+          variant="h4"
+        >
+          {tCompanyAboutTeam("titlePrefix")}
+          <GradientBox component="span">
+            {tCompanyAboutTeam("titleHighlight")}
+          </GradientBox>
+        </Typography>
+        <Typography color="text.secondary" variant="body1">
+          {tCompanyAboutTeam("description")}
+        </Typography>
         <Button
           component={Link}
           href="/careers"

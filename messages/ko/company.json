@@ -22,11 +22,11 @@
     },
     "label": "회사 소개",
     "team": {
-      "label": "팀",
-      "title": "만나보세요",
-      "titleHighlight": "Biruers",
       "description": "대만 각지에서 모인 Biru는 열정 넘치는 팀과 커뮤니티입니다.",
-      "joinUs": "채용 정보"
+      "joinUs": "채용 정보",
+      "label": "팀",
+      "titleHighlight": "Biruers",
+      "titlePrefix": "만나보세요 "
     },
     "values": {
       "description": "Biru Coffee 팀 팩트는 우리가 회사로서 실천하는 가치를 담고 있으며, 우리가 전하고자 하는 경험과 결과로 나아가도록 이끌어 줍니다.",
