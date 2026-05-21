@@ -1,15 +1,15 @@
 {
   "about": {
     "heroArea": {
-      "description": "我們為每位賓客提供美食、服務與空間，以無與倫比的溫度與從容，打造令人難忘的用餐體驗。",
+      "description": "我們以美食、服務與空間，搭配無可比擬的溫度與從容，為每位賓客成就令人驚豔的用餐體驗。",
       "stats": {
         "founded": {
-          "label": "創立於桃園大園",
+          "label": "誕生於桃園大園",
           "value": "2026"
         },
         "hours": {
           "label": "早午餐到晚餐",
-          "value": "全天候"
+          "value": "全日供應"
         },
         "ingredients": {
           "label": "每日新鮮食材",
@@ -18,7 +18,7 @@
       },
       "subtitle": "關於我們",
       "titleLine1": "我們的使命是讓",
-      "titleLine2": "美好咖啡輕鬆實現"
+      "titleLine2": "好咖啡變得輕鬆自在"
     },
     "label": "關於我們",
     "valuesSection": {
