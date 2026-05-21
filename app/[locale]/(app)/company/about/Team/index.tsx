@@ -143,8 +143,8 @@ const Team = () => {
         </Button>
       </Stack>
       <Grid container spacing={2}>
-        {CORE_TEAM.map((member, i) => (
-          <StyledGrid key={i} size={{ xs: 12, sm: 6, md: 3 }}>
+        {CORE_TEAM.map((member, index) => (
+          <StyledGrid key={`${index}`} size={{ xs: 12, sm: 6, md: 3 }}>
             <Stack
               direction="row"
               justifyContent="space-between"
