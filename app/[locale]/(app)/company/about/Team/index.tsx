@@ -119,19 +119,28 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
   height: theme.spacing(8.5),
 }));
 
+const StyledOrganizationSelect = styled(TextField)({
+  maxWidth: 240,
+});
+
 const Team = () => {
+  const organizations = useOrganizations();
+
+  const sortedOrganizations = [...organizations].sort(
+    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+  );
+  const defaultOrganizationId = sortedOrganizations[0].id;
+
   const teamFormSchema = useTeamFormSchema();
   const {
     control,
     formState: { errors },
     register,
   } = useForm<TeamForm>({
-    defaultValues: { organizationId: "" },
+    values: { organizationId: defaultOrganizationId },
     resolver: zodResolver(teamFormSchema),
   });
   const selectedOrganizationId = useWatch({ control, name: "organizationId" });
-
-  const organizations = useOrganizations();
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -160,7 +169,7 @@ const Team = () => {
         <Typography color="text.secondary" variant="body1">
           {tCompanyAboutTeam("description")}
         </Typography>
-        <TextField
+        <StyledOrganizationSelect
           error={!!errors.organizationId}
           helperText={errors.organizationId?.message}
           label={tCompanyAboutTeam("selectOrganization.label")}
@@ -183,19 +192,18 @@ const Team = () => {
               },
             },
           }}
-          sx={{ alignSelf: "flex-start", minWidth: 240 }}
           value={selectedOrganizationId}
           {...register("organizationId")}
         >
           <MenuItem disabled value="">
             <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
           </MenuItem>
-          {organizations.map(({ id, name }) => (
+          {sortedOrganizations.map(({ id, name }) => (
             <MenuItem key={id} value={id}>
               {name}
             </MenuItem>
           ))}
-        </TextField>
+        </StyledOrganizationSelect>
       </Stack>
       <Grid container spacing={2}>
         {TEAM_MEMBERS.map(
