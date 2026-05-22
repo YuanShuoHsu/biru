@@ -117,9 +117,12 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const Team = () => {
-  const tCompanyAboutTeam = useTranslations("company.about.team");
-  const organizations = useOrganizations();
   const [selectedOrg, setSelectedOrg] = useState("");
+
+  const organizations = useOrganizations();
+  console.log(organizations);
+
+  const tCompanyAboutTeam = useTranslations("company.about.team");
 
   return (
     <StyledContainer maxWidth="lg">
@@ -172,9 +175,9 @@ const Team = () => {
           <MenuItem disabled value="">
             <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
           </MenuItem>
-          {organizations.map((org) => (
-            <MenuItem key={org.id} value={org.id}>
-              {org.name}
+          {organizations.map(({ id, name }) => (
+            <MenuItem key={id} value={id}>
+              {name}
             </MenuItem>
           ))}
         </TextField>
