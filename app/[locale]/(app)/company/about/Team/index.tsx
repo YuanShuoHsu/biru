@@ -31,7 +31,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   paddingBlock: theme.spacing(5),
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(5),
+  gap: theme.spacing(2),
 }));
 
 const StyledOrganizationSelect = styled(TextField)({
