@@ -7,7 +7,7 @@ import { type TeamForm, useTeamFormSchema } from "./definitions";
 
 import GradientBox from "@/components/GradientBox";
 
-import { LocaleEnum } from "@/enums/Locale";
+import { formatFullName } from "@/utils/auth";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -70,7 +70,6 @@ const Team = () => {
   const selectedOrganizationId = useWatch({ control, name: "organizationId" });
 
   const locale = useLocale();
-  const isEnglish = locale === LocaleEnum.En;
 
   const organizationMembers = useOrganizationMembers(selectedOrganizationId);
 
@@ -149,9 +148,7 @@ const Team = () => {
                 fontWeight="bold"
                 variant="body2"
               >
-                {(isEnglish ? [firstName, lastName] : [lastName, firstName])
-                  .filter(Boolean)
-                  .join(isEnglish ? " " : "")}
+                {formatFullName(locale, firstName, lastName)}
               </Typography>
               <Chip label={tCompanyAboutTeam(`role.${role}`)} size="small" />
               <Divider />

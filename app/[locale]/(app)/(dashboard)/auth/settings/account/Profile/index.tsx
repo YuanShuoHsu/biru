@@ -27,6 +27,8 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 import { useAuthStore } from "@/providers/auth-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
+import { formatFullName } from "@/utils/auth";
+
 const PROFILE_UPLOAD_AVATAR_KEY = "profile-upload-avatar";
 
 const Profile = () => {
@@ -75,11 +77,7 @@ const Profile = () => {
   const isAvatarDirty = avatarSrc !== (session?.user.image || undefined);
 
   const updateProfile = async ({ lastName, firstName, bio }: ProfileForm) => {
-    const name = (
-      locale === LocaleEnum.En ? [firstName, lastName] : [lastName, firstName]
-    )
-      .filter(Boolean)
-      .join(locale === LocaleEnum.En ? " " : "");
+    const name = formatFullName(locale, firstName, lastName);
 
     await authClient.updateUser({
       image: avatarSrc,
@@ -97,7 +95,7 @@ const Profile = () => {
           const { data } = await authClient.getSession();
           setSession(data);
 
-          enqueueSnackbar(tAuth("settings.profile.success"), {
+          enqueueSnackbar(tAuth("settings.profile.success", { name }), {
             variant: "success",
           });
         },
