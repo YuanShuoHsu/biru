@@ -92,6 +92,10 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
+const StyledOrganizationSelect = styled(TextField)({
+  maxWidth: 240,
+});
+
 const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`,
@@ -118,10 +122,6 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(8.5),
   height: theme.spacing(8.5),
 }));
-
-const StyledOrganizationSelect = styled(TextField)({
-  maxWidth: 240,
-});
 
 const Team = () => {
   const organizations = useOrganizations();
