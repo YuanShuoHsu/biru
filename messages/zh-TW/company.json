@@ -21,6 +21,13 @@
       "titleLine2": "好咖啡變得輕鬆自在"
     },
     "label": "關於我們",
+    "location": {
+      "address": "桃園市大園區（請更新為正確地址）",
+      "hours": "週一至週日 08:00–21:00",
+      "label": "位置",
+      "titleHighlight": "找到我們",
+      "titlePrefix": "來 "
+    },
     "team": {
       "description": "來自台灣各地，Biru 是一支充滿熱情的餐飲團隊與社群。",
       "joinUs": "加入我們",

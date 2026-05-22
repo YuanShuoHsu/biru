@@ -21,6 +21,13 @@
       "titleLine2": "好咖啡变得轻松自在"
     },
     "label": "关于我们",
+    "location": {
+      "address": "桃园市大园区（请更新为正确地址）",
+      "hours": "周一至周日 08:00–21:00",
+      "label": "位置",
+      "titleHighlight": "找到我们",
+      "titlePrefix": "来 "
+    },
     "team": {
       "description": "来自台湾各地，Biru 是一支充满热情的餐饮团队与社群。",
       "joinUs": "加入我们",

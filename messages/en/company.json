@@ -21,6 +21,13 @@
       "titleLine2": "great coffee effortless"
     },
     "label": "About",
+    "location": {
+      "address": "Dayuan District, Taoyuan City (please update with the correct address)",
+      "hours": "Mon–Sun 08:00–21:00",
+      "label": "Location",
+      "titleHighlight": "Find Us",
+      "titlePrefix": "Come "
+    },
     "team": {
       "description": "Contributing from all corners of Taiwan, Biru is a passionate team & community.",
       "joinUs": "Join us",

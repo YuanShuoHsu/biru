@@ -1,52 +1,93 @@
-import { Avatar, Box, Container, Grid, Typography } from "@mui/material";
+import { useTranslations } from "next-intl";
 
-const COMMUNITY_CONTRIBUTORS = [
-  { name: "Contributor A", country: "🇹🇼" },
-  { name: "Contributor B", country: "🇺🇸" },
-  { name: "Contributor C", country: "🇯🇵" },
-  { name: "Contributor D", country: "🇩🇪" },
-];
+import GradientBox from "@/components/GradientBox";
 
-const Community = () => (
-  <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.paper" }}>
-    <Container maxWidth="lg">
-      <Typography
-        variant="h3"
-        sx={{ fontWeight: 800, mb: 1, textAlign: "center" }}
-      >
-        Community contributors
-      </Typography>
-      <Typography color="text.secondary" sx={{ textAlign: "center", mb: 8 }}>
-        Some notable community contributions that have had a lasting impact on
-        Biru.
-      </Typography>
-      <Grid container spacing={3} justifyContent="center">
-        {COMMUNITY_CONTRIBUTORS.map((c, i) => (
-          <Grid
-            size={{ xs: 6, sm: 4, md: 3 }}
-            key={i}
-            sx={{ textAlign: "center" }}
+import { LocationOn, Schedule } from "@mui/icons-material";
+import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const GOOGLE_MAPS_EMBED_URL =
+  "https://www.google.com/maps/embed?pb=REPLACE_WITH_YOUR_EMBED_URL";
+
+const StyledContainer = styled(Container)(({ theme }) => ({
+  paddingBlock: theme.spacing(5),
+  display: "flex",
+  flexDirection: "column",
+  gap: theme.spacing(5),
+}));
+
+const MapFrame = styled("iframe")({
+  width: "100%",
+  height: 360,
+  border: 0,
+  borderRadius: 8,
+  display: "block",
+});
+
+const Location = () => {
+  const t = useTranslations("company.about.location");
+
+  return (
+    <StyledContainer maxWidth="lg">
+      <Grid alignItems="center" container spacing={4}>
+        <Grid size={{ xs: 12, md: 5 }}>
+          <Stack gap={2}>
+            <Stack gap={1}>
+              <Typography
+                color="primary.main"
+                component="h2"
+                fontWeight="bold"
+                variant="body2"
+              >
+                {t("label")}
+              </Typography>
+              <Typography
+                color="text.primary"
+                component="h2"
+                fontWeight="bold"
+                variant="h4"
+              >
+                {t("titlePrefix")}
+                <GradientBox component="span">{t("titleHighlight")}</GradientBox>
+              </Typography>
+            </Stack>
+            <Stack gap={1.5}>
+              <Stack alignItems="flex-start" direction="row" gap={1}>
+                <LocationOn color="primary" fontSize="small" sx={{ mt: 0.25 }} />
+                <Typography color="text.secondary" variant="body2">
+                  {t("address")}
+                </Typography>
+              </Stack>
+              <Stack alignItems="flex-start" direction="row" gap={1}>
+                <Schedule color="primary" fontSize="small" sx={{ mt: 0.25 }} />
+                <Typography color="text.secondary" variant="body2">
+                  {t("hours")}
+                </Typography>
+              </Stack>
+            </Stack>
+          </Stack>
+        </Grid>
+        <Grid size={{ xs: 12, md: 7 }}>
+          <Box
+            sx={{
+              border: 1,
+              borderColor: "divider",
+              borderRadius: 1,
+              overflow: "hidden",
+            }}
           >
-            <Avatar
-              sx={{
-                width: 56,
-                height: 56,
-                bgcolor: "action.selected",
-                mx: "auto",
-                mb: 1,
-                fontSize: "1.25rem",
-              }}
-            >
-              {c.country}
-            </Avatar>
-            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-              {c.name}
-            </Typography>
-          </Grid>
-        ))}
+            <MapFrame
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={GOOGLE_MAPS_EMBED_URL}
+              title={t("label")}
+            />
+          </Box>
+        </Grid>
       </Grid>
-    </Container>
-  </Box>
-);
+    </StyledContainer>
+  );
+};
 
-export default Community;
+export default Location;

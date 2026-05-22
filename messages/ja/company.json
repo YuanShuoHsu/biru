@@ -21,6 +21,13 @@
       "titleLine2": "素晴らしいコーヒーを気軽にすること"
     },
     "label": "私たちについて",
+    "location": {
+      "address": "桃園市大園区（正しい住所に更新してください）",
+      "hours": "月〜日 08:00–21:00",
+      "label": "アクセス",
+      "titleHighlight": "見つける",
+      "titlePrefix": "私たちを "
+    },
     "team": {
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",
       "joinUs": "採用情報",
