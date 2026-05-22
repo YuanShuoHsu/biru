@@ -1,24 +1,28 @@
+"use client";
+
+import { useState } from "react";
+
 import { useTranslations } from "next-intl";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 import GradientBox from "@/components/GradientBox";
 
-import { Link } from "@/i18n/navigation";
+import { useOrganizations } from "@/hooks/useOrganizations";
 
-import { ChevronRight } from "@mui/icons-material";
 import {
   Avatar,
-  Button,
   Container,
   Divider,
   Grid,
+  MenuItem,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 interface TeamMember {
-  bio: string;
+  biography: string;
   countryCode: string;
   github?: string;
   location: string;
@@ -29,7 +33,7 @@ interface TeamMember {
 
 const TEAM_MEMBERS: TeamMember[] = [
   {
-    bio: "Building the future of dining, one coffee at a time.",
+    biography: "Building the future of dining, one coffee at a time.",
     countryCode: "tw",
     github: "https://github.com/",
     location: "Taoyuan, Taiwan",
@@ -37,7 +41,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     title: "Co-founder, CEO",
   },
   {
-    bio: "Loves coding and great coffee.",
+    biography: "Loves coding and great coffee.",
     countryCode: "tw",
     github: "https://github.com/",
     location: "Taipei, Taiwan",
@@ -45,7 +49,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     title: "Co-founder, CTO",
   },
   {
-    bio: "Passionate about building things that matter.",
+    biography: "Passionate about building things that matter.",
     countryCode: "jp",
     github: "https://github.com/",
     location: "Tokyo, Japan",
@@ -53,7 +57,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     title: "Lead Engineer",
   },
   {
-    bio: "Designing experiences people love.",
+    biography: "Designing experiences people love.",
     countryCode: "kr",
     github: "https://github.com/",
     location: "Seoul, South Korea",
@@ -61,7 +65,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     title: "Product Designer",
   },
   {
-    bio: "Turning ideas into beautiful interfaces.",
+    biography: "Turning ideas into beautiful interfaces.",
     countryCode: "us",
     github: "https://github.com/",
     location: "San Francisco, US",
@@ -69,7 +73,7 @@ const TEAM_MEMBERS: TeamMember[] = [
     title: "Frontend Engineer",
   },
   {
-    bio: "Making sure everything runs smoothly.",
+    biography: "Making sure everything runs smoothly.",
     countryCode: "sg",
     github: "https://github.com/",
     location: "Singapore",
@@ -114,6 +118,8 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
 
 const Team = () => {
   const tCompanyAboutTeam = useTranslations("company.about.team");
+  const organizations = useOrganizations();
+  const [selectedOrg, setSelectedOrg] = useState("");
 
   return (
     <StyledContainer maxWidth="lg">
@@ -140,19 +146,42 @@ const Team = () => {
         <Typography color="text.secondary" variant="body1">
           {tCompanyAboutTeam("description")}
         </Typography>
-        <Button
-          component={Link}
-          href="/careers"
-          variant="contained"
-          disableElevation
-          endIcon={<ChevronRight />}
+        <TextField
+          label={tCompanyAboutTeam("selectOrganization.label")}
+          onChange={(e) => setSelectedOrg(e.target.value)}
+          select
+          size="small"
+          slotProps={{
+            inputLabel: { shrink: true },
+            select: {
+              displayEmpty: true,
+              renderValue: (selected) => {
+                const org = organizations.find(({ id }) => id === selected);
+
+                return org ? (
+                  org.name
+                ) : (
+                  <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
+                );
+              },
+            },
+          }}
+          sx={{ alignSelf: "flex-start", minWidth: 240 }}
+          value={selectedOrg}
         >
-          {tCompanyAboutTeam("joinUs")}
-        </Button>
+          <MenuItem disabled value="">
+            <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
+          </MenuItem>
+          {organizations.map((org) => (
+            <MenuItem key={org.id} value={org.id}>
+              {org.name}
+            </MenuItem>
+          ))}
+        </TextField>
       </Stack>
       <Grid container spacing={2}>
         {TEAM_MEMBERS.map(
-          ({ bio, countryCode, location, name, title }, index) => (
+          ({ biography, countryCode, location, name, title }, index) => (
             <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
               <StyledBadgeAvatars
                 badgeContent={
@@ -178,7 +207,7 @@ const Team = () => {
               </Typography>
               <Divider />
               <Typography color="text.secondary" variant="body2">
-                {bio}
+                {biography}
               </Typography>
             </StyledGrid>
           ),

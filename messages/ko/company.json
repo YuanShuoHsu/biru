@@ -24,6 +24,10 @@
     "team": {
       "description": "대만 각지에서 모인 Biru는 열정 넘치는 팀과 커뮤니티입니다.",
       "joinUs": "채용 정보",
+      "selectOrganization": {
+        "label": "조직 선택",
+        "placeholder": "조직을 선택해 주세요"
+      },
       "label": "팀",
       "titleHighlight": "Biruers",
       "titlePrefix": "만나보세요 "
