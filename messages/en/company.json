@@ -24,11 +24,16 @@
     "team": {
       "description": "Contributing from all corners of Taiwan, Biru is a passionate team & community.",
       "joinUs": "Join us",
+      "label": "Team",
+      "role": {
+        "admin": "Admin",
+        "member": "Member",
+        "owner": "Owner"
+      },
       "selectOrganization": {
         "label": "Select organization",
         "placeholder": "Please select your organization"
       },
-      "label": "Team",
       "titleHighlight": "Biruers",
       "titlePrefix": "Meet the "
     },

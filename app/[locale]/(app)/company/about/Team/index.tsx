@@ -1,19 +1,22 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 
 import { type TeamForm, useTeamFormSchema } from "./definitions";
 
-import BadgeAvatars from "@/components/BadgeAvatars";
 import GradientBox from "@/components/GradientBox";
+
+import { LocaleEnum } from "@/enums/Locale";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
 import { useOrganizations } from "@/hooks/useOrganizations";
 
 import {
   Avatar,
+  Chip,
   Container,
   Divider,
   Grid,
@@ -23,67 +26,6 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-
-interface TeamMember {
-  biography: string;
-  countryCode: string;
-  github?: string;
-  location: string;
-  name: string;
-  title: string;
-  twitter?: string;
-}
-
-const TEAM_MEMBERS: TeamMember[] = [
-  {
-    biography: "Building the future of dining, one coffee at a time.",
-    countryCode: "tw",
-    github: "https://github.com/",
-    location: "Taoyuan, Taiwan",
-    name: "Yuan-Shuo Hsu",
-    title: "Co-founder, CEO",
-  },
-  {
-    biography: "Loves coding and great coffee.",
-    countryCode: "tw",
-    github: "https://github.com/",
-    location: "Taipei, Taiwan",
-    name: "Biru Member",
-    title: "Co-founder, CTO",
-  },
-  {
-    biography: "Passionate about building things that matter.",
-    countryCode: "jp",
-    github: "https://github.com/",
-    location: "Tokyo, Japan",
-    name: "Biru Member",
-    title: "Lead Engineer",
-  },
-  {
-    biography: "Designing experiences people love.",
-    countryCode: "kr",
-    github: "https://github.com/",
-    location: "Seoul, South Korea",
-    name: "Biru Member",
-    title: "Product Designer",
-  },
-  {
-    biography: "Turning ideas into beautiful interfaces.",
-    countryCode: "us",
-    github: "https://github.com/",
-    location: "San Francisco, US",
-    name: "Biru Member",
-    title: "Frontend Engineer",
-  },
-  {
-    biography: "Making sure everything runs smoothly.",
-    countryCode: "sg",
-    github: "https://github.com/",
-    location: "Singapore",
-    name: "Biru Member",
-    title: "Backend Engineer",
-  },
-];
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   paddingBlock: theme.spacing(5),
@@ -98,24 +40,12 @@ const StyledOrganizationSelect = styled(TextField)({
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
+  backgroundColor: theme.vars.palette.background.paper,
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(1),
-}));
-
-const StyledBadgeAvatars = styled(BadgeAvatars)({
-  alignSelf: "flex-start",
-
-  "& .MuiBadge-badge": {
-    transform: "translateX(50%)",
-  },
-});
-
-const FlagAvatar = styled(Avatar)(({ theme }) => ({
-  width: theme.spacing(3),
-  height: theme.spacing(3),
 }));
 
 const MemberAvatar = styled(Avatar)(({ theme }) => ({
@@ -126,10 +56,7 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
 const Team = () => {
   const organizations = useOrganizations();
 
-  const sortedOrganizations = [...organizations].sort(
-    (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  );
-  const defaultOrganizationId = sortedOrganizations[0].id;
+  const defaultOrganizationId = organizations[0]?.id || "";
 
   const teamFormSchema = useTeamFormSchema();
   const {
@@ -141,6 +68,11 @@ const Team = () => {
     resolver: zodResolver(teamFormSchema),
   });
   const selectedOrganizationId = useWatch({ control, name: "organizationId" });
+
+  const locale = useLocale();
+  const isEnglish = locale === LocaleEnum.En;
+
+  const organizationMembers = useOrganizationMembers(selectedOrganizationId);
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -198,7 +130,7 @@ const Team = () => {
           <MenuItem disabled value="">
             <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
           </MenuItem>
-          {sortedOrganizations.map(({ id, name }) => (
+          {organizations.map(({ id, name }) => (
             <MenuItem key={id} value={id}>
               {name}
             </MenuItem>
@@ -206,34 +138,30 @@ const Team = () => {
         </StyledOrganizationSelect>
       </Stack>
       <Grid container spacing={2}>
-        {TEAM_MEMBERS.map(
-          ({ biography, countryCode, location, name, title }, index) => (
-            <StyledGrid key={index} size={{ xs: 12, sm: 6, md: 3 }}>
-              <StyledBadgeAvatars
-                badgeContent={
-                  <FlagAvatar
-                    alt={location}
-                    src={`/images/flags/w20/${countryCode}.png`}
-                  />
-                }
-                overlap="rectangular"
-                title={location}
-              >
-                <MemberAvatar variant="rounded">{name[0]}</MemberAvatar>
-              </StyledBadgeAvatars>
+        {organizationMembers.map(
+          ({ bio, firstName, id, image, lastName, role, teams }) => (
+            <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
+              <MemberAvatar src={image || undefined} variant="rounded">
+                {firstName[0]}
+              </MemberAvatar>
               <Typography
                 color="text.primary"
                 fontWeight="bold"
                 variant="body2"
               >
-                {name}
+                {(isEnglish ? [firstName, lastName] : [lastName, firstName])
+                  .filter(Boolean)
+                  .join(isEnglish ? " " : "")}
               </Typography>
-              <Typography color="text.primary" variant="body2">
-                {title}
-              </Typography>
+              <Chip label={tCompanyAboutTeam(`role.${role}`)} size="small" />
               <Divider />
+              {bio && (
+                <Typography color="text.secondary" variant="body2">
+                  {bio}
+                </Typography>
+              )}
               <Typography color="text.secondary" variant="body2">
-                {biography}
+                {teams.map(({ name }) => name).join(" · ")}
               </Typography>
             </StyledGrid>
           ),

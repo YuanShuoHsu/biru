@@ -24,11 +24,16 @@
     "team": {
       "description": "来自台湾各地，Biru 是一支充满热情的餐饮团队与社群。",
       "joinUs": "加入我们",
+      "label": "团队",
+      "role": {
+        "admin": "管理员",
+        "member": "成员",
+        "owner": "拥有者"
+      },
       "selectOrganization": {
         "label": "选择组织",
         "placeholder": "请选择您的组织"
       },
-      "label": "团队",
       "titleHighlight": "Biruers",
       "titlePrefix": "认识 "
     },

@@ -24,11 +24,16 @@
     "team": {
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",
       "joinUs": "採用情報",
+      "label": "チーム",
+      "role": {
+        "admin": "管理者",
+        "member": "メンバー",
+        "owner": "オーナー"
+      },
       "selectOrganization": {
         "label": "組織を選択",
         "placeholder": "組織を選択してください"
       },
-      "label": "チーム",
       "titleHighlight": "Biruers",
       "titlePrefix": "紹介します "
     },
