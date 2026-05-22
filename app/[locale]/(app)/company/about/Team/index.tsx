@@ -77,7 +77,7 @@ const Team = () => {
 
   return (
     <StyledContainer maxWidth="lg">
-      <Stack gap={1}>
+      <Stack gap={2}>
         <Typography
           color="primary.main"
           component="h2"
@@ -140,26 +140,35 @@ const Team = () => {
         {organizationMembers.map(
           ({ bio, firstName, id, image, lastName, role, teams }) => (
             <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
-              <MemberAvatar src={image || undefined} variant="rounded">
-                {firstName[0]}
-              </MemberAvatar>
-              <Typography
-                color="text.primary"
-                fontWeight="bold"
-                variant="body2"
+              <Stack
+                flexWrap="wrap"
+                direction="row"
+                justifyContent="space-between"
+                gap={1}
               >
-                {formatFullName(locale, firstName, lastName)}
-              </Typography>
-              <Chip label={tCompanyAboutTeam(`role.${role}`)} size="small" />
+                <MemberAvatar src={image || undefined} variant="rounded">
+                  {firstName[0]}
+                </MemberAvatar>
+                <Chip label={tCompanyAboutTeam(`role.${role}`)} size="small" />
+              </Stack>
+              <Stack direction="row" alignItems="baseline" gap={1}>
+                <Typography
+                  color="text.primary"
+                  fontWeight="bold"
+                  variant="body2"
+                >
+                  {formatFullName(locale, firstName, lastName)}
+                </Typography>
+                <Typography color="text.secondary" variant="caption">
+                  {teams.map(({ name }) => name).join(" · ")}
+                </Typography>
+              </Stack>
               <Divider />
               {bio && (
                 <Typography color="text.secondary" variant="body2">
                   {bio}
                 </Typography>
               )}
-              <Typography color="text.secondary" variant="body2">
-                {teams.map(({ name }) => name).join(" · ")}
-              </Typography>
             </StyledGrid>
           ),
         )}
