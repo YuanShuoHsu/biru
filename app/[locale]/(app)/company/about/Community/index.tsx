@@ -48,12 +48,18 @@ const Location = () => {
                 variant="h4"
               >
                 {t("titlePrefix")}
-                <GradientBox component="span">{t("titleHighlight")}</GradientBox>
+                <GradientBox component="span">
+                  {t("titleHighlight")}
+                </GradientBox>
               </Typography>
             </Stack>
             <Stack gap={1.5}>
               <Stack alignItems="flex-start" direction="row" gap={1}>
-                <LocationOn color="primary" fontSize="small" sx={{ mt: 0.25 }} />
+                <LocationOn
+                  color="primary"
+                  fontSize="small"
+                  sx={{ mt: 0.25 }}
+                />
                 <Typography color="text.secondary" variant="body2">
                   {t("address")}
                 </Typography>
