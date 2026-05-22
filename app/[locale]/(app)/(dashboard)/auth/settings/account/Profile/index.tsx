@@ -158,9 +158,10 @@ const Profile = () => {
           fullWidth
           helperText={errors.bio?.message}
           label={tAuth("bio.label")}
+          maxRows={4}
           multiline
           placeholder={tAuth("bio.placeholder")}
-          rows={3}
+          slotProps={{ htmlInput: { maxLength: 160 } }}
           {...register("bio")}
         />
       </StyledCardContent>

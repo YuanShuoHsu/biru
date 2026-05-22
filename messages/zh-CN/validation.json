@@ -1,4 +1,7 @@
 {
+  "bio": {
+    "maxLength": "个人简介不能超过 160 个字符。"
+  },
   "birthDate": {
     "invalid": "出生日期无效。",
     "maxDate": "请选择今天或之前的出生日期。",
