@@ -25,7 +25,7 @@ const MapFrame = styled("iframe")({
 });
 
 const Location = () => {
-  const t = useTranslations("company.about.location");
+  const tCompanyAboutLocation = useTranslations("company.about.location");
 
   return (
     <StyledContainer maxWidth="lg">
@@ -39,7 +39,7 @@ const Location = () => {
                 fontWeight="bold"
                 variant="body2"
               >
-                {t("label")}
+                {tCompanyAboutLocation("label")}
               </Typography>
               <Typography
                 color="text.primary"
@@ -47,9 +47,9 @@ const Location = () => {
                 fontWeight="bold"
                 variant="h4"
               >
-                {t("titlePrefix")}
+                {tCompanyAboutLocation("titlePrefix")}
                 <GradientBox component="span">
-                  {t("titleHighlight")}
+                  {tCompanyAboutLocation("titleHighlight")}
                 </GradientBox>
               </Typography>
             </Stack>
@@ -61,13 +61,13 @@ const Location = () => {
                   sx={{ mt: 0.25 }}
                 />
                 <Typography color="text.secondary" variant="body2">
-                  {t("address")}
+                  {tCompanyAboutLocation("address")}
                 </Typography>
               </Stack>
               <Stack alignItems="flex-start" direction="row" gap={1}>
                 <Schedule color="primary" fontSize="small" sx={{ mt: 0.25 }} />
                 <Typography color="text.secondary" variant="body2">
-                  {t("hours")}
+                  {tCompanyAboutLocation("hours")}
                 </Typography>
               </Stack>
             </Stack>
@@ -87,7 +87,7 @@ const Location = () => {
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
               src={GOOGLE_MAPS_EMBED_URL}
-              title={t("label")}
+              title={tCompanyAboutLocation("label")}
             />
           </Box>
         </Grid>
