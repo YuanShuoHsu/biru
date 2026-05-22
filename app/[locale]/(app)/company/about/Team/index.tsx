@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
-
 import { useTranslations } from "next-intl";
+import { useForm, useWatch } from "react-hook-form";
+
+import { type TeamForm, useTeamFormSchema } from "./definitions";
 
 import BadgeAvatars from "@/components/BadgeAvatars";
 import GradientBox from "@/components/GradientBox";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useOrganizations } from "@/hooks/useOrganizations";
 
@@ -117,10 +120,18 @@ const MemberAvatar = styled(Avatar)(({ theme }) => ({
 }));
 
 const Team = () => {
-  const [selectedOrg, setSelectedOrg] = useState("");
+  const teamFormSchema = useTeamFormSchema();
+  const {
+    control,
+    formState: { errors },
+    register,
+  } = useForm<TeamForm>({
+    defaultValues: { organizationId: "" },
+    resolver: zodResolver(teamFormSchema),
+  });
+  const selectedOrganizationId = useWatch({ control, name: "organizationId" });
 
   const organizations = useOrganizations();
-  console.log(organizations);
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -150,8 +161,9 @@ const Team = () => {
           {tCompanyAboutTeam("description")}
         </Typography>
         <TextField
+          error={!!errors.organizationId}
+          helperText={errors.organizationId?.message}
           label={tCompanyAboutTeam("selectOrganization.label")}
-          onChange={(e) => setSelectedOrg(e.target.value)}
           select
           size="small"
           slotProps={{
@@ -159,10 +171,12 @@ const Team = () => {
             select: {
               displayEmpty: true,
               renderValue: (selected) => {
-                const org = organizations.find(({ id }) => id === selected);
+                const organization = organizations.find(
+                  ({ id }) => id === selected,
+                );
 
-                return org ? (
-                  org.name
+                return organization ? (
+                  organization.name
                 ) : (
                   <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
                 );
@@ -170,7 +184,8 @@ const Team = () => {
             },
           }}
           sx={{ alignSelf: "flex-start", minWidth: 240 }}
-          value={selectedOrg}
+          value={selectedOrganizationId}
+          {...register("organizationId")}
         >
           <MenuItem disabled value="">
             <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
