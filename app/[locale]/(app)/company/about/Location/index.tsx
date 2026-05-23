@@ -12,10 +12,12 @@ const GOOGLE_MAPS_EMBED_URL =
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
+  alignItems: "center",
   gap: theme.spacing(5),
 }));
 
 const StyledIframe = styled("iframe")(({ theme }) => ({
+  width: "100%",
   height: theme.spacing(50),
   borderRadius: theme.shape.borderRadius,
 }));
