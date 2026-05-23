@@ -104,46 +104,48 @@ const Location = () => {
             </GradientBox>
           </Typography>
         </Stack>
-        <StyledOrganizationSelect
-          label={tCompanyAboutLocation("selectOrganization.label")}
-          select
-          size="small"
-          slotProps={{
-            inputLabel: { shrink: true },
-            select: {
-              displayEmpty: true,
-              renderValue: (selected) => {
-                const org = organizations.find(({ id }) => id === selected);
-                return org ? (
-                  org.name
-                ) : (
-                  <em>
-                    {tCompanyAboutLocation("selectOrganization.placeholder")}
-                  </em>
-                );
+        <Stack gap={2}>
+          <StyledOrganizationSelect
+            label={tCompanyAboutLocation("selectOrganization.label")}
+            select
+            size="small"
+            slotProps={{
+              inputLabel: { shrink: true },
+              select: {
+                displayEmpty: true,
+                renderValue: (selected) => {
+                  const org = organizations.find(({ id }) => id === selected);
+                  return org ? (
+                    org.name
+                  ) : (
+                    <em>
+                      {tCompanyAboutLocation("selectOrganization.placeholder")}
+                    </em>
+                  );
+                },
               },
-            },
-          }}
-          value={selectedOrganizationId}
-          {...register("organizationId")}
-        >
-          <MenuItem disabled value="">
-            <em>{tCompanyAboutLocation("selectOrganization.placeholder")}</em>
-          </MenuItem>
-          {organizations.map(({ id, name }) => (
-            <MenuItem key={id} value={id}>
-              {name}
+            }}
+            value={selectedOrganizationId}
+            {...register("organizationId")}
+          >
+            <MenuItem disabled value="">
+              <em>{tCompanyAboutLocation("selectOrganization.placeholder")}</em>
             </MenuItem>
-          ))}
-        </StyledOrganizationSelect>
-        {addressParts.length > 0 && (
-          <Stack direction="row" gap={1}>
-            <LocationOn color="primary" fontSize="small" />
-            <Typography color="text.secondary" variant="body2">
-              {addressParts.join(", ")}
-            </Typography>
-          </Stack>
-        )}
+            {organizations.map(({ id, name }) => (
+              <MenuItem key={id} value={id}>
+                {name}
+              </MenuItem>
+            ))}
+          </StyledOrganizationSelect>
+          {addressParts.length > 0 && (
+            <Stack direction="row" gap={1}>
+              <LocationOn color="primary" fontSize="small" />
+              <Typography color="text.secondary" variant="body2">
+                {addressParts.join(", ")}
+              </Typography>
+            </Stack>
+          )}
+        </Stack>
       </StyledContainer>
     </Box>
   );
