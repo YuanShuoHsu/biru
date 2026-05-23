@@ -9,6 +9,7 @@ import GradientBox from "@/components/GradientBox";
 
 import { useOrganizations } from "@/hooks/organization";
 
+import { countries } from "@/constants/countries";
 import { LocaleEnum } from "@/enums/Locale";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,8 +48,15 @@ const Location = () => {
   });
   const selectedOrganizationId = useWatch({ control, name: "organizationId" });
 
-  const organization = organizations.find(({ id }) => id === selectedOrganizationId);
+  const organization = organizations.find(
+    ({ id }) => id === selectedOrganizationId,
+  );
+
   const locale = useLocale();
+
+  const countryLabel =
+    countries.find(({ code }) => code === organization?.addressCountry)
+      ?.label || organization?.addressCountry;
 
   const addressParts = (
     locale === LocaleEnum.En
@@ -58,10 +66,10 @@ const Location = () => {
           organization?.postalCode,
           organization?.addressLocality,
           organization?.addressRegion,
-          organization?.addressCountry,
+          countryLabel,
         ]
       : [
-          organization?.addressCountry,
+          countryLabel,
           organization?.postalCode,
           organization?.addressRegion,
           organization?.addressLocality,
