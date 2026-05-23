@@ -39,6 +39,13 @@ const StyledOrganizationSelect = styled(TextField)({
   maxWidth: 240,
 });
 
+const StyledIframe = styled("iframe")(({ theme }) => ({
+  width: "100%",
+  height: theme.spacing(50),
+  border: "none",
+  borderRadius: theme.shape.borderRadius,
+}));
+
 const Location = () => {
   const organizations = useOrganizations();
   const defaultOrganizationId = organizations[0]?.id || "";
@@ -185,6 +192,15 @@ const Location = () => {
             </Stack>
           )}
         </Stack>
+        {organization?.hasMap && (
+          <StyledIframe
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            src={organization.hasMap}
+            title={tCompanyAboutLocation("label")}
+          />
+        )}
       </StyledContainer>
     </Box>
   );
