@@ -11,8 +11,7 @@ import { formatFullName } from "@/utils/auth";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useOrganizationMembers } from "@/hooks/organization";
-import { useOrganizations } from "@/hooks/organization";
+import { useOrganizationMembers, useOrganizations } from "@/hooks/organization";
 
 import {
   Avatar,
