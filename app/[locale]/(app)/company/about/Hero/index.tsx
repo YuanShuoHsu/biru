@@ -35,29 +35,32 @@ const Hero = () => {
 
   return (
     <StyledContainer maxWidth="lg">
-      <Typography
-        color="primary"
-        component="h2"
-        fontWeight="bold"
-        variant="body2"
-      >
-        {tCompanyAboutHero("subtitle")}
-      </Typography>
-      <Typography
-        color="text.primary"
-        component="h2"
-        fontWeight="bold"
-        variant="h5"
-      >
-        {tCompanyAboutHero("titleLine1")}
-        <br />
-        <GradientBox component="span">
-          {tCompanyAboutHero("titleLine2")}
-        </GradientBox>
-      </Typography>
-      <Typography color="text.primary" textAlign="center" variant="body1">
-        {tCompanyAboutHero("description")}
-      </Typography>
+      <Stack alignItems="center" gap={2}>
+        <Typography
+          color="primary"
+          component="h2"
+          fontWeight="bold"
+          variant="body2"
+        >
+          {tCompanyAboutHero("subtitle")}
+        </Typography>
+        <Typography
+          color="text.primary"
+          component="h2"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h5"
+        >
+          {tCompanyAboutHero("titleLine1")}
+          <br />
+          <GradientBox component="span">
+            {tCompanyAboutHero("titleLine2")}
+          </GradientBox>
+        </Typography>
+        <Typography color="text.primary" textAlign="center" variant="body1">
+          {tCompanyAboutHero("description")}
+        </Typography>
+      </Stack>
       <PhotoSlider />
       <Stack flexWrap="wrap" direction="row" justifyContent="center" gap={5}>
         {STATS.map(({ label, value }) => (
