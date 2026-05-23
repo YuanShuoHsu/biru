@@ -200,16 +200,16 @@ const Location = () => {
               </Typography>
             </Stack>
           )}
+          {organization?.hasMap && (
+            <StyledIframe
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              src={organization.hasMap}
+              title={tCompanyAboutLocation("label")}
+            />
+          )}
         </Stack>
-        {organization?.hasMap && (
-          <StyledIframe
-            allowFullScreen
-            loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
-            src={organization.hasMap}
-            title={tCompanyAboutLocation("label")}
-          />
-        )}
       </StyledContainer>
     </Box>
   );
