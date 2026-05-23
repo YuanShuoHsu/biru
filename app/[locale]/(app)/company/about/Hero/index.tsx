@@ -62,7 +62,13 @@ const Hero = () => {
         </Typography>
       </Stack>
       <PhotoSlider />
-      <Stack flexWrap="wrap" direction="row" justifyContent="center" gap={5}>
+      <Stack
+        flexWrap="wrap"
+        direction="row"
+        justifyContent="center"
+        alignItems="flex-start"
+        gap={5}
+      >
         {STATS.map(({ label, value }) => (
           <Stack key={label} alignItems="center" gap={2}>
             <Typography color="primary.main" fontWeight="bold" variant="h4">
