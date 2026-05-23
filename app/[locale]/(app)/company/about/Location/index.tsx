@@ -77,7 +77,9 @@ const Location = () => {
           organization?.streetAddress,
           organization?.extendedAddress,
         ]
-  ).filter(Boolean).join(", ");
+  )
+    .filter(Boolean)
+    .join(", ");
 
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
