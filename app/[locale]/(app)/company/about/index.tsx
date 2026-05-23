@@ -1,3 +1,5 @@
+// https://mui.com/about/
+
 "use client";
 
 import Hero from "./Hero";
