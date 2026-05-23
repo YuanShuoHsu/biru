@@ -6,6 +6,12 @@ export type Member = typeof authClient.$Infer.Member;
 export type Organization = typeof authClient.$Infer.Organization;
 export type Team = typeof authClient.$Infer.Team;
 
+export type OrganizationLocation = {
+  address: string | null;
+  hours: string | null;
+  mapUrl: string | null;
+};
+
 export type OrganizationMember = Omit<Member, "organizationId"> & {
   bio: string | null;
   firstName: string;

@@ -7,6 +7,7 @@ import {
   Button,
   Container,
   type ContainerProps,
+  Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -16,7 +17,7 @@ const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
-  gap: theme.spacing(2),
+  gap: theme.spacing(5),
 }));
 
 const JoinUs = () => {
@@ -24,30 +25,32 @@ const JoinUs = () => {
 
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
-      <Typography
-        color="primary.main"
-        component="h2"
-        fontWeight="bold"
-        variant="body2"
-      >
-        {tCompanyAboutJoinUs("label")}
-      </Typography>
-      <Typography
-        color="text.primary"
-        component="h2"
-        fontWeight="bold"
-        textAlign="center"
-        variant="h5"
-      >
-        <GradientBox component="span">
-          {tCompanyAboutJoinUs("titleLine1")}
-        </GradientBox>
-        <br />
-        {tCompanyAboutJoinUs("titleLine2")}
-      </Typography>
-      <Typography color="text.secondary" textAlign="center" variant="body1">
-        {tCompanyAboutJoinUs("description")}
-      </Typography>
+      <Stack alignItems="center" gap={2}>
+        <Typography
+          color="primary.main"
+          component="h2"
+          fontWeight="bold"
+          variant="body2"
+        >
+          {tCompanyAboutJoinUs("label")}
+        </Typography>
+        <Typography
+          color="text.primary"
+          component="h2"
+          fontWeight="bold"
+          textAlign="center"
+          variant="h5"
+        >
+          <GradientBox component="span">
+            {tCompanyAboutJoinUs("titleLine1")}
+          </GradientBox>
+          <br />
+          {tCompanyAboutJoinUs("titleLine2")}
+        </Typography>
+        <Typography color="text.secondary" textAlign="center" variant="body1">
+          {tCompanyAboutJoinUs("description")}
+        </Typography>
+      </Stack>
       <Button endIcon={<ChevronRight />} href="#" variant="contained">
         {tCompanyAboutJoinUs("button")}
       </Button>

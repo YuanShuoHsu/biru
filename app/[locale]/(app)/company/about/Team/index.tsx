@@ -11,8 +11,8 @@ import { formatFullName } from "@/utils/auth";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useOrganizationMembers } from "@/hooks/useOrganizationMembers";
-import { useOrganizations } from "@/hooks/useOrganizations";
+import { useOrganizationMembers } from "@/hooks/organization";
+import { useOrganizations } from "@/hooks/organization";
 
 import {
   Avatar,
@@ -32,7 +32,7 @@ const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
+  gap: theme.spacing(5),
 }));
 
 const StyledOrganizationSelect = styled(TextField)({
@@ -78,7 +78,7 @@ const Team = () => {
 
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
-      <Stack gap={2}>
+      <Stack gap={1}>
         <Typography
           color="primary.main"
           component="h2"
@@ -101,6 +101,8 @@ const Team = () => {
         <Typography color="text.secondary" variant="body1">
           {tCompanyAboutTeam("description")}
         </Typography>
+      </Stack>
+      <Stack gap={2}>
         <StyledOrganizationSelect
           error={!!errors.organizationId}
           helperText={errors.organizationId?.message}
@@ -136,44 +138,47 @@ const Team = () => {
             </MenuItem>
           ))}
         </StyledOrganizationSelect>
-      </Stack>
-      <Grid container spacing={2}>
-        {organizationMembers.map(
-          ({ bio, firstName, id, image, lastName, role, teams }) => (
-            <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
-              <Stack
-                flexWrap="wrap"
-                direction="row"
-                justifyContent="space-between"
-                gap={1}
-              >
-                <MemberAvatar src={image || undefined} variant="rounded">
-                  {firstName[0]}
-                </MemberAvatar>
-                <Chip label={tCompanyAboutTeam(`role.${role}`)} size="small" />
-              </Stack>
-              <Stack direction="row" alignItems="baseline" gap={1}>
-                <Typography
-                  color="text.primary"
-                  fontWeight="bold"
-                  variant="body2"
+        <Grid container spacing={2}>
+          {organizationMembers.map(
+            ({ bio, firstName, id, image, lastName, role, teams }) => (
+              <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
+                <Stack
+                  flexWrap="wrap"
+                  direction="row"
+                  justifyContent="space-between"
+                  gap={1}
                 >
-                  {formatFullName(locale, firstName, lastName)}
-                </Typography>
-                <Typography color="text.secondary" variant="caption">
-                  {teams.map(({ name }) => name).join(" · ")}
-                </Typography>
-              </Stack>
-              <Divider />
-              {bio && (
-                <Typography color="text.secondary" variant="body2">
-                  {bio}
-                </Typography>
-              )}
-            </StyledGrid>
-          ),
-        )}
-      </Grid>
+                  <MemberAvatar src={image || undefined} variant="rounded">
+                    {firstName[0]}
+                  </MemberAvatar>
+                  <Chip
+                    label={tCompanyAboutTeam(`role.${role}`)}
+                    size="small"
+                  />
+                </Stack>
+                <Stack direction="row" alignItems="baseline" gap={1}>
+                  <Typography
+                    color="text.primary"
+                    fontWeight="bold"
+                    variant="body2"
+                  >
+                    {formatFullName(locale, firstName, lastName)}
+                  </Typography>
+                  <Typography color="text.secondary" variant="caption">
+                    {teams.map(({ name }) => name).join(" · ")}
+                  </Typography>
+                </Stack>
+                <Divider />
+                {bio && (
+                  <Typography color="text.secondary" variant="body2">
+                    {bio}
+                  </Typography>
+                )}
+              </StyledGrid>
+            ),
+          )}
+        </Grid>
+      </Stack>
     </StyledContainer>
   );
 };

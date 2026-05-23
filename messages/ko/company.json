@@ -34,7 +34,11 @@
       "hours": "월–일 08:00–21:00",
       "label": "오시는 길",
       "titleHighlight": "찾아오세요",
-      "titlePrefix": "저희를 "
+      "titlePrefix": "저희를 ",
+      "selectOrganization": {
+        "label": "조직",
+        "placeholder": "조직을 선택해 주세요"
+      }
     },
     "team": {
       "description": "대만 각지에서 모인 Biru는 열정 넘치는 팀과 커뮤니티입니다.",
@@ -46,7 +50,7 @@
         "owner": "소유자"
       },
       "selectOrganization": {
-        "label": "조직 선택",
+        "label": "조직",
         "placeholder": "조직을 선택해 주세요"
       },
       "titleHighlight": "Biruers",

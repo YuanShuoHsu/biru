@@ -34,7 +34,11 @@
       "hours": "Mon–Sun 08:00–21:00",
       "label": "Location",
       "titleHighlight": "Find Us",
-      "titlePrefix": "Come "
+      "titlePrefix": "Come ",
+      "selectOrganization": {
+        "label": "Organization",
+        "placeholder": "Please select your organization"
+      }
     },
     "team": {
       "description": "Contributing from all corners of Taiwan, Biru is a passionate team & community.",
@@ -46,7 +50,7 @@
         "owner": "Owner"
       },
       "selectOrganization": {
-        "label": "Select organization",
+        "label": "Organization",
         "placeholder": "Please select your organization"
       },
       "titleHighlight": "Biruers",

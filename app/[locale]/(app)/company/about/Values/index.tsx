@@ -29,7 +29,7 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
+  gap: theme.spacing(5),
 }));
 
 const StyledGrid = styled(Grid)(({ theme }) => ({

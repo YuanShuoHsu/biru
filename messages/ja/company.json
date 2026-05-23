@@ -34,7 +34,11 @@
       "hours": "月〜日 08:00–21:00",
       "label": "アクセス",
       "titleHighlight": "見つける",
-      "titlePrefix": "私たちを "
+      "titlePrefix": "私たちを ",
+      "selectOrganization": {
+        "label": "組織",
+        "placeholder": "組織を選択してください"
+      }
     },
     "team": {
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",
@@ -46,7 +50,7 @@
         "owner": "オーナー"
       },
       "selectOrganization": {
-        "label": "組織を選択",
+        "label": "組織",
         "placeholder": "組織を選択してください"
       },
       "titleHighlight": "Biruers",

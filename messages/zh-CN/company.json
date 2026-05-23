@@ -34,7 +34,11 @@
       "hours": "周一至周日 08:00–21:00",
       "label": "位置",
       "titleHighlight": "找到我们",
-      "titlePrefix": "来 "
+      "titlePrefix": "来 ",
+      "selectOrganization": {
+        "label": "组织",
+        "placeholder": "请选择您的组织"
+      }
     },
     "team": {
       "description": "来自台湾各地，Biru 是一支充满热情的餐饮团队与社群。",
@@ -46,7 +50,7 @@
         "owner": "拥有者"
       },
       "selectOrganization": {
-        "label": "选择组织",
+        "label": "组织",
         "placeholder": "请选择您的组织"
       },
       "titleHighlight": "Biruers",

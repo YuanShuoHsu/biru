@@ -12,10 +12,10 @@ import { Box, Container, Divider, Grid, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
-  padding: theme.spacing(2),
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
+  gap: theme.spacing(5),
 }));
 
 const Footer = () => (
