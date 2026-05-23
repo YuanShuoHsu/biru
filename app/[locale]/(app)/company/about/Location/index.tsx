@@ -48,17 +48,19 @@ const Location = () => {
               {tCompanyAboutLocation("titleHighlight")}
             </GradientBox>
           </Typography>
-          <Stack alignItems="flex-start" direction="row" gap={1}>
-            <LocationOn color="primary" fontSize="small" />
-            <Typography color="text.secondary" variant="body2">
-              {tCompanyAboutLocation("address")}
-            </Typography>
-          </Stack>
-          <Stack alignItems="flex-start" direction="row" gap={1}>
-            <Schedule color="primary" fontSize="small" />
-            <Typography color="text.secondary" variant="body2">
-              {tCompanyAboutLocation("hours")}
-            </Typography>
+          <Stack alignItems="center" gap={1}>
+            <Stack alignItems="flex-start" direction="row" gap={1}>
+              <LocationOn color="primary" fontSize="small" />
+              <Typography color="text.secondary" variant="body2">
+                {tCompanyAboutLocation("address")}
+              </Typography>
+            </Stack>
+            <Stack alignItems="flex-start" direction="row" gap={1}>
+              <Schedule color="primary" fontSize="small" />
+              <Typography color="text.secondary" variant="body2">
+                {tCompanyAboutLocation("hours")}
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
         <StyledIframe

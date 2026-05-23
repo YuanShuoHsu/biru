@@ -1,7 +1,11 @@
-import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import FeedbackOutlinedIcon from "@mui/icons-material/FeedbackOutlined";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
+// vibe coding may be someday we need it
+
+import {
+  FavoriteOutlined,
+  FeedbackOutlined,
+  GitHub,
+  GroupsOutlined,
+} from "@mui/icons-material";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
 
 const Support = () => (
@@ -10,9 +14,7 @@ const Support = () => (
       <Grid container spacing={6}>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <FeedbackOutlinedIcon
-              sx={{ fontSize: 40, color: "primary.main" }}
-            />
+            <FeedbackOutlined sx={{ fontSize: 40, color: "primary.main" }} />
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Give feedback
             </Typography>
@@ -23,7 +25,7 @@ const Support = () => (
             <Box>
               <Button
                 variant="outlined"
-                startIcon={<GitHubIcon />}
+                startIcon={<GitHub />}
                 href="https://github.com"
                 target="_blank"
                 rel="noopener"
@@ -33,10 +35,9 @@ const Support = () => (
             </Box>
           </Stack>
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <GroupsOutlinedIcon sx={{ fontSize: 40, color: "primary.main" }} />
+            <GroupsOutlined sx={{ fontSize: 40, color: "primary.main" }} />
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Join the community
             </Typography>
@@ -49,10 +50,9 @@ const Support = () => (
             </Box>
           </Stack>
         </Grid>
-
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <FavoriteOutlinedIcon sx={{ fontSize: 40, color: "error.main" }} />
+            <FavoriteOutlined sx={{ fontSize: 40, color: "error.main" }} />
             <Typography variant="h5" sx={{ fontWeight: 700 }}>
               Support us financially
             </Typography>

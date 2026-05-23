@@ -21,6 +21,14 @@
       "titleLine2": "great coffee effortless"
     },
     "label": "About",
+    "joinUs": {
+      "button": "View careers",
+      "description": "We give every team member the tools and stage to bring unforgettable moments to life with unrivalled passion and creativity.",
+      "imageAlt": "Biru Coffee storefront photo",
+      "label": "Join us",
+      "titleLine1": "Build the next generation",
+      "titleLine2": "of dining experiences"
+    },
     "location": {
       "address": "Dayuan District, Taoyuan City (please update with the correct address)",
       "hours": "Mon–Sun 08:00–21:00",

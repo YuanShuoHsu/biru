@@ -1,8 +1,8 @@
 "use client";
 
 import Hero from "./Hero";
+import JoinUs from "./JoinUs";
 import Location from "./Location";
-import Support from "./Support";
 import Team from "./Team";
 import Values from "./Values";
 
@@ -18,9 +18,11 @@ const About = () => (
     <Divider />
     <Team />
     <Divider />
-    <Support />
-    <Divider />
+    {/* <Support />
+    <Divider /> */}
     <Location />
+    <Divider />
+    <JoinUs />
     <Footer />
   </>
 );

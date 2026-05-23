@@ -21,6 +21,14 @@
       "titleLine2": "好咖啡变得轻松自在"
     },
     "label": "关于我们",
+    "joinUs": {
+      "button": "查看职位",
+      "description": "我们赋予每位伙伴工具与舞台，以无可比拟的热情与创意，一起成就令人难忘的每一刻。",
+      "imageAlt": "Biru Coffee 门市外观照片",
+      "label": "加入我们",
+      "titleLine1": "打造下一个世代的极致",
+      "titleLine2": "餐饮体验"
+    },
     "location": {
       "address": "桃园市大园区（请更新为正确地址）",
       "hours": "周一至周日 08:00–21:00",
