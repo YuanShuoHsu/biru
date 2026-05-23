@@ -18,6 +18,7 @@ import {
   Avatar,
   Chip,
   Container,
+  type ContainerProps,
   Divider,
   Grid,
   MenuItem,
@@ -27,8 +28,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingBlock: theme.spacing(5),
+const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
@@ -76,7 +77,7 @@ const Team = () => {
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
   return (
-    <StyledContainer maxWidth="lg">
+    <StyledContainer component="section" disableGutters maxWidth="lg">
       <Stack gap={2}>
         <Typography
           color="primary.main"

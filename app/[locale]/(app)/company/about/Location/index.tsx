@@ -10,6 +10,7 @@ const GOOGLE_MAPS_EMBED_URL =
   "https://www.google.com/maps/embed?pb=REPLACE_WITH_YOUR_EMBED_URL";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
@@ -25,8 +26,8 @@ const Location = () => {
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
   return (
-    <Box paddingBlock={5} bgcolor="background.paper">
-      <StyledContainer maxWidth="lg">
+    <Box bgcolor="background.paper" component="section">
+      <StyledContainer disableGutters maxWidth="lg">
         <Typography
           color="primary.main"
           component="h2"

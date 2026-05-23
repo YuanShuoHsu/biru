@@ -26,6 +26,7 @@ const VALUE_KEYS: { icon: SvgIconComponent; key: ValueKey }[] = [
 ];
 
 const StyledContainer = styled(Container)(({ theme }) => ({
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(2),
@@ -53,8 +54,8 @@ const Values = () => {
   const tCompanyAboutValues = useTranslations("company.about.values");
 
   return (
-    <Box paddingBlock={5} bgcolor="background.paper">
-      <StyledContainer maxWidth="lg">
+    <Box bgcolor="background.paper" component="section">
+      <StyledContainer disableGutters maxWidth="lg">
         <Stack gap={1}>
           <Typography
             color="primary.main"

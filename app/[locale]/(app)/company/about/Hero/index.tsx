@@ -4,11 +4,16 @@ import PhotoSlider from "./PhotoSlider";
 
 import GradientBox from "@/components/GradientBox";
 
-import { Container, Stack, Typography } from "@mui/material";
+import {
+  Container,
+  type ContainerProps,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingBlock: theme.spacing(5),
+const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -34,7 +39,7 @@ const Hero = () => {
   ];
 
   return (
-    <StyledContainer maxWidth="lg">
+    <StyledContainer component="header" disableGutters maxWidth="lg">
       <Stack alignItems="center" gap={2}>
         <Typography
           color="primary"

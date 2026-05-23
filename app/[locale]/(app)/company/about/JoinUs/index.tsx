@@ -3,11 +3,16 @@ import { useTranslations } from "next-intl";
 import GradientBox from "@/components/GradientBox";
 
 import { ChevronRight } from "@mui/icons-material";
-import { Button, Container, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  type ContainerProps,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-  paddingBlock: theme.spacing(5),
+const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
+  padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -18,7 +23,7 @@ const JoinUs = () => {
   const tCompanyAboutJoinUs = useTranslations("company.about.joinUs");
 
   return (
-    <StyledContainer maxWidth="lg">
+    <StyledContainer component="section" disableGutters maxWidth="lg">
       <Typography
         color="primary.main"
         component="h2"
