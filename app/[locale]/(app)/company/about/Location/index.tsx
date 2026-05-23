@@ -15,11 +15,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useOrganizations } from "@/hooks/organization";
 
-import { LocationOn } from "@mui/icons-material";
+import { AccessTime, LocationOn, Phone } from "@mui/icons-material";
 import {
   Box,
   Container,
   type ContainerProps,
+  Link,
   MenuItem,
   Stack,
   TextField,
@@ -145,7 +146,41 @@ const Location = () => {
             <Stack direction="row" gap={1}>
               <LocationOn color="primary" fontSize="small" />
               <Typography color="text.secondary" variant="body2">
-                {address}
+                {organization?.hasMap ? (
+                  <Link
+                    color="text.secondary"
+                    href={organization.hasMap}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    underline="hover"
+                  >
+                    {address}
+                  </Link>
+                ) : (
+                  address
+                )}
+              </Typography>
+            </Stack>
+          )}
+          {organization?.openingHours && (
+            <Stack direction="row" gap={1}>
+              <AccessTime color="primary" fontSize="small" />
+              <Typography color="text.secondary" variant="body2">
+                {organization.openingHours}
+              </Typography>
+            </Stack>
+          )}
+          {organization?.telephone && (
+            <Stack direction="row" gap={1}>
+              <Phone color="primary" fontSize="small" />
+              <Typography color="text.secondary" variant="body2">
+                <Link
+                  color="text.secondary"
+                  href={`tel:${organization.telephone}`}
+                  underline="hover"
+                >
+                  {organization.telephone}
+                </Link>
               </Typography>
             </Stack>
           )}
