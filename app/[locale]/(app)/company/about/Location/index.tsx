@@ -192,12 +192,12 @@ const Location = () => {
             </Stack>
           )}
         </Stack>
-        {organization?.hasMap && (
+        {organization?.mapEmbedUrl && (
           <StyledIframe
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            src={organization.hasMap}
+            src={organization.mapEmbedUrl}
             title={tCompanyAboutLocation("label")}
           />
         )}
