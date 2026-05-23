@@ -7,12 +7,13 @@ import { type LocationForm, useLocationFormSchema } from "./definitions";
 
 import GradientBox from "@/components/GradientBox";
 
-import { useOrganizations } from "@/hooks/organization";
-
 import { countries } from "@/constants/countries";
+
 import { LocaleEnum } from "@/enums/Locale";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useOrganizations } from "@/hooks/organization";
 
 import { LocationOn } from "@mui/icons-material";
 import {
@@ -52,11 +53,11 @@ const Location = () => {
     ({ id }) => id === selectedOrganizationId,
   );
 
-  const locale = useLocale();
-
   const countryLabel =
     countries.find(({ code }) => code === organization?.addressCountry)
       ?.label || organization?.addressCountry;
+
+  const locale = useLocale();
 
   const addressParts = (
     locale === LocaleEnum.En
