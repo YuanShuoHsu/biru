@@ -41,8 +41,7 @@ const StyledOrganizationSelect = styled(TextField)({
 
 const StyledIframe = styled("iframe")(({ theme }) => ({
   width: "100%",
-  height: theme.spacing(50),
-  border: "none",
+  height: theme.spacing(56.25),
   borderRadius: theme.shape.borderRadius,
 }));
 
@@ -60,6 +59,16 @@ const Location = () => {
   const organization = organizations.find(
     ({ id }) => id === selectedOrganizationId,
   );
+
+  const mapUrl = (() => {
+    if (!organization?.hasMap) return null;
+    const cidMatch = organization.hasMap.match(
+      /!1s(0x[0-9a-f]+)%3A(0x[0-9a-f]+)/i,
+    );
+    if (cidMatch)
+      return `https://www.google.com/maps?cid=${BigInt(cidMatch[2]).toString()}`;
+    return organization.hasMap.replace("/maps/embed?", "/maps?");
+  })();
 
   const countryLabel =
     countries.find(({ code }) => code === organization?.addressCountry)
@@ -153,10 +162,10 @@ const Location = () => {
             <Stack direction="row" gap={1}>
               <LocationOn color="primary" fontSize="small" />
               <Typography color="text.secondary" variant="body2">
-                {organization?.hasMap ? (
+                {mapUrl ? (
                   <Link
                     color="text.secondary"
-                    href={organization.hasMap.replace("/maps/embed?", "/maps?")}
+                    href={mapUrl}
                     rel="noopener noreferrer"
                     target="_blank"
                     underline="hover"
