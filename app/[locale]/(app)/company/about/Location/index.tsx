@@ -156,7 +156,7 @@ const Location = () => {
                 {organization?.hasMap ? (
                   <Link
                     color="text.secondary"
-                    href={organization.hasMap}
+                    href={organization.hasMap.replace("/maps/embed?", "/maps?")}
                     rel="noopener noreferrer"
                     target="_blank"
                     underline="hover"
@@ -192,12 +192,12 @@ const Location = () => {
             </Stack>
           )}
         </Stack>
-        {organization?.mapEmbedUrl && (
+        {organization?.hasMap && (
           <StyledIframe
             allowFullScreen
             loading="lazy"
             referrerPolicy="no-referrer-when-downgrade"
-            src={organization.mapEmbedUrl}
+            src={organization.hasMap}
             title={tCompanyAboutLocation("label")}
           />
         )}
