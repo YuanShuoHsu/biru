@@ -12,8 +12,7 @@ const GOOGLE_MAPS_EMBED_URL =
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  alignItems: "center",
-  gap: theme.spacing(5),
+  gap: theme.spacing(2),
 }));
 
 const StyledIframe = styled("iframe")(({ theme }) => ({
@@ -28,39 +27,37 @@ const Location = () => {
   return (
     <Box paddingBlock={5} bgcolor="background.paper">
       <StyledContainer maxWidth="lg">
-        <Stack alignItems="center" gap={2}>
-          <Typography
-            color="primary.main"
-            component="h2"
-            fontWeight="bold"
-            variant="body2"
-          >
-            {tCompanyAboutLocation("label")}
-          </Typography>
-          <Typography
-            color="text.primary"
-            component="h2"
-            fontWeight="bold"
-            variant="h5"
-          >
-            {tCompanyAboutLocation("titlePrefix")}
-            <GradientBox component="span">
-              {tCompanyAboutLocation("titleHighlight")}
-            </GradientBox>
-          </Typography>
-          <Stack alignItems="center" gap={1}>
-            <Stack alignItems="flex-start" direction="row" gap={1}>
-              <LocationOn color="primary" fontSize="small" />
-              <Typography color="text.secondary" variant="body2">
-                {tCompanyAboutLocation("address")}
-              </Typography>
-            </Stack>
-            <Stack alignItems="flex-start" direction="row" gap={1}>
-              <Schedule color="primary" fontSize="small" />
-              <Typography color="text.secondary" variant="body2">
-                {tCompanyAboutLocation("hours")}
-              </Typography>
-            </Stack>
+        <Typography
+          color="primary.main"
+          component="h2"
+          fontWeight="bold"
+          variant="body2"
+        >
+          {tCompanyAboutLocation("label")}
+        </Typography>
+        <Typography
+          color="text.primary"
+          component="h2"
+          fontWeight="bold"
+          variant="h5"
+        >
+          {tCompanyAboutLocation("titlePrefix")}
+          <GradientBox component="span">
+            {tCompanyAboutLocation("titleHighlight")}
+          </GradientBox>
+        </Typography>
+        <Stack gap={1}>
+          <Stack direction="row" gap={1}>
+            <LocationOn color="primary" fontSize="small" />
+            <Typography color="text.secondary" variant="body2">
+              {tCompanyAboutLocation("address")}
+            </Typography>
+          </Stack>
+          <Stack direction="row" gap={1}>
+            <Schedule color="primary" fontSize="small" />
+            <Typography color="text.secondary" variant="body2">
+              {tCompanyAboutLocation("hours")}
+            </Typography>
           </Stack>
         </Stack>
         <StyledIframe
