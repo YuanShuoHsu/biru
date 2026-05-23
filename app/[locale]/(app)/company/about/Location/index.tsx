@@ -12,7 +12,7 @@ const GOOGLE_MAPS_EMBED_URL =
 const StyledContainer = styled(Container)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
+  gap: theme.spacing(5),
 }));
 
 const StyledIframe = styled("iframe")(({ theme }) => ({
@@ -26,7 +26,7 @@ const Location = () => {
   return (
     <Box paddingBlock={5} bgcolor="background.paper">
       <StyledContainer maxWidth="lg">
-        <Stack gap={2}>
+        <Stack alignItems="center" gap={2}>
           <Typography
             color="primary.main"
             component="h2"
@@ -39,7 +39,7 @@ const Location = () => {
             color="text.primary"
             component="h2"
             fontWeight="bold"
-            variant="h4"
+            variant="h5"
           >
             {tCompanyAboutLocation("titlePrefix")}
             <GradientBox component="span">

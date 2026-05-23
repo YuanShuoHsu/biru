@@ -90,7 +90,7 @@ const Team = () => {
           color="text.primary"
           component="h2"
           fontWeight="bold"
-          variant="h4"
+          variant="h5"
         >
           {tCompanyAboutTeam("titlePrefix")}
           <GradientBox component="span">
