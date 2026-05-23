@@ -23,6 +23,7 @@ const About = () => (
     <Location />
     <Divider />
     <JoinUs />
+    <Divider />
     <Footer />
   </>
 );
