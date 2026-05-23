@@ -59,7 +59,7 @@ const Location = () => {
 
   const locale = useLocale();
 
-  const addressParts = (
+  const address = (
     locale === LocaleEnum.En
       ? [
           organization?.streetAddress,
@@ -77,7 +77,7 @@ const Location = () => {
           organization?.streetAddress,
           organization?.extendedAddress,
         ]
-  ).filter(Boolean);
+  ).filter(Boolean).join(", ");
 
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
@@ -116,6 +116,7 @@ const Location = () => {
                 displayEmpty: true,
                 renderValue: (selected) => {
                   const org = organizations.find(({ id }) => id === selected);
+
                   return org ? (
                     org.name
                   ) : (
@@ -138,11 +139,11 @@ const Location = () => {
               </MenuItem>
             ))}
           </StyledOrganizationSelect>
-          {addressParts.length > 0 && (
+          {address && (
             <Stack direction="row" gap={1}>
               <LocationOn color="primary" fontSize="small" />
               <Typography color="text.secondary" variant="body2">
-                {addressParts.join(", ")}
+                {address}
               </Typography>
             </Stack>
           )}
