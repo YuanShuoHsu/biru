@@ -1,18 +1,19 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 
 import { type LocationForm, useLocationFormSchema } from "./definitions";
 
 import GradientBox from "@/components/GradientBox";
 
-import { useOrganizationLocation } from "@/hooks/organization";
 import { useOrganizations } from "@/hooks/organization";
+
+import { LocaleEnum } from "@/enums/Locale";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { LocationOn, Schedule } from "@mui/icons-material";
+import { LocationOn } from "@mui/icons-material";
 import {
   Box,
   Container,
@@ -35,12 +36,6 @@ const StyledOrganizationSelect = styled(TextField)({
   maxWidth: 240,
 });
 
-const StyledIframe = styled("iframe")(({ theme }) => ({
-  width: "100%",
-  height: theme.spacing(50),
-  borderRadius: theme.shape.borderRadius,
-}));
-
 const Location = () => {
   const organizations = useOrganizations();
   const defaultOrganizationId = organizations[0]?.id || "";
@@ -52,7 +47,28 @@ const Location = () => {
   });
   const selectedOrganizationId = useWatch({ control, name: "organizationId" });
 
-  const location = useOrganizationLocation(selectedOrganizationId);
+  const organization = organizations.find(({ id }) => id === selectedOrganizationId);
+  const locale = useLocale();
+
+  const addressParts = (
+    locale === LocaleEnum.En
+      ? [
+          organization?.streetAddress,
+          organization?.extendedAddress,
+          organization?.postalCode,
+          organization?.addressLocality,
+          organization?.addressRegion,
+          organization?.addressCountry,
+        ]
+      : [
+          organization?.addressCountry,
+          organization?.postalCode,
+          organization?.addressRegion,
+          organization?.addressLocality,
+          organization?.streetAddress,
+          organization?.extendedAddress,
+        ]
+  ).filter(Boolean);
 
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
@@ -89,11 +105,9 @@ const Location = () => {
             select: {
               displayEmpty: true,
               renderValue: (selected) => {
-                const organization = organizations.find(
-                  ({ id }) => id === selected,
-                );
-                return organization ? (
-                  organization.name
+                const org = organizations.find(({ id }) => id === selected);
+                return org ? (
+                  org.name
                 ) : (
                   <em>
                     {tCompanyAboutLocation("selectOrganization.placeholder")}
@@ -114,34 +128,13 @@ const Location = () => {
             </MenuItem>
           ))}
         </StyledOrganizationSelect>
-        {location && (
-          <>
-            <Stack gap={1}>
-              {location.address && (
-                <Stack direction="row" gap={1}>
-                  <LocationOn color="primary" fontSize="small" />
-                  <Typography color="text.secondary" variant="body2">
-                    {location.address}
-                  </Typography>
-                </Stack>
-              )}
-              {location.hours && (
-                <Stack direction="row" gap={1}>
-                  <Schedule color="primary" fontSize="small" />
-                  <Typography color="text.secondary" variant="body2">
-                    {location.hours}
-                  </Typography>
-                </Stack>
-              )}
-            </Stack>
-            {location.mapUrl && (
-              <StyledIframe
-                loading="lazy"
-                src={location.mapUrl}
-                title={tCompanyAboutLocation("label")}
-              />
-            )}
-          </>
+        {addressParts.length > 0 && (
+          <Stack direction="row" gap={1}>
+            <LocationOn color="primary" fontSize="small" />
+            <Typography color="text.secondary" variant="body2">
+              {addressParts.join(", ")}
+            </Typography>
+          </Stack>
         )}
       </StyledContainer>
     </Box>

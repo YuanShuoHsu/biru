@@ -41,7 +41,29 @@ export const authClient = createAuthClient({
       },
     }),
     multiSessionClient(),
-    organizationClient(),
+    organizationClient({
+      teams: { enabled: true },
+      schema: {
+        organization: {
+          additionalFields: {
+            // https://schema.org/PostalAddress
+            addressCountry: {
+              type: "string",
+              required: false,
+              defaultValue: "TW",
+            },
+            addressLocality: { type: "string", required: false },
+            addressRegion: { type: "string", required: false },
+            extendedAddress: { type: "string", required: false },
+            postOfficeBoxNumber: { type: "string", required: false },
+            postalCode: { type: "string", required: false },
+            streetAddress: { type: "string", required: false },
+
+            isOpen: { type: "boolean", required: true, defaultValue: true },
+          },
+        },
+      },
+    }),
   ],
 });
 

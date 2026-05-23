@@ -5,7 +5,6 @@ import useSWR from "swr";
 
 import type {
   Organization,
-  OrganizationLocation,
   OrganizationMember,
 } from "@/types/organizations";
 import type { RouteParams } from "@/types/routeParams";
@@ -18,14 +17,6 @@ export const useOrganization = () => {
   );
 
   return organization;
-};
-
-export const useOrganizationLocation = (organizationId: string) => {
-  const { data: location = null } = useSWR<OrganizationLocation>(
-    organizationId ? `/api/organizations/${organizationId}/location` : null,
-  );
-
-  return location;
 };
 
 export const useOrganizationMembers = (organizationId: string) => {
