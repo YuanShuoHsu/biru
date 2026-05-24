@@ -81,9 +81,9 @@ const Location = () => {
       ? [
           organization?.streetAddress,
           organization?.extendedAddress,
-          organization?.postalCode,
           organization?.addressLocality,
           organization?.addressRegion,
+          organization?.postalCode,
           countryLabel,
         ]
       : [
