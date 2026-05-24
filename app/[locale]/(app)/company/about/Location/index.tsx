@@ -76,25 +76,18 @@ const Location = () => {
 
   const locale = useLocale();
 
+  const addressGroups = [
+    [organization?.streetAddress, organization?.extendedAddress],
+    [organization?.addressLocality],
+    [organization?.addressRegion],
+    [organization?.postalCode],
+    [countryLabel],
+  ];
+
   const address = (
-    locale === LocaleEnum.En
-      ? [
-          organization?.streetAddress,
-          organization?.extendedAddress,
-          organization?.addressLocality,
-          organization?.addressRegion,
-          organization?.postalCode,
-          countryLabel,
-        ]
-      : [
-          countryLabel,
-          organization?.postalCode,
-          organization?.addressRegion,
-          organization?.addressLocality,
-          organization?.streetAddress,
-          organization?.extendedAddress,
-        ]
+    locale === LocaleEnum.En ? addressGroups : [...addressGroups].reverse()
   )
+    .flat()
     .filter(Boolean)
     .join(", ");
 
