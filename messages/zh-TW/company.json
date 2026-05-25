@@ -30,6 +30,7 @@
     },
     "label": "關於我們",
     "location": {
+      "empty": "尚未設定位置資訊",
       "label": "位置",
       "openingHours": {
         "Fr": "週五",

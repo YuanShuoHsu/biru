@@ -30,6 +30,7 @@
     },
     "label": "私たちについて",
     "location": {
+      "empty": "位置情報が設定されていません",
       "label": "アクセス",
       "openingHours": {
         "Fr": "金",

@@ -30,6 +30,7 @@
     },
     "label": "About",
     "location": {
+      "empty": "No location information available",
       "label": "Location",
       "openingHours": {
         "Fr": "Fri",
