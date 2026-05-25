@@ -8,7 +8,7 @@ import { useParams, useSearchParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { useOrganization } from "@/hooks/organization";
+import { useOrganization } from "@/hooks/organizations";
 
 import { usePathname } from "@/i18n/navigation";
 
