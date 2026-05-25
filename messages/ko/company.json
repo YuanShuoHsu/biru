@@ -20,7 +20,6 @@
       "titleLine1": "우리의 미션은",
       "titleLine2": "훌륭한 커피를 더 편하게 만드는 것"
     },
-    "label": "회사 소개",
     "joinUs": {
       "button": "채용 정보 보기",
       "description": "모든 팀원에게 도구와 무대를 제공하여, 비할 데 없는 열정과 창의력으로 잊을 수 없는 순간을 함께 만들어 갑니다.",
@@ -29,16 +28,25 @@
       "titleLine1": "차세대 다이닝 경험을",
       "titleLine2": "함께 만들어 가세요"
     },
+    "label": "회사 소개",
     "location": {
-      "address": "타오위안시 다위안구（올바른 주소로 업데이트해 주세요）",
-      "hours": "월–일 08:00–21:00",
       "label": "오시는 길",
-      "titleHighlight": "찾아오세요",
-      "titlePrefix": "저희를 ",
+      "openingHours": {
+        "Fr": "금",
+        "Mo": "월",
+        "Sa": "토",
+        "Su": "일",
+        "Th": "목",
+        "Tu": "화",
+        "We": "수",
+        "rangeSeparator": "～"
+      },
       "selectOrganization": {
         "label": "조직",
         "placeholder": "조직을 선택해 주세요"
-      }
+      },
+      "titleHighlight": "찾아오세요",
+      "titlePrefix": "저희를 "
     },
     "team": {
       "description": "대만 각지에서 모인 Biru는 열정 넘치는 팀과 커뮤니티입니다.",

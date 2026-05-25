@@ -20,7 +20,6 @@
       "titleLine1": "我们的使命是让",
       "titleLine2": "好咖啡变得轻松自在"
     },
-    "label": "关于我们",
     "joinUs": {
       "button": "查看职位",
       "description": "我们赋予每位伙伴工具与舞台，以无可比拟的热情与创意，一起成就令人难忘的每一刻。",
@@ -29,16 +28,25 @@
       "titleLine1": "打造下一个世代的极致",
       "titleLine2": "餐饮体验"
     },
+    "label": "关于我们",
     "location": {
-      "address": "桃园市大园区（请更新为正确地址）",
-      "hours": "周一至周日 08:00–21:00",
       "label": "位置",
-      "titleHighlight": "找到我们",
-      "titlePrefix": "来 ",
+      "openingHours": {
+        "Fr": "周五",
+        "Mo": "周一",
+        "Sa": "周六",
+        "Su": "周日",
+        "Th": "周四",
+        "Tu": "周二",
+        "We": "周三",
+        "rangeSeparator": "～"
+      },
       "selectOrganization": {
         "label": "组织",
         "placeholder": "请选择您的组织"
-      }
+      },
+      "titleHighlight": "找到我们",
+      "titlePrefix": "来 "
     },
     "team": {
       "description": "来自台湾各地，Biru 是一支充满热情的餐饮团队与社群。",
@@ -64,7 +72,7 @@
       "values": {
         "chaseBetter": {
           "description": "我们被持续变得更好的渴望驱动。",
-          "title": "追求\"更好\""
+          "title": "追求「更好」"
         },
         "keepItSimple": {
           "description": "我们不走制式企业风格，而我们喜欢这样。",

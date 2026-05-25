@@ -20,7 +20,6 @@
       "titleLine1": "私たちの使命は",
       "titleLine2": "素晴らしいコーヒーを気軽にすること"
     },
-    "label": "私たちについて",
     "joinUs": {
       "button": "採用情報を見る",
       "description": "すべてのメンバーにツールと舞台を提供し、比類ない情熱と創造力で忘れられないひとときをともにかたちにします。",
@@ -29,16 +28,25 @@
       "titleLine1": "次世代のダイニング体験を",
       "titleLine2": "ともにかたちにする"
     },
+    "label": "私たちについて",
     "location": {
-      "address": "桃園市大園区（正しい住所に更新してください）",
-      "hours": "月〜日 08:00–21:00",
       "label": "アクセス",
-      "titleHighlight": "見つける",
-      "titlePrefix": "私たちを ",
+      "openingHours": {
+        "Fr": "金",
+        "Mo": "月",
+        "Sa": "土",
+        "Su": "日",
+        "Th": "木",
+        "Tu": "火",
+        "We": "水",
+        "rangeSeparator": "～"
+      },
       "selectOrganization": {
         "label": "組織",
         "placeholder": "組織を選択してください"
-      }
+      },
+      "titleHighlight": "見つける",
+      "titlePrefix": "私たちを "
     },
     "team": {
       "description": "台湾各地から集まった Biru は、情熱あふれるチームとコミュニティです。",

@@ -28,6 +28,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { formatOpeningHoursForDisplay } from "@/utils/openingHours";
+
 const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
@@ -91,6 +93,7 @@ const Location = () => {
     .filter(Boolean)
     .join(", ");
 
+  const tCommon = useTranslations("common");
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
   return (
@@ -174,9 +177,24 @@ const Location = () => {
           {organization?.openingHours && (
             <Stack direction="row" gap={1}>
               <AccessTime color="primary" fontSize="small" />
-              <Typography color="text.secondary" variant="body2">
-                {organization.openingHours}
-              </Typography>
+              <Stack gap={1}>
+                {formatOpeningHoursForDisplay(organization.openingHours, {
+                  formatDay: (day) =>
+                    tCompanyAboutLocation(`openingHours.${day}`),
+                  rangeSeparator: tCompanyAboutLocation(
+                    "openingHours.rangeSeparator",
+                  ),
+                  delimiter: tCommon("delimiter"),
+                }).map((line, index) => (
+                  <Typography
+                    color="text.secondary"
+                    key={index}
+                    variant="body2"
+                  >
+                    {line}
+                  </Typography>
+                ))}
+              </Stack>
             </Stack>
           )}
           {organization?.telephone && (

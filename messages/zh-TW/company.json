@@ -20,7 +20,6 @@
       "titleLine1": "我們的使命是讓",
       "titleLine2": "好咖啡變得輕鬆自在"
     },
-    "label": "關於我們",
     "joinUs": {
       "button": "查看職缺",
       "description": "我們賦予每位夥伴工具與舞台，以無可比擬的熱情與創意，一起成就令人難忘的每一刻。",
@@ -29,16 +28,25 @@
       "titleLine1": "打造下一個世代的極致",
       "titleLine2": "餐飲體驗"
     },
+    "label": "關於我們",
     "location": {
-      "address": "桃園市大園區（請更新為正確地址）",
-      "hours": "週一至週日 08:00–21:00",
       "label": "位置",
-      "titleHighlight": "找到我們",
-      "titlePrefix": "來 ",
+      "openingHours": {
+        "Fr": "週五",
+        "Mo": "週一",
+        "Sa": "週六",
+        "Su": "週日",
+        "Th": "週四",
+        "Tu": "週二",
+        "We": "週三",
+        "rangeSeparator": "～"
+      },
       "selectOrganization": {
         "label": "組織",
         "placeholder": "請選擇您的組織"
-      }
+      },
+      "titleHighlight": "找到我們",
+      "titlePrefix": "來 "
     },
     "team": {
       "description": "來自台灣各地，Biru 是一支充滿熱情的餐飲團隊與社群。",
