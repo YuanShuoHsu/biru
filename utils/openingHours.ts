@@ -1,3 +1,5 @@
+// vibe coding
+
 export const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
 export type Day = (typeof DAYS)[number];
 
