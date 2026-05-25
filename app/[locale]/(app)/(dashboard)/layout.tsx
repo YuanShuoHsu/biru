@@ -1,4 +1,3 @@
-import { Stack } from "@mui/material";
 import { hasLocale } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -6,6 +5,8 @@ import { notFound } from "next/navigation";
 import RouterBreadcrumbs from "@/components/RouterBreadcrumbs";
 
 import { routing } from "@/i18n/routing";
+
+import { Stack } from "@mui/material";
 
 interface DashboardLayoutProps extends LayoutProps<"/[locale]"> {
   toolbar: React.ReactNode;
