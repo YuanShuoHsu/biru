@@ -35,7 +35,7 @@ const OrderStoreSlugLayout = async ({
   const store = stores.find(({ slug }) => slug === storeSlug);
   if (!store) return notFound();
 
-  const menus = await getMenus(store.id);
+  const menus = await getMenus(storeSlug, locale);
 
   return (
     <MenuStoreProvider menus={menus}>

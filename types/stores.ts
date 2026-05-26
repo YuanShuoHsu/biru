@@ -1,8 +1,6 @@
-import type { Locale } from "@/i18n/routing";
-
 export interface Store {
   id: string;
-  name: Record<Locale, string>;
+  name: string;
   createdAt: Date;
   isActive: boolean;
   slug: string;
@@ -10,4 +8,3 @@ export interface Store {
 }
 
 export type StoreSlug = Store["slug"];
-export type StoreName = Store["name"][Locale];
