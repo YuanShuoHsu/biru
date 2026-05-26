@@ -3,17 +3,18 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
+
 import SelectedListItem from "./SelectedListItem";
 import { StyledListItemButton } from "./SelectedListItem/ListItemLink";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { query } from "@/constants/query";
 
-import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 import { useOrganization } from "@/hooks/organizations";
+import { useAuthMenuItems, useLogoutMenuItem } from "@/hooks/useAuth";
 
-import { usePathname } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 import {
   AccountCircle,
