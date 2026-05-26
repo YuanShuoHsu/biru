@@ -1,19 +1,63 @@
-import { setRequestLocale } from "next-intl/server";
+"use client";
 
-import OrderModePickupStoreSlugSelect from "@/components/OrderModePickupStoreSlugSelect";
+import { useTranslations } from "next-intl";
 
-import type { Locale } from "@/i18n/routing";
+import { ORDER_MODE } from "@/constants/orderMode";
 
-interface OrderPageProps {
-  params: Promise<{ locale: Locale }>;
-}
+import { useOrganizations } from "@/hooks/organizations";
 
-const OrderPage = async ({ params }: OrderPageProps) => {
-  const { locale } = await params;
+import { useRouter } from "@/i18n/navigation";
 
-  setRequestLocale(locale);
+import { MenuItem, TextField } from "@mui/material";
 
-  return <OrderModePickupStoreSlugSelect />;
+const OrderModePickupStoreSlugSelect = () => {
+  const router = useRouter();
+
+  const organizations = useOrganizations();
+
+  const tOrder = useTranslations("order");
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    router.push(`/order/${event.target.value}?mode=${ORDER_MODE.Pickup}`);
+
+  return (
+    <TextField
+      fullWidth
+      label={tOrder("mode.pickup.select.label")}
+      name="storeSlug"
+      onChange={handleChange}
+      required
+      select
+      size="small"
+      slotProps={{
+        inputLabel: { shrink: true },
+        select: {
+          displayEmpty: true,
+          renderValue: (selected) => {
+            const organization = organizations.find(
+              ({ slug }) => slug === selected,
+            );
+
+            return organization ? (
+              organization.name
+            ) : (
+              <em>{tOrder("mode.pickup.select.placeholder")}</em>
+            );
+          },
+        },
+      }}
+      value=""
+    >
+      <MenuItem disabled value="">
+        <em>{tOrder("mode.pickup.select.placeholder")}</em>
+      </MenuItem>
+      {organizations.map(({ id, slug, name }) => (
+        <MenuItem key={id} value={slug}>
+          {name}
+        </MenuItem>
+      ))}
+    </TextField>
+  );
 };
 
-export default OrderPage;
+export default OrderModePickupStoreSlugSelect;
