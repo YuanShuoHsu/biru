@@ -2,7 +2,7 @@ import { cache } from "react";
 
 import { fetcher } from "./fetcher";
 
-import { routing, type Locale } from "@/i18n/routing";
+import type { Locale } from "@/i18n/routing";
 
 import type { Menu } from "@/types/menu";
 
@@ -25,12 +25,6 @@ interface OrderMenuSection {
   items: OrderMenuItem[];
 }
 
-const toMultilingual = (text: string): Record<Locale, string> =>
-  Object.fromEntries(routing.locales.map((l) => [l, text])) as Record<
-    Locale,
-    string
-  >;
-
 export const getMenus = cache(
   async (slug: string, locale: Locale): Promise<Menu[]> => {
     try {
@@ -45,7 +39,7 @@ export const getMenus = cache(
         id: section.id,
         key: section.id,
         storeId: section.organizationId,
-        name: toMultilingual(section.name),
+        name: section.name,
         isActive: true,
         createdAt: new Date(section.createdAt),
         updatedAt: new Date(section.updatedAt),
@@ -53,8 +47,8 @@ export const getMenus = cache(
           id: item.id,
           key: item.id,
           menuId: section.id,
-          name: toMultilingual(item.name),
-          description: toMultilingual(item.description),
+          name: item.name,
+          description: item.description,
           image: item.image,
           price: item.price,
           stock: null,

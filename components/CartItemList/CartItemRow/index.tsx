@@ -78,8 +78,8 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
 
   const tCommon = useTranslations("common");
 
-  const itemName = getItemName(menus, id, locale);
-  const choiceNames = getChoiceNames(menus, id, choices, locale, {
+  const itemName = getItemName(menus, id);
+  const choiceNames = getChoiceNames(menus, id, choices, {
     colon: tCommon("colon"),
     delimiter: tCommon("delimiter"),
   });
@@ -99,13 +99,7 @@ const CartItemRow = ({ forceXsLayout, item }: CartItemRowProps) => {
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
 
   const { names: limitingChoiceNames, cap: optionCapLeft } =
-    getLimitingChoicesCap(
-      menus,
-      id,
-      choices,
-      locale,
-      getChoiceAvailableQuantity,
-    );
+    getLimitingChoicesCap(menus, id, choices, getChoiceAvailableQuantity);
 
   const limitingChoicesLabel =
     limitingChoiceNames.length > 0

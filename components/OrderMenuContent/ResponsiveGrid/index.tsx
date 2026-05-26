@@ -32,8 +32,8 @@ const ResponsiveGrid = ({
           <Grid display="flex" key={id} size={viewGridSizes}>
             <ActionAreaCard
               id={id}
-              name={name[locale]}
-              description={description[locale]}
+              name={name}
+              description={description}
               image={image}
               options={options}
               price={price}

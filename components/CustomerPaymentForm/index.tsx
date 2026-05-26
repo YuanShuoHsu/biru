@@ -105,18 +105,12 @@ const CustomerPaymentForm = () => {
         TradeDesc: "餐點付款",
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
-            const itemName = getItemName(menus, id, LocaleEnum.ZhTW);
-            const choiceNames = getChoiceNames(
-              menus,
-              id,
-              choices,
-              LocaleEnum.ZhTW,
-              {
-                colon: "：",
-                delimiter: "、",
-                joinWith: "、",
-              },
-            );
+            const itemName = getItemName(menus, id);
+            const choiceNames = getChoiceNames(menus, id, choices, {
+              colon: "：",
+              delimiter: "、",
+              joinWith: "、",
+            });
             const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
 
             return `${itemName} ${formattedChoices} ${tCommon("multiply")} ${quantity}`;
