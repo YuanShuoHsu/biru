@@ -28,9 +28,7 @@ const DashboardLayout = async ({
         <Grid size={{ xs: 12, sm: "grow" }}>
           <RouterBreadcrumbs />
         </Grid>
-        <Grid size={{ xs: 12, sm: "auto" }}>
-          {toolbar}
-        </Grid>
+        <Grid size={{ xs: 12, sm: "auto" }}>{toolbar}</Grid>
       </Grid>
       {children}
     </Stack>
