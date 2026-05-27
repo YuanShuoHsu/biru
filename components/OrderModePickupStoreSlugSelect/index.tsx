@@ -24,7 +24,7 @@ const OrderModePickupStoreSlugSelect = () => {
     <TextField
       fullWidth
       label={tOrder("mode.pickup.select.label")}
-      name="storeSlug"
+      name="organizationSlug"
       onChange={handleChange}
       required
       select

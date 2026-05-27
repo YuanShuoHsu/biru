@@ -79,7 +79,7 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { storeSlug } = useParams<RouteParams>();
+  const { organizationSlug } = useParams<RouteParams>();
 
   const searchParams = useSearchParams();
   const mode = searchParams.get("mode");
@@ -112,7 +112,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
       disabled: !isPickup,
       icon: Storefront,
       label: storeName,
-      to: `/${storeSlug}`,
+      to: `/${organizationSlug}`,
     },
   ];
 

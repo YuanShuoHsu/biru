@@ -45,7 +45,7 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 const HideAppBar = () => {
   const toggleDrawer = useToggleDrawer();
 
-  const { storeSlug } = useParams();
+  const { organizationSlug } = useParams();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
@@ -79,7 +79,7 @@ const HideAppBar = () => {
               <AccountMenu />
             </Suspense>
           )}
-          {!!storeSlug && <CartIconButton />}
+          {!!organizationSlug && <CartIconButton />}
         </Stack>
       </StyledToolbar>
     </StyledAppBar>

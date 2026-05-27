@@ -9,15 +9,15 @@ import { useRouter } from "@/i18n/navigation";
 
 import { MenuItem, TextField } from "@mui/material";
 
-import type { StoreSlug } from "@/types/stores";
+import type { Organization } from "@/types/organizations";
 
 interface OrderModeDineInStoreSlugTableNumberSelectProps {
-  storeSlug: StoreSlug;
+  organizationSlug: Organization["slug"];
   tableNumber: string;
 }
 
 const OrderModeDineInStoreSlugTableNumberSelect = ({
-  storeSlug,
+  organizationSlug,
   tableNumber,
 }: OrderModeDineInStoreSlugTableNumberSelectProps) => {
   const router = useRouter();
@@ -26,7 +26,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(
-      `/order/${storeSlug}?mode=${ORDER_MODE.DineIn}&tableNumber=${tableNumber}&partySize=${event.target.value}`,
+      `/order/${organizationSlug}?mode=${ORDER_MODE.DineIn}&tableNumber=${tableNumber}&partySize=${event.target.value}`,
     );
 
   return (

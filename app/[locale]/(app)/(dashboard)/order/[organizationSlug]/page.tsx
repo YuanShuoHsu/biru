@@ -9,10 +9,10 @@ import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { StoreSlug } from "@/types/stores";
+import type { Organization } from "@/types/organizations";
 
-interface OrderStoreSlugPageProps {
-  params: Promise<{ locale: Locale; storeSlug: StoreSlug }>;
+interface OrderOrganizationSlugPageProps {
+  params: Promise<{ locale: Locale; organizationSlug: Organization["slug"] }>;
   searchParams: Promise<{
     mode?: string;
     tableNumber?: string;
@@ -20,11 +20,11 @@ interface OrderStoreSlugPageProps {
   }>;
 }
 
-const OrderStoreSlugPage = async ({
+const OrderOrganizationSlugPage = async ({
   params,
   searchParams,
-}: OrderStoreSlugPageProps) => {
-  const [{ locale, storeSlug }, { mode, tableNumber, partySize }] =
+}: OrderOrganizationSlugPageProps) => {
+  const [{ locale, organizationSlug }, { mode, tableNumber, partySize }] =
     await Promise.all([params, searchParams]);
 
   setRequestLocale(locale);
@@ -40,7 +40,7 @@ const OrderStoreSlugPage = async ({
   if (!partySize) {
     return (
       <OrderModeDineInStoreSlugTableNumberSelect
-        storeSlug={storeSlug}
+        organizationSlug={organizationSlug}
         tableNumber={tableNumber}
       />
     );
@@ -57,4 +57,4 @@ const OrderStoreSlugPage = async ({
   return <OrderMenuContent />;
 };
 
-export default OrderStoreSlugPage;
+export default OrderOrganizationSlugPage;

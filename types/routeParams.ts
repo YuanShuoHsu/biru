@@ -1,10 +1,10 @@
-import type { StoreSlug } from "./stores";
+import type { Organization } from "./organizations";
 
 import type { Locale } from "@/i18n/routing";
 
 interface RouteParam {
   locale: Locale;
-  storeSlug: StoreSlug;
+  organizationSlug: Organization["slug"];
 }
 
 export type RouteParams<K extends keyof RouteParam = keyof RouteParam> =

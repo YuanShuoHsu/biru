@@ -65,7 +65,7 @@ const StyledDivider = styled(Divider, {
 
 // 等 order 完成後要修正
 const DineInMenuItem = () => {
-  const { storeSlug } = useParams<RouteParams>();
+  const { organizationSlug } = useParams<RouteParams>();
 
   const router = useRouter();
 
@@ -83,7 +83,7 @@ const DineInMenuItem = () => {
 
   const handleClick = () =>
     router.push(
-      getHref(`/order/${storeSlug}`, { mode, tableNumber, partySize }),
+      getHref(`/order/${organizationSlug}`, { mode, tableNumber, partySize }),
     );
 
   return (
@@ -145,7 +145,7 @@ const DineInMenuItem = () => {
 const useNavItems = (): MenuItem[] => {
   const { session } = useAuthStore((state) => state);
 
-  const { storeSlug } = useParams<RouteParams>();
+  const { organizationSlug } = useParams<RouteParams>();
 
   const pathname = usePathname();
 
@@ -177,7 +177,7 @@ const useNavItems = (): MenuItem[] => {
   const tOrder = useTranslations("order");
 
   const dineInChildren: MenuItem[] = [
-    ...(mode === ORDER_MODE.DineIn && storeSlug
+    ...(mode === ORDER_MODE.DineIn && organizationSlug
       ? [{ slot: () => <DineInMenuItem /> }]
       : []),
     {
