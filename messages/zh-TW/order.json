@@ -1,5 +1,12 @@
 {
   "label": "點餐",
+  "organizationSlug": {
+    "label": "門市",
+    "select": {
+      "label": "選擇門市",
+      "placeholder": "請選擇您的門市"
+    }
+  },
   "mode": {
     "dineIn": {
       "label": "內用",
@@ -17,11 +24,7 @@
       }
     },
     "pickup": {
-      "label": "外帶自取",
-      "select": {
-        "label": "選擇門市",
-        "placeholder": "請選擇您的門市"
-      }
+      "label": "外帶自取"
     },
     "storeSlug": {
       "selectTable": "選擇桌號",

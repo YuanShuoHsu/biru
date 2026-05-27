@@ -1,5 +1,12 @@
 {
   "label": "点餐",
+  "organizationSlug": {
+    "label": "门店",
+    "select": {
+      "label": "选择门店",
+      "placeholder": "请选择您的门店"
+    }
+  },
   "mode": {
     "dineIn": {
       "label": "堂食",
@@ -17,11 +24,7 @@
       }
     },
     "pickup": {
-      "label": "自取",
-      "select": {
-        "label": "选择门店",
-        "placeholder": "请选择您的门店"
-      }
+      "label": "自取"
     },
     "storeSlug": {
       "selectTable": "选择桌号",

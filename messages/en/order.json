@@ -1,5 +1,12 @@
 {
   "label": "Order",
+  "organizationSlug": {
+    "label": "Store",
+    "select": {
+      "label": "Select a store",
+      "placeholder": "Please select your store"
+    }
+  },
   "mode": {
     "dineIn": {
       "label": "Dine-in",
@@ -17,11 +24,7 @@
       }
     },
     "pickup": {
-      "label": "Pickup",
-      "select": {
-        "label": "Select a store",
-        "placeholder": "Please select your store"
-      }
+      "label": "Pickup"
     },
     "storeSlug": {
       "selectTable": "Select a table",

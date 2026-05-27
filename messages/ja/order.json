@@ -1,5 +1,12 @@
 {
   "label": "注文",
+  "organizationSlug": {
+    "label": "店舗",
+    "select": {
+      "label": "店舗を選択",
+      "placeholder": "あなたの店舗を選択してください"
+    }
+  },
   "mode": {
     "dineIn": {
       "label": "店内",
@@ -17,11 +24,7 @@
       }
     },
     "pickup": {
-      "label": "お持ち帰り",
-      "select": {
-        "label": "店舗を選択",
-        "placeholder": "あなたの店舗を選択してください"
-      }
+      "label": "お持ち帰り"
     },
     "storeSlug": {
       "selectTable": "テーブルを選択",

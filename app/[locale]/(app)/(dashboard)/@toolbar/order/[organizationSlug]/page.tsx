@@ -1,9 +1,12 @@
+import { Suspense } from "react";
+
+import OrderOrganizationSlugSelect from "@/components/OrderOrganizationSlugSelect";
 import OrderSearch from "@/components/OrderSearch";
 import ViewToggleButtons from "@/components/ViewToggleButtons";
 
 import { Stack } from "@mui/material";
 
-const OrderModeStoreSlugToolbar = () => (
+const OrderOrganizationSlugToolbar = () => (
   <Stack
     width={{ xs: "100%", sm: "auto" }}
     direction="row"
@@ -11,9 +14,12 @@ const OrderModeStoreSlugToolbar = () => (
     alignItems="center"
     gap={2}
   >
+    <Suspense>
+      <OrderOrganizationSlugSelect />
+    </Suspense>
     <OrderSearch />
     <ViewToggleButtons />
   </Stack>
 );
 
-export default OrderModeStoreSlugToolbar;
+export default OrderOrganizationSlugToolbar;
