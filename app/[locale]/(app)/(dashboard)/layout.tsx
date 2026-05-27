@@ -9,12 +9,14 @@ import { routing } from "@/i18n/routing";
 import { Grid, Stack } from "@mui/material";
 
 interface DashboardLayoutProps extends LayoutProps<"/[locale]"> {
+  subheader: React.ReactNode;
   toolbar: React.ReactNode;
 }
 
 const DashboardLayout = async ({
   children,
   params,
+  subheader,
   toolbar,
 }: DashboardLayoutProps) => {
   const { locale } = await params;
@@ -30,6 +32,7 @@ const DashboardLayout = async ({
         </Grid>
         <Grid size={{ xs: 12, sm: "auto" }}>{toolbar}</Grid>
       </Grid>
+      {subheader}
       {children}
     </Stack>
   );
