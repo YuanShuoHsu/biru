@@ -37,57 +37,51 @@ const OrderOrganizationSlugSelect = () => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(`/order/${ORDER_MODE.Pickup}/${event.target.value}`);
 
-  if (isDineIn) {
-    return (
-      <StyledTextField
-        fullWidth
-        label={tOrder("organizationSlug.label")}
-        size="small"
-        slotProps={{
-          input: { readOnly: true },
-          inputLabel: { shrink: true },
-        }}
-        value={currentOrg?.name ?? ""}
-      />
-    );
-  }
-
   return (
     <StyledTextField
-      label={tOrder("organizationSlug.select.label")}
       fullWidth
-      name="organizationSlug"
-      onChange={handleChange}
-      required
-      select
+      label={tOrder(
+        isDineIn ? "organizationSlug.label" : "organizationSlug.select.label",
+      )}
+      name={isDineIn ? undefined : "organizationSlug"}
+      onChange={isDineIn ? undefined : handleChange}
+      required={!isDineIn}
+      select={!isDineIn}
       size="small"
       slotProps={{
+        input: isDineIn ? { readOnly: true } : undefined,
         inputLabel: { shrink: true },
-        select: {
-          displayEmpty: true,
-          renderValue: (selected) => {
-            const organization = organizations.find(
-              ({ slug }) => slug === selected,
-            );
+        select: isDineIn
+          ? undefined
+          : {
+              displayEmpty: true,
+              renderValue: (selected) => {
+                const organization = organizations.find(
+                  ({ slug }) => slug === selected,
+                );
 
-            return organization ? (
-              organization.name
-            ) : (
-              <em>{tOrder("organizationSlug.select.placeholder")}</em>
-            );
-          },
-        },
+                return organization ? (
+                  organization.name
+                ) : (
+                  <em>{tOrder("organizationSlug.select.placeholder")}</em>
+                );
+              },
+            },
       }}
-      value={organizationSlug ?? ""}
+      value={isDineIn ? currentOrg?.name || "" : organizationSlug || ""}
     >
-      <MenuItem disabled value="">
-        <em>{tOrder("organizationSlug.select.placeholder")}</em>
-      </MenuItem>
-      {organizations.map(({ id, slug, name }) => (
-        <MenuItem key={id} value={slug}>
-          {name}
-        </MenuItem>
-      ))}
+      {isDineIn
+        ? null
+        : [
+            <MenuItem disabled key="" value="">
+              <em>{tOrder("organizationSlug.select.placeholder")}</em>
+            </MenuItem>,
+            ...organizations.map(({ id, slug, name }) => (
+              <MenuItem key={id} value={slug}>
+                {name}
+              </MenuItem>
+            )),
+          ]}
     </StyledTextField>
   );
 };
