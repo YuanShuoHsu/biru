@@ -2,7 +2,9 @@
 // https://mui.com/material-ui/react-toggle-button/#VerticalSpacingToggleButton.tsx
 // https://mui.com/material-ui/react-radio-button/#RadioButtons.tsx
 
-import { useSearchParams } from "next/navigation";
+"use client";
+
+import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
@@ -24,6 +26,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import type { OrderMode } from "@/types/orderMode";
+import type { RouteParams } from "@/types/routeParams";
 import type { PaymentMethod } from "@/types/payment";
 
 const paymentOptions = (mode: OrderMode | null) => [
@@ -101,8 +104,7 @@ const VerticalSpacingToggleButton = ({
   payment,
   setPayment,
 }: VerticalSpacingToggleButtonProps) => {
-  const searchParams = useSearchParams();
-  const mode = searchParams.get("mode") as OrderMode | null;
+  const { mode = null } = useParams<Partial<RouteParams>>();
 
   const handlePaymentChange = (
     _: React.MouseEvent<HTMLElement>,

@@ -6,18 +6,19 @@ import HorizontalLinearStepper from "@/components/HorizontalLinearStepper";
 
 import { routing } from "@/i18n/routing";
 
-interface OrderOrganizationSlugStepperLayoutProps {
+interface OrderModeOrganizationSlugStepperLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     locale: string;
+    mode: string;
     organizationSlug: string;
   }>;
 }
 
-const OrderOrganizationSlugStepperLayout = async ({
+const OrderModeOrganizationSlugStepperLayout = async ({
   children,
   params,
-}: OrderOrganizationSlugStepperLayoutProps) => {
+}: OrderModeOrganizationSlugStepperLayoutProps) => {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
@@ -31,4 +32,4 @@ const OrderOrganizationSlugStepperLayout = async ({
   );
 };
 
-export default OrderOrganizationSlugStepperLayout;
+export default OrderModeOrganizationSlugStepperLayout;

@@ -11,20 +11,23 @@ import type { Locale } from "@/i18n/routing";
 
 import type { Organization } from "@/types/organizations";
 
-interface OrderOrganizationSlugPageProps {
-  params: Promise<{ locale: Locale; organizationSlug: Organization["slug"] }>;
+interface OrderModeOrganizationSlugPageProps {
+  params: Promise<{
+    locale: Locale;
+    mode: string;
+    organizationSlug: Organization["slug"];
+  }>;
   searchParams: Promise<{
-    mode?: string;
     tableNumber?: string;
     partySize?: string;
   }>;
 }
 
-const OrderOrganizationSlugPage = async ({
+const OrderModeOrganizationSlugPage = async ({
   params,
   searchParams,
-}: OrderOrganizationSlugPageProps) => {
-  const [{ locale, organizationSlug }, { mode, tableNumber, partySize }] =
+}: OrderModeOrganizationSlugPageProps) => {
+  const [{ locale, mode, organizationSlug }, { tableNumber, partySize }] =
     await Promise.all([params, searchParams]);
 
   setRequestLocale(locale);
@@ -57,4 +60,4 @@ const OrderOrganizationSlugPage = async ({
   return <OrderMenuContent />;
 };
 
-export default OrderOrganizationSlugPage;
+export default OrderModeOrganizationSlugPage;

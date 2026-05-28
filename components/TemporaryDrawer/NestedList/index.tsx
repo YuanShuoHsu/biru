@@ -63,14 +63,12 @@ const StyledDivider = styled(Divider, {
   marginLeft: theme.spacing(level * 2),
 }));
 
-// 等 order 完成後要修正
 const DineInMenuItem = () => {
-  const { organizationSlug } = useParams<RouteParams>();
+  const { mode, organizationSlug } = useParams<RouteParams>();
 
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const mode = searchParams.get("mode");
   const tableNumber = searchParams.get("tableNumber");
   const partySize = searchParams.get("partySize");
 
@@ -83,7 +81,7 @@ const DineInMenuItem = () => {
 
   const handleClick = () =>
     router.push(
-      getHref(`/order/${organizationSlug}`, { mode, tableNumber, partySize }),
+      getHref(`/order/${mode}/${organizationSlug}`, { tableNumber, partySize }),
     );
 
   return (
@@ -141,16 +139,14 @@ const DineInMenuItem = () => {
   );
 };
 
-// 未來需要跟 breadcrumbs 一起復用重構
 const useNavItems = (): MenuItem[] => {
   const { session } = useAuthStore((state) => state);
 
-  const { organizationSlug } = useParams<RouteParams>();
+  const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
-  const mode = searchParams.get("mode");
   const redirectTo = searchParams.get("redirectTo");
   const isAuthPage = pathname.startsWith("/auth");
   const isCompanyPage = pathname.startsWith("/company");
@@ -183,7 +179,7 @@ const useNavItems = (): MenuItem[] => {
     {
       icon: LocalMall,
       label: tOrder("mode.pickup.label"),
-      to: `?mode=${ORDER_MODE.Pickup}`,
+      to: `/${ORDER_MODE.Pickup}`,
     },
   ];
 

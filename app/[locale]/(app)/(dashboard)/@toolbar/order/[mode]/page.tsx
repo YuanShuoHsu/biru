@@ -2,10 +2,10 @@ import { Suspense } from "react";
 
 import OrderOrganizationSlugSelect from "@/components/OrderOrganizationSlugSelect";
 
-const SubheaderOrderOrganizationSlugPage = () => (
+const ToolbarOrderModePage = () => (
   <Suspense>
     <OrderOrganizationSlugSelect />
   </Suspense>
 );
 
-export default SubheaderOrderOrganizationSlugPage;
+export default ToolbarOrderModePage;

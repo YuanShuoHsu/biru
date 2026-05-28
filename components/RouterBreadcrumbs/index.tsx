@@ -4,7 +4,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
@@ -79,10 +79,7 @@ interface BreadcrumbItem {
 }
 
 const useBreadcrumbs = (): BreadcrumbItem[] => {
-  const { organizationSlug } = useParams<RouteParams>();
-
-  const searchParams = useSearchParams();
-  const mode = searchParams.get("mode");
+  const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
   const organization = useOrganization();
   const storeName = organization?.name || "";
@@ -108,11 +105,19 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
 
   const orderChildren: BreadcrumbItem[] = [
     {
-      children: storeChildren,
-      disabled: !isPickup,
-      icon: Storefront,
-      label: storeName,
-      to: `/${organizationSlug}`,
+      hidden: true,
+      icon: ShoppingCart,
+      label: mode ?? "",
+      to: `/${mode}`,
+      children: [
+        {
+          children: storeChildren,
+          disabled: !isPickup,
+          icon: Storefront,
+          label: storeName,
+          to: `/${organizationSlug}`,
+        },
+      ],
     },
   ];
 

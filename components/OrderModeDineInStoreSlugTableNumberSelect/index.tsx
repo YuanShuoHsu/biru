@@ -26,7 +26,7 @@ const OrderModeDineInStoreSlugTableNumberSelect = ({
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     router.push(
-      `/order/${organizationSlug}?mode=${ORDER_MODE.DineIn}&tableNumber=${tableNumber}&partySize=${event.target.value}`,
+      `/order/${ORDER_MODE.DineIn}/${organizationSlug}?tableNumber=${tableNumber}&partySize=${event.target.value}`,
     );
 
   return (

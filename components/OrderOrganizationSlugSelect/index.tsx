@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
@@ -16,10 +16,7 @@ import type { RouteParams } from "@/types/routeParams";
 const OrderOrganizationSlugSelect = () => {
   const router = useRouter();
 
-  const { organizationSlug } = useParams<Partial<RouteParams>>();
-
-  const searchParams = useSearchParams();
-  const mode = searchParams.get("mode");
+  const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
   const organizations = useOrganizations();
 
@@ -32,7 +29,7 @@ const OrderOrganizationSlugSelect = () => {
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/order/${event.target.value}?mode=${ORDER_MODE.Pickup}`);
+    router.push(`/order/${ORDER_MODE.Pickup}/${event.target.value}`);
 
   if (isDineIn) {
     return (
