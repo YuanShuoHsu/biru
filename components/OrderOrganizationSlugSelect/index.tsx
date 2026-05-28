@@ -9,9 +9,15 @@ import { useOrganizations } from "@/hooks/organizations";
 
 import { useRouter } from "@/i18n/navigation";
 
-import { MenuItem, TextField } from "@mui/material";
+import { MenuItem, TextField, styled } from "@mui/material";
 
 import type { RouteParams } from "@/types/routeParams";
+
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  [theme.breakpoints.up("sm")]: {
+    width: theme.spacing(30),
+  },
+}));
 
 const OrderOrganizationSlugSelect = () => {
   const router = useRouter();
@@ -33,7 +39,8 @@ const OrderOrganizationSlugSelect = () => {
 
   if (isDineIn) {
     return (
-      <TextField
+      <StyledTextField
+        fullWidth
         label={tOrder("organizationSlug.label")}
         size="small"
         slotProps={{
@@ -46,8 +53,9 @@ const OrderOrganizationSlugSelect = () => {
   }
 
   return (
-    <TextField
+    <StyledTextField
       label={tOrder("organizationSlug.select.label")}
+      fullWidth
       name="organizationSlug"
       onChange={handleChange}
       required
@@ -80,7 +88,7 @@ const OrderOrganizationSlugSelect = () => {
           {name}
         </MenuItem>
       ))}
-    </TextField>
+    </StyledTextField>
   );
 };
 

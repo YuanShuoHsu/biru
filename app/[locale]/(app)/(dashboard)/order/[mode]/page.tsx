@@ -2,8 +2,6 @@ import { notFound } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import type { OrderMode } from "@/types/orderMode";
-
 interface OrderModePageProps {
   params: Promise<{ mode: string }>;
 }
@@ -11,7 +9,7 @@ interface OrderModePageProps {
 const OrderModePage = async ({ params }: OrderModePageProps) => {
   const { mode } = await params;
 
-  const validModes: string[] = Object.values(ORDER_MODE) as OrderMode[];
+  const validModes: string[] = Object.values(ORDER_MODE);
   if (!validModes.includes(mode)) return notFound();
 
   return null;

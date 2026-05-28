@@ -8,6 +8,12 @@ import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
 
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
+const StyledTextField = styled(TextField)(({ theme }) => ({
+  [theme.breakpoints.up("sm")]: {
+    width: theme.spacing(30),
+  },
+}));
+
 const StyledIconButton = styled(IconButton, {
   shouldForwardProp: (prop) => prop !== "visible",
 })<{ visible: boolean }>(({ theme, visible }) => ({
@@ -36,7 +42,7 @@ const OrderSearch = () => {
     event.preventDefault();
 
   return (
-    <TextField
+    <StyledTextField
       fullWidth
       onChange={handleChange}
       placeholder={tOrder("mode.storeSlug.tableNumber.search.placeholder")}
