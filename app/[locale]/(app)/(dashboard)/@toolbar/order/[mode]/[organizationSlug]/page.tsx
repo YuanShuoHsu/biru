@@ -1,13 +1,7 @@
-import OrderSearch from "@/components/OrderSearch";
-import ViewToggleButtons from "@/components/ViewToggleButtons";
-
-import { Stack } from "@mui/material";
+import OrderOrganizationSlugSelect from "@/components/OrderOrganizationSlugSelect";
 
 const ToolbarOrderModeOrganizationSlugPage = () => (
-  <Stack direction="row" alignItems="center" gap={2}>
-    <OrderSearch />
-    <ViewToggleButtons />
-  </Stack>
+  <OrderOrganizationSlugSelect />
 );
 
 export default ToolbarOrderModeOrganizationSlugPage;

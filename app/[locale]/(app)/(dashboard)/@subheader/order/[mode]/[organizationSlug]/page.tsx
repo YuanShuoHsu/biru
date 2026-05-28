@@ -1,11 +1,13 @@
-import { Suspense } from "react";
+import OrderSearch from "@/components/OrderSearch";
+import ViewToggleButtons from "@/components/ViewToggleButtons";
 
-import OrderOrganizationSlugSelect from "@/components/OrderOrganizationSlugSelect";
+import { Stack } from "@mui/material";
 
 const SubheaderOrderModeOrganizationSlugPage = () => (
-  <Suspense>
-    <OrderOrganizationSlugSelect />
-  </Suspense>
+  <Stack direction="row" alignItems="center" gap={2}>
+    <OrderSearch />
+    <ViewToggleButtons />
+  </Stack>
 );
 
 export default SubheaderOrderModeOrganizationSlugPage;
