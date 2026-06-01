@@ -107,7 +107,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
     {
       hidden: true,
       icon: ShoppingCart,
-      label: mode ?? "",
+      label: mode || "",
       to: `/${mode}`,
       children: [
         {
