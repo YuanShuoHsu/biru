@@ -26,8 +26,10 @@ import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
-import type { Option } from "@/types/menu";
+import type { components } from "@/types/api";
 import type { ViewDirection } from "@/types/view";
+
+import type { Option } from "@/utils/menus";
 
 const StyledCard = styled(Card)({
   position: "relative",
@@ -113,28 +115,22 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
 // });
 
 export interface ActionAreaCardProps {
-  id: string;
-  name: string;
-  description: string;
-  image: string | null;
+  item: components["schemas"]["OrderMenuItemResponseDto"];
   options: Option[];
-  price: number;
-  stock: number | null;
   showLatest: boolean;
   topSoldRank?: number;
 }
 
 const ActionAreaCard = ({
-  id,
-  name,
-  description,
-  image,
+  item,
   options,
-  price,
-  stock,
   showLatest,
   topSoldRank,
 }: ActionAreaCardProps) => {
+  const { id, name, description, image, offers } = item;
+  const offer = offers[0];
+  const price = parseFloat(offer?.price ?? "0") || 0;
+  const stock = offer?.inventoryLevel?.value ?? null;
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
   const locale = useLocale();
@@ -149,8 +145,6 @@ const ActionAreaCard = ({
   const tOrder = useTranslations("order");
 
   const viewDirection = ViewDirections[view];
-
-  const displayPrice = price.toLocaleString(locale);
 
   // const sizes = options?.find(({ id }) => id === "size")?.choices;
 
@@ -168,14 +162,9 @@ const ActionAreaCard = ({
       confirmText: tDialog("addToCart"),
       content: (
         <CardDialogContent
-          id={id}
-          name={name}
-          description={description}
-          image={image}
+          item={item}
           menus={menus}
           options={options}
-          price={price}
-          stock={stock}
           ref={dialogRef}
         />
       ),
@@ -250,7 +239,7 @@ const ActionAreaCard = ({
               />
             ))} */}
             <Typography color="text.primary" variant="subtitle2">
-              {`${tCommon("currency")} ${displayPrice} ${hasExtraCost ? tCommon("from") : ""}`}
+              {`${tCommon("currency")} ${price} ${hasExtraCost ? tCommon("from") : ""}`}
             </Typography>
           </Stack>
           {description && (

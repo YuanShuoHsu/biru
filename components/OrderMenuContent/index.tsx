@@ -4,7 +4,7 @@
 "use client";
 
 import dayjs from "dayjs";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 import OrderBottomBar from "./OrderBottomBar";
@@ -18,12 +18,7 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
-import {
-  LATEST,
-  NEW_PRODUCT_DAYS,
-  TOP_SOLD,
-  TOP_SOLD_LIMIT,
-} from "@/constants/tab";
+import { LATEST, NEW_PRODUCT_DAYS } from "@/constants/tab";
 
 import { Stack, Tab, Tabs, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -62,8 +57,6 @@ const StyledTabs = styled(Tabs, {
 }));
 
 const OrderMenuContent = () => {
-  const locale = useLocale();
-
   const { menus } = useMenuStore((state) => state);
 
   const { orderSearchText } = useOrderSearchStore((state) => state);
@@ -75,28 +68,33 @@ const OrderMenuContent = () => {
 
   const tOrder = useTranslations("order");
 
+  console.log(menus);
+
   const categoryGroups = menus
-    .map(({ id, name, items }) => ({
+    .map(({ id, name, menuItems }) => ({
       id,
       label: name,
-      items: items.filter(({ isActive }) => isActive),
+      items: menuItems.filter(
+        ({ offers }) => offers[0]?.availability !== "Discontinued",
+      ),
     }))
     .filter(({ items }) => items.length > 0);
 
   const allItems = categoryGroups.flatMap(({ items }) => items);
 
-  const topSoldItems = [...allItems]
-    .sort((a, b) => b.sold - a.sold)
-    .slice(0, TOP_SOLD_LIMIT);
+  // TODO: 需等訂單系統完成後，後端補上 sold 欄位才能啟用
+  // const topSoldItems = [...allItems]
+  //   .sort((a, b) => b.sold - a.sold)
+  //   .slice(0, TOP_SOLD_LIMIT);
 
-  const topSoldGroups =
-    topSoldItems.length > 0
-      ? {
-          id: TOP_SOLD,
-          items: topSoldItems,
-          label: tOrder("mode.storeSlug.tableNumber.topSold"),
-        }
-      : null;
+  // const topSoldGroups =
+  //   topSoldItems.length > 0
+  //     ? {
+  //         id: TOP_SOLD,
+  //         items: topSoldItems,
+  //         label: tOrder("mode.storeSlug.tableNumber.topSold"),
+  //       }
+  //     : null;
 
   const latestItems = allItems.filter(
     ({ createdAt }) =>
@@ -113,7 +111,7 @@ const OrderMenuContent = () => {
       : null;
 
   const combinedGroups = [
-    ...(topSoldGroups ? [topSoldGroups] : []),
+    // ...(topSoldGroups ? [topSoldGroups] : []),
     ...(latestGroups ? [latestGroups] : []),
     ...categoryGroups,
   ];
@@ -164,11 +162,7 @@ const OrderMenuContent = () => {
         </StyledTabs>
         {filteredGroups.map(({ id, items }, index) => (
           <CustomTabPanel index={index} key={id} value={displayIndex}>
-            <ResponsiveGrid
-              items={items}
-              showLatest={id === LATEST}
-              showTopSold={id === TOP_SOLD}
-            />
+            <ResponsiveGrid groupId={id} items={items} />
           </CustomTabPanel>
         ))}
       </Stack>
