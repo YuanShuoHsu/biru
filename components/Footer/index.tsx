@@ -8,7 +8,7 @@ import LinkSection from "./LinkSection";
 import Newsletter from "./Newsletter";
 import SocialLinks from "./SocialLinks";
 
-import { Box, Container, Divider, Grid, Stack } from "@mui/material";
+import { Box, Container, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const StyledContainer = styled(Container)(({ theme }) => ({
@@ -21,10 +21,8 @@ const StyledContainer = styled(Container)(({ theme }) => ({
 const Footer = () => (
   <Box component="footer" bgcolor="background.paper">
     <StyledContainer disableGutters maxWidth="lg">
-      <Grid container spacing={2}>
-        <Newsletter />
-        <LinkSection />
-      </Grid>
+      <Newsletter />
+      <LinkSection />
       <Divider />
       <Stack
         direction={{ xs: "column", sm: "row" }}
