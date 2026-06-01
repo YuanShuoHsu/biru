@@ -1,15 +1,13 @@
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
 import { locales } from "@/constants/locale";
-
-import { LocaleEnum } from "@/enums/Locale";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
@@ -32,7 +30,6 @@ import type {
   EcpayLanguage,
 } from "@/types/ecpay/createEcpayDto";
 import type { PaymentMethod } from "@/types/payment";
-import type { RouteParams } from "@/types/routeParams";
 
 import { getChoiceNames, getItemName } from "@/utils/menu";
 
@@ -62,9 +59,12 @@ const CustomerPaymentForm = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
-  const { locale } = useParams<RouteParams>();
+  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
+    (state) => state,
+  );
+  const { menus } = useMenuStore((state) => state);
 
-  const router = useRouter();
+  const locale = useLocale();
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -74,10 +74,7 @@ const CustomerPaymentForm = () => {
   const completePath = `${pathname.replace("/checkout", "/complete")}${query}`;
   // const isDineIn = mode === ORDER_MODE.DineIn;
 
-  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
-    (state) => state,
-  );
-  const { menus } = useMenuStore((state) => state);
+  const router = useRouter();
 
   const { isMutating, trigger } = useSWRMutation("/api/ecpay", sendRequest);
 
