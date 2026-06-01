@@ -23,10 +23,9 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
-import type { components } from "@/types/api";
+import type { OrderMenu, OrderMenuItem } from "@/types/menus";
 
 import type { Option } from "@/utils/menus";
-
 import { getLimitingChoicesCap } from "@/utils/menus";
 
 const ImageBox = styled(Box)(({ theme }) => ({
@@ -54,8 +53,8 @@ export interface CardDialogContentImperativeHandle {
 }
 
 interface CardDialogContentProps {
-  menuItem: components["schemas"]["OrderMenuItemResponseDto"];
-  menus: components["schemas"]["OrderMenuResponseDto"][];
+  menuItem: OrderMenuItem;
+  menus: OrderMenu[];
   options: Option[];
 }
 

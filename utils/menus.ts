@@ -1,7 +1,4 @@
-import type { components } from "@/types/api";
-
-type Menu = components["schemas"]["OrderMenuResponseDto"];
-type MenuItem = components["schemas"]["OrderMenuItemResponseDto"];
+import type { OrderMenu, OrderMenuItem } from "@/types/menus";
 
 export interface Choice {
   id: string;
@@ -35,17 +32,23 @@ export const getItemKey = (
   return parts.length > 0 ? `${itemId}_${parts.join("_")}` : itemId;
 };
 
-const findItemById = (menus: Menu[], itemId: string): MenuItem | undefined =>
+const findItemById = (
+  menus: OrderMenu[],
+  itemId: string,
+): OrderMenuItem | undefined =>
   menus.flatMap(({ menuItems }) => menuItems).find(({ id }) => id === itemId);
 
-export const getItemName = (menus: Menu[], itemId: string): string => {
+export const getItemName = (menus: OrderMenu[], itemId: string): string => {
   const item = findItemById(menus, itemId);
   if (!item) return "";
 
   return item.name;
 };
 
-export const getItemStock = (menus: Menu[], itemId: string): number | null => {
+export const getItemStock = (
+  menus: OrderMenu[],
+  itemId: string,
+): number | null => {
   const item = findItemById(menus, itemId);
   if (!item) return 0;
 
@@ -64,14 +67,14 @@ const getOptionChoiceName = (option: Option, choiceId: string): string => {
 };
 
 const findItemOptionById = (
-  item: MenuItem & { options: Option[] },
+  item: OrderMenuItem & { options: Option[] },
   optionId: string,
 ): Option | undefined => item.options.find(({ id }) => id === optionId);
 
 type OptionLimitResult = { cap: number; names: string[] };
 
 export const getLimitingChoicesCap = (
-  menus: Menu[],
+  menus: OrderMenu[],
   id: string,
   choices: Record<string, string[]>,
   getChoiceAvailableQuantity: (
@@ -82,7 +85,7 @@ export const getLimitingChoicesCap = (
   ) => number,
 ): OptionLimitResult => {
   const item = findItemById(menus, id) as
-    | (MenuItem & { options: Option[] })
+    | (OrderMenuItem & { options: Option[] })
     | undefined;
   if (!item) return { cap: Infinity, names: [] };
 
@@ -130,13 +133,13 @@ interface CommonSeparators {
 }
 
 export const getChoiceNames = (
-  menus: Menu[],
+  menus: OrderMenu[],
   itemId: string,
   choices: Record<string, string[]>,
   { colon, delimiter, joinWith = "\n" }: CommonSeparators,
 ): string => {
   const item = findItemById(menus, itemId) as
-    | (MenuItem & { options: Option[] })
+    | (OrderMenuItem & { options: Option[] })
     | undefined;
   if (!item) return "";
 
