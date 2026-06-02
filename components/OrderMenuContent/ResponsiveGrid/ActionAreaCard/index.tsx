@@ -21,7 +21,6 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
-import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
@@ -101,6 +100,15 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const OriginalPriceTypography = styled(Typography, {
+  shouldForwardProp: (prop) => prop !== "isPromo",
+})<{ isPromo: boolean }>(({ isPromo }) => ({
+  ...(isPromo && {
+    textDecoration: "line-through",
+    lineHeight: 1.2,
+  }),
+}));
+
 // const SizeOptionChip = styled(Chip)({
 //   "& .MuiChip-label": {
 //     padding: 0,
@@ -117,18 +125,35 @@ export interface ActionAreaCardProps {
 const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
   const { id, name, description, image, offers } = menuItem;
   const offer = offers[0];
-  // const price = parseFloat(offer?.price ?? "0") || 0;
-  const stock = offer?.inventoryLevel?.value ?? null;
-  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
+  const price = Number(offer.price);
+  const priceCurrency = offer.priceCurrency;
+  const stock = offer.inventoryLevel?.value;
+  const availability = offer.availability;
 
-  // const locale = useLocale();
+  const promoPrice = (() => {
+    const priceSpecification = offer.priceSpecification;
+    if (!priceSpecification) return null;
+
+    const now = new Date();
+    const validFrom = priceSpecification.validFrom
+      ? new Date(priceSpecification.validFrom)
+      : null;
+    const validThrough = priceSpecification.validThrough
+      ? new Date(priceSpecification.validThrough)
+      : null;
+
+    if (validFrom && now < validFrom) return null;
+    if (validThrough && now > validThrough) return null;
+
+    return Number(priceSpecification.price);
+  })();
+
+  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
 
   const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);
-  const { menus } = useMenuStore((state) => state);
   const { view } = useViewStore((state) => state);
 
-  // const tCommon = useTranslations("common");
   const tDialog = useTranslations("dialog");
   // const tOrder = useTranslations("order");
 
@@ -140,7 +165,8 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
   //   choices.some(({ extraCost }) => extraCost > 0),
   // );
 
-  const isItemOutOfStock = stock === 0;
+  const isItemOutOfStock =
+    stock === 0 || availability === "OutOfStock" || availability === "SoldOut";
 
   const handleDialogClick = () => {
     if (isItemOutOfStock) return;
@@ -151,7 +177,6 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
       content: (
         <CardDialogContent
           menuItem={menuItem}
-          menus={menus}
           options={[]}
           ref={dialogRef}
         />
@@ -217,19 +242,30 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
           )}
         </ImageBox>
         <StyledCardContent>
-          <Typography variant="h6">{name}</Typography>
-          <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap">
-            {/* {sizes?.map(({ name }) => (
+          <Typography variant="subtitle1">{name}</Typography>
+          {/* <Stack direction="row" alignItems="center" gap={1} flexWrap="wrap"> */}
+          {/* {sizes?.map(({ name }) => (
               <SizeOptionChip
                 key={name[locale]}
                 label={name[locale]}
                 size="small"
               />
             ))} */}
-            {/* <Typography color="text.primary" variant="subtitle2">
-              {`${tCommon("currency")} ${price} ${hasExtraCost ? tCommon("from") : ""}`}
-            </Typography> */}
+          <Stack>
+            <OriginalPriceTypography
+              color={promoPrice !== null ? "text.disabled" : "text.primary"}
+              isPromo={promoPrice !== null}
+              variant={promoPrice !== null ? "caption" : "subtitle2"}
+            >
+              {`${priceCurrency} ${price}`}
+            </OriginalPriceTypography>
+            {promoPrice !== null && (
+              <Typography color="error" variant="subtitle2">
+                {`${priceCurrency} ${promoPrice}`}
+              </Typography>
+            )}
           </Stack>
+          {/* </Stack> */}
           {description && (
             <Typography color="text.secondary" variant="body2">
               {description}
