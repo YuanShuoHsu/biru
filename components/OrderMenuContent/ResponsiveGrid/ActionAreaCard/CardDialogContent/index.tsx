@@ -1,6 +1,8 @@
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import React, { useEffect, useImperativeHandle, useState } from "react";
+import { useEffect, useState } from "react";
+
+import FormBox from "@/components/FormBox";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
@@ -42,35 +44,28 @@ const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-export interface CardDialogContentImperativeHandle {
-  getValues: () => {
-    amount: number;
-    extraCost: number;
-    price: number;
-    quantity: number;
-    choices: Record<string, string[]>;
-  };
-}
-
 interface CardDialogContentProps {
   menuItem: OrderMenuItem;
   menus: OrderMenu[];
   options: Option[];
 }
 
-const CardDialogContent = React.forwardRef<
-  CardDialogContentImperativeHandle,
-  CardDialogContentProps
->(({ menuItem, menus, options }, ref) => {
+const CardDialogContent = ({
+  menuItem,
+  menus,
+  options,
+}: CardDialogContentProps) => {
   const { id, name, description, image, offers } = menuItem;
   const offer = offers[0];
   const price = parseFloat(offer?.price ?? "0") || 0;
   const stock = offer?.inventoryLevel?.value ?? null;
   const [rawQuantity, setRawQuantity] = useState(1);
 
-  const { getCartItemTotalQuantity, getChoiceAvailableQuantity } = useCartStore(
-    (state) => state,
-  );
+  const {
+    getCartItemTotalQuantity,
+    getChoiceAvailableQuantity,
+    updateCartItem,
+  } = useCartStore((state) => state);
 
   const initialChoices = options.reduce<Record<string, string[]>>(
     (acc, { id: optionId, choices: optionChoices, multiple, required }) => {
@@ -130,7 +125,7 @@ const CardDialogContent = React.forwardRef<
     Math.max(Math.min(value, availableToAdd), minQuantity);
   const quantity = clampQuantity(rawQuantity);
 
-  const { setDialog } = useDialogStore((state) => state);
+  const { closeDialog, setDialog } = useDialogStore((state) => state);
 
   useEffect(() => {
     setDialog({ confirmDisabled: quantity <= 0 });
@@ -174,28 +169,32 @@ const CardDialogContent = React.forwardRef<
             })
           : "";
 
-  useImperativeHandle(
-    ref,
-    () => ({
-      getValues: () => ({
-        amount,
-        extraCost,
-        price,
-        quantity,
-        choices,
-      }),
-    }),
-    [amount, extraCost, price, quantity, choices],
-  );
-
   const handleDecreaseQuantity = () =>
     setRawQuantity((prev) => clampQuantity(prev - 1));
 
   const handleIncreaseQuantity = () =>
     setRawQuantity((prev) => clampQuantity(prev + 1));
 
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (quantity <= 0) return;
+
+    updateCartItem({
+      id,
+      amount,
+      extraCost,
+      image: image || null,
+      price,
+      quantity,
+      choices,
+    });
+
+    closeDialog();
+  };
+
   return (
-    <Stack direction="column" gap={2}>
+    <FormBox id="add-to-cart-form" onSubmit={handleSubmit}>
       <ImageBox>
         {image && (
           <Image
@@ -373,10 +372,8 @@ const CardDialogContent = React.forwardRef<
           />
         </Grid>
       </Grid>
-    </Stack>
+    </FormBox>
   );
-});
-
-CardDialogContent.displayName = "CardDialogContent";
+};
 
 export default CardDialogContent;

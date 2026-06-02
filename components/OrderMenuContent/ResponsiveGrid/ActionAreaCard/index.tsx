@@ -1,10 +1,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { useRef } from "react";
 
-import CardDialogContent, {
-  CardDialogContentImperativeHandle,
-} from "./CardDialogContent";
+import CardDialogContent from "./CardDialogContent";
 import ItemSoldOut from "./ItemSoldOut";
 
 import { ViewDirections } from "@/constants/view";
@@ -20,7 +17,6 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
@@ -125,7 +121,7 @@ export interface ActionAreaCardProps {
 }
 
 const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
-  const { id, name, description, image, offers, suitableForDiet, nutrition } =
+  const { name, description, image, offers, suitableForDiet, nutrition } =
     menuItem;
   const offer = offers[0];
   const price = Number(offer.price);
@@ -151,9 +147,6 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
     return { price: Number(priceSpecification.price), validThrough };
   })();
 
-  const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
-
-  const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);
   const { menus } = useMenuStore((state) => state);
   const { view } = useViewStore((state) => state);
@@ -184,27 +177,9 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
           menus={menus}
           menuItem={menuItem}
           options={[]}
-          ref={dialogRef}
         />
       ),
-      onConfirm: async () => {
-        if (!dialogRef.current) return;
-
-        const { amount, extraCost, price, quantity, choices } =
-          dialogRef.current.getValues();
-
-        if (quantity <= 0) return;
-
-        updateCartItem({
-          id,
-          amount,
-          extraCost,
-          image: image || null,
-          price,
-          quantity,
-          choices,
-        });
-      },
+      formId: "add-to-cart-form",
       open: true,
       title: name,
     });
