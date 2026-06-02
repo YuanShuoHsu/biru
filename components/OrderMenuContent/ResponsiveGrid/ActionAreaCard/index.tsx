@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
+import { useMenuStore } from "@/providers/menu-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
@@ -152,6 +153,7 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
 
   const { updateCartItem } = useCartStore((state) => state);
   const { setDialog } = useDialogStore((state) => state);
+  const { menus } = useMenuStore((state) => state);
   const { view } = useViewStore((state) => state);
 
   const tDialog = useTranslations("dialog");
@@ -175,7 +177,12 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
       cancelText: tDialog("close"),
       confirmText: tDialog("addToCart"),
       content: (
-        <CardDialogContent menuItem={menuItem} options={[]} ref={dialogRef} />
+        <CardDialogContent
+          menus={menus}
+          menuItem={menuItem}
+          options={[]}
+          ref={dialogRef}
+        />
       ),
       onConfirm: async () => {
         if (!dialogRef.current) return;

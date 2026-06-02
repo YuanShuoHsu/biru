@@ -22,9 +22,8 @@ import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
-import { useMenuStore } from "@/providers/menu-store-provider";
 
-import type { OrderMenuItem } from "@/types/menus";
+import type { OrderMenu, OrderMenuItem } from "@/types/menus";
 
 import type { Option } from "@/utils/menus";
 import { getLimitingChoicesCap } from "@/utils/menus";
@@ -54,6 +53,7 @@ export interface CardDialogContentImperativeHandle {
 }
 
 interface CardDialogContentProps {
+  menus: OrderMenu[];
   menuItem: OrderMenuItem;
   options: Option[];
 }
@@ -61,8 +61,7 @@ interface CardDialogContentProps {
 const CardDialogContent = React.forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ menuItem, options }, ref) => {
-  const { menus } = useMenuStore((state) => state);
+>(({ menus, menuItem, options }, ref) => {
   const { id, name, description, image, offers } = menuItem;
   const offer = offers[0];
   const price = parseFloat(offer?.price ?? "0") || 0;
