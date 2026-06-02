@@ -175,11 +175,7 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
       cancelText: tDialog("close"),
       confirmText: tDialog("addToCart"),
       content: (
-        <CardDialogContent
-          menuItem={menuItem}
-          options={[]}
-          ref={dialogRef}
-        />
+        <CardDialogContent menuItem={menuItem} options={[]} ref={dialogRef} />
       ),
       onConfirm: async () => {
         if (!dialogRef.current) return;
