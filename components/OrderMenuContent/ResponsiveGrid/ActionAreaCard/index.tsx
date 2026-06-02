@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useRef } from "react";
 
@@ -133,7 +133,7 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
   const stock = offer.inventoryLevel?.value;
   const availability = offer.availability;
 
-  const promoPrice = (() => {
+  const promoInfo = (() => {
     const priceSpecification = offer.priceSpecification;
     if (!priceSpecification) return null;
 
@@ -148,7 +148,7 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
     if (validFrom && now < validFrom) return null;
     if (validThrough && now > validThrough) return null;
 
-    return Number(priceSpecification.price);
+    return { price: Number(priceSpecification.price), validThrough };
   })();
 
   const dialogRef = useRef<CardDialogContentImperativeHandle>(null);
@@ -160,6 +160,7 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
 
   const tDialog = useTranslations("dialog");
   const tOrder = useTranslations("order");
+  const locale = useLocale();
 
   const viewDirection = ViewDirections[view];
 
@@ -258,15 +259,25 @@ const ActionAreaCard = ({ menuItem }: ActionAreaCardProps) => {
             ))} */}
           <Stack>
             <OriginalPriceTypography
-              color={promoPrice !== null ? "text.disabled" : "text.primary"}
-              isPromo={promoPrice !== null}
-              variant={promoPrice !== null ? "caption" : "subtitle2"}
+              color={promoInfo ? "text.disabled" : "text.primary"}
+              isPromo={!!promoInfo}
+              variant={promoInfo ? "caption" : "subtitle2"}
             >
               {`${priceCurrency} ${price}`}
             </OriginalPriceTypography>
-            {promoPrice !== null && (
+            {promoInfo && (
               <Typography color="error" variant="subtitle2">
-                {`${priceCurrency} ${promoPrice}`}
+                {`${priceCurrency} ${promoInfo.price}`}
+              </Typography>
+            )}
+            {promoInfo?.validThrough && (
+              <Typography color="error" variant="caption">
+                {tOrder("menuItem.promoUntil", {
+                  date: promoInfo.validThrough.toLocaleDateString(locale, {
+                    month: "numeric",
+                    day: "numeric",
+                  }),
+                })}
               </Typography>
             )}
           </Stack>

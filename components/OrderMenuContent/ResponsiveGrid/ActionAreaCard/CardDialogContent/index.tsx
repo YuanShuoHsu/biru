@@ -53,15 +53,15 @@ export interface CardDialogContentImperativeHandle {
 }
 
 interface CardDialogContentProps {
-  menus: OrderMenu[];
   menuItem: OrderMenuItem;
+  menus: OrderMenu[];
   options: Option[];
 }
 
 const CardDialogContent = React.forwardRef<
   CardDialogContentImperativeHandle,
   CardDialogContentProps
->(({ menus, menuItem, options }, ref) => {
+>(({ menuItem, menus, options }, ref) => {
   const { id, name, description, image, offers } = menuItem;
   const offer = offers[0];
   const price = parseFloat(offer?.price ?? "0") || 0;
