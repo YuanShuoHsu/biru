@@ -33,7 +33,7 @@ import { getLimitingChoicesCap } from "@/utils/menus";
 const ImageBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
-  aspectRatio: "4/3",
+  aspectRatio: "16/9",
   borderRadius: theme.shape.borderRadius,
   overflow: "hidden",
 }));

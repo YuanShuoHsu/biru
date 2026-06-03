@@ -28,10 +28,10 @@ const StyledButtonBase = styled(ButtonBase, {
   shouldForwardProp: (prop) =>
     prop !== "aspectRatio" && prop !== "fullWidth" && prop !== "shape",
 })<ButtonBaseProps & ShapeProps>(({ fullWidth, shape, theme }) => ({
-  borderRadius:
-    shape === "square" ? Number(theme.shape.borderRadius) * 2 : "50%",
+  borderRadius: shape === "square" ? theme.shape.borderRadius : "50%",
   ...(fullWidth && {
     width: "100%",
+
     "& .MuiBadge-root": { width: "100%" },
   }),
 
@@ -49,8 +49,7 @@ const StyledAvatar = styled(Avatar, {
   maxWidth: fullWidth ? "100%" : "100px",
   height: "auto",
   aspectRatio,
-  borderRadius:
-    shape === "square" ? Number(theme.shape.borderRadius) * 2 : "50%",
+  borderRadius: shape === "square" ? theme.shape.borderRadius : "50%",
 }));
 
 const VisuallyHiddenInput = styled("input")({
