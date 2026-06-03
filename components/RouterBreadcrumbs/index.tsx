@@ -8,8 +8,6 @@ import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { useOrganization } from "@/hooks/organizations";
-
 import { usePathname } from "@/i18n/navigation";
 
 import {
@@ -78,11 +76,8 @@ interface BreadcrumbItem {
   to: string;
 }
 
-const useBreadcrumbs = (): BreadcrumbItem[] => {
+const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
-
-  const organization = useOrganization();
-  const storeName = organization?.name || "";
 
   const tAuth = useTranslations("auth");
   const tCompany = useTranslations("company");
@@ -120,7 +115,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
           children: storeChildren,
           disabled: !isPickup,
           icon: Storefront,
-          label: storeName,
+          label: organizationName,
           to: `/${organizationSlug}`,
         },
       ],
@@ -260,8 +255,12 @@ const findHiddenTo = (
   return findHiddenTo(nextIndex, pathnames, breadcrumbs);
 };
 
-const RouterBreadcrumbs = () => {
-  const breadcrumbs = useBreadcrumbs();
+interface RouterBreadcrumbsProps {
+  organizationName: string;
+}
+
+const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
+  const breadcrumbs = useBreadcrumbs(organizationName);
 
   const pathname = usePathname();
   const pathnames = pathname.split("/").filter((x) => x);
