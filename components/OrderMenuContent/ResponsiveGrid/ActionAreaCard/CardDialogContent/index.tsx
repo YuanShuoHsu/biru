@@ -3,10 +3,10 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import FormBox from "@/components/FormBox";
+import NumberSpinner from "@/components/NumberSpinner";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 
-import { Add, Remove } from "@mui/icons-material";
 import {
   Box,
   Chip,
@@ -14,10 +14,7 @@ import {
   FormControl,
   FormLabel,
   Grid,
-  IconButton,
-  InputAdornment,
   Stack,
-  TextField,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -58,6 +55,7 @@ const CardDialogContent = ({
   const { id, name, description, image, offers } = menuItem;
   const offer = offers[0];
   const price = parseFloat(offer?.price ?? "0") || 0;
+  const priceCurrency = offer?.priceCurrency;
   const stock = offer?.inventoryLevel?.value ?? null;
   const [rawQuantity, setRawQuantity] = useState(1);
 
@@ -168,12 +166,6 @@ const CardDialogContent = ({
               quantity: availableToAdd,
             })
           : "";
-
-  const handleDecreaseQuantity = () =>
-    setRawQuantity((prev) => clampQuantity(prev - 1));
-
-  const handleIncreaseQuantity = () =>
-    setRawQuantity((prev) => clampQuantity(prev + 1));
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -295,7 +287,7 @@ const CardDialogContent = ({
                                   /
                                 </Typography>
                                 <Typography component="span" variant="caption">
-                                  {tCommon("currency")} {extraCost}
+                                  {priceCurrency} {extraCost}
                                 </Typography>
                               </>
                             )}
@@ -312,7 +304,13 @@ const CardDialogContent = ({
         },
       )}
       <Divider variant="inset" />
-      <Grid container display="flex" alignItems="center" spacing={2}>
+      <Grid
+        width="100%"
+        container
+        display="flex"
+        alignItems="center"
+        spacing={2}
+      >
         <Grid size={{ xs: 5 }}>
           <Typography
             color="primary"
@@ -320,54 +318,18 @@ const CardDialogContent = ({
             fontWeight="bold"
             variant="h6"
           >
-            {tCommon("currency")} {displayPrice}
+            {priceCurrency} {displayPrice}
           </Typography>
         </Grid>
         <Grid size={{ xs: 7 }}>
-          <TextField
+          <NumberSpinner
             disabled={!quantity}
+            error={isAtLimit}
             fullWidth
             helperText={isAtLimit ? formHelperText : undefined}
-            size="small"
-            slotProps={{
-              formHelperText: {
-                error: isAtLimit,
-                sx: { textAlign: "right" },
-              },
-              htmlInput: {
-                sx: { textAlign: "center" },
-              },
-              input: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      aria-label="decrease"
-                      disabled={quantity <= minQuantity}
-                      onClick={handleDecreaseQuantity}
-                      size="small"
-                    >
-                      <Remove fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="increase"
-                      disabled={quantity >= availableToAdd}
-                      onClick={handleIncreaseQuantity}
-                      size="small"
-                    >
-                      <Add fontSize="small" />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                readOnly: true,
-                sx: {
-                  paddingInline: 1,
-                },
-              },
-            }}
+            max={availableToAdd}
+            min={minQuantity}
+            onValueChange={(value) => setRawQuantity(value || minQuantity)}
             value={quantity}
           />
         </Grid>
