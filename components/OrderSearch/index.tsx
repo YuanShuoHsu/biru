@@ -4,7 +4,8 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 
 import { Clear, Search } from "@mui/icons-material";
-import { IconButton, InputAdornment, styled, TextField } from "@mui/material";
+import { IconButton, InputAdornment, TextField } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 

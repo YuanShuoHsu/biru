@@ -42,6 +42,7 @@ import { styled, type Theme } from "@mui/material/styles";
 import type { RouteParams } from "@/types/routeParams";
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
+  flex: 1,
   transition: "none",
 
   "& .MuiBreadcrumbs-separator": {
