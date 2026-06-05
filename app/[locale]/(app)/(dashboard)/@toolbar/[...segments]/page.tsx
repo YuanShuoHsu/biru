@@ -1,3 +1,3 @@
-const ToolbarSlugPage = () => null;
+const ToolbarSegmentsPage = () => null;
 
-export default ToolbarSlugPage;
+export default ToolbarSegmentsPage;

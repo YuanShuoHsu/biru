@@ -1,3 +1,3 @@
-const SubheaderSlugPage = () => null;
+const SubheaderSegmentsPage = () => null;
 
-export default SubheaderSlugPage;
+export default SubheaderSegmentsPage;
