@@ -1531,6 +1531,29 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    /** @enum {string} */
+    MenuFilterField: "name" | "description" | "createdAt" | "updatedAt";
+    /** @enum {string} */
+    FilterOperator:
+      | "contains"
+      | "doesNotContain"
+      | "equals"
+      | "doesNotEqual"
+      | "startsWith"
+      | "endsWith"
+      | "isEmpty"
+      | "isNotEmpty"
+      | "isAnyOf"
+      | "is"
+      | "not"
+      | "after"
+      | "onOrAfter"
+      | "before"
+      | "onOrBefore";
+    /** @enum {string} */
+    MenuSortField: "name" | "description" | "createdAt" | "updatedAt";
+    /** @enum {string} */
+    SortDirection: "asc" | "desc";
     ReorderDto: {
       ids: string[];
       /** @default 0 */
@@ -1727,6 +1750,18 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    /** @enum {string} */
+    AddOnFilterField:
+      | "addOnMenuSectionName"
+      | "addOnMenuItemName"
+      | "createdAt"
+      | "updatedAt";
+    /** @enum {string} */
+    AddOnSortField:
+      | "addOnMenuSectionName"
+      | "addOnMenuItemName"
+      | "createdAt"
+      | "updatedAt";
     UpdateMenuItemAddOnDto: {
       /** @description Add-on menu item ID */
       addOnMenuItemId?: string | null;
@@ -1779,6 +1814,10 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    /** @enum {string} */
+    ModifierFilterField: "displayName" | "createdAt" | "updatedAt";
+    /** @enum {string} */
+    ModifierSortField: "displayName" | "createdAt" | "updatedAt";
     UpdateModifierGroupDto: {
       /** @description 群組名稱 */
       displayName?: Record<string, never>;
@@ -2409,32 +2448,17 @@ export interface operations {
   MenusController_findAllMenuSections: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["MenuFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["MenuSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?: "name" | "description" | "createdAt" | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
         searchField?: "name" | "description";
         searchOperator?: "contains" | "startsWith" | "endsWith";
         searchValue?: string;
-        sortBy?: "name" | "description" | "createdAt" | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -2613,32 +2637,17 @@ export interface operations {
   MenusController_findAllMenuSectionItems: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["MenuFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["MenuSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?: "name" | "description" | "createdAt" | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
         searchField?: "name" | "description";
         searchOperator?: "contains" | "startsWith" | "endsWith";
         searchValue?: string;
-        sortBy?: "name" | "description" | "createdAt" | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -2909,37 +2918,14 @@ export interface operations {
   MenusController_findAllMenuItemAddOns: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["AddOnFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["AddOnSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?:
-          | "addOnMenuSectionName"
-          | "addOnMenuItemName"
-          | "createdAt"
-          | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
-        sortBy?:
-          | "addOnMenuSectionName"
-          | "addOnMenuItemName"
-          | "createdAt"
-          | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -3090,29 +3076,14 @@ export interface operations {
   MenusController_findAllModifierGroups: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["ModifierFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["ModifierSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?: "displayName" | "createdAt" | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
-        sortBy?: "displayName" | "createdAt" | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -3291,29 +3262,14 @@ export interface operations {
   MenusController_findAllModifiers: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["ModifierFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["ModifierSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?: "displayName" | "createdAt" | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
-        sortBy?: "displayName" | "createdAt" | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -3464,29 +3420,14 @@ export interface operations {
   MenusController_findAllMenuItemModifierGroups: {
     parameters: {
       query?: {
+        filterField?: components["schemas"]["ModifierFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        sortBy?: components["schemas"]["ModifierSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
-        filterField?: "displayName" | "createdAt" | "updatedAt";
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
         filterValue?: string;
         quickFilterValue?: string;
-        sortBy?: "displayName" | "createdAt" | "updatedAt";
-        sortDirection?: "asc" | "desc";
         timezone?: string;
       };
       header?: never;
@@ -3759,186 +3700,18 @@ export const pathsApiUsersListGetParametersQuerySortByValues: ReadonlyArray<
 export const pathsApiUsersListGetParametersQuerySortDirectionValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["sortDirection"]
 > = ["asc", "desc"];
-export const pathsApiMenusMenuIdMenuSectionsGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["filterField"]
-> = ["name", "description", "createdAt", "updatedAt"];
-export const pathsApiMenusMenuIdMenuSectionsGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
 export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySearchFieldValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["searchField"]
 > = ["name", "description"];
 export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySearchOperatorValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["searchOperator"]
 > = ["contains", "startsWith", "endsWith"];
-export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["sortBy"]
-> = ["name", "description", "createdAt", "updatedAt"];
-export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
-export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["filterField"]
-> = ["name", "description", "createdAt", "updatedAt"];
-export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
 export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQuerySearchFieldValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["searchField"]
 > = ["name", "description"];
 export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQuerySearchOperatorValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["searchOperator"]
 > = ["contains", "startsWith", "endsWith"];
-export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["sortBy"]
-> = ["name", "description", "createdAt", "updatedAt"];
-export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-sections/{sectionId}/menu-items"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
-export const pathsApiMenuItemsMenuItemIdAddOnsGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/add-ons"]["get"]["parameters"]["query"]["filterField"]
-> = ["addOnMenuSectionName", "addOnMenuItemName", "createdAt", "updatedAt"];
-export const pathsApiMenuItemsMenuItemIdAddOnsGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/add-ons"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
-export const pathsApiMenuItemsMenuItemIdAddOnsGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/add-ons"]["get"]["parameters"]["query"]["sortBy"]
-> = ["addOnMenuSectionName", "addOnMenuItemName", "createdAt", "updatedAt"];
-export const pathsApiMenuItemsMenuItemIdAddOnsGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/add-ons"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
-export const pathsApiMenusMenuIdModifierGroupsGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/modifier-groups"]["get"]["parameters"]["query"]["filterField"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiMenusMenuIdModifierGroupsGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/modifier-groups"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
-export const pathsApiMenusMenuIdModifierGroupsGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/modifier-groups"]["get"]["parameters"]["query"]["sortBy"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiMenusMenuIdModifierGroupsGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menus/{menuId}/modifier-groups"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
-export const pathsApiModifierGroupsGroupIdModifiersGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/modifier-groups/{groupId}/modifiers"]["get"]["parameters"]["query"]["filterField"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiModifierGroupsGroupIdModifiersGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/modifier-groups/{groupId}/modifiers"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
-export const pathsApiModifierGroupsGroupIdModifiersGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/modifier-groups/{groupId}/modifiers"]["get"]["parameters"]["query"]["sortBy"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiModifierGroupsGroupIdModifiersGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/modifier-groups/{groupId}/modifiers"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
-export const pathsApiMenuItemsMenuItemIdModifierGroupsGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/modifier-groups"]["get"]["parameters"]["query"]["filterField"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiMenuItemsMenuItemIdModifierGroupsGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/modifier-groups"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
-export const pathsApiMenuItemsMenuItemIdModifierGroupsGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/modifier-groups"]["get"]["parameters"]["query"]["sortBy"]
-> = ["displayName", "createdAt", "updatedAt"];
-export const pathsApiMenuItemsMenuItemIdModifierGroupsGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/menu-items/{menuItemId}/modifier-groups"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
 export const pathsApiOrganizationsOrganizationIdOrderMenuGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/organizations/{organizationId}/order-menu"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
@@ -4010,6 +3783,34 @@ export const issueInvoiceEcpayDecryptedRequestDtoInvTypeValues: ReadonlyArray<
 export const issueInvoiceEcpayDecryptedRequestDtoVatValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["IssueInvoiceEcpayDecryptedRequestDto"]["vat"]
 > = ["1", "0"];
+export const menuFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuFilterField"]
+> = ["name", "description", "createdAt", "updatedAt"];
+export const filterOperatorValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["FilterOperator"]
+> = [
+  "contains",
+  "doesNotContain",
+  "equals",
+  "doesNotEqual",
+  "startsWith",
+  "endsWith",
+  "isEmpty",
+  "isNotEmpty",
+  "isAnyOf",
+  "is",
+  "not",
+  "after",
+  "onOrAfter",
+  "before",
+  "onOrBefore",
+];
+export const menuSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuSortField"]
+> = ["name", "description", "createdAt", "updatedAt"];
+export const sortDirectionValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["SortDirection"]
+> = ["asc", "desc"];
 export const itemAvailabilityValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ItemAvailability"]
 > = ["InStock", "SoldOut", "Discontinued"];
@@ -4058,6 +3859,18 @@ export const updateMenuItemDtoSuitableForDietValues: ReadonlyArray<
   "VeganDiet",
   "VegetarianDiet",
 ];
+export const addOnFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AddOnFilterField"]
+> = ["addOnMenuSectionName", "addOnMenuItemName", "createdAt", "updatedAt"];
+export const addOnSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AddOnSortField"]
+> = ["addOnMenuSectionName", "addOnMenuItemName", "createdAt", "updatedAt"];
+export const modifierFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ModifierFilterField"]
+> = ["displayName", "createdAt", "updatedAt"];
+export const modifierSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ModifierSortField"]
+> = ["displayName", "createdAt", "updatedAt"];
 export const orderMenuItemResponseDtoSuitableForDietValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderMenuItemResponseDto"]["suitableForDiet"]
 > = [
