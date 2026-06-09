@@ -60,12 +60,12 @@ const OrderOrganizationSlugSelect = ({
           : {
               displayEmpty: true,
               renderValue: (selected) => {
-                const organization = organizations.find(
+                const selectedOrganization = organizations.find(
                   ({ slug }) => slug === selected,
                 );
 
-                return organization ? (
-                  organization.name
+                return selectedOrganization ? (
+                  selectedOrganization.name
                 ) : (
                   <em>{tOrder("organizationSlug.select.placeholder")}</em>
                 );

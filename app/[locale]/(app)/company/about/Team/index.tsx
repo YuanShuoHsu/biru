@@ -116,12 +116,12 @@ const Team = () => {
             select: {
               displayEmpty: true,
               renderValue: (selected) => {
-                const organization = organizations.find(
+                const selectedOrganization = organizations.find(
                   ({ id }) => id === selected,
                 );
 
-                return organization ? (
-                  organization.name
+                return selectedOrganization ? (
+                  selectedOrganization.name
                 ) : (
                   <em>{tCompanyAboutTeam("selectOrganization.placeholder")}</em>
                 );
