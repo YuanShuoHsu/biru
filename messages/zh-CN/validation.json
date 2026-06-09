@@ -27,7 +27,7 @@
     "invalid": "电子邮件无效。"
   },
   "firstName": {
-    "minLength": "名字至少需要 1 个字符。"
+    "required": "名字为必填。"
   },
   "gender": {
     "required": "性别为必填。"

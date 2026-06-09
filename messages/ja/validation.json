@@ -27,7 +27,7 @@
     "invalid": "メールアドレスが無効です。"
   },
   "firstName": {
-    "minLength": "名は1文字以上で入力してください。"
+    "required": "名は必須です。"
   },
   "gender": {
     "required": "性別は必須です。"

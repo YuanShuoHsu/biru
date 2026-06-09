@@ -27,7 +27,7 @@
     "invalid": "이메일이 유효하지 않습니다."
   },
   "firstName": {
-    "minLength": "이름은 1자 이상이어야 합니다."
+    "required": "이름은 필수입니다."
   },
   "gender": {
     "required": "성별은 필수입니다."

@@ -16,6 +16,3 @@ export const localize = (
     ""
   );
 };
-
-export const hasAllLocalizedText = (text?: LocalizedText | null): boolean =>
-  routing.locales.every((lang) => Boolean(text?.[lang]?.trim()));
