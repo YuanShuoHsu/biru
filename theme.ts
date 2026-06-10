@@ -145,6 +145,9 @@ const theme = createTheme({
             top: `${APP_BAR_TOOLBAR_HEIGHT_SM_UP}px !important`,
           },
         },
+        ".notistack-MuiContent": {
+          overflowWrap: "anywhere",
+        },
       }),
     },
     MuiDivider: {
