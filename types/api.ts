@@ -301,7 +301,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** 取得菜單品項詳情 */
+    get: operations["MenusController_findMenuItem"];
     put?: never;
     post?: never;
     /** 刪除菜單品項 */
@@ -692,6 +693,45 @@ export interface components {
        */
       updatedAt: string;
     };
+    /** @enum {string} */
+    UserFilterField:
+      | "name"
+      | "email"
+      | "role"
+      | "banned"
+      | "emailSubscribed"
+      | "createdAt";
+    /** @enum {string} */
+    UserFilterOperator:
+      | "contains"
+      | "doesNotContain"
+      | "equals"
+      | "doesNotEqual"
+      | "startsWith"
+      | "endsWith"
+      | "isEmpty"
+      | "isNotEmpty"
+      | "isAnyOf"
+      | "is"
+      | "not"
+      | "after"
+      | "onOrAfter"
+      | "before"
+      | "onOrBefore";
+    /** @enum {string} */
+    UserSearchField: "name" | "email";
+    /** @enum {string} */
+    UserSearchOperator: "contains" | "startsWith" | "endsWith";
+    /** @enum {string} */
+    UserSortField:
+      | "name"
+      | "email"
+      | "role"
+      | "banned"
+      | "emailSubscribed"
+      | "createdAt";
+    /** @enum {string} */
+    SortDirection: "asc" | "desc";
     UpdateUserDto: {
       /**
        * Format: date
@@ -1552,8 +1592,6 @@ export interface components {
       | "onOrBefore";
     /** @enum {string} */
     MenuSortField: "name" | "description" | "createdAt" | "updatedAt";
-    /** @enum {string} */
-    SortDirection: "asc" | "desc";
     ReorderDto: {
       ids: string[];
       /** @default 0 */
@@ -1885,6 +1923,52 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    OrderMenuAddOnItemResponseDto: {
+      id: string;
+      name: string;
+      image?: string | null;
+      offers: components["schemas"]["OrderMenuOfferResponseDto"][];
+    };
+    OrderMenuAddOnResponseDto: {
+      id: string;
+      menuItemId: string;
+      addOnMenuItemId?: string | null;
+      addOnMenuSectionId?: string | null;
+      sortOrder: number;
+      /** @description 解析後的加購品項（指向品項為單筆；指向區塊為其所有品項） */
+      menuItems: components["schemas"]["OrderMenuAddOnItemResponseDto"][];
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    OrderMenuModifierResponseDto: {
+      id: string;
+      modifierGroupId: string;
+      displayName: string;
+      /** @description 加價金額；null 代表不影響價格 */
+      priceAdjustment?: string | null;
+      availability?: components["schemas"]["ItemAvailability"] | null;
+      sortOrder: number;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    OrderMenuModifierGroupResponseDto: {
+      id: string;
+      displayName: string;
+      /** @description 最少選擇數量；>= 1 代表必選 */
+      minSelectionCount: number;
+      /** @description 最多選擇數量；null 為不限 */
+      maxSelectionCount?: number | null;
+      sortOrder: number;
+      modifiers: components["schemas"]["OrderMenuModifierResponseDto"][];
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
     OrderMenuItemResponseDto: {
       id: string;
       menuId?: string | null;
@@ -1910,6 +1994,8 @@ export interface components {
       nutrition?: components["schemas"]["NutritionInformationDto"] | null;
       sortOrder: number;
       offers: components["schemas"]["OrderMenuOfferResponseDto"][];
+      addOns: components["schemas"]["OrderMenuAddOnResponseDto"][];
+      modifierGroups: components["schemas"]["OrderMenuModifierGroupResponseDto"][];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -2055,30 +2141,9 @@ export interface operations {
     parameters: {
       query?: {
         /** @description Column filter 欄位 */
-        filterField?:
-          | "name"
-          | "email"
-          | "role"
-          | "banned"
-          | "emailSubscribed"
-          | "createdAt";
+        filterField?: components["schemas"]["UserFilterField"];
         /** @description Column filter 運算子 */
-        filterOperator?:
-          | "contains"
-          | "doesNotContain"
-          | "equals"
-          | "doesNotEqual"
-          | "startsWith"
-          | "endsWith"
-          | "isEmpty"
-          | "isNotEmpty"
-          | "isAnyOf"
-          | "is"
-          | "not"
-          | "after"
-          | "onOrAfter"
-          | "before"
-          | "onOrBefore";
+        filterOperator?: components["schemas"]["UserFilterOperator"];
         /** @description Column filter 值（isEmpty/isNotEmpty 時可省略，isAnyOf 時以逗號分隔多值） */
         filterValue?: string;
         /** @description 每頁筆數 */
@@ -2088,21 +2153,15 @@ export interface operations {
         /** @description Quick Filter 搜尋值。可傳一般文字，或 role:admin、banned:true、emailSubscribed:false 等欄位 token */
         quickFilterValue?: string;
         /** @description Search 欄位 */
-        searchField?: "name" | "email";
+        searchField?: components["schemas"]["UserSearchField"];
         /** @description Search 運算子 */
-        searchOperator?: "contains" | "startsWith" | "endsWith";
+        searchOperator?: components["schemas"]["UserSearchOperator"];
         /** @description Search 值 */
         searchValue?: string;
         /** @description 排序欄位 */
-        sortBy?:
-          | "name"
-          | "email"
-          | "role"
-          | "banned"
-          | "emailSubscribed"
-          | "createdAt";
+        sortBy?: components["schemas"]["UserSortField"];
         /** @description 排序方向 */
-        sortDirection?: "asc" | "desc";
+        sortDirection?: components["schemas"]["SortDirection"];
         /** @description 時區，用於 createdAt 本地時間比對，例如 Asia/Taipei */
         timezone?: string;
       };
@@ -2725,6 +2784,34 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  MenusController_findMenuItem: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        menuItemId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MenuItemResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -3666,40 +3753,6 @@ type FlattenedDeepRequired<T> = {
 type ReadonlyArray<T> = [Exclude<T, undefined>] extends [unknown[]]
   ? Readonly<Exclude<T, undefined>>
   : Readonly<Exclude<T, undefined>[]>;
-export const pathsApiUsersListGetParametersQueryFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["filterField"]
-> = ["name", "email", "role", "banned", "emailSubscribed", "createdAt"];
-export const pathsApiUsersListGetParametersQueryFilterOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["filterOperator"]
-> = [
-  "contains",
-  "doesNotContain",
-  "equals",
-  "doesNotEqual",
-  "startsWith",
-  "endsWith",
-  "isEmpty",
-  "isNotEmpty",
-  "isAnyOf",
-  "is",
-  "not",
-  "after",
-  "onOrAfter",
-  "before",
-  "onOrBefore",
-];
-export const pathsApiUsersListGetParametersQuerySearchFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["searchField"]
-> = ["name", "email"];
-export const pathsApiUsersListGetParametersQuerySearchOperatorValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["searchOperator"]
-> = ["contains", "startsWith", "endsWith"];
-export const pathsApiUsersListGetParametersQuerySortByValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["sortBy"]
-> = ["name", "email", "role", "banned", "emailSubscribed", "createdAt"];
-export const pathsApiUsersListGetParametersQuerySortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<paths>["/api/users/list"]["get"]["parameters"]["query"]["sortDirection"]
-> = ["asc", "desc"];
 export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySearchFieldValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["searchField"]
 > = ["name", "description"];
@@ -3718,6 +3771,40 @@ export const pathsApiOrganizationsOrganizationIdOrderMenuGetParametersQueryLangV
 export const userResponseDtoLangValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserResponseDto"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
+export const userFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserFilterField"]
+> = ["name", "email", "role", "banned", "emailSubscribed", "createdAt"];
+export const userFilterOperatorValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserFilterOperator"]
+> = [
+  "contains",
+  "doesNotContain",
+  "equals",
+  "doesNotEqual",
+  "startsWith",
+  "endsWith",
+  "isEmpty",
+  "isNotEmpty",
+  "isAnyOf",
+  "is",
+  "not",
+  "after",
+  "onOrAfter",
+  "before",
+  "onOrBefore",
+];
+export const userSearchFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserSearchField"]
+> = ["name", "email"];
+export const userSearchOperatorValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserSearchOperator"]
+> = ["contains", "startsWith", "endsWith"];
+export const userSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserSortField"]
+> = ["name", "email", "role", "banned", "emailSubscribed", "createdAt"];
+export const sortDirectionValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["SortDirection"]
+> = ["asc", "desc"];
 export const updateUserDtoGenderValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UpdateUserDto"]["gender"]
 > = ["female", "male", "other"];
@@ -3808,9 +3895,6 @@ export const filterOperatorValues: ReadonlyArray<
 export const menuSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["MenuSortField"]
 > = ["name", "description", "createdAt", "updatedAt"];
-export const sortDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["SortDirection"]
-> = ["asc", "desc"];
 export const itemAvailabilityValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ItemAvailability"]
 > = ["InStock", "SoldOut", "Discontinued"];
