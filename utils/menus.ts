@@ -1,4 +1,27 @@
-import type { OrderMenu, OrderMenuItem } from "@/types/menus";
+import type { OrderMenu, OrderMenuItem, OrderMenuOffer } from "@/types/menus";
+
+export interface PromoInfo {
+  price: number;
+  validThrough: Date | null;
+}
+
+export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
+  const priceSpecification = offer?.priceSpecification;
+  if (!priceSpecification) return null;
+
+  const now = new Date();
+  const validFrom = priceSpecification.validFrom
+    ? new Date(priceSpecification.validFrom)
+    : null;
+  const validThrough = priceSpecification.validThrough
+    ? new Date(priceSpecification.validThrough)
+    : null;
+
+  if (validFrom && now < validFrom) return null;
+  if (validThrough && now > validThrough) return null;
+
+  return { price: Number(priceSpecification.price), validThrough };
+};
 
 export interface Choice {
   id: string;
