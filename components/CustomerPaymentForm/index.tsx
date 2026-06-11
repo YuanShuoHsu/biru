@@ -54,7 +54,7 @@ const CustomerPaymentForm = () => {
   const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
     (state) => state,
   );
-  const { menus } = useMenuStore((state) => state);
+  const { menu } = useMenuStore((state) => state);
 
   const locale = useLocale();
 
@@ -94,8 +94,8 @@ const CustomerPaymentForm = () => {
         TradeDesc: "餐點付款",
         ItemName: cartItemsList
           .map(({ id, choices, quantity }) => {
-            const itemName = getItemName(menus, id);
-            const choiceNames = getChoiceNames(menus, id, choices, {
+            const itemName = getItemName(menu, id);
+            const choiceNames = getChoiceNames(menu, id, choices, {
               addOnLabel: "加購",
               colon: "：",
               delimiter: "、",
