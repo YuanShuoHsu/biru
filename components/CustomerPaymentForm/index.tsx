@@ -23,6 +23,8 @@ import { styled } from "@mui/material/styles";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
+import useCartTotals from "@/hooks/useCartTotals";
+
 import type { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 import type { PaymentMethod } from "@/types/payment";
 
@@ -51,10 +53,9 @@ const CustomerPaymentForm = () => {
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
 
-  const { isCartEmpty, cartItemsList, cartTotalAmount } = useCartStore(
-    (state) => state,
-  );
+  const { isCartEmpty, cartItemsList } = useCartStore((state) => state);
   const { menu } = useMenuStore((state) => state);
+  const { cartTotalAmount } = useCartTotals();
 
   const locale = useLocale();
 
