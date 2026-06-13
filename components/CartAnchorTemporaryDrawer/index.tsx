@@ -50,7 +50,9 @@ const StickyFooter = styled(Box)(({ theme }) => ({
 }));
 
 const CartAnchorTemporaryDrawer = () => {
-  const { isCartEmpty, cartTotalAmount } = useCartStore((state) => state);
+  const { cartCurrency, isCartEmpty, cartTotalAmount } = useCartStore(
+    (state) => state,
+  );
   const { drawer } = useDrawerStore((state) => state);
   const open = drawer.cart;
   const toggleDrawer = useToggleDrawer();
@@ -101,7 +103,7 @@ const CartAnchorTemporaryDrawer = () => {
             fontWeight="bold"
             variant="h6"
           >
-            {tCommon("currency")} {cartTotalAmount.toLocaleString(locale)}
+            {cartCurrency} {cartTotalAmount.toLocaleString(locale)}
           </Typography>
         </Stack>
         <Button
