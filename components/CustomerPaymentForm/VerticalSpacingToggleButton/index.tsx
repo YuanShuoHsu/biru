@@ -4,6 +4,7 @@
 
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
@@ -25,36 +26,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
 import type { PaymentMethod } from "@/types/payment";
-
-const paymentOptions = (mode: OrderMode | null) => [
-  ...(mode === ORDER_MODE.DineIn
-    ? [
-        {
-          id: "Cash",
-          icon: Payments,
-          label: "現金",
-        },
-      ]
-    : []),
-  {
-    id: "Credit",
-    icon: CreditCard,
-    label: "信用卡",
-  },
-  {
-    id: "TWQR",
-    icon: QrCodeScanner,
-    label: "行動支付",
-  },
-  {
-    id: "WeiXin",
-    icon: MarkChatRead,
-    label: "微信支付",
-  },
-];
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -105,6 +78,16 @@ const VerticalSpacingToggleButton = ({
   setPayment,
 }: VerticalSpacingToggleButtonProps) => {
   const { mode = null } = useParams<Partial<RouteParams>>();
+  const tOrder = useTranslations("order");
+
+  const paymentOptions = [
+    ...(mode === ORDER_MODE.DineIn
+      ? [{ id: "Cash", icon: Payments, label: tOrder("checkout.payment.Cash") }]
+      : []),
+    { id: "Credit", icon: CreditCard, label: tOrder("checkout.payment.Credit") },
+    { id: "TWQR", icon: QrCodeScanner, label: tOrder("checkout.payment.TWQR") },
+    { id: "WeiXin", icon: MarkChatRead, label: tOrder("checkout.payment.WeiXin") },
+  ];
 
   const handlePaymentChange = (
     _: React.MouseEvent<HTMLElement>,
@@ -121,7 +104,7 @@ const VerticalSpacingToggleButton = ({
         value={payment}
         size="small"
       >
-        {paymentOptions(mode).map(({ id, icon: Icon, label }) => (
+        {paymentOptions.map(({ id, icon: Icon, label }) => (
           <StyledToggleButton aria-label={label} key={id} value={id}>
             <Stack
               display="flex"
