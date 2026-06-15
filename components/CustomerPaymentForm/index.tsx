@@ -1,17 +1,19 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 
 import VerticalSpacingToggleButton from "./VerticalSpacingToggleButton";
 
 import { localeConfigs } from "@/constants/locale";
+import { ORDER_MODE } from "@/constants/orderMode";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 import {
   Button,
+  Divider,
   Paper,
   type PaperProps,
   TextField,
@@ -26,6 +28,7 @@ import useCartTotals from "@/hooks/useCartTotals";
 
 import type { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 import type { PaymentMethod } from "@/types/payment";
+import type { RouteParams } from "@/types/routeParams";
 
 import { getChoiceNames, getItemName } from "@/utils/menus";
 
@@ -45,9 +48,14 @@ const StyledPaper = styled((props: PaperProps) => <Paper {...props} />)(
 );
 
 const CustomerPaymentForm = () => {
+  const { mode } = useParams<Partial<RouteParams>>();
+  const isPickup = mode === ORDER_MODE.Pickup;
+
   const [customerInfo, setCustomerInfo] = useState({
+    email: "",
     name: "",
     notes: "",
+    phone: "",
   });
 
   const [payment, setPayment] = useState<PaymentMethod | null>(null);
@@ -135,7 +143,7 @@ const CustomerPaymentForm = () => {
 
   return (
     <StyledPaper component="form" onSubmit={handleSubmit}>
-      <Typography component="span" variant="subtitle1">
+      <Typography color="text.secondary" variant="subtitle2">
         {tOrder("checkout.title")}
       </Typography>
       <TextField
@@ -145,6 +153,23 @@ const CustomerPaymentForm = () => {
         onChange={handleInfoChange}
         required
         value={customerInfo.name}
+      />
+      <TextField
+        fullWidth
+        label={tOrder("checkout.phone")}
+        name="phone"
+        onChange={handleInfoChange}
+        required={isPickup}
+        type="tel"
+        value={customerInfo.phone}
+      />
+      <TextField
+        fullWidth
+        label={tOrder("checkout.email")}
+        name="email"
+        onChange={handleInfoChange}
+        type="email"
+        value={customerInfo.email}
       />
       <TextField
         fullWidth
@@ -161,6 +186,10 @@ const CustomerPaymentForm = () => {
         value={customerInfo.notes}
       />
       {/* <CouponForm /> */}
+      <Divider />
+      <Typography color="text.secondary" variant="subtitle2">
+        {tOrder("checkout.paymentMethod")}
+      </Typography>
       <VerticalSpacingToggleButton payment={payment} setPayment={setPayment} />
       <Button
         disabled={isCartEmpty || !payment}
