@@ -39,7 +39,6 @@ import { getChoiceNames, getItemName } from "@/utils/menus";
 import FormCard, {
   StyledCardActions,
   StyledCardContent,
-  StyledCardHeader,
 } from "../FormCard";
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
@@ -216,18 +215,10 @@ const CustomerPaymentForm = () => {
 
   return (
     <FormCard onSubmit={handleSubmit}>
-      <StyledCardHeader
-        title={
-          <Typography
-            color="text.secondary"
-            fontWeight="bold"
-            variant="subtitle2"
-          >
-            {tOrder("checkout.title")}
-          </Typography>
-        }
-      />
       <StyledCardContent>
+        <Typography alignSelf="flex-start" color="text.secondary" fontWeight="bold" variant="subtitle2">
+          {tOrder("checkout.title")}
+        </Typography>
         <TextField
           fullWidth
           label={tOrder("checkout.name")}
