@@ -17,15 +17,15 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-interface OrderOrganizationSlugSelectProps {
+interface OrderOrganizationTextFieldProps {
   organizations: OrganizationResponse[];
   organizationSlug: string;
 }
 
-const OrderOrganizationSlugSelect = ({
+const OrderOrganizationTextField = ({
   organizations,
   organizationSlug,
-}: OrderOrganizationSlugSelectProps) => {
+}: OrderOrganizationTextFieldProps) => {
   const { mode } = useParams();
 
   const router = useRouter();
@@ -94,4 +94,4 @@ const OrderOrganizationSlugSelect = ({
   );
 };
 
-export default OrderOrganizationSlugSelect;
+export default OrderOrganizationTextField;
