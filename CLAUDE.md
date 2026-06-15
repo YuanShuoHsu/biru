@@ -98,3 +98,12 @@ All providers are composed in `app/[locale]/providers/` — server providers (`i
 - Forms follow the pattern: React Hook Form controller → Zod schema → MUI input with react-imask for formatted fields
 - Phone validation uses `libphonenumber-js`
 - Snackbar/toast notifications use `notistack` via the SWRProvider error handler
+
+## biru-admin Sync
+
+Mirror repo (admin panel): `/Users/yuanshuohsu/Desktop/biru-admin`. Changes in either repo must be synced to the other.
+
+Superset files (admin is a superset of frontend — transplant hunks only, never overwrite the whole file):
+`utils/menus.ts`, `CustomerPaymentForm`, `messages/*/common.json`, `types/api.ts`
+
+All other mirrored components, stores, hooks, constants, and messages can be synced with `cp`.
