@@ -101,9 +101,15 @@ All providers are composed in `app/[locale]/providers/` — server providers (`i
 
 ## biru-admin Sync
 
-Mirror repo (admin panel): `/Users/yuanshuohsu/Desktop/biru-admin`. Changes in either repo must be synced to the other.
+Mirror repo (admin panel): `/Users/yuanshuohsu/Desktop/biru-admin`. After completing any file changes, always sync to biru-admin before considering the task done.
 
-Superset files (admin is a superset of frontend — transplant hunks only, never overwrite the whole file):
-`utils/menus.ts`, `CustomerPaymentForm`, `messages/*/common.json`, `types/api.ts`
+For each changed file, read both versions and decide:
 
-All other mirrored components, stores, hooks, constants, and messages can be synced with `cp`.
+1. **Superset files** (admin has extra content — transplant only the changed hunks, never overwrite the whole file):
+   `utils/menus.ts`, `CustomerPaymentForm`, `messages/*/common.json`, `types/api.ts`
+
+2. **All other mirrored files** — if biru-admin has the same path, check whether its content differs only because it's an older version of biru (safe to `cp`) or because it has intentional admin-specific differences (transplant hunks only).
+
+3. **Renamed or deleted files** — apply the same operation in biru-admin (rename directory, delete file).
+
+When unsure whether a difference is intentional, read the biru-admin file first before deciding.
