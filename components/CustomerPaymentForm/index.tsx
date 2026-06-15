@@ -36,10 +36,7 @@ import type { PaymentMethod } from "@/types/payment";
 import type { RouteParams } from "@/types/routeParams";
 
 import { getChoiceNames, getItemName } from "@/utils/menus";
-import FormCard, {
-  StyledCardActions,
-  StyledCardContent,
-} from "../FormCard";
+import FormCard, { StyledCardActions, StyledCardContent } from "../FormCard";
 
 const sendRequest = async (url: string, { arg }: { arg: CreateEcpayDto }) =>
   fetch(url, {
@@ -216,7 +213,12 @@ const CustomerPaymentForm = () => {
   return (
     <FormCard onSubmit={handleSubmit}>
       <StyledCardContent>
-        <Typography alignSelf="flex-start" color="text.secondary" fontWeight="bold" variant="subtitle2">
+        <Typography
+          alignSelf="flex-start"
+          color="text.secondary"
+          fontWeight="bold"
+          variant="subtitle2"
+        >
           {tOrder("checkout.title")}
         </Typography>
         <TextField
