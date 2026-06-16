@@ -23,6 +23,12 @@
   "currentPassword": {
     "required": "Current password is required."
   },
+  "customerIdentifier": {
+    "invalid": "Tax ID must be 8 digits."
+  },
+  "customerName": {
+    "required": "Company name is required."
+  },
   "email": {
     "invalid": "Email is not valid."
   },
@@ -31,6 +37,9 @@
   },
   "gender": {
     "required": "Gender is required."
+  },
+  "name": {
+    "required": "Name is required."
   },
   "newPassword": {
     "differentFromCurrent": "Be different from your current password.",
@@ -45,6 +54,9 @@
     "match": "Matches the password.",
     "minLength": "Be at least 8 characters long.",
     "number": "Contain at least one number."
+  },
+  "payment": {
+    "required": "Please select a payment method."
   },
   "phone": {
     "invalid": "Phone number is not valid.",

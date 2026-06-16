@@ -8,11 +8,14 @@ import { Fragment } from "react";
 import {
   Divider,
   FormControlLabel,
+  FormHelperText,
   Paper,
   Radio,
   RadioGroup,
   Stack,
   Typography,
+  type FormHelperTextProps,
+  type RadioGroupProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -30,13 +33,17 @@ interface ListRadioGroupOption {
 }
 
 interface ListRadioGroupProps {
+  error?: FormHelperTextProps["error"];
+  helperText?: FormHelperTextProps["children"];
   label: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>, value: string) => void;
+  onChange: RadioGroupProps["onChange"];
   options: ListRadioGroupOption[];
   value: string;
 }
 
 const ListRadioGroup = ({
+  error,
+  helperText,
   label,
   onChange,
   options,
@@ -65,6 +72,7 @@ const ListRadioGroup = ({
         ))}
       </RadioGroup>
     </Paper>
+    {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
   </Stack>
 );
 

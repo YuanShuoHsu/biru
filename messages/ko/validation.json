@@ -23,6 +23,12 @@
   "currentPassword": {
     "required": "현재 비밀번호는 필수입니다."
   },
+  "customerIdentifier": {
+    "invalid": "사업자 등록번호는 8자리 숫자여야 합니다."
+  },
+  "customerName": {
+    "required": "회사명은 필수입니다."
+  },
   "email": {
     "invalid": "이메일이 유효하지 않습니다."
   },
@@ -31,6 +37,9 @@
   },
   "gender": {
     "required": "성별은 필수입니다."
+  },
+  "name": {
+    "required": "이름은 필수입니다."
   },
   "newPassword": {
     "differentFromCurrent": "현재 비밀번호와 달라야 함.",
@@ -45,6 +54,9 @@
     "match": "비밀번호와 일치.",
     "minLength": "8자 이상 길이.",
     "number": "숫자를 최소 1개 포함."
+  },
+  "payment": {
+    "required": "결제 방법을 선택해 주세요."
   },
   "phone": {
     "invalid": "전화번호가 유효하지 않습니다.",
