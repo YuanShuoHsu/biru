@@ -2,6 +2,9 @@
   "bio": {
     "maxLength": "Bio must not exceed 160 characters."
   },
+  "carrierType": {
+    "required": "Please select a carrier type."
+  },
   "birthDate": {
     "invalid": "Birth date is not valid.",
     "maxDate": "Please select a birth date on or before today.",
@@ -30,7 +33,8 @@
     "required": "Company name is required."
   },
   "email": {
-    "invalid": "Email is not valid."
+    "invalid": "Email is not valid.",
+    "required": "Email is required."
   },
   "firstName": {
     "required": "First name is required."
@@ -40,6 +44,9 @@
   },
   "name": {
     "required": "Name is required."
+  },
+  "notes": {
+    "maxLength": "Notes must not exceed 160 characters."
   },
   "newPassword": {
     "differentFromCurrent": "Be different from your current password.",

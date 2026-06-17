@@ -2,6 +2,9 @@
   "bio": {
     "maxLength": "个人简介不能超过 160 个字符。"
   },
+  "carrierType": {
+    "required": "请选择载具类型。"
+  },
   "birthDate": {
     "invalid": "出生日期无效。",
     "maxDate": "请选择今天或之前的出生日期。",
@@ -30,7 +33,8 @@
     "required": "公司名称为必填。"
   },
   "email": {
-    "invalid": "电子邮件无效。"
+    "invalid": "电子邮件无效。",
+    "required": "电子邮件为必填。"
   },
   "firstName": {
     "required": "名字为必填。"
@@ -40,6 +44,9 @@
   },
   "name": {
     "required": "姓名为必填。"
+  },
+  "notes": {
+    "maxLength": "备注不能超过 160 个字符。"
   },
   "newPassword": {
     "differentFromCurrent": "与当前密码不相同。",

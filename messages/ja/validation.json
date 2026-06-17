@@ -2,6 +2,9 @@
   "bio": {
     "maxLength": "自己紹介は160文字以内で入力してください。"
   },
+  "carrierType": {
+    "required": "キャリアタイプを選択してください。"
+  },
   "birthDate": {
     "invalid": "生年月日が無効です。",
     "maxDate": "今日以前の生年月日を選択してください。",
@@ -30,7 +33,8 @@
     "required": "会社名は必須です。"
   },
   "email": {
-    "invalid": "メールアドレスが無効です。"
+    "invalid": "メールアドレスが無効です。",
+    "required": "メールアドレスは必須です。"
   },
   "firstName": {
     "required": "名は必須です。"
@@ -40,6 +44,9 @@
   },
   "name": {
     "required": "氏名は必須です。"
+  },
+  "notes": {
+    "maxLength": "備考は160文字以内で入力してください。"
   },
   "newPassword": {
     "differentFromCurrent": "現在のパスワードと異なる。",

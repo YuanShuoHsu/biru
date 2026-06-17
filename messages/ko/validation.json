@@ -2,6 +2,9 @@
   "bio": {
     "maxLength": "자기소개는 160자를 초과할 수 없습니다."
   },
+  "carrierType": {
+    "required": "캐리어 유형을 선택해 주세요."
+  },
   "birthDate": {
     "invalid": "생년월일이 유효하지 않습니다.",
     "maxDate": "오늘 또는 그 이전 날짜를 선택해 주세요.",
@@ -30,7 +33,8 @@
     "required": "회사명은 필수입니다."
   },
   "email": {
-    "invalid": "이메일이 유효하지 않습니다."
+    "invalid": "이메일이 유효하지 않습니다.",
+    "required": "이메일은 필수입니다."
   },
   "firstName": {
     "required": "이름은 필수입니다."
@@ -40,6 +44,9 @@
   },
   "name": {
     "required": "이름은 필수입니다."
+  },
+  "notes": {
+    "maxLength": "메모는 160자를 초과할 수 없습니다."
   },
   "newPassword": {
     "differentFromCurrent": "현재 비밀번호와 달라야 함.",

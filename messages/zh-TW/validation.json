@@ -2,6 +2,9 @@
   "bio": {
     "maxLength": "個人簡介不能超過 160 個字元。"
   },
+  "carrierType": {
+    "required": "請選擇載具類型。"
+  },
   "birthDate": {
     "invalid": "出生日期無效。",
     "maxDate": "請選擇今天或之前的出生日期。",
@@ -30,7 +33,8 @@
     "required": "公司名稱為必填。"
   },
   "email": {
-    "invalid": "電子郵件無效。"
+    "invalid": "電子郵件無效。",
+    "required": "電子郵件為必填。"
   },
   "firstName": {
     "required": "名字為必填。"
@@ -40,6 +44,9 @@
   },
   "name": {
     "required": "姓名為必填。"
+  },
+  "notes": {
+    "maxLength": "備註不能超過 160 個字元。"
   },
   "newPassword": {
     "differentFromCurrent": "與目前密碼不相同。",
