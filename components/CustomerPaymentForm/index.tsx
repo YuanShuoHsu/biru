@@ -359,19 +359,12 @@ const CustomerPaymentForm = () => {
                 carrierType === "mobile" ? "/AB12345" : "AB12345678901234"
               }
               required
+              slotProps={{ inputLabel: { shrink: true } }}
               {...register("invoiceInfo.carruerNum")}
             />
           )}
         {invoiceType === "company" && (
           <>
-            <TextField
-              error={!!errors.invoiceInfo?.address}
-              fullWidth
-              helperText={errors.invoiceInfo?.address?.message}
-              label={tOrder("checkout.invoice.customerAddr")}
-              required
-              {...register("invoiceInfo.address")}
-            />
             <TextField
               error={!!errors.invoiceInfo?.customerIdentifier}
               fullWidth
@@ -387,6 +380,14 @@ const CustomerPaymentForm = () => {
               label={tOrder("checkout.invoice.customerName")}
               required
               {...register("invoiceInfo.customerName")}
+            />
+            <TextField
+              error={!!errors.invoiceInfo?.address}
+              fullWidth
+              helperText={errors.invoiceInfo?.address?.message}
+              label={tOrder("checkout.invoice.customerAddr")}
+              required
+              {...register("invoiceInfo.address")}
             />
           </>
         )}
