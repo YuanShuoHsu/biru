@@ -6,7 +6,6 @@ const FormBox = ({ ref, ...props }: BoxProps<"form">) => (
     component="form"
     display="flex"
     flexDirection="column"
-    alignItems="center"
     gap={2}
     {...props}
   />
