@@ -106,13 +106,16 @@ const theme = createTheme({
     },
     MuiButton: {
       styleOverrides: {
-        root: ({ theme }) => ({
+        root: ({ ownerState, theme }) => ({
           textTransform: "none",
           transition: theme.transitions.create([
             "background-color",
             "border-color",
             "color",
           ]),
+          ...(ownerState.variant === "outlined" && {
+            backgroundColor: theme.vars.palette.background.paper,
+          }),
         }),
       },
     },
@@ -218,6 +221,13 @@ const theme = createTheme({
         }),
       },
     },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
     MuiTab: {
       styleOverrides: {
         root: ({ theme }) => ({
@@ -230,13 +240,6 @@ const theme = createTheme({
         root: ({ theme }) => ({
           borderBottom: `1px solid ${theme.vars.palette.divider}`,
           transition: theme.transitions.create("border-color"),
-        }),
-      },
-    },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          transition: theme.transitions.create("color"),
         }),
       },
     },
