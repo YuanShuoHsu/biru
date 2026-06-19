@@ -12,6 +12,7 @@ import {
   useCustomerPaymentFormSchema,
 } from "./definitions";
 
+import CustomizedAccordions from "@/components/CustomizedAccordions";
 import ListRadioGroup from "@/components/ListRadioGroup";
 
 import { localeConfigs } from "@/constants/locale";
@@ -249,6 +250,7 @@ const CustomerPaymentForm = () => {
 
   return (
     <FormBox onSubmit={onSubmit}>
+      <CustomizedAccordions defaultExpanded={false} />
       <Card variant="outlined">
         <StyledCardContent>
           <Typography
