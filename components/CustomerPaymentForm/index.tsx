@@ -27,10 +27,10 @@ import {
   Business,
   CreditCard,
   MarkChatRead,
-  ShoppingCart,
   Payments,
   Person,
   QrCodeScanner,
+  ShoppingCart,
   TaskAlt,
   VolunteerActivism,
 } from "@mui/icons-material";
@@ -431,7 +431,6 @@ const CustomerPaymentForm = () => {
         <Button
           disabled={isMutating}
           onClick={() => router.push(pathname.replace("/checkout", "/cart"))}
-          size="large"
           startIcon={<ShoppingCart />}
           variant="outlined"
         >
@@ -442,7 +441,6 @@ const CustomerPaymentForm = () => {
           endIcon={<TaskAlt />}
           loading={isMutating}
           loadingPosition="end"
-          size="large"
           type="submit"
           variant="contained"
         >
