@@ -3,6 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
 import { useForm, useWatch } from "react-hook-form";
+import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 
 import {
@@ -36,6 +37,7 @@ import {
   VolunteerActivism,
 } from "@mui/icons-material";
 import {
+  Autocomplete,
   Button,
   Card,
   Divider,
@@ -51,8 +53,9 @@ import { useMenuStore } from "@/providers/menu-store-provider";
 import type { CreateEcpayDto } from "@/types/ecpay/createEcpayDto";
 import type { PaymentMethod } from "@/types/payment";
 
-import { sendRequest } from "@/utils/fetcher";
+import { fetcher, sendRequest } from "@/utils/fetcher";
 import { getChoiceNames, getItemName } from "@/utils/menus";
+
 import FormBox from "../FormBox";
 import { StyledCardContent } from "../FormCard";
 
@@ -63,6 +66,8 @@ const INVOICE_TYPES: { icon: React.ElementType; type: InvoiceType }[] = [
 ];
 
 const CARRIER_TYPES: CarrierType[] = ["individual", "mobile", "certificate"];
+
+type LoveCodeOption = { label: string; loveCode: string; short?: string };
 
 const CustomerPaymentForm = () => {
   const { mode } = useParams();
@@ -101,10 +106,15 @@ const CustomerPaymentForm = () => {
     resolver: zodResolver(customerPaymentFormSchema),
   });
 
-  const [carrierType, invoiceType, payment] = useWatch({
+  const [carrierType, invoiceType, loveCode, payment] = useWatch({
     control,
-    name: ["carrierType", "invoiceType", "payment"],
+    name: ["carrierType", "invoiceType", "invoiceInfo.loveCode", "payment"],
   });
+
+  const { data: loveCodes = [] } = useSWR<LoveCodeOption[]>(
+    invoiceType === "donate" ? "/api/love-codes" : null,
+    fetcher,
+  );
 
   const locale = useLocale();
 
@@ -401,13 +411,53 @@ const CustomerPaymentForm = () => {
             </>
           )}
           {invoiceType === "donate" && (
-            <TextField
-              error={!!errors.invoiceInfo?.loveCode}
+            <Autocomplete
+              filterOptions={(options, { inputValue }) =>
+                options.filter(
+                  ({ label, loveCode: code, short }) =>
+                    label.includes(inputValue) ||
+                    (short && short.includes(inputValue)) ||
+                    code.startsWith(inputValue),
+                )
+              }
+              freeSolo
               fullWidth
-              helperText={tOrder("checkout.invoice.donateFormat")}
-              label={tOrder("checkout.invoice.loveCode")}
-              required
-              {...register("invoiceInfo.loveCode")}
+              getOptionLabel={(option) =>
+                typeof option === "string" ? option : option.loveCode
+              }
+              inputValue={loveCode}
+              onInputChange={(_, value) =>
+                setValue("invoiceInfo.loveCode", value, {
+                  shouldValidate: isSubmitted,
+                })
+              }
+              options={loveCodes}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  error={!!errors.invoiceInfo?.loveCode}
+                  helperText={
+                    errors.invoiceInfo?.loveCode?.message ||
+                    tOrder("checkout.invoice.donateFormat")
+                  }
+                  label={tOrder("checkout.invoice.loveCode")}
+                  required
+                />
+              )}
+              renderOption={({ key, ...props }, option) => (
+                <li key={key} {...props}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    sx={{ width: "100%" }}
+                  >
+                    <Typography>{option.short || option.label}</Typography>
+                    <Typography color="text.secondary" variant="body2">
+                      {option.loveCode}
+                    </Typography>
+                  </Stack>
+                </li>
+              )}
             />
           )}
           <Divider flexItem />
