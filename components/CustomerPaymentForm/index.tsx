@@ -70,15 +70,12 @@ const CARRIER_TYPES: CarrierType[] = ["individual", "mobile", "certificate"];
 type LoveCodeOption = { label: string; loveCode: string; short?: string };
 
 const CustomerPaymentForm = () => {
-  const { mode } = useParams();
-  const isPickup = mode === ORDER_MODE.Pickup;
-
   const { isCartEmpty, cartItemsList } = useCartStore((state) => state);
   const { menu } = useMenuStore((state) => state);
 
   const { cartTotalAmount } = useCartTotals();
 
-  const customerPaymentFormSchema = useCustomerPaymentFormSchema(isPickup);
+  const customerPaymentFormSchema = useCustomerPaymentFormSchema();
 
   const {
     control,
@@ -111,12 +108,10 @@ const CustomerPaymentForm = () => {
     name: ["carrierType", "invoiceType", "invoiceInfo.loveCode", "payment"],
   });
 
-  const { data: loveCodes = [] } = useSWR<LoveCodeOption[]>(
-    invoiceType === "donate" ? "/api/love-codes" : null,
-    fetcher,
-  );
-
   const locale = useLocale();
+
+  const { mode } = useParams();
+  const isPickup = mode === ORDER_MODE.Pickup;
 
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -126,6 +121,11 @@ const CustomerPaymentForm = () => {
   // const isDineIn = mode === ORDER_MODE.DineIn;
 
   const router = useRouter();
+
+  const { data: loveCodes = [] } = useSWR<LoveCodeOption[]>(
+    invoiceType === "donate" ? "/api/love-codes" : null,
+    fetcher,
+  );
 
   const { isMutating, trigger } = useSWRMutation(
     "/api/ecpay",
