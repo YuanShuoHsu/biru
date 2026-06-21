@@ -15,10 +15,24 @@ export const useCustomerPaymentFormSchema = () => {
 
   return z
     .object({
-      email: z.union([
-        z.literal(""),
-        z.email({ error: tValidation("email.invalid") }),
-      ]),
+      customer: z.object({
+        email: z.union([
+          z.literal(""),
+          z.email({ error: tValidation("email.invalid") }),
+        ]),
+        name: z
+          .string()
+          .trim()
+          .min(1, { error: tValidation("name.required") }),
+        notes: z
+          .string()
+          .trim()
+          .max(160, { error: tValidation("notes.maxLength") }),
+        phone: z
+          .string()
+          .trim()
+          .refine((val) => !isPickup || !!val, tValidation("phone.required")),
+      }),
       invoice: z.object({
         carrierType: z.union([
           z.enum(["certificate", "individual", "mobile"]),
@@ -48,19 +62,7 @@ export const useCustomerPaymentFormSchema = () => {
         emailSameAsCustomer: z.boolean(),
         type: z.enum(["company", "donate", "personal"]).nullable(),
       }),
-      name: z
-        .string()
-        .trim()
-        .min(1, { error: tValidation("name.required") }),
-      notes: z
-        .string()
-        .trim()
-        .max(160, { error: tValidation("notes.maxLength") }),
       payment: z.enum(["Cash", "Credit", "TWQR", "WeiXin"]).nullable(),
-      phone: z
-        .string()
-        .trim()
-        .refine((val) => !isPickup || !!val, tValidation("phone.required")),
     })
     .superRefine((data, ctx) => {
       if (!data.invoice.type) {
@@ -83,11 +85,11 @@ export const useCustomerPaymentFormSchema = () => {
         case "personal":
           if (data.invoice.carrierType === "individual") {
             if (data.invoice.emailSameAsCustomer) {
-              if (!data.email) {
+              if (!data.customer.email) {
                 ctx.addIssue({
                   code: "custom",
                   message: tValidation("email.required"),
-                  path: ["email"],
+                  path: ["customer", "email"],
                 });
               }
             } else {
