@@ -6,6 +6,7 @@
 import { Fragment } from "react";
 
 import {
+  Chip,
   Divider,
   FormControlLabel,
   FormHelperText,
@@ -27,6 +28,8 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
 }));
 
 interface ListRadioGroupOption {
+  disabled?: boolean;
+  disabledReason?: string;
   icon?: React.ElementType;
   label: string;
   value: string;
@@ -55,21 +58,27 @@ const ListRadioGroup = ({
     </Typography>
     <Paper variant="outlined">
       <RadioGroup onChange={onChange} value={value}>
-        {options.map(({ icon: Icon, label, value: optionValue }, index) => (
-          <Fragment key={optionValue}>
-            {index !== 0 && <Divider />}
-            <StyledFormControlLabel
-              control={<Radio size="small" />}
-              label={
-                <Stack direction="row" alignItems="center" gap={2}>
-                  {Icon && <Icon fontSize="small" />}
-                  <Typography variant="body2">{label}</Typography>
-                </Stack>
-              }
-              value={optionValue}
-            />
-          </Fragment>
-        ))}
+        {options.map(
+          ({ disabled, disabledReason, icon: Icon, label, value: optionValue }, index) => (
+            <Fragment key={optionValue}>
+              {index !== 0 && <Divider />}
+              <StyledFormControlLabel
+                control={<Radio size="small" />}
+                disabled={disabled}
+                label={
+                  <Stack direction="row" alignItems="center" gap={2}>
+                    {Icon && <Icon fontSize="small" />}
+                    <Typography variant="body2">{label}</Typography>
+                    {disabled && disabledReason && (
+                      <Chip label={disabledReason} size="small" />
+                    )}
+                  </Stack>
+                }
+                value={optionValue}
+              />
+            </Fragment>
+          ),
+        )}
       </RadioGroup>
     </Paper>
     {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
