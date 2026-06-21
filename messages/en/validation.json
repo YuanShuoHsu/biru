@@ -2,14 +2,22 @@
   "bio": {
     "maxLength": "Bio must not exceed 160 characters."
   },
-  "carrierType": {
-    "required": "Please select a carrier type."
-  },
   "birthDate": {
     "invalid": "Birth date is not valid.",
     "maxDate": "Please select a birth date on or before today.",
     "minDate": "Please select a birth date on or after 1900-01-01.",
     "required": "Birth date is required."
+  },
+  "carrierType": {
+    "required": "Please select a carrier type."
+  },
+  "carruerNum": {
+    "certificate": {
+      "invalid": "Certificate must be 16 uppercase alphanumeric characters."
+    },
+    "mobile": {
+      "invalid": "Mobile barcode must be in the format /XXXXXXX."
+    }
   },
   "confirmNewPassword": {
     "mismatch": "Passwords do not match.",
@@ -30,10 +38,16 @@
     "required": "Company address is required."
   },
   "customerIdentifier": {
-    "invalid": "Tax ID must be 8 digits."
+    "invalid": "Tax ID must be 8 digits.",
+    "notFound": "No company found for this Tax ID.",
+    "required": "Tax ID is required."
   },
   "customerName": {
     "required": "Company name is required."
+  },
+  "donateCode": {
+    "invalid": "Donation code must be 3 to 7 digits.",
+    "required": "Donation code is required."
   },
   "email": {
     "invalid": "Email is not valid.",
@@ -45,11 +59,11 @@
   "gender": {
     "required": "Gender is required."
   },
+  "invoiceType": {
+    "required": "Invoice type is required."
+  },
   "name": {
     "required": "Name is required."
-  },
-  "notes": {
-    "maxLength": "Notes must not exceed 160 characters."
   },
   "newPassword": {
     "differentFromCurrent": "Be different from your current password.",
@@ -58,6 +72,9 @@
     "minLength": "Be at least 8 characters long.",
     "number": "Contain at least one number.",
     "sameAsCurrent": "New password must be different from your current password."
+  },
+  "notes": {
+    "maxLength": "Notes must not exceed 160 characters."
   },
   "password": {
     "letter": "Contain at least one letter.",

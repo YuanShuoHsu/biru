@@ -2,14 +2,22 @@
   "bio": {
     "maxLength": "个人简介不能超过 160 个字符。"
   },
-  "carrierType": {
-    "required": "请选择载具类型。"
-  },
   "birthDate": {
     "invalid": "出生日期无效。",
     "maxDate": "请选择今天或之前的出生日期。",
     "minDate": "请选择 1900-01-01 或之后的出生日期。",
     "required": "出生日期为必填。"
+  },
+  "carrierType": {
+    "required": "请选择载具类型。"
+  },
+  "carruerNum": {
+    "certificate": {
+      "invalid": "自然人凭证格式需为 16 位英数大写。"
+    },
+    "mobile": {
+      "invalid": "手机条码格式需为 /XXXXXXX。"
+    }
   },
   "confirmNewPassword": {
     "mismatch": "两次输入的密码不一致。",
@@ -30,10 +38,16 @@
     "required": "公司地址为必填。"
   },
   "customerIdentifier": {
-    "invalid": "统一编号格式需为 8 位数字。"
+    "invalid": "统一编号格式需为 8 位数字。",
+    "notFound": "查无对应的公司资料。",
+    "required": "统一编号为必填。"
   },
   "customerName": {
     "required": "公司名称为必填。"
+  },
+  "donateCode": {
+    "invalid": "捐赠码格式需为 3 至 7 位数字。",
+    "required": "捐赠码为必填。"
   },
   "email": {
     "invalid": "电子邮件无效。",
@@ -45,11 +59,11 @@
   "gender": {
     "required": "性别为必填。"
   },
+  "invoiceType": {
+    "required": "发票类型为必填。"
+  },
   "name": {
     "required": "姓名为必填。"
-  },
-  "notes": {
-    "maxLength": "备注不能超过 160 个字符。"
   },
   "newPassword": {
     "differentFromCurrent": "与当前密码不相同。",
@@ -58,6 +72,9 @@
     "minLength": "至少 8 个字符长度。",
     "number": "包含至少一个数字。",
     "sameAsCurrent": "新密码不能与当前密码相同。"
+  },
+  "notes": {
+    "maxLength": "备注不能超过 160 个字符。"
   },
   "password": {
     "letter": "包含至少一个英文字母。",

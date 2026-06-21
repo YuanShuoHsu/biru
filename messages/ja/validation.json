@@ -2,14 +2,22 @@
   "bio": {
     "maxLength": "自己紹介は160文字以内で入力してください。"
   },
-  "carrierType": {
-    "required": "キャリアタイプを選択してください。"
-  },
   "birthDate": {
     "invalid": "生年月日が無効です。",
     "maxDate": "今日以前の生年月日を選択してください。",
     "minDate": "1900-01-01以降の生年月日を選択してください。",
     "required": "生年月日は必須です。"
+  },
+  "carrierType": {
+    "required": "キャリアタイプを選択してください。"
+  },
+  "carruerNum": {
+    "certificate": {
+      "invalid": "自然人証明書は半角英大文字・数字16文字で入力してください。"
+    },
+    "mobile": {
+      "invalid": "スマホバーコードの形式は /XXXXXXX で入力してください。"
+    }
   },
   "confirmNewPassword": {
     "mismatch": "パスワードが一致しません。",
@@ -30,10 +38,16 @@
     "required": "会社住所は必須です。"
   },
   "customerIdentifier": {
-    "invalid": "統一番号は8桁の数字で入力してください。"
+    "invalid": "統一番号は8桁の数字で入力してください。",
+    "notFound": "該当する会社が見つかりません。",
+    "required": "統一番号は必須です。"
   },
   "customerName": {
     "required": "会社名は必須です。"
+  },
+  "donateCode": {
+    "invalid": "寄付コードは3〜7桁の数字で入力してください。",
+    "required": "寄付コードは必須です。"
   },
   "email": {
     "invalid": "メールアドレスが無効です。",
@@ -45,11 +59,11 @@
   "gender": {
     "required": "性別は必須です。"
   },
+  "invoiceType": {
+    "required": "インボイスの種類は必須です。"
+  },
   "name": {
     "required": "氏名は必須です。"
-  },
-  "notes": {
-    "maxLength": "備考は160文字以内で入力してください。"
   },
   "newPassword": {
     "differentFromCurrent": "現在のパスワードと異なる。",
@@ -58,6 +72,9 @@
     "minLength": "8文字以上の長さ。",
     "number": "数字を1文字以上含む。",
     "sameAsCurrent": "新しいパスワードは現在のパスワードと異なる必要があります。"
+  },
+  "notes": {
+    "maxLength": "備考は160文字以内で入力してください。"
   },
   "password": {
     "letter": "英字を1文字以上含む。",
