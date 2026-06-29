@@ -11,6 +11,7 @@ pnpm start        # Start production server
 pnpm lint         # Run ESLint
 pnpm format       # Format all files with Prettier
 pnpm format:check # Check formatting without writing changes
+pnpm codegen      # Regenerate types/api.ts from NestJS OpenAPI spec (requires biru-api running on :3001)
 ```
 
 No test suite is currently configured.
