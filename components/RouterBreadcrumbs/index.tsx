@@ -5,7 +5,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 import { ORDER_MODE } from "@/constants/orderMode";
@@ -48,6 +48,8 @@ import {
 import { type CSSObject, styled, type Theme } from "@mui/material/styles";
 
 import type { RouteParams } from "@/types/routeParams";
+
+import { getHref } from "@/utils/href";
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   flex: 1,
@@ -96,19 +98,23 @@ interface BreadcrumbItem {
 
 const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
+  const searchParams = useSearchParams();
 
   const tAuth = useTranslations("auth");
   const tCompany = useTranslations("company");
   const tOrder = useTranslations("order");
 
-  const isPickup = mode === ORDER_MODE.Pickup;
+  const modeLabelMap: Partial<Record<string, string>> = {
+    [ORDER_MODE.Counter]: tOrder("mode.counter.label"),
+    [ORDER_MODE.DineIn]: tOrder("mode.dineIn.label"),
+    [ORDER_MODE.Kiosk]: tOrder("mode.kiosk.label"),
+    [ORDER_MODE.Pickup]: tOrder("mode.pickup.label"),
+  };
+  const modeLabel = (mode && modeLabelMap[mode]) || mode || "";
 
-  const modeLabel =
-    mode === ORDER_MODE.Pickup
-      ? tOrder("mode.pickup.label")
-      : mode === ORDER_MODE.DineIn
-        ? tOrder("mode.dineIn.label")
-        : mode || "";
+  const partySize = searchParams.get("partySize");
+  const tableNumber = searchParams.get("tableNumber");
+  const storeTo = getHref(`/${organizationSlug}`, { partySize, tableNumber });
 
   const storeChildren: BreadcrumbItem[] = [
     {
@@ -130,18 +136,18 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
 
   const orderChildren: BreadcrumbItem[] = [
     {
-      icon: ShoppingCart,
-      label: modeLabel,
-      to: `/${mode}`,
       children: [
         {
           children: storeChildren,
-          disabled: !isPickup,
           icon: Storefront,
           label: organizationName,
-          to: `/${organizationSlug}`,
+          to: storeTo,
         },
       ],
+      disabled: true,
+      icon: ShoppingCart,
+      label: modeLabel,
+      to: `/${mode}`,
     },
   ];
 
@@ -248,7 +254,7 @@ const findBreadcrumb = (
   | Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label" | "to">
   | undefined =>
   breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
-    const currentPath = `${parentPath}${to}`;
+    const currentPath = `${parentPath}${to.split("?")[0]}`;
 
     if (currentPath === targetPath)
       return [{ disabled, hidden, icon, label, to }];
