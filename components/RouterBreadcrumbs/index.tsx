@@ -16,6 +16,7 @@ import {
   AccountCircle,
   Business,
   DeleteForever,
+  Restaurant,
   Email,
   Gavel,
   GroupAdd,
@@ -30,9 +31,12 @@ import {
   PersonAdd,
   Pets,
   Policy,
+  QrCodeScanner,
   Settings,
   ShoppingCart,
   Storefront,
+  LocalMall,
+  TouchApp,
 } from "@mui/icons-material";
 import {
   Breadcrumbs,
@@ -112,6 +116,15 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
   };
   const modeLabel = (mode && modeLabelMap[mode]) || mode || "";
 
+  const modeIconMap: Record<string, React.ComponentType<SvgIconProps>> = {
+    [ORDER_MODE.Counter]: QrCodeScanner,
+    [ORDER_MODE.DineIn]: Restaurant,
+    [ORDER_MODE.Kiosk]: TouchApp,
+    [ORDER_MODE.Pickup]: LocalMall,
+  };
+  const modeIcon: React.ComponentType<SvgIconProps> =
+    mode ? modeIconMap[mode] : ShoppingCart;
+
   const partySize = searchParams.get("partySize");
   const tableNumber = searchParams.get("tableNumber");
   const storeTo = getHref(`/${organizationSlug}`, { partySize, tableNumber });
@@ -145,7 +158,7 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
         },
       ],
       disabled: true,
-      icon: ShoppingCart,
+      icon: modeIcon,
       label: modeLabel,
       to: `/${mode}`,
     },
