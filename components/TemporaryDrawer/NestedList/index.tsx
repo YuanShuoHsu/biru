@@ -187,10 +187,26 @@ const useNavItems = (): MenuItem[] => {
                 chipLabel={tOrder("mode.dineIn.label")}
                 extra={[
                   ...(tableNumber
-                    ? [{ icon: <TableBar />, primary: tOrder("mode.dineIn.storeSlug.tableNumber.value", { tableNumber }) }]
+                    ? [
+                        {
+                          icon: <TableBar />,
+                          primary: tOrder(
+                            "mode.dineIn.storeSlug.tableNumber.value",
+                            { tableNumber },
+                          ),
+                        },
+                      ]
                     : []),
                   ...(partySize
-                    ? [{ icon: partySize === "1" ? <Person /> : <Group />, primary: tOrder("mode.dineIn.storeSlug.tableNumber.partySize.select.value", { count: partySize }) }]
+                    ? [
+                        {
+                          icon: partySize === "1" ? <Person /> : <Group />,
+                          primary: tOrder(
+                            "mode.dineIn.storeSlug.tableNumber.partySize.select.value",
+                            { count: partySize },
+                          ),
+                        },
+                      ]
                     : []),
                 ]}
                 level={level}
@@ -218,7 +234,17 @@ const useNavItems = (): MenuItem[] => {
                 chipLabel={tOrder("mode.kiosk.label")}
                 extra={
                   type
-                    ? [{ icon: type === "dine-in" ? <Restaurant /> : <LocalMall />, primary: tOrder(type === "dine-in" ? "mode.kiosk.dineIn" : "mode.kiosk.takeout") }]
+                    ? [
+                        {
+                          icon:
+                            type === "dine-in" ? <Restaurant /> : <LocalMall />,
+                          primary: tOrder(
+                            type === "dine-in"
+                              ? "mode.kiosk.dineIn"
+                              : "mode.kiosk.takeout",
+                          ),
+                        },
+                      ]
                     : []
                 }
                 level={level}
