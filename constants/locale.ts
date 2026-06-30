@@ -8,14 +8,14 @@ import * as muiLocales from "@mui/material/locale";
 import type { ThemeOptions } from "@mui/material/styles";
 import * as pickersLocales from "@mui/x-date-pickers/locales";
 
-import type { EcpayLanguage } from "@/types/ecpay/createEcpayDto";
+import type { EcpayLanguage } from "@/types/ecpay";
 
 type DayjsLocale = "zh-tw" | "en" | "ja" | "ko" | "zh-cn";
 
 interface LocaleConfig {
   countryCode: CountryCode;
   dayjs: DayjsLocale;
-  ecpayLanguage: EcpayLanguage;
+  ecpayLanguage?: EcpayLanguage;
   label: string;
   mui: ThemeOptions[];
 }
@@ -24,7 +24,6 @@ export const localeConfigs: Record<Locale, LocaleConfig> = {
   [LocaleEnum.ZhTW]: {
     countryCode: "TW",
     dayjs: "zh-tw",
-    ecpayLanguage: "",
     label: "繁體中文",
     mui: [muiLocales.zhTW, pickersLocales.zhTW],
   },
