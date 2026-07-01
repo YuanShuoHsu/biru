@@ -2,6 +2,7 @@
   "colon": ": ",
   "currency": "NT$",
   "delimiter": ", ",
+  "discontinued": "Discontinued",
   "empty": "No items yet",
   "from": "from",
   "loading": "Loading...",
@@ -11,7 +12,7 @@
   "parenthesisClose": ")",
   "parenthesisOpen": "(",
   "reachStockLimit": "Stock limit reached {label}",
-  "soldOut": "{label} Sold out",
+  "soldOut": "Sold out",
   "totalAmount": "Total",
   "unavailable": "Unavailable"
 }
