@@ -9,14 +9,14 @@
     "required": "出生日期为必填。"
   },
   "carrierType": {
-    "required": "请选择载具类型。"
+    "notSelected": "请选择您的载具类型。"
   },
   "carruerNum": {
     "certificate": {
-      "invalid": "自然人凭证格式需为 16 位英数大写。"
+      "invalid": "自然人凭证格式无效。"
     },
     "mobile": {
-      "invalid": "手机条码格式需为 /XXXXXXX。"
+      "invalid": "手机条码格式无效。"
     }
   },
   "confirmNewPassword": {
@@ -38,7 +38,7 @@
     "required": "公司地址为必填。"
   },
   "customerIdentifier": {
-    "invalid": "统一编号格式需为 8 位数字。",
+    "invalid": "统一编号格式无效。",
     "notFound": "查无对应的公司资料。",
     "required": "统一编号为必填。"
   },
@@ -46,7 +46,7 @@
     "required": "公司名称为必填。"
   },
   "donateCode": {
-    "invalid": "捐赠码格式需为 3 至 7 位数字。",
+    "invalid": "捐赠码格式无效。",
     "required": "捐赠码为必填。"
   },
   "email": {
@@ -60,7 +60,7 @@
     "required": "性别为必填。"
   },
   "invoiceType": {
-    "required": "发票类型为必填。"
+    "notSelected": "请选择您的发票类型。"
   },
   "name": {
     "required": "姓名为必填。"
@@ -83,10 +83,10 @@
     "number": "包含至少一个数字。"
   },
   "payment": {
-    "required": "请选择付款方式。"
+    "notSelected": "请选择您的付款方式。"
   },
   "phone": {
-    "invalid": "电话号码无效。",
-    "required": "电话号码为必填。"
+    "invalid": "手机号码格式无效。",
+    "required": "手机号码为必填。"
   }
 }

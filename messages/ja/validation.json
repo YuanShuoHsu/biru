@@ -9,14 +9,14 @@
     "required": "生年月日は必須です。"
   },
   "carrierType": {
-    "required": "キャリアタイプを選択してください。"
+    "notSelected": "キャリアタイプを選択してください。"
   },
   "carruerNum": {
     "certificate": {
-      "invalid": "自然人証明書は半角英大文字・数字16文字で入力してください。"
+      "invalid": "自然人証明書が無効です。"
     },
     "mobile": {
-      "invalid": "スマホバーコードの形式は /XXXXXXX で入力してください。"
+      "invalid": "スマホバーコードが無効です。"
     }
   },
   "confirmNewPassword": {
@@ -38,7 +38,7 @@
     "required": "会社住所は必須です。"
   },
   "customerIdentifier": {
-    "invalid": "統一番号は8桁の数字で入力してください。",
+    "invalid": "統一番号が無効です。",
     "notFound": "該当する会社が見つかりません。",
     "required": "統一番号は必須です。"
   },
@@ -46,7 +46,7 @@
     "required": "会社名は必須です。"
   },
   "donateCode": {
-    "invalid": "寄付コードは3〜7桁の数字で入力してください。",
+    "invalid": "寄付コードが無効です。",
     "required": "寄付コードは必須です。"
   },
   "email": {
@@ -60,7 +60,7 @@
     "required": "性別は必須です。"
   },
   "invoiceType": {
-    "required": "インボイスの種類は必須です。"
+    "notSelected": "インボイスの種類を選択してください。"
   },
   "name": {
     "required": "氏名は必須です。"
@@ -83,10 +83,10 @@
     "number": "数字を1文字以上含む。"
   },
   "payment": {
-    "required": "支払い方法を選択してください。"
+    "notSelected": "お支払い方法を選択してください。"
   },
   "phone": {
-    "invalid": "電話番号が無効です。",
-    "required": "電話番号は必須です。"
+    "invalid": "携帯電話番号が無効です。",
+    "required": "携帯電話番号は必須です。"
   }
 }

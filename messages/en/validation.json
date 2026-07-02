@@ -9,14 +9,14 @@
     "required": "Birth date is required."
   },
   "carrierType": {
-    "required": "Please select a carrier type."
+    "notSelected": "Please select your carrier type."
   },
   "carruerNum": {
     "certificate": {
-      "invalid": "Certificate must be 16 uppercase alphanumeric characters."
+      "invalid": "Certificate is not valid."
     },
     "mobile": {
-      "invalid": "Mobile barcode must be in the format /XXXXXXX."
+      "invalid": "Mobile barcode is not valid."
     }
   },
   "confirmNewPassword": {
@@ -38,7 +38,7 @@
     "required": "Company address is required."
   },
   "customerIdentifier": {
-    "invalid": "Tax ID must be 8 digits.",
+    "invalid": "Tax ID is not valid.",
     "notFound": "No company found for this Tax ID.",
     "required": "Tax ID is required."
   },
@@ -46,7 +46,7 @@
     "required": "Company name is required."
   },
   "donateCode": {
-    "invalid": "Donation code must be 3 to 7 digits.",
+    "invalid": "Donation code is not valid.",
     "required": "Donation code is required."
   },
   "email": {
@@ -60,7 +60,7 @@
     "required": "Gender is required."
   },
   "invoiceType": {
-    "required": "Invoice type is required."
+    "notSelected": "Please select your invoice type."
   },
   "name": {
     "required": "Name is required."
@@ -83,10 +83,10 @@
     "number": "Contain at least one number."
   },
   "payment": {
-    "required": "Please select a payment method."
+    "notSelected": "Please select your payment method."
   },
   "phone": {
-    "invalid": "Phone number is not valid.",
-    "required": "Phone is required."
+    "invalid": "Mobile number is not valid.",
+    "required": "Mobile number is required."
   }
 }
