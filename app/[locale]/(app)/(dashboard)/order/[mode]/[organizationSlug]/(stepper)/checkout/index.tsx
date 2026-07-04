@@ -1,8 +1,10 @@
 "use client";
 
+import { type CountryCode, parsePhoneNumberWithError } from "libphonenumber-js";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams, useSearchParams } from "next/navigation";
+import { useSnackbar } from "notistack";
 import { useForm, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
@@ -28,7 +30,6 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
-import useCartTotals from "@/hooks/useCartTotals";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 
@@ -55,10 +56,12 @@ import {
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
-import type { BaseEcpayDto } from "@/types/ecpay";
+import type { CheckoutEcpayDto } from "@/types/ecpay";
+import type { CreateOrderDto, OrderResponse } from "@/types/orders";
 import type { PaymentMethod } from "@/types/payment";
 
 import { getPhoneFormatting } from "@/utils/countries";
+import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 import { getChoiceNames, getItemName } from "@/utils/menus";
 
@@ -81,13 +84,22 @@ const INVOICE_TYPES: { icon: React.ElementType; type: InvoiceType }[] = [
 
 const CARRIER_TYPES: CarrierType[] = ["individual", "mobile", "certificate"];
 
+const API_ORDER_MODE: Record<string, CreateOrderDto["mode"]> = {
+  [ORDER_MODE.Counter]: "counter",
+  [ORDER_MODE.DineIn]: "dineIn",
+  [ORDER_MODE.Kiosk]: "kiosk",
+  [ORDER_MODE.Pickup]: "pickup",
+};
+
 const OrderModeOrganizationSlugCheckout = () => {
-  const { isCartEmpty, cartItemsList } = useCartStore((state) => state);
+  const { cartItemsList, clearCart, isCartEmpty } = useCartStore(
+    (state) => state,
+  );
   const { menu } = useMenuStore((state) => state);
 
   const hasInvalidItems = useCartHasInvalidItems();
 
-  const { cartTotalAmount } = useCartTotals();
+  const { enqueueSnackbar } = useSnackbar();
 
   const customerPaymentFormSchema = useCustomerPaymentFormSchema();
 
@@ -147,20 +159,23 @@ const OrderModeOrganizationSlugCheckout = () => {
 
   const { mask, placeholder } = getPhoneFormatting(countryCode);
 
-  const { mode } = useParams();
+  const { mode, organizationSlug } = useParams();
   const isKiosk = mode === ORDER_MODE.Kiosk;
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const search = searchParams.toString();
-  const query = search ? `?${search}` : "";
-  const completePath = `${pathname.replace("/checkout", "/complete")}${query}`;
   // const isDineIn = mode === ORDER_MODE.DineIn;
 
   const router = useRouter();
 
-  const { isMutating, trigger: triggerEcpay } = useSWRMutation(
+  const { isMutating: isMutatingEcpay, trigger: triggerEcpay } = useSWRMutation(
     "/api/ecpay",
-    sendRequest<{ message: string }, BaseEcpayDto>(),
+    sendRequest<{ message: string }, CheckoutEcpayDto>(),
+  );
+
+  const { isMutating: isMutatingOrder, trigger: triggerOrder } = useSWRMutation(
+    `/api/organizations/${String(organizationSlug)}/orders`,
+    sendRequest<OrderResponse, CreateOrderDto>(),
   );
 
   const shouldFetch =
@@ -234,113 +249,141 @@ const OrderModeOrganizationSlugCheckout = () => {
   const onSubmit = handleSubmit(async (values) => {
     if (!values.payment) return;
 
-    if (values.payment === "Cash") {
-      router.replace(completePath);
-
-      return;
-    }
-
-    const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
-    const completeUrl = `${baseUrl}/${locale}${completePath}`;
-
-    // const buildInvoice = (): CreateEcpayDto["invoice"] => {
-    //   const common = {
-    //     CustomerEmail: values.invoice.emailSameAsCustomer
-    //       ? values.customer.email
-    //       : values.invoice.email,
-    //     CustomerName: values.customer.name,
-    //     CustomerPhone: values.customer.phone,
-    //     DelayDay: "0",
-    //     Donation: "0",
-    //     InvType: "07",
-    //     TaxType: "1",
-    //   };
-    //   switch (values.invoice.type) {
-    //     case "personal":
-    //       if (values.invoice.carrierType === "mobile") {
-    //         return {
-    //           ...common,
-    //           CarruerNum: values.invoice.carruerNum,
-    //           CarruerType: "3",
-    //           Print: "0",
-    //         };
-    //       }
-    //       if (values.invoice.carrierType === "certificate") {
-    //         return {
-    //           ...common,
-    //           CarruerNum: values.invoice.carruerNum,
-    //           CarruerType: "2",
-    //           Print: "0",
-    //         };
-    //       }
-    //       return { ...common, CarruerType: "", Donation: "0", Print: "0" };
-    //     case "company":
-    //       return {
-    //         ...common,
-    //         CarruerType: "",
-    //         CustomerAddr: values.invoice.customerAddr,
-    //         CustomerIdentifier: values.invoice.customerIdentifier,
-    //         CustomerName: values.invoice.customerName,
-    //         Print: "1",
-    //       };
-    //     case "donate":
-    //       return {
-    //         ...common,
-    //         CarruerType: "",
-    //         Donation: "1",
-    //         LoveCode: values.invoice.donateCode,
-    //         Print: "0",
-    //       };
-    //   }
-    // };
-
-    const dto: BaseEcpayDto = {
-      ChoosePayment:
-        values.payment === "Jkopay" || values.payment === "iPASS"
-          ? "DigitalPayment"
-          : (values.payment as BaseEcpayDto["ChoosePayment"]),
-      ...(["iPASS", "Jkopay"].includes(values.payment) && {
-        ChooseSubPayment: values.payment,
-      }),
-      ClientBackURL: completeUrl,
-      ItemName: cartItemsList
-        .map(({ menuItemId, modifiers, addOns, quantity }) => {
-          const itemName = getItemName(menu, menuItemId);
-          const choiceNames = getChoiceNames(
-            menu,
+    try {
+      const order = await triggerOrder({
+        customer: {
+          email: values.customer.email || undefined,
+          name: values.customer.name,
+          notes: values.customer.notes || undefined,
+          phone: values.customer.phone
+            ? parsePhoneNumberWithError(
+                values.customer.phone,
+                values.customer.countryCode as CountryCode,
+              ).number
+            : undefined,
+        },
+        items: cartItemsList.map(
+          ({ addOns, menuItemId, modifiers, quantity }) => ({
+            addOns: addOns.map(({ id, modifiers: addOnModifiers }) => ({
+              menuItemId: id,
+              modifiers: addOnModifiers,
+            })),
             menuItemId,
             modifiers,
-            addOns,
-            {
-              addOnLabel: tOrder("menuItem.addOn"),
-              colon: tCommon("colon"),
-              delimiter: tCommon("delimiter"),
-              parenthesisOpen: tCommon("parenthesisOpen"),
-              parenthesisClose: tCommon("parenthesisClose"),
-            },
-          );
-          const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
+            quantity,
+          }),
+        ),
+        mode: API_ORDER_MODE[String(mode)],
+        payment: values.payment,
+      });
 
-          return `${itemName} ${formattedChoices} ${tCommon("multiply")} ${quantity}`;
-        })
-        .join("#"),
-      Language: localeConfigs[locale].ecpayLanguage,
-      NeedExtraPaidInfo: "Y",
-      OrderResultURL: completeUrl,
-      Remark: values.customer.notes || undefined,
-      TotalAmount: cartTotalAmount,
-      TradeDesc: tOrder("checkout.tradeDesc"),
-    };
+      clearCart();
 
-    const { message: data } = await triggerEcpay(dto);
+      const completeSearchParams = new URLSearchParams(search);
+      completeSearchParams.set("orderId", order.id);
+      const completePath = `${pathname.replace("/checkout", "/complete")}?${completeSearchParams}`;
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(data, "text/html");
-    const form = doc.getElementById("ecpayForm");
+      if (values.payment === "Cash") {
+        router.replace(completePath);
 
-    if (form instanceof HTMLFormElement) {
-      document.body.appendChild(form);
-      form.submit();
+        return;
+      }
+
+      const baseUrl = process.env.NEXT_PUBLIC_NEXT_URL;
+      const completeUrl = `${baseUrl}/${locale}${completePath}`;
+
+      // const buildInvoice = (): CreateEcpayDto["invoice"] => {
+      //   const common = {
+      //     CustomerEmail: values.invoice.emailSameAsCustomer
+      //       ? values.customer.email
+      //       : values.invoice.email,
+      //     CustomerName: values.customer.name,
+      //     CustomerPhone: values.customer.phone,
+      //     DelayDay: "0",
+      //     Donation: "0",
+      //     InvType: "07",
+      //     TaxType: "1",
+      //   };
+      //   switch (values.invoice.type) {
+      //     case "personal":
+      //       if (values.invoice.carrierType === "mobile") {
+      //         return {
+      //           ...common,
+      //           CarruerNum: values.invoice.carruerNum,
+      //           CarruerType: "3",
+      //           Print: "0",
+      //         };
+      //       }
+      //       if (values.invoice.carrierType === "certificate") {
+      //         return {
+      //           ...common,
+      //           CarruerNum: values.invoice.carruerNum,
+      //           CarruerType: "2",
+      //           Print: "0",
+      //         };
+      //       }
+      //       return { ...common, CarruerType: "", Donation: "0", Print: "0" };
+      //     case "company":
+      //       return {
+      //         ...common,
+      //         CarruerType: "",
+      //         CustomerAddr: values.invoice.customerAddr,
+      //         CustomerIdentifier: values.invoice.customerIdentifier,
+      //         CustomerName: values.invoice.customerName,
+      //         Print: "1",
+      //       };
+      //     case "donate":
+      //       return {
+      //         ...common,
+      //         CarruerType: "",
+      //         Donation: "1",
+      //         LoveCode: values.invoice.donateCode,
+      //         Print: "0",
+      //       };
+      //   }
+      // };
+
+      const dto: CheckoutEcpayDto = {
+        ClientBackURL: completeUrl,
+        ItemName: cartItemsList
+          .map(({ menuItemId, modifiers, addOns, quantity }) => {
+            const itemName = getItemName(menu, menuItemId);
+            const choiceNames = getChoiceNames(
+              menu,
+              menuItemId,
+              modifiers,
+              addOns,
+              {
+                addOnLabel: tOrder("menuItem.addOn"),
+                colon: tCommon("colon"),
+                delimiter: tCommon("delimiter"),
+                parenthesisOpen: tCommon("parenthesisOpen"),
+                parenthesisClose: tCommon("parenthesisClose"),
+              },
+            );
+            const formattedChoices = choiceNames ? `[${choiceNames}]` : "";
+
+            return `${itemName} ${formattedChoices} ${tCommon("multiply")} ${quantity}`;
+          })
+          .join("#"),
+        Language: localeConfigs[locale].ecpayLanguage,
+        orderId: order.id,
+        OrderResultURL: completeUrl,
+        TradeDesc: tOrder("checkout.tradeDesc"),
+      };
+
+      const { message: data } = await triggerEcpay(dto);
+
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(data, "text/html");
+      const form = doc.getElementById("ecpayForm");
+
+      if (form instanceof HTMLFormElement) {
+        document.body.appendChild(form);
+        form.submit();
+      }
+    } catch (error) {
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
   });
 
@@ -596,7 +639,7 @@ const OrderModeOrganizationSlugCheckout = () => {
       </Card>
       <Stack direction="row" justifyContent="space-between">
         <Button
-          disabled={isMutating}
+          disabled={isMutatingEcpay || isMutatingOrder}
           onClick={() => router.push(pathname.replace("/checkout", "/cart"))}
           startIcon={<ShoppingCart />}
           variant="outlined"
@@ -606,7 +649,7 @@ const OrderModeOrganizationSlugCheckout = () => {
         <Button
           disabled={isCartEmpty || hasInvalidItems}
           endIcon={<TaskAlt />}
-          loading={isMutating}
+          loading={isMutatingEcpay || isMutatingOrder}
           loadingPosition="end"
           type="submit"
           variant="contained"
