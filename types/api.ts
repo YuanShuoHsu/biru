@@ -237,6 +237,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/users/me/orders": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢我的訂單列表 */
+    get: operations["UserOrdersController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationId}/menus": {
     parameters: {
       query?: never;
@@ -771,6 +788,11 @@ export interface components {
        */
       lastName?: string | null;
       /**
+       * @description 電話（E.164 格式）
+       * @example +886912345678
+       */
+      phoneNumber?: string | null;
+      /**
        * Format: date-time
        * @description 最後更新時間
        * @example 2025-10-14T12:34:56.000Z
@@ -851,8 +873,8 @@ export interface components {
        */
       lastName?: string;
       /**
-       * @description 聯絡電話（不含國碼）
-       * @example 0123456789
+       * @description 聯絡電話（E.164 格式）
+       * @example +886912345678
        */
       phoneNumber?: string;
     };
@@ -1538,6 +1560,7 @@ export interface components {
     OrderResponseDto: {
       id: string;
       sellerId: string;
+      userId?: string | null;
       /** @enum {string} */
       mode: "counter" | "dineIn" | "kiosk" | "pickup";
       orderNumber: string;
@@ -1608,6 +1631,57 @@ export interface components {
       | "orderStatus"
       | "paymentDate"
       | "createdAt";
+    OrderSellerDto: {
+      id: string;
+      name: string;
+      slug: string;
+      logo?: string | null;
+      addressCountry?: string | null;
+    };
+    UserOrderResponseDto: {
+      id: string;
+      sellerId: string;
+      userId?: string | null;
+      /** @enum {string} */
+      mode: "counter" | "dineIn" | "kiosk" | "pickup";
+      orderNumber: string;
+      customer: components["schemas"]["OrderCustomerDto"];
+      /** @enum {string} */
+      paymentMethod:
+        | "ApplePay"
+        | "Cash"
+        | "Credit"
+        | "iPASS"
+        | "Jkopay"
+        | "TWQR"
+        | "WeiXin";
+      paymentMethodId?: string | null;
+      /** @enum {string} */
+      orderStatus:
+        | "OrderCancelled"
+        | "OrderDelivered"
+        | "OrderPaymentDue"
+        | "OrderPickupAvailable"
+        | "OrderProcessing"
+        | "OrderProblem";
+      confirmationNumber?: string | null;
+      /** Format: date-time */
+      paymentDate?: string | null;
+      tradeNo?: string | null;
+      discount?: string | null;
+      discountCode?: string | null;
+      invoice?: Record<string, never> | null;
+      items: components["schemas"]["OrderItemResponseDto"][];
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      seller: components["schemas"]["OrderSellerDto"];
+    };
+    UserOrderListResponseDto: {
+      data: components["schemas"]["UserOrderResponseDto"][];
+      total: number;
+    };
     MenuResponseDto: {
       id: string;
       organizationId: string;
@@ -2637,6 +2711,35 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OrderResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UserOrdersController_findAll: {
+    parameters: {
+      query?: {
+        limit?: number;
+        offset?: number;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserOrderListResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -4177,6 +4280,22 @@ export const orderSortFieldValues: ReadonlyArray<
   "orderStatus",
   "paymentDate",
   "createdAt",
+];
+export const userOrderResponseDtoModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserOrderResponseDto"]["mode"]
+> = ["counter", "dineIn", "kiosk", "pickup"];
+export const userOrderResponseDtoPaymentMethodValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserOrderResponseDto"]["paymentMethod"]
+> = ["ApplePay", "Cash", "Credit", "iPASS", "Jkopay", "TWQR", "WeiXin"];
+export const userOrderResponseDtoOrderStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserOrderResponseDto"]["orderStatus"]
+> = [
+  "OrderCancelled",
+  "OrderDelivered",
+  "OrderPaymentDue",
+  "OrderPickupAvailable",
+  "OrderProcessing",
+  "OrderProblem",
 ];
 export const menuFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["MenuFilterField"]
