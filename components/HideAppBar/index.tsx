@@ -2,7 +2,6 @@
 
 "use client";
 
-import { useParams } from "next/navigation";
 import { Suspense } from "react";
 
 import AccountMenu from "./AccountMenu";
@@ -18,6 +17,8 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
+
+import { usePathname } from "@/i18n/navigation";
 
 import { Menu } from "@mui/icons-material";
 import {
@@ -55,13 +56,13 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 }));
 
 const HideAppBar = () => {
-  const toggleDrawer = useToggleDrawer();
-
-  const { organizationSlug } = useParams();
+  const pathname = usePathname();
 
   const trigger = useScrollTrigger({
     threshold: SCROLL_TRIGGER_THRESHOLD,
   });
+
+  const toggleDrawer = useToggleDrawer();
 
   const isMaintenanceMode = process.env.NEXT_PUBLIC_MAINTENANCE === "true";
 
@@ -91,7 +92,7 @@ const HideAppBar = () => {
               <AccountMenu />
             </Suspense>
           )}
-          {!!organizationSlug && <CartIconButton />}
+          {pathname.startsWith("/order/") && <CartIconButton />}
         </Stack>
       </StyledToolbar>
     </StyledAppBar>
