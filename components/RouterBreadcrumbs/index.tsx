@@ -15,6 +15,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import {
   AccountCircle,
   Business,
+  ConfirmationNumber,
   DeleteForever,
   Restaurant,
   Email,
@@ -220,6 +221,11 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
               icon: ReceiptLong,
               label: tAuth("settings.orders.label"),
               to: "/orders",
+            },
+            {
+              icon: ConfirmationNumber,
+              label: tAuth("settings.coupons.label"),
+              to: "/coupons",
             },
           ],
           disabled: true,
