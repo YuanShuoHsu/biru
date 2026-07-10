@@ -421,7 +421,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
                 field: { onChange, value },
                 fieldState: { error },
               }) => (
-                <CountrySelect
+                <CountryAutocomplete
                   error={!!error}
                   helperText={error?.message}
                   mode="country"
