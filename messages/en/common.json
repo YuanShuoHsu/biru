@@ -31,6 +31,7 @@
   "parenthesisOpen": "(",
   "reachStockLimit": "Stock limit reached {label}",
   "soldOut": "Sold out",
-  "totalAmount": "Total",
+  "subtotal": "Subtotal",
+  "total": "Total",
   "unavailable": "Unavailable"
 }

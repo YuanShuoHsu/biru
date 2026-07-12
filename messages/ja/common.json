@@ -31,6 +31,7 @@
   "parenthesisOpen": "(",
   "reachStockLimit": "在庫の上限に達しました {label}",
   "soldOut": "売り切れ",
-  "totalAmount": "合計",
+  "subtotal": "小計",
+  "total": "合計",
   "unavailable": "取扱なし"
 }
