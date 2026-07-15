@@ -51,7 +51,15 @@ export const useLogout = () => {
             variant: "success",
           });
 
-          if (!data && pathname.startsWith("/auth/settings"))
+          if (
+            !data &&
+            [
+              "/auth/coupons",
+              "/auth/orders",
+              "/auth/points",
+              "/auth/settings",
+            ].some((prefix) => pathname.startsWith(prefix))
+          )
             router.replace("/auth/sign-in");
         },
       },
