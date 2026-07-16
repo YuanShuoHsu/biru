@@ -219,11 +219,17 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
         {
           children: [
             {
+              icon: Stars,
+              label: tAuth("points.transactions.label"),
+              to: "/transactions",
+            },
+            {
               icon: Storefront,
               label: tAuth("store.label"),
               to: "/store",
             },
           ],
+          disabled: true,
           icon: Stars,
           label: tAuth("points.label"),
           to: "/points",

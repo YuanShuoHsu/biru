@@ -149,7 +149,7 @@ const Points = ({ page, pageSize, wallets }: PointsProps) => {
         )}
         {wallets.length > 0 && transactions.length === 0 && (
           <Typography color="text.secondary" variant="body2">
-            {tAuth("points.transactionsEmpty")}
+            {tAuth("points.transactions.empty")}
           </Typography>
         )}
         {transactions.length > 0 && (

@@ -42,7 +42,7 @@ export const useOrdersMenuItem = (): MenuItem => {
   return {
     icon: ReceiptLong,
     label: tAuth("orders.label"),
-    to: "/orders",
+    to: "/orders?page=1&pageSize=10",
   };
 };
 
@@ -52,7 +52,7 @@ export const usePointsMenuItem = (): MenuItem => {
   return {
     icon: Stars,
     label: tAuth("points.label"),
-    to: "/points",
+    to: "/points/transactions?page=1&pageSize=10",
   };
 };
 
