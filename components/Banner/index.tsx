@@ -5,12 +5,6 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 import NavigationButton from "./NavigationButton";
 
-import {
-  APP_BAR_TOOLBAR_HEIGHT,
-  APP_BAR_TOOLBAR_HEIGHT_SM_UP,
-  APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
-} from "@/constants/appBar";
-
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -31,19 +25,14 @@ import {
 const StyledBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
-  maxHeight: `calc(100vh - ${APP_BAR_TOOLBAR_HEIGHT}px)`,
-  aspectRatio: 4 / 3,
+  aspectRatio: "4/3",
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
 
-  [`${theme.breakpoints.up("xs")} and (orientation: landscape)`]: {
-    maxHeight: `calc(100vh - ${APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE}px)`,
-  },
   [theme.breakpoints.up("sm")]: {
-    maxHeight: `calc(100vh - ${APP_BAR_TOOLBAR_HEIGHT_SM_UP}px)`,
-    aspectRatio: 16 / 9,
+    aspectRatio: "16/9",
   },
 }));
 
