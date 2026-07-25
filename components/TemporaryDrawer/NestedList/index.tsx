@@ -19,15 +19,15 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import {
   AccountCircle,
   Apartment,
-  Description,
+  Gavel,
   Group,
   Home,
   Info,
   LocalMall,
   Person,
+  Policy,
   QrCodeScanner,
   Restaurant,
-  Security,
   ShoppingCart,
   Storefront,
   TableBar,
@@ -292,7 +292,7 @@ const useNavItems = (): MenuItem[] => {
           to: "/about",
         },
         {
-          icon: Description,
+          icon: Gavel,
           label: tCompany("legal.terms.label"),
           to: getHref("/terms", {
             [query.back]: pathname,
@@ -300,7 +300,7 @@ const useNavItems = (): MenuItem[] => {
           }),
         },
         {
-          icon: Security,
+          icon: Policy,
           label: tCompany("legal.privacy.label"),
           to: getHref("/privacy", {
             [query.back]: pathname,
