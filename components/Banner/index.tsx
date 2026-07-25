@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 import NavigationButton from "./NavigationButton";
@@ -8,6 +7,8 @@ import NavigationButton from "./NavigationButton";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+import type { Banner as BannerType } from "@/types/banners";
 
 import "swiper/css";
 import "swiper/css/free-mode";
@@ -76,7 +77,17 @@ const StyledSlide = styled(SwiperSlide)({
   alignItems: "center",
 });
 
-const Banner = () => (
+const StyledImage = styled("img")({
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+});
+
+interface BannerProps {
+  banners: BannerType[];
+}
+
+const Banner = ({ banners }: BannerProps) => (
   <StyledBox>
     <StyledSwiper
       autoplay={{
@@ -110,18 +121,9 @@ const Banner = () => (
       slidesPerView={1}
       spaceBetween={0}
     >
-      {Array.from({ length: 9 }, (_, index) => (
-        <StyledSlide key={index}>
-          <Image
-            alt={`Slide ${index + 1}`}
-            fill
-            priority={index === 0}
-            sizes="100vw"
-            src="/images/IMG_4590.jpg"
-            style={{
-              objectFit: "cover",
-            }}
-          />
+      {banners.map(({ id, image }, index) => (
+        <StyledSlide key={id}>
+          <StyledImage alt={`Slide ${index + 1}`} src={image} />
         </StyledSlide>
       ))}
     </StyledSwiper>

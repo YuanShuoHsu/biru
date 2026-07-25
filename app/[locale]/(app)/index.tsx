@@ -1,9 +1,15 @@
 import Banner from "@/components/Banner";
 import Footer from "@/components/Footer";
 
-const Home = () => (
+import type { Banner as BannerType } from "@/types/banners";
+
+interface HomeProps {
+  banners: BannerType[];
+}
+
+const Home = ({ banners }: HomeProps) => (
   <>
-    <Banner />
+    {banners.length > 0 && <Banner banners={banners} />}
     <Footer />
   </>
 );

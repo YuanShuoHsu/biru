@@ -4,6 +4,8 @@ import Home from ".";
 
 import type { Locale } from "@/i18n/routing";
 
+import { getBanners } from "@/utils/banners";
+
 interface HomePageProps {
   params: Promise<{ locale: Locale }>;
 }
@@ -13,7 +15,9 @@ const HomePage = async ({ params }: HomePageProps) => {
 
   setRequestLocale(locale);
 
-  return <Home />;
+  const banners = await getBanners();
+
+  return <Home banners={banners} />;
 };
 
 export default HomePage;
