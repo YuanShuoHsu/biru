@@ -14,7 +14,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 
 import {
   AccountCircle,
-  Business,
+  Apartment,
   ConfirmationNumber,
   DeleteForever,
   Restaurant,
@@ -277,7 +277,7 @@ const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
         },
       ],
       disabled: true,
-      icon: Business,
+      icon: Apartment,
       label: tCompany("label"),
       to: "/company",
     },

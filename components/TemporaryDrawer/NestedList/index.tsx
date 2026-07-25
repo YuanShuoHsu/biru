@@ -18,7 +18,7 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 
 import {
   AccountCircle,
-  Business,
+  Apartment,
   Description,
   Group,
   Home,
@@ -308,7 +308,7 @@ const useNavItems = (): MenuItem[] => {
           }),
         },
       ],
-      icon: Business,
+      icon: Apartment,
       label: tCompany("label"),
       to: "/company",
     },
