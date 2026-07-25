@@ -9,7 +9,7 @@ interface HomeProps {
 
 const Home = ({ banners }: HomeProps) => (
   <>
-    {banners.length > 0 && <Banner banners={banners} />}
+    <Banner banners={banners} />
     <Footer />
   </>
 );
