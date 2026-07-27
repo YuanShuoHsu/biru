@@ -36,6 +36,7 @@ const SelectedListItem = ({
     if (isExpandable) {
       event.stopPropagation();
       setOpen((prev) => !prev);
+
       return;
     }
 
