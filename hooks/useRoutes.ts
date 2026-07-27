@@ -208,9 +208,21 @@ export const findRoute = (path: string): MatchedRoute | undefined => {
   return matched;
 };
 
-export const useRoutes = (defaultOrganization?: string | null) => {
+interface UseRoutesOptions {
+  defaultOrganization?: string | null;
+  organizationName?: string;
+}
+
+export const useRoutes = ({
+  defaultOrganization,
+  organizationName,
+}: UseRoutesOptions = {}) => {
   const t = useTranslations();
   const searchParams = useSearchParams();
+
+  const labels: Partial<Record<string, string>> = {
+    organizationSlug: organizationName,
+  };
 
   const values: Record<RouteQuery, string | null> = {
     organization:
@@ -221,8 +233,7 @@ export const useRoutes = (defaultOrganization?: string | null) => {
     tableNumber: searchParams.get("tableNumber"),
   };
 
-  const buildHref = (href: string) => {
-    const { query } = findRoute(href) || {};
+  const buildHref = (href: string, query = findRoute(href)?.query) => {
     if (!query) return href;
 
     return getHref(
@@ -231,15 +242,18 @@ export const useRoutes = (defaultOrganization?: string | null) => {
     );
   };
 
-  return (path: string, href?: string): NavItem & { param?: string } => {
-    const { icon, label, param, to } = findRoute(path) || {};
+  return (path: string, href?: string): NavItem => {
+    const { icon, label, param, query, to } = findRoute(path) || {};
+    const target = to === null ? undefined : (href ?? to ?? path);
 
     return {
       icon,
-      label: label && t(label),
-      param,
+      label:
+        (param && labels[param]) ??
+        (label && t(label)) ??
+        path.split("/").at(-1),
       path,
-      to: to === null ? undefined : buildHref(href ?? to ?? path),
+      to: target && buildHref(target, target === path ? query : undefined),
     };
   };
 };

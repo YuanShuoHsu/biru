@@ -73,29 +73,13 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
 
-  const navItem = useRoutes();
+  const navItem = useRoutes({ organizationName });
 
-  const labels: Partial<Record<string, string>> = {
-    organizationSlug: organizationName,
-  };
+  const pathnames = usePathname().split("/").filter(Boolean);
 
-  const pathname = usePathname();
-  const pathnames = pathname.split("/").filter((x) => x);
-
-  const segments: NavItem[] = pathnames.map((value, index) => {
-    const segmentPath = pathnames.slice(0, index + 1).join("/");
-    const path = `/${segmentPath}`;
-
-    const { icon, label, param, to } = navItem(path);
-
-    const dynamicLabel = param ? labels[param] : undefined;
-
-    return {
-      icon,
-      label: dynamicLabel ?? label ?? value,
-      to,
-    };
-  });
+  const segments = pathnames.map((_, index) =>
+    navItem(`/${pathnames.slice(0, index + 1).join("/")}`),
+  );
 
   const lastSegment = segments.at(-1);
   const isCollapsed = segments.length > MAX_ITEMS;
