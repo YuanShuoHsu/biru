@@ -6,9 +6,7 @@
 
 import { useState } from "react";
 
-import { findRoute } from "@/constants/routes";
-
-import { useNavItem } from "@/hooks/useNavItem";
+import { findRoute, useRoutes } from "@/hooks/useRoutes";
 
 import { Link, usePathname } from "@/i18n/navigation";
 
@@ -75,7 +73,7 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
 
-  const navItem = useNavItem();
+  const navItem = useRoutes();
 
   const labels: Partial<Record<string, string>> = {
     organizationSlug: organizationName,
