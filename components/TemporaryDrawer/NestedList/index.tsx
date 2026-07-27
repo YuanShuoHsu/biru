@@ -12,7 +12,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useAuthNavItems } from "@/hooks/useAuth";
 import { useCompanyNavItems } from "@/hooks/useCompany";
-import { useRoutes } from "@/hooks/useRoutes";
+import { getRouteSlots, useRoutes } from "@/hooks/useRoutes";
 
 import { Home } from "@mui/icons-material";
 import { List, ListSubheader, Toolbar } from "@mui/material";
@@ -38,10 +38,10 @@ const useNavItems = (): NavItem[] => {
   const tHome = useTranslations("home");
 
   // 只有現場點餐模式底下有這一項；外帶自取沒有
-  const orderModeItem = navItem(`/order/${mode}/current-store`);
+  const orderModeSlots = getRouteSlots(`/order/${mode}`);
 
   const orderChildren: NavItem[] = [
-    ...(organizationSlug && orderModeItem.slot ? [orderModeItem] : []),
+    ...(organizationSlug ? orderModeSlots.map((slot) => ({ slot })) : []),
     navItem(`/order/${ORDER_MODE.Pickup}`),
   ];
 

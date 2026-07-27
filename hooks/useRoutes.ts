@@ -67,187 +67,224 @@ interface RouteSlot {
   slot: Slot;
 }
 
-interface RoutePath {
-  children?: Record<string, Route>;
+interface RoutePage {
+  children?: Route[];
   icon: React.ComponentType<SvgIconProps>;
   label?: LabelKey;
   query?: readonly RouteQuery[];
+  segment: string;
   to?: string | null;
 }
 
-type Route = RoutePath | RouteSlot;
+type Route = RoutePage | RouteSlot;
 
-const storeRoute: RoutePath = {
-  children: {
-    cart: {
+const storeRoute: RoutePage = {
+  children: [
+    {
       icon: ShoppingCart,
       label: "order.mode.storeSlug.tableNumber.stepper.cart.label",
+      segment: "cart",
     },
-    checkout: {
+    {
       icon: Payment,
       label: "order.mode.storeSlug.tableNumber.stepper.checkout.label",
+      segment: "checkout",
     },
-    complete: {
+    {
       icon: Pets,
       label: "order.mode.storeSlug.tableNumber.stepper.complete.label",
+      segment: "complete",
     },
-  },
+  ],
   icon: Storefront,
   query: ["partySize", "tableNumber", "type"],
+  segment: "[organizationSlug]",
 };
 
-const orderModeChildren: Record<string, Route> = {
-  "[organizationSlug]": storeRoute,
-};
+const orderModeChildren: Route[] = [storeRoute];
 
-const onSiteOrderModeChildren: Record<string, Route> = {
-  "current-store": { slot: OrderModeMenuItem },
-  "[organizationSlug]": storeRoute,
-};
+const onSiteOrderModeChildren: Route[] = [
+  { slot: OrderModeMenuItem },
+  storeRoute,
+];
 
-const routes: Record<string, Route> = {
-  auth: {
-    children: {
-      "accept-invitation": {
-        icon: GroupAdd,
-        label: "auth.acceptInvitation.label",
-      },
-      coupons: { icon: ConfirmationNumber, label: "auth.coupons.label" },
-      "delete-account": {
-        icon: DeleteForever,
-        label: "auth.deleteAccount.label",
-      },
-      "forgot-password": {
-        icon: HelpOutline,
-        label: "auth.forgotPassword.label",
-      },
-      orders: {
-        icon: ReceiptLong,
-        label: "auth.orders.label",
-        query: ["page", "pageSize"],
-      },
-      points: {
-        children: {
-          store: { icon: Storefront, label: "auth.store.label" },
-          transactions: {
-            icon: Stars,
-            label: "auth.points.transactions.label",
-            query: ["page", "pageSize"],
-          },
-        },
-        icon: Stars,
-        label: "auth.points.label",
-        to: "/auth/points/transactions",
-      },
-      "reset-password": {
-        icon: LockReset,
-        label: "auth.resetPassword.label",
-      },
-      settings: {
-        children: {
-          account: { icon: Person, label: "auth.settings.account.label" },
-          security: { icon: Lock, label: "auth.settings.security.label" },
-        },
-        icon: Settings,
-        label: "auth.settings.label",
-        to: "/auth/settings/account",
-      },
-      "sign-in": {
-        icon: Login,
-        label: "auth.signIn.label",
-        query: ["redirectTo"],
-      },
-      "sign-up": {
-        icon: PersonAdd,
-        label: "auth.signUp.label",
-        query: ["redirectTo"],
-      },
-      "verify-email": { icon: Email, label: "auth.verifyEmail.label" },
-    },
-    icon: AccountCircle,
-    label: "auth.label",
-    to: null,
-  },
-  company: {
-    children: {
-      about: { icon: Info, label: "company.about.label" },
-      privacy: {
-        icon: Policy,
-        label: "company.legal.privacy.label",
-        query: ["back", "redirectTo"],
-      },
-      terms: {
-        icon: Gavel,
-        label: "company.legal.terms.label",
-        query: ["back", "redirectTo"],
-      },
-    },
-    icon: Apartment,
-    label: "company.label",
-    to: null,
-  },
-
-  order: {
-    children: {
-      [ORDER_MODE.Counter]: {
+const routes: Route[] = [
+  {
+    children: [
+      {
         children: onSiteOrderModeChildren,
         icon: QrCodeScanner,
         label: "order.mode.counter.label",
+        segment: ORDER_MODE.Counter,
         to: null,
       },
-      [ORDER_MODE.DineIn]: {
+      {
         children: onSiteOrderModeChildren,
         icon: Restaurant,
         label: "order.mode.dineIn.label",
+        segment: ORDER_MODE.DineIn,
         to: null,
       },
-      [ORDER_MODE.Kiosk]: {
+      {
         children: onSiteOrderModeChildren,
         icon: TouchApp,
         label: "order.mode.kiosk.label",
+        segment: ORDER_MODE.Kiosk,
         to: null,
       },
-      [ORDER_MODE.Pickup]: {
+      {
         children: orderModeChildren,
         icon: LocalMall,
         label: "order.mode.pickup.label",
+        segment: ORDER_MODE.Pickup,
       },
-    },
+    ],
     icon: ShoppingCart,
     label: "order.label",
+    segment: "order",
     to: null,
   },
-};
+  {
+    children: [
+      {
+        icon: GroupAdd,
+        label: "auth.acceptInvitation.label",
+        segment: "accept-invitation",
+      },
+      {
+        icon: ConfirmationNumber,
+        label: "auth.coupons.label",
+        segment: "coupons",
+      },
+      {
+        icon: DeleteForever,
+        label: "auth.deleteAccount.label",
+        segment: "delete-account",
+      },
+      {
+        icon: HelpOutline,
+        label: "auth.forgotPassword.label",
+        segment: "forgot-password",
+      },
+      {
+        icon: ReceiptLong,
+        label: "auth.orders.label",
+        query: ["page", "pageSize"],
+        segment: "orders",
+      },
+      {
+        children: [
+          { icon: Storefront, label: "auth.store.label", segment: "store" },
+          {
+            icon: Stars,
+            label: "auth.points.transactions.label",
+            query: ["page", "pageSize"],
+            segment: "transactions",
+          },
+        ],
+        icon: Stars,
+        label: "auth.points.label",
+        segment: "points",
+        to: "/auth/points/transactions",
+      },
+      {
+        icon: LockReset,
+        label: "auth.resetPassword.label",
+        segment: "reset-password",
+      },
+      {
+        children: [
+          {
+            icon: Person,
+            label: "auth.settings.account.label",
+            segment: "account",
+          },
+          {
+            icon: Lock,
+            label: "auth.settings.security.label",
+            segment: "security",
+          },
+        ],
+        icon: Settings,
+        label: "auth.settings.label",
+        segment: "settings",
+        to: "/auth/settings/account",
+      },
+      {
+        icon: Login,
+        label: "auth.signIn.label",
+        query: ["redirectTo"],
+        segment: "sign-in",
+      },
+      {
+        icon: PersonAdd,
+        label: "auth.signUp.label",
+        query: ["redirectTo"],
+        segment: "sign-up",
+      },
+      {
+        icon: Email,
+        label: "auth.verifyEmail.label",
+        segment: "verify-email",
+      },
+    ],
+    icon: AccountCircle,
+    label: "auth.label",
+    segment: "auth",
+    to: null,
+  },
+  {
+    children: [
+      { icon: Info, label: "company.about.label", segment: "about" },
+      {
+        icon: Policy,
+        label: "company.legal.privacy.label",
+        query: ["back", "redirectTo"],
+        segment: "privacy",
+      },
+      {
+        icon: Gavel,
+        label: "company.legal.terms.label",
+        query: ["back", "redirectTo"],
+        segment: "terms",
+      },
+    ],
+    icon: Apartment,
+    label: "company.label",
+    segment: "company",
+    to: null,
+  },
+];
 
 const findRoute = (path: string) => {
-  let children: RoutePath["children"] = routes;
-  let matched: (Route & { param?: string }) | undefined;
+  let children: RoutePage["children"] = routes;
+  let matched: (RoutePage & { param?: string }) | undefined;
 
   for (const segment of path.split("/").filter(Boolean)) {
     if (!children) return;
 
-    const key: string | undefined =
-      segment in children
-        ? segment
-        : Object.keys(children).find((child) => child.startsWith("["));
-    const meta: Route | undefined = key ? children[key] : undefined;
-    if (!key || !meta) return;
+    const pages: RoutePage[] = children.filter((route) => "segment" in route);
+    const meta: RoutePage | undefined =
+      pages.find((page) => page.segment === segment) ??
+      pages.find((page) => page.segment.startsWith("["));
+    if (!meta) return;
 
     matched = {
       ...meta,
-      ...(key.startsWith("[") && { param: key.slice(1, -1) }),
+      ...(meta.segment.startsWith("[") && {
+        param: meta.segment.slice(1, -1),
+      }),
     };
-    children = "slot" in meta ? undefined : meta.children;
+    children = meta.children;
   }
 
   return matched;
 };
 
-const findRoutePath = (path: string) => {
-  const route = findRoute(path);
-
-  return route && !("slot" in route) ? route : undefined;
-};
+export const getRouteSlots = (path: string): Slot[] =>
+  findRoute(path)?.children?.flatMap((child) =>
+    "slot" in child ? [child.slot] : [],
+  ) ?? [];
 
 export const useRoutes = () => {
   const t = useTranslations();
@@ -272,7 +309,7 @@ export const useRoutes = () => {
     type: searchParams.get("type"),
   };
 
-  const buildHref = (href: string, query = findRoutePath(href)?.query) => {
+  const buildHref = (href: string, query = findRoute(href)?.query) => {
     if (!query) return href;
 
     return getHref(
@@ -282,11 +319,7 @@ export const useRoutes = () => {
   };
 
   return (path: string, href?: string): NavItem => {
-    const route = findRoute(path);
-
-    if (route && "slot" in route) return { slot: route.slot };
-
-    const { icon, label, param, query, to } = route ?? {};
+    const { icon, label, param, query, to } = findRoute(path) ?? {};
     const target = to === null ? undefined : (href ?? to ?? path);
 
     return {
