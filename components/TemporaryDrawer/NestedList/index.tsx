@@ -9,14 +9,13 @@ import SelectedListItem from "./SelectedListItem";
 import { StyledListItemButton } from "./SelectedListItem/ListItemLink";
 
 import { ORDER_MODE } from "@/constants/orderMode";
-import { query } from "@/constants/query";
 
 import { useOrganization } from "@/hooks/organizations";
 import { useAuthNavItems } from "@/hooks/useAuth";
 import { useCompanyNavItems } from "@/hooks/useCompany";
 import { useRoutes } from "@/hooks/useRoutes";
 
-import { usePathname, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import {
   Group,
@@ -47,7 +46,6 @@ import type { OrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
 
 import { useAccountNavItems } from "@/utils/account";
-import { getHref } from "@/utils/href";
 
 const StyledChip = styled(Chip)(({ theme }) => ({
   marginLeft: "auto",
@@ -135,8 +133,8 @@ const OrderModeMenuItem = ({
       : [],
   };
 
-  const hrefByMode: Partial<Record<OrderMode, string>> = {
-    [ORDER_MODE.DineIn]: getHref(storePath, { tableNumber, partySize }),
+  const hrefByMode: Partial<Record<OrderMode, string | undefined>> = {
+    [ORDER_MODE.DineIn]: navItem(storePath).to,
     [ORDER_MODE.Kiosk]: `${storePath}?${searchParams.toString()}`,
   };
 
@@ -187,29 +185,12 @@ const useNavItems = (): NavItem[] => {
 
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
-  const pathname = usePathname();
-
-  const searchParams = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo");
-
-  const isAuthPage = pathname.startsWith("/auth");
-  const isCompanyPage = pathname.startsWith("/company");
-
   const accountChildren = useAccountNavItems(divider);
-
-  const redirect =
-    (isAuthPage || isCompanyPage) && redirectTo ? redirectTo : pathname;
-
-  const authChildren = useAuthNavItems(redirect);
+  const authChildren = useAuthNavItems();
 
   const navItem = useRoutes();
 
-  const legalQuery = {
-    [query.back]: pathname,
-    [query.redirectTo]: redirectTo,
-  };
-
-  const companyChildren = useCompanyNavItems(legalQuery);
+  const companyChildren = useCompanyNavItems();
 
   const tHome = useTranslations("home");
 
