@@ -4,43 +4,15 @@
 
 "use client";
 
-import { useTranslations } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
-import { ORDER_MODE } from "@/constants/orderMode";
+import { findRoute } from "@/constants/routes";
+
+import { useNavItem } from "@/hooks/useNavItem";
 
 import { Link, usePathname } from "@/i18n/navigation";
 
-import {
-  AccountCircle,
-  Apartment,
-  ConfirmationNumber,
-  DeleteForever,
-  Restaurant,
-  Email,
-  Gavel,
-  GroupAdd,
-  HelpOutline,
-  Info,
-  Lock,
-  LockReset,
-  Login,
-  MoreHoriz,
-  Payment,
-  Person,
-  PersonAdd,
-  Pets,
-  Policy,
-  QrCodeScanner,
-  ReceiptLong,
-  Settings,
-  ShoppingCart,
-  Stars,
-  Storefront,
-  LocalMall,
-  TouchApp,
-} from "@mui/icons-material";
+import { MoreHoriz } from "@mui/icons-material";
 import {
   Breadcrumbs,
   IconButton,
@@ -49,14 +21,11 @@ import {
   type MenuItemProps,
   Link as MuiLink,
   MenuItem as MuiMenuItem,
-  type SvgIconProps,
   Typography,
 } from "@mui/material";
 import { type CSSObject, styled, type Theme } from "@mui/material/styles";
 
-import type { RouteParams } from "@/types/routeParams";
-
-import { getHref } from "@/utils/href";
+import type { NavItem } from "@/types/navItem";
 
 const StyledBreadcrumbs = styled(Breadcrumbs)(({ theme }) => ({
   flex: 1,
@@ -94,241 +63,6 @@ const StyledMenuItem = styled(MuiMenuItem)<MenuItemProps>(({ theme }) => ({
   ...iconTextBaseStyles(theme),
 }));
 
-interface BreadcrumbItem {
-  children?: BreadcrumbItem[];
-  disabled?: boolean;
-  hidden?: boolean;
-  icon: React.ComponentType<SvgIconProps>;
-  label: string;
-  to: string;
-}
-
-const useBreadcrumbs = (organizationName: string): BreadcrumbItem[] => {
-  const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
-  const searchParams = useSearchParams();
-
-  const tAuth = useTranslations("auth");
-  const tCompany = useTranslations("company");
-  const tOrder = useTranslations("order");
-
-  const modeLabelMap: Partial<Record<string, string>> = {
-    [ORDER_MODE.Counter]: tOrder("mode.counter.label"),
-    [ORDER_MODE.DineIn]: tOrder("mode.dineIn.label"),
-    [ORDER_MODE.Kiosk]: tOrder("mode.kiosk.label"),
-    [ORDER_MODE.Pickup]: tOrder("mode.pickup.label"),
-  };
-  const modeLabel = (mode && modeLabelMap[mode]) || mode || "";
-
-  const modeIconMap: Record<string, React.ComponentType<SvgIconProps>> = {
-    [ORDER_MODE.Counter]: QrCodeScanner,
-    [ORDER_MODE.DineIn]: Restaurant,
-    [ORDER_MODE.Kiosk]: TouchApp,
-    [ORDER_MODE.Pickup]: LocalMall,
-  };
-  const modeIcon: React.ComponentType<SvgIconProps> = mode
-    ? modeIconMap[mode]
-    : ShoppingCart;
-
-  const partySize = searchParams.get("partySize");
-  const tableNumber = searchParams.get("tableNumber");
-  const storeTo = getHref(`/${organizationSlug}`, { partySize, tableNumber });
-
-  const storeChildren: BreadcrumbItem[] = [
-    {
-      icon: ShoppingCart,
-      label: tOrder("mode.storeSlug.tableNumber.stepper.cart.label"),
-      to: "/cart",
-    },
-    {
-      icon: Payment,
-      label: tOrder("mode.storeSlug.tableNumber.stepper.checkout.label"),
-      to: "/checkout",
-    },
-    {
-      icon: Pets,
-      label: tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
-      to: "/complete",
-    },
-  ];
-
-  const orderChildren: BreadcrumbItem[] = [
-    {
-      children: [
-        {
-          children: storeChildren,
-          icon: Storefront,
-          label: organizationName,
-          to: storeTo,
-        },
-      ],
-      disabled: true,
-      icon: modeIcon,
-      label: modeLabel,
-      to: `/${mode}`,
-    },
-  ];
-
-  return [
-    {
-      children: [
-        {
-          icon: Login,
-          label: tAuth("signIn.label"),
-          to: "/sign-in",
-        },
-        {
-          icon: PersonAdd,
-          label: tAuth("signUp.label"),
-          to: "/sign-up",
-        },
-        {
-          icon: Email,
-          label: tAuth("verifyEmail.label"),
-          to: "/verify-email",
-        },
-        {
-          icon: HelpOutline,
-          label: tAuth("forgotPassword.label"),
-          to: "/forgot-password",
-        },
-        {
-          icon: LockReset,
-          label: tAuth("resetPassword.label"),
-          to: "/reset-password",
-        },
-        {
-          icon: DeleteForever,
-          label: tAuth("deleteAccount.label"),
-          to: "/delete-account",
-        },
-        {
-          icon: GroupAdd,
-          label: tAuth("acceptInvitation.label"),
-          to: "/accept-invitation",
-        },
-        {
-          icon: ReceiptLong,
-          label: tAuth("orders.label"),
-          to: "/orders",
-        },
-        {
-          icon: ConfirmationNumber,
-          label: tAuth("coupons.label"),
-          to: "/coupons",
-        },
-        {
-          children: [
-            {
-              icon: Stars,
-              label: tAuth("points.transactions.label"),
-              to: "/transactions",
-            },
-            {
-              icon: Storefront,
-              label: tAuth("store.label"),
-              to: "/store",
-            },
-          ],
-          disabled: true,
-          icon: Stars,
-          label: tAuth("points.label"),
-          to: "/points",
-        },
-        {
-          children: [
-            {
-              icon: Person,
-              label: tAuth("settings.account.label"),
-              to: "/account",
-            },
-            {
-              icon: Lock,
-              label: tAuth("settings.security.label"),
-              to: "/security",
-            },
-          ],
-          disabled: true,
-          icon: Settings,
-          label: tAuth("settings.label"),
-          to: "/settings",
-        },
-      ],
-      disabled: true,
-      icon: AccountCircle,
-      label: tAuth("label"),
-      to: "/auth",
-    },
-    {
-      children: [
-        {
-          icon: Info,
-          label: tCompany("about.label"),
-          to: "/about",
-        },
-        {
-          icon: Gavel,
-          label: tCompany("legal.terms.label"),
-          to: "/terms",
-        },
-        {
-          icon: Policy,
-          label: tCompany("legal.privacy.label"),
-          to: "/privacy",
-        },
-      ],
-      disabled: true,
-      icon: Apartment,
-      label: tCompany("label"),
-      to: "/company",
-    },
-    {
-      children: orderChildren,
-      disabled: true,
-      icon: ShoppingCart,
-      label: tOrder("label"),
-      to: "/order",
-    },
-  ];
-};
-
-const findBreadcrumb = (
-  breadcrumbs: BreadcrumbItem[],
-  targetPath: string,
-  parentPath = "",
-):
-  | Pick<BreadcrumbItem, "disabled" | "hidden" | "icon" | "label" | "to">
-  | undefined =>
-  breadcrumbs.flatMap(({ children, disabled, hidden, icon, label, to }) => {
-    const currentPath = `${parentPath}${to.split("?")[0]}`;
-
-    if (currentPath === targetPath)
-      return [{ disabled, hidden, icon, label, to }];
-
-    if (children) {
-      const found = findBreadcrumb(children, targetPath, currentPath);
-      if (!found) return [];
-
-      return [found];
-    }
-
-    return [];
-  })[0];
-
-const findHiddenTo = (
-  startIndex: number,
-  pathnames: string[],
-  breadcrumbs: BreadcrumbItem[],
-): string | undefined => {
-  const nextIndex = startIndex + 1;
-  if (nextIndex >= pathnames.length) return;
-
-  const nextMatchPath = `/${pathnames.slice(0, nextIndex + 1).join("/")}`;
-  const { hidden = false } = findBreadcrumb(breadcrumbs, nextMatchPath) || {};
-  if (!hidden) return;
-
-  return findHiddenTo(nextIndex, pathnames, breadcrumbs);
-};
-
 const ITEMS_BEFORE_COLLAPSE = 1;
 const ITEMS_AFTER_COLLAPSE = 2;
 const MAX_ITEMS = ITEMS_BEFORE_COLLAPSE + ITEMS_AFTER_COLLAPSE + 1;
@@ -341,32 +75,30 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const open = Boolean(anchorEl);
 
-  const breadcrumbs = useBreadcrumbs(organizationName);
+  const navItem = useNavItem();
+
+  const labels: Partial<Record<string, string>> = {
+    organizationSlug: organizationName,
+  };
 
   const pathname = usePathname();
   const pathnames = pathname.split("/").filter((x) => x);
 
-  const segments: BreadcrumbItem[] = pathnames.flatMap((value, index) => {
+  const segments: NavItem[] = pathnames.map((value, index) => {
     const segmentPath = pathnames.slice(0, index + 1).join("/");
     const path = `/${segmentPath}`;
 
-    const found = findBreadcrumb(breadcrumbs, path);
-    const {
-      disabled = false,
-      hidden = false,
-      icon = () => null,
-      label = value,
-      to: breadcrumbTo,
-    } = found || {};
-    if (hidden) return [];
+    const { icon, label, to } = navItem(path);
+    const { disabled, param } = findRoute(path) || {};
 
-    const hiddenTo = findHiddenTo(index, pathnames, breadcrumbs);
-    const queryString = breadcrumbTo?.includes("?")
-      ? breadcrumbTo.split("?")[1]
-      : undefined;
-    const to = queryString ? `${path}?${queryString}` : hiddenTo || path;
+    const dynamicLabel = param ? labels[param] : undefined;
 
-    return [{ disabled, icon, label, to }];
+    return {
+      disabled,
+      icon,
+      label: dynamicLabel ?? label ?? value,
+      to,
+    };
   });
 
   const lastSegment = segments.at(-1);
@@ -379,7 +111,7 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
   };
   const handleClose = () => setAnchorEl(null);
 
-  const renderSegment = (segment: BreadcrumbItem) => {
+  const renderSegment = (segment: NavItem) => {
     const { disabled, icon: Icon, label, to } = segment;
     const isLast = segment === lastSegment;
     const isText = isLast || disabled;
@@ -387,7 +119,7 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
 
     return isText ? (
       <StyledTypography color={color} key={to}>
-        <Icon fontSize="inherit" />
+        {Icon && <Icon fontSize="inherit" />}
         {label}
       </StyledTypography>
     ) : (
@@ -398,7 +130,7 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
         key={to}
         underline="always"
       >
-        <Icon fontSize="inherit" />
+        {Icon && <Icon fontSize="inherit" />}
         {label}
       </StyledLink>
     );
@@ -420,7 +152,7 @@ const RouterBreadcrumbs = ({ organizationName }: RouterBreadcrumbsProps) => {
               onClick={handleClose}
               {...(disabled ? {} : { component: Link, href: to })}
             >
-              <Icon fontSize="inherit" />
+              {Icon && <Icon fontSize="inherit" />}
               {label}
             </StyledMenuItem>
           ))}
