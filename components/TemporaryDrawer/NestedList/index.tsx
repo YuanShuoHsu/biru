@@ -37,7 +37,6 @@ const useNavItems = (): NavItem[] => {
 
   const tHome = useTranslations("home");
 
-  // 只有現場點餐模式底下有這一項；外帶自取沒有
   const orderModeSlots = getRouteSlots(`/order/${mode}`);
 
   const orderChildren: NavItem[] = [
