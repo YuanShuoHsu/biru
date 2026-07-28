@@ -5,14 +5,14 @@
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
-import DividerSlot from "./DividerSlot";
+import OrderModeMenuItem from "./OrderModeMenuItem";
 import SelectedListItem from "./SelectedListItem";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useAuthNavItems } from "@/hooks/useAuth";
 import { useCompanyNavItems } from "@/hooks/useCompany";
-import { getRouteSlots, useRoutes } from "@/hooks/useRoutes";
+import { useRoutes } from "@/hooks/useRoutes";
 
 import { Home } from "@mui/icons-material";
 import { List, ListSubheader, Toolbar } from "@mui/material";
@@ -29,7 +29,7 @@ const useNavItems = (): NavItem[] => {
 
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
-  const accountChildren = useAccountNavItems(DividerSlot);
+  const accountChildren = useAccountNavItems();
   const authChildren = useAuthNavItems();
   const companyChildren = useCompanyNavItems();
 
@@ -37,10 +37,14 @@ const useNavItems = (): NavItem[] => {
 
   const tHome = useTranslations("home");
 
-  const orderModeSlots = getRouteSlots(`/order/${mode}`);
+  const isInStoreOrder =
+    Boolean(organizationSlug) &&
+    [ORDER_MODE.Counter, ORDER_MODE.DineIn, ORDER_MODE.Kiosk].some(
+      (orderMode) => orderMode === mode,
+    );
 
   const orderChildren: NavItem[] = [
-    ...(organizationSlug ? orderModeSlots.map((slot) => ({ slot })) : []),
+    ...(isInStoreOrder ? [{ slot: OrderModeMenuItem }] : []),
     navItem(`/order/${ORDER_MODE.Pickup}`),
   ];
 

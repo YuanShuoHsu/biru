@@ -8,8 +8,6 @@ import {
 } from "next-intl";
 import { useSearchParams } from "next/navigation";
 
-import OrderModeMenuItem from "@/components/TemporaryDrawer/NestedList/OrderModeMenuItem";
-
 import { ORDER_MODE } from "@/constants/orderMode";
 import { DEFAULT_PAGINATION_QUERY } from "@/constants/pagination";
 
@@ -47,11 +45,11 @@ import {
 } from "@mui/icons-material";
 import type { SvgIconProps } from "@mui/material";
 
-import type { NavItem, Slot } from "@/types/navItem";
+import type { NavItem } from "@/types/navItem";
 
 import { getHref } from "@/utils/href";
 
-type LabelKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
+type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
 
 type RouteQuery =
   | "back"
@@ -63,22 +61,16 @@ type RouteQuery =
   | "tableNumber"
   | "type";
 
-interface RouteSlot {
-  slot: Slot;
-}
-
-interface RoutePage {
+interface Route {
   children?: Route[];
   icon: React.ComponentType<SvgIconProps>;
-  label?: LabelKey;
+  label?: MessageKey;
   query?: readonly RouteQuery[];
   segment: string;
   to?: string | null;
 }
 
-type Route = RoutePage | RouteSlot;
-
-const storeRoute: RoutePage = {
+const storeRoute: Route = {
   children: [
     {
       icon: ShoppingCart,
@@ -101,39 +93,32 @@ const storeRoute: RoutePage = {
   segment: "[organizationSlug]",
 };
 
-const orderModeChildren: Route[] = [storeRoute];
-
-const onSiteOrderModeChildren: Route[] = [
-  { slot: OrderModeMenuItem },
-  storeRoute,
-];
-
 const routes: Route[] = [
   {
     children: [
       {
-        children: onSiteOrderModeChildren,
+        children: [storeRoute],
         icon: QrCodeScanner,
         label: "order.mode.counter.label",
         segment: ORDER_MODE.Counter,
         to: null,
       },
       {
-        children: onSiteOrderModeChildren,
+        children: [storeRoute],
         icon: Restaurant,
         label: "order.mode.dineIn.label",
         segment: ORDER_MODE.DineIn,
         to: null,
       },
       {
-        children: onSiteOrderModeChildren,
+        children: [storeRoute],
         icon: TouchApp,
         label: "order.mode.kiosk.label",
         segment: ORDER_MODE.Kiosk,
         to: null,
       },
       {
-        children: orderModeChildren,
+        children: [storeRoute],
         icon: LocalMall,
         label: "order.mode.pickup.label",
         segment: ORDER_MODE.Pickup,
@@ -257,16 +242,15 @@ const routes: Route[] = [
 ];
 
 const findRoute = (path: string) => {
-  let children: RoutePage["children"] = routes;
-  let matched: (RoutePage & { param?: string }) | undefined;
+  let children: Route["children"] = routes;
+  let matched: (Route & { param?: string }) | undefined;
 
   for (const segment of path.split("/").filter(Boolean)) {
     if (!children) return;
 
-    const pages: RoutePage[] = children.filter((route) => "segment" in route);
-    const meta: RoutePage | undefined =
-      pages.find((page) => page.segment === segment) ??
-      pages.find((page) => page.segment.startsWith("["));
+    const meta: Route | undefined =
+      children.find((page) => page.segment === segment) ??
+      children.find((page) => page.segment.startsWith("["));
     if (!meta) return;
 
     matched = {
@@ -280,11 +264,6 @@ const findRoute = (path: string) => {
 
   return matched;
 };
-
-export const getRouteSlots = (path: string): Slot[] =>
-  findRoute(path)?.children?.flatMap((child) =>
-    "slot" in child ? [child.slot] : [],
-  ) ?? [];
 
 export const useRoutes = () => {
   const t = useTranslations();
