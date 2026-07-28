@@ -222,16 +222,16 @@ const routes: Route[] = [
     children: [
       { icon: Info, label: "company.about.label", segment: "about" },
       {
-        icon: Policy,
-        label: "company.legal.privacy.label",
-        query: ["back", "redirectTo"],
-        segment: "privacy",
-      },
-      {
         icon: Gavel,
         label: "company.legal.terms.label",
         query: ["back", "redirectTo"],
         segment: "terms",
+      },
+      {
+        icon: Policy,
+        label: "company.legal.privacy.label",
+        query: ["back", "redirectTo"],
+        segment: "privacy",
       },
     ],
     icon: Apartment,
