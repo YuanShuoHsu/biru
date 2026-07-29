@@ -9,12 +9,15 @@ import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 import useSWR from "swr";
 
+import { menuSocket } from "@/app/socket";
+
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useOrderItemName } from "@/hooks/useOrderItemName";
+import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useRouter } from "@/i18n/navigation";
 
@@ -106,13 +109,15 @@ const OrderModeOrganizationSlugComplete = ({
   order: initialOrder,
   organization,
 }: OrderModeOrganizationSlugCompleteProps) => {
-  const { cartKey, clearCart } = useCartStore((state) => state);
+  const { cartKey, clearCart, lastOrderId, setLastOrderId } = useCartStore(
+    (state) => state,
+  );
+
+  const locale = useLocale();
 
   const getOrderItemName = useOrderItemName();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  const locale = useLocale();
 
   const { mode, organizationSlug } = useParams<{
     mode: string;
@@ -127,21 +132,35 @@ const OrderModeOrganizationSlugComplete = ({
   menuSearchParams.delete("orderId");
   const menuQuery = menuSearchParams.size ? `?${menuSearchParams}` : "";
 
+  const { data: order = initialOrder, mutate } = useSWR<OrderResponse | null>(
+    orderId ? `/api/organizations/${organizationSlug}/orders/${orderId}` : null,
+    { fallbackData: initialOrder },
+  );
+
+  const { isConnected } = useSocketConnection(menuSocket);
+
+  useEffect(() => {
+    if (!isConnected || !orderId) return;
+
+    const handleOrderStatusUpdated = () => {
+      mutate();
+    };
+
+    menuSocket
+      .timeout(5000)
+      .emitWithAck("joinOrder", { orderId })
+      .then(handleOrderStatusUpdated)
+      .catch(() => {});
+
+    menuSocket.on("orderStatusUpdated", handleOrderStatusUpdated);
+
+    return () => {
+      menuSocket.off("orderStatusUpdated", handleOrderStatusUpdated);
+    };
+  }, [isConnected, mutate, orderId]);
+
   const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
-
-  const { data: order = initialOrder } = useSWR<OrderResponse | null>(
-    orderId ? `/api/organizations/${organizationSlug}/orders/${orderId}` : null,
-    {
-      fallbackData: initialOrder,
-      refreshInterval: (data) =>
-        data &&
-        data.paymentMethod !== "Cash" &&
-        data.orderStatus === "OrderPaymentDue"
-          ? 3000
-          : 0,
-    },
-  );
 
   const isSuccess =
     !!order &&
@@ -161,8 +180,11 @@ const OrderModeOrganizationSlugComplete = ({
   const showPickupInfo = mode === ORDER_MODE.Pickup && !!organization;
 
   useEffect(() => {
-    if (cartKey && isSuccess) clearCart();
-  }, [cartKey, clearCart, isSuccess]);
+    if (!cartKey || !isSuccess || order?.id !== lastOrderId) return;
+
+    clearCart();
+    setLastOrderId(null);
+  }, [cartKey, clearCart, isSuccess, lastOrderId, order?.id, setLastOrderId]);
 
   const status = isSuccess ? "success" : "error";
   const StatusIcon = STATUS_ICON[status];

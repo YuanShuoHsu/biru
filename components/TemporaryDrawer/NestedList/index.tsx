@@ -29,7 +29,7 @@ const useNavItems = (): NavItem[] => {
 
   const isInStoreOrder =
     Boolean(organizationSlug) &&
-    [ORDER_MODE.Counter, ORDER_MODE.DineIn, ORDER_MODE.Kiosk].some(
+    [ORDER_MODE.Counter, ORDER_MODE.DineIn, ORDER_MODE.DriveThru].some(
       (orderMode) => orderMode === mode,
     );
 
