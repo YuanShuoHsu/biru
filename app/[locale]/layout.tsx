@@ -15,7 +15,7 @@ import { routing } from "@/i18n/routing";
 
 import InitColorSchemeScript from "@mui/material/InitColorSchemeScript";
 
-import { buildOpenGraph, buildTwitter, SITE_NAME } from "@/utils/metadata";
+import { buildOpenGraph, buildTwitter } from "@/utils/metadata";
 import { getSiteMeta } from "@/utils/siteMeta";
 
 const geistSans = Geist({
@@ -37,15 +37,14 @@ export const generateMetadata = async ({
   const t = await getTranslations({ locale, namespace: "metadata" });
 
   const description = t("description");
+  const siteName = t("siteName");
   const title = t("home.title");
 
-  // 未自行覆寫的頁面（會員、結帳流程）沿用此處的品牌層級設定；
-  // 不設 alternates，避免這些頁的 canonical 全部指向首頁
   return {
     description,
     metadataBase: new URL(getSiteMeta().siteUrl),
     openGraph: buildOpenGraph({ description, locale, title }),
-    title: { default: title, template: `%s | ${SITE_NAME}` },
+    title: { default: title, template: `%s | ${siteName}` },
     twitter: buildTwitter({ description, title }),
   };
 };
