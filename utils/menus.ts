@@ -259,13 +259,12 @@ type AddOnLimitResult = { cap: number; names: string[] };
 
 export const getAddOnsCap = (
   selectedAddOnItems: OrderMenuAddOnItem[],
-  getChoiceAvailableQuantity: (choiceId: string, choiceStock: number) => number,
+  getUsedQuantity: (addOnId: string) => number,
 ): AddOnLimitResult =>
   selectedAddOnItems.reduce<AddOnLimitResult>(
     (acc, { id, name, offers }) => {
       const stock = getOfferStock(offers[0]);
-      const available =
-        stock === null ? Infinity : getChoiceAvailableQuantity(id, stock);
+      const available = stock === null ? Infinity : stock - getUsedQuantity(id);
 
       if (available < acc.cap) return { cap: available, names: [name] };
       if (
@@ -284,7 +283,7 @@ export const getLimitingAddOnsCap = (
   menu: OrderMenu | null,
   menuItemId: string,
   addOns: CartAddOn[],
-  getChoiceAvailableQuantity: (choiceId: string, choiceStock: number) => number,
+  getUsedQuantity: (addOnId: string) => number,
 ): AddOnLimitResult => {
   const item = findItemById(menu, menuItemId);
   if (!item) return { cap: Infinity, names: [] };
@@ -293,7 +292,7 @@ export const getLimitingAddOnsCap = (
     addOns.some((addOn) => addOn.menuItemId === id),
   );
 
-  return getAddOnsCap(selectedAddOnItems, getChoiceAvailableQuantity);
+  return getAddOnsCap(selectedAddOnItems, getUsedQuantity);
 };
 
 interface CommonSeparators {
