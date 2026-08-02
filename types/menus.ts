@@ -12,3 +12,5 @@ export type OrderMenuModifierGroup =
   components["schemas"]["OrderMenuModifierGroupResponseDto"];
 export type OrderMenuModifier =
   components["schemas"]["OrderMenuModifierResponseDto"];
+
+export type ItemAvailability = components["schemas"]["ItemAvailability"];
