@@ -204,24 +204,22 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const displayPrice = amount.toLocaleString(locale);
   const isAtLimit = quantity >= availableToAdd;
 
-  const limitingAddOnsLabel =
-    limitingAddOnNames.length > 0
-      ? limitingAddOnNames.join(tCommon("delimiter"))
-      : "";
+  const limitingLabel = [
+    ...(itemStockCapLeft === availableToAdd ? [name] : []),
+    ...(addOnCapLeft === availableToAdd ? limitingAddOnNames : []),
+  ].join(tCommon("delimiter"));
 
   const formHelperText =
     perItemCapLeft === availableToAdd
       ? tCommon("maxQuantity", { quantity: MAX_QUANTITY })
-      : itemStockCapLeft === availableToAdd
-        ? availableToAdd > 0
-          ? tDialog("maxStock", {
-              label: "",
-              quantity: availableToAdd,
-            })
-          : itemStockLeft === 0
-            ? tCommon("soldOut")
-            : tCommon("reachStockLimit", { label: "" })
-        : tCommon("reachStockLimit", { label: limitingAddOnsLabel });
+      : availableToAdd > 0
+        ? tDialog("maxStock", {
+            label: limitingLabel,
+            quantity: availableToAdd,
+          })
+        : itemStockLeft === 0
+          ? tCommon("soldOut")
+          : tCommon("reachStockLimit", { label: limitingLabel });
 
   useEffect(() => {
     setDialog({ confirmDisabled: quantity <= 0 });
