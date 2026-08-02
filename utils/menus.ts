@@ -9,6 +9,7 @@ import type {
   OrderMenuModifierGroup,
   OrderMenuOffer,
 } from "@/types/menus";
+import type { ApiOrderMode } from "@/types/orderMode";
 
 export const isLowStock = (offer?: OrderMenuOffer): boolean => {
   const stock = offer?.inventoryLevel?.value;
@@ -43,12 +44,15 @@ export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
 
 export const hasUnsatisfiableModifierGroup = (
   modifierGroups: OrderMenuModifierGroup[],
+  mode: ApiOrderMode,
 ): boolean =>
   modifierGroups.some(
     ({ minSelectionCount, modifiers }) =>
       modifiers.filter(
-        ({ availability }) =>
-          availability !== "SoldOut" && availability !== "Discontinued",
+        ({ availability, availableModes }) =>
+          availability !== "SoldOut" &&
+          availability !== "Discontinued" &&
+          availableModes.includes(mode),
       ).length < minSelectionCount,
   );
 
@@ -204,9 +208,11 @@ export const getOfferStock = (offer?: OrderMenuOffer): number | null => {
 export const getItemStock = (
   menu: OrderMenu | null,
   itemId: string,
+  mode: ApiOrderMode,
 ): number | null => {
   const item = findItemById(menu, itemId);
   if (!item) return 0;
+  if (!item.availableModes.includes(mode)) return 0;
 
   return getOfferStock(item.offers[0]);
 };
