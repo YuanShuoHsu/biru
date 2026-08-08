@@ -1,4 +1,16 @@
 {
+  "board": {
+    "empty": "No orders right now",
+    "hint": "Head to the counter once your number appears under Ready for pickup.",
+    "label": "Pickup numbers",
+    "link": "View pickup numbers",
+    "status": {
+      "OrderPaymentDue": "Payment due",
+      "OrderProcessing": "Preparing",
+      "OrderPickupAvailable": "Ready for pickup"
+    },
+    "title": "{organizationName} pickup numbers"
+  },
   "cart": {
     "back": "Back to menu",
     "next": "Proceed to checkout",
@@ -70,7 +82,7 @@
       "Credit": "Credit Card",
       "iPASS": "iPASS MONEY",
       "Jkopay": "JKO Pay",
-      "pickupUnavailable": "Not available for online takeout",
+      "pickupUnavailable": "Not available for online pickup",
       "TWQR": "Mobile Payment",
       "WeiXin": "WeChat Pay"
     },
@@ -160,8 +172,8 @@
       "unavailable": "Unavailable for drive-thru"
     },
     "pickup": {
-      "label": "Pickup",
-      "unavailable": "Unavailable for pickup"
+      "label": "Online pickup",
+      "unavailable": "Unavailable for online pickup"
     },
     "storeSlug": {
       "selectTable": "Select a table",

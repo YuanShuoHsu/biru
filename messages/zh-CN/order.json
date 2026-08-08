@@ -1,4 +1,16 @@
 {
+  "board": {
+    "empty": "目前没有订单",
+    "hint": "号码出现在“可取餐”即可前往柜台取餐。",
+    "label": "取餐号码",
+    "link": "查看取餐号码",
+    "status": {
+      "OrderPaymentDue": "待付款",
+      "OrderProcessing": "准备中",
+      "OrderPickupAvailable": "可取餐"
+    },
+    "title": "{organizationName} 取餐号码"
+  },
   "cart": {
     "back": "返回菜单",
     "next": "前往结账",
@@ -70,7 +82,7 @@
       "Credit": "信用卡",
       "iPASS": "iPASS MONEY",
       "Jkopay": "街口支付",
-      "pickupUnavailable": "线上外带不支持现金",
+      "pickupUnavailable": "线上外带自取不支持现金",
       "TWQR": "移动支付",
       "WeiXin": "微信支付"
     },
@@ -160,8 +172,8 @@
       "unavailable": "得来速不供应"
     },
     "pickup": {
-      "label": "自取",
-      "unavailable": "自取不供应"
+      "label": "线上外带自取",
+      "unavailable": "线上外带自取不供应"
     },
     "storeSlug": {
       "selectTable": "选择桌号",

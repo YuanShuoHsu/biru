@@ -1,4 +1,16 @@
 {
+  "board": {
+    "empty": "현재 주문이 없습니다",
+    "hint": "번호가 '픽업 가능'에 표시되면 카운터로 오세요.",
+    "label": "픽업 번호",
+    "link": "픽업 번호 보기",
+    "status": {
+      "OrderPaymentDue": "결제 대기",
+      "OrderProcessing": "준비 중",
+      "OrderPickupAvailable": "픽업 가능"
+    },
+    "title": "{organizationName} 픽업 번호"
+  },
   "cart": {
     "back": "메뉴로 돌아가기",
     "next": "결제하기",
@@ -70,7 +82,7 @@
       "Credit": "신용카드",
       "iPASS": "iPASS MONEY",
       "Jkopay": "JKO Pay",
-      "pickupUnavailable": "온라인 포장은 이용할 수 없습니다",
+      "pickupUnavailable": "온라인 포장 수령은 이용할 수 없습니다",
       "TWQR": "모바일 결제",
       "WeiXin": "위챗페이"
     },
@@ -160,8 +172,8 @@
       "unavailable": "드라이브 스루 미제공"
     },
     "pickup": {
-      "label": "포장 수령",
-      "unavailable": "포장 수령 미제공"
+      "label": "온라인 포장 수령",
+      "unavailable": "온라인 포장 수령 미제공"
     },
     "storeSlug": {
       "selectTable": "테이블 선택",

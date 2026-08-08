@@ -44,6 +44,14 @@ const useNavItems = (): NavItem[] => {
       ...navItem("/order"),
       children: orderChildren,
     },
+    ...(organizationSlug
+      ? [
+          {
+            ...navItem("/order-board"),
+            children: [navItem(`/order-board/${organizationSlug}`)],
+          },
+        ]
+      : []),
     {
       ...navItem("/auth"),
       children: navChildren["/auth"],

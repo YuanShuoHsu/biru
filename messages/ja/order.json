@@ -1,4 +1,16 @@
 {
+  "board": {
+    "empty": "現在ご注文はありません",
+    "hint": "番号が「受け取り可能」に表示されたらカウンターへお越しください。",
+    "label": "受け取り番号",
+    "link": "受け取り番号を見る",
+    "status": {
+      "OrderPaymentDue": "支払い待ち",
+      "OrderProcessing": "準備中",
+      "OrderPickupAvailable": "受け取り可能"
+    },
+    "title": "{organizationName} 受け取り番号"
+  },
   "cart": {
     "back": "メニューに戻る",
     "next": "レジへ進む",
@@ -70,7 +82,7 @@
       "Credit": "クレジットカード",
       "iPASS": "iPASS MONEY",
       "Jkopay": "街口Pay",
-      "pickupUnavailable": "オンライン持ち帰りではご利用いただけません",
+      "pickupUnavailable": "オンラインお持ち帰りではご利用いただけません",
       "TWQR": "モバイル決済",
       "WeiXin": "WeChat Pay"
     },
@@ -160,8 +172,8 @@
       "unavailable": "ドライブスルーは対象外"
     },
     "pickup": {
-      "label": "お持ち帰り",
-      "unavailable": "お持ち帰りは対象外"
+      "label": "オンラインお持ち帰り",
+      "unavailable": "オンラインお持ち帰りは対象外"
     },
     "storeSlug": {
       "selectTable": "テーブルを選択",

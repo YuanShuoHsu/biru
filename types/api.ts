@@ -201,7 +201,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** 查詢優惠券 */
+    get: operations["AdminCouponsController_findOne"];
     put?: never;
     post?: never;
     /** 刪除優惠券 */
@@ -210,6 +211,23 @@ export interface paths {
     head?: never;
     /** 更新優惠券 */
     patch: operations["AdminCouponsController_update"];
+    trace?: never;
+  };
+  "/api/coupons/{couponId}/recipients": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢優惠券持券紀錄 */
+    get: operations["AdminCouponsController_findRecipients"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
     trace?: never;
   };
   "/api/coupons/{couponId}/grant": {
@@ -348,6 +366,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/coupons": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢本店適用的優惠券列表 */
+    get: operations["OrganizationCouponsController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/coupons/{couponId}/grant": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 發放本店專屬優惠券給指定會員 */
+    post: operations["OrganizationCouponsController_grant"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/donate-codes": {
     parameters: {
       query?: never;
@@ -479,6 +531,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/orders/board": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢顧客端取餐號碼牌（公開） */
+    get: operations["OrdersController_findBoard"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/board/admin": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢後台訂單看板 */
+    get: operations["OrdersController_findAdminBoard"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/orders/{orderId}": {
     parameters: {
       query?: never;
@@ -496,7 +582,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/organizations/{organizationSlug}/orders/{orderId}/ready": {
+  "/api/organizations/{organizationSlug}/orders/{orderId}/customer": {
     parameters: {
       query?: never;
       header?: never;
@@ -509,11 +595,11 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    /** 標記訂單可取餐 */
-    patch: operations["OrdersController_markReady"];
+    /** 修改顧客資訊 */
+    patch: operations["OrdersController_updateCustomer"];
     trace?: never;
   };
-  "/api/organizations/{organizationSlug}/orders/{orderId}/picked-up": {
+  "/api/organizations/{organizationSlug}/orders/{orderId}/transitions/{toStatus}": {
     parameters: {
       query?: never;
       header?: never;
@@ -526,25 +612,8 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    /** 確認已取餐 */
-    patch: operations["OrdersController_confirmPickup"];
-    trace?: never;
-  };
-  "/api/organizations/{organizationSlug}/orders/{orderId}/processing": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    /** 取消標記完成（退回上一個狀態：已送達→可取餐、可取餐→準備中） */
-    patch: operations["OrdersController_revertReady"];
+    /** 變更訂單狀態（可用的目標見該訂單的 availableTransitions） */
+    patch: operations["OrdersController_applyTransition"];
     trace?: never;
   };
   "/api/users/me/orders": {
@@ -1078,12 +1147,43 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
   schemas: {
+    /**
+     * @description 角色
+     * @enum {string}
+     */
+    UserRole: "admin" | "user";
     UserResponseDto: {
       /**
        * @description ID
        * @example 123e4567-e89b-12d3-a456-426614174000
        */
       id: string;
+      /**
+       * @description 角色
+       * @example user
+       */
+      role: components["schemas"]["UserRole"] | null;
+      /**
+       * @description 是否已封鎖
+       * @example false
+       */
+      banned: boolean | null;
+      /**
+       * @description 封鎖原因
+       * @example 違反使用條款
+       */
+      banReason?: string | null;
+      /**
+       * Format: date-time
+       * @description 封鎖到期時間；null 為永久
+       * @example 2025-12-31T23:59:59.000Z
+       */
+      banExpires?: string | null;
+      /**
+       * @description 個人簡介
+       * @example 喜歡精釀啤酒
+       */
+      bio?: string | null;
       /**
        * @description 姓名
        * @example Coffee
@@ -1287,14 +1387,22 @@ export interface components {
        */
       email: string;
     };
+    /** @enum {string} */
+    CouponDiscountType: "fixed" | "percentage";
+    /**
+     * @description 自動發放觸發：signup 註冊禮／birthday 生日月／spend 單筆滿額
+     * @enum {string}
+     */
+    CouponIssueTrigger: "signup" | "birthday" | "spend";
+    /** @enum {string} */
+    CouponScope: "order" | "item";
     CreateCouponDto: {
       /** @description 適用店家；null = 全部店家通用，發行店永遠視為適用 */
       applicableOrganizationIds?: string[] | null;
       code: string;
       /** @description 幣別（ISO 4217），未帶時預設 TWD；應與店家菜單幣別一致 */
       discountCurrency?: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       /** @description fixed: 折抵金額；percentage: 折扣百分比（0 < value ≤ 100） */
       discountValue: number;
       isActive?: boolean;
@@ -1304,19 +1412,14 @@ export interface components {
       isPublic?: boolean;
       /** @description issueTrigger=spend 的單筆滿額門檻 */
       issueMinSpend?: number;
-      /**
-       * @description 自動發放觸發：signup 註冊禮／birthday 生日月／spend 單筆滿額
-       * @enum {string|null}
-       */
-      issueTrigger?: "signup" | "birthday" | "spend" | null;
+      issueTrigger?: components["schemas"]["CouponIssueTrigger"] | null;
       menuItemIds?: string[];
       menuSectionIds?: string[];
       minSubtotal?: number;
       perUserLimit?: number;
       /** @description 兌換所需點數；null = 不可用點數兌換 */
       pointsCost?: number | null;
-      /** @enum {string} */
-      scope?: "order" | "item";
+      scope?: components["schemas"]["CouponScope"];
       totalLimit?: number;
       /** Format: date-time */
       validFrom?: string | null;
@@ -1328,15 +1431,13 @@ export interface components {
       applicableOrganizationIds?: string[] | null;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       isActive: boolean;
       isClaimable: boolean;
       isPublic: boolean;
       issueMinSpend?: string | null;
-      /** @enum {string|null} */
-      issueTrigger?: "signup" | "birthday" | "spend" | null;
+      issueTrigger?: components["schemas"]["CouponIssueTrigger"] | null;
       menuItemIds?: string[] | null;
       /** @description 指定品項的名稱清單（依 menuItemIds 順序，管理列表顯示用） */
       menuItemNames?: string[] | null;
@@ -1346,8 +1447,7 @@ export interface components {
       minSubtotal?: string | null;
       perUserLimit?: number | null;
       pointsCost?: number | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       totalLimit?: number | null;
       usedCount: number;
       /** Format: date-time */
@@ -1395,8 +1495,7 @@ export interface components {
       code?: string;
       /** @description 幣別（ISO 4217），未帶時預設 TWD；應與店家菜單幣別一致 */
       discountCurrency?: string;
-      /** @enum {string} */
-      discountType?: "fixed" | "percentage";
+      discountType?: components["schemas"]["CouponDiscountType"];
       /** @description fixed: 折抵金額；percentage: 折扣百分比（0 < value ≤ 100） */
       discountValue?: number;
       isActive?: boolean;
@@ -1406,24 +1505,55 @@ export interface components {
       isPublic?: boolean;
       /** @description issueTrigger=spend 的單筆滿額門檻 */
       issueMinSpend?: number;
-      /**
-       * @description 自動發放觸發：signup 註冊禮／birthday 生日月／spend 單筆滿額
-       * @enum {string|null}
-       */
-      issueTrigger?: "signup" | "birthday" | "spend" | null;
+      issueTrigger?: components["schemas"]["CouponIssueTrigger"] | null;
       menuItemIds?: string[];
       menuSectionIds?: string[];
       minSubtotal?: number;
       perUserLimit?: number;
       /** @description 兌換所需點數；null = 不可用點數兌換 */
       pointsCost?: number | null;
-      /** @enum {string} */
-      scope?: "order" | "item";
+      scope?: components["schemas"]["CouponScope"];
       totalLimit?: number;
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
       validThrough?: string | null;
+    };
+    /** @enum {string} */
+    CouponRecipientFilterField:
+      | "userEmail"
+      | "grantedByEmail"
+      | "source"
+      | "createdAt"
+      | "usedAt";
+    /** @enum {string} */
+    CouponRecipientSortField:
+      | "userEmail"
+      | "source"
+      | "grantedByEmail"
+      | "createdAt"
+      | "usedAt";
+    /** @enum {string} */
+    UserCouponSource:
+      | "granted"
+      | "claimed"
+      | "signup"
+      | "birthday"
+      | "spend"
+      | "redeemed";
+    CouponRecipientResponseDto: {
+      id: string;
+      grantedByEmail?: string | null;
+      source: components["schemas"]["UserCouponSource"];
+      userEmail: string;
+      /** Format: date-time */
+      usedAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    CouponRecipientListResponseDto: {
+      data: components["schemas"]["CouponRecipientResponseDto"][];
+      total: number;
     };
     GrantCouponDto: {
       /**
@@ -1436,12 +1566,10 @@ export interface components {
       id: string;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       minSubtotal?: string | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
@@ -1451,14 +1579,7 @@ export interface components {
     UserCouponResponseDto: {
       id: string;
       coupon: components["schemas"]["CustomerCouponDto"];
-      /** @enum {string} */
-      source:
-        | "granted"
-        | "claimed"
-        | "signup"
-        | "birthday"
-        | "spend"
-        | "redeemed";
+      source: components["schemas"]["UserCouponSource"];
       /** Format: date-time */
       usedAt?: string | null;
       /** Format: date-time */
@@ -1496,12 +1617,10 @@ export interface components {
       id: string;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       minSubtotal?: string | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
@@ -1513,12 +1632,10 @@ export interface components {
       id: string;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       minSubtotal?: string | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
@@ -1530,14 +1647,7 @@ export interface components {
     MyCouponResponseDto: {
       id: string;
       coupon: components["schemas"]["CustomerCouponDto"];
-      /** @enum {string} */
-      source:
-        | "granted"
-        | "claimed"
-        | "signup"
-        | "birthday"
-        | "spend"
-        | "redeemed";
+      source: components["schemas"]["UserCouponSource"];
       /** Format: date-time */
       usedAt?: string | null;
       /** Format: date-time */
@@ -1551,12 +1661,10 @@ export interface components {
       id: string;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       minSubtotal?: string | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
@@ -2257,11 +2365,11 @@ export interface components {
       paymentMethodId?: string | null;
       /** @enum {string} */
       orderStatus:
-        | "OrderCancelled"
-        | "OrderDelivered"
         | "OrderPaymentDue"
-        | "OrderPickupAvailable"
         | "OrderProcessing"
+        | "OrderPickupAvailable"
+        | "OrderDelivered"
+        | "OrderCancelled"
         | "OrderProblem";
       confirmationNumber?: string | null;
       /** Format: date-time */
@@ -2276,6 +2384,8 @@ export interface components {
       discount?: string | null;
       discountCode?: string | null;
       discountCurrency?: string | null;
+      subtotal: string;
+      total: string;
       invoice?: Record<string, never> | null;
       items: components["schemas"]["OrderItemResponseDto"][];
       /** Format: date-time */
@@ -2305,6 +2415,90 @@ export interface components {
       | "createdAt"
       | "tableNumber"
       | "total";
+    /** @enum {string} */
+    OrderBoardStatus:
+      | "OrderPaymentDue"
+      | "OrderProcessing"
+      | "OrderPickupAvailable";
+    OrderBoardItemDto: {
+      orderNumber: string;
+      orderStatus: components["schemas"]["OrderBoardStatus"];
+    };
+    /** @enum {string} */
+    OrderFlowStatus:
+      | "OrderPaymentDue"
+      | "OrderProcessing"
+      | "OrderPickupAvailable"
+      | "OrderDelivered";
+    /** @enum {string} */
+    OrderTransitionDirection: "advance" | "cancel" | "revert";
+    /** @enum {string} */
+    OrderStatus:
+      | "OrderPaymentDue"
+      | "OrderProcessing"
+      | "OrderPickupAvailable"
+      | "OrderDelivered"
+      | "OrderCancelled"
+      | "OrderProblem";
+    OrderTransitionDto: {
+      /** @description 此轉換僅適用現金訂單，動作實際上是收款或取消收款 */
+      cashOnly?: boolean;
+      direction: components["schemas"]["OrderTransitionDirection"];
+      toStatus: components["schemas"]["OrderStatus"];
+    };
+    AdminOrderResponseDto: {
+      id: string;
+      sellerId: string;
+      userId?: string | null;
+      /** @enum {string} */
+      mode: "counter" | "dineIn" | "driveThru" | "pickup";
+      orderNumber: string;
+      customer: components["schemas"]["OrderCustomerDto"];
+      /** @enum {string} */
+      paymentMethod:
+        | "ApplePay"
+        | "Cash"
+        | "Credit"
+        | "iPASS"
+        | "Jkopay"
+        | "TWQR"
+        | "WeiXin";
+      paymentMethodId?: string | null;
+      /** @enum {string} */
+      orderStatus:
+        | "OrderPaymentDue"
+        | "OrderProcessing"
+        | "OrderPickupAvailable"
+        | "OrderDelivered"
+        | "OrderCancelled"
+        | "OrderProblem";
+      confirmationNumber?: string | null;
+      /** Format: date-time */
+      orderDate: string;
+      /** Format: date-time */
+      paymentDate?: string | null;
+      /** Format: date-time */
+      paymentDueDate?: string | null;
+      tradeNo?: string | null;
+      partySize?: number | null;
+      tableNumber?: number | null;
+      discount?: string | null;
+      discountCode?: string | null;
+      discountCurrency?: string | null;
+      subtotal: string;
+      total: string;
+      invoice?: Record<string, never> | null;
+      items: components["schemas"]["OrderItemResponseDto"][];
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+      availableTransitions: components["schemas"]["OrderTransitionDto"][];
+    };
+    AdminOrderBoardColumnDto: {
+      orderStatus: components["schemas"]["OrderFlowStatus"];
+      orders: components["schemas"]["AdminOrderResponseDto"][];
+    };
     OrderSellerDto: {
       id: string;
       name: string;
@@ -2332,11 +2526,11 @@ export interface components {
       paymentMethodId?: string | null;
       /** @enum {string} */
       orderStatus:
-        | "OrderCancelled"
-        | "OrderDelivered"
         | "OrderPaymentDue"
-        | "OrderPickupAvailable"
         | "OrderProcessing"
+        | "OrderPickupAvailable"
+        | "OrderDelivered"
+        | "OrderCancelled"
         | "OrderProblem";
       confirmationNumber?: string | null;
       /** Format: date-time */
@@ -2351,6 +2545,8 @@ export interface components {
       discount?: string | null;
       discountCode?: string | null;
       discountCurrency?: string | null;
+      subtotal: string;
+      total: string;
       invoice?: Record<string, never> | null;
       items: components["schemas"]["OrderItemResponseDto"][];
       /** Format: date-time */
@@ -2411,9 +2607,9 @@ export interface components {
       updatedAt: string;
     };
     /** @enum {string} */
-    MenuFilterField: "name" | "description" | "createdAt" | "updatedAt";
+    MenuSectionFilterField: "name" | "description" | "createdAt" | "updatedAt";
     /** @enum {string} */
-    MenuSortField: "name" | "description" | "createdAt" | "updatedAt";
+    MenuSectionSortField: "name" | "description" | "createdAt" | "updatedAt";
     ReorderDto: {
       ids: string[];
       /** @default 0 */
@@ -2561,6 +2757,35 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    /** @enum {string} */
+    MenuItemFilterField:
+      | "name"
+      | "description"
+      | "priceCurrency"
+      | "price"
+      | "inventoryLevel"
+      | "deliveryLeadTime"
+      | "priceSpecification"
+      | "availability"
+      | "availableModes"
+      | "createdAt"
+      | "updatedAt"
+      | "priceSpecificationValidFrom"
+      | "priceSpecificationValidThrough";
+    /** @enum {string} */
+    MenuItemSortField:
+      | "name"
+      | "description"
+      | "priceCurrency"
+      | "price"
+      | "inventoryLevel"
+      | "deliveryLeadTime"
+      | "priceSpecification"
+      | "availability"
+      | "createdAt"
+      | "updatedAt"
+      | "priceSpecificationValidFrom"
+      | "priceSpecificationValidThrough";
     UpdateMenuItemDto: {
       /**
        * @example {
@@ -2688,9 +2913,19 @@ export interface components {
       updatedAt: string;
     };
     /** @enum {string} */
-    ModifierFilterField: "displayName" | "createdAt" | "updatedAt";
+    ModifierGroupFilterField:
+      | "displayName"
+      | "minSelectionCount"
+      | "maxSelectionCount"
+      | "createdAt"
+      | "updatedAt";
     /** @enum {string} */
-    ModifierSortField: "displayName" | "createdAt" | "updatedAt";
+    ModifierGroupSortField:
+      | "displayName"
+      | "minSelectionCount"
+      | "maxSelectionCount"
+      | "createdAt"
+      | "updatedAt";
     UpdateModifierGroupDto: {
       /** @description 群組名稱 */
       displayName?: Record<string, never>;
@@ -2717,6 +2952,21 @@ export interface components {
       /** @description 可販售的點餐模式；省略代表四種全開 */
       availableModes?: components["schemas"]["OrderMode"][];
     };
+    /** @enum {string} */
+    ModifierFilterField:
+      | "displayName"
+      | "priceAdjustment"
+      | "availability"
+      | "availableModes"
+      | "createdAt"
+      | "updatedAt";
+    /** @enum {string} */
+    ModifierSortField:
+      | "displayName"
+      | "priceAdjustment"
+      | "availability"
+      | "createdAt"
+      | "updatedAt";
     UpdateModifierDto: {
       /** @description 選項名稱 */
       displayName?: Record<string, never>;
@@ -2915,12 +3165,10 @@ export interface components {
       id: string;
       code: string;
       discountCurrency: string;
-      /** @enum {string} */
-      discountType: "fixed" | "percentage";
+      discountType: components["schemas"]["CouponDiscountType"];
       discountValue: string;
       minSubtotal?: string | null;
-      /** @enum {string} */
-      scope: "order" | "item";
+      scope: components["schemas"]["CouponScope"];
       /** Format: date-time */
       validFrom?: string | null;
       /** Format: date-time */
@@ -3061,8 +3309,10 @@ export interface operations {
         limit?: number;
         /** @description 偏移量 */
         offset?: number;
-        /** @description Quick Filter 搜尋值。可傳一般文字，或 role:admin、banned:true、emailSubscribed:false 等欄位 token */
+        /** @description Quick Filter 搜尋值 */
         quickFilterValue?: string;
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
         /** @description Search 欄位 */
         searchField?: components["schemas"]["UserSearchField"];
         /** @description Search 運算子 */
@@ -3214,6 +3464,8 @@ export interface operations {
       query?: {
         filterField?: components["schemas"]["BannerFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["BannerSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
@@ -3391,6 +3643,8 @@ export interface operations {
       query?: {
         filterField?: components["schemas"]["CouponFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
         lang?: "en" | "ja" | "ko" | "zh-CN" | "zh-TW";
         sortBy?: components["schemas"]["CouponSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
@@ -3434,6 +3688,34 @@ export interface operations {
     };
     responses: {
       201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CouponResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AdminCouponsController_findOne: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        couponId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
         headers: {
           [name: string]: unknown;
         };
@@ -3497,6 +3779,45 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["CouponResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AdminCouponsController_findRecipients: {
+    parameters: {
+      query?: {
+        filterField?: components["schemas"]["CouponRecipientFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortBy?: components["schemas"]["CouponRecipientSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path: {
+        couponId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["CouponRecipientListResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -3736,6 +4057,77 @@ export interface operations {
       };
     };
   };
+  OrganizationCouponsController_findAll: {
+    parameters: {
+      query?: {
+        filterField?: components["schemas"]["CouponFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        lang?: "en" | "ja" | "ko" | "zh-CN" | "zh-TW";
+        sortBy?: components["schemas"]["CouponSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrganizationCouponsController_grant: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        couponId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["GrantCouponDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["UserCouponResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   DonateCodesController_getAll: {
     parameters: {
       query?: never;
@@ -3942,6 +4334,8 @@ export interface operations {
       query?: {
         filterField?: components["schemas"]["OrderFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["OrderSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
@@ -4004,6 +4398,62 @@ export interface operations {
       };
     };
   };
+  OrdersController_findBoard: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OrderBoardItemDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrdersController_findAdminBoard: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AdminOrderBoardColumnDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   OrdersController_findOne: {
     parameters: {
       query?: never;
@@ -4033,7 +4483,7 @@ export interface operations {
       };
     };
   };
-  OrdersController_markReady: {
+  OrdersController_updateCustomer: {
     parameters: {
       query?: never;
       header?: never;
@@ -4043,7 +4493,11 @@ export interface operations {
       };
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateOrderCustomerDto"];
+      };
+    };
     responses: {
       200: {
         headers: {
@@ -4062,13 +4516,14 @@ export interface operations {
       };
     };
   };
-  OrdersController_confirmPickup: {
+  OrdersController_applyTransition: {
     parameters: {
       query?: never;
       header?: never;
       path: {
         organizationSlug: string;
         orderId: string;
+        toStatus: string;
       };
       cookie?: never;
     };
@@ -4079,36 +4534,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["OrderResponseDto"];
-        };
-      };
-      /** @description Internal server error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OrdersController_revertReady: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        organizationSlug: string;
-        orderId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["OrderResponseDto"];
+          "application/json": components["schemas"]["AdminOrderResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -4240,9 +4666,9 @@ export interface operations {
   MenusController_findAllMenuSections: {
     parameters: {
       query?: {
-        filterField?: components["schemas"]["MenuFilterField"];
+        filterField?: components["schemas"]["MenuSectionFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
-        sortBy?: components["schemas"]["MenuSortField"];
+        sortBy?: components["schemas"]["MenuSectionSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
@@ -4428,9 +4854,11 @@ export interface operations {
   MenusController_findAllMenuSectionItems: {
     parameters: {
       query?: {
-        filterField?: components["schemas"]["MenuFilterField"];
+        filterField?: components["schemas"]["MenuItemFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
-        sortBy?: components["schemas"]["MenuSortField"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortBy?: components["schemas"]["MenuItemSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
@@ -4893,9 +5321,9 @@ export interface operations {
   MenusController_findAllModifierGroups: {
     parameters: {
       query?: {
-        filterField?: components["schemas"]["ModifierFilterField"];
+        filterField?: components["schemas"]["ModifierGroupFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
-        sortBy?: components["schemas"]["ModifierSortField"];
+        sortBy?: components["schemas"]["ModifierGroupSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
@@ -5080,6 +5508,8 @@ export interface operations {
       query?: {
         filterField?: components["schemas"]["ModifierFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["ModifierSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
@@ -5235,9 +5665,9 @@ export interface operations {
   MenusController_findAllMenuItemModifierGroups: {
     parameters: {
       query?: {
-        filterField?: components["schemas"]["ModifierFilterField"];
+        filterField?: components["schemas"]["ModifierGroupFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
-        sortBy?: components["schemas"]["ModifierSortField"];
+        sortBy?: components["schemas"]["ModifierGroupSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
@@ -5572,6 +6002,9 @@ type ReadonlyArray<T> = [Exclude<T, undefined>] extends [unknown[]]
 export const pathsApiCouponsGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/coupons"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
+export const pathsApiOrganizationsOrganizationSlugCouponsGetParametersQueryLangValues: ReadonlyArray<
+  FlattenedDeepRequired<paths>["/api/organizations/{organizationSlug}/coupons"]["get"]["parameters"]["query"]["lang"]
+> = ["en", "ja", "ko", "zh-CN", "zh-TW"];
 export const pathsApiMenusMenuIdMenuSectionsGetParametersQuerySearchFieldValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/menus/{menuId}/menu-sections"]["get"]["parameters"]["query"]["searchField"]
 > = ["name", "description"];
@@ -5587,6 +6020,9 @@ export const pathsApiMenuSectionsSectionIdMenuItemsGetParametersQuerySearchOpera
 export const pathsApiOrganizationsOrganizationIdOrderMenuGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/organizations/{organizationId}/order-menu"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
+export const userRoleValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserRole"]
+> = ["admin", "user"];
 export const userResponseDtoLangValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserResponseDto"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
@@ -5658,23 +6094,14 @@ export const filterOperatorValues: ReadonlyArray<
 export const bannerSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["BannerSortField"]
 > = ["isActive", "createdAt", "updatedAt"];
-export const createCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CreateCouponDto"]["discountType"]
+export const couponDiscountTypeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["CouponDiscountType"]
 > = ["fixed", "percentage"];
-export const createCouponDtoIssueTriggerValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CreateCouponDto"]["issueTrigger"]
+export const couponIssueTriggerValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["CouponIssueTrigger"]
 > = ["signup", "birthday", "spend"];
-export const createCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CreateCouponDto"]["scope"]
-> = ["order", "item"];
-export const couponResponseDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CouponResponseDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const couponResponseDtoIssueTriggerValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CouponResponseDto"]["issueTrigger"]
-> = ["signup", "birthday", "spend"];
-export const couponResponseDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CouponResponseDto"]["scope"]
+export const couponScopeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["CouponScope"]
 > = ["order", "item"];
 export const couponFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["CouponFilterField"]
@@ -5710,48 +6137,18 @@ export const couponSortFieldValues: ReadonlyArray<
   "isActive",
   "createdAt",
 ];
-export const updateCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["UpdateCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const updateCouponDtoIssueTriggerValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["UpdateCouponDto"]["issueTrigger"]
-> = ["signup", "birthday", "spend"];
-export const updateCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["UpdateCouponDto"]["scope"]
-> = ["order", "item"];
-export const customerCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CustomerCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const customerCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["CustomerCouponDto"]["scope"]
-> = ["order", "item"];
-export const userCouponResponseDtoSourceValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["UserCouponResponseDto"]["source"]
+export const couponRecipientFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["CouponRecipientFilterField"]
+> = ["userEmail", "grantedByEmail", "source", "createdAt", "usedAt"];
+export const couponRecipientSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["CouponRecipientSortField"]
+> = ["userEmail", "source", "grantedByEmail", "createdAt", "usedAt"];
+export const userCouponSourceValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserCouponSource"]
 > = ["granted", "claimed", "signup", "birthday", "spend", "redeemed"];
 export const validateCouponDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ValidateCouponDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
-export const availableCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AvailableCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const availableCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AvailableCouponDto"]["scope"]
-> = ["order", "item"];
-export const claimableCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["ClaimableCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const claimableCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["ClaimableCouponDto"]["scope"]
-> = ["order", "item"];
-export const myCouponResponseDtoSourceValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["MyCouponResponseDto"]["source"]
-> = ["granted", "claimed", "signup", "birthday", "spend", "redeemed"];
-export const myClaimableCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["MyClaimableCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const myClaimableCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["MyClaimableCouponDto"]["scope"]
-> = ["order", "item"];
 export const baseEcpayLanguageValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["BaseEcpayLanguage"]
 > = ["ENG", "KOR", "JPN", "CHI"];
@@ -5812,11 +6209,11 @@ export const orderResponseDtoPaymentMethodValues: ReadonlyArray<
 export const orderResponseDtoOrderStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderResponseDto"]["orderStatus"]
 > = [
-  "OrderCancelled",
-  "OrderDelivered",
   "OrderPaymentDue",
-  "OrderPickupAvailable",
   "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
+  "OrderCancelled",
   "OrderProblem",
 ];
 export const orderFilterFieldValues: ReadonlyArray<
@@ -5845,6 +6242,46 @@ export const orderSortFieldValues: ReadonlyArray<
   "tableNumber",
   "total",
 ];
+export const orderBoardStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderBoardStatus"]
+> = ["OrderPaymentDue", "OrderProcessing", "OrderPickupAvailable"];
+export const orderFlowStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderFlowStatus"]
+> = [
+  "OrderPaymentDue",
+  "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
+];
+export const orderTransitionDirectionValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderTransitionDirection"]
+> = ["advance", "cancel", "revert"];
+export const orderStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderStatus"]
+> = [
+  "OrderPaymentDue",
+  "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
+  "OrderCancelled",
+  "OrderProblem",
+];
+export const adminOrderResponseDtoModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AdminOrderResponseDto"]["mode"]
+> = ["counter", "dineIn", "driveThru", "pickup"];
+export const adminOrderResponseDtoPaymentMethodValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AdminOrderResponseDto"]["paymentMethod"]
+> = ["ApplePay", "Cash", "Credit", "iPASS", "Jkopay", "TWQR", "WeiXin"];
+export const adminOrderResponseDtoOrderStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AdminOrderResponseDto"]["orderStatus"]
+> = [
+  "OrderPaymentDue",
+  "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
+  "OrderCancelled",
+  "OrderProblem",
+];
 export const userOrderResponseDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserOrderResponseDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
@@ -5854,18 +6291,18 @@ export const userOrderResponseDtoPaymentMethodValues: ReadonlyArray<
 export const userOrderResponseDtoOrderStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserOrderResponseDto"]["orderStatus"]
 > = [
-  "OrderCancelled",
-  "OrderDelivered",
   "OrderPaymentDue",
-  "OrderPickupAvailable",
   "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
+  "OrderCancelled",
   "OrderProblem",
 ];
-export const menuFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["MenuFilterField"]
+export const menuSectionFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuSectionFilterField"]
 > = ["name", "description", "createdAt", "updatedAt"];
-export const menuSortFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["MenuSortField"]
+export const menuSectionSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuSectionSortField"]
 > = ["name", "description", "createdAt", "updatedAt"];
 export const orderModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderMode"]
@@ -5903,6 +6340,39 @@ export const menuItemResponseDtoSuitableForDietValues: ReadonlyArray<
   "VeganDiet",
   "VegetarianDiet",
 ];
+export const menuItemFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuItemFilterField"]
+> = [
+  "name",
+  "description",
+  "priceCurrency",
+  "price",
+  "inventoryLevel",
+  "deliveryLeadTime",
+  "priceSpecification",
+  "availability",
+  "availableModes",
+  "createdAt",
+  "updatedAt",
+  "priceSpecificationValidFrom",
+  "priceSpecificationValidThrough",
+];
+export const menuItemSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MenuItemSortField"]
+> = [
+  "name",
+  "description",
+  "priceCurrency",
+  "price",
+  "inventoryLevel",
+  "deliveryLeadTime",
+  "priceSpecification",
+  "availability",
+  "createdAt",
+  "updatedAt",
+  "priceSpecificationValidFrom",
+  "priceSpecificationValidThrough",
+];
 export const updateMenuItemDtoSuitableForDietValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UpdateMenuItemDto"]["suitableForDiet"]
 > = [
@@ -5924,12 +6394,43 @@ export const addOnFilterFieldValues: ReadonlyArray<
 export const addOnSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AddOnSortField"]
 > = ["addOnMenuSectionName", "addOnMenuItemName", "createdAt", "updatedAt"];
+export const modifierGroupFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ModifierGroupFilterField"]
+> = [
+  "displayName",
+  "minSelectionCount",
+  "maxSelectionCount",
+  "createdAt",
+  "updatedAt",
+];
+export const modifierGroupSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ModifierGroupSortField"]
+> = [
+  "displayName",
+  "minSelectionCount",
+  "maxSelectionCount",
+  "createdAt",
+  "updatedAt",
+];
 export const modifierFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ModifierFilterField"]
-> = ["displayName", "createdAt", "updatedAt"];
+> = [
+  "displayName",
+  "priceAdjustment",
+  "availability",
+  "availableModes",
+  "createdAt",
+  "updatedAt",
+];
 export const modifierSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ModifierSortField"]
-> = ["displayName", "createdAt", "updatedAt"];
+> = [
+  "displayName",
+  "priceAdjustment",
+  "availability",
+  "createdAt",
+  "updatedAt",
+];
 export const orderMenuItemResponseDtoSuitableForDietValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderMenuItemResponseDto"]["suitableForDiet"]
 > = [
@@ -5948,12 +6449,6 @@ export const orderMenuItemResponseDtoSuitableForDietValues: ReadonlyArray<
 export const organizationMemberResponseDtoRoleValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrganizationMemberResponseDto"]["role"]
 > = ["admin", "member", "owner"];
-export const pointsCouponDtoDiscountTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["PointsCouponDto"]["discountType"]
-> = ["fixed", "percentage"];
-export const pointsCouponDtoScopeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["PointsCouponDto"]["scope"]
-> = ["order", "item"];
 export const pointTransactionDtoTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PointTransactionDto"]["type"]
 > = ["earn", "redeem"];

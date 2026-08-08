@@ -29,6 +29,7 @@ import {
   ContentCopy,
   ErrorOutline,
   MenuBook,
+  Storefront,
 } from "@mui/icons-material";
 import {
   Button,
@@ -241,6 +242,19 @@ const OrderModeOrganizationSlugComplete = ({
                   {order.orderNumber}
                 </Typography>
               </Stack>
+              <Button
+                onClick={() =>
+                  router.push(
+                    `/order-board/${organizationSlug}?${new URLSearchParams({
+                      orderNumber: order.orderNumber,
+                    })}`,
+                  )
+                }
+                startIcon={<Storefront />}
+                variant="outlined"
+              >
+                {tOrder("board.link")}
+              </Button>
             </StyledCardContent>
           </Card>
           {showPickupInfo && organization && (

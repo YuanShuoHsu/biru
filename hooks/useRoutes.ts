@@ -129,6 +129,13 @@ const routes: Route[] = [
     to: null,
   },
   {
+    children: [{ icon: Storefront, segment: "[organizationSlug]" }],
+    icon: ReceiptLong,
+    label: "order.board.label",
+    segment: "order-board",
+    to: null,
+  },
+  {
     children: [
       {
         icon: GroupAdd,
