@@ -1,9 +1,10 @@
 {
   "board": {
+    "count": "{count}건",
     "empty": "현재 주문이 없습니다",
-    "hint": "번호가 '픽업 가능'에 표시되면 카운터로 오세요.",
     "label": "픽업 번호",
     "link": "픽업 번호 보기",
+    "mine": "고객님의 번호",
     "status": {
       "OrderPaymentDue": "결제 대기",
       "OrderProcessing": "준비 중",

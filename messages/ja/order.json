@@ -1,9 +1,10 @@
 {
   "board": {
+    "count": "{count} 件",
     "empty": "現在ご注文はありません",
-    "hint": "番号が「受け取り可能」に表示されたらカウンターへお越しください。",
     "label": "受け取り番号",
     "link": "受け取り番号を見る",
+    "mine": "お客様の番号",
     "status": {
       "OrderPaymentDue": "支払い待ち",
       "OrderProcessing": "準備中",

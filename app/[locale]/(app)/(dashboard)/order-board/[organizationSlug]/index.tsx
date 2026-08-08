@@ -9,69 +9,77 @@ import { menuSocket } from "@/app/socket";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
-import { Card, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  CardHeader,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { orderBoardStatusValues } from "@/types/api";
 import type { OrderBoardItem } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
-// 同一份排版要同時撐住手機與店內大螢幕，字級一律隨視窗寬度縮放
-const StyledColumnsStack = styled(Stack)(({ theme }) => ({
+const StyledContainerGrid = styled(Grid)(({ theme }) => ({
   flex: 1,
   minHeight: 0,
-  flexDirection: "column",
-  gap: theme.spacing(2),
 
   [theme.breakpoints.up("md")]: {
-    flexDirection: "row",
+    flexWrap: "nowrap",
   },
 }));
 
-const StyledColumnCard = styled(Card, {
+const StyledColumnGrid = styled(Grid)({
+  alignSelf: "stretch",
+});
+
+const StyledCard = styled(Card, {
   shouldForwardProp: (prop) => prop !== "highlighted",
 })<{ highlighted?: boolean }>(({ highlighted, theme }) => ({
-  flex: 1,
-  minHeight: 0,
+  height: "100%",
   display: "flex",
   flexDirection: "column",
-  gap: theme.spacing(2),
-  padding: theme.spacing(2),
+  overflow: "hidden",
+
   ...(highlighted && {
-    backgroundColor: theme.vars.palette.success.main,
-    color: theme.vars.palette.success.contrastText,
+    backgroundColor: `rgba(${theme.vars.palette.success.mainChannel} / 0.2)`,
+    borderColor: theme.vars.palette.success.main,
   }),
 }));
 
-const StyledNumbersStack = styled("div")(({ theme }) => ({
+const StyledList = styled(List)({
   flex: 1,
   minHeight: 0,
   overflowY: "auto",
-  display: "flex",
-  flexWrap: "wrap",
-  alignContent: "flex-start",
-  gap: theme.spacing(1),
+});
+
+const StyledEmptyTypography = styled(Typography)(({ theme }) => ({
+  padding: theme.spacing(2),
+  textAlign: "center",
 }));
 
-const StyledNumber = styled("span", {
+const StyledListItem = styled(ListItem, {
   shouldForwardProp: (prop) => prop !== "mine",
 })<{ mine?: boolean }>(({ mine, theme }) => ({
-  padding: theme.spacing(0.5, 1.5),
-  borderRadius: theme.shape.borderRadius,
-  fontVariantNumeric: "tabular-nums",
-  fontWeight: "bold",
-  lineHeight: 1.2,
-  fontSize: "clamp(1.5rem, 4.5vw, 4rem)",
   ...(mine && {
     outline: `3px solid ${theme.vars.palette.warning.main}`,
-    outlineOffset: 2,
+    outlineOffset: -3,
   }),
 }));
 
-const StyledColumnTitle = styled(Typography)({
-  fontWeight: "bold",
-  fontSize: "clamp(1rem, 2vw, 2rem)",
-}) as typeof Typography;
+const StyledListItemText = styled(ListItemText)({
+  "& .MuiListItemText-primary": {
+    fontVariantNumeric: "tabular-nums",
+    fontWeight: "bold",
+    lineHeight: 1.2,
+    fontSize: "clamp(1.5rem, 3vw, 3rem)",
+  },
+});
 
 interface OrderBoardProps {
   items: OrderBoardItem[];
@@ -112,44 +120,52 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   }, [isConnected, mutate, organization.id]);
 
   return (
-    <Stack flex={1} minHeight={0} gap={2}>
-      <StyledColumnsStack>
-        {orderBoardStatusValues.map((status) => {
-          const numbers = items
-            .filter((item) => item.orderStatus === status)
-            .map((item) => item.orderNumber);
+    <StyledContainerGrid container spacing={2}>
+      {orderBoardStatusValues.map((status) => {
+        const numbers = items
+          .filter((item) => item.orderStatus === status)
+          .map((item) => item.orderNumber);
 
-          return (
-            <StyledColumnCard
+        return (
+          <StyledColumnGrid key={status} size={{ xs: 12, md: 4 }}>
+            <StyledCard
               highlighted={status === "OrderPickupAvailable"}
-              key={status}
               variant="outlined"
             >
-              <StyledColumnTitle component="h2">
-                {tOrder(`board.status.${status}`)}
-              </StyledColumnTitle>
-              {numbers.length ? (
-                <StyledNumbersStack>
-                  {numbers.map((orderNumber) => (
-                    <StyledNumber
+              <CardHeader
+                slotProps={{ title: { component: "h2" } }}
+                subheader={tOrder("board.count", { count: numbers.length })}
+                title={tOrder(`board.status.${status}`)}
+              />
+              <Divider />
+              <StyledList>
+                {numbers.length ? (
+                  numbers.map((orderNumber) => (
+                    <StyledListItem
                       key={orderNumber}
                       mine={orderNumber === myOrderNumber}
                     >
-                      {orderNumber}
-                    </StyledNumber>
-                  ))}
-                </StyledNumbersStack>
-              ) : (
-                <Typography variant="body2">{tOrder("board.empty")}</Typography>
-              )}
-            </StyledColumnCard>
-          );
-        })}
-      </StyledColumnsStack>
-      <Typography color="text.secondary" variant="caption">
-        {tOrder("board.hint")}
-      </Typography>
-    </Stack>
+                      <StyledListItemText
+                        primary={orderNumber}
+                        secondary={
+                          orderNumber === myOrderNumber
+                            ? tOrder("board.mine")
+                            : null
+                        }
+                      />
+                    </StyledListItem>
+                  ))
+                ) : (
+                  <StyledEmptyTypography color="text.secondary" variant="body2">
+                    {tOrder("board.empty")}
+                  </StyledEmptyTypography>
+                )}
+              </StyledList>
+            </StyledCard>
+          </StyledColumnGrid>
+        );
+      })}
+    </StyledContainerGrid>
   );
 };
 

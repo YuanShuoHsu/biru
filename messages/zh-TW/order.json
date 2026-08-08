@@ -1,9 +1,10 @@
 {
   "board": {
+    "count": "共 {count} 筆",
     "empty": "目前沒有訂單",
-    "hint": "號碼出現在「可取餐」即可前往櫃檯取餐。",
     "label": "取餐號碼",
     "link": "查看取餐號碼",
+    "mine": "您的號碼",
     "status": {
       "OrderPaymentDue": "待付款",
       "OrderProcessing": "準備中",

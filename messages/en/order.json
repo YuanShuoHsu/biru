@@ -1,9 +1,10 @@
 {
   "board": {
+    "count": "{count} orders",
     "empty": "No orders right now",
-    "hint": "Head to the counter once your number appears under Ready for pickup.",
     "label": "Pickup numbers",
     "link": "View pickup numbers",
+    "mine": "Your number",
     "status": {
       "OrderPaymentDue": "Payment due",
       "OrderProcessing": "Preparing",

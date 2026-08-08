@@ -53,6 +53,7 @@ type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
 
 type RouteQuery =
   | "back"
+  | "orderNumber"
   | "organization"
   | "page"
   | "pageSize"
@@ -129,11 +130,16 @@ const routes: Route[] = [
     to: null,
   },
   {
-    children: [{ icon: Storefront, segment: "[organizationSlug]" }],
+    children: [
+      {
+        icon: Storefront,
+        query: ["orderNumber"],
+        segment: "[organizationSlug]",
+      },
+    ],
     icon: ReceiptLong,
     label: "order.board.label",
     segment: "order-board",
-    to: null,
   },
   {
     children: [
@@ -285,6 +291,7 @@ export const useRoutes = () => {
 
   const values: Record<RouteQuery, string | null> = {
     back: pathname,
+    orderNumber: searchParams.get("orderNumber"),
     organization: searchParams.get("organization"),
     page: DEFAULT_PAGINATION_QUERY.page,
     pageSize: DEFAULT_PAGINATION_QUERY.pageSize,
