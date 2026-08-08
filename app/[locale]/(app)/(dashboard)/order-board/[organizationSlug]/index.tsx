@@ -22,7 +22,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { orderBoardStatusValues } from "@/types/api";
-import type { OrderBoardItem } from "@/types/orders";
+import type { OrderBoardItem, OrderResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 const StyledContainerGrid = styled(Grid)(({ theme }) => ({
@@ -90,7 +90,14 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   const tOrder = useTranslations("order");
 
   const searchParams = useSearchParams();
-  const myOrderNumber = searchParams.get("orderNumber");
+  const orderId = searchParams.get("orderId");
+
+  const { data: myOrder } = useSWR<OrderResponse>(
+    orderId
+      ? `/api/organizations/${organization.slug}/orders/${orderId}`
+      : null,
+  );
+  const myOrderNumber = myOrder?.orderNumber;
 
   const { data: items = initialItems, mutate } = useSWR<OrderBoardItem[]>(
     `/api/organizations/${organization.slug}/orders/board`,

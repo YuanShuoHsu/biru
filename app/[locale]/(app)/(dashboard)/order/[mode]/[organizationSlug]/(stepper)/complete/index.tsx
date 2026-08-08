@@ -246,7 +246,7 @@ const OrderModeOrganizationSlugComplete = ({
                 onClick={() =>
                   router.push(
                     `/order-board/${organizationSlug}?${new URLSearchParams({
-                      orderNumber: order.orderNumber,
+                      orderId: order.id,
                     })}`,
                   )
                 }

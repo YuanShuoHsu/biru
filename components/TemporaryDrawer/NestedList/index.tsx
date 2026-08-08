@@ -5,6 +5,7 @@
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 
+import DividerSlot from "./DividerSlot";
 import OrderModeMenuItem from "./OrderModeMenuItem";
 import SelectedListItem from "./SelectedListItem";
 
@@ -48,6 +49,7 @@ const useNavItems = (): NavItem[] => {
       "/order-board",
       organizationSlug ? `/order-board/${organizationSlug}` : undefined,
     ),
+    { slot: DividerSlot },
     {
       ...navItem("/auth"),
       children: navChildren["/auth"],
