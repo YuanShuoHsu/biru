@@ -46,6 +46,12 @@ export const authClient = createAuthClient({
           type: "string",
           required: false,
         },
+        phoneNumberVerified: {
+          type: "boolean",
+          required: true,
+          defaultValue: false,
+          input: false,
+        },
       },
     }),
     multiSessionClient(),
@@ -117,6 +123,13 @@ const customErrorCodes: Record<string, Record<Locale, string>> = {
     [LocaleEnum.Ja]: "招待が見つからないか、有効期限が切れています",
     [LocaleEnum.Ko]: "초대를 찾을 수 없거나 만료되었습니다",
     [LocaleEnum.ZhCN]: "邀请链接无效或已过期",
+  },
+  PHONE_NUMBER_ALREADY_EXISTS: {
+    [LocaleEnum.ZhTW]: "此電話號碼已被註冊",
+    [LocaleEnum.En]: "This phone number is already registered.",
+    [LocaleEnum.Ja]: "この電話番号は既に登録されています",
+    [LocaleEnum.Ko]: "이 전화번호는 이미 등록되어 있습니다",
+    [LocaleEnum.ZhCN]: "此电话号码已被注册",
   },
   UNAUTHORIZED: {
     [LocaleEnum.ZhTW]: "請先登入",
