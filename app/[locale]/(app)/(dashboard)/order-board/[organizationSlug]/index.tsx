@@ -22,7 +22,7 @@ import {
 import { styled } from "@mui/material/styles";
 
 import { orderBoardStatusValues } from "@/types/api";
-import type { OrderBoardItem, OrderResponse } from "@/types/orders";
+import type { OrderBoardItem } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 const StyledContainerGrid = styled(Grid)(({ theme }) => ({
@@ -92,13 +92,6 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
 
-  const { data: myOrder } = useSWR<OrderResponse>(
-    orderId
-      ? `/api/organizations/${organization.slug}/orders/${orderId}`
-      : null,
-  );
-  const myOrderNumber = myOrder?.orderNumber;
-
   const { data: items = initialItems, mutate } = useSWR<OrderBoardItem[]>(
     `/api/organizations/${organization.slug}/orders/board`,
     { fallbackData: initialItems },
@@ -129,9 +122,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   return (
     <StyledContainerGrid container spacing={2}>
       {orderBoardStatusValues.map((status) => {
-        const numbers = items
-          .filter((item) => item.orderStatus === status)
-          .map((item) => item.orderNumber);
+        const columnItems = items.filter((item) => item.orderStatus === status);
 
         return (
           <StyledColumnGrid key={status} size={{ xs: 12, md: 4 }}>
@@ -141,23 +132,21 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
             >
               <CardHeader
                 slotProps={{ title: { component: "h2" } }}
-                subheader={tOrder("board.count", { count: numbers.length })}
+                subheader={tOrder("board.count", { count: columnItems.length })}
                 title={tOrder(`board.status.${status}`)}
               />
               <Divider />
               <StyledList>
-                {numbers.length ? (
-                  numbers.map((orderNumber) => (
+                {columnItems.length ? (
+                  columnItems.map((item) => (
                     <StyledListItem
-                      key={orderNumber}
-                      mine={orderNumber === myOrderNumber}
+                      key={item.orderId}
+                      mine={item.orderId === orderId}
                     >
                       <StyledListItemText
-                        primary={orderNumber}
+                        primary={item.orderNumber}
                         secondary={
-                          orderNumber === myOrderNumber
-                            ? tOrder("board.mine")
-                            : null
+                          item.orderId === orderId ? tOrder("board.mine") : null
                         }
                       />
                     </StyledListItem>
