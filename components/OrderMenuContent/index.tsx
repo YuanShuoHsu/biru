@@ -28,11 +28,21 @@ import {
   TOP_SOLD,
 } from "@/constants/tab";
 
-import { Box, Tab, Tabs, Typography, useScrollTrigger } from "@mui/material";
+import {
+  Badge,
+  Box,
+  Tab,
+  Tabs,
+  Typography,
+  useScrollTrigger,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
+
+import type { OrderMenuItem } from "@/types/menus";
 
 const TABS_HEIGHT = 48;
 const CONTROLS_HEIGHT = 72;
@@ -77,6 +87,20 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   },
 }));
 
+const QuantityBadge = styled(Badge)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+
+  "& .MuiBadge-badge": {
+    position: "static",
+    transform: "none",
+  },
+
+  "& .MuiBadge-invisible": {
+    display: "none",
+  },
+}));
+
 const SectionBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
@@ -109,6 +133,8 @@ const OrderMenuContent = () => {
     id: string;
     timer?: ReturnType<typeof setTimeout>;
   }>({ id: "" });
+
+  const { cartItemsList } = useCartStore((state) => state);
 
   const { menu } = useMenuStore((state) => state);
 
@@ -171,6 +197,20 @@ const OrderMenuContent = () => {
       ({ menuItems, name }) =>
         name.toLowerCase().includes(searchText) || menuItems.length > 0,
     );
+
+  const getSectionQuantity = (menuItems: OrderMenuItem[]) => {
+    const menuItemIds = new Set(menuItems.map(({ id }) => id));
+
+    return cartItemsList.reduce(
+      (sum, { addOns, menuItemId, quantity }) =>
+        sum +
+        (menuItemIds.has(menuItemId) ||
+        addOns.some((addOn) => menuItemIds.has(addOn.menuItemId))
+          ? quantity
+          : 0),
+      0,
+    );
+  };
 
   const displayIndex = Math.max(
     0,
@@ -259,8 +299,22 @@ const OrderMenuContent = () => {
           value={displayIndex}
           variant="scrollable"
         >
-          {filteredSections.map(({ id, name }) => (
-            <Tab key={id} label={name} />
+          {filteredSections.map(({ id, menuItems, name }) => (
+            <Tab
+              key={id}
+              label={
+                id === TOP_SOLD || id === LATEST ? (
+                  name
+                ) : (
+                  <QuantityBadge
+                    badgeContent={getSectionQuantity(menuItems)}
+                    color="secondary"
+                  >
+                    {name}
+                  </QuantityBadge>
+                )
+              }
+            />
           ))}
         </StyledTabs>
       </HeaderBox>
