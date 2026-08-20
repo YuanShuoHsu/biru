@@ -137,7 +137,10 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
             <StyledCard color={STATUS_COLORS[status]} variant="outlined">
               <StyledCardHeader
                 color={STATUS_COLORS[status]}
-                slotProps={{ title: { component: "h2" } }}
+                slotProps={{
+                  subheader: { variant: "body2" },
+                  title: { component: "h2", variant: "body2" },
+                }}
                 subheader={tOrder("board.count", { count: columnItems.length })}
                 title={statusLabel}
               />
