@@ -7,16 +7,21 @@ import useSWR from "swr";
 
 import { menuSocket } from "@/app/socket";
 
+import { STATUS_COLORS } from "@/constants/orders";
+
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import {
   Card,
   CardHeader,
+  Chip,
+  type ChipProps,
   Divider,
   Grid,
   List,
   ListItem,
   ListItemText,
+  Stack,
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -39,18 +44,28 @@ const StyledColumnGrid = styled(Grid)({
 });
 
 const StyledCard = styled(Card, {
-  shouldForwardProp: (prop) => prop !== "highlighted",
-})<{ highlighted?: boolean }>(({ highlighted, theme }) => ({
+  shouldForwardProp: (prop) => prop !== "color",
+})<{ color: ChipProps["color"] }>(({ color, theme }) => ({
   height: "100%",
   display: "flex",
   flexDirection: "column",
   overflow: "hidden",
 
-  ...(highlighted && {
-    backgroundColor: `rgba(${theme.vars.palette.success.mainChannel} / 0.2)`,
-    borderColor: theme.vars.palette.success.main,
-  }),
+  ...(color &&
+    color !== "default" && {
+      borderTop: `3px solid ${theme.vars.palette[color].main}`,
+    }),
 }));
+
+const StyledCardHeader = styled(CardHeader, {
+  shouldForwardProp: (prop) => prop !== "color",
+})<{ color: ChipProps["color"] }>(({ color, theme }) =>
+  color && color !== "default"
+    ? {
+        backgroundColor: `rgba(${theme.vars.palette[color].mainChannel} / 0.12)`,
+      }
+    : {},
+);
 
 const StyledList = styled(List)({
   flex: 1,
@@ -67,7 +82,7 @@ const StyledListItem = styled(ListItem, {
   shouldForwardProp: (prop) => prop !== "mine",
 })<{ mine?: boolean }>(({ mine, theme }) => ({
   ...(mine && {
-    outline: `3px solid ${theme.vars.palette.warning.main}`,
+    outline: `3px solid ${theme.vars.palette.primary.main}`,
     outlineOffset: -3,
   }),
 }));
@@ -123,31 +138,48 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
     <StyledContainerGrid container spacing={2}>
       {orderBoardStatusValues.map((status) => {
         const columnItems = items.filter((item) => item.orderStatus === status);
+        const statusLabel = tOrder(`board.status.${status}`);
 
         return (
           <StyledColumnGrid key={status} size={{ xs: 12, md: 4 }}>
-            <StyledCard
-              highlighted={status === "OrderPickupAvailable"}
-              variant="outlined"
-            >
-              <CardHeader
+            <StyledCard color={STATUS_COLORS[status]} variant="outlined">
+              <StyledCardHeader
+                color={STATUS_COLORS[status]}
                 slotProps={{ title: { component: "h2" } }}
                 subheader={tOrder("board.count", { count: columnItems.length })}
-                title={tOrder(`board.status.${status}`)}
+                title={statusLabel}
               />
               <Divider />
               <StyledList>
                 {columnItems.length ? (
-                  columnItems.map((item) => (
+                  columnItems.map((item, index) => (
                     <StyledListItem
+                      divider={index < columnItems.length - 1}
                       key={item.orderId}
                       mine={item.orderId === orderId}
                     >
                       <StyledListItemText
-                        primary={item.orderNumber}
+                        primary={
+                          <Stack
+                            alignItems="center"
+                            columnGap={1}
+                            direction="row"
+                            flexWrap="wrap"
+                            justifyContent="space-between"
+                          >
+                            {item.orderNumber}
+                            <Chip
+                              color={STATUS_COLORS[status]}
+                              label={statusLabel}
+                              size="small"
+                              variant="outlined"
+                            />
+                          </Stack>
+                        }
                         secondary={
                           item.orderId === orderId ? tOrder("board.mine") : null
                         }
+                        slotProps={{ primary: { component: "div" } }}
                       />
                     </StyledListItem>
                   ))
