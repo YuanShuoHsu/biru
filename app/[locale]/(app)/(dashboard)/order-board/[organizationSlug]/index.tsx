@@ -7,6 +7,7 @@ import useSWR from "swr";
 
 import { menuSocket } from "@/app/socket";
 
+import { MODE_COLORS } from "@/constants/orderMode";
 import { STATUS_COLORS } from "@/constants/orders";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
@@ -87,15 +88,6 @@ const StyledListItem = styled(ListItem, {
   }),
 }));
 
-const StyledListItemText = styled(ListItemText)({
-  "& .MuiListItemText-primary": {
-    fontVariantNumeric: "tabular-nums",
-    fontWeight: "bold",
-    lineHeight: 1.2,
-    fontSize: "clamp(1.5rem, 3vw, 3rem)",
-  },
-});
-
 interface OrderBoardProps {
   items: OrderBoardItem[];
   organization: OrganizationResponse;
@@ -158,19 +150,28 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                       key={item.orderId}
                       mine={item.orderId === orderId}
                     >
-                      <StyledListItemText
+                      <ListItemText
                         primary={
                           <Stack
+                            flexWrap="wrap"
+                            direction="row"
+                            justifyContent="space-between"
                             alignItems="center"
                             columnGap={1}
-                            direction="row"
-                            flexWrap="wrap"
-                            justifyContent="space-between"
                           >
-                            {item.orderNumber}
+                            <Typography variant="body1">
+                              {item.orderNumber}
+                            </Typography>
                             <Chip
-                              color={STATUS_COLORS[status]}
-                              label={statusLabel}
+                              color={MODE_COLORS[item.mode]}
+                              label={
+                                item.tableNumber
+                                  ? tOrder(
+                                      "mode.dineIn.storeSlug.tableNumber.value",
+                                      { tableNumber: item.tableNumber },
+                                    )
+                                  : tOrder(`mode.${item.mode}.label`)
+                              }
                               size="small"
                               variant="outlined"
                             />
