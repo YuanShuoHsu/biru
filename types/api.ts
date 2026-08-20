@@ -2151,6 +2151,18 @@ export interface components {
       /** @description 綠界端狀態是否與本機一致；false 代表兩邊對不起來，需人工處理 */
       matchesLocal: boolean;
     };
+    RefundItemSnapshotDto: {
+      /** @description 訂單品項 ID */
+      orderItemId: string;
+      /** @description 品項名稱 */
+      menuItemName: string;
+      /** @description 退款數量 */
+      quantity: number;
+      /** @description 單價 */
+      unitPrice: string;
+      /** @description 此品項的退款金額 */
+      amount: string;
+    };
     OrderRefundDto: {
       /** @description 退款 ID */
       id: string;
@@ -2166,8 +2178,8 @@ export interface components {
        * @enum {string}
        */
       channel: "ecpay" | "manual";
-      /** @description 退款品項；整單退款為 null */
-      items: Record<string, never>[] | null;
+      /** @description 此次退款的品項與數量 */
+      items: components["schemas"]["RefundItemSnapshotDto"][] | null;
       /**
        * @description none：無發票需處理；voided：發票已作廢；allowance：已開立折讓；failed：錢已退但發票處理失敗
        * @enum {string}
@@ -2243,6 +2255,8 @@ export interface components {
       items: components["schemas"]["CreateOrderItemDto"][];
       partySize?: number;
       tableNumber?: number;
+      /** Format: uuid */
+      idempotencyKey?: string;
     };
     OrderCustomerDto: {
       email?: string | null;
