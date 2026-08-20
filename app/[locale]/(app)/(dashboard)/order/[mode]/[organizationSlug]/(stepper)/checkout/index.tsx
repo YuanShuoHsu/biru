@@ -206,7 +206,9 @@ const OrderModeOrganizationSlugCheckout = () => {
 
   const { trigger: triggerOrder } = useSWRMutation(
     `/api/organizations/${String(organizationSlug)}/orders`,
-    sendRequest<OrderResponse, CreateOrderDto>(),
+    sendRequest<OrderResponse, CreateOrderDto>({
+      headers: { "Idempotency-Key": idempotencyKey },
+    }),
   );
 
   const shouldFetch =
@@ -342,7 +344,6 @@ const OrderModeOrganizationSlugCheckout = () => {
             : undefined,
         },
         discountCode: coupon?.code,
-        idempotencyKey,
         invoice: invoice.type
           ? {
               carrierType: carrier && carrier !== "none" ? carrier : undefined,
@@ -511,7 +512,6 @@ const OrderModeOrganizationSlugCheckout = () => {
                   setValue("customer.telephone", e.target.value, {
                     shouldValidate: isSubmitted,
                   });
-                  // 信箱與手機擇一必填，只驗改動的那欄會留下已不成立的錯誤
                   if (isSubmitted) void triggerValidation("customer.email");
                 }}
                 required={isTelephoneRequired}
