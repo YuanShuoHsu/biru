@@ -145,7 +145,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                 title={statusLabel}
               />
               <Divider />
-              <StyledList>
+              <StyledList disablePadding>
                 {columnItems.length ? (
                   columnItems.map((item, index) => (
                     <StyledListItem
