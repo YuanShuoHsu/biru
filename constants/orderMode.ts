@@ -20,5 +20,5 @@ export const MODE_COLORS: Record<ApiOrderMode, ChipProps["color"]> = {
   counter: "default",
   dineIn: "info",
   driveThru: "primary",
-  pickup: "secondary",
+  pickup: "error",
 };
