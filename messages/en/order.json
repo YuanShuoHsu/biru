@@ -70,7 +70,8 @@
       "mobile": "Mobile barcode",
       "none": "Paper invoice",
       "personal": "Personal invoice",
-      "title": "Invoice type"
+      "title": "Invoice type",
+      "individual": "ECPay carrier"
     },
     "payment": {
       "ApplePay": "Apple Pay",
@@ -116,6 +117,24 @@
       "title": "Transaction details",
       "tradeNo": "ECPay trade number",
       "unpaid": "Awaiting payment"
+    },
+    "invoice": {
+      "copied": "Invoice number copied",
+      "invoiceDate": "Issued at",
+      "invoiceNumber": "Invoice number",
+      "status": {
+        "issued": "Issued",
+        "issuing": "Issuing",
+        "label": "Issue status",
+        "pending": "Pending",
+        "voided": "Voided"
+      },
+      "title": "Invoice details"
+    },
+    "pending": {
+      "retry": "Pay again",
+      "subtitle": "Your order was created but payment has not been received. If you have already paid, this page will update shortly; if not, please ask our staff for assistance.",
+      "title": "Payment not completed"
     }
   },
   "label": "Order",
@@ -148,18 +167,16 @@
     },
     "dineIn": {
       "label": "Dine-in",
-      "storeSlug": {
-        "tableNumber": {
-          "label": "Table",
-          "partySize": {
-            "select": {
-              "label": "Party size",
-              "placeholder": "Please select your party size",
-              "value": "{count} people"
-            }
-          },
-          "value": "Table {tableNumber}"
+      "partySize": {
+        "select": {
+          "label": "Party size",
+          "placeholder": "Please select your party size",
+          "value": "{count} people"
         }
+      },
+      "tableNumber": {
+        "label": "Table",
+        "value": "Table {tableNumber}"
       },
       "unavailable": "Unavailable for dine-in"
     },

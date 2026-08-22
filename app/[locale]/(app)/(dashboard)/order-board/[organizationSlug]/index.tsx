@@ -10,6 +10,7 @@ import { menuSocket } from "@/app/socket";
 import { MODE_COLORS } from "@/constants/orderMode";
 import { STATUS_COLORS } from "@/constants/orders";
 
+import { useOrderModeLabel } from "@/hooks/useOrderModeLabel";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import {
@@ -94,6 +95,8 @@ interface OrderBoardProps {
 }
 
 const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
+  const getOrderModeLabel = useOrderModeLabel();
+
   const tOrder = useTranslations("order");
 
   const searchParams = useSearchParams();
@@ -167,14 +170,10 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                             </Typography>
                             <Chip
                               color={MODE_COLORS[item.mode]}
-                              label={
-                                item.tableNumber
-                                  ? tOrder(
-                                      "mode.dineIn.storeSlug.tableNumber.value",
-                                      { tableNumber: item.tableNumber },
-                                    )
-                                  : tOrder(`mode.${item.mode}.label`)
-                              }
+                              label={getOrderModeLabel(
+                                item.mode,
+                                item.tableNumber,
+                              )}
                               size="small"
                               variant="outlined"
                             />

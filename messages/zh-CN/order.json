@@ -70,7 +70,8 @@
       "mobile": "手机条码",
       "none": "纸本发票",
       "personal": "个人发票",
-      "title": "发票类型"
+      "title": "发票类型",
+      "individual": "绿界载具"
     },
     "payment": {
       "ApplePay": "Apple Pay",
@@ -116,6 +117,24 @@
       "title": "交易信息",
       "tradeNo": "绿界交易编号",
       "unpaid": "待付款"
+    },
+    "invoice": {
+      "copied": "已复制发票号码",
+      "invoiceDate": "开立时间",
+      "invoiceNumber": "发票号码",
+      "status": {
+        "issued": "已开立",
+        "issuing": "开立中",
+        "label": "开立状态",
+        "pending": "待开立",
+        "voided": "已作废"
+      },
+      "title": "发票信息"
+    },
+    "pending": {
+      "retry": "重新付款",
+      "subtitle": "订单已创建但尚未收到付款。若您已完成付款，稍候片刻本页会自动更新；若尚未付款，请联系现场工作人员协助。",
+      "title": "尚未完成付款"
     }
   },
   "label": "点餐",
@@ -148,18 +167,16 @@
     },
     "dineIn": {
       "label": "堂食",
-      "storeSlug": {
-        "tableNumber": {
-          "label": "桌号",
-          "partySize": {
-            "select": {
-              "label": "用餐人数",
-              "placeholder": "请选择您的用餐人数",
-              "value": "{count} 位"
-            }
-          },
-          "value": "桌号 {tableNumber}"
+      "partySize": {
+        "select": {
+          "label": "用餐人数",
+          "placeholder": "请选择您的用餐人数",
+          "value": "{count} 位"
         }
+      },
+      "tableNumber": {
+        "label": "桌号",
+        "value": "桌号 {tableNumber}"
       },
       "unavailable": "堂食不供应"
     },
