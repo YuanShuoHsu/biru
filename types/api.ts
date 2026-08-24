@@ -559,8 +559,7 @@ export interface paths {
     put?: never;
     /** 補開發票（開立失敗後由後台重試） */
     post: operations["EcpayOrderInvoiceController_issue"];
-    /** 作廢發票並補一張待開立的（統編或抬頭開錯但不需退款時），回傳新的待開立發票 */
-    delete: operations["EcpayOrderInvoiceController_void"];
+    delete?: never;
     options?: never;
     head?: never;
     patch?: never;
@@ -595,6 +594,23 @@ export interface paths {
     get: operations["EcpayOrderInvoiceController_verify"];
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/invoice/void": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 作廢發票並重新開立（統編或抬頭開錯但不需退款時），回傳新的發票 */
+    post: operations["EcpayOrderInvoiceController_void"];
     delete?: never;
     options?: never;
     head?: never;
@@ -2194,7 +2210,7 @@ export interface components {
       randomNumber?: string | null;
       /** Format: date-time */
       printedAt?: string | null;
-      /** @description 已重設列印的次數，達 3 次後不再開放重設 */
+      /** @description 已重設列印的次數 */
       printResetCount: number;
       /** Format: date-time */
       createdAt: string;
@@ -4534,39 +4550,6 @@ export interface operations {
       };
     };
   };
-  EcpayOrderInvoiceController_void: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        organizationSlug: string;
-        orderId: string;
-      };
-      cookie?: never;
-    };
-    requestBody: {
-      content: {
-        "application/json": components["schemas"]["VoidInvoiceDto"];
-      };
-    };
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["OrderInvoiceDto"];
-        };
-      };
-      /** @description Internal server error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
   EcpayOrderInvoiceController_print: {
     parameters: {
       query?: never;
@@ -4647,6 +4630,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OrderInvoiceVerificationDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  EcpayOrderInvoiceController_void: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["VoidInvoiceDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OrderInvoiceDto"];
         };
       };
       /** @description Internal server error */
