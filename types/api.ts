@@ -450,6 +450,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/ecpay/attention": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 列出綠界流程中需要人工處理的項目（補正 cron 收斂不掉的殘留） */
+    get: operations["EcpayAttentionController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/ecpay": {
     parameters: {
       query?: never;
@@ -542,7 +559,7 @@ export interface paths {
     put?: never;
     /** 補開發票（開立失敗後由後台重試） */
     post: operations["EcpayOrderInvoiceController_issue"];
-    /** 作廢發票（統編或抬頭開錯但不需退款時） */
+    /** 作廢發票並補一張待開立的（統編或抬頭開錯但不需退款時），回傳新的待開立發票 */
     delete: operations["EcpayOrderInvoiceController_void"];
     options?: never;
     head?: never;
@@ -1880,6 +1897,42 @@ export interface components {
       applicableOrganizationSlugs?: string[] | null;
     };
     /**
+     * @description 需要人工處理的類型
+     *     - invoiceSettlementFailed：退款完成但發票沒作廢也沒折讓
+     *     - refundUnconfirmed：退刷送出後沒收到綠界結果，可退數量被佔住
+     *     - invoiceStuck：發票卡在開立中，查證失敗需人工到綠界後台確認
+     *     - invoiceOverdue：訂單已付款但發票遲遲沒開出來
+     *     - paymentProblem：綠界回報付款異常
+     *     - callbackFailed：綠界通知驗簽失敗或處理失敗
+     * @enum {string}
+     */
+    EcpayAttentionType:
+      | "invoiceSettlementFailed"
+      | "refundUnconfirmed"
+      | "invoiceStuck"
+      | "invoiceOverdue"
+      | "paymentProblem"
+      | "callbackFailed";
+    EcpayAttentionItemDto: {
+      /**
+       * @description 需要人工處理的類型
+       *     - invoiceSettlementFailed：退款完成但發票沒作廢也沒折讓
+       *     - refundUnconfirmed：退刷送出後沒收到綠界結果，可退數量被佔住
+       *     - invoiceStuck：發票卡在開立中，查證失敗需人工到綠界後台確認
+       *     - invoiceOverdue：訂單已付款但發票遲遲沒開出來
+       *     - paymentProblem：綠界回報付款異常
+       *     - callbackFailed：綠界通知驗簽失敗或處理失敗
+       */
+      type: components["schemas"]["EcpayAttentionType"];
+      orderId: string | null;
+      orderNumber: string | null;
+      confirmationNumber: string | null;
+      /** @description 錯誤訊息或補充說明 */
+      detail: string | null;
+      /** Format: date-time */
+      occurredAt: string;
+    };
+    /**
      * @description 語系設定
      *     預設語系為中文，若要變更語系參數值請帶：
      *     - ENG：英語
@@ -1910,18 +1963,6 @@ export interface components {
        * @example https://your-domain.com/shop
        */
       ClientBackURL?: string;
-      /**
-       * Format: uri
-       * @description Client 端回傳付款結果網址
-       *     有別於 ReturnURL（server端的網址），OrderResultURL 為特店的 client 端（前端）網址。消費者付款完成後，綠界會將付款結果參數以 POST 方式回傳到到該網址。詳細說明請參考付款結果通知。
-       *     注意事項：
-       *     1. 若與 [ClientBackURL] 同時設定，將會以此參數為主。
-       *     2. 銀聯卡及非即時交易（ATM、CVS、BARCODE）不支援此參數。
-       *     3. 付款結果通知請依 ReturnURL（server端的網址）為主,避免因前端操作或網路問題未收到 OrderResultURL 特店的 client 端（前端）的通知。
-       *     4. 參數內容若有包含 %26(&) 及 %3C(<) 這二個值時，請先進行 urldecode() 避免呼叫 API 失敗。
-       * @example https://your-domain.com/ecpay/result
-       */
-      OrderResultURL?: string;
       /**
        * @description 語系設定
        *     預設語系為中文，若要變更語系參數值請帶：
@@ -2153,6 +2194,8 @@ export interface components {
       randomNumber?: string | null;
       /** Format: date-time */
       printedAt?: string | null;
+      /** @description 已重設列印的次數，達 3 次後不再開放重設 */
+      printResetCount: number;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -2182,6 +2225,10 @@ export interface components {
     VoidInvoiceDto: {
       /** @description 作廢原因 */
       reason: string;
+      /** @description 重新開立時要更正的統一編號；省略則沿用作廢那張的買受人資訊 */
+      customerIdentifier?: string;
+      /** @description 重新開立時要更正的買受人抬頭 */
+      customerName?: string;
     };
     ResetInvoicePrintDto: {
       /** @description 重設列印的理由 */
@@ -4273,6 +4320,34 @@ export interface operations {
         };
         content: {
           "application/json": Record<string, never>[];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  EcpayAttentionController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["EcpayAttentionItemDto"][];
         };
       };
       /** @description Internal server error */
@@ -6605,6 +6680,16 @@ export const userCouponSourceValues: ReadonlyArray<
 export const validateCouponDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ValidateCouponDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
+export const ecpayAttentionTypeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["EcpayAttentionType"]
+> = [
+  "invoiceSettlementFailed",
+  "refundUnconfirmed",
+  "invoiceStuck",
+  "invoiceOverdue",
+  "paymentProblem",
+  "callbackFailed",
+];
 export const baseEcpayLanguageValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["BaseEcpayLanguage"]
 > = ["ENG", "KOR", "JPN", "CHI"];
