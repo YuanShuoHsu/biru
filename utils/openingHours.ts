@@ -155,22 +155,28 @@ export interface OpeningHoursDisplayConfig {
   delimiter: string;
 }
 
+const groupConsecutiveDays = (days: Day[]): Day[][] =>
+  DAYS.filter((day) => days.includes(day)).reduce<Day[][]>((runs, day) => {
+    const run = runs[runs.length - 1];
+
+    if (run && DAYS.indexOf(day) === DAYS.indexOf(run[run.length - 1]) + 1)
+      run.push(day);
+    else runs.push([day]);
+
+    return runs;
+  }, []);
+
 const formatDisplayDays = (
   days: Day[],
   { formatDay, rangeSeparator, delimiter }: OpeningHoursDisplayConfig,
-): string => {
-  if (days.length === 0) return "";
-  if (days.length === 1) return formatDay(days[0]);
-
-  const first = DAYS.indexOf(days[0]);
-  const last = DAYS.indexOf(days[days.length - 1]);
-  const isConsecutive = last - first === days.length - 1;
-
-  if (isConsecutive)
-    return `${formatDay(days[0])}${rangeSeparator}${formatDay(days[days.length - 1])}`;
-
-  return days.map(formatDay).join(delimiter);
-};
+): string =>
+  groupConsecutiveDays(days)
+    .map((run) =>
+      run.length === 1
+        ? formatDay(run[0])
+        : `${formatDay(run[0])}${rangeSeparator}${formatDay(run[run.length - 1])}`,
+    )
+    .join(delimiter);
 
 export const formatOpeningHoursForDisplay = (
   value: string,
