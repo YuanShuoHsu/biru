@@ -221,6 +221,14 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                   size="small"
                   variant="outlined"
                 />
+                {order.pickupTime && (
+                  <Typography color="text.secondary" variant="caption">
+                    {tOrder("complete.transaction.pickupTime")}{" "}
+                    {dayjs(order.pickupTime)
+                      .tz(STORE_TIMEZONE)
+                      .format("YYYY/MM/DD HH:mm")}
+                  </Typography>
+                )}
                 {order.items.map((item) => (
                   <Stack
                     direction="row"

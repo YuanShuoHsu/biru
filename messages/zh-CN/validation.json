@@ -90,6 +90,16 @@
   "payment": {
     "notSelected": "请选择您的付款方式。"
   },
+  "pickupTime": {
+    "beforeClosing": "请选择打烊 {minutes} 分钟前的取餐时间。",
+    "closed": "请选择营业时间内的取餐时间。",
+    "invalid": "取餐时间无效。",
+    "itemUnavailable": "{name}在所选取餐时间不供应。",
+    "maxDateTime": "请选择 {days} 天内的取餐时间。",
+    "minDateTime": "请选择 {minutes} 分钟后的取餐时间。",
+    "minutesStep": "请以 {minutes} 分钟为间隔选择取餐时间。",
+    "notSelected": "请选择您的取餐时间。"
+  },
   "telephone": {
     "invalid": "电话格式无效。",
     "required": "电话为必填。"

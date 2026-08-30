@@ -437,6 +437,14 @@ const OrderModeOrganizationSlugComplete = ({
                 label={tOrder("complete.transaction.mode")}
                 value={tOrder(`mode.${order.mode}.label`)}
               />
+              {order.pickupTime && (
+                <InfoRow
+                  label={tOrder("complete.transaction.pickupTime")}
+                  value={dayjs(order.pickupTime)
+                    .tz(STORE_TIMEZONE)
+                    .format("YYYY/MM/DD HH:mm")}
+                />
+              )}
               {order.tradeNo && (
                 <InfoRow
                   label={tOrder("complete.transaction.tradeNo")}
