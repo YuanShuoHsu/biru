@@ -7,6 +7,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
+
 import {
   type ForgotPasswordForm,
   useForgotPasswordFormSchema,

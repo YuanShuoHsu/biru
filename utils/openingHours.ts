@@ -1,5 +1,3 @@
-// vibe coding
-
 import type { Dayjs } from "dayjs";
 
 export const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
@@ -111,7 +109,7 @@ const getDaySchedules = (value: string, at: Dayjs): Schedule[] => {
   );
 };
 
-const isUnrestricted = (value: string): boolean =>
+export const isUnrestricted = (value: string): boolean =>
   parseOpeningHours(value).length === 0;
 
 export const isOpenOn = (value: string, at: Dayjs): boolean =>
@@ -166,9 +164,16 @@ const groupConsecutiveDays = (days: Day[]): Day[][] =>
     return runs;
   }, []);
 
-const formatDisplayDays = (
+const formatDays = (
   days: Day[],
-  { formatDay, rangeSeparator, delimiter }: OpeningHoursDisplayConfig,
+  {
+    formatDay,
+    rangeSeparator,
+    delimiter,
+  }: Pick<
+    OpeningHoursDisplayConfig,
+    "formatDay" | "rangeSeparator" | "delimiter"
+  >,
 ): string =>
   groupConsecutiveDays(days)
     .map((run) =>
@@ -199,7 +204,7 @@ export const formatOpeningHoursForDisplay = (
             }`,
       );
 
-    const daysLabel = formatDisplayDays(group[0].days, config);
+    const daysLabel = formatDays(group[0].days, config);
 
     return times.length === 0
       ? daysLabel

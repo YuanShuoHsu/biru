@@ -2,11 +2,12 @@
 
 // https://mui.com/material-ui/react-drawer/#TemporaryDrawer.tsx
 
+import { Suspense } from "react";
+
 import NestedList from "./NestedList";
 
 import { Box, Drawer } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Suspense } from "react";
 
 import { useDrawerStore } from "@/providers/drawer-store-provider";
 
