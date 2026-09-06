@@ -2589,16 +2589,16 @@ export interface components {
        * @description 一個包裝的價錢
        * @example 950.00
        */
-      price?: string | null;
+      price: string;
       /** @example TWD */
-      priceCurrency?: string;
+      priceCurrency: string;
       /**
        * @description 一個包裝的量
        * @example 100.000
        */
-      eligibleQuantity?: string | null;
+      eligibleQuantity: string;
       /** @description eligibleQuantity 的單位，需與 unitCode 同維度 */
-      eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
+      eligibleQuantityUnitCode: components["schemas"]["UnitCode"];
       /**
        * Format: uri
        * @description 採購連結
@@ -2617,16 +2617,18 @@ export interface components {
       brand?: string | null;
       image?: string | null;
       supplierId?: string | null;
+      /** @description 無 purchasing 權限時不回傳 */
       supplierName?: string | null;
       unitCode: components["schemas"]["UnitCode"];
       inventoryLevel: string;
       lowStockThreshold?: string | null;
-      /** @description 一個包裝的價錢 */
+      /** @description 一個包裝的價錢；無 purchasing 權限時不回傳 */
       price?: string | null;
       priceCurrency: string;
       eligibleQuantity?: string | null;
       /** @description eligibleQuantity 的單位 */
       eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
+      /** @description 採購連結；無 purchasing 權限時不回傳 */
       url?: string | null;
       /** @description 每基準單位價格 */
       unitPrice?: number | null;
@@ -2719,8 +2721,9 @@ export interface components {
       ingredientName: Record<string, never>;
       unitCode: components["schemas"]["UnitCode"];
       requiredQuantity: string;
+      /** @description 無 purchasing 權限時不回傳 */
       unitPrice?: number | null;
-      /** @description 用量 × 單價 */
+      /** @description 用量 × 單價；無 purchasing 權限時不回傳 */
       cost?: number | null;
       sortOrder: number;
       /** Format: date-time */
@@ -2736,8 +2739,8 @@ export interface components {
       name: Record<string, never>;
       recipeYield: number;
       recipeInstructions?: Record<string, never>[] | null;
-      /** @description 全部材料成本合計 */
-      cost: number;
+      /** @description 全部材料成本合計；任一材料缺單價時為 null，無 purchasing 權限時不回傳 */
+      cost?: number | null;
       /** @description 對應品項售價 */
       price?: number | null;
       recipeIngredients?: components["schemas"]["RecipeIngredientResponseDto"][];
@@ -2769,56 +2772,65 @@ export interface components {
        * @description 一個包裝的價錢
        * @example 950.00
        */
-      price?: string | null;
+      price?: string;
       /** @example TWD */
       priceCurrency?: string;
       /**
        * @description 一個包裝的量
        * @example 100.000
        */
-      eligibleQuantity?: string | null;
+      eligibleQuantity?: string;
       /** @description eligibleQuantity 的單位，需與 unitCode 同維度 */
-      eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
+      eligibleQuantityUnitCode?: components["schemas"]["UnitCode"];
       /**
        * Format: uri
        * @description 採購連結
        */
       url?: string | null;
+      /**
+       * @description 開帳數量；系統會一併寫入盤點帳本
+       * @example 500.000
+       */
+      inventoryLevel?: string | null;
+      /** @description inventoryLevel 寫入帳本時的異動原因；不會存到 ingredient */
+      note?: string | null;
     };
     /** @enum {string} */
     InventoryTransactionFilterField:
       | "note"
       | "quantity"
       | "unitCost"
-      | "createdAt";
+      | "createdAt"
+      | "reason";
     /** @enum {string} */
     InventoryTransactionSortField:
       | "note"
       | "quantity"
       | "unitCost"
-      | "createdAt";
+      | "createdAt"
+      | "reason";
     CreateInventoryTransactionDto: {
       /**
        * @description 清點後的現有數量；異動量由系統與帳上數量相減求得
        * @example 500.000
        */
       inventoryLevel: string;
-      /**
-       * @description 進貨單價
-       * @example 9.5000
-       */
-      unitCost?: string;
       /** @description 異動原因，自由填寫 */
       note?: string | null;
     };
+    /** @enum {string} */
+    InventoryTransactionReason: "count" | "consume" | "restore";
     InventoryTransactionResponseDto: {
       id: string;
       ingredientId: string;
       organizationId: string;
       /** @description 帶正負的異動量 */
       quantity: string;
+      reason: components["schemas"]["InventoryTransactionReason"];
+      /** @description 無 purchasing 權限時不回傳 */
       unitCost?: string | null;
       orderId?: string | null;
+      orderNumber?: string | null;
       note?: string | null;
       /** Format: date-time */
       createdAt: string;
@@ -3439,7 +3451,8 @@ export interface components {
       id: string;
       name: Record<string, never>;
       recipeYield: number;
-      cost: number;
+      /** @description 任一材料缺單價時為 null */
+      cost?: number | null;
     };
     MenuItemResponseDto: {
       id: string;
@@ -8022,10 +8035,13 @@ export const recipeSortFieldValues: ReadonlyArray<
 > = ["name", "recipeYield", "createdAt", "updatedAt"];
 export const inventoryTransactionFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["InventoryTransactionFilterField"]
-> = ["note", "quantity", "unitCost", "createdAt"];
+> = ["note", "quantity", "unitCost", "createdAt", "reason"];
 export const inventoryTransactionSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["InventoryTransactionSortField"]
-> = ["note", "quantity", "unitCost", "createdAt"];
+> = ["note", "quantity", "unitCost", "createdAt", "reason"];
+export const inventoryTransactionReasonValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["InventoryTransactionReason"]
+> = ["count", "consume", "restore"];
 export const recipeIngredientFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["RecipeIngredientFilterField"]
 > = ["ingredientName", "requiredQuantity", "createdAt", "updatedAt"];
