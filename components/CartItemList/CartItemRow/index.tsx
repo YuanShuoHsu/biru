@@ -1,4 +1,4 @@
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
@@ -10,6 +10,7 @@ import NumberSpinner from "@/components/NumberSpinner";
 import { MAX_QUANTITY } from "@/constants/cart";
 import { API_ORDER_MODE } from "@/constants/orderMode";
 
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
 
 import { Delete, RestaurantMenu } from "@mui/icons-material";
@@ -105,7 +106,7 @@ interface CartItemRowProps {
 const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const { menuItemId, modifiers, addOns, quantity } = item;
 
-  const locale = useLocale();
+  const formatMoney = useFormatMoney();
 
   const { mode } = useParams<RouteParams<"mode">>();
   const apiMode = API_ORDER_MODE[mode];
@@ -254,7 +255,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
             fontWeight="bold"
             variant="body2"
           >
-            {priceCurrency} {amount.toLocaleString(locale)}
+            {formatMoney(amount, priceCurrency)}
           </StyledTypography>
           <StyledNumberSpinner
             {...(quantity <= 1 && {

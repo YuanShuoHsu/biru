@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
@@ -28,6 +28,7 @@ import { useDrawerStore } from "@/providers/drawer-store-provider";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
 import useCartTotals from "@/hooks/useCartTotals";
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 
 import { useToggleDrawer } from "@/utils/drawer";
 
@@ -66,7 +67,7 @@ const CartAnchorTemporaryDrawer = () => {
   const toggleDrawer = useToggleDrawer();
   const handleClose = toggleDrawer("cart", false);
 
-  const locale = useLocale();
+  const formatMoney = useFormatMoney();
 
   const pathname = usePathname();
 
@@ -112,7 +113,7 @@ const CartAnchorTemporaryDrawer = () => {
             fontWeight="bold"
             variant="h6"
           >
-            {cartCurrency} {cartTotalAmount.toLocaleString(locale)}
+            {formatMoney(cartTotalAmount, cartCurrency)}
           </Typography>
         </Stack>
         {(isCartPage || isCheckoutPage) && (

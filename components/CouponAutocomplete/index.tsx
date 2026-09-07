@@ -9,12 +9,13 @@
 
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
 import React, { useRef, useState } from "react";
 import useSWR from "swr";
 
 import useCartTotals from "@/hooks/useCartTotals";
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 
 import { CheckCircle, LocalOffer } from "@mui/icons-material";
 import {
@@ -121,7 +122,9 @@ const CouponAutocomplete = ({
 
   const { cartCurrency } = useCartTotals();
 
-  const locale = useLocale();
+  const format = useFormatter();
+
+  const formatMoney = useFormatMoney();
 
   const { organizationSlug } = useParams();
 
@@ -227,10 +230,8 @@ const CouponAutocomplete = ({
                           {value && (
                             <Typography color="primary" variant="subtitle2">
                               {value.discountType === "percentage"
-                                ? `-${Number(value.discountValue)}%`
-                                : `-${cartCurrency} ${Number(
-                                    value.discountValue,
-                                  ).toLocaleString(locale)}`}
+                                ? `-${format.number(Number(value.discountValue))}%`
+                                : `-${formatMoney(Number(value.discountValue), cartCurrency)}`}
                             </Typography>
                           )}
                           <CheckCircle color="success" fontSize="small" />
@@ -283,14 +284,14 @@ const CouponAutocomplete = ({
               secondary={
                 minSubtotal &&
                 tOrder("checkout.coupon.minSubtotal", {
-                  amount: `${cartCurrency} ${Number(minSubtotal).toLocaleString(locale)}`,
+                  amount: formatMoney(Number(minSubtotal), cartCurrency),
                 })
               }
             />
             <Typography color="primary" variant="subtitle2">
               {discountType === "percentage"
-                ? `-${Number(discountValue)}%`
-                : `-${cartCurrency} ${Number(discountValue).toLocaleString(locale)}`}
+                ? `-${format.number(Number(discountValue))}%`
+                : `-${formatMoney(Number(discountValue), cartCurrency)}`}
             </Typography>
           </ListItem>
         );

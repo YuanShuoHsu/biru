@@ -1,7 +1,6 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
 import CustomizedAccordions from "@/components/CustomizedAccordions";
@@ -10,6 +9,7 @@ import { type AccordionProps, Box, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import useCartTotals from "@/hooks/useCartTotals";
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 
 import type { ValidateCouponResponse } from "@/types/coupons";
 
@@ -24,7 +24,7 @@ interface CartAccordionProps extends Omit<AccordionProps, "children"> {
 const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
   const { cartCurrency, cartTotalAmount } = useCartTotals();
 
-  const { locale } = useParams();
+  const formatMoney = useFormatMoney();
 
   const tCommon = useTranslations("common");
 
@@ -43,7 +43,7 @@ const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
                 fontWeight="bold"
                 variant="caption"
               >
-                {cartCurrency} {cartTotalAmount.toLocaleString(locale)}
+                {formatMoney(cartTotalAmount, cartCurrency)}
               </OriginalPriceTypography>
             )}
             <Typography
@@ -52,9 +52,9 @@ const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
               fontWeight="bold"
               variant="h6"
             >
-              {cartCurrency}{" "}
-              {(coupon ? Number(coupon.total) : cartTotalAmount).toLocaleString(
-                locale,
+              {formatMoney(
+                coupon ? Number(coupon.total) : cartTotalAmount,
+                cartCurrency,
               )}
             </Typography>
           </Stack>

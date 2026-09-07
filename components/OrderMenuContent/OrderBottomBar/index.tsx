@@ -1,10 +1,11 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
 import useCartTotals from "@/hooks/useCartTotals";
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 
 import { usePathname } from "@/i18n/navigation";
 
@@ -55,7 +56,7 @@ const OrderBottomBar = () => {
   const { cartCurrency, cartTotalAmount } = useCartTotals();
   const hasInvalidItems = useCartHasInvalidItems();
 
-  const locale = useLocale();
+  const formatMoney = useFormatMoney();
 
   const pathname = usePathname();
 
@@ -76,7 +77,7 @@ const OrderBottomBar = () => {
               <ShoppingCart />
             </Badge>
             <Typography fontWeight="bold" variant="subtitle1">
-              {cartCurrency} {cartTotalAmount.toLocaleString(locale)}
+              {formatMoney(cartTotalAmount, cartCurrency)}
             </Typography>
           </Stack>
           <Chip

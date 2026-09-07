@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormatter, useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useState } from "react";
 
@@ -10,6 +10,8 @@ import FormCard, {
 } from "@/components/FormCard";
 
 import { ORDER_MODE } from "@/constants/orderMode";
+
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 
 import { Link, useRouter } from "@/i18n/navigation";
 
@@ -41,7 +43,7 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
 
   const format = useFormatter();
 
-  const locale = useLocale();
+  const formatMoney = useFormatMoney();
 
   const router = useRouter();
 
@@ -138,8 +140,8 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
                           variant="h5"
                         >
                           {coupon.discountType === "percentage"
-                            ? `-${Number(coupon.discountValue)}%`
-                            : `-${coupon.discountCurrency} ${Number(coupon.discountValue).toLocaleString(locale)}`}
+                            ? `-${format.number(Number(coupon.discountValue))}%`
+                            : `-${formatMoney(Number(coupon.discountValue), coupon.discountCurrency)}`}
                         </Typography>
                         {"coupon" in item ? (
                           <Button

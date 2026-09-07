@@ -1,4 +1,4 @@
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, useMemo } from "react";
@@ -13,8 +13,10 @@ import RadioButtonsGroup from "@/components/RadioButtonsGroup";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 import { API_ORDER_MODE } from "@/constants/orderMode";
+import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import { useAvailableHoursLabel } from "@/hooks/useAvailableHoursLabel";
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -117,7 +119,9 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const { addCartItem, getCartItemTotalQuantity, updateCartItem } =
     useCartStore((state) => state);
 
-  const locale = useLocale();
+  const format = useFormatter();
+
+  const formatMoney = useFormatMoney();
 
   const { mode } = useParams<RouteParams<"mode">>();
   const apiMode = API_ORDER_MODE[mode];
@@ -212,7 +216,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const { closeDialog, setDialog } = useDialogStore((state) => state);
 
   const amount = (price + extraCost) * quantity;
-  const displayPrice = amount.toLocaleString(locale);
+  const displayPrice = formatMoney(amount, priceCurrency);
   const isAtLimit = quantity >= availableToAdd;
 
   const limitingLabel = [
@@ -291,7 +295,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       {choiceExtraCost !== 0 && (
         <Typography color="text.secondary" variant="caption">
           {choiceExtraCost > 0 ? "+" : "-"}
-          {priceCurrency} {Math.abs(choiceExtraCost).toLocaleString(locale)}
+          {formatMoney(Math.abs(choiceExtraCost), priceCurrency)}
         </Typography>
       )}
       {availableHoursLabel && (
@@ -578,7 +582,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               isPromo
               variant="caption"
             >
-              {`${priceCurrency} ${basePrice.toLocaleString(locale)}`}
+              {formatMoney(basePrice, priceCurrency)}
             </OriginalPriceTypography>
           )}
           <Typography
@@ -587,14 +591,15 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             fontWeight="bold"
             variant="h6"
           >
-            {priceCurrency} {displayPrice}
+            {displayPrice}
           </Typography>
           {promoInfo?.validThrough && (
             <Typography color="error" variant="caption">
               {tOrder("menuItem.promoUntil", {
-                date: promoInfo.validThrough.toLocaleDateString(locale, {
+                date: format.dateTime(promoInfo.validThrough, {
                   month: "numeric",
                   day: "numeric",
+                  timeZone: STORE_TIMEZONE,
                 }),
               })}
             </Typography>

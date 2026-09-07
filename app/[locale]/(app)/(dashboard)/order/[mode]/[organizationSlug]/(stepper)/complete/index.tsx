@@ -19,6 +19,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { INVOICE_STATUS_COLORS } from "@/constants/orders";
 import { STORE_TIMEZONE } from "@/constants/timezone";
 
+import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOrderItemName } from "@/hooks/useOrderItemName";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
@@ -128,6 +129,8 @@ const OrderModeOrganizationSlugComplete = ({
     (state) => state,
   );
 
+  const formatMoney = useFormatMoney();
+
   const locale = useLocale();
 
   const getOrderItemName = useOrderItemName();
@@ -183,7 +186,7 @@ const OrderModeOrganizationSlugComplete = ({
       SUCCESS_ORDER_STATUSES.includes(order.orderStatus));
   const isPaid = !!order && order.orderStatus !== "OrderPaymentDue";
   const orderNo = order ? order.confirmationNumber || order.orderNumber : "";
-  const currency = order?.items[0]?.priceCurrency || "";
+  const currency = order?.items[0]?.priceCurrency;
   const discount = Number(order?.discount || 0);
   const totalAmount =
     (order?.items || []).reduce(
@@ -361,10 +364,10 @@ const OrderModeOrganizationSlugComplete = ({
                     {item.orderQuantity}
                   </Typography>
                   <Typography flexShrink={0} variant="body2">
-                    {currency}{" "}
-                    {(
-                      Number(item.unitPrice) * item.orderQuantity
-                    ).toLocaleString(locale)}
+                    {formatMoney(
+                      Number(item.unitPrice) * item.orderQuantity,
+                      currency,
+                    )}
                   </Typography>
                 </Stack>
               ))}
@@ -377,7 +380,7 @@ const OrderModeOrganizationSlugComplete = ({
                       : ""}
                   </Typography>
                   <Typography color="primary" flexShrink={0} variant="body2">
-                    -{currency} {discount.toLocaleString(locale)}
+                    -{formatMoney(discount, currency)}
                   </Typography>
                 </Stack>
               )}
@@ -391,7 +394,7 @@ const OrderModeOrganizationSlugComplete = ({
                   {tOrder("complete.summary.total")}
                 </Typography>
                 <Typography color="primary" fontWeight="bold" variant="h6">
-                  {currency} {totalAmount.toLocaleString(locale)}
+                  {formatMoney(totalAmount, currency)}
                 </Typography>
               </Stack>
             </StyledCardContent>
@@ -465,7 +468,7 @@ const OrderModeOrganizationSlugComplete = ({
               )}
               <InfoRow
                 label={tOrder("complete.transaction.amount")}
-                value={`${currency} ${totalAmount.toLocaleString(locale)}`}
+                value={formatMoney(totalAmount, currency)}
               />
             </StyledCardContent>
           </Card>

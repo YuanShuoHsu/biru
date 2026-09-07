@@ -1549,6 +1549,16 @@ export interface components {
           before?: unknown;
         };
       };
+      /** @description 外鍵欄位名 → id → 寫入當下的名稱快照；沒有外鍵異動時為 null */
+      changeLabels?: {
+        [key: string]: {
+          [key: string]:
+            | string
+            | {
+                [key: string]: string;
+              };
+        };
+      } | null;
       /** Format: date-time */
       createdAt: string;
     };
@@ -2541,6 +2551,7 @@ export interface components {
       | "name"
       | "brand"
       | "supplierName"
+      | "note"
       | "unitCode"
       | "inventoryLevel"
       | "lowStockThreshold"
@@ -2551,6 +2562,7 @@ export interface components {
       | "name"
       | "brand"
       | "supplierName"
+      | "note"
       | "unitCode"
       | "inventoryLevel"
       | "lowStockThreshold"
@@ -2604,11 +2616,14 @@ export interface components {
        * @description 採購連結
        */
       url?: string | null;
+      note?: string | null;
       /**
        * @description 開帳數量；系統會一併寫入盤點帳本
        * @example 500.000
        */
       inventoryLevel?: string | null;
+      /** @description inventoryLevel 寫入帳本時的異動原因；不會存到 ingredient */
+      transactionNote?: string | null;
     };
     IngredientResponseDto: {
       id: string;
@@ -2616,6 +2631,7 @@ export interface components {
       name: Record<string, never>;
       brand?: string | null;
       image?: string | null;
+      /** @description 無 purchasing 權限時不回傳 */
       supplierId?: string | null;
       /** @description 無 purchasing 權限時不回傳 */
       supplierName?: string | null;
@@ -2630,6 +2646,7 @@ export interface components {
       eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
       /** @description 採購連結；無 purchasing 權限時不回傳 */
       url?: string | null;
+      note?: string | null;
       /** @description 每基準單位價格 */
       unitPrice?: number | null;
       /** @description 包裝量，與 eligibleQuantity 相同 */
@@ -2671,6 +2688,12 @@ export interface components {
       /** Format: uri */
       url?: string | null;
       note?: string | null;
+      /** @description 由這家供應的食材；一個食材只屬於一家供應商，選入原本屬於別家的食材會改綁到這家 */
+      ingredientIds?: string[];
+    };
+    SupplierIngredientResponseDto: {
+      id: string;
+      name: Record<string, never>;
     };
     SupplierResponseDto: {
       id: string;
@@ -2679,8 +2702,8 @@ export interface components {
       telephone?: string | null;
       url?: string | null;
       note?: string | null;
-      /** @description 此供應商有採購規格的食材 */
-      ingredientNames: Record<string, never>[];
+      /** @description 由這家供應的食材 */
+      ingredients: components["schemas"]["SupplierIngredientResponseDto"][];
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -2787,13 +2810,14 @@ export interface components {
        * @description 採購連結
        */
       url?: string | null;
+      note?: string | null;
       /**
        * @description 開帳數量；系統會一併寫入盤點帳本
        * @example 500.000
        */
       inventoryLevel?: string | null;
       /** @description inventoryLevel 寫入帳本時的異動原因；不會存到 ingredient */
-      note?: string | null;
+      transactionNote?: string | null;
     };
     /** @enum {string} */
     InventoryTransactionFilterField:
@@ -2826,6 +2850,8 @@ export interface components {
       organizationId: string;
       /** @description 帶正負的異動量 */
       quantity: string;
+      /** @description 這筆異動之後的帳上結存 */
+      balance: string;
       reason: components["schemas"]["InventoryTransactionReason"];
       /** @description 無 purchasing 權限時不回傳 */
       unitCost?: string | null;
@@ -2900,6 +2926,8 @@ export interface components {
       /** Format: uri */
       url?: string | null;
       note?: string | null;
+      /** @description 由這家供應的食材；一個食材只屬於一家供應商，選入原本屬於別家的食材會改綁到這家 */
+      ingredientIds?: string[];
     };
     MenuItemSalesResponseDto: {
       menuItemId: string;
@@ -7994,6 +8022,7 @@ export const ingredientFilterFieldValues: ReadonlyArray<
   "name",
   "brand",
   "supplierName",
+  "note",
   "unitCode",
   "inventoryLevel",
   "lowStockThreshold",
@@ -8006,6 +8035,7 @@ export const ingredientSortFieldValues: ReadonlyArray<
   "name",
   "brand",
   "supplierName",
+  "note",
   "unitCode",
   "inventoryLevel",
   "lowStockThreshold",
