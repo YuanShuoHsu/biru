@@ -3,7 +3,7 @@
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
-import { calcCartItemAmount, getCartCurrency } from "@/utils/menus";
+import { calcCartItemAmount } from "@/utils/menus";
 
 const useCartTotals = () => {
   const { cartItemsList } = useCartStore((state) => state);
@@ -13,7 +13,7 @@ const useCartTotals = () => {
     (sum, item) => sum + calcCartItemAmount(menu, item),
     0,
   );
-  const cartCurrency = getCartCurrency(menu, cartItemsList);
+  const cartCurrency = menu?.currency || "";
 
   return { cartCurrency, cartTotalAmount };
 };

@@ -142,16 +142,6 @@ export const calcCartItemAmount = (
   return (price + extraCost) * quantity;
 };
 
-export const getCartCurrency = (
-  menu: OrderMenu | null,
-  cartItemsList: CartItem[],
-): string => {
-  if (!cartItemsList.length) return "";
-  const item = findItemById(menu, cartItemsList[0].menuItemId);
-
-  return item?.offers[0]?.priceCurrency || "";
-};
-
 export const getCartAvailableHours = (
   menu: OrderMenu | null,
   cartItemsList: CartItem[],
