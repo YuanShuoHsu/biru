@@ -110,7 +110,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const priceCurrency = offer?.priceCurrency;
   const stock = getOfferStock(offer);
   const stockUnit = offer?.inventoryLevel?.unitText;
-  const leadTime = offer?.deliveryLeadTime?.value;
+  const leadTimeMinutes = offer?.deliveryLeadTimeMinutes;
 
   const promoInfo = getActivePromo(offer);
   const price = promoInfo?.price || basePrice;
@@ -476,7 +476,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           </Typography>
         </Stack>
       )}
-      {leadTime !== undefined && (
+      {leadTimeMinutes != null && (
         <Stack
           direction="row"
           alignItems="center"
@@ -485,7 +485,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         >
           <AccessTime color="disabled" fontSize="small" />
           <Typography color="text.secondary" variant="caption">
-            {tOrder("menuItem.preparationTime", { value: leadTime })}
+            {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
           </Typography>
         </Stack>
       )}
