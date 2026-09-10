@@ -777,6 +777,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/menu-items/{menuItemId}/recipe": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得品項食譜 */
+    get: operations["MenuItemInventoryController_findRecipe"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/recipes/{recipeId}": {
     parameters: {
       query?: never;
@@ -812,6 +829,23 @@ export interface paths {
     options?: never;
     head?: never;
     patch?: never;
+    trace?: never;
+  };
+  "/api/recipes/{recipeId}/recipe-ingredients/reorder": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** 重新排序食譜材料 */
+    patch: operations["RecipesController_reorderIngredients"];
     trace?: never;
   };
   "/api/recipes/{recipeId}/recipe-ingredients/{recipeIngredientId}": {
@@ -1213,7 +1247,7 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    /** 更新品項供應狀態 */
+    /** 更新品項供應狀態與剩餘數量 */
     patch: operations["MenusController_updateOfferAvailability"];
     trace?: never;
   };
@@ -2906,6 +2940,9 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    MenuItemRecipeDetailResponseDto: {
+      recipe: components["schemas"]["RecipeResponseDto"] | null;
+    };
     UpdateRecipeDto: {
       /**
        * @example {
@@ -2941,7 +2978,9 @@ export interface components {
       | "ingredientName"
       | "requiredQuantity"
       | "createdAt"
-      | "updatedAt";
+      | "updatedAt"
+      | "unitPrice"
+      | "cost";
     CreateRecipeIngredientDto: {
       ingredientId: string;
       /**
@@ -3503,7 +3542,8 @@ export interface components {
       menuItemId?: string | null;
       menuSectionId?: string | null;
       price?: string | null;
-      priceCurrency?: string | null;
+      /** @description price 的幣別；來自店家設定 */
+      priceCurrency: string;
       availability?: components["schemas"]["ItemAvailability"] | null;
       /** @description 可供應時段；null 代表全時段供應 */
       availableHours?: string | null;
@@ -3629,8 +3669,14 @@ export interface components {
       inventoryLevel?: components["schemas"]["QuantitativeValueDto"];
       priceSpecification?: components["schemas"]["PriceSpecificationDto"];
     };
-    UpdateItemAvailabilityDto: {
+    OfferInventoryLevelValueDto: {
+      /** @description 當日剩餘庫存數量；null 代表不限量 */
+      value: number | null;
+    };
+    UpdateOfferAvailabilityDto: {
       availability: components["schemas"]["ItemAvailability"];
+      /** @description 僅含數量；單位 unitText 屬菜單定義，需 menu:update 才能改 */
+      inventoryLevel?: components["schemas"]["OfferInventoryLevelValueDto"];
     };
     CreateMenuItemAddOnDto: {
       /** @description Add-on menu item ID */
@@ -3787,6 +3833,9 @@ export interface components {
       /** @description 可販售的點餐模式 */
       availableModes?: components["schemas"]["OrderMode"][];
     };
+    UpdateItemAvailabilityDto: {
+      availability: components["schemas"]["ItemAvailability"];
+    };
     CreateMenuItemModifierGroupDto: {
       /** @description 要掛到此品項的選項群組 ID */
       modifierGroupId: string;
@@ -3808,7 +3857,8 @@ export interface components {
       menuItemId?: string | null;
       menuSectionId?: string | null;
       price?: string | null;
-      priceCurrency?: string | null;
+      /** @description price 的幣別；來自店家設定 */
+      priceCurrency: string;
       availability?: components["schemas"]["ItemAvailability"] | null;
       /** @description 可供應時段；null 代表全時段供應 */
       availableHours?: string | null;
@@ -5860,6 +5910,34 @@ export interface operations {
       };
     };
   };
+  MenuItemInventoryController_findRecipe: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        menuItemId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MenuItemRecipeDetailResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   RecipesController_findOne: {
     parameters: {
       query?: never;
@@ -6005,6 +6083,36 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["RecipeIngredientResponseDto"];
         };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  RecipesController_reorderIngredients: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        recipeId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReorderDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Internal server error */
       500: {
@@ -7070,7 +7178,7 @@ export interface operations {
     };
     requestBody: {
       content: {
-        "application/json": components["schemas"]["UpdateItemAvailabilityDto"];
+        "application/json": components["schemas"]["UpdateOfferAvailabilityDto"];
       };
     };
     responses: {
@@ -8199,7 +8307,14 @@ export const recipeIngredientFilterFieldValues: ReadonlyArray<
 > = ["ingredientName", "requiredQuantity", "createdAt", "updatedAt"];
 export const recipeIngredientSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["RecipeIngredientSortField"]
-> = ["ingredientName", "requiredQuantity", "createdAt", "updatedAt"];
+> = [
+  "ingredientName",
+  "requiredQuantity",
+  "createdAt",
+  "updatedAt",
+  "unitPrice",
+  "cost",
+];
 export const createOrderInvoiceDtoTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["CreateOrderInvoiceDto"]["type"]
 > = ["personal", "company", "donate"];
