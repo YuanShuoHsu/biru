@@ -11,9 +11,9 @@ export const generateMetadata = async ({
   params,
 }: OrderBoardPageProps): Promise<Metadata> => {
   const { locale } = await params;
-  const t = await getTranslations({ locale });
+  const tOrder = await getTranslations({ locale, namespace: "order" });
 
-  return { title: t("order.board.label") };
+  return { title: tOrder("board.label") };
 };
 
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {

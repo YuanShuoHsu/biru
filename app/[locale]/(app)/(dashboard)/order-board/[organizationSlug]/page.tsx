@@ -19,15 +19,15 @@ export const generateMetadata = async ({
   params,
 }: OrderBoardPageProps): Promise<Metadata> => {
   const { locale, organizationSlug } = await params;
-  const [t, organization] = await Promise.all([
-    getTranslations({ locale }),
+  const [tOrder, organization] = await Promise.all([
+    getTranslations({ locale, namespace: "order" }),
     fetcher<OrganizationResponse>(
       `/api/organizations/${organizationSlug}`,
     ).catch(() => null),
   ]);
 
   return {
-    title: t("order.board.title", {
+    title: tOrder("board.title", {
       organizationName: organization?.name || organizationSlug,
     }),
   };

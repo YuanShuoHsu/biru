@@ -18,13 +18,14 @@ export const generateMetadata = async ({
   const { locale, mode } = await params;
   if (mode !== ORDER_MODE.Pickup) return {};
 
-  const t = await getTranslations({ locale });
+  const tMetadata = await getTranslations({ locale, namespace: "metadata" });
+  const tOrder = await getTranslations({ locale, namespace: "order" });
 
   return buildMetadata({
-    description: t("metadata.order.description"),
+    description: tMetadata("order.description"),
     locale,
     pathname: `/order/${ORDER_MODE.Pickup}`,
-    title: t("order.mode.pickup.label"),
+    title: tOrder("mode.pickup.label"),
   });
 };
 

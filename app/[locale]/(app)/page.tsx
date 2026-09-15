@@ -16,13 +16,13 @@ export const generateMetadata = async ({
   params,
 }: HomePageProps): Promise<Metadata> => {
   const { locale } = await params;
-  const t = await getTranslations({ locale, namespace: "metadata" });
+  const tMetadata = await getTranslations({ locale, namespace: "metadata" });
 
   return buildMetadata({
-    description: t("home.description"),
+    description: tMetadata("home.description"),
     locale,
     pathname: "",
-    title: t("home.title"),
+    title: tMetadata("home.title"),
     titleAbsolute: true,
   });
 };

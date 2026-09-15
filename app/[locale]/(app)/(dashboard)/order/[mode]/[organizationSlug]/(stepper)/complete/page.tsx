@@ -20,10 +20,10 @@ export const generateMetadata = async ({
   params,
 }: OrderModeOrganizationSlugCompletePageProps): Promise<Metadata> => {
   const { locale } = await params;
-  const t = await getTranslations({ locale });
+  const tOrder = await getTranslations({ locale, namespace: "order" });
 
   return {
-    title: t("order.mode.storeSlug.tableNumber.stepper.complete.label"),
+    title: tOrder("mode.storeSlug.tableNumber.stepper.complete.label"),
   };
 };
 

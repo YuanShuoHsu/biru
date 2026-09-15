@@ -41,10 +41,10 @@ export const generateMetadata = async ({
   if (mode !== ORDER_MODE.Pickup)
     return { robots: { follow: true, index: false }, title: organization.name };
 
-  const t = await getTranslations({ locale });
+  const tMetadata = await getTranslations({ locale, namespace: "metadata" });
 
   return buildMetadata({
-    description: t("metadata.organization.description", {
+    description: tMetadata("organization.description", {
       name: organization.name,
     }),
     locale,
