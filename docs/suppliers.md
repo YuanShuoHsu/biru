@@ -14,15 +14,16 @@
 
 ## 食材
 
-| 廠商                                           | 電話 | 品項                 | 備註 |
-| ---------------------------------------------- | ---- | -------------------- | ---- |
-| [Costco](https://www.costco.com.tw)            |      | 椰子水、柚子茶       |      |
-| 全國食材廣場                                   |      | 吉利丁、香草精       |      |
-| [全聯全電商](https://pxbox.es.pxmart.com.tw)   |      | 蘋果汁               |      |
-| 家樂福                                         |      | 鮮奶油、牛奶、鹽、糖 |      |
-| [義大利廚房](https://shop.hseiyi.com)          |      | 橄欖油               |      |
-| [蝦皮（碩田）](https://shopee.tw/shop/6517228) |      | 焙茶粉、抹茶粉       |      |
-| [駿伸企業](https://www.ambrosia.tw)            |      | 蘋果果醬             |      |
+| 廠商                                                   | 電話                   | 品項           | 備註 |
+| ------------------------------------------------------ | ---------------------- | -------------- | ---- |
+| [Costco](https://www.costco.com.tw)                    |                        | 椰子水、柚子茶 |      |
+| [全國食材廣場](https://www.cross-country.com.tw)       |                        | 吉利丁、香草精 |      |
+| [全聯全電商](https://pxbox.es.pxmart.com.tw)           |                        | 蘋果汁         |      |
+| [光泉牧場](https://www.kuangchuan.com.tw/Business/B2B) | (02) 8751-8788 分機238 | 光泉全脂鮮乳   |      |
+| [萬家福](https://online.uni-prosperity.com.tw)         |                        | 鮮奶油、鹽、糖 |      |
+| [義大利廚房](https://shop.hseiyi.com)                  |                        | 橄欖油         |      |
+| [蝦皮（碩田）](https://shopee.tw/shop/6517228)         |                        | 焙茶粉、抹茶粉 |      |
+| [駿伸企業](https://www.ambrosia.tw)                    |                        | 蘋果果醬       |      |
 
 ## 包材耗材
 
