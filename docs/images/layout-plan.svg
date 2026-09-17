@@ -1,0 +1,176 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 700" font-family="-apple-system, 'PingFang TC', 'Noto Sans TC', 'Microsoft JhengHei', sans-serif">
+  <style>
+    .bg { fill: #ffffff; }
+    .wall { fill: none; stroke: #334155; stroke-width: 6; }
+    .zone { stroke-width: 1.5; }
+    .wash { fill: #e0f2fe; stroke: #0284c7; }
+    .heat { fill: #ffedd5; stroke: #ea580c; }
+    .prep { fill: #fef9c3; stroke: #ca8a04; }
+    .cold { fill: #dbeafe; stroke: #2563eb; }
+    .store { fill: #f1f5f9; stroke: #64748b; }
+    .bar { fill: #ede9fe; stroke: #7c3aed; }
+    .front { fill: #dcfce7; stroke: #16a34a; }
+    .guest { fill: #f8fafc; stroke: #94a3b8; stroke-dasharray: 6 4; }
+    .equip { fill: #ffffff; stroke: #1e293b; stroke-width: 1.2; }
+    .todo { fill: #ffffff; stroke: #1e293b; stroke-width: 1.2; stroke-dasharray: 4 3; }
+    .title { font-size: 15px; font-weight: 700; fill: #0f172a; }
+    .label { font-size: 12px; fill: #1e293b; }
+    .note { font-size: 11px; fill: #475569; }
+    .flow { fill: none; stroke: #16a34a; stroke-width: 2; stroke-dasharray: 7 5; }
+    .flow-head { fill: #16a34a; }
+    .door { stroke: #ffffff; stroke-width: 8; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #0f172a; }
+      .wall { stroke: #cbd5e1; }
+      .wash { fill: #102f42; }
+      .heat { fill: #41230f; }
+      .prep { fill: #3c310d; }
+      .cold { fill: #18244a; }
+      .store { fill: #232e3d; }
+      .bar { fill: #2a2148; }
+      .front { fill: #14301d; }
+      .guest { fill: #1e293b; }
+      .equip, .todo { fill: #0f172a; stroke: #e2e8f0; }
+      .title, .label { fill: #f1f5f9; }
+      .note { fill: #cbd5e1; }
+      .door { stroke: #0f172a; }
+    }
+  </style>
+
+  <rect class="bg" width="960" height="700" />
+  <rect class="wall" x="20" y="20" width="920" height="660" />
+  <line class="door" x1="820" y1="20" x2="900" y2="20" />
+  <text class="note" x="822" y="40">收貨／員工出入口</text>
+  <line class="door" x1="800" y1="680" x2="900" y2="680" />
+  <text class="note" x="822" y="668">顧客入口</text>
+
+  <!-- 後場 -->
+  <rect class="zone wash" x="40" y="50" width="200" height="250" rx="6" />
+  <text class="title" x="52" y="74">清洗與回收</text>
+  <rect class="todo" x="56" y="90" width="80" height="44" />
+  <text class="label" x="66" y="117">回收暫放</text>
+  <rect class="todo" x="148" y="90" width="80" height="44" />
+  <text class="label" x="171" y="117">水槽</text>
+  <rect class="todo" x="148" y="146" width="80" height="44" />
+  <text class="label" x="171" y="173">瀝乾</text>
+  <rect class="todo" x="56" y="146" width="80" height="44" />
+  <text class="label" x="66" y="166">潔淨餐具</text>
+  <text class="label" x="80" y="182">收納</text>
+  <rect class="todo" x="56" y="202" width="80" height="36" />
+  <text class="label" x="72" y="225">洗手台</text>
+  <text class="note" x="52" y="264">回收 → 清洗 → 瀝乾 → 收納</text>
+  <text class="note" x="52" y="282">順時針單向，不回到出餐檯</text>
+
+  <rect class="zone heat" x="260" y="50" width="200" height="250" rx="6" />
+  <text class="title" x="272" y="74">加熱與組裝</text>
+  <rect class="equip" x="276" y="90" width="80" height="70" />
+  <text class="label" x="286" y="120">RATIONAL</text>
+  <text class="label" x="300" y="138">烤箱</text>
+  <rect class="todo" x="368" y="90" width="80" height="70" />
+  <text class="label" x="384" y="120">鍋具</text>
+  <text class="label" x="384" y="138">加熱</text>
+  <rect class="todo" x="276" y="172" width="172" height="36" />
+  <text class="label" x="316" y="195">熱盤／熱鍋落檯</text>
+  <rect class="todo" x="276" y="220" width="172" height="36" />
+  <text class="label" x="330" y="243">餐點組裝</text>
+  <text class="note" x="272" y="282">組裝緊鄰下方出餐檯</text>
+
+  <rect class="zone prep" x="480" y="50" width="200" height="250" rx="6" />
+  <text class="title" x="492" y="74">備料與分裝</text>
+  <rect class="todo" x="496" y="90" width="168" height="60" />
+  <text class="label" x="532" y="116">備料台</text>
+  <text class="note" x="532" y="134">秤重、切配</text>
+  <rect class="todo" x="496" y="162" width="168" height="60" />
+  <text class="label" x="532" y="188">分裝台</text>
+  <text class="note" x="532" y="206">奶酪、紅醬</text>
+  <text class="note" x="492" y="264">可能與備料台共用檯面</text>
+  <text class="note" x="492" y="282">兩側分別接加熱與冷藏</text>
+
+  <rect class="zone cold" x="700" y="50" width="110" height="250" rx="6" />
+  <text class="title" x="712" y="74">冷藏冷凍</text>
+  <rect class="equip" x="716" y="90" width="78" height="80" />
+  <text class="label" x="731" y="135">冷藏櫃</text>
+  <rect class="equip" x="716" y="182" width="78" height="80" />
+  <text class="label" x="731" y="227">冷凍櫃</text>
+
+  <rect class="zone store" x="830" y="60" width="90" height="240" rx="6" />
+  <text class="title" x="842" y="84">儲物</text>
+  <rect class="todo" x="842" y="100" width="66" height="54" />
+  <text class="label" x="851" y="125">乾貨</text>
+  <text class="label" x="851" y="141">包材</text>
+  <rect class="todo" x="842" y="164" width="66" height="54" />
+  <text class="label" x="851" y="189">備用</text>
+  <text class="label" x="851" y="205">杯具</text>
+  <rect class="todo" x="842" y="228" width="66" height="54" />
+  <text class="label" x="851" y="253">清潔</text>
+  <text class="label" x="851" y="269">用品</text>
+
+  <!-- 吧台／前場 -->
+  <text class="note" x="40" y="326">── 工作人員側 ──</text>
+
+  <rect class="zone wash" x="40" y="340" width="110" height="80" rx="6" />
+  <text class="title" x="60" y="372">回收檯</text>
+  <text class="note" x="52" y="396">與出餐檯分開</text>
+
+  <rect class="zone front" x="200" y="340" width="130" height="80" rx="6" />
+  <text class="title" x="232" y="372">出餐檯</text>
+  <text class="note" x="216" y="396">餐點與飲品交付</text>
+
+  <rect class="zone bar" x="340" y="340" width="280" height="80" rx="6" />
+  <text class="title" x="352" y="360">咖啡製作</text>
+  <rect class="equip" x="352" y="368" width="60" height="44" />
+  <text class="label" x="358" y="395">磨豆機</text>
+  <rect class="todo" x="418" y="368" width="54" height="44" />
+  <text class="label" x="433" y="395">填壓</text>
+  <rect class="equip" x="478" y="368" width="72" height="44" />
+  <text class="label" x="490" y="395">咖啡機</text>
+  <rect class="todo" x="556" y="368" width="56" height="44" />
+  <text class="label" x="562" y="387">杯具</text>
+  <text class="label" x="562" y="403">牛奶</text>
+
+  <rect class="zone bar" x="630" y="340" width="190" height="80" rx="6" />
+  <text class="title" x="642" y="360">冷飲製作</text>
+  <rect class="equip" x="642" y="368" width="54" height="44" />
+  <text class="label" x="648" y="395">製冰機</text>
+  <rect class="equip" x="702" y="368" width="54" height="44" />
+  <text class="label" x="708" y="395">果汁機</text>
+  <rect class="todo" x="762" y="368" width="50" height="44" />
+  <text class="label" x="768" y="395">調飲</text>
+
+  <rect class="zone front" x="830" y="340" width="90" height="80" rx="6" />
+  <text class="title" x="857" y="385">點餐</text>
+
+  <text class="note" x="40" y="444">── 顧客側 ──</text>
+
+  <!-- 顧客區 -->
+  <rect class="zone guest" x="40" y="460" width="300" height="200" rx="6" />
+  <text class="title" x="52" y="484">內用座位</text>
+  <text class="note" x="52" y="504">座位數待定</text>
+
+  <rect class="zone guest" x="360" y="460" width="220" height="90" rx="6" />
+  <text class="title" x="372" y="484">候餐／取餐</text>
+  <text class="note" x="372" y="504">位於出餐檯前，不擋入口</text>
+
+  <rect class="zone guest" x="780" y="460" width="140" height="90" rx="6" />
+  <text class="title" x="792" y="484">點餐排隊</text>
+
+  <!-- 顧客動線 -->
+  <path class="flow" d="M 850 670 L 850 560" />
+  <path class="flow" d="M 830 520 L 600 520" />
+  <path class="flow" d="M 470 460 L 265 430" />
+  <path class="flow" d="M 250 440 L 250 560 L 200 560" />
+  <path class="flow" d="M 120 460 L 95 430" />
+  <polygon class="flow-head" points="850,552 844,566 856,566" />
+  <polygon class="flow-head" points="592,520 606,514 606,526" />
+  <polygon class="flow-head" points="265,430 276,440 279,428" />
+  <polygon class="flow-head" points="192,560 206,554 206,566" />
+  <polygon class="flow-head" points="95,430 97,445 107,437" />
+  <!-- 圖例 -->
+  <text class="note" x="360" y="590">綠色虛線：顧客動線</text>
+  <text class="note" x="360" y="608">入口 → 點餐 → 候餐 → 取餐 → 座位 → 回收檯</text>
+  <rect class="equip" x="360" y="624" width="18" height="12" />
+  <text class="note" x="384" y="634">購買清單內設備</text>
+  <rect class="todo" x="490" y="624" width="18" height="12" />
+  <text class="note" x="514" y="634">尚未採購／待確認</text>
+  <text class="note" x="360" y="656">示意圖，非等比例；左右方向依實際格局調整</text>
+</svg>
