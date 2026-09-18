@@ -264,6 +264,9 @@ const theme = createTheme({
   cssVariables: {
     colorSchemeSelector: "class",
   },
+  typography: {
+    fontFamily: "var(--font-geist-sans)",
+  },
 });
 
 export default theme;
