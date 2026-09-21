@@ -45,10 +45,7 @@ const useNavItems = (): NavItem[] => {
       ...navItem("/order"),
       children: orderChildren,
     },
-    navItem(
-      "/order-board",
-      organizationSlug ? `/order-board/${organizationSlug}` : undefined,
-    ),
+    navItem("/order-board"),
     { slot: DividerSlot },
     {
       ...navItem("/auth"),

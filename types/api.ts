@@ -2286,6 +2286,7 @@ export interface components {
       | "cannotReviewOwnDraft"
       | "cannotReviewSelf"
       | "correctionSourceChanged"
+      | "dailyHoursExceeded"
       | "emergencyDetailsRequired"
       | "employeeNotEnabled"
       | "employmentWindowConflict"
@@ -2312,6 +2313,7 @@ export interface components {
       | "medicalLeaveInterval"
       | "memberNotFound"
       | "menstrualDayLimit"
+      | "monthlyOvertimeExceeded"
       | "noTemplateDates"
       | "outsideShiftWindow"
       | "overlappingAttendance"
@@ -2335,6 +2337,7 @@ export interface components {
       | "payrollSourceChanged"
       | "payrollTermsRequired"
       | "pendingRequestExists"
+      | "quarterOvertimeExceeded"
       | "reasonRequired"
       | "requestAlreadyReviewed"
       | "reservedMakeupRest"
@@ -2446,6 +2449,8 @@ export interface components {
        *     ]
        */
       allowedIps: string[];
+      /** @description Labor Standards Act art. 32 para. 2: union or labor-management meeting consent raises the overtime caps */
+      extendedOvertimeAgreed: boolean;
       organizationId: string;
       /** Format: date-time */
       updatedAt: string;
@@ -2462,6 +2467,8 @@ export interface components {
        *     ]
        */
       allowedIps: string[];
+      /** @description Labor Standards Act art. 32 para. 2: union or labor-management meeting consent raises the overtime caps */
+      extendedOvertimeAgreed: boolean;
       latitude: number;
       longitude: number;
       radiusMeters: number;
@@ -2645,6 +2652,7 @@ export interface components {
     /** @enum {string} */
     AttendanceRequestFilterField:
       | "employeeName"
+      | "leaveTypeName"
       | "reason"
       | "reviewReason"
       | "startsAt"
@@ -2654,6 +2662,7 @@ export interface components {
     /** @enum {string} */
     AttendanceRequestSortField:
       | "employeeName"
+      | "leaveTypeName"
       | "reason"
       | "reviewReason"
       | "startsAt"
@@ -2695,6 +2704,7 @@ export interface components {
       reason: string;
       reviewReason?: string | null;
       leaveTypeId?: string | null;
+      leaveTypeName?: string | null;
       leaveCaseId?: string | null;
       leaveMinutes?: number | null;
       paidPercent?: number | null;
@@ -11448,6 +11458,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "cannotReviewOwnDraft",
   "cannotReviewSelf",
   "correctionSourceChanged",
+  "dailyHoursExceeded",
   "emergencyDetailsRequired",
   "employeeNotEnabled",
   "employmentWindowConflict",
@@ -11474,6 +11485,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "medicalLeaveInterval",
   "memberNotFound",
   "menstrualDayLimit",
+  "monthlyOvertimeExceeded",
   "noTemplateDates",
   "outsideShiftWindow",
   "overlappingAttendance",
@@ -11497,6 +11509,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "payrollSourceChanged",
   "payrollTermsRequired",
   "pendingRequestExists",
+  "quarterOvertimeExceeded",
   "reasonRequired",
   "requestAlreadyReviewed",
   "reservedMakeupRest",
@@ -11589,6 +11602,7 @@ export const attendanceRequestFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceRequestFilterField"]
 > = [
   "employeeName",
+  "leaveTypeName",
   "reason",
   "reviewReason",
   "startsAt",
@@ -11600,6 +11614,7 @@ export const attendanceRequestSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceRequestSortField"]
 > = [
   "employeeName",
+  "leaveTypeName",
   "reason",
   "reviewReason",
   "startsAt",
