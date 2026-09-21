@@ -6,7 +6,7 @@ import {
   type NestedKeyOf,
   useTranslations,
 } from "next-intl";
-import { useParams, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { DEFAULT_PAGINATION_QUERY } from "@/constants/pagination";
@@ -46,7 +46,6 @@ import {
 import type { SvgIconProps } from "@mui/material";
 
 import type { NavItem } from "@/types/navItem";
-import type { RouteParams } from "@/types/routeParams";
 
 import { getHref } from "@/utils/href";
 
@@ -68,7 +67,7 @@ interface Route {
   label?: MessageKey;
   query?: readonly RouteQuery[];
   segment: string;
-  to?: string | null | ((params: RouteParams<"organizationSlug">) => string);
+  to?: string | null;
 }
 
 const storeRoute: Route = {
@@ -141,8 +140,6 @@ const routes: Route[] = [
     icon: ReceiptLong,
     label: "order.board.label",
     segment: "order-board",
-    to: ({ organizationSlug }) =>
-      organizationSlug ? `/order-board/${organizationSlug}` : "/order-board",
   },
   {
     children: [
@@ -292,8 +289,6 @@ export const useRoutes = () => {
 
   const pathname = usePathname();
 
-  const params = useParams<RouteParams<"organizationSlug">>();
-
   const values: Record<RouteQuery, string | null> = {
     back: pathname,
     orderId: searchParams.get("orderId"),
@@ -316,8 +311,7 @@ export const useRoutes = () => {
 
   return (path: string): NavItem => {
     const { icon, label, param, query, to } = findRoute(path) ?? {};
-    const resolved = typeof to === "function" ? to(params) : to;
-    const target = resolved === null ? undefined : (resolved ?? path);
+    const target = to === null ? undefined : (to ?? path);
 
     return {
       icon,
