@@ -60,7 +60,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 可建立為員工的組織成員清單 */
+    /** 組織成員與其出勤設定清單 */
     get: operations["AttendanceEmployeesController_members"];
     put?: never;
     post?: never;
@@ -364,6 +364,24 @@ export interface paths {
     options?: never;
     head?: never;
     patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/leave-cases/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 刪除尚未被使用的請假案件 */
+    delete: operations["AttendanceLeavesController_deleteLeaveCase"];
+    options?: never;
+    head?: never;
+    /** 修改請假案件 */
+    patch: operations["AttendanceLeavesController_updateLeaveCase"];
     trace?: never;
   };
   "/api/organizations/{organizationSlug}/attendance/leave-types": {
@@ -2281,6 +2299,7 @@ export interface components {
     /** @enum {string} */
     AttendanceErrorCode:
       | "activeShiftExists"
+      | "belowStatutoryPaidPercent"
       | "calendarLeaveInterval"
       | "calendarLeavePayRequired"
       | "cannotReviewOwnDraft"
@@ -2305,9 +2324,12 @@ export interface components {
       | "invalidPayrollState"
       | "ipNotAllowed"
       | "leaveCaseExists"
+      | "leaveCaseInUse"
+      | "leaveCaseIntervalConflict"
       | "leaveCaseRequired"
       | "leaveOutsideShift"
       | "leavePolicyRequired"
+      | "leavePolicyRulesRequired"
       | "locationNotAllowed"
       | "medicalCertificateRequired"
       | "medicalLeaveInterval"
@@ -2337,7 +2359,6 @@ export interface components {
       | "payrollSourceChanged"
       | "payrollTermsRequired"
       | "pendingRequestExists"
-      | "quarterOvertimeExceeded"
       | "reasonRequired"
       | "requestAlreadyReviewed"
       | "reservedMakeupRest"
@@ -2349,8 +2370,7 @@ export interface components {
       | "sourceRequired"
       | "splitLeaveByYear"
       | "statutoryBalanceAutomatic"
-      | "statutoryKindImmutable"
-      | "statutoryPolicyExists"
+      | "weeklyMinutesFromOutsideEmployment"
       | "weeklyMinutesFromRequired";
     AttendanceErrorResponseDto: {
       message: components["schemas"]["AttendanceErrorCode"];
@@ -2386,10 +2406,6 @@ export interface components {
       canManageSettings: boolean;
       canManagePayroll: boolean;
     };
-    AttendanceMemberResponseDto: {
-      userId: string;
-      name: string;
-    };
     /** @enum {string} */
     FilterOperator:
       | "contains"
@@ -2418,6 +2434,7 @@ export interface components {
     /** @enum {string} */
     AttendanceEmployeeFilterField:
       | "name"
+      | "email"
       | "hiredAt"
       | "terminatedAt"
       | "weeklyMinutes"
@@ -2425,10 +2442,23 @@ export interface components {
     /** @enum {string} */
     AttendanceEmployeeSortField:
       | "name"
+      | "email"
       | "hiredAt"
       | "terminatedAt"
       | "weeklyMinutes"
       | "enabled";
+    AttendanceMemberResponseDto: {
+      userId: string;
+      name: string;
+      email: string;
+      /** Format: date-time */
+      joinedAt: string;
+      employee?: components["schemas"]["AttendanceEmployeeResponseDto"] | null;
+    };
+    AttendanceMembersResponseDto: {
+      data: components["schemas"]["AttendanceMemberResponseDto"][];
+      total: number;
+    };
     AttendanceEmployeesResponseDto: {
       data: components["schemas"]["AttendanceEmployeeResponseDto"][];
       total: number;
@@ -2449,8 +2479,6 @@ export interface components {
        *     ]
        */
       allowedIps: string[];
-      /** @description Labor Standards Act art. 32 para. 2: union or labor-management meeting consent raises the overtime caps */
-      extendedOvertimeAgreed: boolean;
       organizationId: string;
       /** Format: date-time */
       updatedAt: string;
@@ -2467,8 +2495,6 @@ export interface components {
        *     ]
        */
       allowedIps: string[];
-      /** @description Labor Standards Act art. 32 para. 2: union or labor-management meeting consent raises the overtime caps */
-      extendedOvertimeAgreed: boolean;
       latitude: number;
       longitude: number;
       radiusMeters: number;
@@ -2907,8 +2933,9 @@ export interface components {
       eventLeave: boolean;
       calendarLeave: boolean;
       medicalCertificateRequired: boolean;
-      paidPercent: number;
-      requiresBalance: boolean;
+      paidPercent?: number | null;
+      statutoryPaidPercent?: number | null;
+      requiresBalance?: boolean | null;
       enabled: boolean;
     };
     AttendanceLeaveTypesResponseDto: {
@@ -2916,10 +2943,9 @@ export interface components {
       total: number;
     };
     SaveAttendanceLeaveTypeDto: {
-      statutoryKind?: components["schemas"]["StatutoryLeaveKind"];
+      paidPercent?: number | null;
+      requiresBalance?: boolean | null;
       name: string;
-      paidPercent: number;
-      requiresBalance: boolean;
       enabled: boolean;
     };
     /** @enum {string} */
@@ -5849,7 +5875,18 @@ export interface operations {
   };
   AttendanceEmployeesController_members: {
     parameters: {
-      query?: never;
+      query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["AttendanceEmployeeFilterField"];
+        sortBy?: components["schemas"]["AttendanceEmployeeSortField"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
       header?: never;
       path?: never;
       cookie?: never;
@@ -5861,7 +5898,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["AttendanceMemberResponseDto"][];
+          "application/json": components["schemas"]["AttendanceMembersResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -6629,6 +6666,66 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceLeaveCasesResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceLeavesController_deleteLeaveCase: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceLeavesController_updateLeaveCase: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAttendanceLeaveCaseDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceLeaveCaseRecordResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -11453,6 +11550,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceErrorCode"]
 > = [
   "activeShiftExists",
+  "belowStatutoryPaidPercent",
   "calendarLeaveInterval",
   "calendarLeavePayRequired",
   "cannotReviewOwnDraft",
@@ -11477,9 +11575,12 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "invalidPayrollState",
   "ipNotAllowed",
   "leaveCaseExists",
+  "leaveCaseInUse",
+  "leaveCaseIntervalConflict",
   "leaveCaseRequired",
   "leaveOutsideShift",
   "leavePolicyRequired",
+  "leavePolicyRulesRequired",
   "locationNotAllowed",
   "medicalCertificateRequired",
   "medicalLeaveInterval",
@@ -11509,7 +11610,6 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "payrollSourceChanged",
   "payrollTermsRequired",
   "pendingRequestExists",
-  "quarterOvertimeExceeded",
   "reasonRequired",
   "requestAlreadyReviewed",
   "reservedMakeupRest",
@@ -11521,8 +11621,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "sourceRequired",
   "splitLeaveByYear",
   "statutoryBalanceAutomatic",
-  "statutoryKindImmutable",
-  "statutoryPolicyExists",
+  "weeklyMinutesFromOutsideEmployment",
   "weeklyMinutesFromRequired",
 ];
 export const filterOperatorValues: ReadonlyArray<
@@ -11555,10 +11654,10 @@ export const sortDirectionValues: ReadonlyArray<
 > = ["asc", "desc"];
 export const attendanceEmployeeFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeFilterField"]
-> = ["name", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
+> = ["name", "email", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
 export const attendanceEmployeeSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeSortField"]
-> = ["name", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
+> = ["name", "email", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
 export const attendanceShiftFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceShiftFilterField"]
 > = ["employeeName", "startsAt", "endsAt", "dayKind"];
