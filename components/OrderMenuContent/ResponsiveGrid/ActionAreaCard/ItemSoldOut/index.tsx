@@ -25,6 +25,7 @@ const StyledButton = styled(Button, {
 }));
 
 const StyledTypography = styled(Typography)({
+  fontWeight: "bold",
   whiteSpace: "pre-line",
   wordBreak: "break-word",
   transform: "rotate(-30deg)",
@@ -49,11 +50,7 @@ const ItemSoldOut = ({ soldOutLabel }: ItemSoldOutProps) => {
       variant="outlined"
     >
       {message && (
-        <StyledTypography
-          color="error"
-          fontWeight="bold"
-          variant={getTypographyVariant(message)}
-        >
+        <StyledTypography color="error" variant={getTypographyVariant(message)}>
           {message}
         </StyledTypography>
       )}

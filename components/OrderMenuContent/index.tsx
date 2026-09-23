@@ -119,8 +119,9 @@ const SectionBox = styled(Box)(({ theme }) => ({
 }));
 
 const SectionTypography = styled(Typography)(({ theme }) => ({
-  borderLeft: `${theme.spacing(0.375)} solid ${theme.vars.palette.primary.main}`,
   paddingLeft: theme.spacing(1),
+  borderLeft: `${theme.spacing(0.375)} solid ${theme.vars.palette.primary.main}`,
+  fontWeight: "bold",
 }));
 
 const OrderMenuContent = () => {
@@ -321,7 +322,7 @@ const OrderMenuContent = () => {
         </StyledTabs>
       </HeaderBox>
       {!filteredSections.length && (
-        <Typography align="center" color="text.secondary">
+        <Typography align="center" color="textSecondary">
           {tOrder("mode.storeSlug.tableNumber.search.noResults")}
         </Typography>
       )}
@@ -338,11 +339,7 @@ const OrderMenuContent = () => {
             };
           }}
         >
-          <SectionTypography
-            color="primary"
-            fontWeight="bold"
-            variant="subtitle1"
-          >
+          <SectionTypography color="primary" variant="subtitle1">
             {name}
           </SectionTypography>
           {id === TOP_SOLD || id === LATEST ? (

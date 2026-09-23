@@ -9,6 +9,7 @@ import {
   type ContainerProps,
   Stack,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -20,37 +21,35 @@ const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
+const StyledStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(2),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
 const JoinUs = () => {
   const tCompanyAboutJoinUs = useTranslations("company.about.joinUs");
 
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
-      <Stack alignItems="center" gap={2}>
-        <Typography
-          color="primary.main"
-          component="h2"
-          fontWeight="bold"
-          variant="body2"
-        >
+      <StyledStack>
+        <StyledTypography color="primary" component="h2" variant="body2">
           {tCompanyAboutJoinUs("label")}
-        </Typography>
-        <Typography
-          color="text.primary"
-          component="h2"
-          fontWeight="bold"
-          textAlign="center"
-          variant="h5"
-        >
+        </StyledTypography>
+        <StyledTypography align="center" component="h2" variant="h5">
           <GradientBox component="span">
             {tCompanyAboutJoinUs("titleLine1")}
           </GradientBox>
           <br />
           {tCompanyAboutJoinUs("titleLine2")}
-        </Typography>
-        <Typography color="text.secondary" textAlign="center" variant="body1">
+        </StyledTypography>
+        <Typography align="center" color="textSecondary" variant="body1">
           {tCompanyAboutJoinUs("description")}
         </Typography>
-      </Stack>
+      </StyledStack>
       <Button endIcon={<ChevronRight />} href="#" variant="contained">
         {tCompanyAboutJoinUs("button")}
       </Button>

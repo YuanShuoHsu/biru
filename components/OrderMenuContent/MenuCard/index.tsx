@@ -2,7 +2,7 @@
 
 import { RestaurantMenu } from "@mui/icons-material";
 import { Card, CardContent, CardMedia, Typography } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { type CSSObject, styled } from "@mui/material/styles";
 
 import { useMenuStore } from "@/providers/menu-store-provider";
 
@@ -38,9 +38,16 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const WrapTypography = styled(Typography)({
+const wrapStyle: CSSObject = {
   overflowWrap: "anywhere",
+};
+
+const NameTypography = styled(Typography)({
+  ...wrapStyle,
+  fontWeight: "bold",
 });
+
+const WrapTypography = styled(Typography)(wrapStyle);
 
 const MenuCard = () => {
   const { menu } = useMenuStore((state) => state);
@@ -51,11 +58,9 @@ const MenuCard = () => {
         {!menu?.image && <RestaurantMenu color="disabled" fontSize="large" />}
       </StyledCardMedia>
       <StyledCardContent>
-        <WrapTypography fontWeight="bold" variant="subtitle1">
-          {menu?.name}
-        </WrapTypography>
+        <NameTypography variant="subtitle1">{menu?.name}</NameTypography>
         {menu?.description && (
-          <WrapTypography color="text.secondary" variant="body2">
+          <WrapTypography color="textSecondary" variant="body2">
             {menu.description}
           </WrapTypography>
         )}

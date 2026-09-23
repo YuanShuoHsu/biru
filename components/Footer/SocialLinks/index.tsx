@@ -1,5 +1,10 @@
 import { Facebook, Instagram, YouTube } from "@mui/icons-material";
 import { IconButton, Stack, SvgIcon, type SvgIconProps } from "@mui/material";
+import { styled } from "@mui/material/styles";
+
+const StyledStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
 
 const Line = (props: SvgIconProps) => (
   <SvgIcon {...props} viewBox="0 0 24 24">
@@ -31,7 +36,7 @@ const SOCIAL_LINKS = [
 ];
 
 const SocialLinks = () => (
-  <Stack direction="row" gap={1}>
+  <StyledStack direction="row">
     {SOCIAL_LINKS.map(({ href, icon: Icon, label }) => (
       <IconButton
         key={label}
@@ -46,7 +51,7 @@ const SocialLinks = () => (
         <Icon fontSize="small" />
       </IconButton>
     ))}
-  </Stack>
+  </StyledStack>
 );
 
 export default SocialLinks;

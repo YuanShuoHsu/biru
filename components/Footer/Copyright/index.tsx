@@ -13,7 +13,7 @@ const Copyright = () => {
   });
 
   return (
-    <Typography color="text.secondary" variant="caption">
+    <Typography color="textSecondary" variant="caption">
       {copyrightLine}
     </Typography>
   );

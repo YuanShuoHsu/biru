@@ -58,6 +58,15 @@ const StyledListItem = styled(ListItem)(({ theme }) => ({
   },
 }));
 
+const ContentStack = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  gap: theme.spacing(2),
+}));
+
+const InfoStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(2),
+}));
+
 const StyledListItemAvatar = styled(ListItemAvatar)({
   margin: 0,
   flex: 1,
@@ -92,8 +101,20 @@ const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   },
 }));
 
+const ControlsStack = styled(Stack, {
+  shouldForwardProp: (prop) => prop !== "compact",
+})<{ compact: boolean }>(({ compact, theme }) => ({
+  alignItems: "stretch",
+  gap: theme.spacing(2),
+
+  ...(compact && {
+    alignItems: "center",
+  }),
+}));
+
 const StyledTypography = styled(Typography)<TypographyProps>({
   flex: 1,
+  fontWeight: "bold",
 });
 
 const StyledNumberSpinner = styled(NumberSpinner)({
@@ -234,8 +255,8 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
         limitingAddOnsLabel={limitingAddOnsLabel}
         unavailableLabel={unavailableLabel}
       />
-      <Stack width="100%" gap={2}>
-        <Stack direction="row" gap={2}>
+      <ContentStack>
+        <InfoStack direction="row">
           <StyledListItemAvatar>
             <ImageBox>
               {image ? (
@@ -253,18 +274,9 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
             </ImageBox>
           </StyledListItemAvatar>
           <StyledListItemText primary={itemName} secondary={choiceNames} />
-        </Stack>
-        <Stack
-          alignItems={compact ? "center" : "stretch"}
-          direction={compact ? "row" : "column"}
-          gap={2}
-        >
-          <StyledTypography
-            color="primary"
-            component="span"
-            fontWeight="bold"
-            variant="body2"
-          >
+        </InfoStack>
+        <ControlsStack compact={compact} direction={compact ? "row" : "column"}>
+          <StyledTypography color="primary" component="span" variant="body2">
             {formatMoney(amount, priceCurrency)}
           </StyledTypography>
           <StyledNumberSpinner
@@ -282,8 +294,8 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
             size="small"
             value={quantity}
           />
-        </Stack>
-      </Stack>
+        </ControlsStack>
+      </ContentStack>
     </StyledListItem>
   );
 };

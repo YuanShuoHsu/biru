@@ -9,7 +9,15 @@ import {
   Tune,
   type SvgIconComponent,
 } from "@mui/icons-material";
-import { Box, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  type BoxProps,
+  Container,
+  Grid,
+  Stack,
+  Typography,
+  type TypographyProps,
+} from "@mui/material";
 import { alpha, styled } from "@mui/material/styles";
 
 type ValueKey =
@@ -25,6 +33,10 @@ const VALUE_KEYS: { icon: SvgIconComponent; key: ValueKey }[] = [
   { icon: RocketLaunch, key: "trustAndDeliver" },
 ];
 
+const SectionBox = styled(Box)<BoxProps>(({ theme }) => ({
+  backgroundColor: theme.vars.palette.background.paper,
+}));
+
 const StyledContainer = styled(Container)(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
@@ -32,12 +44,25 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
+const HeaderStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
 const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
+  gap: theme.spacing(1),
+}));
+
+const ValueTitleStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
   gap: theme.spacing(1),
 }));
 
@@ -50,59 +75,46 @@ const IconBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
 }));
 
+const InitialBox = styled(Box)<BoxProps>(({ theme }) => ({
+  color: theme.vars.palette.primary.main,
+}));
+
 const Values = () => {
   const tCompanyAboutValues = useTranslations("company.about.values");
 
   return (
-    <Box bgcolor="background.paper" component="section">
+    <SectionBox component="section">
       <StyledContainer disableGutters maxWidth="lg">
-        <Stack gap={1}>
-          <Typography
-            color="primary.main"
-            component="h2"
-            fontWeight="bold"
-            variant="body2"
-          >
+        <HeaderStack>
+          <StyledTypography color="primary" component="h2" variant="body2">
             {tCompanyAboutValues("subtitle")}
-          </Typography>
-          <Typography
-            color="text.primary"
-            component="h2"
-            fontWeight="bold"
-            variant="h5"
-          >
+          </StyledTypography>
+          <StyledTypography component="h2" variant="h5">
             {tCompanyAboutValues("titlePrefix")}
             <GradientBox component="span">
               {tCompanyAboutValues("titleGradient")}
             </GradientBox>
-          </Typography>
-          <Typography color="text.secondary" variant="body1">
+          </StyledTypography>
+          <Typography color="textSecondary" variant="body1">
             {tCompanyAboutValues("description")}
           </Typography>
-        </Stack>
+        </HeaderStack>
         <Grid container spacing={2}>
           {VALUE_KEYS.map(({ icon: Icon, key }) => {
             const title = tCompanyAboutValues(`values.${key}.title`);
 
             return (
               <StyledGrid key={key} size={{ xs: 12, md: 3 }}>
-                <Stack alignItems="center" direction="row" gap={1}>
+                <ValueTitleStack direction="row">
                   <IconBox>
                     <Icon color="primary" fontSize="small" />
                   </IconBox>
-                  <Typography
-                    color="text.primary"
-                    component="h3"
-                    fontWeight="bold"
-                    variant="body2"
-                  >
-                    <Box component="span" color="primary.main">
-                      {title[0]}
-                    </Box>
+                  <StyledTypography component="h3" variant="body2">
+                    <InitialBox component="span">{title[0]}</InitialBox>
                     {title.slice(1)}
-                  </Typography>
-                </Stack>
-                <Typography color="text.secondary" variant="body2">
+                  </StyledTypography>
+                </ValueTitleStack>
+                <Typography color="textSecondary" variant="body2">
                   {tCompanyAboutValues(`values.${key}.description`)}
                 </Typography>
               </StyledGrid>
@@ -110,7 +122,7 @@ const Values = () => {
           })}
         </Grid>
       </StyledContainer>
-    </Box>
+    </SectionBox>
   );
 };
 

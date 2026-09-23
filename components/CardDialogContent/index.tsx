@@ -36,6 +36,7 @@ import {
   Radio,
   Stack,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -90,8 +91,32 @@ const WrapTypography = styled(Typography)({
   overflowWrap: "anywhere",
 });
 
+const DietStack = styled(Stack)(({ theme }) => ({
+  flexWrap: "wrap",
+  gap: theme.spacing(0.5),
+}));
+
+const MetaStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  alignSelf: "flex-start",
+  gap: theme.spacing(0.5),
+}));
+
+const ChoiceLabelStack = styled(Stack)(({ theme }) => ({
+  alignItems: "baseline",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+}));
+
+const AddOnOptionsStack = styled(Stack)(({ theme }) => ({
+  paddingLeft: theme.spacing(3),
+  gap: theme.spacing(2),
+}));
+
 const AddOnLabelStack = styled(Stack)(({ theme }) => ({
   paddingBlock: theme.spacing(0.75),
+  alignItems: "center",
+  gap: theme.spacing(1.5),
 }));
 
 const AddOnAvatar = styled(Avatar, {
@@ -105,19 +130,36 @@ const AddOnAvatar = styled(Avatar, {
   }),
 }));
 
-const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
-  [theme.breakpoints.up("sm")]: {
-    flex: 1,
-  },
+const FooterStack = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  flexWrap: "wrap",
+  alignItems: "center",
+  gap: theme.spacing(2),
 }));
+
+const PriceStack = styled(Stack)({
+  flex: 1,
+});
 
 const OriginalPriceTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "isPromo",
 })<{ isPromo: boolean }>(({ isPromo }) => ({
+  fontWeight: "bold",
+
   ...(isPromo && {
     textDecoration: "line-through",
     lineHeight: 1.2,
   }),
+}));
+
+const PriceTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
+const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
+  [theme.breakpoints.up("sm")]: {
+    flex: 1,
+  },
 }));
 
 interface CardDialogContentProps {
@@ -397,16 +439,16 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     noteLabel: string,
     tagLabel: string,
   ) => (
-    <Stack direction="row" alignItems="baseline" flexWrap="wrap" gap={1}>
+    <ChoiceLabelStack direction="row">
       <WrapTypography variant="body2">{choiceName}</WrapTypography>
       {choiceExtraCost !== 0 && (
-        <Typography color="text.secondary" variant="caption">
+        <Typography color="textSecondary" variant="caption">
           {choiceExtraCost > 0 ? "+" : "-"}
           {formatMoney(Math.abs(choiceExtraCost), priceCurrency)}
         </Typography>
       )}
       {noteLabel && (
-        <Typography color="text.secondary" variant="caption">
+        <Typography color="textSecondary" variant="caption">
           {noteLabel}
         </Typography>
       )}
@@ -415,7 +457,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           {tagLabel}
         </Typography>
       )}
-    </Stack>
+    </ChoiceLabelStack>
   );
 
   const getModifierGroupHint = ({
@@ -635,12 +677,12 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         )}
       </ImageBox>
       {description && (
-        <WrapTypography color="text.secondary" variant="body2">
+        <WrapTypography color="textSecondary" variant="body2">
           {description}
         </WrapTypography>
       )}
       {suitableForDiet && suitableForDiet.length > 0 && (
-        <Stack direction="row" flexWrap="wrap" gap={0.5}>
+        <DietStack direction="row">
           {suitableForDiet.map((diet) => (
             <Chip
               key={diet}
@@ -648,38 +690,28 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               size="small"
             />
           ))}
-        </Stack>
+        </DietStack>
       )}
       {nutrition?.calories && (
-        <Typography color="text.secondary" variant="caption">
+        <Typography color="textSecondary" variant="caption">
           {tOrder("menuItem.calories", { value: nutrition.calories })}
         </Typography>
       )}
       {itemAvailableHoursLabel && (
-        <Stack
-          direction="row"
-          alignItems="center"
-          alignSelf="flex-start"
-          gap={0.5}
-        >
+        <MetaStack direction="row">
           <EventAvailable color="disabled" fontSize="small" />
-          <Typography color="text.secondary" variant="caption">
+          <Typography color="textSecondary" variant="caption">
             {itemAvailableHoursLabel}
           </Typography>
-        </Stack>
+        </MetaStack>
       )}
       {leadTimeMinutes != null && (
-        <Stack
-          direction="row"
-          alignItems="center"
-          alignSelf="flex-start"
-          gap={0.5}
-        >
+        <MetaStack direction="row">
           <AccessTime color="disabled" fontSize="small" />
-          <Typography color="text.secondary" variant="caption">
+          <Typography color="textSecondary" variant="caption">
             {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
           </Typography>
-        </Stack>
+        </MetaStack>
       )}
       <Divider flexItem />
       {servingTemperatures.length > 0 &&
@@ -770,7 +802,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               children: (addOnHasBuiltInChoices ||
                 modifierGroups.length > 0) && (
                 <Collapse in={checked} timeout="auto" unmountOnExit>
-                  <Stack pl={3} gap={2}>
+                  <AddOnOptionsStack>
                     {servingTemperatures.length > 0 &&
                       renderServingTemperatureLevelGroup(
                         servingTemperatures,
@@ -807,12 +839,12 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                         )}
                       </Fragment>
                     ))}
-                  </Stack>
+                  </AddOnOptionsStack>
                 </Collapse>
               ),
               disabled: !checked && !!unavailableLabel,
               label: (
-                <AddOnLabelStack direction="row" alignItems="center" gap={1.5}>
+                <AddOnLabelStack direction="row">
                   <AddOnAvatar
                     alt={name}
                     disabled={!checked && !!unavailableLabel}
@@ -838,32 +870,24 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       {(hasBuiltInChoices ||
         modifierGroups.length > 0 ||
         addOnItems.length > 0) && <Divider flexItem />}
-      <Stack
-        width="100%"
-        direction="row"
-        flexWrap="wrap"
-        alignItems="center"
-        gap={2}
-      >
-        <Stack direction="column" flex={1}>
+      <FooterStack direction="row">
+        <PriceStack direction="column">
           {promoInfo && (
             <OriginalPriceTypography
-              color="text.disabled"
-              fontWeight="bold"
+              color="textDisabled"
               isPromo
               variant="caption"
             >
               {formatMoney(basePrice, priceCurrency)}
             </OriginalPriceTypography>
           )}
-          <Typography
+          <PriceTypography
             color={promoInfo ? "error" : "primary"}
             component="span"
-            fontWeight="bold"
             variant="h6"
           >
             {displayPrice}
-          </Typography>
+          </PriceTypography>
           {promoInfo?.validThrough && (
             <Typography color="error" variant="caption">
               {tOrder("menuItem.promoUntil", {
@@ -876,13 +900,13 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             </Typography>
           )}
           {showLowStock && (
-            <Typography color="text.secondary" variant="caption">
+            <Typography color="textSecondary" variant="caption">
               {tOrder("menuItem.stockLeft", {
                 stock: [stock, stockUnit].filter(Boolean).join(" "),
               })}
             </Typography>
           )}
-        </Stack>
+        </PriceStack>
         <StyledNumberSpinner
           disabled={!quantity}
           error={isAtLimit}
@@ -893,7 +917,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           onValueChange={(value) => setValue("quantity", value || minQuantity)}
           value={quantity}
         />
-      </Stack>
+      </FooterStack>
     </FormBox>
   );
 };

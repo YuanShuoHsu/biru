@@ -4,10 +4,15 @@ import { Fragment } from "react";
 import CartItemRow from "./CartItemRow";
 
 import { Divider, List, NoSsr, Typography } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 
 import { getItemKey } from "@/utils/menus";
+
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  padding: theme.spacing(2),
+}));
 
 interface CartItemListProps {
   compact?: boolean;
@@ -18,15 +23,15 @@ const CartItemList = ({ compact = false }: CartItemListProps) => {
 
   const tCommon = useTranslations("common");
 
-  const loading = <Typography padding={2}>{tCommon("loading")}</Typography>;
+  const loading = <StyledTypography>{tCommon("loading")}</StyledTypography>;
 
   return (
     <List disablePadding>
       <NoSsr defer fallback={loading}>
         {isCartEmpty ? (
-          <Typography padding={2} variant="body1">
+          <StyledTypography variant="body1">
             {tCommon("empty")}
-          </Typography>
+          </StyledTypography>
         ) : (
           cartItemsList.map((item, index) => (
             <Fragment key={getItemKey(item)}>

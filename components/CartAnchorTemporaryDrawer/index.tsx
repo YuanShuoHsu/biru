@@ -20,6 +20,7 @@ import {
   Theme,
   Toolbar,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { type CSSObject, styled } from "@mui/material/styles";
 
@@ -57,6 +58,16 @@ const StickyFooter = styled(Box)(({ theme }) => ({
   flexDirection: "column",
   gap: theme.spacing(2),
 }));
+
+const StyledStack = styled(Stack)({
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+});
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
 
 const CartAnchorTemporaryDrawer = () => {
   const { isCartEmpty } = useCartStore((state) => state);
@@ -99,23 +110,14 @@ const CartAnchorTemporaryDrawer = () => {
       </StickyHeader>
       <CartItemList />
       <StickyFooter>
-        <Stack
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <StyledStack>
           <Typography component="span" variant="subtitle1">
             {tCommon("subtotal")}
           </Typography>
-          <Typography
-            color="primary"
-            component="span"
-            fontWeight="bold"
-            variant="h6"
-          >
+          <StyledTypography color="primary" component="span" variant="h6">
             {formatMoney(cartTotalAmount, cartCurrency)}
-          </Typography>
-        </Stack>
+          </StyledTypography>
+        </StyledStack>
         {(isCartPage || isCheckoutPage) && (
           <Button
             fullWidth

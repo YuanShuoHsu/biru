@@ -42,6 +42,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 import { useCountdownStore } from "@/providers/countdown-store-provider";
@@ -51,6 +52,24 @@ import {
   handleMouseDownPassword,
   handleMouseUpPassword,
 } from "@/utils/password";
+
+const StyledTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
+const OptionsStack = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
+const SwitchAuthStack = styled(Stack)(({ theme }) => ({
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+}));
 
 interface AuthSignInProps {
   locale: Locale;
@@ -151,14 +170,9 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader
         title={
-          <Typography
-            color="primary"
-            fontWeight="bold"
-            textAlign="center"
-            variant="h6"
-          >
+          <StyledTypography align="center" color="primary" variant="h6">
             {tAuth("signIn.label")}
-          </Typography>
+          </StyledTypography>
         }
       />
       <StyledCardContent>
@@ -207,13 +221,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           type={showPassword ? "text" : "password"}
           {...register("password")}
         />
-        <Stack
-          width="100%"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={1}
-        >
+        <OptionsStack>
           <FormControlLabel
             control={
               <Controller
@@ -235,7 +243,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           <Link href={forgotPasswordHref} underline="hover" variant="body2">
             {tAuth("forgotPassword.label")}
           </Link>
-        </Stack>
+        </OptionsStack>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
@@ -249,12 +257,12 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
           {tAuth("signIn.label")}
         </Button>
         <Divider flexItem />
-        <Stack flexDirection="row" alignItems="center" gap={0.5}>
+        <SwitchAuthStack>
           <Typography variant="body2">{tAuth("noAccount")}</Typography>
           <Link href={signUpHref} underline="hover" variant="body2">
             {tAuth("signUp.label")}
           </Link>
-        </Stack>
+        </SwitchAuthStack>
       </StyledCardActions>
     </FormCard>
   );

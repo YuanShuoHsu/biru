@@ -38,6 +38,10 @@ import { useCountdownStore } from "@/providers/countdown-store-provider";
 
 import { getHref } from "@/utils/href";
 
+const StyledTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
 const StyledAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "color",
 })<{ color: "error" | "primary" }>(({ color, theme }) => {
@@ -206,21 +210,16 @@ const AuthAcceptInvitation = ({
     <FormCard>
       <StyledCardHeader
         title={
-          <Typography
-            color={config.color}
-            fontWeight="bold"
-            textAlign="center"
-            variant="h6"
-          >
+          <StyledTypography align="center" color={config.color} variant="h6">
             {config.title}
-          </Typography>
+          </StyledTypography>
         }
       />
       <StyledCardContent>
         <StyledAvatar color={config.color}>
           <Icon fontSize="large" />
         </StyledAvatar>
-        <Typography color="text.secondary" textAlign="center" variant="caption">
+        <Typography align="center" color="textSecondary" variant="caption">
           {config.subtitle}
         </Typography>
         <TextField

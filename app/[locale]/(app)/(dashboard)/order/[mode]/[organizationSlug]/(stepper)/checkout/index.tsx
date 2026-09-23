@@ -59,6 +59,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import type { TimeView } from "@mui/x-date-pickers/models";
 
@@ -101,6 +102,19 @@ import {
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
+
+const StyledTypography = styled(Typography)({
+  alignSelf: "flex-start",
+  fontWeight: "bold",
+});
+
+const StyledGrid = styled(Grid)({
+  width: "100%",
+});
+
+const StyledStack = styled(Stack)({
+  justifyContent: "space-between",
+});
 
 const PaymentImage = ({ method }: { method: CreateOrderPayment }) => (
   <Image
@@ -529,14 +543,9 @@ const OrderModeOrganizationSlugCheckout = ({
       </Card>
       <Card variant="outlined">
         <StyledCardContent>
-          <Typography
-            alignSelf="flex-start"
-            color="text.secondary"
-            fontWeight="bold"
-            variant="subtitle2"
-          >
+          <StyledTypography color="textSecondary" variant="subtitle2">
             {tOrder("checkout.title")}
-          </Typography>
+          </StyledTypography>
           <TextField
             autoComplete="name"
             error={!!errors.customer?.name}
@@ -547,7 +556,7 @@ const OrderModeOrganizationSlugCheckout = ({
             required
             {...register("customer.name")}
           />
-          <Grid container spacing={2} width="100%">
+          <StyledGrid container spacing={2}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <CountryAutocomplete
                 error={!!errors.customer?.countryCode}
@@ -588,7 +597,7 @@ const OrderModeOrganizationSlugCheckout = ({
                 value={telephone}
               />
             </Grid>
-          </Grid>
+          </StyledGrid>
           <TextField
             {...register("customer.email")}
             autoComplete="email"
@@ -825,7 +834,7 @@ const OrderModeOrganizationSlugCheckout = ({
           />
         </StyledCardContent>
       </Card>
-      <Stack direction="row" justifyContent="space-between">
+      <StyledStack direction="row">
         <Button
           disabled={isSubmitting || isRedirecting}
           onClick={() =>
@@ -847,7 +856,7 @@ const OrderModeOrganizationSlugCheckout = ({
         >
           {tOrder("checkout.placeOrder")}
         </Button>
-      </Stack>
+      </StyledStack>
     </FormBox>
   );
 };

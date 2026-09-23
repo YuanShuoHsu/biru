@@ -25,6 +25,25 @@ import { styled } from "@mui/material/styles";
 import type { Slot } from "@/types/navItem";
 import type { RouteParams } from "@/types/routeParams";
 
+const ContentStack = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
+const InfoStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
+const InfoRowStack = styled(Stack)(({ theme }) => ({
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(4),
+}));
+
 const StyledChip = styled(Chip)(({ theme }) => ({
   marginLeft: "auto",
   padding: theme.spacing(0.5),
@@ -82,28 +101,21 @@ const OrderModeMenuItem: Slot = ({ level }) => {
         level={level}
         selected
       >
-        <Stack
-          width="100%"
-          flexDirection="row"
-          flexWrap="wrap"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={1}
-        >
-          <Stack gap={1}>
-            <Stack flexDirection="row" alignItems="center" gap={4}>
+        <ContentStack>
+          <InfoStack>
+            <InfoRowStack>
               <ListItemIcon>
                 <Storefront />
               </ListItemIcon>
               <ListItemText primary={storeName} />
-            </Stack>
-            {extra.map(({ icon, primary }, i) => (
-              <Stack key={i} flexDirection="row" alignItems="center" gap={4}>
+            </InfoRowStack>
+            {extra.map(({ icon, primary }, index) => (
+              <InfoRowStack key={index}>
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={primary} />
-              </Stack>
+              </InfoRowStack>
             ))}
-          </Stack>
+          </InfoStack>
           <StyledChip
             color="primary"
             icon={ModeIcon && <ModeIcon />}
@@ -111,7 +123,7 @@ const OrderModeMenuItem: Slot = ({ level }) => {
             size="small"
             variant="outlined"
           />
-        </Stack>
+        </ContentStack>
       </StyledListItemButton>
     </ListItem>
   );

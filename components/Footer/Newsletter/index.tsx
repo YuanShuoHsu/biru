@@ -15,7 +15,7 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
 const Newsletter = () => {
   return (
     <StyledGrid size={{ xs: 12, md: 6 }}>
-      <BrandMark color="text.primary" />
+      <BrandMark color="textPrimary" />
     </StyledGrid>
   );
 };

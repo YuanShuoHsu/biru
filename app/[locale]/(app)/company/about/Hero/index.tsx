@@ -9,6 +9,7 @@ import {
   type ContainerProps,
   Stack,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -17,6 +18,22 @@ const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
+  gap: theme.spacing(5),
+}));
+
+const CenteredStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(2),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
+const StatsStack = styled(Stack)(({ theme }) => ({
+  flexWrap: "wrap",
+  justifyContent: "center",
+  alignItems: "flex-start",
   gap: theme.spacing(5),
 }));
 
@@ -40,51 +57,34 @@ const Hero = () => {
 
   return (
     <StyledContainer component="header" disableGutters maxWidth="lg">
-      <Stack alignItems="center" gap={2}>
-        <Typography
-          color="primary"
-          component="h2"
-          fontWeight="bold"
-          variant="body2"
-        >
+      <CenteredStack>
+        <StyledTypography color="primary" component="h2" variant="body2">
           {tCompanyAboutHero("subtitle")}
-        </Typography>
-        <Typography
-          color="text.primary"
-          component="h2"
-          fontWeight="bold"
-          textAlign="center"
-          variant="h5"
-        >
+        </StyledTypography>
+        <StyledTypography align="center" component="h2" variant="h5">
           {tCompanyAboutHero("titleLine1")}
           <br />
           <GradientBox component="span">
             {tCompanyAboutHero("titleLine2")}
           </GradientBox>
-        </Typography>
-        <Typography color="text.primary" textAlign="center" variant="body1">
+        </StyledTypography>
+        <Typography align="center" variant="body1">
           {tCompanyAboutHero("description")}
         </Typography>
-      </Stack>
+      </CenteredStack>
       <PhotoSlider />
-      <Stack
-        flexWrap="wrap"
-        direction="row"
-        justifyContent="center"
-        alignItems="flex-start"
-        gap={5}
-      >
+      <StatsStack direction="row">
         {STATS.map(({ label, value }) => (
-          <Stack key={label} alignItems="center" gap={2}>
-            <Typography color="primary.main" fontWeight="bold" variant="h4">
+          <CenteredStack key={label}>
+            <StyledTypography color="primary" variant="h4">
               {value}
-            </Typography>
-            <Typography color="text.secondary" variant="body1">
+            </StyledTypography>
+            <Typography color="textSecondary" variant="body1">
               {label}
             </Typography>
-          </Stack>
+          </CenteredStack>
         ))}
-      </Stack>
+      </StatsStack>
     </StyledContainer>
   );
 };

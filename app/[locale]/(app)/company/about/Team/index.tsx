@@ -22,6 +22,7 @@ import {
   Stack,
   TextField,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -34,6 +35,18 @@ const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(5),
+}));
+
+const HeaderStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
+const ContentStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(2),
 }));
 
 const StyledOrganizationSelect = styled(TextField)({
@@ -50,9 +63,20 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const MemberHeaderStack = styled(Stack)(({ theme }) => ({
+  flexWrap: "wrap",
+  justifyContent: "space-between",
+  gap: theme.spacing(1),
+}));
+
 const MemberAvatar = styled(Avatar)(({ theme }) => ({
   width: theme.spacing(8.5),
   height: theme.spacing(8.5),
+}));
+
+const MemberNameStack = styled(Stack)(({ theme }) => ({
+  alignItems: "baseline",
+  gap: theme.spacing(1),
 }));
 
 interface TeamProps {
@@ -81,31 +105,21 @@ const Team = ({ organizations }: TeamProps) => {
 
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
-      <Stack gap={1}>
-        <Typography
-          color="primary.main"
-          component="h2"
-          fontWeight="bold"
-          variant="body2"
-        >
+      <HeaderStack>
+        <StyledTypography color="primary" component="h2" variant="body2">
           {tCompanyAboutTeam("label")}
-        </Typography>
-        <Typography
-          color="text.primary"
-          component="h2"
-          fontWeight="bold"
-          variant="h5"
-        >
+        </StyledTypography>
+        <StyledTypography component="h2" variant="h5">
           {tCompanyAboutTeam("titlePrefix")}
           <GradientBox component="span">
             {tCompanyAboutTeam("titleHighlight")}
           </GradientBox>
-        </Typography>
-        <Typography color="text.secondary" variant="body1">
+        </StyledTypography>
+        <Typography color="textSecondary" variant="body1">
           {tCompanyAboutTeam("description")}
         </Typography>
-      </Stack>
-      <Stack gap={2}>
+      </HeaderStack>
+      <ContentStack>
         <StyledOrganizationSelect
           error={!!errors.organizationId}
           helperText={errors.organizationId?.message}
@@ -145,12 +159,7 @@ const Team = ({ organizations }: TeamProps) => {
           {organizationMembers.map(
             ({ bio, firstName, id, image, lastName, role, teams }) => (
               <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
-                <Stack
-                  flexWrap="wrap"
-                  direction="row"
-                  justifyContent="space-between"
-                  gap={1}
-                >
+                <MemberHeaderStack direction="row">
                   <MemberAvatar src={image || undefined} variant="rounded">
                     {firstName[0]}
                   </MemberAvatar>
@@ -158,22 +167,18 @@ const Team = ({ organizations }: TeamProps) => {
                     label={tCompanyAboutTeam(`role.${role}`)}
                     size="small"
                   />
-                </Stack>
-                <Stack direction="row" alignItems="baseline" gap={1}>
-                  <Typography
-                    color="text.primary"
-                    fontWeight="bold"
-                    variant="body2"
-                  >
+                </MemberHeaderStack>
+                <MemberNameStack direction="row">
+                  <StyledTypography variant="body2">
                     {formatFullName(locale, firstName, lastName)}
-                  </Typography>
-                  <Typography color="text.secondary" variant="caption">
+                  </StyledTypography>
+                  <Typography color="textSecondary" variant="caption">
                     {teams.map(({ name }) => name).join(" · ")}
                   </Typography>
-                </Stack>
+                </MemberNameStack>
                 <Divider />
                 {bio && (
-                  <Typography color="text.secondary" variant="body2">
+                  <Typography color="textSecondary" variant="body2">
                     {bio}
                   </Typography>
                 )}
@@ -181,7 +186,7 @@ const Team = ({ organizations }: TeamProps) => {
             ),
           )}
         </Grid>
-      </Stack>
+      </ContentStack>
     </StyledContainer>
   );
 };

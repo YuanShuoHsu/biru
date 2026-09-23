@@ -66,7 +66,7 @@ const StyledCard = styled(Card, {
     }),
 }));
 
-const StyledCardHeader = styled(CardHeader, {
+const StyledCardHeader = styled(CardHeader<"div", object, "h2">, {
   shouldForwardProp: (prop) => prop !== "color",
 })<{ color: ChipProps["color"] }>(({ color, theme }) =>
   color && color !== "default"
@@ -94,6 +94,13 @@ const StyledListItem = styled(ListItem, {
     outline: `3px solid ${theme.vars.palette.primary.main}`,
     outlineOffset: -3,
   }),
+}));
+
+const StyledStack = styled(Stack)(({ theme }) => ({
+  flexWrap: "wrap",
+  justifyContent: "space-between",
+  alignItems: "center",
+  columnGap: theme.spacing(1),
 }));
 
 interface OrderBoardProps {
@@ -166,13 +173,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                     >
                       <ListItemText
                         primary={
-                          <Stack
-                            flexWrap="wrap"
-                            direction="row"
-                            justifyContent="space-between"
-                            alignItems="center"
-                            columnGap={1}
-                          >
+                          <StyledStack direction="row">
                             <Typography variant="body1">
                               {item.orderNumber}
                             </Typography>
@@ -190,7 +191,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                               size="small"
                               variant="outlined"
                             />
-                          </Stack>
+                          </StyledStack>
                         }
                         secondary={
                           item.orderId === orderId ? tOrder("board.mine") : null
@@ -200,7 +201,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                     </StyledListItem>
                   ))
                 ) : (
-                  <StyledEmptyTypography color="text.secondary" variant="body2">
+                  <StyledEmptyTypography color="textSecondary" variant="body2">
                     {tOrder("board.empty")}
                   </StyledEmptyTypography>
                 )}

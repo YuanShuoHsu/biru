@@ -49,6 +49,7 @@ const StyledBox = styled(Box)(({ theme }) => ({
 const StyledTypography = styled(Typography)({
   whiteSpace: "pre-line",
   wordBreak: "break-word",
+  fontWeight: "bold",
   transform: "rotate(-30deg)",
 });
 
@@ -133,11 +134,7 @@ const CartItemSoldOut = ({
         )}
       </StyledBox>
       {message && (
-        <StyledTypography
-          color="error"
-          fontWeight="bold"
-          variant={getTypographyVariant(message)}
-        >
+        <StyledTypography color="error" variant={getTypographyVariant(message)}>
           {message}
         </StyledTypography>
       )}

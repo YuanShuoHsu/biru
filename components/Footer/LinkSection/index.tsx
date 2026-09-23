@@ -45,9 +45,7 @@ const LinkSection = () => {
     <Grid container spacing={2}>
       {footerItems.map(({ children, label: parentLabel, path: parentPath }) => (
         <StyledGrid key={parentPath} size={{ xs: 6, md: 2 }}>
-          <Typography color="text.primary" variant="subtitle2">
-            {parentLabel}
-          </Typography>
+          <Typography variant="subtitle2">{parentLabel}</Typography>
           {children?.map(
             (
               { label: childLabel, onClick, slot: Slot, to: childTo },
@@ -57,7 +55,7 @@ const LinkSection = () => {
 
               return (
                 <Link
-                  color="text.secondary"
+                  color="textSecondary"
                   component={onClick ? "button" : "a"}
                   href={onClick ? undefined : childTo}
                   key={itemIndex}

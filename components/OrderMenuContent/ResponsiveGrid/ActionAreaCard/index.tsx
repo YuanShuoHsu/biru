@@ -132,7 +132,10 @@ const wrapStyle: CSSObject = {
   overflowWrap: "anywhere",
 };
 
-const WrapTypography = styled(Typography)(wrapStyle);
+const WrapTypography = styled(Typography)({
+  ...wrapStyle,
+  fontWeight: "bold",
+});
 
 const ClampTypography = styled(Typography)({
   ...wrapStyle,
@@ -146,6 +149,7 @@ const OriginalPriceTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "isPromo",
 })<{ isPromo: boolean }>(({ isPromo }) => ({
   ...wrapStyle,
+  fontWeight: "bold",
   ...(isPromo && {
     textDecoration: "line-through",
   }),
@@ -262,9 +266,7 @@ const ActionAreaCard = ({
         </ImageBox>
         <StyledCardContent>
           <TitleBox>
-            <WrapTypography fontWeight="bold" variant="subtitle1">
-              {name}
-            </WrapTypography>
+            <WrapTypography variant="subtitle1">{name}</WrapTypography>
             {(isTopSold || isLatest || servingTemperatures.length > 0) && (
               <IconBox>
                 {isTopSold && (
@@ -297,37 +299,32 @@ const ActionAreaCard = ({
             )}
           </TitleBox>
           {description && (
-            <ClampTypography color="text.secondary" variant="body2">
+            <ClampTypography color="textSecondary" variant="body2">
               {description}
             </ClampTypography>
           )}
           <Stack>
             <OriginalPriceTypography
-              color={promoInfo ? "text.disabled" : "primary"}
-              fontWeight="bold"
+              color={promoInfo ? "textDisabled" : "primary"}
               isPromo={!!promoInfo}
               variant={promoInfo ? "caption" : "subtitle2"}
             >
               {`${priceCurrency} ${price}`}
             </OriginalPriceTypography>
             {promoInfo && (
-              <WrapTypography
-                color="error"
-                fontWeight="bold"
-                variant="subtitle2"
-              >
+              <WrapTypography color="error" variant="subtitle2">
                 {`${priceCurrency} ${promoInfo.price}`}
               </WrapTypography>
             )}
             {showLowStock && (
-              <Typography color="text.secondary" variant="caption">
+              <Typography color="textSecondary" variant="caption">
                 {tOrder("menuItem.stockLeft", {
                   stock: [stock, stockUnit].filter(Boolean).join(" "),
                 })}
               </Typography>
             )}
             {availableHoursLabel && (
-              <Typography color="text.secondary" variant="caption">
+              <Typography color="textSecondary" variant="caption">
                 {availableHoursLabel}
               </Typography>
             )}

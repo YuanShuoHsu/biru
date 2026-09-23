@@ -28,9 +28,9 @@ import { useRouter } from "@/i18n/navigation";
 import { useCartStore } from "@/providers/cart-store-provider";
 
 import {
-  CheckCircleOutline,
+  CheckCircleOutlined,
   ContentCopy,
-  ErrorOutline,
+  ErrorOutlined,
   HourglassEmpty,
   MenuBook,
   Storefront,
@@ -63,21 +63,54 @@ const statusIconStyle: CSSObject = {
   fontSize: 56,
 };
 
-const StyledCheckCircleOutline = styled(CheckCircleOutline)(statusIconStyle);
+const StyledCheckCircleOutline = styled(CheckCircleOutlined)(statusIconStyle);
 
-const StyledErrorOutline = styled(ErrorOutline)(statusIconStyle);
+const StyledErrorOutline = styled(ErrorOutlined)(statusIconStyle);
 
 const StyledHourglassEmpty = styled(HourglassEmpty)(statusIconStyle);
+
+const BoldTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
+const StyledTextField = styled(TextField)({
+  maxWidth: 240,
+});
+
+const SummaryRowStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+  justifyContent: "space-between",
+}));
+
+const AmountTypography = styled(Typography)({
+  flexShrink: 0,
+});
+
+const TotalStack = styled(Stack)({
+  alignItems: "center",
+  justifyContent: "space-between",
+});
+
+const InfoRowStack = styled(Stack)(({ theme }) => ({
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(2),
+}));
+
+const InfoValueStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
+const StyledTypography = styled(Typography)({
+  wordBreak: "break-all",
+});
 
 const STATUS_ICON = {
   error: StyledErrorOutline,
   pending: StyledHourglassEmpty,
   success: StyledCheckCircleOutline,
 } as const;
-
-const StyledTypography = styled(Typography)({
-  wordBreak: "break-all",
-});
 
 const SUCCESS_ORDER_STATUSES: OrderResponse["orderStatus"][] = [
   "OrderDelivered",
@@ -94,24 +127,19 @@ const InfoRow = ({
   label: string;
   value: React.ReactNode;
 }) => (
-  <Stack
-    direction="row"
-    justifyContent="space-between"
-    alignItems="center"
-    gap={2}
-  >
-    <Typography color="text.secondary" variant="body2">
+  <InfoRowStack direction="row">
+    <Typography color="textSecondary" variant="body2">
       {label}
     </Typography>
-    <Stack direction="row" alignItems="center" gap={1}>
+    <InfoValueStack direction="row">
       {typeof value === "string" ? (
         <StyledTypography variant="body2">{value}</StyledTypography>
       ) : (
         value
       )}
       {action}
-    </Stack>
-  </Stack>
+    </InfoValueStack>
+  </InfoRowStack>
 );
 
 interface OrderModeOrganizationSlugCompleteProps {
@@ -256,19 +284,10 @@ const OrderModeOrganizationSlugComplete = ({
         <StyledCardContent>
           <StatusIcon color={status === "pending" ? "warning" : status} />
           <Stack>
-            <Typography
-              fontWeight="bold"
-              gutterBottom
-              textAlign="center"
-              variant="h5"
-            >
+            <BoldTypography align="center" gutterBottom variant="h5">
               {tOrder(`complete.${status}.title`)}
-            </Typography>
-            <Typography
-              color="text.secondary"
-              textAlign="center"
-              variant="body2"
-            >
+            </BoldTypography>
+            <Typography align="center" color="textSecondary" variant="body2">
               {tOrder(`complete.${status}.subtitle`)}
             </Typography>
           </Stack>
@@ -289,20 +308,15 @@ const OrderModeOrganizationSlugComplete = ({
             <StyledCardContent>
               <Stack>
                 <Typography
-                  color="text.secondary"
-                  textAlign="center"
+                  align="center"
+                  color="textSecondary"
                   variant="caption"
                 >
                   {tOrder("complete.pickupNumber")}
                 </Typography>
-                <Typography
-                  color="primary"
-                  fontWeight="bold"
-                  textAlign="center"
-                  variant="h2"
-                >
+                <BoldTypography align="center" color="primary" variant="h2">
                   {order.orderNumber}
-                </Typography>
+                </BoldTypography>
               </Stack>
               <Button
                 onClick={() =>
@@ -322,21 +336,16 @@ const OrderModeOrganizationSlugComplete = ({
           {showPickupInfo && organization && (
             <Card variant="outlined">
               <StyledCardContent>
-                <Typography
-                  color="text.secondary"
-                  fontWeight="bold"
-                  variant="subtitle2"
-                >
+                <BoldTypography color="textSecondary" variant="subtitle2">
                   {tOrder("complete.pickupLocation")}
-                </Typography>
-                <TextField
+                </BoldTypography>
+                <StyledTextField
                   label={tOrder("organizationSlug.label")}
                   size="small"
                   slotProps={{
                     input: { readOnly: true },
                     inputLabel: { shrink: true },
                   }}
-                  sx={{ maxWidth: 240 }}
                   value={organization.name}
                 />
                 <LocationDetails organization={organization} showMap={false} />
@@ -345,69 +354,52 @@ const OrderModeOrganizationSlugComplete = ({
           )}
           <Card variant="outlined">
             <StyledCardContent>
-              <Typography
-                color="text.secondary"
-                fontWeight="bold"
-                variant="subtitle2"
-              >
+              <BoldTypography color="textSecondary" variant="subtitle2">
                 {tOrder("complete.summary.title")}
-              </Typography>
+              </BoldTypography>
               {order.items.map((item) => (
-                <Stack
-                  direction="row"
-                  gap={1}
-                  justifyContent="space-between"
-                  key={item.id}
-                >
+                <SummaryRowStack direction="row" key={item.id}>
                   <Typography variant="body2">
                     {getOrderItemName(item)} {tCommon("multiply")}{" "}
                     {item.orderQuantity}
                   </Typography>
-                  <Typography flexShrink={0} variant="body2">
+                  <AmountTypography variant="body2">
                     {formatMoney(
                       Number(item.unitPrice) * item.orderQuantity,
                       currency,
                     )}
-                  </Typography>
-                </Stack>
+                  </AmountTypography>
+                </SummaryRowStack>
               ))}
               {discount > 0 && (
-                <Stack direction="row" justifyContent="space-between" gap={1}>
+                <SummaryRowStack direction="row">
                   <Typography variant="body2">
                     {tOrder("complete.summary.discount")}
                     {order.discountCode
                       ? `${tCommon("parenthesisOpen")}${order.discountCode}${tCommon("parenthesisClose")}`
                       : ""}
                   </Typography>
-                  <Typography color="primary" flexShrink={0} variant="body2">
+                  <AmountTypography color="primary" variant="body2">
                     -{formatMoney(discount, currency)}
-                  </Typography>
-                </Stack>
+                  </AmountTypography>
+                </SummaryRowStack>
               )}
               <Divider />
-              <Stack
-                alignItems="center"
-                direction="row"
-                justifyContent="space-between"
-              >
-                <Typography fontWeight="bold" variant="subtitle1">
+              <TotalStack direction="row">
+                <BoldTypography variant="subtitle1">
                   {tOrder("complete.summary.total")}
-                </Typography>
-                <Typography color="primary" fontWeight="bold" variant="h6">
+                </BoldTypography>
+                <BoldTypography color="primary" variant="h6">
                   {formatMoney(totalAmount, currency)}
-                </Typography>
-              </Stack>
+                </BoldTypography>
+              </TotalStack>
             </StyledCardContent>
           </Card>
           <Card variant="outlined">
             <StyledCardContent>
-              <Typography
-                color="text.secondary"
-                fontWeight="bold"
-                variant="subtitle2"
-              >
+              <BoldTypography color="textSecondary" variant="subtitle2">
                 {tOrder("complete.transaction.title")}
-              </Typography>
+              </BoldTypography>
               <InfoRow
                 label={tOrder("complete.transaction.status")}
                 value={
@@ -475,13 +467,9 @@ const OrderModeOrganizationSlugComplete = ({
           {invoice && (
             <Card variant="outlined">
               <StyledCardContent>
-                <Typography
-                  color="text.secondary"
-                  fontWeight="bold"
-                  variant="subtitle2"
-                >
+                <BoldTypography color="textSecondary" variant="subtitle2">
                   {tOrder("complete.invoice.title")}
-                </Typography>
+                </BoldTypography>
                 <InfoRow
                   label={tOrder("complete.invoice.status.label")}
                   value={

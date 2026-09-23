@@ -60,9 +60,31 @@ import {
   handleMouseUpPassword,
 } from "@/utils/password";
 
+const TitleTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
+const NameStack = styled(Stack)({
+  width: "100%",
+});
+
+const OptionsStack = styled(Stack)(({ theme }) => ({
+  width: "100%",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
 const StyledTypography = styled(Typography)({
   whiteSpace: "pre-line",
 });
+
+const SwitchAuthStack = styled(Stack)(({ theme }) => ({
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+}));
 
 // const today = dayjs();
 
@@ -221,22 +243,16 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
     <FormCard component="form" onSubmit={onSubmit}>
       <StyledCardHeader
         title={
-          <Typography
-            color="primary"
-            fontWeight="bold"
-            textAlign="center"
-            variant="h6"
-          >
+          <TitleTypography align="center" color="primary" variant="h6">
             {tAuth("signUp.label")}
-          </Typography>
+          </TitleTypography>
         }
       />
       <StyledCardContent>
         <GoogleButton action="signUp" redirectTo={redirectTo} />
         <Divider flexItem>{tAuth("or")}</Divider>
         <UploadAvatars uploadKey={SIGN_UP_AVATAR_KEY} />
-        <Stack
-          width="100%"
+        <NameStack
           direction={locale === LocaleEnum.En ? "row-reverse" : "row"}
           spacing={2}
         >
@@ -259,7 +275,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
             required
             {...register("firstName")}
           />
-        </Stack>
+        </NameStack>
         {/* <Controller
           control={control}
           name="birthDate"
@@ -461,13 +477,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
             />
           </Grid>
         </Grid> */}
-        <Stack
-          width="100%"
-          flexDirection="row"
-          justifyContent="space-between"
-          alignItems="center"
-          gap={1}
-        >
+        <OptionsStack>
           <FormControlLabel
             control={
               <Checkbox
@@ -479,7 +489,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
             label={tAuth("emailUpdates")}
             slotProps={{ typography: { variant: "body2" } }}
           />
-        </Stack>
+        </OptionsStack>
       </StyledCardContent>
       <StyledCardActions disableSpacing>
         <Button
@@ -494,7 +504,7 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
         </Button>
         <StyledTypography
           align="center"
-          color="text.secondary"
+          color="textSecondary"
           variant="caption"
         >
           {tAuth.rich("legalConsent", {
@@ -504,12 +514,12 @@ const AuthSignUp = ({ locale, redirectTo }: AuthSignUpProps) => {
           })}
         </StyledTypography>
         <Divider flexItem />
-        <Stack flexDirection="row" alignItems="center" gap={0.5}>
+        <SwitchAuthStack>
           <Typography variant="body2">{tAuth("hasAccount")}</Typography>
           <Link href={signInHref} underline="hover" variant="body2">
             {tAuth("signIn.label")}
           </Link>
-        </Stack>
+        </SwitchAuthStack>
       </StyledCardActions>
     </FormCard>
   );

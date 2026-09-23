@@ -77,6 +77,11 @@ const HintTypography = styled(Typography)(({ theme }) => ({
   zIndex: 1,
 }));
 
+const StyledStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
 const HighlightTypography = styled(Typography, {
   shouldForwardProp: (prop) => prop !== "highlight",
 })<TypographyProps<"span"> & { highlight: boolean }>(
@@ -159,7 +164,9 @@ const CouponAutocomplete = ({
       }
       id="coupon-autocomplete"
       inputValue={couponCode || code}
-      isOptionEqualToValue={(option, selected) => option.code === selected.code}
+      isOptionEqualToValue={(option, selected) =>
+        option.code === getOptionLabel(selected)
+      }
       onBlur={onBlur}
       onChange={(_, newValue) => {
         if (!newValue) setCode("");
@@ -212,12 +219,13 @@ const CouponAutocomplete = ({
                   : "";
             }}
             slotProps={{
+              ...params.slotProps,
               htmlInput: {
-                ...params.inputProps,
+                ...params.slotProps.htmlInput,
                 autoComplete: "new-password",
               },
               input: {
-                ...params.InputProps,
+                ...params.slotProps.input,
                 endAdornment: (
                   <>
                     {loading ? (
@@ -226,7 +234,7 @@ const CouponAutocomplete = ({
                       !!cartItemsList.length &&
                       !textFieldProps.error &&
                       couponCode && (
-                        <Stack direction="row" alignItems="center" gap={1}>
+                        <StyledStack direction="row">
                           {value && (
                             <Typography color="primary" variant="subtitle2">
                               {value.discountType === "percentage"
@@ -235,10 +243,10 @@ const CouponAutocomplete = ({
                             </Typography>
                           )}
                           <CheckCircle color="success" fontSize="small" />
-                        </Stack>
+                        </StyledStack>
                       )
                     )}
-                    {params.InputProps.endAdornment}
+                    {params.slotProps.input.endAdornment}
                   </>
                 ),
               },

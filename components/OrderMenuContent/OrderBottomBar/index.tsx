@@ -45,6 +45,16 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme, variant }) => ({
   }),
 }));
 
+const StyledStack = styled(Stack)(({ theme }) => ({
+  flex: 1,
+  alignItems: "center",
+  gap: theme.spacing(2),
+}));
+
+const StyledTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
 const StyledChip = styled(Chip)(({ theme }) => ({
   borderColor: theme.vars.palette.background.paper,
   color: theme.vars.palette.background.paper,
@@ -72,14 +82,14 @@ const OrderBottomBar = () => {
     <Fade in={!isCartEmpty} unmountOnExit>
       <StyledContainer disableGutters maxWidth="sm">
         <StyledButton href={cartHref} variant="outlined">
-          <Stack flex={1} direction="row" alignItems="center" gap={2}>
+          <StyledStack direction="row">
             <Badge badgeContent={cartTotalQuantity} color="secondary">
               <ShoppingCart />
             </Badge>
-            <Typography fontWeight="bold" variant="subtitle1">
+            <StyledTypography variant="subtitle1">
               {formatMoney(cartTotalAmount, cartCurrency)}
-            </Typography>
-          </Stack>
+            </StyledTypography>
+          </StyledStack>
           <Chip
             color="primary"
             label={tOrder("cart.view")}

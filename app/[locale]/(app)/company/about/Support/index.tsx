@@ -7,18 +7,42 @@ import {
   GroupsOutlined,
 } from "@mui/icons-material";
 import { Box, Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { type CSSObject, styled } from "@mui/material/styles";
+
+const StyledBox = styled(Box)(({ theme }) => ({
+  paddingTop: theme.spacing(10),
+  paddingBottom: theme.spacing(10),
+  backgroundColor: theme.vars.palette.background.default,
+
+  [theme.breakpoints.up("sm")]: {
+    paddingTop: theme.spacing(14),
+    paddingBottom: theme.spacing(14),
+  },
+}));
+
+const iconStyle: CSSObject = {
+  fontSize: 40,
+};
+
+const StyledFeedbackOutlined = styled(FeedbackOutlined)(iconStyle);
+
+const StyledTypography = styled(Typography)({
+  fontWeight: 700,
+});
+
+const StyledGroupsOutlined = styled(GroupsOutlined)(iconStyle);
+
+const StyledFavoriteOutlined = styled(FavoriteOutlined)(iconStyle);
 
 const Support = () => (
-  <Box sx={{ py: { xs: 10, sm: 14 }, bgcolor: "background.default" }}>
+  <StyledBox>
     <Container disableGutters maxWidth="lg">
       <Grid container spacing={6}>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <FeedbackOutlined sx={{ fontSize: 40, color: "primary.main" }} />
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Give feedback
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <StyledFeedbackOutlined color="primary" />
+            <StyledTypography variant="h5">Give feedback</StyledTypography>
+            <Typography color="textSecondary" variant="body2">
               Found a bug or have a feature request? Let us know by opening an
               issue on GitHub. We read every submission.
             </Typography>
@@ -37,11 +61,9 @@ const Support = () => (
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <GroupsOutlined sx={{ fontSize: 40, color: "primary.main" }} />
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
-              Join the community
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <StyledGroupsOutlined color="primary" />
+            <StyledTypography variant="h5">Join the community</StyledTypography>
+            <Typography color="textSecondary" variant="body2">
               Whether you are a developer, designer, or coffee enthusiast, there
               is a place for you in the Biru community.
             </Typography>
@@ -52,11 +74,11 @@ const Support = () => (
         </Grid>
         <Grid size={{ xs: 12, md: 4 }}>
           <Stack spacing={2}>
-            <FavoriteOutlined sx={{ fontSize: 40, color: "error.main" }} />
-            <Typography variant="h5" sx={{ fontWeight: 700 }}>
+            <StyledFavoriteOutlined color="error" />
+            <StyledTypography variant="h5">
               Support us financially
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            </StyledTypography>
+            <Typography color="textSecondary" variant="body2">
               If you use Biru in a revenue-generating product, consider
               supporting our sustainability via Open Collective.
             </Typography>
@@ -75,7 +97,7 @@ const Support = () => (
         </Grid>
       </Grid>
     </Container>
-  </Box>
+  </StyledBox>
 );
 
 export default Support;

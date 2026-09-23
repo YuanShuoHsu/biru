@@ -8,8 +8,12 @@ import LinkSection from "./LinkSection";
 import Newsletter from "./Newsletter";
 import SocialLinks from "./SocialLinks";
 
-import { Box, Container, Divider, Stack } from "@mui/material";
+import { Box, type BoxProps, Container, Divider, Stack } from "@mui/material";
 import { styled } from "@mui/material/styles";
+
+const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
+  backgroundColor: theme.vars.palette.background.paper,
+}));
 
 const StyledContainer = styled(Container)(({ theme }) => ({
   padding: theme.spacing(5, 2),
@@ -18,23 +22,24 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
+const StyledStack = styled(Stack)(({ theme }) => ({
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
 const Footer = () => (
-  <Box component="footer" bgcolor="background.paper">
+  <StyledBox component="footer">
     <StyledContainer disableGutters maxWidth="lg">
       <Newsletter />
       <LinkSection />
       <Divider />
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        justifyContent="space-between"
-        alignItems="center"
-        gap={1}
-      >
+      <StyledStack direction={{ xs: "column", sm: "row" }}>
         <Copyright />
         <SocialLinks />
-      </Stack>
+      </StyledStack>
     </StyledContainer>
-  </Box>
+  </StyledBox>
 );
 
 export default Footer;

@@ -55,6 +55,18 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const StartStack = styled(Stack)(({ theme }) => ({
+  minWidth: 0,
+  flexDirection: "row",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
+const EndStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  gap: theme.spacing(0.5),
+}));
+
 const HideAppBar = () => {
   const pathname = usePathname();
 
@@ -69,7 +81,7 @@ const HideAppBar = () => {
   return (
     <StyledAppBar position="fixed" trigger={trigger}>
       <StyledToolbar>
-        <Stack minWidth={0} flexDirection="row" alignItems="center" gap={1}>
+        <StartStack>
           {!isMaintenanceMode && (
             <IconButton
               aria-label="open drawer"
@@ -81,8 +93,8 @@ const HideAppBar = () => {
             </IconButton>
           )}
           <BrandMark />
-        </Stack>
-        <Stack direction="row" alignItems="center" gap={0.5}>
+        </StartStack>
+        <EndStack direction="row">
           <ThemeSwitcher />
           <Suspense>
             <LanguageMenu />
@@ -93,7 +105,7 @@ const HideAppBar = () => {
             </Suspense>
           )}
           {pathname.startsWith("/order/") && <CartIconButton />}
-        </Stack>
+        </EndStack>
       </StyledToolbar>
     </StyledAppBar>
   );

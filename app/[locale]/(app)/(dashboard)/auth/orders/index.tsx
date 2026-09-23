@@ -49,9 +49,38 @@ const ORDER_MODE_PATH: Record<UserOrderResponse["mode"], string> = {
   pickup: ORDER_MODE.Pickup,
 };
 
+const StyledTypography = styled(Typography)({
+  fontWeight: "bold",
+});
+
+const SummaryStack = styled(Stack)(({ theme }) => ({
+  flex: 1,
+  gap: theme.spacing(1),
+}));
+
+const SummaryRowStack = styled(Stack)(({ theme }) => ({
+  justifyContent: "space-between",
+  alignItems: "center",
+  gap: theme.spacing(1),
+}));
+
+const DetailsStack = styled(Stack)(({ theme }) => ({
+  padding: theme.spacing(2),
+  gap: theme.spacing(1),
+}));
+
 const StyledChip = styled(Chip)({
   alignSelf: "flex-start",
 });
+
+const ItemRowStack = styled(Stack)(({ theme }) => ({
+  justifyContent: "space-between",
+  gap: theme.spacing(1),
+}));
+
+const ActionsStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
 
 interface OrdersProps {
   orders: UserOrderListResponse | null;
@@ -143,14 +172,14 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
     <FormCard>
       <StyledCardHeader
         title={
-          <Typography color="primary" fontWeight="bold" variant="h6">
+          <StyledTypography color="primary" variant="h6">
             {tAuth("orders.label")}
-          </Typography>
+          </StyledTypography>
         }
       />
       <StyledCardContent>
         {orders.length === 0 && (
-          <Typography color="text.secondary" variant="body2">
+          <Typography color="textSecondary" variant="body2">
             {tAuth("orders.empty")}
           </Typography>
         )}
@@ -171,48 +200,34 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
               key={order.id}
               onChange={handleChange(order.id)}
               summary={
-                <Stack flex={1} gap={1}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <Typography fontWeight="bold" variant="subtitle2">
+                <SummaryStack>
+                  <SummaryRowStack direction="row">
+                    <StyledTypography variant="subtitle2">
                       {order.seller.name}
-                    </Typography>
+                    </StyledTypography>
                     <Chip
                       color={STATUS_COLORS[order.orderStatus]}
                       label={tAuth(`orders.status.${order.orderStatus}`)}
                       size="small"
                       variant="outlined"
                     />
-                  </Stack>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    <Typography color="text.secondary" variant="caption">
+                  </SummaryRowStack>
+                  <SummaryRowStack direction="row">
+                    <Typography color="textSecondary" variant="caption">
                       {dayjs(order.createdAt)
                         .tz(STORE_TIMEZONE)
                         .format("YYYY/MM/DD HH:mm:ss")}
                     </Typography>
-                    <Typography
-                      color="primary"
-                      fontWeight="bold"
-                      variant="subtitle2"
-                    >
+                    <StyledTypography color="primary" variant="subtitle2">
                       {tOrder("complete.summary.total")}{" "}
                       {formatMoney(totalAmount, currency)}
-                    </Typography>
-                  </Stack>
-                </Stack>
+                    </StyledTypography>
+                  </SummaryRowStack>
+                </SummaryStack>
               }
             >
-              <Stack padding={2} gap={1}>
-                <Typography color="text.secondary" variant="caption">
+              <DetailsStack>
+                <Typography color="textSecondary" variant="caption">
                   {tOrder("complete.transaction.orderNo")}{" "}
                   {order.confirmationNumber || order.orderNumber}
                 </Typography>
@@ -223,7 +238,7 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                   variant="outlined"
                 />
                 {order.pickupTime && (
-                  <Typography color="text.secondary" variant="caption">
+                  <Typography color="textSecondary" variant="caption">
                     {tOrder("complete.transaction.pickupTime")}{" "}
                     {dayjs(order.pickupTime)
                       .tz(STORE_TIMEZONE)
@@ -231,12 +246,7 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                   </Typography>
                 )}
                 {order.items.map((item) => (
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    gap={1}
-                    key={item.id}
-                  >
+                  <ItemRowStack direction="row" key={item.id}>
                     <Typography variant="body2">
                       {getOrderItemName(item)} {tCommon("multiply")}{" "}
                       {item.orderQuantity}
@@ -247,10 +257,10 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                         currency,
                       )}
                     </Typography>
-                  </Stack>
+                  </ItemRowStack>
                 ))}
                 {discount > 0 && (
-                  <Stack direction="row" justifyContent="space-between" gap={1}>
+                  <ItemRowStack direction="row">
                     <Typography variant="body2">
                       {tOrder("complete.summary.discount")}
                       {order.discountCode
@@ -260,24 +270,19 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                     <Typography color="primary" variant="body2">
                       -{formatMoney(discount, currency)}
                     </Typography>
-                  </Stack>
+                  </ItemRowStack>
                 )}
                 {order.invoice?.invoiceNumber && (
-                  <Typography color="text.secondary" variant="caption">
+                  <Typography color="textSecondary" variant="caption">
                     {tOrder("complete.invoice.invoiceNumber")}{" "}
                     {order.invoice.invoiceNumber}
                   </Typography>
                 )}
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  gap={1}
-                  justifyContent="space-between"
-                >
-                  <Typography color="text.secondary" variant="body2">
+                <SummaryRowStack direction="row">
+                  <Typography color="textSecondary" variant="body2">
                     {tOrder(`checkout.payment.${order.paymentMethod}`)}
                   </Typography>
-                  <Stack direction="row" gap={1}>
+                  <ActionsStack direction="row">
                     <Button
                       href={getHref(
                         `/order/${ORDER_MODE_PATH[order.mode]}/${order.seller.slug}/complete`,
@@ -299,9 +304,9 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                     >
                       {getReorderLabel(order.mode)}
                     </Button>
-                  </Stack>
-                </Stack>
-              </Stack>
+                  </ActionsStack>
+                </SummaryRowStack>
+              </DetailsStack>
             </CustomizedAccordions>
           );
         })}

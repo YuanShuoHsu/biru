@@ -12,22 +12,40 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
   Box,
+  type BoxProps,
   Container,
   type ContainerProps,
   MenuItem,
   Stack,
   TextField,
   Typography,
+  type TypographyProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { OrganizationResponse } from "@/types/organizations";
+
+const StyledBox = styled(Box)<BoxProps>(({ theme }) => ({
+  backgroundColor: theme.vars.palette.background.paper,
+}));
 
 const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
   flexDirection: "column",
   gap: theme.spacing(5),
+}));
+
+const HeaderStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
+const StyledTypography = styled(Typography)<TypographyProps>({
+  fontWeight: "bold",
+});
+
+const ContentStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(2),
 }));
 
 const StyledOrganizationSelect = styled(TextField)({
@@ -55,30 +73,20 @@ const Location = ({ organizations }: LocationProps) => {
   const tCompanyAboutLocation = useTranslations("company.about.location");
 
   return (
-    <Box bgcolor="background.paper" component="section">
+    <StyledBox component="section">
       <StyledContainer disableGutters maxWidth="lg">
-        <Stack gap={1}>
-          <Typography
-            color="primary.main"
-            component="h2"
-            fontWeight="bold"
-            variant="body2"
-          >
+        <HeaderStack>
+          <StyledTypography color="primary" component="h2" variant="body2">
             {tCompanyAboutLocation("label")}
-          </Typography>
-          <Typography
-            color="text.primary"
-            component="h2"
-            fontWeight="bold"
-            variant="h5"
-          >
+          </StyledTypography>
+          <StyledTypography component="h2" variant="h5">
             {tCompanyAboutLocation("titlePrefix")}
             <GradientBox component="span">
               {tCompanyAboutLocation("titleHighlight")}
             </GradientBox>
-          </Typography>
-        </Stack>
-        <Stack gap={2}>
+          </StyledTypography>
+        </HeaderStack>
+        <ContentStack>
           <StyledOrganizationSelect
             label={tCompanyAboutLocation("selectOrganization.label")}
             select
@@ -115,9 +123,9 @@ const Location = ({ organizations }: LocationProps) => {
             ))}
           </StyledOrganizationSelect>
           <LocationDetails organization={organization} />
-        </Stack>
+        </ContentStack>
       </StyledContainer>
-    </Box>
+    </StyledBox>
   );
 };
 

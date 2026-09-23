@@ -1,9 +1,9 @@
+import { StyledStack } from "./styled";
+
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderTableNumberChip from "@/components/OrderTableNumberChip";
 
 import { ORDER_MODE } from "@/constants/orderMode";
-
-import { Stack } from "@mui/material";
 
 interface SubheaderOrderModeOrganizationSlugCompletePageProps {
   params: Promise<{ mode: string; organizationSlug: string }>;
@@ -20,12 +20,7 @@ const SubheaderOrderModeOrganizationSlugCompletePage = async ({
   if (mode !== ORDER_MODE.DineIn || !tableNumber || !partySize) return null;
 
   return (
-    <Stack
-      direction="row"
-      justifyContent={{ sm: "flex-end" }}
-      alignItems="center"
-      gap={2}
-    >
+    <StyledStack direction="row">
       <OrderTableNumberChip tableNumber={tableNumber} />
       <OrderPartySizeTextField
         organizationSlug={organizationSlug}
@@ -33,7 +28,7 @@ const SubheaderOrderModeOrganizationSlugCompletePage = async ({
         readOnly
         tableNumber={tableNumber}
       />
-    </Stack>
+    </StyledStack>
   );
 };
 

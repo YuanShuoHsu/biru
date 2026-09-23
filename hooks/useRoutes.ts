@@ -24,7 +24,7 @@ import {
   Email,
   Gavel,
   GroupAdd,
-  HelpOutline,
+  HelpOutlined,
   Info,
   LocalMall,
   Lock,
@@ -159,7 +159,7 @@ const routes: Route[] = [
         segment: "delete-account",
       },
       {
-        icon: HelpOutline,
+        icon: HelpOutlined,
         label: "auth.forgotPassword.label",
         segment: "forgot-password",
       },

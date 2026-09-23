@@ -11,8 +11,13 @@ import { useRouter } from "@/i18n/navigation";
 
 import { MenuBook, ShoppingCartCheckout } from "@mui/icons-material";
 import { Button, Stack } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
+
+const StyledStack = styled(Stack)({
+  justifyContent: "space-between",
+});
 
 const OrderModeOrganizationSlugCart = () => {
   const hasInvalidItems = useCartHasInvalidItems();
@@ -35,7 +40,7 @@ const OrderModeOrganizationSlugCart = () => {
   return (
     <>
       <CartAccordion coupon={null} defaultExpanded />
-      <Stack direction="row" justifyContent="space-between">
+      <StyledStack direction="row">
         <Button
           onClick={() =>
             router.push(`/order/${mode}/${organizationSlug}${query}`)
@@ -55,7 +60,7 @@ const OrderModeOrganizationSlugCart = () => {
         >
           {tOrder("cart.next")}
         </Button>
-      </Stack>
+      </StyledStack>
     </>
   );
 };
