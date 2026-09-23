@@ -411,7 +411,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         </Typography>
       )}
       {tagLabel && (
-        <Typography color="warning" variant="caption">
+        <Typography color="error" variant="caption">
           {tagLabel}
         </Typography>
       )}
