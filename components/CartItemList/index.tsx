@@ -28,18 +28,14 @@ const CartItemList = ({ compact = false }: CartItemListProps) => {
             {tCommon("empty")}
           </Typography>
         ) : (
-          cartItemsList.map((item, index) => {
-            const { menuItemId, modifiers, addOns } = item;
-
-            return (
-              <Fragment key={getItemKey(menuItemId, modifiers, addOns)}>
-                <CartItemRow compact={compact} item={item} />
-                {index < cartItemsList.length - 1 && (
-                  <Divider component="li" variant="inset" />
-                )}
-              </Fragment>
-            );
-          })
+          cartItemsList.map((item, index) => (
+            <Fragment key={getItemKey(item)}>
+              <CartItemRow compact={compact} item={item} />
+              {index < cartItemsList.length - 1 && (
+                <Divider component="li" variant="inset" />
+              )}
+            </Fragment>
+          ))
         )}
       </NoSsr>
     </List>

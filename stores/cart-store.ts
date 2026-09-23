@@ -1,6 +1,7 @@
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
+import type { ServingTemperature } from "@/types/menus";
 import type { OrderMode } from "@/types/orderMode";
 import type { Organization } from "@/types/organizations";
 
@@ -9,6 +10,7 @@ import { getItemKey } from "@/utils/menus";
 export interface CartAddOn {
   menuItemId: string;
   modifiers: Record<string, string[]>;
+  servingTemperature: ServingTemperature | null;
 }
 
 export interface CartItem {
@@ -16,6 +18,7 @@ export interface CartItem {
   quantity: number;
   modifiers: Record<string, string[]>;
   addOns: CartAddOn[];
+  servingTemperature: ServingTemperature | null;
 }
 
 type CartItemsMap = Record<string, CartItem>;
@@ -105,11 +108,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
           ...initState,
           addCartItem: (item) => {
             const { cartItemsMap } = get();
-            const itemKey = getItemKey(
-              item.menuItemId,
-              item.modifiers,
-              item.addOns,
-            );
+            const itemKey = getItemKey(item);
             const existing = cartItemsMap[itemKey];
 
             if (existing) {
@@ -127,19 +126,11 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
           clearCart: () => setActiveCart({}),
           deleteCartItem: (item) => {
             const newMap = { ...get().cartItemsMap };
-            delete newMap[
-              getItemKey(item.menuItemId, item.modifiers, item.addOns)
-            ];
+            delete newMap[getItemKey(item)];
             setActiveCart(newMap);
           },
           getCartItemTotalQuantity: (menuItemId, excludedItem) => {
-            const excludedKey =
-              excludedItem &&
-              getItemKey(
-                excludedItem.menuItemId,
-                excludedItem.modifiers,
-                excludedItem.addOns,
-              );
+            const excludedKey = excludedItem && getItemKey(excludedItem);
 
             return Object.entries(get().cartItemsMap).reduce(
               (sum, [key, { addOns, menuItemId: id, quantity }]) => {
@@ -161,11 +152,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
             const cartItemsMap: CartItemsMap = {};
 
             for (const item of items) {
-              const itemKey = getItemKey(
-                item.menuItemId,
-                item.modifiers,
-                item.addOns,
-              );
+              const itemKey = getItemKey(item);
               const existing = cartItemsMap[itemKey];
 
               cartItemsMap[itemKey] = existing
@@ -198,16 +185,8 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
           setLastOrderId: (orderId) => set({ lastOrderId: orderId }),
           updateCartItem: (oldItem, newItem) => {
             const { cartItemsMap } = get();
-            const oldKey = getItemKey(
-              oldItem.menuItemId,
-              oldItem.modifiers,
-              oldItem.addOns,
-            );
-            const newKey = getItemKey(
-              newItem.menuItemId,
-              newItem.modifiers,
-              newItem.addOns,
-            );
+            const oldKey = getItemKey(oldItem);
+            const newKey = getItemKey(newItem);
 
             if (oldKey === newKey) {
               setActiveCart({ ...cartItemsMap, [oldKey]: newItem });
@@ -243,7 +222,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
           checkoutKeys,
           lastOrderId,
         }),
-        version: 7,
+        version: 8,
         migrate: () => ({ carts: {} }),
       },
     ),

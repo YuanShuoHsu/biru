@@ -105,5 +105,8 @@
   "telephone": {
     "invalid": "電話番号が無効です。",
     "required": "電話番号は必須です。"
+  },
+  "servingTemperature": {
+    "notSelected": "温度を選択してください。"
   }
 }

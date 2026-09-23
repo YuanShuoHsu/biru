@@ -38,6 +38,7 @@ import type {
   ItemAvailability,
   OrderMenuItem,
   OrderMenuModifierGroup,
+  ServingTemperature,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
@@ -48,10 +49,13 @@ import {
   getAddOnItems,
   getAddOnPrice,
   getAddOnsCap,
+  getApplicableModifierGroups,
+  getDefaultServingTemperature,
   getGroupsExtraCost,
   getOfferStock,
   hasUnsatisfiableModifierGroup,
   isLowStock,
+  isMenuItemUnsatisfiable,
 } from "@/utils/menus";
 
 const ImageBox = styled(Box)(({ theme }) => ({
@@ -104,6 +108,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     suitableForDiet,
     nutrition,
     modifierGroups,
+    servingTemperatures,
   } = menuItem;
   const offer = offers[0];
   const basePrice = Number(offer?.price || 0);
@@ -144,6 +149,9 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   } = useForm<AddToCartFormInput>({
     defaultValues: {
       quantity: cartItem?.quantity || 1,
+      servingTemperature:
+        cartItem?.servingTemperature ||
+        getDefaultServingTemperature(servingTemperatures),
       choices: cartItem
         ? {
             ...cartItem.modifiers,
@@ -151,6 +159,14 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               ({ menuItemId }) => menuItemId,
             ),
           }
+        : {},
+      addOnServingTemperatures: cartItem
+        ? Object.fromEntries(
+            cartItem.addOns.map(({ menuItemId, servingTemperature }) => [
+              menuItemId,
+              servingTemperature,
+            ]),
+          )
         : {},
       addOnChoices: cartItem
         ? Object.fromEntries(
@@ -164,10 +180,27 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     resolver: zodResolver(addToCartFormSchema),
   });
 
-  const [choices = {}, addOnChoices = {}, rawQuantity = 1] = useWatch({
+  const [
+    servingTemperature = null,
+    choices = {},
+    addOnServingTemperatures = {},
+    addOnChoices = {},
+    rawQuantity = 1,
+  ] = useWatch({
     control,
-    name: ["choices", "addOnChoices", "quantity"],
+    name: [
+      "servingTemperature",
+      "choices",
+      "addOnServingTemperatures",
+      "addOnChoices",
+      "quantity",
+    ],
   });
+
+  const applicableModifierGroups = getApplicableModifierGroups(
+    modifierGroups,
+    servingTemperature,
+  );
 
   const addOnItems = useMemo(() => getAddOnItems(menuItem), [menuItem]);
 
@@ -176,14 +209,27 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     selectedAddOnIds.includes(id),
   );
 
-  const modifierExtraCost = getGroupsExtraCost(modifierGroups, choices);
+  const modifierExtraCost = getGroupsExtraCost(
+    applicableModifierGroups,
+    choices,
+  );
+
+  const getAddOnServingTemperature = ({
+    id,
+    servingTemperatures,
+  }: Pick<OrderMenuItem, "id" | "servingTemperatures">) =>
+    addOnServingTemperatures[id] ||
+    getDefaultServingTemperature(servingTemperatures);
 
   const addOnExtraCost = selectedAddOnItems.reduce(
     (sum, addOnItem) =>
       sum +
       getAddOnPrice(addOnItem) +
       getGroupsExtraCost(
-        addOnItem.modifierGroups,
+        getApplicableModifierGroups(
+          addOnItem.modifierGroups,
+          getAddOnServingTemperature(addOnItem),
+        ),
         addOnChoices[addOnItem.id] || {},
       ),
     0,
@@ -249,27 +295,72 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         shouldValidate: isSubmitted,
       });
 
-  const onSubmit = handleSubmit(({ choices, addOnChoices }) => {
-    if (quantity <= 0) return;
-
-    const modifiers = Object.fromEntries(
-      Object.entries(choices).filter(([key]) => key !== ADD_ON_OPTION_ID),
+  // 換溫度後不再適用的群組，連同已選的選項一起清掉
+  const pickApplicableChoices = (
+    selections: Record<string, string[]>,
+    groups: OrderMenuModifierGroup[],
+    next: ServingTemperature,
+  ) =>
+    Object.fromEntries(
+      Object.entries(selections).filter(
+        ([groupId]) =>
+          groupId === ADD_ON_OPTION_ID ||
+          getApplicableModifierGroups(groups, next).some(
+            ({ id }) => id === groupId,
+          ),
+      ),
     );
-    const addOns = selectedAddOnItems.map(({ id }) => ({
-      menuItemId: id,
-      modifiers: addOnChoices[id] || {},
-    }));
 
-    const newItem = { menuItemId: id, quantity, modifiers, addOns };
+  const handleServingTemperatureChange = (next: ServingTemperature) => {
+    setValue("servingTemperature", next, { shouldValidate: isSubmitted });
+    setValue("choices", pickApplicableChoices(choices, modifierGroups, next), {
+      shouldValidate: isSubmitted,
+    });
+  };
 
-    if (cartItem) {
-      updateCartItem(cartItem, newItem);
-    } else {
-      addCartItem(newItem);
-    }
+  const handleAddOnServingTemperatureChange =
+    (addOnId: string, groups: OrderMenuModifierGroup[]) =>
+    (next: ServingTemperature) => {
+      setValue(`addOnServingTemperatures.${addOnId}`, next, {
+        shouldValidate: isSubmitted,
+      });
+      setValue(
+        `addOnChoices.${addOnId}`,
+        pickApplicableChoices(addOnChoices[addOnId] || {}, groups, next),
+        { shouldValidate: isSubmitted },
+      );
+    };
 
-    closeDialog();
-  });
+  const onSubmit = handleSubmit(
+    ({ servingTemperature, choices, addOnChoices }) => {
+      if (quantity <= 0) return;
+
+      const modifiers = Object.fromEntries(
+        Object.entries(choices).filter(([key]) => key !== ADD_ON_OPTION_ID),
+      );
+      const addOns = selectedAddOnItems.map((addOnItem) => ({
+        menuItemId: addOnItem.id,
+        modifiers: addOnChoices[addOnItem.id] || {},
+        servingTemperature: getAddOnServingTemperature(addOnItem),
+      }));
+
+      const newItem = {
+        addOns,
+        menuItemId: id,
+        modifiers,
+        quantity,
+        servingTemperature,
+      };
+
+      if (cartItem) {
+        updateCartItem(cartItem, newItem);
+      } else {
+        addCartItem(newItem);
+      }
+
+      closeDialog();
+    },
+  );
 
   const getUnavailableLabel = (
     availability: ItemAvailability | null | undefined,
@@ -326,6 +417,45 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
     return hints.length > 0 ? hints.join(tCommon("delimiter")) : null;
   };
+
+  const renderServingTemperatureGroup = (
+    options: ServingTemperature[],
+    value: ServingTemperature | null,
+    groups: OrderMenuModifierGroup[],
+    onValueChange: (next: ServingTemperature) => void,
+    error?: { message?: string },
+  ) => (
+    <RadioButtonsGroup
+      error={!!error}
+      fullWidth
+      helperText={error?.message}
+      label={tOrder("menuItem.servingTemperatures.label")}
+      onChange={(event, next) => onValueChange(next as ServingTemperature)}
+      options={options.map((option) => {
+        const unavailableLabel = hasUnsatisfiableModifierGroup(
+          groups,
+          option,
+          apiMode,
+        )
+          ? tCommon("soldOut")
+          : "";
+
+        return {
+          control: <Radio size="small" />,
+          disabled: !!unavailableLabel,
+          label: renderChoiceLabel(
+            tOrder(`menuItem.servingTemperatures.${option}`),
+            0,
+            unavailableLabel,
+            "",
+          ),
+          value: option,
+        };
+      })}
+      required
+      value={value || ""}
+    />
+  );
 
   const renderModifierGroup = (
     group: OrderMenuModifierGroup,
@@ -490,9 +620,19 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         </Stack>
       )}
       <Divider flexItem />
-      {modifierGroups.map((group, index) => (
+      {servingTemperatures.length > 0 &&
+        renderServingTemperatureGroup(
+          servingTemperatures,
+          servingTemperature,
+          modifierGroups,
+          handleServingTemperatureChange,
+          errors.servingTemperature,
+        )}
+      {applicableModifierGroups.map((group, index) => (
         <Fragment key={group.id}>
-          {index > 0 && <Divider flexItem variant="inset" />}
+          {(index > 0 || servingTemperatures.length > 0) && (
+            <Divider flexItem variant="inset" />
+          )}
           {renderModifierGroup(
             group,
             choices,
@@ -501,9 +641,9 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           )}
         </Fragment>
       ))}
-      {modifierGroups.length > 0 && addOnItems.length > 0 && (
-        <Divider flexItem variant="inset" />
-      )}
+      {(servingTemperatures.length > 0 ||
+        applicableModifierGroups.length > 0) &&
+        addOnItems.length > 0 && <Divider flexItem variant="inset" />}
       {addOnItems.length > 0 && (
         <CheckboxesGroup
           error={!!errors.choices?.[ADD_ON_OPTION_ID]}
@@ -514,8 +654,20 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             setValue(`choices.${ADD_ON_OPTION_ID}`, next)
           }
           options={addOnItems.map((addOnItem) => {
-            const { availableModes, id, name, offers, modifierGroups } =
-              addOnItem;
+            const {
+              availableModes,
+              id,
+              modifierGroups,
+              name,
+              offers,
+              servingTemperatures,
+            } = addOnItem;
+            const addOnServingTemperature =
+              getAddOnServingTemperature(addOnItem);
+            const applicableAddOnGroups = getApplicableModifierGroups(
+              modifierGroups,
+              addOnServingTemperature,
+            );
             const checked = selectedAddOnIds.includes(id);
             const addOnStock = getOfferStock(offers[0]);
             const outOfStockInCart =
@@ -528,7 +680,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 availableModes,
                 offers[0]?.availableHours,
               ) ||
-              (hasUnsatisfiableModifierGroup(modifierGroups, apiMode)
+              (isMenuItemUnsatisfiable(addOnItem, apiMode)
                 ? tCommon("soldOut")
                 : "") ||
               (outOfStockInCart
@@ -536,21 +688,33 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 : "");
 
             return {
-              children: checked && modifierGroups.length > 0 && (
-                <Stack pl={3} gap={2}>
-                  {modifierGroups.map((group, index) => (
-                    <Fragment key={group.id}>
-                      {index > 0 && <Divider flexItem variant="inset" />}
-                      {renderModifierGroup(
-                        group,
-                        addOnChoices[id] || {},
-                        handleAddOnChoicesChange(id),
-                        errors.addOnChoices?.[id]?.[group.id],
+              children: checked &&
+                (servingTemperatures.length > 0 ||
+                  applicableAddOnGroups.length > 0) && (
+                  <Stack pl={3} gap={2}>
+                    {servingTemperatures.length > 0 &&
+                      renderServingTemperatureGroup(
+                        servingTemperatures,
+                        addOnServingTemperature,
+                        modifierGroups,
+                        handleAddOnServingTemperatureChange(id, modifierGroups),
+                        errors.addOnServingTemperatures?.[id],
                       )}
-                    </Fragment>
-                  ))}
-                </Stack>
-              ),
+                    {applicableAddOnGroups.map((group, index) => (
+                      <Fragment key={group.id}>
+                        {(index > 0 || servingTemperatures.length > 0) && (
+                          <Divider flexItem variant="inset" />
+                        )}
+                        {renderModifierGroup(
+                          group,
+                          addOnChoices[id] || {},
+                          handleAddOnChoicesChange(id),
+                          errors.addOnChoices?.[id]?.[group.id],
+                        )}
+                      </Fragment>
+                    ))}
+                  </Stack>
+                ),
               disabled: !checked && !!unavailableLabel,
               label: renderChoiceLabel(
                 name,
@@ -564,9 +728,9 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           value={selectedAddOnIds}
         />
       )}
-      {(modifierGroups.length > 0 || addOnItems.length > 0) && (
-        <Divider flexItem />
-      )}
+      {(servingTemperatures.length > 0 ||
+        applicableModifierGroups.length > 0 ||
+        addOnItems.length > 0) && <Divider flexItem />}
       <Stack
         width="100%"
         direction="row"

@@ -104,7 +104,7 @@ interface CartItemRowProps {
 }
 
 const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
-  const { menuItemId, modifiers, addOns, quantity } = item;
+  const { addOns, menuItemId, quantity } = item;
 
   const formatMoney = useFormatMoney();
 
@@ -126,12 +126,17 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const image = menuItem?.image || null;
   const priceCurrency = offer?.priceCurrency || "";
   const amount = calcCartItemAmount(menu, item);
-  const choiceNames = getChoiceNames(menu, menuItemId, modifiers, addOns, {
+  const choiceNames = getChoiceNames(menu, item, {
     addOnLabel: tOrder("menuItem.addOn"),
     colon: tCommon("colon"),
     delimiter: tCommon("delimiter"),
     parenthesisOpen: tCommon("parenthesisOpen"),
     parenthesisClose: tCommon("parenthesisClose"),
+    servingTemperatureLabel: tOrder("menuItem.servingTemperatures.label"),
+    servingTemperatureNames: {
+      Hot: tOrder("menuItem.servingTemperatures.Hot"),
+      Iced: tOrder("menuItem.servingTemperatures.Iced"),
+    },
   });
 
   const { addCartItem, deleteCartItem, getCartItemTotalQuantity } =

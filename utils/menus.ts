@@ -8,6 +8,7 @@ import type {
   OrderMenuItem,
   OrderMenuModifierGroup,
   OrderMenuOffer,
+  ServingTemperature,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 
@@ -42,11 +43,23 @@ export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
   return { price: Number(priceSpecification.price), validThrough };
 };
 
+// 群組限定溫度時，只在選了該溫度才適用；未選溫度時只剩不限溫度的群組
+export const getApplicableModifierGroups = (
+  modifierGroups: OrderMenuModifierGroup[],
+  servingTemperature: ServingTemperature | null,
+): OrderMenuModifierGroup[] =>
+  modifierGroups.filter(
+    (group) =>
+      !group.servingTemperature ||
+      group.servingTemperature === servingTemperature,
+  );
+
 export const hasUnsatisfiableModifierGroup = (
   modifierGroups: OrderMenuModifierGroup[],
+  servingTemperature: ServingTemperature | null,
   mode: ApiOrderMode,
 ): boolean =>
-  modifierGroups.some(
+  getApplicableModifierGroups(modifierGroups, servingTemperature).some(
     ({ minSelectionCount, modifiers }) =>
       modifiers.filter(
         ({ availability, availableModes }) =>
@@ -54,6 +67,25 @@ export const hasUnsatisfiableModifierGroup = (
           availability !== "Discontinued" &&
           availableModes.includes(mode),
       ).length < minSelectionCount,
+  );
+
+// 只供應一種溫度時直接帶入，不必讓客人選
+export const getDefaultServingTemperature = (
+  servingTemperatures: ServingTemperature[],
+): ServingTemperature | null =>
+  servingTemperatures.length === 1 ? servingTemperatures[0] : null;
+
+// 任一可供應的溫度能湊齊必選群組就還能點
+export const isMenuItemUnsatisfiable = (
+  {
+    modifierGroups,
+    servingTemperatures,
+  }: Pick<OrderMenuItem, "modifierGroups" | "servingTemperatures">,
+  mode: ApiOrderMode,
+): boolean =>
+  (servingTemperatures.length > 0 ? servingTemperatures : [null]).every(
+    (servingTemperature) =>
+      hasUnsatisfiableModifierGroup(modifierGroups, servingTemperature, mode),
   );
 
 export const ADD_ON_OPTION_ID = "addOns";
@@ -163,28 +195,41 @@ export const getCartAvailableHours = (
     }));
   });
 
-export const getItemKey = (
-  menuItemId: string,
-  modifiers: Record<string, string[]>,
-  addOns: CartAddOn[],
-): string => {
+export const getItemKey = ({
+  addOns,
+  menuItemId,
+  modifiers,
+  servingTemperature,
+}: Omit<CartItem, "quantity">): string => {
   const parts = [
+    ...(servingTemperature ? [`servingTemperature:${servingTemperature}`] : []),
     ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
       [...selected].sort().map((modifierId) => `${groupId}:${modifierId}`),
     ),
     ...[...addOns]
       .sort((a, b) => a.menuItemId.localeCompare(b.menuItemId))
-      .flatMap(({ menuItemId: addOnId, modifiers }) => [
-        `${ADD_ON_OPTION_ID}:${addOnId}`,
-        ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
-          [...selected]
-            .sort()
-            .map(
-              (modifierId) =>
-                `${ADD_ON_OPTION_ID}:${addOnId}:${groupId}:${modifierId}`,
-            ),
-        ),
-      ]),
+      .flatMap(
+        ({
+          menuItemId: addOnId,
+          modifiers,
+          servingTemperature: addOnServingTemperature,
+        }) => [
+          `${ADD_ON_OPTION_ID}:${addOnId}`,
+          ...(addOnServingTemperature
+            ? [
+                `${ADD_ON_OPTION_ID}:${addOnId}:servingTemperature:${addOnServingTemperature}`,
+              ]
+            : []),
+          ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
+            [...selected]
+              .sort()
+              .map(
+                (modifierId) =>
+                  `${ADD_ON_OPTION_ID}:${addOnId}:${groupId}:${modifierId}`,
+              ),
+          ),
+        ],
+      ),
   ];
 
   return parts.length > 0 ? `${menuItemId}_${parts.join("_")}` : menuItemId;
@@ -221,6 +266,14 @@ export const getItemStock = (
   return getOfferStock(item.offers[0]);
 };
 
+const isInvalidServingTemperature = (
+  servingTemperatures: ServingTemperature[],
+  servingTemperature: ServingTemperature | null,
+): boolean =>
+  servingTemperatures.length > 0
+    ? !servingTemperature || !servingTemperatures.includes(servingTemperature)
+    : !!servingTemperature;
+
 export const hasInvalidChoices = (
   menu: OrderMenu | null,
   item: CartItem,
@@ -232,8 +285,13 @@ export const hasInvalidChoices = (
   const hasInvalidSelections = (
     modifierGroups: OrderMenuModifierGroup[],
     selections: Record<string, string[]>,
+    servingTemperature: ServingTemperature | null,
   ) => {
-    const modifiers = modifierGroups.flatMap(({ modifiers }) => modifiers);
+    const applicableGroups = getApplicableModifierGroups(
+      modifierGroups,
+      servingTemperature,
+    );
+    const modifiers = applicableGroups.flatMap(({ modifiers }) => modifiers);
 
     return (
       Object.values(selections)
@@ -243,7 +301,7 @@ export const hasInvalidChoices = (
 
           return !modifier || !modifier.availableModes.includes(mode);
         }) ||
-      modifierGroups.some(({ id, maxSelectionCount, minSelectionCount }) => {
+      applicableGroups.some(({ id, maxSelectionCount, minSelectionCount }) => {
         const selected = selections[id] || [];
 
         return (
@@ -254,18 +312,36 @@ export const hasInvalidChoices = (
     );
   };
 
-  if (hasInvalidSelections(menuItem.modifierGroups, item.modifiers))
+  if (
+    isInvalidServingTemperature(
+      menuItem.servingTemperatures,
+      item.servingTemperature,
+    ) ||
+    hasInvalidSelections(
+      menuItem.modifierGroups,
+      item.modifiers,
+      item.servingTemperature,
+    )
+  )
     return true;
 
   const addOnItems = getAddOnItems(menuItem);
 
-  return item.addOns.some(({ menuItemId, modifiers }) => {
+  return item.addOns.some(({ menuItemId, modifiers, servingTemperature }) => {
     const addOnItem = addOnItems.find(({ id }) => id === menuItemId);
     if (!addOnItem) return true;
 
     return (
       !addOnItem.availableModes.includes(mode) ||
-      hasInvalidSelections(addOnItem.modifierGroups, modifiers)
+      isInvalidServingTemperature(
+        addOnItem.servingTemperatures,
+        servingTemperature,
+      ) ||
+      hasInvalidSelections(
+        addOnItem.modifierGroups,
+        modifiers,
+        servingTemperature,
+      )
     );
   });
 };
@@ -310,29 +386,38 @@ export const getLimitingAddOnsCap = (
   return getAddOnsCap(selectedAddOnItems, getUsedQuantity);
 };
 
-interface CommonSeparators {
+interface ChoiceNameOptions {
   addOnLabel?: string;
   colon: string;
   delimiter: string;
   parenthesisOpen: string;
   parenthesisClose: string;
+  servingTemperatureLabel: string;
+  servingTemperatureNames: Record<ServingTemperature, string>;
 }
 
 export const getChoiceNames = (
   menu: OrderMenu | null,
-  menuItemId: string,
-  modifiers: Record<string, string[]>,
-  addOns: CartAddOn[],
+  { addOns, menuItemId, modifiers, servingTemperature }: CartItem,
   {
     addOnLabel,
     colon,
     delimiter,
     parenthesisOpen,
     parenthesisClose,
-  }: CommonSeparators,
+    servingTemperatureLabel,
+    servingTemperatureNames,
+  }: ChoiceNameOptions,
 ): string => {
   const item = findItemById(menu, menuItemId);
   if (!item) return "";
+
+  const getServingTemperatureParts = (
+    value: ServingTemperature | null,
+  ): string[] =>
+    value
+      ? [`${servingTemperatureLabel}${colon}${servingTemperatureNames[value]}`]
+      : [];
 
   const modifierParts = Object.entries(modifiers).flatMap(
     ([groupId, modifierIds]) => {
@@ -356,39 +441,47 @@ export const getChoiceNames = (
 
   const addOnItems = getAddOnItems(item);
   const addOnNames = addOns
-    .map(({ menuItemId: addOnId, modifiers }) => {
-      const addOnItem = addOnItems.find(({ id }) => id === addOnId);
-      if (!addOnItem) return "";
+    .map(
+      ({
+        menuItemId: addOnId,
+        modifiers,
+        servingTemperature: addOnServingTemperature,
+      }) => {
+        const addOnItem = addOnItems.find(({ id }) => id === addOnId);
+        if (!addOnItem) return "";
 
-      const modifierParts = Object.entries(modifiers)
-        .flatMap(([groupId, modifierIds]) => {
-          if (!modifierIds.length) return [];
+        const modifierParts = [
+          ...getServingTemperatureParts(addOnServingTemperature),
+          ...Object.entries(modifiers).flatMap(([groupId, modifierIds]) => {
+            if (!modifierIds.length) return [];
 
-          const group = addOnItem.modifierGroups.find(
-            ({ id }) => id === groupId,
-          );
+            const group = addOnItem.modifierGroups.find(
+              ({ id }) => id === groupId,
+            );
 
-          const names = modifierIds
-            .map(
-              (modifierId) =>
-                group?.modifiers.find(({ id }) => id === modifierId)
-                  ?.displayName,
-            )
-            .filter(Boolean)
-            .join(delimiter);
+            const names = modifierIds
+              .map(
+                (modifierId) =>
+                  group?.modifiers.find(({ id }) => id === modifierId)
+                    ?.displayName,
+              )
+              .filter(Boolean)
+              .join(delimiter);
 
-          return names ? [`${group?.displayName ?? ""}${colon}${names}`] : [];
-        })
-        .join(delimiter);
+            return names ? [`${group?.displayName ?? ""}${colon}${names}`] : [];
+          }),
+        ].join(delimiter);
 
-      return modifierParts
-        ? `${addOnItem.name}${parenthesisOpen}${modifierParts}${parenthesisClose}`
-        : addOnItem.name;
-    })
+        return modifierParts
+          ? `${addOnItem.name}${parenthesisOpen}${modifierParts}${parenthesisClose}`
+          : addOnItem.name;
+      },
+    )
     .filter(Boolean)
     .join(delimiter);
 
   return [
+    ...getServingTemperatureParts(servingTemperature),
     ...modifierParts,
     ...(addOnNames ? [`${addOnLabel ?? ""}${colon}${addOnNames}`] : []),
   ].join(delimiter);

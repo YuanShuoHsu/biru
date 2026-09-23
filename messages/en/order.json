@@ -166,7 +166,8 @@
     "selectUpTo": "Select up to {count}",
     "servingTemperatures": {
       "Hot": "Hot",
-      "Iced": "Iced"
+      "Iced": "Iced",
+      "label": "Temperature"
     },
     "stockLeft": "Only {stock} left"
   },

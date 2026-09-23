@@ -166,7 +166,8 @@
     "selectUpTo": "最多可选 {count} 项",
     "servingTemperatures": {
       "Hot": "热",
-      "Iced": "冰"
+      "Iced": "冰",
+      "label": "冷热"
     },
     "stockLeft": "剩余 {stock}"
   },

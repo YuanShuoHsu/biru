@@ -105,5 +105,8 @@
   "telephone": {
     "invalid": "電話格式無效。",
     "required": "電話為必填。"
+  },
+  "servingTemperature": {
+    "notSelected": "請選擇您的冷熱。"
   }
 }

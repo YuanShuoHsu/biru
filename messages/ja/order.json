@@ -166,7 +166,8 @@
     "selectUpTo": "最大{count}個まで選択できます",
     "servingTemperatures": {
       "Hot": "ホット",
-      "Iced": "アイス"
+      "Iced": "アイス",
+      "label": "温度"
     },
     "stockLeft": "残り {stock}"
   },

@@ -17,12 +17,16 @@ const groupModifiers = (
 };
 
 export const getCartItems = (items: OrderItemResponse[]): CartItem[] =>
-  items.map(({ addOns, menuItemId, modifiers, orderQuantity }) => ({
-    addOns: (addOns || []).map((addOn) => ({
-      menuItemId: addOn.menuItemId,
-      modifiers: groupModifiers(addOn.modifiers),
-    })),
-    menuItemId,
-    modifiers: groupModifiers(modifiers),
-    quantity: orderQuantity,
-  }));
+  items.map(
+    ({ addOns, menuItemId, modifiers, orderQuantity, servingTemperature }) => ({
+      addOns: (addOns || []).map((addOn) => ({
+        menuItemId: addOn.menuItemId,
+        modifiers: groupModifiers(addOn.modifiers),
+        servingTemperature: addOn.servingTemperature || null,
+      })),
+      menuItemId,
+      modifiers: groupModifiers(modifiers),
+      quantity: orderQuantity,
+      servingTemperature: servingTemperature || null,
+    }),
+  );
