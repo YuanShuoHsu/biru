@@ -401,7 +401,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     <Stack direction="row" alignItems="baseline" flexWrap="wrap" gap={1}>
       <WrapTypography variant="body2">{choiceName}</WrapTypography>
       {recommendedLabel && (
-        <Typography color="primary" variant="caption">
+        <Typography color="warning" variant="caption">
           {recommendedLabel}
         </Typography>
       )}
