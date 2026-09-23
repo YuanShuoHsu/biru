@@ -29,7 +29,6 @@ import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
-import { servingTemperatureValues } from "@/types/api";
 import type { OrderMenuItem } from "@/types/menus";
 import type { RouteParams } from "@/types/routeParams";
 import type { ViewDirection } from "@/types/view";
@@ -252,23 +251,21 @@ const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
             </WrapTypography>
             {servingTemperatures.length > 0 && (
               <TemperatureBox>
-                {servingTemperatureValues
-                  .filter((value) => servingTemperatures.includes(value))
-                  .map((value) => {
-                    const { color, icon: Icon } =
-                      SERVING_TEMPERATURE_ICONS[value];
+                {servingTemperatures.map((value) => {
+                  const { color, icon: Icon } =
+                    SERVING_TEMPERATURE_ICONS[value];
 
-                    return (
-                      <Icon
-                        color={color}
-                        fontSize="small"
-                        key={value}
-                        titleAccess={tOrder(
-                          `menuItem.servingTemperatures.${value}`,
-                        )}
-                      />
-                    );
-                  })}
+                  return (
+                    <Icon
+                      color={color}
+                      fontSize="small"
+                      key={value}
+                      titleAccess={tOrder(
+                        `menuItem.servingTemperatures.${value}`,
+                      )}
+                    />
+                  );
+                })}
               </TemperatureBox>
             )}
           </TitleBox>
