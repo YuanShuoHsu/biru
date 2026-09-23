@@ -157,7 +157,7 @@ const Points = ({ page, pageSize, points }: PointsProps) => {
               action={
                 <StyledTypography
                   color={
-                    transaction.type === "earn" ? "primary" : "text.secondary"
+                    transaction.type === "earn" ? "primary" : "textSecondary"
                   }
                   variant="body2"
                 >
