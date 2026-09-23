@@ -162,6 +162,7 @@
     "outsideAvailableHours": "Outside serving hours",
     "preparationTime": "Ready in about {value} min",
     "promoUntil": "Offer ends {date}",
+    "recommended": "Recommended",
     "selectAtLeast": "Select at least {count}",
     "selectUpTo": "Select up to {count}",
     "servingTemperatureLabels": {
@@ -179,7 +180,7 @@
     "servingTemperatures": {
       "Hot": "Hot",
       "Iced": "Iced",
-      "label": "Temperature / Ice"
+      "label": "Ice / Temperature"
     },
     "stockLeft": "Only {stock} left",
     "sweetness": {

@@ -162,6 +162,7 @@
     "outsideAvailableHours": "非供应时间",
     "preparationTime": "预计准备约 {value} 分钟",
     "promoUntil": "优惠至 {date}",
+    "recommended": "推荐",
     "selectAtLeast": "请至少选择 {count} 项",
     "selectUpTo": "最多可选 {count} 项",
     "servingTemperatureLabels": {
@@ -179,7 +180,7 @@
     "servingTemperatures": {
       "Hot": "热",
       "Iced": "冰",
-      "label": "温度／冰量"
+      "label": "冰量／温度"
     },
     "stockLeft": "剩余 {stock}",
     "sweetness": {

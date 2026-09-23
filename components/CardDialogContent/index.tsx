@@ -112,8 +112,10 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     nutrition,
     modifierGroups,
     servingTemperatures,
+    recommendedServingTemperatureLevel,
     sweetness,
     fixedSweetnessLevel,
+    recommendedSweetnessLevel,
   } = menuItem;
   const hasBuiltInChoices =
     servingTemperatures.length > 0 || sweetness !== "NotApplicable";
@@ -370,9 +372,15 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     choiceExtraCost: number,
     unavailableLabel: string,
     availableHoursLabel: string,
+    recommendedLabel: string,
   ) => (
     <Stack direction="row" alignItems="center" flexWrap="wrap" gap={1}>
       <WrapTypography variant="body2">{choiceName}</WrapTypography>
+      {recommendedLabel && (
+        <Typography color="primary" variant="caption">
+          {recommendedLabel}
+        </Typography>
+      )}
       {choiceExtraCost !== 0 && (
         <Typography color="text.secondary" variant="caption">
           {choiceExtraCost > 0 ? "+" : "-"}
@@ -410,6 +418,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
   const renderServingTemperatureLevelGroup = (
     servingTemperaturesOffered: ServingTemperature[],
+    recommendedLevel: ServingTemperatureLevel | null,
     value: ServingTemperatureLevel | null,
     onValueChange: (next: ServingTemperatureLevel) => void,
     error?: { message?: string },
@@ -428,6 +437,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             0,
             "",
             "",
+            level === recommendedLevel ? tOrder("menuItem.recommended") : "",
           ),
           value: level,
         }),
@@ -440,6 +450,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const renderSweetnessGroup = (
     sweetnessOffered: Sweetness,
     fixedLevel: SweetnessLevel | null,
+    recommendedLevel: SweetnessLevel | null,
     value: SweetnessLevel | null,
     onValueChange: (next: SweetnessLevel) => void,
     error?: { message?: string },
@@ -459,6 +470,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                   label: renderChoiceLabel(
                     tOrder(`menuItem.sweetnessLevels.${fixedLevel}`),
                     0,
+                    "",
                     "",
                     "",
                   ),
@@ -483,6 +495,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             0,
             "",
             "",
+            level === recommendedLevel ? tOrder("menuItem.recommended") : "",
           ),
           value: level,
         }))}
@@ -540,6 +553,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 Number(priceAdjustment || 0),
                 unavailableLabel,
                 "",
+                "",
               ),
               value: id,
             };
@@ -578,6 +592,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 displayName,
                 Number(priceAdjustment || 0),
                 unavailableLabel,
+                "",
                 "",
               ),
               value: id,
@@ -657,6 +672,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       {servingTemperatures.length > 0 &&
         renderServingTemperatureLevelGroup(
           servingTemperatures,
+          recommendedServingTemperatureLevel || null,
           servingTemperatureLevel,
           handleServingTemperatureLevelChange,
           errors.servingTemperatureLevel,
@@ -669,6 +685,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           {renderSweetnessGroup(
             sweetness,
             fixedSweetnessLevel || null,
+            recommendedSweetnessLevel || null,
             sweetnessLevel,
             handleSweetnessLevelChange,
             errors.sweetnessLevel,
@@ -707,8 +724,11 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               name,
               offers,
               servingTemperatures,
+              recommendedServingTemperatureLevel:
+                addOnRecommendedServingTemperatureLevel,
               sweetness: addOnSweetness,
               fixedSweetnessLevel: addOnFixedSweetnessLevel,
+              recommendedSweetnessLevel: addOnRecommendedSweetnessLevel,
             } = addOnItem;
             const addOnHasBuiltInChoices =
               servingTemperatures.length > 0 ||
@@ -739,6 +759,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                     {servingTemperatures.length > 0 &&
                       renderServingTemperatureLevelGroup(
                         servingTemperatures,
+                        addOnRecommendedServingTemperatureLevel || null,
                         addOnServingTemperatureLevels[id] || null,
                         handleAddOnServingTemperatureLevelChange(id),
                         errors.addOnServingTemperatureLevels?.[id],
@@ -751,6 +772,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                         {renderSweetnessGroup(
                           addOnSweetness,
                           addOnFixedSweetnessLevel || null,
+                          addOnRecommendedSweetnessLevel || null,
                           addOnSweetnessLevels[id] || null,
                           handleAddOnSweetnessLevelChange(id),
                           errors.addOnSweetnessLevels?.[id],
@@ -778,6 +800,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 getAddOnPrice(addOnItem),
                 unavailableLabel,
                 getAvailableHoursLabel(offers[0]?.availableHours),
+                "",
               ),
               value: id,
             };
