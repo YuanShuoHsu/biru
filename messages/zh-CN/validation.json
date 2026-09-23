@@ -106,7 +106,7 @@
     "invalid": "电话格式无效。",
     "required": "电话为必填。"
   },
-  "servingTemperature": {
-    "notSelected": "请选择您的冷热。"
+  "servingTemperatureLevel": {
+    "notSelected": "请选择您的{label}。"
   }
 }

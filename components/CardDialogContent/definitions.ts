@@ -1,23 +1,24 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import * as z from "zod";
 
-import { servingTemperatureValues } from "@/types/api";
+import { useServingTemperatureLabel } from "@/hooks/useServingTemperatureLabel";
+
+import { servingTemperatureLevelValues } from "@/types/api";
 import type {
   OrderMenuItem,
   OrderMenuModifierGroup,
   ServingTemperature,
+  ServingTemperatureLevel,
 } from "@/types/menus";
 
-import {
-  ADD_ON_OPTION_ID,
-  getAddOnItems,
-  getApplicableModifierGroups,
-  getDefaultServingTemperature,
-} from "@/utils/menus";
+import { ADD_ON_OPTION_ID, getAddOnItems } from "@/utils/menus";
 
 export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
+  const locale = useLocale();
   const tOrder = useTranslations("order");
   const tValidation = useTranslations("validation");
+
+  const getServingTemperatureLabel = useServingTemperatureLabel();
 
   const getGroupMessage = (
     { minSelectionCount, maxSelectionCount }: OrderMenuModifierGroup,
@@ -29,14 +30,19 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
         ? tOrder("menuItem.selectUpTo", { count: maxSelectionCount })
         : null;
 
-  const servingTemperatureSchema = z.enum(servingTemperatureValues).nullable();
+  const servingTemperatureLevelSchema = z
+    .enum(servingTemperatureLevelValues)
+    .nullable();
 
   return z
     .object({
       quantity: z.number(),
-      servingTemperature: servingTemperatureSchema,
+      servingTemperatureLevel: servingTemperatureLevelSchema,
       choices: z.record(z.string(), z.array(z.string())),
-      addOnServingTemperatures: z.record(z.string(), servingTemperatureSchema),
+      addOnServingTemperatureLevels: z.record(
+        z.string(),
+        servingTemperatureLevelSchema,
+      ),
       addOnChoices: z.record(
         z.string(),
         z.record(z.string(), z.array(z.string())),
@@ -44,32 +50,39 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
     })
     .superRefine(
       (
-        { servingTemperature, choices, addOnServingTemperatures, addOnChoices },
+        {
+          servingTemperatureLevel,
+          choices,
+          addOnServingTemperatureLevels,
+          addOnChoices,
+        },
         ctx,
       ) => {
-        const validateServingTemperature = (
+        const validateServingTemperatureLevel = (
           servingTemperatures: ServingTemperature[],
-          value: ServingTemperature | null,
+          value: ServingTemperatureLevel | null,
           path: (string | number)[],
         ) => {
           if (servingTemperatures.length > 0 && !value)
             ctx.addIssue({
               code: "custom",
-              message: tValidation("servingTemperature.notSelected"),
+              message: tValidation("servingTemperatureLevel.notSelected", {
+                label:
+                  getServingTemperatureLabel(
+                    servingTemperatures,
+                  ).toLocaleLowerCase(locale),
+              }),
               path,
             });
         };
 
-        validateServingTemperature(
+        validateServingTemperatureLevel(
           menuItem.servingTemperatures,
-          servingTemperature,
-          ["servingTemperature"],
+          servingTemperatureLevel,
+          ["servingTemperatureLevel"],
         );
 
-        getApplicableModifierGroups(
-          menuItem.modifierGroups,
-          servingTemperature,
-        ).forEach((group) => {
+        menuItem.modifierGroups.forEach((group) => {
           const message = getGroupMessage(group, choices[group.id] ?? []);
 
           if (message)
@@ -85,20 +98,13 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
         getAddOnItems(menuItem)
           .filter(({ id }) => selectedAddOnIds.includes(id))
           .forEach(({ id: addOnId, modifierGroups, servingTemperatures }) => {
-            const addOnServingTemperature =
-              addOnServingTemperatures[addOnId] ||
-              getDefaultServingTemperature(servingTemperatures);
-
-            validateServingTemperature(
+            validateServingTemperatureLevel(
               servingTemperatures,
-              addOnServingTemperature,
-              ["addOnServingTemperatures", addOnId],
+              addOnServingTemperatureLevels[addOnId] || null,
+              ["addOnServingTemperatureLevels", addOnId],
             );
 
-            getApplicableModifierGroups(
-              modifierGroups,
-              addOnServingTemperature,
-            ).forEach((group) => {
+            modifierGroups.forEach((group) => {
               const message = getGroupMessage(
                 group,
                 addOnChoices[addOnId]?.[group.id] ?? [],

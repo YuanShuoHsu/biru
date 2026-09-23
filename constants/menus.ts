@@ -3,9 +3,24 @@ import type { ElementType } from "react";
 import { AcUnit, LocalFireDepartment } from "@mui/icons-material";
 import type { SvgIconProps } from "@mui/material";
 
-import type { ServingTemperature } from "@/types/menus";
+import type {
+  ServingTemperature,
+  ServingTemperatureLevel,
+} from "@/types/menus";
 
 export const LOW_STOCK_THRESHOLD = 5;
+
+export const SERVING_TEMPERATURE_OF_LEVEL: Record<
+  ServingTemperatureLevel,
+  ServingTemperature
+> = {
+  Warm: "Hot",
+  Hot: "Hot",
+  RegularIce: "Iced",
+  LessIce: "Iced",
+  LightIce: "Iced",
+  NoIce: "Iced",
+};
 
 export const SERVING_TEMPERATURE_ICONS: Record<
   ServingTemperature,

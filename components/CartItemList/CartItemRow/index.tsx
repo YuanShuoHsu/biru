@@ -8,10 +8,12 @@ import CardDialogContent from "@/components/CardDialogContent";
 import NumberSpinner from "@/components/NumberSpinner";
 
 import { MAX_QUANTITY } from "@/constants/cart";
+import { SERVING_TEMPERATURE_OF_LEVEL } from "@/constants/menus";
 import { API_ORDER_MODE } from "@/constants/orderMode";
 
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
+import { useServingTemperatureLabel } from "@/hooks/useServingTemperatureLabel";
 
 import { Delete, RestaurantMenu } from "@mui/icons-material";
 import {
@@ -115,6 +117,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const { setDialog } = useDialogStore((state) => state);
 
   const isOutsideAvailableHours = useOutsideAvailableHours();
+  const getServingTemperatureLabel = useServingTemperatureLabel();
 
   const tCommon = useTranslations("common");
   const tDialog = useTranslations("dialog");
@@ -130,13 +133,12 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
     addOnLabel: tOrder("menuItem.addOn"),
     colon: tCommon("colon"),
     delimiter: tCommon("delimiter"),
+    getServingTemperatureLevelLabel: (level) =>
+      getServingTemperatureLabel([SERVING_TEMPERATURE_OF_LEVEL[level]]),
+    getServingTemperatureLevelName: (level) =>
+      tOrder(`menuItem.servingTemperatureLevels.${level}`),
     parenthesisOpen: tCommon("parenthesisOpen"),
     parenthesisClose: tCommon("parenthesisClose"),
-    servingTemperatureLabel: tOrder("menuItem.servingTemperatures.label"),
-    servingTemperatureNames: {
-      Hot: tOrder("menuItem.servingTemperatures.Hot"),
-      Iced: tOrder("menuItem.servingTemperatures.Iced"),
-    },
   });
 
   const { addCartItem, deleteCartItem, getCartItemTotalQuantity } =

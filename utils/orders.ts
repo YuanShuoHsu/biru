@@ -18,15 +18,21 @@ const groupModifiers = (
 
 export const getCartItems = (items: OrderItemResponse[]): CartItem[] =>
   items.map(
-    ({ addOns, menuItemId, modifiers, orderQuantity, servingTemperature }) => ({
+    ({
+      addOns,
+      menuItemId,
+      modifiers,
+      orderQuantity,
+      servingTemperatureLevel,
+    }) => ({
       addOns: (addOns || []).map((addOn) => ({
         menuItemId: addOn.menuItemId,
         modifiers: groupModifiers(addOn.modifiers),
-        servingTemperature: addOn.servingTemperature || null,
+        servingTemperatureLevel: addOn.servingTemperatureLevel || null,
       })),
       menuItemId,
       modifiers: groupModifiers(modifiers),
       quantity: orderQuantity,
-      servingTemperature: servingTemperature || null,
+      servingTemperatureLevel: servingTemperatureLevel || null,
     }),
   );

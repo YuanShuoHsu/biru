@@ -1,5 +1,8 @@
 "use client";
 
+import dayjs from "dayjs";
+import timezonePlugin from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -9,6 +12,7 @@ import { menuSocket } from "@/app/socket";
 
 import { MODE_COLORS } from "@/constants/orderMode";
 import { STATUS_COLORS } from "@/constants/orders";
+import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import { useOrderModeLabel } from "@/hooks/useOrderModeLabel";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
@@ -31,6 +35,9 @@ import { styled } from "@mui/material/styles";
 import { orderBoardStatusValues } from "@/types/api";
 import type { OrderBoardItem } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
+
+dayjs.extend(utc);
+dayjs.extend(timezonePlugin);
 
 const StyledContainerGrid = styled(Grid)(({ theme }) => ({
   flex: 1,
@@ -97,6 +104,7 @@ interface OrderBoardProps {
 const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   const getOrderModeLabel = useOrderModeLabel();
 
+  const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
 
   const searchParams = useSearchParams();
@@ -170,10 +178,15 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
                             </Typography>
                             <Chip
                               color={MODE_COLORS[item.mode]}
-                              label={getOrderModeLabel(
-                                item.mode,
-                                item.tableNumber,
-                              )}
+                              label={[
+                                getOrderModeLabel(item.mode, item.tableNumber),
+                                item.pickupTime &&
+                                  dayjs(item.pickupTime)
+                                    .tz(STORE_TIMEZONE)
+                                    .format("HH:mm"),
+                              ]
+                                .filter(Boolean)
+                                .join(tCommon("delimiter"))}
                               size="small"
                               variant="outlined"
                             />

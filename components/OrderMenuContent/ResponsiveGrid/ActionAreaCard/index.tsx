@@ -35,8 +35,8 @@ import type { ViewDirection } from "@/types/view";
 
 import {
   getActivePromo,
+  hasUnsatisfiableModifierGroup,
   isLowStock,
-  isMenuItemUnsatisfiable,
 } from "@/utils/menus";
 
 const StyledCard = styled(Card)({
@@ -191,7 +191,7 @@ const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
     stock === 0 ||
     availability === "SoldOut" ||
     availability === "Discontinued" ||
-    isMenuItemUnsatisfiable(menuItem, apiMode);
+    hasUnsatisfiableModifierGroup(menuItem.modifierGroups, apiMode);
   const showLowStock = !isItemOutOfStock && isLowStock(offer);
   const availableHoursLabel = getAvailableHoursLabel(offer.availableHours);
 

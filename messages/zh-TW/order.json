@@ -164,10 +164,22 @@
     "promoUntil": "優惠至 {date}",
     "selectAtLeast": "請至少選擇 {count} 項",
     "selectUpTo": "最多可選 {count} 項",
+    "servingTemperatureLabels": {
+      "Hot": "溫度",
+      "Iced": "冰量"
+    },
+    "servingTemperatureLevels": {
+      "Hot": "熱",
+      "LessIce": "少冰",
+      "LightIce": "微冰",
+      "NoIce": "去冰",
+      "RegularIce": "正常冰",
+      "Warm": "溫"
+    },
     "servingTemperatures": {
       "Hot": "熱",
       "Iced": "冰",
-      "label": "冷熱"
+      "label": "溫度／冰量"
     },
     "stockLeft": "剩餘 {stock}"
   },

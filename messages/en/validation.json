@@ -106,7 +106,7 @@
     "invalid": "Phone is not valid.",
     "required": "Phone is required."
   },
-  "servingTemperature": {
-    "notSelected": "Please select your temperature."
+  "servingTemperatureLevel": {
+    "notSelected": "Please select your {label}."
   }
 }

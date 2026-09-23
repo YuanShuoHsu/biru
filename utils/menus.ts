@@ -1,6 +1,11 @@
-import { LOW_STOCK_THRESHOLD } from "@/constants/menus";
+import {
+  LOW_STOCK_THRESHOLD,
+  SERVING_TEMPERATURE_OF_LEVEL,
+} from "@/constants/menus";
 
 import type { CartAddOn, CartItem } from "@/stores/cart-store";
+
+import { servingTemperatureLevelValues } from "@/types/api";
 
 import type {
   OrderMenu,
@@ -9,6 +14,7 @@ import type {
   OrderMenuModifierGroup,
   OrderMenuOffer,
   ServingTemperature,
+  ServingTemperatureLevel,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 
@@ -43,23 +49,18 @@ export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
   return { price: Number(priceSpecification.price), validThrough };
 };
 
-// 群組限定溫度時，只在選了該溫度才適用；未選溫度時只剩不限溫度的群組
-export const getApplicableModifierGroups = (
-  modifierGroups: OrderMenuModifierGroup[],
-  servingTemperature: ServingTemperature | null,
-): OrderMenuModifierGroup[] =>
-  modifierGroups.filter(
-    (group) =>
-      !group.servingTemperature ||
-      group.servingTemperature === servingTemperature,
+export const getServingTemperatureLevels = (
+  servingTemperatures: ServingTemperature[],
+): ServingTemperatureLevel[] =>
+  servingTemperatureLevelValues.filter((level) =>
+    servingTemperatures.includes(SERVING_TEMPERATURE_OF_LEVEL[level]),
   );
 
 export const hasUnsatisfiableModifierGroup = (
   modifierGroups: OrderMenuModifierGroup[],
-  servingTemperature: ServingTemperature | null,
   mode: ApiOrderMode,
 ): boolean =>
-  getApplicableModifierGroups(modifierGroups, servingTemperature).some(
+  modifierGroups.some(
     ({ minSelectionCount, modifiers }) =>
       modifiers.filter(
         ({ availability, availableModes }) =>
@@ -67,25 +68,6 @@ export const hasUnsatisfiableModifierGroup = (
           availability !== "Discontinued" &&
           availableModes.includes(mode),
       ).length < minSelectionCount,
-  );
-
-// 只供應一種溫度時直接帶入，不必讓客人選
-export const getDefaultServingTemperature = (
-  servingTemperatures: ServingTemperature[],
-): ServingTemperature | null =>
-  servingTemperatures.length === 1 ? servingTemperatures[0] : null;
-
-// 任一可供應的溫度能湊齊必選群組就還能點
-export const isMenuItemUnsatisfiable = (
-  {
-    modifierGroups,
-    servingTemperatures,
-  }: Pick<OrderMenuItem, "modifierGroups" | "servingTemperatures">,
-  mode: ApiOrderMode,
-): boolean =>
-  (servingTemperatures.length > 0 ? servingTemperatures : [null]).every(
-    (servingTemperature) =>
-      hasUnsatisfiableModifierGroup(modifierGroups, servingTemperature, mode),
   );
 
 export const ADD_ON_OPTION_ID = "addOns";
@@ -199,10 +181,12 @@ export const getItemKey = ({
   addOns,
   menuItemId,
   modifiers,
-  servingTemperature,
+  servingTemperatureLevel,
 }: Omit<CartItem, "quantity">): string => {
   const parts = [
-    ...(servingTemperature ? [`servingTemperature:${servingTemperature}`] : []),
+    ...(servingTemperatureLevel
+      ? [`servingTemperatureLevel:${servingTemperatureLevel}`]
+      : []),
     ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
       [...selected].sort().map((modifierId) => `${groupId}:${modifierId}`),
     ),
@@ -212,12 +196,12 @@ export const getItemKey = ({
         ({
           menuItemId: addOnId,
           modifiers,
-          servingTemperature: addOnServingTemperature,
+          servingTemperatureLevel: addOnServingTemperatureLevel,
         }) => [
           `${ADD_ON_OPTION_ID}:${addOnId}`,
-          ...(addOnServingTemperature
+          ...(addOnServingTemperatureLevel
             ? [
-                `${ADD_ON_OPTION_ID}:${addOnId}:servingTemperature:${addOnServingTemperature}`,
+                `${ADD_ON_OPTION_ID}:${addOnId}:servingTemperatureLevel:${addOnServingTemperatureLevel}`,
               ]
             : []),
           ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
@@ -266,13 +250,16 @@ export const getItemStock = (
   return getOfferStock(item.offers[0]);
 };
 
-const isInvalidServingTemperature = (
+const isInvalidServingTemperatureLevel = (
   servingTemperatures: ServingTemperature[],
-  servingTemperature: ServingTemperature | null,
+  servingTemperatureLevel: ServingTemperatureLevel | null,
 ): boolean =>
   servingTemperatures.length > 0
-    ? !servingTemperature || !servingTemperatures.includes(servingTemperature)
-    : !!servingTemperature;
+    ? !servingTemperatureLevel ||
+      !servingTemperatures.includes(
+        SERVING_TEMPERATURE_OF_LEVEL[servingTemperatureLevel],
+      )
+    : !!servingTemperatureLevel;
 
 export const hasInvalidChoices = (
   menu: OrderMenu | null,
@@ -285,13 +272,8 @@ export const hasInvalidChoices = (
   const hasInvalidSelections = (
     modifierGroups: OrderMenuModifierGroup[],
     selections: Record<string, string[]>,
-    servingTemperature: ServingTemperature | null,
   ) => {
-    const applicableGroups = getApplicableModifierGroups(
-      modifierGroups,
-      servingTemperature,
-    );
-    const modifiers = applicableGroups.flatMap(({ modifiers }) => modifiers);
+    const modifiers = modifierGroups.flatMap(({ modifiers }) => modifiers);
 
     return (
       Object.values(selections)
@@ -299,9 +281,14 @@ export const hasInvalidChoices = (
         .some((selectedId) => {
           const modifier = modifiers.find(({ id }) => id === selectedId);
 
-          return !modifier || !modifier.availableModes.includes(mode);
+          return (
+            !modifier ||
+            !modifier.availableModes.includes(mode) ||
+            modifier.availability === "SoldOut" ||
+            modifier.availability === "Discontinued"
+          );
         }) ||
-      applicableGroups.some(({ id, maxSelectionCount, minSelectionCount }) => {
+      modifierGroups.some(({ id, maxSelectionCount, minSelectionCount }) => {
         const selected = selections[id] || [];
 
         return (
@@ -313,37 +300,31 @@ export const hasInvalidChoices = (
   };
 
   if (
-    isInvalidServingTemperature(
+    isInvalidServingTemperatureLevel(
       menuItem.servingTemperatures,
-      item.servingTemperature,
+      item.servingTemperatureLevel,
     ) ||
-    hasInvalidSelections(
-      menuItem.modifierGroups,
-      item.modifiers,
-      item.servingTemperature,
-    )
+    hasInvalidSelections(menuItem.modifierGroups, item.modifiers)
   )
     return true;
 
   const addOnItems = getAddOnItems(menuItem);
 
-  return item.addOns.some(({ menuItemId, modifiers, servingTemperature }) => {
-    const addOnItem = addOnItems.find(({ id }) => id === menuItemId);
-    if (!addOnItem) return true;
+  return item.addOns.some(
+    ({ menuItemId, modifiers, servingTemperatureLevel }) => {
+      const addOnItem = addOnItems.find(({ id }) => id === menuItemId);
+      if (!addOnItem) return true;
 
-    return (
-      !addOnItem.availableModes.includes(mode) ||
-      isInvalidServingTemperature(
-        addOnItem.servingTemperatures,
-        servingTemperature,
-      ) ||
-      hasInvalidSelections(
-        addOnItem.modifierGroups,
-        modifiers,
-        servingTemperature,
-      )
-    );
-  });
+      return (
+        !addOnItem.availableModes.includes(mode) ||
+        isInvalidServingTemperatureLevel(
+          addOnItem.servingTemperatures,
+          servingTemperatureLevel,
+        ) ||
+        hasInvalidSelections(addOnItem.modifierGroups, modifiers)
+      );
+    },
+  );
 };
 
 type AddOnLimitResult = { cap: number; names: string[] };
@@ -390,42 +371,43 @@ interface ChoiceNameOptions {
   addOnLabel?: string;
   colon: string;
   delimiter: string;
+  getServingTemperatureLevelLabel: (level: ServingTemperatureLevel) => string;
+  getServingTemperatureLevelName: (level: ServingTemperatureLevel) => string;
   parenthesisOpen: string;
   parenthesisClose: string;
-  servingTemperatureLabel: string;
-  servingTemperatureNames: Record<ServingTemperature, string>;
 }
 
 export const getChoiceNames = (
   menu: OrderMenu | null,
-  { addOns, menuItemId, modifiers, servingTemperature }: CartItem,
+  { addOns, menuItemId, modifiers, servingTemperatureLevel }: CartItem,
   {
     addOnLabel,
     colon,
     delimiter,
+    getServingTemperatureLevelLabel,
+    getServingTemperatureLevelName,
     parenthesisOpen,
     parenthesisClose,
-    servingTemperatureLabel,
-    servingTemperatureNames,
   }: ChoiceNameOptions,
 ): string => {
   const item = findItemById(menu, menuItemId);
   if (!item) return "";
 
-  const getServingTemperatureParts = (
-    value: ServingTemperature | null,
-  ): string[] =>
-    value
-      ? [`${servingTemperatureLabel}${colon}${servingTemperatureNames[value]}`]
-      : [];
-
-  const modifierParts = Object.entries(modifiers).flatMap(
-    ([groupId, modifierIds]) => {
+  const getSelectionParts = (
+    modifierGroups: OrderMenuModifierGroup[],
+    selections: Record<string, string[]>,
+    level: ServingTemperatureLevel | null,
+  ): string[] => [
+    ...(level
+      ? [
+          `${getServingTemperatureLevelLabel(level)}${colon}${getServingTemperatureLevelName(level)}`,
+        ]
+      : []),
+    ...Object.entries(selections).flatMap(([groupId, modifierIds]) => {
       if (!modifierIds.length) return [];
 
-      const group = item.modifierGroups.find(({ id }) => id === groupId);
-
-      const modifierNames = modifierIds
+      const group = modifierGroups.find(({ id }) => id === groupId);
+      const names = modifierIds
         .map(
           (modifierId) =>
             group?.modifiers.find(({ id }) => id === modifierId)?.displayName,
@@ -433,11 +415,9 @@ export const getChoiceNames = (
         .filter(Boolean)
         .join(delimiter);
 
-      return modifierNames
-        ? [`${group?.displayName ?? ""}${colon}${modifierNames}`]
-        : [];
-    },
-  );
+      return names ? [`${group?.displayName ?? ""}${colon}${names}`] : [];
+    }),
+  ];
 
   const addOnItems = getAddOnItems(item);
   const addOnNames = addOns
@@ -445,32 +425,16 @@ export const getChoiceNames = (
       ({
         menuItemId: addOnId,
         modifiers,
-        servingTemperature: addOnServingTemperature,
+        servingTemperatureLevel: addOnServingTemperatureLevel,
       }) => {
         const addOnItem = addOnItems.find(({ id }) => id === addOnId);
         if (!addOnItem) return "";
 
-        const modifierParts = [
-          ...getServingTemperatureParts(addOnServingTemperature),
-          ...Object.entries(modifiers).flatMap(([groupId, modifierIds]) => {
-            if (!modifierIds.length) return [];
-
-            const group = addOnItem.modifierGroups.find(
-              ({ id }) => id === groupId,
-            );
-
-            const names = modifierIds
-              .map(
-                (modifierId) =>
-                  group?.modifiers.find(({ id }) => id === modifierId)
-                    ?.displayName,
-              )
-              .filter(Boolean)
-              .join(delimiter);
-
-            return names ? [`${group?.displayName ?? ""}${colon}${names}`] : [];
-          }),
-        ].join(delimiter);
+        const modifierParts = getSelectionParts(
+          addOnItem.modifierGroups,
+          modifiers,
+          addOnServingTemperatureLevel,
+        ).join(delimiter);
 
         return modifierParts
           ? `${addOnItem.name}${parenthesisOpen}${modifierParts}${parenthesisClose}`
@@ -481,8 +445,11 @@ export const getChoiceNames = (
     .join(delimiter);
 
   return [
-    ...getServingTemperatureParts(servingTemperature),
-    ...modifierParts,
+    ...getSelectionParts(
+      item.modifierGroups,
+      modifiers,
+      servingTemperatureLevel,
+    ),
     ...(addOnNames ? [`${addOnLabel ?? ""}${colon}${addOnNames}`] : []),
   ].join(delimiter);
 };

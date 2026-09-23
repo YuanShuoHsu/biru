@@ -164,10 +164,22 @@
     "promoUntil": "Offer ends {date}",
     "selectAtLeast": "Select at least {count}",
     "selectUpTo": "Select up to {count}",
+    "servingTemperatureLabels": {
+      "Hot": "Temperature",
+      "Iced": "Ice"
+    },
+    "servingTemperatureLevels": {
+      "Hot": "Hot",
+      "LessIce": "Less ice",
+      "LightIce": "Light ice",
+      "NoIce": "No ice",
+      "RegularIce": "Regular ice",
+      "Warm": "Warm"
+    },
     "servingTemperatures": {
       "Hot": "Hot",
       "Iced": "Iced",
-      "label": "Temperature"
+      "label": "Temperature / Ice"
     },
     "stockLeft": "Only {stock} left"
   },
