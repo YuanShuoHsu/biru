@@ -6,6 +6,7 @@ import ItemSoldOut from "./ItemSoldOut";
 
 import CardDialogContent from "@/components/CardDialogContent";
 
+import { SERVING_TEMPERATURE_ICONS } from "@/constants/menus";
 import { API_ORDER_MODE } from "@/constants/orderMode";
 import { ViewDirections, ViewImageSizes } from "@/constants/view";
 
@@ -28,6 +29,7 @@ import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
+import { servingTemperatureValues } from "@/types/api";
 import type { OrderMenuItem } from "@/types/menus";
 import type { RouteParams } from "@/types/routeParams";
 import type { ViewDirection } from "@/types/view";
@@ -105,6 +107,19 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const TitleBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: theme.spacing(1),
+}));
+
+const TemperatureBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexShrink: 0,
+  gap: theme.spacing(0.5),
+}));
+
 const wrapStyle: CSSObject = {
   overflowWrap: "anywhere",
 };
@@ -134,7 +149,14 @@ interface ActionAreaCardProps {
 }
 
 const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
-  const { availableModes, name, description, image, offers } = menuItem;
+  const {
+    availableModes,
+    description,
+    image,
+    name,
+    offers,
+    servingTemperatures,
+  } = menuItem;
   const offer = offers[0];
   const price = Number(offer.price);
   const priceCurrency = offer.priceCurrency;
@@ -224,9 +246,32 @@ const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
           )}
         </ImageBox>
         <StyledCardContent>
-          <WrapTypography fontWeight="bold" variant="subtitle1">
-            {name}
-          </WrapTypography>
+          <TitleBox>
+            <WrapTypography fontWeight="bold" variant="subtitle1">
+              {name}
+            </WrapTypography>
+            {servingTemperatures.length > 0 && (
+              <TemperatureBox>
+                {servingTemperatureValues
+                  .filter((value) => servingTemperatures.includes(value))
+                  .map((value) => {
+                    const { color, icon: Icon } =
+                      SERVING_TEMPERATURE_ICONS[value];
+
+                    return (
+                      <Icon
+                        color={color}
+                        fontSize="small"
+                        key={value}
+                        titleAccess={tOrder(
+                          `menuItem.servingTemperatures.${value}`,
+                        )}
+                      />
+                    );
+                  })}
+              </TemperatureBox>
+            )}
+          </TitleBox>
           {description && (
             <ClampTypography color="text.secondary" variant="body2">
               {description}

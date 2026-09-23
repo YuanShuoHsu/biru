@@ -412,7 +412,8 @@ export interface paths {
     get?: never;
     put?: never;
     post?: never;
-    delete?: never;
+    /** 刪除尚未被使用的自訂假別 */
+    delete: operations["AttendanceLeavesController_deleteLeaveType"];
     options?: never;
     head?: never;
     /** 更新假別 */
@@ -2307,6 +2308,7 @@ export interface components {
       | "correctionSourceChanged"
       | "dailyHoursExceeded"
       | "emergencyDetailsRequired"
+      | "employeeDisableConflict"
       | "employeeNotEnabled"
       | "employmentWindowConflict"
       | "futureCorrection"
@@ -2330,6 +2332,7 @@ export interface components {
       | "leaveOutsideShift"
       | "leavePolicyRequired"
       | "leavePolicyRulesRequired"
+      | "leaveTypeInUse"
       | "locationNotAllowed"
       | "medicalCertificateRequired"
       | "medicalLeaveInterval"
@@ -2370,8 +2373,7 @@ export interface components {
       | "sourceRequired"
       | "splitLeaveByYear"
       | "statutoryBalanceAutomatic"
-      | "weeklyMinutesFromOutsideEmployment"
-      | "weeklyMinutesFromRequired";
+      | "statutoryLeaveTypeLocked";
     AttendanceErrorResponseDto: {
       message: components["schemas"]["AttendanceErrorCode"];
       /** @example Conflict */
@@ -2381,17 +2383,21 @@ export interface components {
       success: boolean;
       timestamp: string;
     };
-    AttendanceWeeklyMinutesChangeResponseDto: {
-      from: string;
-      minutes: number;
-    };
+    /** @enum {string} */
+    AttendanceEmploymentType: "fullTime" | "partTime";
+    /** @enum {string} */
+    AttendanceEmployeeStatus:
+      | "unconfigured"
+      | "upcoming"
+      | "active"
+      | "disabled"
+      | "terminated";
     AttendanceEmployeeResponseDto: {
       id: string;
       organizationId: string;
       userId: string;
       name: string;
-      weeklyMinutes: number;
-      weeklyMinutesHistory: components["schemas"]["AttendanceWeeklyMinutesChangeResponseDto"][];
+      employmentType: components["schemas"]["AttendanceEmploymentType"];
       enabled: boolean;
       /** Format: date-time */
       hiredAt: string;
@@ -2399,6 +2405,7 @@ export interface components {
       terminatedAt?: string | null;
       /** Format: date-time */
       createdAt: string;
+      status: components["schemas"]["AttendanceEmployeeStatus"];
     };
     AttendanceContextResponseDto: {
       employee?: components["schemas"]["AttendanceEmployeeResponseDto"] | null;
@@ -2437,23 +2444,40 @@ export interface components {
       | "email"
       | "hiredAt"
       | "terminatedAt"
-      | "weeklyMinutes"
-      | "enabled";
+      | "employmentType"
+      | "status";
     /** @enum {string} */
     AttendanceEmployeeSortField:
       | "name"
       | "email"
       | "hiredAt"
       | "terminatedAt"
-      | "weeklyMinutes"
-      | "enabled";
+      | "employmentType"
+      | "status";
+    AttendanceEmploymentResponseDto: {
+      id: string;
+      organizationId: string;
+      userId: string;
+      name: string;
+      employmentType: components["schemas"]["AttendanceEmploymentType"];
+      enabled: boolean;
+      /** Format: date-time */
+      hiredAt: string;
+      /** Format: date-time */
+      terminatedAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+    };
     AttendanceMemberResponseDto: {
       userId: string;
       name: string;
       email: string;
       /** Format: date-time */
       joinedAt: string;
-      employee?: components["schemas"]["AttendanceEmployeeResponseDto"] | null;
+      status: components["schemas"]["AttendanceEmployeeStatus"];
+      employee?:
+        | components["schemas"]["AttendanceEmploymentResponseDto"]
+        | null;
     };
     AttendanceMembersResponseDto: {
       data: components["schemas"]["AttendanceMemberResponseDto"][];
@@ -2464,8 +2488,6 @@ export interface components {
       total: number;
     };
     SaveAttendanceEmployeeDto: {
-      weeklyMinutes?: number;
-      weeklyMinutesFrom?: string;
       userId: string;
       enabled: boolean;
       hiredAt: string;
@@ -2678,22 +2700,24 @@ export interface components {
     /** @enum {string} */
     AttendanceRequestFilterField:
       | "employeeName"
-      | "leaveTypeName"
       | "reason"
       | "reviewReason"
       | "startsAt"
       | "endsAt"
       | "kind"
+      | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "status";
     /** @enum {string} */
     AttendanceRequestSortField:
       | "employeeName"
-      | "leaveTypeName"
       | "reason"
       | "reviewReason"
       | "startsAt"
       | "endsAt"
       | "kind"
+      | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "status";
     /** @enum {string} */
     AttendanceRequestKind: "correction" | "leave" | "overtime";
@@ -2705,6 +2729,27 @@ export interface components {
       | "withdrawn"
       | "cancellationPending"
       | "cancelled";
+    /** @enum {string} */
+    StatutoryLeaveKind:
+      | "custom"
+      | "annual"
+      | "personal"
+      | "familyCare"
+      | "sick"
+      | "hospitalSick"
+      | "pregnancyRest"
+      | "parental"
+      | "menstrual"
+      | "marriage"
+      | "funeral8"
+      | "funeral6"
+      | "funeral3"
+      | "prenatal"
+      | "paternity"
+      | "maternity"
+      | "miscarriage28"
+      | "miscarriage7"
+      | "miscarriage5";
     /** @enum {string} */
     AttendanceEmergencyCause: "disaster" | "incident" | "unexpected";
     EmergencyWorkResponseDto: {
@@ -2731,6 +2776,9 @@ export interface components {
       reviewReason?: string | null;
       leaveTypeId?: string | null;
       leaveTypeName?: string | null;
+      leaveTypeStatutoryKind?:
+        | components["schemas"]["StatutoryLeaveKind"]
+        | null;
       leaveCaseId?: string | null;
       leaveMinutes?: number | null;
       paidPercent?: number | null;
@@ -2816,9 +2864,10 @@ export interface components {
     /** @enum {string} */
     AttendanceLeaveCaseFilterField:
       | "employeeName"
-      | "leaveTypeName"
       | "reference"
       | "reason"
+      | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "eventDate"
       | "startsAt"
       | "endsAt"
@@ -2827,9 +2876,10 @@ export interface components {
     /** @enum {string} */
     AttendanceLeaveCaseSortField:
       | "employeeName"
-      | "leaveTypeName"
       | "reference"
       | "reason"
+      | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "eventDate"
       | "startsAt"
       | "endsAt"
@@ -2842,6 +2892,7 @@ export interface components {
       employeeName: string;
       leaveTypeId: string;
       leaveTypeName: string;
+      leaveTypeStatutoryKind: components["schemas"]["StatutoryLeaveKind"];
       reference: string;
       /** Format: date-time */
       eventDate: string;
@@ -2904,27 +2955,6 @@ export interface components {
       | "paidPercent"
       | "requiresBalance"
       | "enabled";
-    /** @enum {string} */
-    StatutoryLeaveKind:
-      | "custom"
-      | "annual"
-      | "personal"
-      | "familyCare"
-      | "sick"
-      | "hospitalSick"
-      | "pregnancyRest"
-      | "parental"
-      | "menstrual"
-      | "marriage"
-      | "funeral8"
-      | "funeral6"
-      | "funeral3"
-      | "prenatal"
-      | "paternity"
-      | "maternity"
-      | "miscarriage28"
-      | "miscarriage7"
-      | "miscarriage5";
     AttendanceLeaveTypeResponseDto: {
       id: string;
       organizationId: string;
@@ -2952,6 +2982,7 @@ export interface components {
     AttendanceLeaveBalanceFilterField:
       | "employeeName"
       | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "startsAt"
       | "endsAt"
       | "year"
@@ -2961,6 +2992,7 @@ export interface components {
     AttendanceLeaveBalanceSortField:
       | "employeeName"
       | "leaveTypeName"
+      | "leaveTypeStatutoryKind"
       | "startsAt"
       | "endsAt"
       | "year"
@@ -2973,6 +3005,7 @@ export interface components {
       employeeName: string;
       leaveTypeId: string;
       leaveTypeName: string;
+      leaveTypeStatutoryKind: components["schemas"]["StatutoryLeaveKind"];
       year: number;
       grantedMinutes: number;
       usedMinutes: number;
@@ -4983,6 +5016,11 @@ export interface components {
       image?: string;
     };
     /**
+     * @description 可供應的飲品溫度；省略代表不適用
+     * @enum {string}
+     */
+    ServingTemperature: "Hot" | "Iced";
+    /**
      * @description 可販售的點餐模式；省略代表四種全開
      * @enum {string}
      */
@@ -5059,6 +5097,8 @@ export interface components {
         | "VeganDiet"
         | "VegetarianDiet"
       )[];
+      /** @description 可供應的飲品溫度；省略代表不適用 */
+      servingTemperatures?: components["schemas"]["ServingTemperature"][];
       /** @description 可販售的點餐模式；省略代表四種全開 */
       availableModes?: components["schemas"]["OrderMode"][];
       nutrition?: components["schemas"]["NutritionInformationDto"];
@@ -5114,6 +5154,8 @@ export interface components {
             | "VegetarianDiet"
           )[]
         | null;
+      /** @description 可供應的飲品溫度；空陣列代表不適用 */
+      servingTemperatures: components["schemas"]["ServingTemperature"][];
       /** @description 可販售的點餐模式 */
       availableModes: components["schemas"]["OrderMode"][];
       nutrition?: components["schemas"]["NutritionInformationDto"] | null;
@@ -5135,6 +5177,7 @@ export interface components {
       | "priceSpecification"
       | "availability"
       | "availableModes"
+      | "servingTemperatures"
       | "createdAt"
       | "updatedAt"
       | "priceSpecificationValidFrom"
@@ -5149,6 +5192,7 @@ export interface components {
       | "deliveryLeadTimeMinutes"
       | "priceSpecification"
       | "availability"
+      | "servingTemperatures"
       | "createdAt"
       | "updatedAt"
       | "priceSpecificationValidFrom"
@@ -5176,6 +5220,8 @@ export interface components {
         | "VeganDiet"
         | "VegetarianDiet"
       )[];
+      /** @description 可供應的飲品溫度；省略代表不適用 */
+      servingTemperatures?: components["schemas"]["ServingTemperature"][];
       /** @description 可販售的點餐模式；省略代表四種全開 */
       availableModes?: components["schemas"]["OrderMode"][];
       nutrition?: components["schemas"]["NutritionInformationDto"];
@@ -5475,6 +5521,8 @@ export interface components {
             | "VegetarianDiet"
           )[]
         | null;
+      /** @description 可供應的飲品溫度；空陣列代表不適用 */
+      servingTemperatures: components["schemas"]["ServingTemperature"][];
       /** @description 可販售的點餐模式 */
       availableModes: components["schemas"]["OrderMode"][];
       nutrition?: components["schemas"]["NutritionInformationDto"] | null;
@@ -6793,6 +6841,34 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceLeaveTypeResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceLeavesController_deleteLeaveType: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -11558,6 +11634,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "correctionSourceChanged",
   "dailyHoursExceeded",
   "emergencyDetailsRequired",
+  "employeeDisableConflict",
   "employeeNotEnabled",
   "employmentWindowConflict",
   "futureCorrection",
@@ -11581,6 +11658,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "leaveOutsideShift",
   "leavePolicyRequired",
   "leavePolicyRulesRequired",
+  "leaveTypeInUse",
   "locationNotAllowed",
   "medicalCertificateRequired",
   "medicalLeaveInterval",
@@ -11621,9 +11699,14 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "sourceRequired",
   "splitLeaveByYear",
   "statutoryBalanceAutomatic",
-  "weeklyMinutesFromOutsideEmployment",
-  "weeklyMinutesFromRequired",
+  "statutoryLeaveTypeLocked",
 ];
+export const attendanceEmploymentTypeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceEmploymentType"]
+> = ["fullTime", "partTime"];
+export const attendanceEmployeeStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeStatus"]
+> = ["unconfigured", "upcoming", "active", "disabled", "terminated"];
 export const filterOperatorValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["FilterOperator"]
 > = [
@@ -11654,10 +11737,10 @@ export const sortDirectionValues: ReadonlyArray<
 > = ["asc", "desc"];
 export const attendanceEmployeeFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeFilterField"]
-> = ["name", "email", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
+> = ["name", "email", "hiredAt", "terminatedAt", "employmentType", "status"];
 export const attendanceEmployeeSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeSortField"]
-> = ["name", "email", "hiredAt", "terminatedAt", "weeklyMinutes", "enabled"];
+> = ["name", "email", "hiredAt", "terminatedAt", "employmentType", "status"];
 export const attendanceShiftFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceShiftFilterField"]
 > = ["employeeName", "startsAt", "endsAt", "dayKind"];
@@ -11701,24 +11784,26 @@ export const attendanceRequestFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceRequestFilterField"]
 > = [
   "employeeName",
-  "leaveTypeName",
   "reason",
   "reviewReason",
   "startsAt",
   "endsAt",
   "kind",
+  "leaveTypeName",
+  "leaveTypeStatutoryKind",
   "status",
 ];
 export const attendanceRequestSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceRequestSortField"]
 > = [
   "employeeName",
-  "leaveTypeName",
   "reason",
   "reviewReason",
   "startsAt",
   "endsAt",
   "kind",
+  "leaveTypeName",
+  "leaveTypeStatutoryKind",
   "status",
 ];
 export const attendanceRequestKindValues: ReadonlyArray<
@@ -11734,47 +11819,6 @@ export const attendanceRequestStatusValues: ReadonlyArray<
   "cancellationPending",
   "cancelled",
 ];
-export const attendanceEmergencyCauseValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceEmergencyCause"]
-> = ["disaster", "incident", "unexpected"];
-export const attendanceParentalModeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceParentalMode"]
-> = ["daily", "continuous"];
-export const reviewAttendanceRequestDtoStatusValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["ReviewAttendanceRequestDto"]["status"]
-> = ["approved", "rejected"];
-export const attendanceLeaveCaseFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveCaseFilterField"]
-> = [
-  "employeeName",
-  "leaveTypeName",
-  "reference",
-  "reason",
-  "eventDate",
-  "startsAt",
-  "endsAt",
-  "grantedMinutes",
-  "paidPercent",
-];
-export const attendanceLeaveCaseSortFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveCaseSortField"]
-> = [
-  "employeeName",
-  "leaveTypeName",
-  "reference",
-  "reason",
-  "eventDate",
-  "startsAt",
-  "endsAt",
-  "grantedMinutes",
-  "paidPercent",
-];
-export const attendanceLeaveTypeFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveTypeFilterField"]
-> = ["name", "statutoryKind", "paidPercent", "requiresBalance", "enabled"];
-export const attendanceLeaveTypeSortFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveTypeSortField"]
-> = ["name", "statutoryKind", "paidPercent", "requiresBalance", "enabled"];
 export const statutoryLeaveKindValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["StatutoryLeaveKind"]
 > = [
@@ -11798,11 +11842,55 @@ export const statutoryLeaveKindValues: ReadonlyArray<
   "miscarriage7",
   "miscarriage5",
 ];
+export const attendanceEmergencyCauseValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceEmergencyCause"]
+> = ["disaster", "incident", "unexpected"];
+export const attendanceParentalModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceParentalMode"]
+> = ["daily", "continuous"];
+export const reviewAttendanceRequestDtoStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ReviewAttendanceRequestDto"]["status"]
+> = ["approved", "rejected"];
+export const attendanceLeaveCaseFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveCaseFilterField"]
+> = [
+  "employeeName",
+  "reference",
+  "reason",
+  "leaveTypeName",
+  "leaveTypeStatutoryKind",
+  "eventDate",
+  "startsAt",
+  "endsAt",
+  "grantedMinutes",
+  "paidPercent",
+];
+export const attendanceLeaveCaseSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveCaseSortField"]
+> = [
+  "employeeName",
+  "reference",
+  "reason",
+  "leaveTypeName",
+  "leaveTypeStatutoryKind",
+  "eventDate",
+  "startsAt",
+  "endsAt",
+  "grantedMinutes",
+  "paidPercent",
+];
+export const attendanceLeaveTypeFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveTypeFilterField"]
+> = ["name", "statutoryKind", "paidPercent", "requiresBalance", "enabled"];
+export const attendanceLeaveTypeSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveTypeSortField"]
+> = ["name", "statutoryKind", "paidPercent", "requiresBalance", "enabled"];
 export const attendanceLeaveBalanceFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceLeaveBalanceFilterField"]
 > = [
   "employeeName",
   "leaveTypeName",
+  "leaveTypeStatutoryKind",
   "startsAt",
   "endsAt",
   "year",
@@ -11814,6 +11902,7 @@ export const attendanceLeaveBalanceSortFieldValues: ReadonlyArray<
 > = [
   "employeeName",
   "leaveTypeName",
+  "leaveTypeStatutoryKind",
   "startsAt",
   "endsAt",
   "year",
@@ -12244,6 +12333,9 @@ export const menuSectionFilterFieldValues: ReadonlyArray<
 export const menuSectionSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["MenuSectionSortField"]
 > = ["name", "description", "createdAt", "updatedAt"];
+export const servingTemperatureValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ServingTemperature"]
+> = ["Hot", "Iced"];
 export const orderModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderMode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
@@ -12292,6 +12384,7 @@ export const menuItemFilterFieldValues: ReadonlyArray<
   "priceSpecification",
   "availability",
   "availableModes",
+  "servingTemperatures",
   "createdAt",
   "updatedAt",
   "priceSpecificationValidFrom",
@@ -12308,6 +12401,7 @@ export const menuItemSortFieldValues: ReadonlyArray<
   "deliveryLeadTimeMinutes",
   "priceSpecification",
   "availability",
+  "servingTemperatures",
   "createdAt",
   "updatedAt",
   "priceSpecificationValidFrom",

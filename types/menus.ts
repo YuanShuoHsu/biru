@@ -14,3 +14,4 @@ export type OrderMenuModifier =
   components["schemas"]["OrderMenuModifierResponseDto"];
 
 export type ItemAvailability = components["schemas"]["ItemAvailability"];
+export type ServingTemperature = components["schemas"]["ServingTemperature"];
