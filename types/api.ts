@@ -3650,12 +3650,12 @@ export interface components {
      * @enum {string}
      */
     ServingTemperatureLevel:
-      | "Warm"
-      | "Hot"
       | "RegularIce"
       | "LessIce"
       | "LightIce"
-      | "NoIce";
+      | "NoIce"
+      | "Warm"
+      | "Hot";
     CreateOrderItemAddOnDto: {
       menuItemId: string;
       /** @description modifierGroupId → modifierIds[] */
@@ -5046,7 +5046,7 @@ export interface components {
      * @description 可供應的飲品溫度；省略代表不適用
      * @enum {string}
      */
-    ServingTemperature: "Hot" | "Iced";
+    ServingTemperature: "Iced" | "Hot";
     /**
      * @description 可販售的點餐模式；省略代表四種全開
      * @enum {string}
@@ -12106,7 +12106,7 @@ export const userCouponSourceValues: ReadonlyArray<
 > = ["granted", "claimed", "signup", "birthday", "spend", "redeemed"];
 export const servingTemperatureLevelValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ServingTemperatureLevel"]
-> = ["Warm", "Hot", "RegularIce", "LessIce", "LightIce", "NoIce"];
+> = ["RegularIce", "LessIce", "LightIce", "NoIce", "Warm", "Hot"];
 export const validateCouponDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ValidateCouponDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
@@ -12367,7 +12367,7 @@ export const menuSectionSortFieldValues: ReadonlyArray<
 > = ["name", "description", "createdAt", "updatedAt"];
 export const servingTemperatureValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ServingTemperature"]
-> = ["Hot", "Iced"];
+> = ["Iced", "Hot"];
 export const orderModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderMode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];

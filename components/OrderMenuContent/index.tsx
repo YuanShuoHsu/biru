@@ -155,6 +155,7 @@ const OrderMenuContent = () => {
     .filter(({ sold }) => sold > 0)
     .sort((a, b) => b.sold - a.sold)
     .slice(0, FEATURED_LIMIT);
+  const topSoldIds = new Set(topSoldItems.map(({ id }) => id));
 
   const latestItems = allItems
     .filter(
@@ -163,6 +164,7 @@ const OrderMenuContent = () => {
     )
     .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
     .slice(0, FEATURED_LIMIT);
+  const latestIds = new Set(latestItems.map(({ id }) => id));
 
   const combinedSections = [
     ...(topSoldItems.length
@@ -345,13 +347,17 @@ const OrderMenuContent = () => {
           </SectionTypography>
           {id === TOP_SOLD || id === LATEST ? (
             <FeaturedSlider
+              latestIds={latestIds}
               menuItems={menuItems}
               priority={sectionIndex === 0}
+              topSoldIds={topSoldIds}
             />
           ) : (
             <ResponsiveGrid
+              latestIds={latestIds}
               menuItems={menuItems}
               priority={sectionIndex === 0}
+              topSoldIds={topSoldIds}
             />
           )}
         </SectionBox>

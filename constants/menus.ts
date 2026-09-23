@@ -1,7 +1,9 @@
 import type { ElementType } from "react";
 
-import { AcUnit, LocalFireDepartment } from "@mui/icons-material";
+import { AcUnit, LocalCafe } from "@mui/icons-material";
 import type { SvgIconProps } from "@mui/material";
+import { lightBlue } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
 
 import type {
   ServingTemperature,
@@ -14,18 +16,30 @@ export const SERVING_TEMPERATURE_OF_LEVEL: Record<
   ServingTemperatureLevel,
   ServingTemperature
 > = {
-  Warm: "Hot",
-  Hot: "Hot",
   RegularIce: "Iced",
   LessIce: "Iced",
   LightIce: "Iced",
   NoIce: "Iced",
+  Warm: "Hot",
+  Hot: "Hot",
 };
+
+const StyledLocalCafe = styled(LocalCafe)(({ theme }) => ({
+  color: theme.vars.palette.error.main,
+}));
+
+const StyledAcUnit = styled(AcUnit)(({ theme }) => ({
+  color: lightBlue[700],
+
+  ...theme.applyStyles("dark", {
+    color: lightBlue[300],
+  }),
+}));
 
 export const SERVING_TEMPERATURE_ICONS: Record<
   ServingTemperature,
-  { color: SvgIconProps["color"]; icon: ElementType<SvgIconProps> }
+  ElementType<SvgIconProps>
 > = {
-  Hot: { color: "error", icon: LocalFireDepartment },
-  Iced: { color: "info", icon: AcUnit },
+  Hot: StyledLocalCafe,
+  Iced: StyledAcUnit,
 };

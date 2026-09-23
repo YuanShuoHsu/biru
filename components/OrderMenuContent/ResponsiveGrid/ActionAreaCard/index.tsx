@@ -13,7 +13,7 @@ import { ViewDirections, ViewImageSizes } from "@/constants/view";
 import { useAvailableHoursLabel } from "@/hooks/useAvailableHoursLabel";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
 
-import { RestaurantMenu } from "@mui/icons-material";
+import { AutoAwesome, RestaurantMenu, ThumbUp } from "@mui/icons-material";
 import {
   Badge,
   Box,
@@ -23,6 +23,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { amber } from "@mui/material/colors";
 import { type CSSObject, styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
@@ -113,10 +114,18 @@ const TitleBox = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const TemperatureBox = styled(Box)(({ theme }) => ({
+const IconBox = styled(Box)(({ theme }) => ({
   display: "flex",
   flexShrink: 0,
   gap: theme.spacing(0.5),
+}));
+
+const StyledAutoAwesome = styled(AutoAwesome)(({ theme }) => ({
+  color: amber[700],
+
+  ...theme.applyStyles("dark", {
+    color: amber[300],
+  }),
 }));
 
 const wrapStyle: CSSObject = {
@@ -143,11 +152,18 @@ const OriginalPriceTypography = styled(Typography, {
 }));
 
 interface ActionAreaCardProps {
+  isLatest: boolean;
+  isTopSold: boolean;
   menuItem: OrderMenuItem;
   priority: boolean;
 }
 
-const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
+const ActionAreaCard = ({
+  isLatest,
+  isTopSold,
+  menuItem,
+  priority,
+}: ActionAreaCardProps) => {
   const {
     availableModes,
     description,
@@ -249,15 +265,26 @@ const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
             <WrapTypography fontWeight="bold" variant="subtitle1">
               {name}
             </WrapTypography>
-            {servingTemperatures.length > 0 && (
-              <TemperatureBox>
+            {(isTopSold || isLatest || servingTemperatures.length > 0) && (
+              <IconBox>
+                {isTopSold && (
+                  <ThumbUp
+                    color="primary"
+                    fontSize="small"
+                    titleAccess={tOrder("mode.storeSlug.tableNumber.topSold")}
+                  />
+                )}
+                {isLatest && (
+                  <StyledAutoAwesome
+                    fontSize="small"
+                    titleAccess={tOrder("mode.storeSlug.tableNumber.latest")}
+                  />
+                )}
                 {servingTemperatures.map((value) => {
-                  const { color, icon: Icon } =
-                    SERVING_TEMPERATURE_ICONS[value];
+                  const Icon = SERVING_TEMPERATURE_ICONS[value];
 
                   return (
                     <Icon
-                      color={color}
                       fontSize="small"
                       key={value}
                       titleAccess={tOrder(
@@ -266,7 +293,7 @@ const ActionAreaCard = ({ menuItem, priority }: ActionAreaCardProps) => {
                     />
                   );
                 })}
-              </TemperatureBox>
+              </IconBox>
             )}
           </TitleBox>
           {description && (
