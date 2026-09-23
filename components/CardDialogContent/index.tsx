@@ -35,12 +35,15 @@ import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import type { CartItem } from "@/stores/cart-store";
 
+import { sweetnessLevelValues } from "@/types/api";
 import type {
   ItemAvailability,
   OrderMenuItem,
   OrderMenuModifierGroup,
   ServingTemperature,
   ServingTemperatureLevel,
+  Sweetness,
+  SweetnessLevel,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 import type { RouteParams } from "@/types/routeParams";
@@ -109,7 +112,11 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     nutrition,
     modifierGroups,
     servingTemperatures,
+    sweetness,
+    fixedSweetnessLevel,
   } = menuItem;
+  const hasBuiltInChoices =
+    servingTemperatures.length > 0 || sweetness !== "NotApplicable";
   const offer = offers[0];
   const basePrice = Number(offer?.price || 0);
   const priceCurrency = offer?.priceCurrency;
@@ -151,6 +158,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     defaultValues: {
       quantity: cartItem?.quantity || 1,
       servingTemperatureLevel: cartItem?.servingTemperatureLevel || null,
+      sweetnessLevel: cartItem?.sweetnessLevel || null,
       choices: cartItem
         ? {
             ...cartItem.modifiers,
@@ -164,6 +172,14 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             cartItem.addOns.map(({ menuItemId, servingTemperatureLevel }) => [
               menuItemId,
               servingTemperatureLevel,
+            ]),
+          )
+        : {},
+      addOnSweetnessLevels: cartItem
+        ? Object.fromEntries(
+            cartItem.addOns.map(({ menuItemId, sweetnessLevel }) => [
+              menuItemId,
+              sweetnessLevel,
             ]),
           )
         : {},
@@ -181,16 +197,20 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
   const [
     servingTemperatureLevel = null,
+    sweetnessLevel = null,
     choices = {},
     addOnServingTemperatureLevels = {},
+    addOnSweetnessLevels = {},
     addOnChoices = {},
     rawQuantity = 1,
   ] = useWatch({
     control,
     name: [
       "servingTemperatureLevel",
+      "sweetnessLevel",
       "choices",
       "addOnServingTemperatureLevels",
+      "addOnSweetnessLevels",
       "addOnChoices",
       "quantity",
     ],
@@ -285,8 +305,17 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         shouldValidate: isSubmitted,
       });
 
+  const handleSweetnessLevelChange = (next: SweetnessLevel) =>
+    setValue("sweetnessLevel", next, { shouldValidate: isSubmitted });
+
+  const handleAddOnSweetnessLevelChange =
+    (addOnId: string) => (next: SweetnessLevel) =>
+      setValue(`addOnSweetnessLevels.${addOnId}`, next, {
+        shouldValidate: isSubmitted,
+      });
+
   const onSubmit = handleSubmit(
-    ({ servingTemperatureLevel, choices, addOnChoices }) => {
+    ({ servingTemperatureLevel, sweetnessLevel, choices, addOnChoices }) => {
       if (quantity <= 0) return;
 
       const modifiers = Object.fromEntries(
@@ -297,6 +326,11 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         modifiers: addOnChoices[addOnItem.id] || {},
         servingTemperatureLevel:
           addOnServingTemperatureLevels[addOnItem.id] || null,
+        // 只有可調才存客人所選；固定甜度下單時由後端帶入
+        sweetnessLevel:
+          addOnItem.sweetness === "Adjustable"
+            ? addOnSweetnessLevels[addOnItem.id] || null
+            : null,
       }));
 
       const newItem = {
@@ -305,6 +339,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         modifiers,
         quantity,
         servingTemperatureLevel,
+        sweetnessLevel: sweetness === "Adjustable" ? sweetnessLevel : null,
       };
 
       if (cartItem) {
@@ -401,6 +436,60 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       value={value || ""}
     />
   );
+
+  const renderSweetnessGroup = (
+    sweetnessOffered: Sweetness,
+    fixedLevel: SweetnessLevel | null,
+    value: SweetnessLevel | null,
+    onValueChange: (next: SweetnessLevel) => void,
+    error?: { message?: string },
+  ) =>
+    sweetnessOffered === "Fixed" ? (
+      <RadioButtonsGroup
+        disabled
+        fullWidth
+        helperText={tOrder("menuItem.sweetness.fixed")}
+        label={tOrder("menuItem.sweetness.label")}
+        onChange={undefined}
+        options={
+          fixedLevel
+            ? [
+                {
+                  control: <Radio size="small" />,
+                  label: renderChoiceLabel(
+                    tOrder(`menuItem.sweetnessLevels.${fixedLevel}`),
+                    0,
+                    "",
+                    "",
+                  ),
+                  value: fixedLevel,
+                },
+              ]
+            : []
+        }
+        value={fixedLevel || ""}
+      />
+    ) : (
+      <RadioButtonsGroup
+        error={!!error}
+        fullWidth
+        helperText={error?.message}
+        label={tOrder("menuItem.sweetness.label")}
+        onChange={(event, next) => onValueChange(next as SweetnessLevel)}
+        options={sweetnessLevelValues.map((level) => ({
+          control: <Radio size="small" />,
+          label: renderChoiceLabel(
+            tOrder(`menuItem.sweetnessLevels.${level}`),
+            0,
+            "",
+            "",
+          ),
+          value: level,
+        }))}
+        required
+        value={value || ""}
+      />
+    );
 
   const renderModifierGroup = (
     group: OrderMenuModifierGroup,
@@ -572,9 +661,23 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           handleServingTemperatureLevelChange,
           errors.servingTemperatureLevel,
         )}
+      {sweetness !== "NotApplicable" && (
+        <>
+          {servingTemperatures.length > 0 && (
+            <Divider flexItem variant="inset" />
+          )}
+          {renderSweetnessGroup(
+            sweetness,
+            fixedSweetnessLevel || null,
+            sweetnessLevel,
+            handleSweetnessLevelChange,
+            errors.sweetnessLevel,
+          )}
+        </>
+      )}
       {modifierGroups.map((group, index) => (
         <Fragment key={group.id}>
-          {(index > 0 || servingTemperatures.length > 0) && (
+          {(index > 0 || hasBuiltInChoices) && (
             <Divider flexItem variant="inset" />
           )}
           {renderModifierGroup(
@@ -585,7 +688,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           )}
         </Fragment>
       ))}
-      {(servingTemperatures.length > 0 || modifierGroups.length > 0) &&
+      {(hasBuiltInChoices || modifierGroups.length > 0) &&
         addOnItems.length > 0 && <Divider flexItem variant="inset" />}
       {addOnItems.length > 0 && (
         <CheckboxesGroup
@@ -604,7 +707,12 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               name,
               offers,
               servingTemperatures,
+              sweetness: addOnSweetness,
+              fixedSweetnessLevel: addOnFixedSweetnessLevel,
             } = addOnItem;
+            const addOnHasBuiltInChoices =
+              servingTemperatures.length > 0 ||
+              addOnSweetness !== "NotApplicable";
             const checked = selectedAddOnIds.includes(id);
             const addOnStock = getOfferStock(offers[0]);
             const outOfStockInCart =
@@ -626,8 +734,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
             return {
               children: checked &&
-                (servingTemperatures.length > 0 ||
-                  modifierGroups.length > 0) && (
+                (addOnHasBuiltInChoices || modifierGroups.length > 0) && (
                   <Stack pl={3} gap={2}>
                     {servingTemperatures.length > 0 &&
                       renderServingTemperatureLevelGroup(
@@ -636,9 +743,23 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                         handleAddOnServingTemperatureLevelChange(id),
                         errors.addOnServingTemperatureLevels?.[id],
                       )}
+                    {addOnSweetness !== "NotApplicable" && (
+                      <>
+                        {servingTemperatures.length > 0 && (
+                          <Divider flexItem variant="inset" />
+                        )}
+                        {renderSweetnessGroup(
+                          addOnSweetness,
+                          addOnFixedSweetnessLevel || null,
+                          addOnSweetnessLevels[id] || null,
+                          handleAddOnSweetnessLevelChange(id),
+                          errors.addOnSweetnessLevels?.[id],
+                        )}
+                      </>
+                    )}
                     {modifierGroups.map((group, index) => (
                       <Fragment key={group.id}>
-                        {(index > 0 || servingTemperatures.length > 0) && (
+                        {(index > 0 || addOnHasBuiltInChoices) && (
                           <Divider flexItem variant="inset" />
                         )}
                         {renderModifierGroup(
@@ -664,7 +785,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           value={selectedAddOnIds}
         />
       )}
-      {(servingTemperatures.length > 0 ||
+      {(hasBuiltInChoices ||
         modifierGroups.length > 0 ||
         addOnItems.length > 0) && <Divider flexItem />}
       <Stack

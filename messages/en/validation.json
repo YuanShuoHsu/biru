@@ -108,5 +108,8 @@
   },
   "servingTemperatureLevel": {
     "notSelected": "Please select your {label}."
+  },
+  "sweetnessLevel": {
+    "notSelected": "Please select your sweetness."
   }
 }

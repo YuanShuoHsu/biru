@@ -137,8 +137,11 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
       getServingTemperatureLabel([SERVING_TEMPERATURE_OF_LEVEL[level]]),
     getServingTemperatureLevelName: (level) =>
       tOrder(`menuItem.servingTemperatureLevels.${level}`),
+    getSweetnessLevelName: (level) =>
+      tOrder(`menuItem.sweetnessLevels.${level}`),
     parenthesisOpen: tCommon("parenthesisOpen"),
     parenthesisClose: tCommon("parenthesisClose"),
+    sweetnessLabel: tOrder("menuItem.sweetness.label"),
   });
 
   const { addCartItem, deleteCartItem, getCartItemTotalQuantity } =

@@ -3,12 +3,17 @@ import * as z from "zod";
 
 import { useServingTemperatureLabel } from "@/hooks/useServingTemperatureLabel";
 
-import { servingTemperatureLevelValues } from "@/types/api";
+import {
+  servingTemperatureLevelValues,
+  sweetnessLevelValues,
+} from "@/types/api";
 import type {
   OrderMenuItem,
   OrderMenuModifierGroup,
   ServingTemperature,
   ServingTemperatureLevel,
+  Sweetness,
+  SweetnessLevel,
 } from "@/types/menus";
 
 import { ADD_ON_OPTION_ID, getAddOnItems } from "@/utils/menus";
@@ -34,15 +39,19 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
     .enum(servingTemperatureLevelValues)
     .nullable();
 
+  const sweetnessLevelSchema = z.enum(sweetnessLevelValues).nullable();
+
   return z
     .object({
       quantity: z.number(),
       servingTemperatureLevel: servingTemperatureLevelSchema,
+      sweetnessLevel: sweetnessLevelSchema,
       choices: z.record(z.string(), z.array(z.string())),
       addOnServingTemperatureLevels: z.record(
         z.string(),
         servingTemperatureLevelSchema,
       ),
+      addOnSweetnessLevels: z.record(z.string(), sweetnessLevelSchema),
       addOnChoices: z.record(
         z.string(),
         z.record(z.string(), z.array(z.string())),
@@ -52,8 +61,10 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
       (
         {
           servingTemperatureLevel,
+          sweetnessLevel,
           choices,
           addOnServingTemperatureLevels,
+          addOnSweetnessLevels,
           addOnChoices,
         },
         ctx,
@@ -76,11 +87,28 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
             });
         };
 
+        const validateSweetnessLevel = (
+          sweetness: Sweetness,
+          value: SweetnessLevel | null,
+          path: (string | number)[],
+        ) => {
+          if (sweetness === "Adjustable" && !value)
+            ctx.addIssue({
+              code: "custom",
+              message: tValidation("sweetnessLevel.notSelected"),
+              path,
+            });
+        };
+
         validateServingTemperatureLevel(
           menuItem.servingTemperatures,
           servingTemperatureLevel,
           ["servingTemperatureLevel"],
         );
+
+        validateSweetnessLevel(menuItem.sweetness, sweetnessLevel, [
+          "sweetnessLevel",
+        ]);
 
         menuItem.modifierGroups.forEach((group) => {
           const message = getGroupMessage(group, choices[group.id] ?? []);
@@ -97,27 +125,40 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
 
         getAddOnItems(menuItem)
           .filter(({ id }) => selectedAddOnIds.includes(id))
-          .forEach(({ id: addOnId, modifierGroups, servingTemperatures }) => {
-            validateServingTemperatureLevel(
+          .forEach(
+            ({
+              id: addOnId,
+              modifierGroups,
               servingTemperatures,
-              addOnServingTemperatureLevels[addOnId] || null,
-              ["addOnServingTemperatureLevels", addOnId],
-            );
-
-            modifierGroups.forEach((group) => {
-              const message = getGroupMessage(
-                group,
-                addOnChoices[addOnId]?.[group.id] ?? [],
+              sweetness,
+            }) => {
+              validateServingTemperatureLevel(
+                servingTemperatures,
+                addOnServingTemperatureLevels[addOnId] || null,
+                ["addOnServingTemperatureLevels", addOnId],
               );
 
-              if (message)
-                ctx.addIssue({
-                  code: "custom",
-                  message,
-                  path: ["addOnChoices", addOnId, group.id],
-                });
-            });
-          });
+              validateSweetnessLevel(
+                sweetness,
+                addOnSweetnessLevels[addOnId] || null,
+                ["addOnSweetnessLevels", addOnId],
+              );
+
+              modifierGroups.forEach((group) => {
+                const message = getGroupMessage(
+                  group,
+                  addOnChoices[addOnId]?.[group.id] ?? [],
+                );
+
+                if (message)
+                  ctx.addIssue({
+                    code: "custom",
+                    message,
+                    path: ["addOnChoices", addOnId, group.id],
+                  });
+              });
+            },
+          );
       },
     );
 };

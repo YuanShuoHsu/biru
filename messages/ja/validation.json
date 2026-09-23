@@ -108,5 +108,8 @@
   },
   "servingTemperatureLevel": {
     "notSelected": "{label}を選択してください。"
+  },
+  "sweetnessLevel": {
+    "notSelected": "甘さを選択してください。"
   }
 }

@@ -24,15 +24,18 @@ export const getCartItems = (items: OrderItemResponse[]): CartItem[] =>
       modifiers,
       orderQuantity,
       servingTemperatureLevel,
+      sweetnessLevel,
     }) => ({
       addOns: (addOns || []).map((addOn) => ({
         menuItemId: addOn.menuItemId,
         modifiers: groupModifiers(addOn.modifiers),
         servingTemperatureLevel: addOn.servingTemperatureLevel || null,
+        sweetnessLevel: addOn.sweetnessLevel || null,
       })),
       menuItemId,
       modifiers: groupModifiers(modifiers),
       quantity: orderQuantity,
       servingTemperatureLevel: servingTemperatureLevel || null,
+      sweetnessLevel: sweetnessLevel || null,
     }),
   );

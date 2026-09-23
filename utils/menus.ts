@@ -15,6 +15,8 @@ import type {
   OrderMenuOffer,
   ServingTemperature,
   ServingTemperatureLevel,
+  Sweetness,
+  SweetnessLevel,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 
@@ -182,11 +184,13 @@ export const getItemKey = ({
   menuItemId,
   modifiers,
   servingTemperatureLevel,
+  sweetnessLevel,
 }: Omit<CartItem, "quantity">): string => {
   const parts = [
     ...(servingTemperatureLevel
       ? [`servingTemperatureLevel:${servingTemperatureLevel}`]
       : []),
+    ...(sweetnessLevel ? [`sweetnessLevel:${sweetnessLevel}`] : []),
     ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
       [...selected].sort().map((modifierId) => `${groupId}:${modifierId}`),
     ),
@@ -197,11 +201,17 @@ export const getItemKey = ({
           menuItemId: addOnId,
           modifiers,
           servingTemperatureLevel: addOnServingTemperatureLevel,
+          sweetnessLevel: addOnSweetnessLevel,
         }) => [
           `${ADD_ON_OPTION_ID}:${addOnId}`,
           ...(addOnServingTemperatureLevel
             ? [
                 `${ADD_ON_OPTION_ID}:${addOnId}:servingTemperatureLevel:${addOnServingTemperatureLevel}`,
+              ]
+            : []),
+          ...(addOnSweetnessLevel
+            ? [
+                `${ADD_ON_OPTION_ID}:${addOnId}:sweetnessLevel:${addOnSweetnessLevel}`,
               ]
             : []),
           ...Object.entries(modifiers).flatMap(([groupId, selected]) =>
@@ -261,6 +271,23 @@ const isInvalidServingTemperatureLevel = (
       )
     : !!servingTemperatureLevel;
 
+// 只有可調才看客人選的值；不可調時後端以品項設定為準，再訂一次帶回的固定甜度不算錯
+const isInvalidSweetnessLevel = (
+  sweetness: Sweetness,
+  sweetnessLevel: SweetnessLevel | null,
+): boolean => sweetness === "Adjustable" && !sweetnessLevel;
+
+// 可調為客人所選、固定為品項當下的設定
+export const getDisplaySweetnessLevel = (
+  { fixedSweetnessLevel, sweetness }: OrderMenuItem | OrderMenuAddOnItem,
+  sweetnessLevel: SweetnessLevel | null,
+): SweetnessLevel | null =>
+  sweetness === "Adjustable"
+    ? sweetnessLevel
+    : sweetness === "Fixed"
+      ? fixedSweetnessLevel || null
+      : null;
+
 export const hasInvalidChoices = (
   menu: OrderMenu | null,
   item: CartItem,
@@ -304,6 +331,7 @@ export const hasInvalidChoices = (
       menuItem.servingTemperatures,
       item.servingTemperatureLevel,
     ) ||
+    isInvalidSweetnessLevel(menuItem.sweetness, item.sweetnessLevel) ||
     hasInvalidSelections(menuItem.modifierGroups, item.modifiers)
   )
     return true;
@@ -311,7 +339,7 @@ export const hasInvalidChoices = (
   const addOnItems = getAddOnItems(menuItem);
 
   return item.addOns.some(
-    ({ menuItemId, modifiers, servingTemperatureLevel }) => {
+    ({ menuItemId, modifiers, servingTemperatureLevel, sweetnessLevel }) => {
       const addOnItem = addOnItems.find(({ id }) => id === menuItemId);
       if (!addOnItem) return true;
 
@@ -321,6 +349,7 @@ export const hasInvalidChoices = (
           addOnItem.servingTemperatures,
           servingTemperatureLevel,
         ) ||
+        isInvalidSweetnessLevel(addOnItem.sweetness, sweetnessLevel) ||
         hasInvalidSelections(addOnItem.modifierGroups, modifiers)
       );
     },
@@ -373,21 +402,31 @@ interface ChoiceNameOptions {
   delimiter: string;
   getServingTemperatureLevelLabel: (level: ServingTemperatureLevel) => string;
   getServingTemperatureLevelName: (level: ServingTemperatureLevel) => string;
+  getSweetnessLevelName: (level: SweetnessLevel) => string;
   parenthesisOpen: string;
   parenthesisClose: string;
+  sweetnessLabel: string;
 }
 
 export const getChoiceNames = (
   menu: OrderMenu | null,
-  { addOns, menuItemId, modifiers, servingTemperatureLevel }: CartItem,
+  {
+    addOns,
+    menuItemId,
+    modifiers,
+    servingTemperatureLevel,
+    sweetnessLevel,
+  }: CartItem,
   {
     addOnLabel,
     colon,
     delimiter,
     getServingTemperatureLevelLabel,
     getServingTemperatureLevelName,
+    getSweetnessLevelName,
     parenthesisOpen,
     parenthesisClose,
+    sweetnessLabel,
   }: ChoiceNameOptions,
 ): string => {
   const item = findItemById(menu, menuItemId);
@@ -397,10 +436,16 @@ export const getChoiceNames = (
     modifierGroups: OrderMenuModifierGroup[],
     selections: Record<string, string[]>,
     level: ServingTemperatureLevel | null,
+    displaySweetnessLevel: SweetnessLevel | null,
   ): string[] => [
     ...(level
       ? [
           `${getServingTemperatureLevelLabel(level)}${colon}${getServingTemperatureLevelName(level)}`,
+        ]
+      : []),
+    ...(displaySweetnessLevel
+      ? [
+          `${sweetnessLabel}${colon}${getSweetnessLevelName(displaySweetnessLevel)}`,
         ]
       : []),
     ...Object.entries(selections).flatMap(([groupId, modifierIds]) => {
@@ -426,6 +471,7 @@ export const getChoiceNames = (
         menuItemId: addOnId,
         modifiers,
         servingTemperatureLevel: addOnServingTemperatureLevel,
+        sweetnessLevel: addOnSweetnessLevel,
       }) => {
         const addOnItem = addOnItems.find(({ id }) => id === addOnId);
         if (!addOnItem) return "";
@@ -434,6 +480,7 @@ export const getChoiceNames = (
           addOnItem.modifierGroups,
           modifiers,
           addOnServingTemperatureLevel,
+          getDisplaySweetnessLevel(addOnItem, addOnSweetnessLevel),
         ).join(delimiter);
 
         return modifierParts
@@ -449,6 +496,7 @@ export const getChoiceNames = (
       item.modifierGroups,
       modifiers,
       servingTemperatureLevel,
+      getDisplaySweetnessLevel(item, sweetnessLevel),
     ),
     ...(addOnNames ? [`${addOnLabel ?? ""}${colon}${addOnNames}`] : []),
   ].join(delimiter);

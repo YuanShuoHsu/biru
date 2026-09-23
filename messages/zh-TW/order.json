@@ -181,7 +181,19 @@
       "Iced": "冰",
       "label": "溫度／冰量"
     },
-    "stockLeft": "剩餘 {stock}"
+    "stockLeft": "剩餘 {stock}",
+    "sweetness": {
+      "fixed": "此品項甜度固定",
+      "label": "甜度"
+    },
+    "sweetnessLevels": {
+      "FullSugar": "全糖",
+      "HalfSugar": "半糖",
+      "LessSugar": "少糖",
+      "LightSugar": "微糖",
+      "MinimalSugar": "一分糖",
+      "NoSugar": "無糖"
+    }
   },
   "mode": {
     "counter": {

@@ -181,7 +181,19 @@
       "Iced": "아이스",
       "label": "온도／얼음 양"
     },
-    "stockLeft": "남은 수량 {stock}"
+    "stockLeft": "남은 수량 {stock}",
+    "sweetness": {
+      "fixed": "이 상품은 당도를 조절할 수 없습니다",
+      "label": "당도"
+    },
+    "sweetnessLevels": {
+      "FullSugar": "설탕 보통",
+      "HalfSugar": "설탕 절반",
+      "LessSugar": "설탕 적게",
+      "LightSugar": "설탕 조금",
+      "MinimalSugar": "설탕 아주 조금",
+      "NoSugar": "무설탕"
+    }
   },
   "mode": {
     "counter": {

@@ -181,7 +181,19 @@
       "Iced": "Iced",
       "label": "Temperature / Ice"
     },
-    "stockLeft": "Only {stock} left"
+    "stockLeft": "Only {stock} left",
+    "sweetness": {
+      "fixed": "Sweetness is fixed for this item",
+      "label": "Sweetness"
+    },
+    "sweetnessLevels": {
+      "FullSugar": "Full sugar",
+      "HalfSugar": "Half sugar",
+      "LessSugar": "Less sugar",
+      "LightSugar": "Light sugar",
+      "MinimalSugar": "Minimal sugar",
+      "NoSugar": "No sugar"
+    }
   },
   "mode": {
     "counter": {

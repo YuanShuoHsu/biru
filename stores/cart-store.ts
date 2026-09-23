@@ -1,7 +1,7 @@
 import { createJSONStorage, persist } from "zustand/middleware";
 import { createStore } from "zustand/vanilla";
 
-import type { ServingTemperatureLevel } from "@/types/menus";
+import type { ServingTemperatureLevel, SweetnessLevel } from "@/types/menus";
 import type { OrderMode } from "@/types/orderMode";
 import type { Organization } from "@/types/organizations";
 
@@ -11,6 +11,7 @@ export interface CartAddOn {
   menuItemId: string;
   modifiers: Record<string, string[]>;
   servingTemperatureLevel: ServingTemperatureLevel | null;
+  sweetnessLevel: SweetnessLevel | null;
 }
 
 export interface CartItem {
@@ -19,6 +20,7 @@ export interface CartItem {
   modifiers: Record<string, string[]>;
   addOns: CartAddOn[];
   servingTemperatureLevel: ServingTemperatureLevel | null;
+  sweetnessLevel: SweetnessLevel | null;
 }
 
 type CartItemsMap = Record<string, CartItem>;

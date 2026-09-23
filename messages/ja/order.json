@@ -181,7 +181,19 @@
       "Iced": "アイス",
       "label": "温度／氷の量"
     },
-    "stockLeft": "残り {stock}"
+    "stockLeft": "残り {stock}",
+    "sweetness": {
+      "fixed": "この商品は甘さを調整できません",
+      "label": "甘さ"
+    },
+    "sweetnessLevels": {
+      "FullSugar": "砂糖普通",
+      "HalfSugar": "砂糖半分",
+      "LessSugar": "砂糖少なめ",
+      "LightSugar": "砂糖控えめ",
+      "MinimalSugar": "砂糖ごく少なめ",
+      "NoSugar": "無糖"
+    }
   },
   "mode": {
     "counter": {
