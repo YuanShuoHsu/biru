@@ -27,7 +27,16 @@ import {
   EventAvailable,
   RestaurantMenu,
 } from "@mui/icons-material";
-import { Box, Chip, Divider, Radio, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Collapse,
+  Divider,
+  Radio,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
@@ -80,6 +89,21 @@ const StyledRestaurantMenu = styled(RestaurantMenu)(({ theme }) => ({
 const WrapTypography = styled(Typography)({
   overflowWrap: "anywhere",
 });
+
+const AddOnAvatar = styled(Avatar, {
+  shouldForwardProp: (prop) => prop !== "disabled",
+})<{ disabled: boolean }>(({ disabled, theme }) => ({
+  width: theme.spacing(7),
+  height: theme.spacing(7),
+  backgroundColor: theme.palette.action.hover,
+  ...(disabled && {
+    opacity: theme.palette.action.disabledOpacity,
+  }),
+}));
+
+const AddOnLabelStack = styled(Stack)(({ theme }) => ({
+  paddingBlock: theme.spacing(0.75),
+}));
 
 const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
@@ -720,6 +744,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             const {
               availableModes,
               id,
+              image,
               modifierGroups,
               name,
               offers,
@@ -753,8 +778,9 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                 : "");
 
             return {
-              children: checked &&
-                (addOnHasBuiltInChoices || modifierGroups.length > 0) && (
+              children: (addOnHasBuiltInChoices ||
+                modifierGroups.length > 0) && (
+                <Collapse in={checked} timeout="auto" unmountOnExit>
                   <Stack pl={3} gap={2}>
                     {servingTemperatures.length > 0 &&
                       renderServingTemperatureLevelGroup(
@@ -793,14 +819,27 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                       </Fragment>
                     ))}
                   </Stack>
-                ),
+                </Collapse>
+              ),
               disabled: !checked && !!unavailableLabel,
-              label: renderChoiceLabel(
-                name,
-                getAddOnPrice(addOnItem),
-                unavailableLabel,
-                getAvailableHoursLabel(offers[0]?.availableHours),
-                "",
+              label: (
+                <AddOnLabelStack direction="row" alignItems="center" gap={1.5}>
+                  <AddOnAvatar
+                    alt={name}
+                    disabled={!checked && !!unavailableLabel}
+                    src={image || undefined}
+                    variant="rounded"
+                  >
+                    <RestaurantMenu color="disabled" />
+                  </AddOnAvatar>
+                  {renderChoiceLabel(
+                    name,
+                    getAddOnPrice(addOnItem),
+                    unavailableLabel,
+                    getAvailableHoursLabel(offers[0]?.availableHours),
+                    "",
+                  )}
+                </AddOnLabelStack>
               ),
               value: id,
             };
