@@ -90,6 +90,10 @@ const WrapTypography = styled(Typography)({
   overflowWrap: "anywhere",
 });
 
+const AddOnLabelStack = styled(Stack)(({ theme }) => ({
+  paddingBlock: theme.spacing(0.75),
+}));
+
 const AddOnAvatar = styled(Avatar, {
   shouldForwardProp: (prop) => prop !== "disabled",
 })<{ disabled: boolean }>(({ disabled, theme }) => ({
@@ -99,10 +103,6 @@ const AddOnAvatar = styled(Avatar, {
   ...(disabled && {
     opacity: theme.palette.action.disabledOpacity,
   }),
-}));
-
-const AddOnLabelStack = styled(Stack)(({ theme }) => ({
-  paddingBlock: theme.spacing(0.75),
 }));
 
 const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
@@ -394,31 +394,25 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   const renderChoiceLabel = (
     choiceName: string,
     choiceExtraCost: number,
-    unavailableLabel: string,
-    availableHoursLabel: string,
-    recommendedLabel: string,
+    noteLabel: string,
+    tagLabel: string,
   ) => (
     <Stack direction="row" alignItems="baseline" flexWrap="wrap" gap={1}>
       <WrapTypography variant="body2">{choiceName}</WrapTypography>
-      {recommendedLabel && (
-        <Typography color="warning" variant="caption">
-          {recommendedLabel}
-        </Typography>
-      )}
       {choiceExtraCost !== 0 && (
         <Typography color="text.secondary" variant="caption">
           {choiceExtraCost > 0 ? "+" : "-"}
           {formatMoney(Math.abs(choiceExtraCost), priceCurrency)}
         </Typography>
       )}
-      {availableHoursLabel && (
+      {noteLabel && (
         <Typography color="text.secondary" variant="caption">
-          {availableHoursLabel}
+          {noteLabel}
         </Typography>
       )}
-      {unavailableLabel && (
-        <Typography color="error" variant="caption">
-          {unavailableLabel}
+      {tagLabel && (
+        <Typography color="warning" variant="caption">
+          {tagLabel}
         </Typography>
       )}
     </Stack>
@@ -460,7 +454,6 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             tOrder(`menuItem.servingTemperatureLevels.${level}`),
             0,
             "",
-            "",
             level === recommendedLevel ? tOrder("menuItem.recommended") : "",
           ),
           value: level,
@@ -481,9 +474,8 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   ) =>
     sweetnessOffered === "Fixed" ? (
       <RadioButtonsGroup
-        disabled
         fullWidth
-        helperText={tOrder("menuItem.sweetness.fixed")}
+        helperText={null}
         label={tOrder("menuItem.sweetness.label")}
         onChange={undefined}
         options={
@@ -495,14 +487,14 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                     tOrder(`menuItem.sweetnessLevels.${fixedLevel}`),
                     0,
                     "",
-                    "",
-                    "",
+                    tOrder("menuItem.sweetness.fixed"),
                   ),
                   value: fixedLevel,
                 },
               ]
             : []
         }
+        required
         value={fixedLevel || ""}
       />
     ) : (
@@ -517,7 +509,6 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           label: renderChoiceLabel(
             tOrder(`menuItem.sweetnessLevels.${level}`),
             0,
-            "",
             "",
             level === recommendedLevel ? tOrder("menuItem.recommended") : "",
           ),
@@ -575,9 +566,8 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               label: renderChoiceLabel(
                 displayName,
                 Number(priceAdjustment || 0),
+                "",
                 unavailableLabel,
-                "",
-                "",
               ),
               value: id,
             };
@@ -615,9 +605,8 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               label: renderChoiceLabel(
                 displayName,
                 Number(priceAdjustment || 0),
+                "",
                 unavailableLabel,
-                "",
-                "",
               ),
               value: id,
             };
@@ -835,9 +824,8 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                   {renderChoiceLabel(
                     name,
                     getAddOnPrice(addOnItem),
-                    unavailableLabel,
                     getAvailableHoursLabel(offers[0]?.availableHours),
-                    "",
+                    unavailableLabel,
                   )}
                 </AddOnLabelStack>
               ),

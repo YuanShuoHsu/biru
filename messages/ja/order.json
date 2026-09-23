@@ -184,7 +184,7 @@
     },
     "stockLeft": "残り {stock}",
     "sweetness": {
-      "fixed": "この商品は甘さを調整できません",
+      "fixed": "甘さ固定",
       "label": "甘さ"
     },
     "sweetnessLevels": {

@@ -184,7 +184,7 @@
     },
     "stockLeft": "Only {stock} left",
     "sweetness": {
-      "fixed": "Sweetness is fixed for this item",
+      "fixed": "Fixed sweetness",
       "label": "Sweetness"
     },
     "sweetnessLevels": {

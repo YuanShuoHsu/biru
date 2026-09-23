@@ -184,7 +184,7 @@
     },
     "stockLeft": "剩餘 {stock}",
     "sweetness": {
-      "fixed": "此品項甜度固定",
+      "fixed": "甜度固定",
       "label": "甜度"
     },
     "sweetnessLevels": {

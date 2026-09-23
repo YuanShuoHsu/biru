@@ -184,7 +184,7 @@
     },
     "stockLeft": "남은 수량 {stock}",
     "sweetness": {
-      "fixed": "이 상품은 당도를 조절할 수 없습니다",
+      "fixed": "당도 고정",
       "label": "당도"
     },
     "sweetnessLevels": {
