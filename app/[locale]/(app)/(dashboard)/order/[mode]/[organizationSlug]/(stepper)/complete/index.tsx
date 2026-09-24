@@ -1,9 +1,6 @@
 "use client";
 
-import dayjs from "dayjs";
-import timezonePlugin from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import { useLocale, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
@@ -54,9 +51,6 @@ import type { OrganizationResponse } from "@/types/organizations";
 import { submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-
-dayjs.extend(utc);
-dayjs.extend(timezonePlugin);
 
 const statusIconStyle: CSSObject = {
   alignSelf: "center",
@@ -204,6 +198,8 @@ const OrderModeOrganizationSlugComplete = ({
       menuSocket.off("orderStatusUpdated", handleOrderStatusUpdated);
     };
   }, [isConnected, mutate, orderId]);
+
+  const format = useFormatter();
 
   const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
@@ -435,9 +431,11 @@ const OrderModeOrganizationSlugComplete = ({
               {order.pickupTime && (
                 <InfoRow
                   label={tOrder("complete.transaction.pickupTime")}
-                  value={dayjs(order.pickupTime)
-                    .tz(STORE_TIMEZONE)
-                    .format("YYYY/MM/DD HH:mm")}
+                  value={format.dateTime(
+                    new Date(order.pickupTime),
+                    "dateTime",
+                    { timeZone: STORE_TIMEZONE },
+                  )}
                 />
               )}
               {order.tradeNo && (
@@ -453,9 +451,9 @@ const OrderModeOrganizationSlugComplete = ({
               {order.paymentDate && (
                 <InfoRow
                   label={tOrder("complete.transaction.paymentDate")}
-                  value={dayjs(order.paymentDate)
-                    .tz(STORE_TIMEZONE)
-                    .format("YYYY/MM/DD HH:mm:ss")}
+                  value={format.dateTime(new Date(order.paymentDate), "short", {
+                    timeZone: STORE_TIMEZONE,
+                  })}
                 />
               )}
               <InfoRow
@@ -501,9 +499,11 @@ const OrderModeOrganizationSlugComplete = ({
                 {invoice.invoiceDate && (
                   <InfoRow
                     label={tOrder("complete.invoice.invoiceDate")}
-                    value={dayjs(invoice.invoiceDate)
-                      .tz(STORE_TIMEZONE)
-                      .format("YYYY/MM/DD HH:mm:ss")}
+                    value={format.dateTime(
+                      new Date(invoice.invoiceDate),
+                      "short",
+                      { timeZone: STORE_TIMEZONE },
+                    )}
                   />
                 )}
                 <InfoRow

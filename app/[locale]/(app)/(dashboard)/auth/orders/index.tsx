@@ -1,9 +1,6 @@
 "use client";
 
-import dayjs from "dayjs";
-import timezonePlugin from "dayjs/plugin/timezone";
-import utc from "dayjs/plugin/utc";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import CustomizedAccordions from "@/components/CustomizedAccordions";
@@ -38,9 +35,6 @@ import type { UserOrderListResponse, UserOrderResponse } from "@/types/orders";
 
 import { getHref } from "@/utils/href";
 import { getCartItems } from "@/utils/orders";
-
-dayjs.extend(utc);
-dayjs.extend(timezonePlugin);
 
 const ORDER_MODE_PATH: Record<UserOrderResponse["mode"], string> = {
   counter: ORDER_MODE.Counter,
@@ -104,6 +98,8 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
   const pathname = usePathname();
 
   const router = useRouter();
+
+  const format = useFormatter();
 
   const tAuth = useTranslations("auth");
   const tCommon = useTranslations("common");
@@ -214,9 +210,9 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                   </SummaryRowStack>
                   <SummaryRowStack direction="row">
                     <Typography color="textSecondary" variant="caption">
-                      {dayjs(order.createdAt)
-                        .tz(STORE_TIMEZONE)
-                        .format("YYYY/MM/DD HH:mm:ss")}
+                      {format.dateTime(new Date(order.createdAt), "short", {
+                        timeZone: STORE_TIMEZONE,
+                      })}
                     </Typography>
                     <StyledTypography color="primary" variant="subtitle2">
                       {tOrder("complete.summary.total")}{" "}
@@ -240,9 +236,9 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
                 {order.pickupTime && (
                   <Typography color="textSecondary" variant="caption">
                     {tOrder("complete.transaction.pickupTime")}{" "}
-                    {dayjs(order.pickupTime)
-                      .tz(STORE_TIMEZONE)
-                      .format("YYYY/MM/DD HH:mm")}
+                    {format.dateTime(new Date(order.pickupTime), "dateTime", {
+                      timeZone: STORE_TIMEZONE,
+                    })}
                   </Typography>
                 )}
                 {order.items.map((item) => (

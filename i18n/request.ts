@@ -13,13 +13,36 @@ import enMessages from "@/messages";
 
 export const formats = {
   dateTime: {
-    short: {
-      day: "numeric",
-      month: "short",
+    date: {
       year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    },
+    dateTime: {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    },
+    monthDay: {
+      month: "2-digit",
+      day: "2-digit",
+    },
+    short: {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hourCycle: "h23",
+    },
+    time: {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
     },
   },
   number: {

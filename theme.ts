@@ -153,6 +153,11 @@ const theme = createTheme({
         },
       }),
     },
+    MuiDateTimePicker: {
+      defaultProps: {
+        ampm: false,
+      },
+    },
     MuiDivider: {
       styleOverrides: {
         root: ({ theme }) => ({

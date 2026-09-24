@@ -891,9 +891,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           {promoInfo?.validThrough && (
             <Typography color="error" variant="caption">
               {tOrder("menuItem.promoUntil", {
-                date: format.dateTime(promoInfo.validThrough, {
-                  month: "numeric",
-                  day: "numeric",
+                date: format.dateTime(promoInfo.validThrough, "monthDay", {
                   timeZone: STORE_TIMEZONE,
                 }),
               })}
