@@ -40,6 +40,11 @@ const StyledButton = styled(Button)<ButtonProps>(({ theme, variant }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
   pointerEvents: "auto",
+
+  "&.Mui-disabled": {
+    pointerEvents: "auto",
+  },
+
   ...(variant === "outlined" && {
     flex: 1,
   }),
@@ -98,7 +103,7 @@ const OrderBottomBar = () => {
         </StyledButton>
         <StyledButton
           disabled={hasInvalidItems}
-          href={checkoutHref}
+          href={hasInvalidItems ? undefined : checkoutHref}
           variant="contained"
         >
           <StyledChip label={tOrder("cart.next")} variant="outlined" />
