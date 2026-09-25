@@ -11,7 +11,6 @@ import { menuSocket } from "@/app/socket";
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
 
-import { localeConfigs } from "@/constants/locale";
 import { ORDER_MODE } from "@/constants/orderMode";
 import { INVOICE_STATUS_COLORS } from "@/constants/orders";
 import { STORE_TIMEZONE } from "@/constants/timezone";
@@ -48,7 +47,7 @@ import type { CheckoutEcpayDto, CheckoutEcpayResponse } from "@/types/ecpay";
 import type { OrderResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { submitEcpayCheckout } from "@/utils/ecpay";
+import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
 
@@ -241,7 +240,7 @@ const OrderModeOrganizationSlugComplete = ({
         await fetcher<CheckoutEcpayResponse>("/api/ecpay", {
           body: JSON.stringify({
             ClientBackURL: completeUrl,
-            Language: localeConfigs[locale].ecpayLanguage,
+            Language: ecpayLanguages[locale],
             orderId: order.id,
             TradeDesc: tOrder("checkout.tradeDesc"),
           } satisfies CheckoutEcpayDto),

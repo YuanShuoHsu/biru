@@ -29,7 +29,6 @@ import { StyledCardContent } from "@/components/FormCard";
 import ListRadioGroup from "@/components/ListRadioGroup";
 import TextMaskCustom from "@/components/TextMaskCustom";
 
-import { localeConfigs } from "@/constants/locale";
 import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
 import { PICKUP_MINUTES_STEP } from "@/constants/pickup";
 import { STORE_TIMEZONE } from "@/constants/timezone";
@@ -87,7 +86,7 @@ import type { RouteParams } from "@/types/routeParams";
 
 import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
-import { submitEcpayCheckout } from "@/utils/ecpay";
+import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { sendRequest } from "@/utils/fetcher";
 import { getCartAvailableHours } from "@/utils/menus";
@@ -492,7 +491,7 @@ const OrderModeOrganizationSlugCheckout = ({
 
       const dto: CheckoutEcpayDto = {
         ClientBackURL: completeUrl,
-        Language: localeConfigs[locale].ecpayLanguage,
+        Language: ecpayLanguages[locale],
         orderId: order.id,
         TradeDesc: tOrder("checkout.tradeDesc"),
       };

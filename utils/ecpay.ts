@@ -1,4 +1,15 @@
-import type { CheckoutEcpayResponse } from "@/types/ecpay";
+import { LocaleEnum } from "@/enums/Locale";
+
+import type { Locale } from "@/i18n/routing";
+
+import type { CheckoutEcpayResponse, EcpayLanguage } from "@/types/ecpay";
+
+export const ecpayLanguages: Partial<Record<Locale, EcpayLanguage>> = {
+  [LocaleEnum.En]: "ENG",
+  [LocaleEnum.Ja]: "JPN",
+  [LocaleEnum.Ko]: "KOR",
+  [LocaleEnum.ZhCN]: "CHI",
+};
 
 export const submitEcpayCheckout = ({
   action,
