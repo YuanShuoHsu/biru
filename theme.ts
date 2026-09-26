@@ -259,6 +259,19 @@ const theme = createTheme({
         }),
       },
     },
+    MuiTablePagination: {
+      styleOverrides: {
+        displayedRows: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+        select: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+        selectLabel: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
+      },
+    },
     MuiToggleButton: {
       styleOverrides: {
         root: ({ theme }) => ({
