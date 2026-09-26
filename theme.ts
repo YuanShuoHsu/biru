@@ -113,6 +113,9 @@ const theme = createTheme({
             "border-color",
             "color",
           ]),
+          "& .MuiSvgIcon-root": {
+            transition: "none",
+          },
           ...(ownerState.variant === "outlined" && {
             backgroundColor: theme.vars.palette.background.paper,
           }),
@@ -126,11 +129,13 @@ const theme = createTheme({
     },
     MuiChip: {
       styleOverrides: {
+        label: ({ theme }) => ({
+          transition: theme.transitions.create("color"),
+        }),
         root: ({ theme }) => ({
           transition: theme.transitions.create([
             "background-color",
             "border-color",
-            "color",
           ]),
         }),
       },
@@ -238,6 +243,9 @@ const theme = createTheme({
     },
     MuiTab: {
       styleOverrides: {
+        icon: {
+          transition: "none",
+        },
         root: ({ theme }) => ({
           transition: theme.transitions.create("color"),
         }),
