@@ -122,6 +122,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/attendance/employees/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 刪除沒有任何出勤或薪資紀錄的員工設定 */
+    delete: operations["AttendanceEmployeesController_deleteEmployee"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/attendance/settings": {
     parameters: {
       query?: never;
@@ -2235,7 +2252,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 依統一編號查詢公司名稱與地址 */
+    /** 依統一編號查詢公司名稱、地址與負責人 */
     get: operations["GcisController_findOne"];
     put?: never;
     post?: never;
@@ -2538,6 +2555,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/payroll/withholding-file/non-resident": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 產生非居住者給付日的扣繳憑單申報檔（給付後 10 日內申報） */
+    get: operations["PayrollWithholdingController_nonResidentFile"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/payroll/withholding-unit": {
     parameters: {
       query?: never;
@@ -2589,6 +2623,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/payroll/me/withholding-certificates/{year}/request": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 申請填發扣繳憑單（免填發年度改為填發） */
+    post: operations["PayrollWithholdingController_requestCertificate"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2614,7 +2665,7 @@ export interface components {
       | "dailyHoursExceeded"
       | "dayKindRequired"
       | "emergencyDetailsRequired"
-      | "employeeDisableConflict"
+      | "employeeInUse"
       | "employeeNotEnabled"
       | "employmentInsuranceExemptionInvalid"
       | "employmentInsuranceIneligible"
@@ -2624,6 +2675,7 @@ export interface components {
       | "healthInsuranceExemptionInvalid"
       | "healthInsuranceRequired"
       | "healthSupplementExemptionInvalid"
+      | "foreignTaxIdentityRequired"
       | "holidayCalendarMissing"
       | "holidaySubstituteInvalid"
       | "idempotencyConflict"
@@ -2667,6 +2719,7 @@ export interface components {
       | "overlappingLeave"
       | "overlappingOvertimeExtensions"
       | "overlappingShift"
+      | "overtimeAgreementRequired"
       | "parentalChildExists"
       | "parentalChildMismatch"
       | "parentalChildRequired"
@@ -2704,7 +2757,6 @@ export interface components {
       | "statutoryLeaveTypeLocked"
       | "studentWeeklyHoursExceeded"
       | "taxIdentityRequired"
-      | "taxIdentityUnsupported"
       | "terminationProtected"
       | "terminationReasonRequired"
       | "weeklyRestRequired"
@@ -2750,7 +2802,6 @@ export interface components {
       | "unconfigured"
       | "upcoming"
       | "active"
-      | "disabled"
       | "terminated";
     AttendanceEmployeeResponseDto: {
       id: string;
@@ -2769,7 +2820,6 @@ export interface components {
       employmentInsuranceEligible: boolean;
       workPermitRequired: boolean;
       pensionApplicable: boolean;
-      enabled: boolean;
       birthDate?: string | null;
       taiwanStaySince?: string | null;
       /** Format: date-time */
@@ -2785,11 +2835,20 @@ export interface components {
       createdAt: string;
       status: components["schemas"]["AttendanceEmployeeStatus"];
     };
+    AttendanceSelfReviewAllowanceDto: {
+      attendanceRequest: boolean;
+      leaveCase: boolean;
+      parentalChild: boolean;
+      parentalReturn: boolean;
+      payslip: boolean;
+    };
     AttendanceContextResponseDto: {
       employee?: components["schemas"]["AttendanceEmployeeResponseDto"] | null;
       canManage: boolean;
       canManageSettings: boolean;
       canManagePayroll: boolean;
+      /** @description 店內沒有其他人具備同一審核權限時，本人可處理自己的案件 */
+      selfReviewAllowed: components["schemas"]["AttendanceSelfReviewAllowanceDto"];
     };
     /** @enum {string} */
     FilterOperator:
@@ -2851,7 +2910,6 @@ export interface components {
       employmentInsuranceEligible: boolean;
       workPermitRequired: boolean;
       pensionApplicable: boolean;
-      enabled: boolean;
       birthDate?: string | null;
       taiwanStaySince?: string | null;
       /** Format: date-time */
@@ -2872,6 +2930,8 @@ export interface components {
       email: string;
       /** Format: date-time */
       joinedAt: string;
+      /** @description 已設定且沒有任何出勤或薪資紀錄 */
+      deletable: boolean;
       status: components["schemas"]["AttendanceEmployeeStatus"];
       employee?:
         | components["schemas"]["AttendanceEmploymentResponseDto"]
@@ -2908,7 +2968,6 @@ export interface components {
       indigenousHolidays: string[];
       terminationReason?: components["schemas"]["AttendanceTerminationReason"];
       userId: string;
-      enabled: boolean;
       birthDate: string;
       taiwanStaySince?: string;
       regularLeaveWeekday?: number;
@@ -2916,6 +2975,9 @@ export interface components {
       hiredAt: string;
       terminatedAt?: string;
       terminationNoticedAt?: string;
+    };
+    AttendanceIdResponseDto: {
+      id: string;
     };
     AttendanceSettingsResponseDto: {
       /**
@@ -2950,6 +3012,18 @@ export interface components {
        * @example 2026-01
        */
       voluntaryLaborInsuranceFrom?: string | null;
+      /**
+       * @description 工會或勞資會議同意延長工時（含休息日出勤）的決議日；未設定時不得延長工時
+       * @example 2026-01-15
+       */
+      overtimeAgreedFrom?: string | null;
+      /**
+       * @description 每月發薪日，超過該月天數時為月底
+       * @example 5
+       */
+      payday?: number | null;
+      /** @description 發薪日在薪資月份的次月 */
+      paydayNextMonth: boolean;
       organizationId: string;
       /** Format: date-time */
       updatedAt: string;
@@ -2991,6 +3065,18 @@ export interface components {
        * @example 2026-01
        */
       voluntaryLaborInsuranceFrom?: string | null;
+      /**
+       * @description 工會或勞資會議同意延長工時（含休息日出勤）的決議日；未設定時不得延長工時
+       * @example 2026-01-15
+       */
+      overtimeAgreedFrom?: string | null;
+      /**
+       * @description 每月發薪日，超過該月天數時為月底
+       * @example 5
+       */
+      payday?: number | null;
+      /** @description 發薪日在薪資月份的次月 */
+      paydayNextMonth: boolean;
       latitude: number;
       longitude: number;
       radiusMeters: number;
@@ -3179,9 +3265,6 @@ export interface components {
       startsAt: string;
       endsAt: string;
       paidBreak: boolean;
-    };
-    AttendanceIdResponseDto: {
-      id: string;
     };
     CreateAttendancePunchDto: {
       action: components["schemas"]["AttendanceEventAction"];
@@ -3416,7 +3499,7 @@ export interface components {
       leaveTypeName: string;
       leaveTypeStatutoryKind: components["schemas"]["StatutoryLeaveKind"];
       calendarLeave: boolean;
-      reference: string;
+      reference?: string | null;
       /** Format: date-time */
       eventDate: string;
       /** Format: date-time */
@@ -3433,8 +3516,12 @@ export interface components {
       total: number;
     };
     CreateAttendanceLeaveCaseDto: {
+      /** @description 育嬰留職停薪以子女區分，其他事件假必填 */
+      reference?: string;
       /** @description 育嬰留職停薪取子女出生日，其他事件假必填 */
       eventDate?: string;
+      /** @description 產假、流產假由開始日加法定天數推得，其他假別必填 */
+      endsAt?: string;
       /** Format: uuid */
       childId?: string;
       earlyParentalAgreed?: boolean;
@@ -3442,9 +3529,7 @@ export interface components {
       employeeId: string;
       /** Format: uuid */
       leaveTypeId: string;
-      reference: string;
       startsAt: string;
-      endsAt: string;
       reason: string;
       extensionAgreed?: boolean;
     };
@@ -3453,7 +3538,7 @@ export interface components {
       id: string;
       employeeId: string;
       leaveTypeId: string;
-      reference: string;
+      reference?: string | null;
       /** Format: date-time */
       eventDate: string;
       /** Format: date-time */
@@ -3485,6 +3570,8 @@ export interface components {
       statutoryKind: components["schemas"]["StatutoryLeaveKind"];
       eventLeave: boolean;
       calendarLeave: boolean;
+      /** @description 產假、流產假等固定天數曆日假的法定天數，請假案件結束日由此推得 */
+      fixedCalendarDays?: number | null;
       medicalCertificateRequired: boolean;
       paidPercent?: number | null;
       statutoryPaidPercent?: number | null;
@@ -6547,8 +6634,10 @@ export interface components {
       | "openingHoursRequired"
       | "overlappingLeaveAttendance"
       | "parentalReturnPending"
+      | "overtimeAgreementRequired"
       | "partTimeLadderRequiresPartTime"
       | "payrollPeriodOpen"
+      | "paydayRequired"
       | "payrollRuleSetStale"
       | "pendingRequests"
       | "pensionIneligible"
@@ -6594,6 +6683,8 @@ export interface components {
       reviewedAt?: string | null;
       /** Format: date-time */
       publishedAt?: string | null;
+      /** @description 依店家發薪日推得的給付日，扣繳與補充保費以此認定 */
+      paidOn?: string | null;
       /** Format: date-time */
       createdAt: string;
     };
@@ -6665,14 +6756,16 @@ export interface components {
       /** Format: email */
       contactEmail: string;
     };
+    /** @enum {string} */
+    WithholdingIdType: "0" | "3" | "7";
     PayrollWithholdingCertificateResponseDto: {
       employeeId: string;
       employeeName: string;
       legalStatus: components["schemas"]["AttendanceLegalStatus"];
-      /** @description 外籍員工目前需另行申報 */
-      filable: boolean;
+      idType: components["schemas"]["WithholdingIdType"];
       taxIdMasked?: string | null;
-      addressProvided: boolean;
+      identityComplete: boolean;
+      certificateRequested: boolean;
       periodFrom: string;
       periodTo: string;
       salaryCents: string;
@@ -6681,10 +6774,24 @@ export interface components {
       retirementIncomeCents: string;
       retirementWithholdingCents: string;
     };
+    PayrollNonResidentPaymentResponseDto: {
+      paymentDate: string;
+      /** @description 代扣稅款之日起 10 日內 */
+      deadline: string;
+      employeeId: string;
+      employeeName: string;
+      taxIdMasked?: string | null;
+      identityComplete: boolean;
+      salaryCents: string;
+      salaryWithholdingCents: string;
+      retirementIncomeCents: string;
+      retirementWithholdingCents: string;
+    };
     PayrollWithholdingSummaryResponseDto: {
       year: number;
       unit?: components["schemas"]["PayrollWithholdingUnitResponseDto"] | null;
       certificates: components["schemas"]["PayrollWithholdingCertificateResponseDto"][];
+      nonResidentPayments: components["schemas"]["PayrollNonResidentPaymentResponseDto"][];
     };
     PayrollWithholdingFileResponseDto: {
       fileName: string;
@@ -6705,12 +6812,272 @@ export interface components {
       /** Format: email */
       contactEmail: string;
     };
+    /** @enum {string} */
+    ResidenceCountryCode:
+      | "AD"
+      | "AE"
+      | "AF"
+      | "AG"
+      | "AI"
+      | "AL"
+      | "AM"
+      | "AN"
+      | "AO"
+      | "AQ"
+      | "AR"
+      | "AS"
+      | "AT"
+      | "AU"
+      | "AW"
+      | "AX"
+      | "AZ"
+      | "BA"
+      | "BB"
+      | "BD"
+      | "BE"
+      | "BF"
+      | "BG"
+      | "BH"
+      | "BI"
+      | "BJ"
+      | "BL"
+      | "BM"
+      | "BN"
+      | "BO"
+      | "BR"
+      | "BS"
+      | "BT"
+      | "BV"
+      | "BW"
+      | "BY"
+      | "BZ"
+      | "CA"
+      | "CC"
+      | "CD"
+      | "CF"
+      | "CG"
+      | "CH"
+      | "CI"
+      | "CK"
+      | "CL"
+      | "CM"
+      | "CN"
+      | "CO"
+      | "CR"
+      | "CU"
+      | "CV"
+      | "CX"
+      | "CY"
+      | "CZ"
+      | "DE"
+      | "DJ"
+      | "DK"
+      | "DM"
+      | "DO"
+      | "DZ"
+      | "EC"
+      | "EE"
+      | "EG"
+      | "EH"
+      | "ER"
+      | "ES"
+      | "ET"
+      | "FI"
+      | "FJ"
+      | "FK"
+      | "FM"
+      | "FO"
+      | "FR"
+      | "FX"
+      | "GA"
+      | "GB"
+      | "GD"
+      | "GE"
+      | "GF"
+      | "GG"
+      | "GH"
+      | "GI"
+      | "GL"
+      | "GM"
+      | "GN"
+      | "GP"
+      | "GQ"
+      | "GR"
+      | "GS"
+      | "GT"
+      | "GU"
+      | "GW"
+      | "GY"
+      | "HK"
+      | "HM"
+      | "HN"
+      | "HR"
+      | "HT"
+      | "HU"
+      | "ID"
+      | "IE"
+      | "IL"
+      | "IM"
+      | "IN"
+      | "IO"
+      | "IQ"
+      | "IR"
+      | "IS"
+      | "IT"
+      | "JE"
+      | "JM"
+      | "JO"
+      | "JP"
+      | "KE"
+      | "KG"
+      | "KH"
+      | "KI"
+      | "KM"
+      | "KN"
+      | "KP"
+      | "KR"
+      | "KW"
+      | "KY"
+      | "KZ"
+      | "LA"
+      | "LB"
+      | "LC"
+      | "LI"
+      | "LK"
+      | "LR"
+      | "LS"
+      | "LT"
+      | "LU"
+      | "LV"
+      | "LY"
+      | "MA"
+      | "MC"
+      | "MD"
+      | "ME"
+      | "MF"
+      | "MG"
+      | "MH"
+      | "MK"
+      | "ML"
+      | "MM"
+      | "MN"
+      | "MO"
+      | "MP"
+      | "MQ"
+      | "MR"
+      | "MS"
+      | "MT"
+      | "MU"
+      | "MV"
+      | "MW"
+      | "MX"
+      | "MY"
+      | "MZ"
+      | "NA"
+      | "NC"
+      | "NE"
+      | "NF"
+      | "NG"
+      | "NI"
+      | "NL"
+      | "NO"
+      | "NP"
+      | "NR"
+      | "NU"
+      | "NZ"
+      | "OM"
+      | "PA"
+      | "PE"
+      | "PF"
+      | "PG"
+      | "PH"
+      | "PK"
+      | "PL"
+      | "PM"
+      | "PN"
+      | "PR"
+      | "PS"
+      | "PT"
+      | "PW"
+      | "PY"
+      | "QA"
+      | "RE"
+      | "RO"
+      | "RS"
+      | "RU"
+      | "RW"
+      | "SA"
+      | "SB"
+      | "SC"
+      | "SD"
+      | "SE"
+      | "SG"
+      | "SH"
+      | "SI"
+      | "SJ"
+      | "SK"
+      | "SL"
+      | "SM"
+      | "SN"
+      | "SO"
+      | "SR"
+      | "ST"
+      | "SV"
+      | "SY"
+      | "SZ"
+      | "TC"
+      | "TD"
+      | "TF"
+      | "TG"
+      | "TH"
+      | "TJ"
+      | "TK"
+      | "TL"
+      | "TM"
+      | "TN"
+      | "TO"
+      | "TP"
+      | "TR"
+      | "TT"
+      | "TV"
+      | "TW"
+      | "TZ"
+      | "UA"
+      | "UG"
+      | "UM"
+      | "US"
+      | "UY"
+      | "UZ"
+      | "VA"
+      | "VC"
+      | "VE"
+      | "VG"
+      | "VI"
+      | "VN"
+      | "VU"
+      | "WF"
+      | "WS"
+      | "XA"
+      | "XB"
+      | "XC"
+      | "YE"
+      | "YT"
+      | "YU"
+      | "ZA"
+      | "ZM"
+      | "ZW"
+      | "ZZ";
     PayrollTaxIdentityDto: {
-      /** @description 國民身分證統一編號 */
+      /** @description 本國籍為身分證統一編號；外籍為居留證統一證號，未住滿 183 天且無統一證號者為護照出生年月日加英文姓名前 2 字母 */
       taxId: string;
-      /** @description 戶籍地址 */
+      /** @description 戶籍地址；外籍無中文地址者填雇主地址 */
       address: string;
+      residenceCountryCode?: components["schemas"]["ResidenceCountryCode"];
+      /** @description 居住地國稅務識別碼，無則填 NOTIN */
+      foreignTaxId?: string;
     };
+    /** @enum {string} */
+    MyWithholdingCertificateKind: "annual" | "nonResident";
     MyWithholdingUnitResponseDto: {
       businessNumber: string;
       name: string;
@@ -6718,7 +7085,12 @@ export interface components {
       agentName: string;
     };
     MyWithholdingCertificateResponseDto: {
+      kind: components["schemas"]["MyWithholdingCertificateKind"];
+      idType: components["schemas"]["WithholdingIdType"];
       year: number;
+      paymentDate?: string | null;
+      /** @description 免填發的年度憑單可由員工申請填發 */
+      requested: boolean;
       unit: components["schemas"]["MyWithholdingUnitResponseDto"];
       employeeName: string;
       taxId: string;
@@ -6963,6 +7335,34 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceEmployeeResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceEmployeesController_deleteEmployee: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -12920,6 +13320,34 @@ export interface operations {
       };
     };
   };
+  PayrollWithholdingController_nonResidentFile: {
+    parameters: {
+      query: {
+        paymentDate: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PayrollWithholdingFileResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   PayrollWithholdingController_saveUnit: {
     parameters: {
       query?: never;
@@ -13008,6 +13436,34 @@ export interface operations {
       };
     };
   };
+  PayrollWithholdingController_requestCertificate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        year: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
 }
 type FlattenedDeepRequired<T> = {
   [K in keyof T]-?: FlattenedDeepRequired<
@@ -13062,7 +13518,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "dailyHoursExceeded",
   "dayKindRequired",
   "emergencyDetailsRequired",
-  "employeeDisableConflict",
+  "employeeInUse",
   "employeeNotEnabled",
   "employmentInsuranceExemptionInvalid",
   "employmentInsuranceIneligible",
@@ -13072,6 +13528,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "healthInsuranceExemptionInvalid",
   "healthInsuranceRequired",
   "healthSupplementExemptionInvalid",
+  "foreignTaxIdentityRequired",
   "holidayCalendarMissing",
   "holidaySubstituteInvalid",
   "idempotencyConflict",
@@ -13115,6 +13572,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "overlappingLeave",
   "overlappingOvertimeExtensions",
   "overlappingShift",
+  "overtimeAgreementRequired",
   "parentalChildExists",
   "parentalChildMismatch",
   "parentalChildRequired",
@@ -13152,7 +13610,6 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "statutoryLeaveTypeLocked",
   "studentWeeklyHoursExceeded",
   "taxIdentityRequired",
-  "taxIdentityUnsupported",
   "terminationProtected",
   "terminationReasonRequired",
   "weeklyRestRequired",
@@ -13188,7 +13645,7 @@ export const attendanceTerminationReasonValues: ReadonlyArray<
 ];
 export const attendanceEmployeeStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeStatus"]
-> = ["unconfigured", "upcoming", "active", "disabled", "terminated"];
+> = ["unconfigured", "upcoming", "active", "terminated"];
 export const filterOperatorValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["FilterOperator"]
 > = [
@@ -14146,8 +14603,10 @@ export const payrollBlockerValues: ReadonlyArray<
   "openingHoursRequired",
   "overlappingLeaveAttendance",
   "parentalReturnPending",
+  "overtimeAgreementRequired",
   "partTimeLadderRequiresPartTime",
   "payrollPeriodOpen",
+  "paydayRequired",
   "payrollRuleSetStale",
   "pendingRequests",
   "pensionIneligible",
@@ -14173,3 +14632,266 @@ export const payrollEarningTypeSortFieldValues: ReadonlyArray<
 export const payrollEarningCategoryValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PayrollEarningCategory"]
 > = ["wage", "bonus"];
+export const withholdingIdTypeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["WithholdingIdType"]
+> = ["0", "3", "7"];
+export const residenceCountryCodeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ResidenceCountryCode"]
+> = [
+  "AD",
+  "AE",
+  "AF",
+  "AG",
+  "AI",
+  "AL",
+  "AM",
+  "AN",
+  "AO",
+  "AQ",
+  "AR",
+  "AS",
+  "AT",
+  "AU",
+  "AW",
+  "AX",
+  "AZ",
+  "BA",
+  "BB",
+  "BD",
+  "BE",
+  "BF",
+  "BG",
+  "BH",
+  "BI",
+  "BJ",
+  "BL",
+  "BM",
+  "BN",
+  "BO",
+  "BR",
+  "BS",
+  "BT",
+  "BV",
+  "BW",
+  "BY",
+  "BZ",
+  "CA",
+  "CC",
+  "CD",
+  "CF",
+  "CG",
+  "CH",
+  "CI",
+  "CK",
+  "CL",
+  "CM",
+  "CN",
+  "CO",
+  "CR",
+  "CU",
+  "CV",
+  "CX",
+  "CY",
+  "CZ",
+  "DE",
+  "DJ",
+  "DK",
+  "DM",
+  "DO",
+  "DZ",
+  "EC",
+  "EE",
+  "EG",
+  "EH",
+  "ER",
+  "ES",
+  "ET",
+  "FI",
+  "FJ",
+  "FK",
+  "FM",
+  "FO",
+  "FR",
+  "FX",
+  "GA",
+  "GB",
+  "GD",
+  "GE",
+  "GF",
+  "GG",
+  "GH",
+  "GI",
+  "GL",
+  "GM",
+  "GN",
+  "GP",
+  "GQ",
+  "GR",
+  "GS",
+  "GT",
+  "GU",
+  "GW",
+  "GY",
+  "HK",
+  "HM",
+  "HN",
+  "HR",
+  "HT",
+  "HU",
+  "ID",
+  "IE",
+  "IL",
+  "IM",
+  "IN",
+  "IO",
+  "IQ",
+  "IR",
+  "IS",
+  "IT",
+  "JE",
+  "JM",
+  "JO",
+  "JP",
+  "KE",
+  "KG",
+  "KH",
+  "KI",
+  "KM",
+  "KN",
+  "KP",
+  "KR",
+  "KW",
+  "KY",
+  "KZ",
+  "LA",
+  "LB",
+  "LC",
+  "LI",
+  "LK",
+  "LR",
+  "LS",
+  "LT",
+  "LU",
+  "LV",
+  "LY",
+  "MA",
+  "MC",
+  "MD",
+  "ME",
+  "MF",
+  "MG",
+  "MH",
+  "MK",
+  "ML",
+  "MM",
+  "MN",
+  "MO",
+  "MP",
+  "MQ",
+  "MR",
+  "MS",
+  "MT",
+  "MU",
+  "MV",
+  "MW",
+  "MX",
+  "MY",
+  "MZ",
+  "NA",
+  "NC",
+  "NE",
+  "NF",
+  "NG",
+  "NI",
+  "NL",
+  "NO",
+  "NP",
+  "NR",
+  "NU",
+  "NZ",
+  "OM",
+  "PA",
+  "PE",
+  "PF",
+  "PG",
+  "PH",
+  "PK",
+  "PL",
+  "PM",
+  "PN",
+  "PR",
+  "PS",
+  "PT",
+  "PW",
+  "PY",
+  "QA",
+  "RE",
+  "RO",
+  "RS",
+  "RU",
+  "RW",
+  "SA",
+  "SB",
+  "SC",
+  "SD",
+  "SE",
+  "SG",
+  "SH",
+  "SI",
+  "SJ",
+  "SK",
+  "SL",
+  "SM",
+  "SN",
+  "SO",
+  "SR",
+  "ST",
+  "SV",
+  "SY",
+  "SZ",
+  "TC",
+  "TD",
+  "TF",
+  "TG",
+  "TH",
+  "TJ",
+  "TK",
+  "TL",
+  "TM",
+  "TN",
+  "TO",
+  "TP",
+  "TR",
+  "TT",
+  "TV",
+  "TW",
+  "TZ",
+  "UA",
+  "UG",
+  "UM",
+  "US",
+  "UY",
+  "UZ",
+  "VA",
+  "VC",
+  "VE",
+  "VG",
+  "VI",
+  "VN",
+  "VU",
+  "WF",
+  "WS",
+  "XA",
+  "XB",
+  "XC",
+  "YE",
+  "YT",
+  "YU",
+  "ZA",
+  "ZM",
+  "ZW",
+  "ZZ",
+];
+export const myWithholdingCertificateKindValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["MyWithholdingCertificateKind"]
+> = ["annual", "nonResident"];
