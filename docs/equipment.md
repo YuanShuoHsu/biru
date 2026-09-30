@@ -8,7 +8,7 @@
 | ------ | ---------------- | -------------------------------------------------------------------------------------------------------------- | ----------- | ---- | ----------- | ----------------- | ------ | ---- | ----- |
 | 咖啡機 | Victoria Arduino |                                                                                                                |             |      |             |                   |        |      |       |
 | 磨豆機 | Mahlkönig        | [MAHLKONIG E80 Supreme 磨豆機 220v 黑](https://www.tiamo-cafe.com.tw/ec99/rwd1627/product.asp?prodid=hg1798bk) | 98,000      | 1    | 98,000      | 寬240×深340×高630 | 15.2kg | 220V | 500W  |
-| 製冰機 | HOSHIZAKI        | [70kg桌上型製冰機 DCM-70M](https://www.hoshizaki.com.tw/goods.php?act=view&no=249)                             | 136,000     | 1    | 136,000     | 寬350×深525×高695 | 42kg   | 100V | 255W  |
+| 製冰機 | HOSHIZAKI        | [115kg桌上型製冰機 DCM-115M](https://www.hoshizaki.com.tw/goods.php?act=view&no=248)                           | 159,000     | 1    | 159,000     | 寬350×深585×高815 | 47kg   | 100V | 350W  |
 | 手沖壺 | Fellow           | [EKG PRO 電子溫控壺 - 旗艦版](https://www.fellowproducts.com.tw/products/ekgpro)                               | 6,980       | 1    | 6,980       | 寬282×深172×高196 | 1.20kg | 110V | 1200W |
 | 果汁機 |                  |                                                                                                                |             |      |             |                   |        |      |       |
 
