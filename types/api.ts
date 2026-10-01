@@ -157,6 +157,45 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/attendance/shift-types": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 班別 */
+    get: operations["AttendanceShiftTypesController_shiftTypes"];
+    put?: never;
+    /** 新增班別 */
+    post: operations["AttendanceShiftTypesController_createShiftType"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/shift-types/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 刪除班別 */
+    delete: operations["AttendanceShiftTypesController_deleteShiftType"];
+    options?: never;
+    head?: never;
+    /**
+     * 修改班別
+     * @description 已排定的班次存的是實際起訖時間，不會跟著變動。
+     */
+    patch: operations["AttendanceShiftTypesController_updateShiftType"];
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/attendance/me/shifts": {
     parameters: {
       query?: never;
@@ -235,6 +274,23 @@ export interface paths {
     };
     /** 指定期間各員工的假日、例假與休息日 */
     get: operations["AttendanceShiftsController_calendarDayKinds"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/teams": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 可排班的團隊與其成員 */
+    get: operations["AttendanceShiftsController_teams"];
     put?: never;
     post?: never;
     delete?: never;
@@ -403,6 +459,26 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/attendance/requests/review": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /**
+     * 批次審核申請單
+     * @description 逐筆審核，無法審核的申請（需查驗證明、例假出勤、尚未核給額度等）會跳過並附上原因。
+     */
+    patch: operations["AttendanceRequestsController_reviewBatch"];
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/attendance/requests/{id}/review": {
     parameters: {
       query?: never;
@@ -418,6 +494,26 @@ export interface paths {
     head?: never;
     /** 審核申請單 */
     patch: operations["AttendanceRequestsController_review"];
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/shifts/extra-work-reviews": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 批次審核排班外的打卡時數
+     * @description ids 為班次 id，每個班次所有尚未審核的時段一併審核。
+     */
+    post: operations["AttendanceRequestsController_reviewExtraWorkBatch"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
     trace?: never;
   };
   "/api/organizations/{organizationSlug}/attendance/shifts/{id}/extra-work-reviews": {
@@ -2434,6 +2530,60 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/payroll/statements/batch": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /**
+     * 試算當月所有員工的薪資單草稿
+     * @description 對象為當月在職且薪資單尚未覆核或發布的員工，既有草稿會重新試算；無法試算者跳過並附上原因。回傳的 id 為員工 id。
+     */
+    post: operations["PayrollController_draftBatch"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/payroll/statements/review": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** 批次覆核薪資單 */
+    patch: operations["PayrollController_reviewBatch"];
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/payroll/statements/publish": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    /** 批次發布薪資單 */
+    patch: operations["PayrollController_publishBatch"];
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/payroll/statements/{id}/review": {
     parameters: {
       query?: never;
@@ -2666,6 +2816,7 @@ export interface components {
       | "dayKindRequired"
       | "emergencyDetailsRequired"
       | "employeeInUse"
+      | "employeeNotInTeam"
       | "employeeNotEnabled"
       | "employmentInsuranceExemptionInvalid"
       | "employmentInsuranceIneligible"
@@ -2752,6 +2903,7 @@ export interface components {
       | "shiftRequired"
       | "shiftRestTooShort"
       | "shiftTooLong"
+      | "shiftTypeNameTaken"
       | "splitLeaveByYear"
       | "statutoryBalanceAutomatic"
       | "statutoryLeaveTypeLocked"
@@ -3083,8 +3235,38 @@ export interface components {
       graceMinutes: number;
     };
     /** @enum {string} */
+    AttendanceShiftTypeFilterField: "name" | "startTime" | "endTime";
+    /** @enum {string} */
+    AttendanceShiftTypeSortField: "name" | "startTime" | "endTime";
+    AttendanceShiftTypeResponseDto: {
+      id: string;
+      name: string;
+      startTime: string;
+      endTime: string;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    AttendanceShiftTypesResponseDto: {
+      data: components["schemas"]["AttendanceShiftTypeResponseDto"][];
+      total: number;
+    };
+    SaveAttendanceShiftTypeDto: {
+      /**
+       * @description 店家時區的 HH:mm
+       * @example 09:00
+       */
+      startTime: string;
+      /**
+       * @description 店家時區的 HH:mm，早於開始時間表示隔日結束
+       * @example 17:00
+       */
+      endTime: string;
+      name: string;
+    };
+    /** @enum {string} */
     AttendanceShiftFilterField:
       | "employeeName"
+      | "teamName"
       | "startsAt"
       | "endsAt"
       | "clockInAt"
@@ -3093,6 +3275,7 @@ export interface components {
     /** @enum {string} */
     AttendanceShiftSortField:
       | "employeeName"
+      | "teamName"
       | "startsAt"
       | "endsAt"
       | "clockInAt"
@@ -3121,6 +3304,8 @@ export interface components {
       organizationId: string;
       employeeId: string;
       employeeName: string;
+      teamId?: string | null;
+      teamName?: string | null;
       /** Format: date-time */
       startsAt: string;
       /** Format: date-time */
@@ -3175,6 +3360,12 @@ export interface components {
       dayKinds: components["schemas"]["AttendanceCalendarDayKindResponseDto"][];
       pendingSubstitutes: components["schemas"]["AttendanceCalendarPendingSubstituteResponseDto"][];
     };
+    AttendanceTeamResponseDto: {
+      id: string;
+      name: string;
+      /** @description 屬於該團隊的出勤員工 */
+      employeeIds: string[];
+    };
     /**
      * @description 員工設有固定例假日與休息日時由星期推得，未設定者必填
      * @enum {string}
@@ -3183,6 +3374,8 @@ export interface components {
     CreateAttendanceShiftDto: {
       /** @description 員工設有固定例假日與休息日時由星期推得，未設定者必填 */
       dayKind?: components["schemas"]["AttendanceScheduledDayKind"];
+      /** @description 員工必須是該團隊的成員 */
+      teamId?: string | null;
       /** Format: uuid */
       employeeId: string;
       startsAt: string;
@@ -3198,6 +3391,7 @@ export interface components {
       id: string;
       organizationId: string;
       employeeId: string;
+      teamId?: string | null;
       /** Format: date-time */
       startsAt: string;
       /** Format: date-time */
@@ -3231,6 +3425,7 @@ export interface components {
       | "restDay"
       | "regularLeave"
       | "employeeNotEnabled"
+      | "employeeNotInTeam"
       | "workPermitRequired"
       | "maternalNightWork"
       | "shiftTooLong"
@@ -3260,6 +3455,8 @@ export interface components {
       employeeId?: string;
       /** @description 員工設有固定例假日與休息日時由星期推得；未設定者移到其他日期或改排其他員工時必填，同員工同日省略則沿用原日別 */
       dayKind?: components["schemas"]["AttendanceScheduledDayKind"];
+      /** @description 省略則沿用原團隊，null 則清除 */
+      teamId?: string | null;
       /** @description 只檢查能否排入，不寫入 */
       dryRun?: boolean;
       startsAt: string;
@@ -3384,6 +3581,7 @@ export interface components {
       shiftStartsAt?: string | null;
       /** Format: date-time */
       shiftEndsAt?: string | null;
+      shiftDayKind?: components["schemas"]["AttendanceDayKind"] | null;
       originalEvents?:
         | components["schemas"]["AttendanceEventResponseDto"][]
         | null;
@@ -3399,6 +3597,7 @@ export interface components {
     AttendanceReviewCountsResponseDto: {
       requests: number;
       parentalReturns: number;
+      extraWork: number;
     };
     CorrectedEventDto: {
       action: components["schemas"]["AttendanceEventAction"];
@@ -3445,6 +3644,29 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
+    ReviewAttendanceBatchDto: {
+      /** @description 駁回時必填 */
+      reason?: string;
+      ids: string[];
+      /** @enum {string} */
+      status: "approved" | "rejected";
+    };
+    AttendanceBatchSkippedResponseDto: {
+      id: string;
+      reason: components["schemas"]["AttendanceErrorCode"];
+    };
+    AttendanceBatchResponseDto: {
+      succeeded: string[];
+      skipped: components["schemas"]["AttendanceBatchSkippedResponseDto"][];
+    };
+    ReviewLeaveCaseDto: {
+      /** @description 產假、流產假由開始日加法定天數推得，其他假別必填 */
+      endsAt?: string;
+      reference: string;
+      eventDate: string;
+      startsAt: string;
+      extensionAgreed?: boolean;
+    };
     EmergencyWorkDto: {
       cause: components["schemas"]["AttendanceEmergencyCause"];
       reportedAt: string;
@@ -3452,19 +3674,25 @@ export interface components {
       makeupEndsAt: string;
     };
     ReviewAttendanceRequestDto: {
+      /** @description 核准尚未核給額度的事件假時必填，核准時一併建立額度 */
+      leaveCase?: components["schemas"]["ReviewLeaveCaseDto"];
+      /** @description 駁回時必填 */
+      reason?: string;
       medicalCertified?: boolean;
       emergency?: components["schemas"]["EmergencyWorkDto"];
       /** @enum {string} */
       status: "approved" | "rejected";
-      reason: string;
     };
     ReviewAttendanceExtraWorkDto: {
+      /** @description 核准尚未核給額度的事件假時必填，核准時一併建立額度 */
+      leaveCase?: components["schemas"]["ReviewLeaveCaseDto"];
+      /** @description 駁回時必填 */
+      reason?: string;
       startsAt: string;
       endsAt: string;
       emergency?: components["schemas"]["EmergencyWorkDto"];
       /** @enum {string} */
       status: "approved" | "rejected";
-      reason: string;
     };
     /** @enum {string} */
     AttendanceLeaveCaseFilterField:
@@ -6710,11 +6938,19 @@ export interface components {
       /** Format: uuid */
       employeeId: string;
       month: string;
-      reason: string;
+      reason?: string;
       earnings?: components["schemas"]["PayrollEarningInputDto"][];
     };
+    PayrollBatchDraftDto: {
+      month: string;
+      reason?: string;
+    };
+    PayrollBatchReviewDto: {
+      ids: string[];
+      reason?: string;
+    };
     PayrollReviewDto: {
-      reason: string;
+      reason?: string;
     };
     /** @enum {string} */
     PayrollEarningTypeFilterField: "name" | "category";
@@ -7430,6 +7666,133 @@ export interface operations {
       };
     };
   };
+  AttendanceShiftTypesController_shiftTypes: {
+    parameters: {
+      query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["AttendanceShiftTypeFilterField"];
+        sortBy?: components["schemas"]["AttendanceShiftTypeSortField"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceShiftTypesResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceShiftTypesController_createShiftType: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SaveAttendanceShiftTypeDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceShiftTypesController_deleteShiftType: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceShiftTypesController_updateShiftType: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["SaveAttendanceShiftTypeDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   AttendanceShiftsController_myShifts: {
     parameters: {
       query?: {
@@ -7439,6 +7802,8 @@ export interface operations {
         sortDirection?: components["schemas"]["SortDirection"];
         filterField?: components["schemas"]["AttendanceShiftFilterField"];
         sortBy?: components["schemas"]["AttendanceShiftSortField"];
+        /** @description 只列出有排班外打卡時數尚未審核的班次 */
+        unreviewedOvertime?: "true";
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -7502,6 +7867,8 @@ export interface operations {
         sortDirection?: components["schemas"]["SortDirection"];
         filterField?: components["schemas"]["AttendanceShiftFilterField"];
         sortBy?: components["schemas"]["AttendanceShiftSortField"];
+        /** @description 只列出有排班外打卡時數尚未審核的班次 */
+        unreviewedOvertime?: "true";
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -7607,6 +7974,32 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceCalendarDayKindsResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceShiftsController_teams: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceTeamResponseDto"][];
         };
       };
       /** @description Internal server error */
@@ -7925,6 +8318,36 @@ export interface operations {
       };
     };
   };
+  AttendanceRequestsController_reviewBatch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewAttendanceBatchDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceBatchResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   AttendanceRequestsController_review: {
     parameters: {
       query?: never;
@@ -7946,6 +8369,36 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceRequestRecordResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceRequestsController_reviewExtraWorkBatch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ReviewAttendanceBatchDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceBatchResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -13044,6 +13497,96 @@ export interface operations {
       };
     };
   };
+  PayrollController_draftBatch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PayrollBatchDraftDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceBatchResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PayrollController_reviewBatch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PayrollBatchReviewDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceBatchResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PayrollController_publishBatch: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["PayrollBatchReviewDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceBatchResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   PayrollController_review: {
     parameters: {
       query?: never;
@@ -13475,6 +14018,12 @@ type FlattenedDeepRequired<T> = {
 type ReadonlyArray<T> = [Exclude<T, undefined>] extends [unknown[]]
   ? Readonly<Exclude<T, undefined>>
   : Readonly<Exclude<T, undefined>[]>;
+export const pathsApiOrganizationsOrganizationSlugAttendanceMeShiftsGetParametersQueryUnreviewedOvertimeValues: ReadonlyArray<
+  FlattenedDeepRequired<paths>["/api/organizations/{organizationSlug}/attendance/me/shifts"]["get"]["parameters"]["query"]["unreviewedOvertime"]
+> = ["true"];
+export const pathsApiOrganizationsOrganizationSlugAttendanceShiftsGetParametersQueryUnreviewedOvertimeValues: ReadonlyArray<
+  FlattenedDeepRequired<paths>["/api/organizations/{organizationSlug}/attendance/shifts"]["get"]["parameters"]["query"]["unreviewedOvertime"]
+> = ["true"];
 export const pathsApiCouponsGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/coupons"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
@@ -13519,6 +14068,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "dayKindRequired",
   "emergencyDetailsRequired",
   "employeeInUse",
+  "employeeNotInTeam",
   "employeeNotEnabled",
   "employmentInsuranceExemptionInvalid",
   "employmentInsuranceIneligible",
@@ -13605,6 +14155,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "shiftRequired",
   "shiftRestTooShort",
   "shiftTooLong",
+  "shiftTypeNameTaken",
   "splitLeaveByYear",
   "statutoryBalanceAutomatic",
   "statutoryLeaveTypeLocked",
@@ -13696,10 +14247,17 @@ export const attendanceEmployeeSortFieldValues: ReadonlyArray<
   "legalStatus",
   "status",
 ];
+export const attendanceShiftTypeFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceShiftTypeFilterField"]
+> = ["name", "startTime", "endTime"];
+export const attendanceShiftTypeSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceShiftTypeSortField"]
+> = ["name", "startTime", "endTime"];
 export const attendanceShiftFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceShiftFilterField"]
 > = [
   "employeeName",
+  "teamName",
   "startsAt",
   "endsAt",
   "clockInAt",
@@ -13710,6 +14268,7 @@ export const attendanceShiftSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceShiftSortField"]
 > = [
   "employeeName",
+  "teamName",
   "startsAt",
   "endsAt",
   "clockInAt",
@@ -13736,6 +14295,7 @@ export const attendanceCopySkipReasonValues: ReadonlyArray<
   "restDay",
   "regularLeave",
   "employeeNotEnabled",
+  "employeeNotInTeam",
   "workPermitRequired",
   "maternalNightWork",
   "shiftTooLong",
@@ -13817,6 +14377,9 @@ export const attendanceEmergencyCauseValues: ReadonlyArray<
 export const attendanceParentalModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceParentalMode"]
 > = ["daily", "continuous"];
+export const reviewAttendanceBatchDtoStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ReviewAttendanceBatchDto"]["status"]
+> = ["approved", "rejected"];
 export const reviewAttendanceRequestDtoStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ReviewAttendanceRequestDto"]["status"]
 > = ["approved", "rejected"];
