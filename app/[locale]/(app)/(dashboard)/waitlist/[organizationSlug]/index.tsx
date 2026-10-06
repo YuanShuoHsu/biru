@@ -3,9 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { type CountryCode, parsePhoneNumberWithError } from "libphonenumber-js";
 import { useLocale, useTranslations } from "next-intl";
-import { useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
-import { QRCodeSVG } from "qrcode.react";
 import { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import useSWR from "swr";
@@ -23,7 +21,6 @@ import { useSocketConnection } from "@/hooks/useSocketConnection";
 import { useRouter } from "@/i18n/navigation";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
-import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import {
   Alert,
@@ -50,8 +47,6 @@ import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
 import { getWaitlistErrorCode } from "@/utils/waitlist";
 
-const KIOSK_RESET_MS = 20 * 1000;
-
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
   gap: theme.spacing(2),
@@ -69,11 +64,6 @@ const GroupCard = styled(Card)(({ theme }) => ({
   textAlign: "center",
 }));
 
-const KioskStack = styled(Stack)(({ theme }) => ({
-  alignItems: "center",
-  gap: theme.spacing(2),
-}));
-
 interface WaitlistProps {
   organization: OrganizationResponse;
   status: WaitlistStatusResponse;
@@ -81,20 +71,14 @@ interface WaitlistProps {
 
 const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
   const session = useAuthStore((state) => state.session);
-  const { closeDialog, setDialog } = useDialogStore((state) => state);
 
-  const [idempotencyKey, setIdempotencyKey] = useState(() =>
-    crypto.randomUUID(),
-  );
+  const [idempotencyKey] = useState(() => crypto.randomUUID());
 
   const { enqueueSnackbar } = useSnackbar();
 
   const locale = useLocale();
 
   const router = useRouter();
-
-  const searchParams = useSearchParams();
-  const isKiosk = searchParams.get("kiosk") === "true";
 
   const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
@@ -130,31 +114,28 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
     };
   }, [isConnected, mutate, organization.id]);
 
-  const prefill = session && !isKiosk ? session : null;
-  const phoneDefaults = getPhoneDefaults(prefill?.user.phoneNumber, locale);
-  const defaultValues: WaitlistFormValues = {
-    countryCode: phoneDefaults.countryCode || "",
-    email: prefill?.user.email || "",
-    name: prefill
-      ? formatFullName(
-          prefill.user.lang,
-          prefill.user.firstName,
-          prefill.user.lastName,
-        )
-      : "",
-    partySize: "",
-    telephone: phoneDefaults.telephone,
-  };
+  const phoneDefaults = getPhoneDefaults(session?.user.phoneNumber, locale);
 
   const {
     control,
     formState: { errors, isSubmitted, isSubmitting },
     handleSubmit,
     register,
-    reset,
     setValue,
   } = useForm<WaitlistFormValues>({
-    defaultValues,
+    defaultValues: {
+      countryCode: phoneDefaults.countryCode || "",
+      email: session?.user.email || "",
+      name: session
+        ? formatFullName(
+            session.user.lang,
+            session.user.firstName,
+            session.user.lastName,
+          )
+        : "",
+      partySize: "",
+      telephone: phoneDefaults.telephone,
+    },
     resolver: zodResolver(waitlistFormSchema),
   });
 
@@ -176,39 +157,6 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
       : !status.open
         ? "closed"
         : null;
-
-  const handleKioskTicket = (ticket: WaitlistTicketResponse) => {
-    const timer = setTimeout(closeDialog, KIOSK_RESET_MS);
-
-    setDialog({
-      confirmText: tWaitlist("kiosk.done"),
-      content: (
-        <KioskStack>
-          <Typography color="textSecondary" variant="body2">
-            {tWaitlist("ticket.number")}
-          </Typography>
-          <BoldTypography color="primary" variant="h2">
-            {ticket.ticketNumber}
-          </BoldTypography>
-          <QRCodeSVG
-            size={180}
-            value={`${window.location.origin}/${locale}/waitlist/${organization.slug}/${ticket.id}`}
-          />
-          <Typography align="center" variant="body2">
-            {tWaitlist("kiosk.scan")}
-          </Typography>
-        </KioskStack>
-      ),
-      onExited: () => {
-        clearTimeout(timer);
-        reset(defaultValues);
-        setIdempotencyKey(crypto.randomUUID());
-      },
-      open: true,
-      showCancel: false,
-      title: tWaitlist("kiosk.title"),
-    });
-  };
 
   const handleFormSubmit = async ({
     countryCode,
@@ -238,8 +186,7 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
         },
       );
 
-      if (isKiosk) handleKioskTicket(ticket);
-      else router.push(`/waitlist/${organization.slug}/${ticket.id}`);
+      router.push(`/waitlist/${organization.slug}/${ticket.id}`);
     } catch (error) {
       const code = getWaitlistErrorCode(error);
 

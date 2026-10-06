@@ -57,11 +57,6 @@
     "again": "重新取号",
     "store": "门店信息"
   },
-  "kiosk": {
-    "title": "取号成功",
-    "scan": "用手机扫描二维码，随时查看叫号进度",
-    "done": "完成"
-  },
   "errors": {
     "waitlistClosed": "当前非营业时间，暂不开放取号。",
     "waitlistDisabled": "本店当前未开放现场排队。",

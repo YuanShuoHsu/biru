@@ -57,11 +57,6 @@
     "again": "Get a new number",
     "store": "Store info"
   },
-  "kiosk": {
-    "title": "You're on the waitlist",
-    "scan": "Scan the QR code with your phone to follow your place in line",
-    "done": "Done"
-  },
   "errors": {
     "waitlistClosed": "We're closed right now, so the waitlist isn't open.",
     "waitlistDisabled": "This store doesn't offer a walk-in waitlist.",
