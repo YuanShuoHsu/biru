@@ -15,6 +15,7 @@ import { menuSocket } from "@/app/socket";
 import CountryAutocomplete from "@/components/CountryAutocomplete";
 import FormCard, { StyledCardContent } from "@/components/FormCard";
 import TextMaskCustom from "@/components/TextMaskCustom";
+import WaitlistStatTile from "@/components/WaitlistStatTile";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
@@ -22,10 +23,12 @@ import { useRouter } from "@/i18n/navigation";
 
 import { useAuthStore } from "@/providers/auth-store-provider";
 
+import { Campaign, HourglassTop, People } from "@mui/icons-material";
 import {
   Alert,
   Button,
   Card,
+  Divider,
   Grid,
   MenuItem,
   Stack,
@@ -45,7 +48,7 @@ import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import { getWaitlistErrorCode } from "@/utils/waitlist";
+import { enableCallAlerts, getWaitlistErrorCode } from "@/utils/waitlist";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
@@ -58,10 +61,28 @@ const BoldTypography = styled(Typography)({
   fontWeight: "bold",
 });
 
-const GroupCard = styled(Card)(({ theme }) => ({
-  height: "100%",
-  padding: theme.spacing(1.5),
-  textAlign: "center",
+const GroupRowStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+}));
+
+const GroupLabelStack = styled(Stack)(({ theme }) => ({
+  flexShrink: 0,
+  width: theme.spacing(9),
+
+  [theme.breakpoints.down("sm")]: {
+    alignItems: "center",
+    columnGap: theme.spacing(1),
+    flexDirection: "row",
+    width: "100%",
+  },
+}));
+
+const PartySizeStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  color: theme.vars.palette.text.secondary,
+  gap: theme.spacing(0.5),
 }));
 
 interface WaitlistProps {
@@ -156,7 +177,9 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
       ? "paused"
       : !status.open
         ? "closed"
-        : null;
+        : status.cutoff
+          ? "cutoff"
+          : null;
 
   const handleFormSubmit = async ({
     countryCode,
@@ -190,6 +213,8 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
     } catch (error) {
       const code = getWaitlistErrorCode(error);
 
+      if (code) mutate();
+
       enqueueSnackbar(
         code ? tWaitlist(`errors.${code}`) : getErrorMessage(error),
         { variant: "error" },
@@ -199,9 +224,6 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
 
   return (
     <StyledStack>
-      <BoldTypography variant="h5">
-        {tWaitlist("title", { organizationName: organization.name })}
-      </BoldTypography>
       {unavailable && (
         <Alert severity="warning">
           {tWaitlist(`unavailable.${unavailable}`)}
@@ -213,44 +235,43 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
             <BoldTypography color="textSecondary" variant="subtitle2">
               {tWaitlist("groups.title")}
             </BoldTypography>
-            <Grid container spacing={1}>
+            <Stack divider={<Divider flexItem />} spacing={1.5}>
               {status.groups.map((group) => (
-                <Grid
-                  key={group.prefix}
-                  size={{ xs: 12 / Math.min(status.groups.length, 3) }}
-                >
-                  <GroupCard variant="outlined">
-                    <BoldTypography color="primary" variant="h4">
-                      {group.prefix}
+                <GroupRowStack direction="row" key={group.prefix}>
+                  <GroupLabelStack>
+                    <BoldTypography variant="h6">
+                      {tWaitlist("groups.group", { prefix: group.prefix })}
                     </BoldTypography>
-                    <Typography variant="body2">
-                      {group.minPartySize === group.maxPartySize
-                        ? tWaitlist("groups.single", {
-                            count: group.minPartySize,
-                          })
-                        : tWaitlist("groups.range", {
-                            max: group.maxPartySize,
-                            min: group.minPartySize,
-                          })}
-                    </Typography>
-                    <Typography color="textSecondary" variant="body2">
-                      {tWaitlist("groups.waitingCount", {
-                        count: group.waitingCount,
-                      })}
-                    </Typography>
-                    <Typography color="textSecondary" variant="caption">
-                      {group.calledTicketNumbers.length
-                        ? tWaitlist("groups.calling", {
-                            numbers: group.calledTicketNumbers.join(
-                              tCommon("delimiter"),
-                            ),
-                          })
-                        : tWaitlist("groups.notCalling")}
-                    </Typography>
-                  </GroupCard>
-                </Grid>
+                    <PartySizeStack direction="row">
+                      <People fontSize="inherit" />
+                      <Typography variant="caption">
+                        {group.minPartySize === group.maxPartySize
+                          ? tWaitlist("groups.single", {
+                              count: group.minPartySize,
+                            })
+                          : tWaitlist("groups.range", {
+                              max: group.maxPartySize,
+                              min: group.minPartySize,
+                            })}
+                      </Typography>
+                    </PartySizeStack>
+                  </GroupLabelStack>
+                  <WaitlistStatTile
+                    color="primary"
+                    icon={Campaign}
+                    label={tWaitlist("groups.current")}
+                    value={group.currentTicketNumber || "—"}
+                  />
+                  <WaitlistStatTile
+                    icon={HourglassTop}
+                    label={tWaitlist("groups.waiting")}
+                    value={tWaitlist("groups.waitingValue", {
+                      count: group.waitingCount,
+                    })}
+                  />
+                </GroupRowStack>
               ))}
-            </Grid>
+            </Stack>
           </StyledCardContent>
         </Card>
       )}
@@ -360,6 +381,7 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
             <Button
               fullWidth
               loading={isSubmitting}
+              onClick={enableCallAlerts}
               size="large"
               type="submit"
               variant="contained"

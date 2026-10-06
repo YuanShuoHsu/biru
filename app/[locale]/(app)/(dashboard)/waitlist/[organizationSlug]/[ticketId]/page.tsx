@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import type { Locale } from "@/i18n/routing";
 
 import type { OrganizationResponse } from "@/types/organizations";
-import type { WaitlistTicketResponse } from "@/types/waitlist";
+import type { WaitlistTicketDetailResponse } from "@/types/waitlist";
 
 import { fetcher } from "@/utils/fetcher";
 
@@ -37,7 +37,7 @@ const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
     fetcher<OrganizationResponse>(
       `/api/organizations/${organizationSlug}`,
     ).catch(() => null),
-    fetcher<WaitlistTicketResponse>(
+    fetcher<WaitlistTicketDetailResponse>(
       `/api/organizations/${organizationSlug}/waitlist/tickets/${ticketId}`,
     ).catch(() => null),
   ]);

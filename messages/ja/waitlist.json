@@ -3,14 +3,16 @@
   "title": "{organizationName} 順番待ち",
   "groups": {
     "title": "現在の待ち状況",
+    "group": "{prefix} グループ",
     "range": "{min}～{max} 名",
     "single": "{count} 名",
-    "waitingCount": "{count} 組待ち",
-    "calling": "呼び出し中：{numbers}",
-    "notCalling": "まだ呼び出していません"
+    "current": "現在の呼び出し",
+    "waiting": "待ち",
+    "waitingValue": "{count} 組"
   },
   "unavailable": {
     "closed": "営業時間外のため、受付を停止しています。",
+    "cutoff": "まもなく閉店のため、順番待ちの受付を終了しました。",
     "disabled": "当店では店頭の順番待ち受付を行っていません。",
     "paused": "ただいま受付を一時停止しています。スタッフにお声がけください。"
   },
@@ -28,7 +30,20 @@
     "label": "整理券",
     "number": "あなたの番号",
     "partySize": "{count} 名",
-    "ahead": "{count, plural, =0 {次はあなたの番です。呼び出しにご注意ください} other {あと # 組}}",
+    "stats": {
+      "current": "現在の呼び出し",
+      "ahead": "前の待ち",
+      "aheadValue": "{count} 組",
+      "deadline": "受付期限",
+      "reply": "ご回答",
+      "replied": "来店確定",
+      "notReplied": "未回答"
+    },
+    "steps": {
+      "taken": "受付",
+      "called": "呼び出し",
+      "seated": "ご案内"
+    },
     "status": {
       "waiting": "お待ちください",
       "called": "順番が来ました",
@@ -37,16 +52,12 @@
       "cancelled": "キャンセル済み"
     },
     "message": {
-      "waiting": "このページを開いたままにしてください。呼び出し時にお知らせします。",
-      "called": "{time} までにカウンターへお越しいただき、ご来店の可否をお知らせください。",
-      "confirmed": "ご来店のご確認ありがとうございます。{time} までにカウンターへお越しください。",
+      "waiting": "このページを開いたままにしてください。呼び出し時にすぐ更新されます。",
       "seated": "テーブルの QR コードを読み取ってご注文ください。",
       "noShow": "順番が過ぎました。まだお近くにいらっしゃる場合はスタッフにお声がけください。",
       "cancelled": "この整理券はキャンセルされました。"
     },
     "notify": {
-      "enable": "呼び出し通知をオンにする",
-      "enabled": "呼び出し通知はオンです",
       "title": "{organizationName}：{ticketNumber} 番の方、順番が来ました",
       "body": "お早めにカウンターまでお越しください。"
     },
@@ -64,6 +75,7 @@
   },
   "errors": {
     "waitlistClosed": "営業時間外のため、受付を停止しています。",
+    "waitlistCutoff": "まもなく閉店のため、順番待ちの受付を終了しました。",
     "waitlistDisabled": "当店では店頭の順番待ち受付を行っていません。",
     "waitlistGroupsInvalid": "人数区分の設定が正しくありません。",
     "waitlistPartySizeUnavailable": "この人数では受付できません。スタッフにお声がけください。",

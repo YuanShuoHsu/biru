@@ -3,14 +3,16 @@
   "title": "{organizationName} 현장 대기",
   "groups": {
     "title": "현재 대기 현황",
+    "group": "{prefix} 그룹",
     "range": "{min}~{max}명",
     "single": "{count}명",
-    "waitingCount": "{count}팀 대기 중",
-    "calling": "호출 중: {numbers}",
-    "notCalling": "아직 호출 전"
+    "current": "현재 호출",
+    "waiting": "대기",
+    "waitingValue": "{count}팀"
   },
   "unavailable": {
     "closed": "지금은 영업시간이 아니라 대기 등록을 받지 않습니다.",
+    "cutoff": "곧 영업이 종료되어 현장 대기 등록이 마감되었습니다.",
     "disabled": "이 매장은 현장 대기를 운영하지 않습니다.",
     "paused": "현재 대기 등록이 일시 중지되었습니다. 직원에게 문의해 주세요."
   },
@@ -28,7 +30,20 @@
     "label": "번호표",
     "number": "고객님 번호",
     "partySize": "{count}명",
-    "ahead": "{count, plural, =0 {다음 차례입니다. 호출에 유의해 주세요} other {앞에 #팀 대기 중}}",
+    "stats": {
+      "current": "현재 호출",
+      "ahead": "앞 대기",
+      "aheadValue": "{count}팀",
+      "deadline": "도착 기한",
+      "reply": "회신",
+      "replied": "방문 확정",
+      "notReplied": "미회신"
+    },
+    "steps": {
+      "taken": "등록",
+      "called": "호출",
+      "seated": "착석"
+    },
     "status": {
       "waiting": "대기 중",
       "called": "고객님 차례입니다",
@@ -37,16 +52,12 @@
       "cancelled": "취소됨"
     },
     "message": {
-      "waiting": "이 페이지를 열어 두시면 호출 시 바로 알려 드립니다.",
-      "called": "{time}까지 카운터로 와 주시고 방문 여부를 알려 주세요.",
-      "confirmed": "방문을 확인해 주셔서 감사합니다. {time}까지 카운터로 와 주세요.",
+      "waiting": "이 페이지를 열어 두세요. 호출되면 바로 업데이트됩니다.",
       "seated": "테이블의 QR 코드를 스캔해 주문해 주세요.",
       "noShow": "순서가 지났습니다. 아직 근처에 계시면 직원에게 문의해 주세요.",
       "cancelled": "이 번호표는 취소되었습니다."
     },
     "notify": {
-      "enable": "호출 알림 켜기",
-      "enabled": "호출 알림이 켜져 있습니다",
       "title": "{organizationName}: {ticketNumber}번 고객님 차례입니다",
       "body": "매장 카운터로 빨리 와 주세요."
     },
@@ -64,6 +75,7 @@
   },
   "errors": {
     "waitlistClosed": "지금은 영업시간이 아니라 대기 등록을 받지 않습니다.",
+    "waitlistCutoff": "곧 영업이 종료되어 현장 대기 등록이 마감되었습니다.",
     "waitlistDisabled": "이 매장은 현장 대기를 운영하지 않습니다.",
     "waitlistGroupsInvalid": "인원 그룹 설정이 올바르지 않습니다.",
     "waitlistPartySizeUnavailable": "이 인원으로는 대기 등록을 받을 수 없습니다. 직원에게 문의해 주세요.",

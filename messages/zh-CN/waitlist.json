@@ -3,14 +3,16 @@
   "title": "{organizationName} 现场排队",
   "groups": {
     "title": "当前排队情况",
+    "group": "{prefix} 组",
     "range": "{min}–{max} 位",
     "single": "{count} 位",
-    "waitingCount": "{count} 组等候中",
-    "calling": "叫号中：{numbers}",
-    "notCalling": "尚未叫号"
+    "current": "当前叫号",
+    "waiting": "等候",
+    "waitingValue": "{count} 组"
   },
   "unavailable": {
     "closed": "当前非营业时间，暂不开放取号。",
+    "cutoff": "已接近打烊时间，现场排队已停止取号。",
     "disabled": "本店当前未开放现场排队。",
     "paused": "当前暂停取号，请咨询现场服务人员。"
   },
@@ -28,7 +30,20 @@
     "label": "号码牌",
     "number": "您的号码",
     "partySize": "{count} 位",
-    "ahead": "{count, plural, =0 {下一组就是您，请留意叫号} other {前方还有 # 组}}",
+    "stats": {
+      "current": "当前叫号",
+      "ahead": "前方",
+      "aheadValue": "{count} 组",
+      "deadline": "报到期限",
+      "reply": "回复",
+      "replied": "已确认前往",
+      "notReplied": "尚未回复"
+    },
+    "steps": {
+      "taken": "取号",
+      "called": "叫号",
+      "seated": "入座"
+    },
     "status": {
       "waiting": "排队中",
       "called": "轮到您了",
@@ -37,16 +52,12 @@
       "cancelled": "已取消"
     },
     "message": {
-      "waiting": "请保持此页面打开，叫号时会实时提醒您。",
-      "called": "请于 {time} 前到柜台报到，并回复是否前往。",
-      "confirmed": "您已确认前往，请于 {time} 前到柜台报到。",
+      "waiting": "请保持此页面打开，叫号时会实时更新。",
       "seated": "请扫描桌上的二维码点餐。",
       "noShow": "您的号码已过号，如仍在店外请咨询服务人员。",
       "cancelled": "此号码牌已取消。"
     },
     "notify": {
-      "enable": "开启叫号提醒",
-      "enabled": "已开启叫号提醒",
       "title": "{organizationName}：轮到 {ticketNumber} 了",
       "body": "请尽快到柜台报到。"
     },
@@ -64,6 +75,7 @@
   },
   "errors": {
     "waitlistClosed": "当前非营业时间，暂不开放取号。",
+    "waitlistCutoff": "已接近打烊时间，现场排队已停止取号。",
     "waitlistDisabled": "本店当前未开放现场排队。",
     "waitlistGroupsInvalid": "排队分组设置有误。",
     "waitlistPartySizeUnavailable": "无法受理此用餐人数的排队，请咨询现场服务人员。",

@@ -12,6 +12,7 @@ import { menuSocket } from "@/app/socket";
 
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
+import WaitlistStatTile from "@/components/WaitlistStatTile";
 
 import { STORE_TIMEZONE } from "@/constants/timezone";
 import { WAITLIST_STATUS_COLORS } from "@/constants/waitlist";
@@ -23,25 +24,54 @@ import { useRouter } from "@/i18n/navigation";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import {
+  AccessTime,
+  Campaign,
   CheckCircleOutlined,
-  NotificationsActive,
-  NotificationsNone,
+  HelpOutlined,
+  HourglassTop,
+  People,
   Replay,
 } from "@mui/icons-material";
-import { Button, Card, Chip, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Card,
+  Chip,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import type { OrganizationResponse } from "@/types/organizations";
-import type { WaitlistTicketResponse } from "@/types/waitlist";
+import type {
+  WaitlistTicketDetailResponse,
+  WaitlistTicketStatus,
+} from "@/types/waitlist";
 
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import { getWaitlistErrorCode } from "@/utils/waitlist";
+import {
+  enableCallAlertSound,
+  getWaitlistErrorCode,
+  playCallChime,
+} from "@/utils/waitlist";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
 
 const ALERT_VIBRATION = [400, 200, 400, 200, 400];
+
+const STEPS = ["taken", "called", "seated"] as const;
+
+const ACTIVE_STEPS: Record<WaitlistTicketStatus, number> = {
+  called: 2,
+  cancelled: 1,
+  noShow: 2,
+  seated: 3,
+  waiting: 1,
+};
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
@@ -66,28 +96,23 @@ const CenterStack = styled(Stack)(({ theme }) => ({
   textAlign: "center",
 }));
 
+const PartySizeStack = styled(Stack)(({ theme }) => ({
+  alignItems: "center",
+  color: theme.vars.palette.text.secondary,
+  gap: theme.spacing(0.5),
+}));
+
+const TilesStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
 const BoldTypography = styled(Typography)({
   fontWeight: "bold",
 });
 
-const playChime = (audioContext: AudioContext) => {
-  [0, 0.35, 0.7].forEach((offset) => {
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-    const startAt = audioContext.currentTime + offset;
-
-    oscillator.frequency.value = 880;
-    gain.gain.setValueAtTime(0.3, startAt);
-    gain.gain.exponentialRampToValueAtTime(0.001, startAt + 0.3);
-    oscillator.connect(gain).connect(audioContext.destination);
-    oscillator.start(startAt);
-    oscillator.stop(startAt + 0.3);
-  });
-};
-
 interface WaitlistTicketProps {
   organization: OrganizationResponse;
-  ticket: WaitlistTicketResponse;
+  ticket: WaitlistTicketDetailResponse;
 }
 
 const WaitlistTicket = ({
@@ -97,9 +122,6 @@ const WaitlistTicket = ({
   const setDialog = useDialogStore((state) => state.setDialog);
 
   const [isConfirming, setIsConfirming] = useState(false);
-  const [isReminderEnabled, setIsReminderEnabled] = useState(false);
-
-  const audioContextRef = useRef<AudioContext | null>(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -110,11 +132,23 @@ const WaitlistTicket = ({
   const ticketUrl = `/api/organizations/${organization.slug}/waitlist/tickets/${initialTicket.id}`;
 
   const { data: ticket = initialTicket, mutate } =
-    useSWR<WaitlistTicketResponse>(ticketUrl, {
+    useSWR<WaitlistTicketDetailResponse>(ticketUrl, {
       fallbackData: initialTicket,
     });
 
   const previousStatusRef = useRef(ticket.status);
+
+  useEffect(() => {
+    const handleFirstInteraction = () => {
+      enableCallAlertSound();
+    };
+
+    window.addEventListener("click", handleFirstInteraction, { once: true });
+
+    return () => {
+      window.removeEventListener("click", handleFirstInteraction);
+    };
+  }, []);
 
   const { isConnected } = useSocketConnection(menuSocket);
 
@@ -146,7 +180,7 @@ const WaitlistTicket = ({
 
     navigator.vibrate?.(ALERT_VIBRATION);
 
-    if (audioContextRef.current) playChime(audioContextRef.current);
+    playCallChime();
 
     if (
       document.hidden &&
@@ -172,16 +206,14 @@ const WaitlistTicket = ({
   ]);
 
   const isActive = ticket.status === "waiting" || ticket.status === "called";
-
-  const handleEnableReminder = async () => {
-    audioContextRef.current ??= new AudioContext();
-    await audioContextRef.current.resume();
-
-    if ("Notification" in window && Notification.permission === "default")
-      await Notification.requestPermission();
-
-    setIsReminderEnabled(true);
-  };
+  const activeStep =
+    ticket.status === "cancelled" && ticket.calledAt
+      ? 2
+      : ACTIVE_STEPS[ticket.status];
+  const errorStep =
+    ticket.status === "noShow" || ticket.status === "cancelled"
+      ? activeStep
+      : null;
 
   const handleConfirm = async () => {
     setIsConfirming(true);
@@ -235,9 +267,6 @@ const WaitlistTicket = ({
 
   return (
     <StyledStack>
-      <BoldTypography variant="h5">
-        {tWaitlist("title", { organizationName: organization.name })}
-      </BoldTypography>
       <StyledCard called={ticket.status === "called"} variant="outlined">
         <StyledCardContent>
           <CenterStack>
@@ -255,62 +284,84 @@ const WaitlistTicket = ({
             >
               {ticket.ticketNumber}
             </BoldTypography>
-            <Typography variant="body1">
-              {tWaitlist("ticket.partySize", { count: ticket.partySize })}
-            </Typography>
-            {ticket.status === "waiting" && (
-              <BoldTypography variant="h6">
-                {tWaitlist("ticket.ahead", { count: ticket.aheadCount })}
-              </BoldTypography>
-            )}
-            <Typography color="textSecondary" variant="body2">
-              {ticket.status === "called" && ticket.holdUntil
-                ? tWaitlist(
-                    ticket.confirmedAt
-                      ? "ticket.message.confirmed"
-                      : "ticket.message.called",
-                    {
-                      time: dayjs(ticket.holdUntil)
-                        .tz(STORE_TIMEZONE)
-                        .format("HH:mm"),
-                    },
-                  )
-                : tWaitlist(`ticket.message.${ticket.status}`)}
-            </Typography>
+            <PartySizeStack direction="row">
+              <People fontSize="small" />
+              <Typography variant="body1">
+                {tWaitlist("ticket.partySize", { count: ticket.partySize })}
+              </Typography>
+            </PartySizeStack>
           </CenterStack>
-          {isActive ? (
-            <>
-              {ticket.status === "called" ? (
-                !ticket.confirmedAt && (
-                  <Button
-                    color="success"
-                    loading={isConfirming}
-                    onClick={handleConfirm}
-                    size="large"
-                    startIcon={<CheckCircleOutlined />}
-                    variant="contained"
-                  >
-                    {tWaitlist("ticket.confirm.label")}
-                  </Button>
-                )
-              ) : (
-                <Button
-                  disabled={isReminderEnabled}
-                  onClick={handleEnableReminder}
-                  startIcon={
-                    isReminderEnabled ? (
-                      <NotificationsActive />
-                    ) : (
-                      <NotificationsNone />
+          {ticket.status === "waiting" && (
+            <TilesStack direction="row">
+              <WaitlistStatTile
+                icon={Campaign}
+                label={tWaitlist("ticket.stats.current")}
+                value={ticket.currentTicketNumber || "—"}
+              />
+              <WaitlistStatTile
+                icon={HourglassTop}
+                label={tWaitlist("ticket.stats.ahead")}
+                value={tWaitlist("ticket.stats.aheadValue", {
+                  count: ticket.aheadCount,
+                })}
+              />
+            </TilesStack>
+          )}
+          {ticket.status === "called" && ticket.holdUntil && (
+            <TilesStack direction="row">
+              <WaitlistStatTile
+                icon={AccessTime}
+                label={tWaitlist("ticket.stats.deadline")}
+                value={dayjs(ticket.holdUntil)
+                  .tz(STORE_TIMEZONE)
+                  .format("HH:mm")}
+              />
+              <WaitlistStatTile
+                icon={ticket.confirmedAt ? CheckCircleOutlined : HelpOutlined}
+                label={tWaitlist("ticket.stats.reply")}
+                value={tWaitlist(
+                  ticket.confirmedAt
+                    ? "ticket.stats.replied"
+                    : "ticket.stats.notReplied",
+                )}
+              />
+            </TilesStack>
+          )}
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {STEPS.map((step, index) => (
+              <Step key={step}>
+                <StepLabel
+                  error={index === errorStep}
+                  optional={
+                    index === errorStep && (
+                      <Typography color="error" variant="caption">
+                        {tWaitlist(`ticket.status.${ticket.status}`)}
+                      </Typography>
                     )
                   }
+                >
+                  {tWaitlist(`ticket.steps.${step}`)}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          {ticket.status !== "called" && (
+            <Typography align="center" color="textSecondary" variant="body2">
+              {tWaitlist(`ticket.message.${ticket.status}`)}
+            </Typography>
+          )}
+          {isActive ? (
+            <>
+              {ticket.status === "called" && !ticket.confirmedAt && (
+                <Button
+                  color="success"
+                  loading={isConfirming}
+                  onClick={handleConfirm}
+                  size="large"
+                  startIcon={<CheckCircleOutlined />}
                   variant="contained"
                 >
-                  {tWaitlist(
-                    isReminderEnabled
-                      ? "ticket.notify.enabled"
-                      : "ticket.notify.enable",
-                  )}
+                  {tWaitlist("ticket.confirm.label")}
                 </Button>
               )}
               <Button color="error" onClick={handleCancelDialog}>
@@ -318,13 +369,15 @@ const WaitlistTicket = ({
               </Button>
             </>
           ) : (
-            <Button
-              onClick={() => router.push(`/waitlist/${organization.slug}`)}
-              startIcon={<Replay />}
-              variant="outlined"
-            >
-              {tWaitlist("ticket.again")}
-            </Button>
+            ticket.status === "cancelled" && (
+              <Button
+                onClick={() => router.push(`/waitlist/${organization.slug}`)}
+                startIcon={<Replay />}
+                variant="outlined"
+              >
+                {tWaitlist("ticket.again")}
+              </Button>
+            )
           )}
         </StyledCardContent>
       </StyledCard>
