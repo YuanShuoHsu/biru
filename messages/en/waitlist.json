@@ -38,7 +38,8 @@
     },
     "message": {
       "waiting": "Keep this page open and we'll alert you when your number is called.",
-      "called": "Please check in at the counter as soon as possible.",
+      "called": "Please check in at the counter by {time} and let us know whether you are coming.",
+      "confirmed": "Thank you for confirming. Please check in at the counter by {time}.",
       "seated": "Scan the QR code on your table to order.",
       "noShow": "Your number was skipped. If you're still nearby, please ask a member of staff.",
       "cancelled": "This ticket has been cancelled."
@@ -53,6 +54,10 @@
       "label": "Leave the waitlist",
       "contentText": "Leave the waitlist with {ticketNumber}? You'll need to get a new number to rejoin.",
       "success": "You've left the waitlist"
+    },
+    "confirm": {
+      "label": "Confirm attendance",
+      "success": "Your attendance has been confirmed"
     },
     "again": "Get a new number",
     "store": "Store info"

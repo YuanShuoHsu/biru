@@ -38,7 +38,8 @@
     },
     "message": {
       "waiting": "請保持此頁面開啟，叫號時會即時提醒您。",
-      "called": "請盡快至櫃檯報到。",
+      "called": "請於 {time} 前至櫃檯報到，並回覆是否前往。",
+      "confirmed": "您已確認前往，請於 {time} 前至櫃檯報到。",
       "seated": "請掃描桌上的 QR code 點餐。",
       "noShow": "您的號碼已過號，如仍在店外請洽服務人員。",
       "cancelled": "此號碼牌已取消。"
@@ -53,6 +54,10 @@
       "label": "取消候位",
       "contentText": "確定要取消 {ticketNumber} 的候位嗎？取消後需重新取號。",
       "success": "已取消候位"
+    },
+    "confirm": {
+      "label": "確認前往",
+      "success": "已回覆確認前往"
     },
     "again": "重新取號",
     "store": "門市資訊"

@@ -38,7 +38,8 @@
     },
     "message": {
       "waiting": "请保持此页面打开，叫号时会实时提醒您。",
-      "called": "请尽快到柜台报到。",
+      "called": "请于 {time} 前到柜台报到，并回复是否前往。",
+      "confirmed": "您已确认前往，请于 {time} 前到柜台报到。",
       "seated": "请扫描桌上的二维码点餐。",
       "noShow": "您的号码已过号，如仍在店外请咨询服务人员。",
       "cancelled": "此号码牌已取消。"
@@ -53,6 +54,10 @@
       "label": "取消排队",
       "contentText": "确定要取消 {ticketNumber} 的排队吗？取消后需重新取号。",
       "success": "已取消排队"
+    },
+    "confirm": {
+      "label": "确认前往",
+      "success": "已回复确认前往"
     },
     "again": "重新取号",
     "store": "门店信息"

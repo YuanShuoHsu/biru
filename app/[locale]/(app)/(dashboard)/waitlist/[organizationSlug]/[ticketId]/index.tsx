@@ -1,5 +1,8 @@
 "use client";
 
+import dayjs from "dayjs";
+import timezonePlugin from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
 import { useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
@@ -10,6 +13,7 @@ import { menuSocket } from "@/app/socket";
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
 
+import { STORE_TIMEZONE } from "@/constants/timezone";
 import { WAITLIST_STATUS_COLORS } from "@/constants/waitlist";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
@@ -19,6 +23,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
 import {
+  CheckCircleOutlined,
   NotificationsActive,
   NotificationsNone,
   Replay,
@@ -32,6 +37,9 @@ import type { WaitlistTicketResponse } from "@/types/waitlist";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
 import { getWaitlistErrorCode } from "@/utils/waitlist";
+
+dayjs.extend(utc);
+dayjs.extend(timezonePlugin);
 
 const ALERT_VIBRATION = [400, 200, 400, 200, 400];
 
@@ -88,6 +96,7 @@ const WaitlistTicket = ({
 }: WaitlistTicketProps) => {
   const setDialog = useDialogStore((state) => state.setDialog);
 
+  const [isConfirming, setIsConfirming] = useState(false);
   const [isReminderEnabled, setIsReminderEnabled] = useState(false);
 
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -174,6 +183,28 @@ const WaitlistTicket = ({
     setIsReminderEnabled(true);
   };
 
+  const handleConfirm = async () => {
+    setIsConfirming(true);
+
+    try {
+      await fetcher(`${ticketUrl}/confirm`, { method: "POST" });
+
+      enqueueSnackbar(tWaitlist("ticket.confirm.success"), {
+        variant: "success",
+      });
+    } catch (error) {
+      const code = getWaitlistErrorCode(error);
+
+      enqueueSnackbar(
+        code ? tWaitlist(`errors.${code}`) : getErrorMessage(error),
+        { variant: "error" },
+      );
+    } finally {
+      await mutate();
+      setIsConfirming(false);
+    }
+  };
+
   const handleCancelConfirm = async () => {
     try {
       await fetcher(`${ticketUrl}/cancel`, { method: "POST" });
@@ -233,29 +264,55 @@ const WaitlistTicket = ({
               </BoldTypography>
             )}
             <Typography color="textSecondary" variant="body2">
-              {tWaitlist(`ticket.message.${ticket.status}`)}
+              {ticket.status === "called" && ticket.holdUntil
+                ? tWaitlist(
+                    ticket.confirmedAt
+                      ? "ticket.message.confirmed"
+                      : "ticket.message.called",
+                    {
+                      time: dayjs(ticket.holdUntil)
+                        .tz(STORE_TIMEZONE)
+                        .format("HH:mm"),
+                    },
+                  )
+                : tWaitlist(`ticket.message.${ticket.status}`)}
             </Typography>
           </CenterStack>
           {isActive ? (
             <>
-              <Button
-                disabled={isReminderEnabled}
-                onClick={handleEnableReminder}
-                startIcon={
-                  isReminderEnabled ? (
-                    <NotificationsActive />
-                  ) : (
-                    <NotificationsNone />
-                  )
-                }
-                variant="contained"
-              >
-                {tWaitlist(
-                  isReminderEnabled
-                    ? "ticket.notify.enabled"
-                    : "ticket.notify.enable",
-                )}
-              </Button>
+              {ticket.status === "called" ? (
+                !ticket.confirmedAt && (
+                  <Button
+                    color="success"
+                    loading={isConfirming}
+                    onClick={handleConfirm}
+                    size="large"
+                    startIcon={<CheckCircleOutlined />}
+                    variant="contained"
+                  >
+                    {tWaitlist("ticket.confirm.label")}
+                  </Button>
+                )
+              ) : (
+                <Button
+                  disabled={isReminderEnabled}
+                  onClick={handleEnableReminder}
+                  startIcon={
+                    isReminderEnabled ? (
+                      <NotificationsActive />
+                    ) : (
+                      <NotificationsNone />
+                    )
+                  }
+                  variant="contained"
+                >
+                  {tWaitlist(
+                    isReminderEnabled
+                      ? "ticket.notify.enabled"
+                      : "ticket.notify.enable",
+                  )}
+                </Button>
+              )}
               <Button color="error" onClick={handleCancelDialog}>
                 {tWaitlist("ticket.cancel.label")}
               </Button>
