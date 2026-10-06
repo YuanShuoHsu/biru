@@ -24,6 +24,7 @@ import {
   Email,
   Gavel,
   GroupAdd,
+  HourglassTop,
   HelpOutlined,
   Info,
   LocalMall,
@@ -53,6 +54,7 @@ type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
 
 type RouteQuery =
   | "back"
+  | "kiosk"
   | "orderId"
   | "organization"
   | "page"
@@ -140,6 +142,26 @@ const routes: Route[] = [
     icon: ReceiptLong,
     label: "order.board.label",
     segment: "order-board",
+  },
+  {
+    children: [
+      {
+        children: [
+          {
+            icon: ConfirmationNumber,
+            label: "waitlist.ticket.label",
+            segment: "[ticketId]",
+          },
+        ],
+        icon: Storefront,
+        query: ["kiosk"],
+        segment: "[organizationSlug]",
+      },
+    ],
+    icon: HourglassTop,
+    label: "waitlist.label",
+    segment: "waitlist",
+    to: null,
   },
   {
     children: [
@@ -291,6 +313,7 @@ export const useRoutes = () => {
 
   const values: Record<RouteQuery, string | null> = {
     back: pathname,
+    kiosk: searchParams.get("kiosk"),
     orderId: searchParams.get("orderId"),
     organization: searchParams.get("organization"),
     page: DEFAULT_PAGINATION_QUERY.page,

@@ -1,0 +1,74 @@
+{
+  "label": "현장 대기",
+  "title": "{organizationName} 현장 대기",
+  "groups": {
+    "title": "현재 대기 현황",
+    "range": "{min}~{max}명",
+    "single": "{count}명",
+    "waitingCount": "{count}팀 대기 중",
+    "calling": "호출 중: {numbers}",
+    "notCalling": "아직 호출 전"
+  },
+  "unavailable": {
+    "closed": "지금은 영업시간이 아니라 대기 등록을 받지 않습니다.",
+    "disabled": "이 매장은 현장 대기를 운영하지 않습니다.",
+    "paused": "현재 대기 등록이 일시 중지되었습니다. 직원에게 문의해 주세요."
+  },
+  "form": {
+    "title": "대기 등록",
+    "partySize": {
+      "label": "인원",
+      "placeholder": "인원을 선택해 주세요",
+      "value": "{count}명"
+    },
+    "notice": "매장에서 확인 전화를 드릴 수 있습니다. 이메일을 남기시면 차례가 되었을 때 알려 드립니다.",
+    "submit": "번호 받기"
+  },
+  "ticket": {
+    "label": "번호표",
+    "number": "고객님 번호",
+    "partySize": "{count}명",
+    "ahead": "{count, plural, =0 {다음 차례입니다. 호출에 유의해 주세요} other {앞에 #팀 대기 중}}",
+    "status": {
+      "waiting": "대기 중",
+      "called": "고객님 차례입니다",
+      "seated": "착석 완료",
+      "noShow": "순서 지남",
+      "cancelled": "취소됨"
+    },
+    "message": {
+      "waiting": "이 페이지를 열어 두시면 호출 시 바로 알려 드립니다.",
+      "called": "매장 카운터로 빨리 와 주세요.",
+      "seated": "테이블의 QR 코드를 스캔해 주문해 주세요.",
+      "noShow": "순서가 지났습니다. 아직 근처에 계시면 직원에게 문의해 주세요.",
+      "cancelled": "이 번호표는 취소되었습니다."
+    },
+    "notify": {
+      "enable": "호출 알림 켜기",
+      "enabled": "호출 알림이 켜져 있습니다",
+      "title": "{organizationName}: {ticketNumber}번 고객님 차례입니다",
+      "body": "매장 카운터로 빨리 와 주세요."
+    },
+    "cancel": {
+      "label": "대기 취소",
+      "contentText": "{ticketNumber} 대기를 취소하시겠습니까? 취소하면 번호를 다시 받아야 합니다.",
+      "success": "대기가 취소되었습니다"
+    },
+    "again": "번호 다시 받기",
+    "store": "매장 정보"
+  },
+  "kiosk": {
+    "title": "대기 등록 완료",
+    "scan": "휴대폰으로 QR 코드를 스캔하면 대기 현황을 언제든 확인할 수 있습니다",
+    "done": "완료"
+  },
+  "errors": {
+    "waitlistClosed": "지금은 영업시간이 아니라 대기 등록을 받지 않습니다.",
+    "waitlistDisabled": "이 매장은 현장 대기를 운영하지 않습니다.",
+    "waitlistGroupsInvalid": "인원 그룹 설정이 올바르지 않습니다.",
+    "waitlistPartySizeUnavailable": "이 인원으로는 대기 등록을 받을 수 없습니다. 직원에게 문의해 주세요.",
+    "waitlistPaused": "현재 대기 등록이 일시 중지되었습니다. 직원에게 문의해 주세요.",
+    "waitlistPhoneInQueue": "이 전화번호는 이미 대기 중입니다.",
+    "waitlistTransitionInvalid": "번호표 상태가 변경되었습니다. 페이지를 새로고침해 주세요."
+  }
+}

@@ -87,6 +87,9 @@
     "minLength": "至少 8 个字符长度。",
     "number": "包含至少一个数字。"
   },
+  "partySize": {
+    "notSelected": "请选择您的用餐人数。"
+  },
   "payment": {
     "notSelected": "请选择您的付款方式。"
   },

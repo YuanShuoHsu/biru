@@ -1,0 +1,74 @@
+{
+  "label": "现场排队",
+  "title": "{organizationName} 现场排队",
+  "groups": {
+    "title": "当前排队情况",
+    "range": "{min}–{max} 位",
+    "single": "{count} 位",
+    "waitingCount": "{count} 组等候中",
+    "calling": "叫号中：{numbers}",
+    "notCalling": "尚未叫号"
+  },
+  "unavailable": {
+    "closed": "当前非营业时间，暂不开放取号。",
+    "disabled": "本店当前未开放现场排队。",
+    "paused": "当前暂停取号，请咨询现场服务人员。"
+  },
+  "form": {
+    "title": "填写排队信息",
+    "partySize": {
+      "label": "用餐人数",
+      "placeholder": "请选择您的用餐人数",
+      "value": "{count} 位"
+    },
+    "notice": "店家可能会致电确认，留下电子邮箱可在叫号时收到通知。",
+    "submit": "立即取号"
+  },
+  "ticket": {
+    "label": "号码牌",
+    "number": "您的号码",
+    "partySize": "{count} 位",
+    "ahead": "{count, plural, =0 {下一组就是您，请留意叫号} other {前方还有 # 组}}",
+    "status": {
+      "waiting": "排队中",
+      "called": "轮到您了",
+      "seated": "已入座",
+      "noShow": "已过号",
+      "cancelled": "已取消"
+    },
+    "message": {
+      "waiting": "请保持此页面打开，叫号时会实时提醒您。",
+      "called": "请尽快到柜台报到。",
+      "seated": "请扫描桌上的二维码点餐。",
+      "noShow": "您的号码已过号，如仍在店外请咨询服务人员。",
+      "cancelled": "此号码牌已取消。"
+    },
+    "notify": {
+      "enable": "开启叫号提醒",
+      "enabled": "已开启叫号提醒",
+      "title": "{organizationName}：轮到 {ticketNumber} 了",
+      "body": "请尽快到柜台报到。"
+    },
+    "cancel": {
+      "label": "取消排队",
+      "contentText": "确定要取消 {ticketNumber} 的排队吗？取消后需重新取号。",
+      "success": "已取消排队"
+    },
+    "again": "重新取号",
+    "store": "门店信息"
+  },
+  "kiosk": {
+    "title": "取号成功",
+    "scan": "用手机扫描二维码，随时查看叫号进度",
+    "done": "完成"
+  },
+  "errors": {
+    "waitlistClosed": "当前非营业时间，暂不开放取号。",
+    "waitlistDisabled": "本店当前未开放现场排队。",
+    "waitlistGroupsInvalid": "排队分组设置有误。",
+    "waitlistPartySizeUnavailable": "无法受理此用餐人数的排队，请咨询现场服务人员。",
+    "waitlistPaused": "当前暂停取号，请咨询现场服务人员。",
+    "waitlistPhoneInQueue": "此电话号码已在排队中，请勿重复取号。",
+    "waitlistTransitionInvalid": "号码牌状态已变更，请刷新页面。"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "label": "Waitlist",
+  "title": "{organizationName} waitlist",
+  "groups": {
+    "title": "Current wait",
+    "range": "{min}–{max} guests",
+    "single": "{count, plural, one {# guest} other {# guests}}",
+    "waitingCount": "{count, plural, one {# party waiting} other {# parties waiting}}",
+    "calling": "Now calling: {numbers}",
+    "notCalling": "No one called yet"
+  },
+  "unavailable": {
+    "closed": "We're closed right now, so the waitlist isn't open.",
+    "disabled": "This store doesn't offer a walk-in waitlist.",
+    "paused": "The waitlist is paused. Please ask a member of staff."
+  },
+  "form": {
+    "title": "Join the waitlist",
+    "partySize": {
+      "label": "Party size",
+      "placeholder": "Select your party size",
+      "value": "{count, plural, one {# guest} other {# guests}}"
+    },
+    "notice": "The store may call you to confirm. Leave an email to be notified when it's your turn.",
+    "submit": "Get a number"
+  },
+  "ticket": {
+    "label": "Ticket",
+    "number": "Your number",
+    "partySize": "{count, plural, one {# guest} other {# guests}}",
+    "ahead": "{count, plural, =0 {You're next. Watch for your number} one {# party ahead of you} other {# parties ahead of you}}",
+    "status": {
+      "waiting": "Waiting",
+      "called": "It's your turn",
+      "seated": "Seated",
+      "noShow": "Skipped",
+      "cancelled": "Cancelled"
+    },
+    "message": {
+      "waiting": "Keep this page open and we'll alert you when your number is called.",
+      "called": "Please check in at the counter as soon as possible.",
+      "seated": "Scan the QR code on your table to order.",
+      "noShow": "Your number was skipped. If you're still nearby, please ask a member of staff.",
+      "cancelled": "This ticket has been cancelled."
+    },
+    "notify": {
+      "enable": "Turn on alerts",
+      "enabled": "Alerts are on",
+      "title": "{organizationName}: {ticketNumber}, it's your turn",
+      "body": "Please check in at the counter as soon as possible."
+    },
+    "cancel": {
+      "label": "Leave the waitlist",
+      "contentText": "Leave the waitlist with {ticketNumber}? You'll need to get a new number to rejoin.",
+      "success": "You've left the waitlist"
+    },
+    "again": "Get a new number",
+    "store": "Store info"
+  },
+  "kiosk": {
+    "title": "You're on the waitlist",
+    "scan": "Scan the QR code with your phone to follow your place in line",
+    "done": "Done"
+  },
+  "errors": {
+    "waitlistClosed": "We're closed right now, so the waitlist isn't open.",
+    "waitlistDisabled": "This store doesn't offer a walk-in waitlist.",
+    "waitlistGroupsInvalid": "The party size groups are invalid.",
+    "waitlistPartySizeUnavailable": "We can't take this party size on the waitlist. Please ask a member of staff.",
+    "waitlistPaused": "The waitlist is paused. Please ask a member of staff.",
+    "waitlistPhoneInQueue": "This phone number is already on the waitlist.",
+    "waitlistTransitionInvalid": "This ticket has changed. Please refresh the page."
+  }
+}

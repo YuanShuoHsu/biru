@@ -87,6 +87,9 @@
     "minLength": "8자 이상 길이.",
     "number": "숫자를 최소 1개 포함."
   },
+  "partySize": {
+    "notSelected": "인원을 선택해 주세요."
+  },
   "payment": {
     "notSelected": "결제 방법을 선택해 주세요."
   },

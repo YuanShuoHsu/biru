@@ -87,6 +87,9 @@
     "minLength": "Be at least 8 characters long.",
     "number": "Contain at least one number."
   },
+  "partySize": {
+    "notSelected": "Please select your party size."
+  },
   "payment": {
     "notSelected": "Please select your payment method."
   },

@@ -87,6 +87,9 @@
     "minLength": "8文字以上の長さ。",
     "number": "数字を1文字以上含む。"
   },
+  "partySize": {
+    "notSelected": "人数を選択してください。"
+  },
   "payment": {
     "notSelected": "お支払い方法を選択してください。"
   },

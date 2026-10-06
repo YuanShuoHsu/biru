@@ -1,0 +1,74 @@
+{
+  "label": "現場候位",
+  "title": "{organizationName} 現場候位",
+  "groups": {
+    "title": "目前候位狀況",
+    "range": "{min}–{max} 位",
+    "single": "{count} 位",
+    "waitingCount": "{count} 組等候中",
+    "calling": "叫號中：{numbers}",
+    "notCalling": "尚未叫號"
+  },
+  "unavailable": {
+    "closed": "目前非營業時間，暫不開放取號。",
+    "disabled": "本店目前未開放現場候位。",
+    "paused": "目前暫停取號，請洽現場服務人員。"
+  },
+  "form": {
+    "title": "填寫候位資料",
+    "partySize": {
+      "label": "用餐人數",
+      "placeholder": "請選擇您的用餐人數",
+      "value": "{count} 位"
+    },
+    "notice": "店家可能會致電確認，留下電子信箱可在叫號時收到通知。",
+    "submit": "立即取號"
+  },
+  "ticket": {
+    "label": "號碼牌",
+    "number": "您的號碼",
+    "partySize": "{count} 位",
+    "ahead": "{count, plural, =0 {下一組就是您，請留意叫號} other {前方還有 # 組}}",
+    "status": {
+      "waiting": "候位中",
+      "called": "輪到您了",
+      "seated": "已入座",
+      "noShow": "已過號",
+      "cancelled": "已取消"
+    },
+    "message": {
+      "waiting": "請保持此頁面開啟，叫號時會即時提醒您。",
+      "called": "請盡快至櫃檯報到。",
+      "seated": "請掃描桌上的 QR code 點餐。",
+      "noShow": "您的號碼已過號，如仍在店外請洽服務人員。",
+      "cancelled": "此號碼牌已取消。"
+    },
+    "notify": {
+      "enable": "開啟叫號提醒",
+      "enabled": "已開啟叫號提醒",
+      "title": "{organizationName}：輪到 {ticketNumber} 了",
+      "body": "請盡快至櫃檯報到。"
+    },
+    "cancel": {
+      "label": "取消候位",
+      "contentText": "確定要取消 {ticketNumber} 的候位嗎？取消後需重新取號。",
+      "success": "已取消候位"
+    },
+    "again": "重新取號",
+    "store": "門市資訊"
+  },
+  "kiosk": {
+    "title": "取號成功",
+    "scan": "用手機掃描 QR code，隨時查看叫號進度",
+    "done": "完成"
+  },
+  "errors": {
+    "waitlistClosed": "目前非營業時間，暫不開放取號。",
+    "waitlistDisabled": "本店目前未開放現場候位。",
+    "waitlistGroupsInvalid": "候位分組設定有誤。",
+    "waitlistPartySizeUnavailable": "無法受理此用餐人數的候位，請洽現場服務人員。",
+    "waitlistPaused": "目前暫停取號，請洽現場服務人員。",
+    "waitlistPhoneInQueue": "此電話號碼已在候位中，請勿重複取號。",
+    "waitlistTransitionInvalid": "號碼牌狀態已變更，請重新整理頁面。"
+  }
+}

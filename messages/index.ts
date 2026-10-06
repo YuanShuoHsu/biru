@@ -8,6 +8,7 @@ import maintenance from "./en/maintenance.json";
 import metadata from "./en/metadata.json";
 import order from "./en/order.json";
 import validation from "./en/validation.json";
+import waitlist from "./en/waitlist.json";
 
 const messages = {
   appBar,
@@ -20,6 +21,7 @@ const messages = {
   metadata,
   order,
   validation,
+  waitlist,
 };
 
 export default messages;

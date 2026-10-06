@@ -1,0 +1,74 @@
+{
+  "label": "順番待ち",
+  "title": "{organizationName} 順番待ち",
+  "groups": {
+    "title": "現在の待ち状況",
+    "range": "{min}～{max} 名",
+    "single": "{count} 名",
+    "waitingCount": "{count} 組待ち",
+    "calling": "呼び出し中：{numbers}",
+    "notCalling": "まだ呼び出していません"
+  },
+  "unavailable": {
+    "closed": "営業時間外のため、受付を停止しています。",
+    "disabled": "当店では店頭の順番待ち受付を行っていません。",
+    "paused": "ただいま受付を一時停止しています。スタッフにお声がけください。"
+  },
+  "form": {
+    "title": "順番待ちの受付",
+    "partySize": {
+      "label": "人数",
+      "placeholder": "人数を選択してください",
+      "value": "{count} 名"
+    },
+    "notice": "確認のためお店からお電話する場合があります。メールアドレスを入力すると、順番が来たときにお知らせします。",
+    "submit": "番号を受け取る"
+  },
+  "ticket": {
+    "label": "整理券",
+    "number": "あなたの番号",
+    "partySize": "{count} 名",
+    "ahead": "{count, plural, =0 {次はあなたの番です。呼び出しにご注意ください} other {あと # 組}}",
+    "status": {
+      "waiting": "お待ちください",
+      "called": "順番が来ました",
+      "seated": "ご案内済み",
+      "noShow": "順番が過ぎました",
+      "cancelled": "キャンセル済み"
+    },
+    "message": {
+      "waiting": "このページを開いたままにしてください。呼び出し時にお知らせします。",
+      "called": "お早めにカウンターまでお越しください。",
+      "seated": "テーブルの QR コードを読み取ってご注文ください。",
+      "noShow": "順番が過ぎました。まだお近くにいらっしゃる場合はスタッフにお声がけください。",
+      "cancelled": "この整理券はキャンセルされました。"
+    },
+    "notify": {
+      "enable": "呼び出し通知をオンにする",
+      "enabled": "呼び出し通知はオンです",
+      "title": "{organizationName}：{ticketNumber} 番の方、順番が来ました",
+      "body": "お早めにカウンターまでお越しください。"
+    },
+    "cancel": {
+      "label": "順番待ちをキャンセル",
+      "contentText": "{ticketNumber} の順番待ちをキャンセルしますか？キャンセル後は番号を取り直す必要があります。",
+      "success": "順番待ちをキャンセルしました"
+    },
+    "again": "番号を取り直す",
+    "store": "店舗情報"
+  },
+  "kiosk": {
+    "title": "受付が完了しました",
+    "scan": "スマートフォンで QR コードを読み取ると、待ち状況をいつでも確認できます",
+    "done": "完了"
+  },
+  "errors": {
+    "waitlistClosed": "営業時間外のため、受付を停止しています。",
+    "waitlistDisabled": "当店では店頭の順番待ち受付を行っていません。",
+    "waitlistGroupsInvalid": "人数区分の設定が正しくありません。",
+    "waitlistPartySizeUnavailable": "この人数では受付できません。スタッフにお声がけください。",
+    "waitlistPaused": "ただいま受付を一時停止しています。スタッフにお声がけください。",
+    "waitlistPhoneInQueue": "この電話番号はすでに順番待ちに登録されています。",
+    "waitlistTransitionInvalid": "整理券の状態が変わりました。ページを再読み込みしてください。"
+  }
+}
