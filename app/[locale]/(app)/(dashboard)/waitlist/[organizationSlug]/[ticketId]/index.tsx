@@ -137,6 +137,7 @@ const WaitlistTicket = ({
       fallbackData: initialTicket,
     });
 
+  const previousCalledAtRef = useRef(ticket.calledAt);
   const previousStatusRef = useRef(ticket.status);
 
   useEffect(() => {
@@ -174,10 +175,18 @@ const WaitlistTicket = ({
   }, [isConnected, mutate, organization.id]);
 
   useEffect(() => {
+    const previousCalledAt = previousCalledAtRef.current;
     const previousStatus = previousStatusRef.current;
+    previousCalledAtRef.current = ticket.calledAt;
     previousStatusRef.current = ticket.status;
 
-    if (ticket.status !== "called" || ticket.status === previousStatus) return;
+    if (
+      ticket.status !== "called" ||
+      !ticket.calledAt ||
+      ticket.calledAt === previousCalledAt ||
+      previousStatus === "seated"
+    )
+      return;
 
     navigator.vibrate?.(ALERT_VIBRATION);
 
@@ -201,6 +210,7 @@ const WaitlistTicket = ({
   }, [
     organization.name,
     tWaitlist,
+    ticket.calledAt,
     ticket.id,
     ticket.status,
     ticket.ticketNumber,
