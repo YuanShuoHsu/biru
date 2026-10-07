@@ -63,12 +63,12 @@
     },
     "cancel": {
       "label": "Leave the waitlist",
-      "contentText": "Leave the waitlist with {ticketNumber}? You'll need to get a new number to rejoin.",
-      "success": "You've left the waitlist"
+      "contentText": "Leave the waitlist with <bold>{ticketNumber}</bold>? You'll need to get a new number to rejoin.",
+      "success": "Left the waitlist with {ticketNumber}"
     },
     "confirm": {
       "label": "Confirm attendance",
-      "success": "Your attendance has been confirmed"
+      "success": "Confirmed attendance for {ticketNumber}"
     },
     "again": "Get a new number",
     "store": "Store info"

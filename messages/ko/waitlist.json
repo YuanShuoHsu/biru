@@ -63,12 +63,12 @@
     },
     "cancel": {
       "label": "대기 취소",
-      "contentText": "{ticketNumber} 대기를 취소하시겠습니까? 취소하면 번호를 다시 받아야 합니다.",
-      "success": "대기가 취소되었습니다"
+      "contentText": "<bold>{ticketNumber}</bold> 대기를 취소하시겠습니까? 취소하면 번호를 다시 받아야 합니다.",
+      "success": "{ticketNumber} 대기가 취소되었습니다"
     },
     "confirm": {
       "label": "방문 확정",
-      "success": "방문이 확정되었습니다"
+      "success": "{ticketNumber} 방문이 확정되었습니다"
     },
     "again": "번호 다시 받기",
     "store": "매장 정보"

@@ -36,6 +36,7 @@ import {
   Button,
   Card,
   Chip,
+  DialogContentText,
   Stack,
   Step,
   StepLabel,
@@ -221,9 +222,14 @@ const WaitlistTicket = ({
     try {
       await fetcher(`${ticketUrl}/confirm`, { method: "POST" });
 
-      enqueueSnackbar(tWaitlist("ticket.confirm.success"), {
-        variant: "success",
-      });
+      enqueueSnackbar(
+        tWaitlist("ticket.confirm.success", {
+          ticketNumber: ticket.ticketNumber,
+        }),
+        {
+          variant: "success",
+        },
+      );
     } catch (error) {
       const code = getWaitlistErrorCode(error);
 
@@ -250,16 +256,26 @@ const WaitlistTicket = ({
       await mutate();
     }
 
-    enqueueSnackbar(tWaitlist("ticket.cancel.success"), {
-      variant: "success",
-    });
+    enqueueSnackbar(
+      tWaitlist("ticket.cancel.success", {
+        ticketNumber: ticket.ticketNumber,
+      }),
+      {
+        variant: "success",
+      },
+    );
   };
 
   const handleCancelDialog = () =>
     setDialog({
-      contentText: tWaitlist("ticket.cancel.contentText", {
-        ticketNumber: ticket.ticketNumber,
-      }),
+      content: (
+        <DialogContentText>
+          {tWaitlist.rich("ticket.cancel.contentText", {
+            bold: (chunks) => <strong>{chunks}</strong>,
+            ticketNumber: ticket.ticketNumber,
+          })}
+        </DialogContentText>
+      ),
       onConfirm: handleCancelConfirm,
       open: true,
       title: tWaitlist("ticket.cancel.label"),
@@ -364,7 +380,11 @@ const WaitlistTicket = ({
                   {tWaitlist("ticket.confirm.label")}
                 </Button>
               )}
-              <Button color="error" onClick={handleCancelDialog}>
+              <Button
+                color="error"
+                onClick={handleCancelDialog}
+                variant="outlined"
+              >
                 {tWaitlist("ticket.cancel.label")}
               </Button>
             </>

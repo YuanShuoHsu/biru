@@ -63,12 +63,12 @@
     },
     "cancel": {
       "label": "取消排队",
-      "contentText": "确定要取消 {ticketNumber} 的排队吗？取消后需重新取号。",
-      "success": "已取消排队"
+      "contentText": "确定要取消 <bold>{ticketNumber}</bold> 的排队吗？取消后需重新取号。",
+      "success": "已取消排队 {ticketNumber}"
     },
     "confirm": {
       "label": "确认前往",
-      "success": "已回复确认前往"
+      "success": "已确认 {ticketNumber} 前往"
     },
     "again": "重新取号",
     "store": "门店信息"

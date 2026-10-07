@@ -63,12 +63,12 @@
     },
     "cancel": {
       "label": "取消候位",
-      "contentText": "確定要取消 {ticketNumber} 的候位嗎？取消後需重新取號。",
-      "success": "已取消候位"
+      "contentText": "確定要取消 <bold>{ticketNumber}</bold> 的候位嗎？取消後需重新取號。",
+      "success": "已取消候位 {ticketNumber}"
     },
     "confirm": {
       "label": "確認前往",
-      "success": "已回覆確認前往"
+      "success": "已確認 {ticketNumber} 前往"
     },
     "again": "重新取號",
     "store": "門市資訊"

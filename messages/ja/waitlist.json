@@ -63,12 +63,12 @@
     },
     "cancel": {
       "label": "順番待ちをキャンセル",
-      "contentText": "{ticketNumber} の順番待ちをキャンセルしますか？キャンセル後は番号を取り直す必要があります。",
-      "success": "順番待ちをキャンセルしました"
+      "contentText": "<bold>{ticketNumber}</bold> の順番待ちをキャンセルしますか？キャンセル後は番号を取り直す必要があります。",
+      "success": "{ticketNumber} の順番待ちをキャンセルしました"
     },
     "confirm": {
       "label": "来店を確定する",
-      "success": "ご来店を確定しました"
+      "success": "{ticketNumber} の来店を確定しました"
     },
     "again": "番号を取り直す",
     "store": "店舗情報"
