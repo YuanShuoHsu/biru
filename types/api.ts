@@ -2396,6 +2396,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/waitlist/tickets/list": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 後台號碼牌歷史列表 */
+    get: operations["WaitlistController_listTickets"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/waitlist/tickets/{ticketId}": {
     parameters: {
       query?: never;
@@ -2410,7 +2427,11 @@ export interface paths {
     delete?: never;
     options?: never;
     head?: never;
-    patch?: never;
+    /**
+     * 修改號碼牌
+     * @description 僅限進行中；人數換到其他分組時改發新組號碼並排到最後
+     */
+    patch: operations["WaitlistController_updateTicket"];
     trace?: never;
   };
   "/api/organizations/{organizationSlug}/waitlist/tickets/{ticketId}/cancel": {
@@ -4228,7 +4249,8 @@ export interface components {
       | "supplier"
       | "ingredient"
       | "recipe"
-      | "organization";
+      | "organization"
+      | "waitlistTicket";
     /** @enum {string} */
     AuditAction: "create" | "update" | "delete";
     AuditLogResponseDto: {
@@ -5133,7 +5155,10 @@ export interface components {
     OrderInvoiceVerificationDto: {
       /** @description 綠界端的發票號碼 */
       invoiceNumber: string;
-      /** @description 綠界端的開立時間 */
+      /**
+       * Format: date-time
+       * @description 綠界端的開立時間
+       */
       invoiceDate: string;
       /** @description 綠界端的發票金額 */
       salesAmount: string;
@@ -6747,6 +6772,35 @@ export interface components {
       success: boolean;
       timestamp: string;
     };
+    /** @enum {string} */
+    WaitlistTicketStatus:
+      | "waiting"
+      | "called"
+      | "seated"
+      | "noShow"
+      | "cancelled";
+    WaitlistTicketListItemDto: {
+      /** Format: date-time */
+      calledAt?: string | null;
+      /**
+       * Format: date-time
+       * @description 顧客回覆確認前往的時間
+       */
+      confirmedAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      endedAt?: string | null;
+      id: string;
+      partySize: number;
+      prefix: string;
+      status: components["schemas"]["WaitlistTicketStatus"];
+      /** @example A012 */
+      ticketNumber: string;
+      email?: string | null;
+      name: string;
+      phoneNumber: string;
+    };
     WaitlistGroupStatusDto: {
       /** @example 4 */
       maxPartySize: number;
@@ -6781,13 +6835,6 @@ export interface components {
        */
       phoneNumber: string;
     };
-    /** @enum {string} */
-    WaitlistTicketStatus:
-      | "waiting"
-      | "called"
-      | "seated"
-      | "noShow"
-      | "cancelled";
     WaitlistTicketResponseDto: {
       /** @description 前方候位組數，非候位中為 0 */
       aheadCount: number;
@@ -6847,6 +6894,8 @@ export interface components {
       status: components["schemas"]["WaitlistTicketStatus"];
       /** @example A012 */
       ticketNumber: string;
+      /** @description 店員可將此號碼牌轉換到的狀態 */
+      availableTransitions: components["schemas"]["WaitlistTicketStatus"][];
       email?: string | null;
       /** @description 已叫號且超過保留期限 */
       overdue: boolean;
@@ -6867,6 +6916,28 @@ export interface components {
       /** @description 進行中的號碼牌與今日已結束的號碼牌 */
       tickets: components["schemas"]["AdminWaitlistTicketDto"][];
     };
+    /** @enum {string} */
+    WaitlistTicketFilterField:
+      | "ticketNumber"
+      | "name"
+      | "phoneNumber"
+      | "email"
+      | "status"
+      | "partySize"
+      | "createdAt"
+      | "calledAt"
+      | "endedAt";
+    /** @enum {string} */
+    WaitlistTicketSortField:
+      | "ticketNumber"
+      | "name"
+      | "phoneNumber"
+      | "email"
+      | "status"
+      | "partySize"
+      | "createdAt"
+      | "calledAt"
+      | "endedAt";
     WaitlistTicketDetailResponseDto: {
       /** @description 前方候位組數，非候位中為 0 */
       aheadCount: number;
@@ -6912,6 +6983,12 @@ export interface components {
       holdMinutes: number;
       paused: boolean;
     };
+    UpdateWaitlistGroupDto: {
+      /** @example 4 */
+      maxPartySize: number;
+      /** @example 3 */
+      minPartySize: number;
+    };
     UpdateWaitlistSettingsDto: {
       /**
        * @description 打烊前幾分鐘停止顧客自助取號
@@ -6919,7 +6996,7 @@ export interface components {
        */
       cutoffMinutes: number;
       enabled: boolean;
-      groups: components["schemas"]["WaitlistGroupDto"][];
+      groups: components["schemas"]["UpdateWaitlistGroupDto"][];
       /**
        * @description 保留期限過後再等幾分鐘自動過號，0 為不自動過號
        * @example 10
@@ -13612,6 +13689,43 @@ export interface operations {
       };
     };
   };
+  WaitlistController_listTickets: {
+    parameters: {
+      query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["WaitlistTicketFilterField"];
+        sortBy?: components["schemas"]["WaitlistTicketSortField"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   WaitlistController_getTicket: {
     parameters: {
       query?: never;
@@ -13630,6 +13744,39 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["WaitlistTicketDetailResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  WaitlistController_updateTicket: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        ticketId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateWaitlistTicketDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["WaitlistTicketResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -15209,6 +15356,7 @@ export const auditResourceValues: ReadonlyArray<
   "ingredient",
   "recipe",
   "organization",
+  "waitlistTicket",
 ];
 export const auditActionValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AuditAction"]
@@ -15763,6 +15911,32 @@ export const waitlistErrorCodeValues: ReadonlyArray<
 export const waitlistTicketStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["WaitlistTicketStatus"]
 > = ["waiting", "called", "seated", "noShow", "cancelled"];
+export const waitlistTicketFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["WaitlistTicketFilterField"]
+> = [
+  "ticketNumber",
+  "name",
+  "phoneNumber",
+  "email",
+  "status",
+  "partySize",
+  "createdAt",
+  "calledAt",
+  "endedAt",
+];
+export const waitlistTicketSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["WaitlistTicketSortField"]
+> = [
+  "ticketNumber",
+  "name",
+  "phoneNumber",
+  "email",
+  "status",
+  "partySize",
+  "createdAt",
+  "calledAt",
+  "endedAt",
+];
 export const organizationMemberResponseDtoRoleValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrganizationMemberResponseDto"]["role"]
 > = ["admin", "member", "owner"];
