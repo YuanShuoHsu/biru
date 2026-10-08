@@ -49,13 +49,15 @@
       "called": "順番が来ました",
       "seated": "ご案内済み",
       "noShow": "順番が過ぎました",
-      "cancelled": "キャンセル済み"
+      "cancelled": "キャンセル済み",
+      "expired": "整理券は無効です"
     },
     "message": {
       "waiting": "このページを開いたままにしてください。呼び出し時にすぐ更新されます。",
       "seated": "テーブルの QR コードを読み取ってご注文ください。",
       "noShow": "順番が過ぎました。まだお近くにいらっしゃる場合はスタッフにお声がけください。",
-      "cancelled": "この整理券はキャンセルされました。"
+      "cancelled": "この整理券はキャンセルされました。",
+      "expired": "この整理券は有効期限が切れました。"
     },
     "notify": {
       "title": "{organizationName}：{ticketNumber} 番の方、順番が来ました",

@@ -49,13 +49,15 @@
       "called": "轮到您了",
       "seated": "已入座",
       "noShow": "已过号",
-      "cancelled": "已取消"
+      "cancelled": "已取消",
+      "expired": "号码牌已失效"
     },
     "message": {
       "waiting": "请保持此页面打开，叫号时会实时更新。",
       "seated": "请扫描桌上的二维码点餐。",
       "noShow": "您的号码已过号，如仍在店外请咨询服务人员。",
-      "cancelled": "此号码牌已取消。"
+      "cancelled": "此号码牌已取消。",
+      "expired": "此号码牌已超时失效。"
     },
     "notify": {
       "title": "{organizationName}：轮到 {ticketNumber} 了",

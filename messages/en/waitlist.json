@@ -49,13 +49,15 @@
       "called": "It's your turn",
       "seated": "Seated",
       "noShow": "Skipped",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "expired": "Ticket expired"
     },
     "message": {
       "waiting": "Please keep this page open. It updates as soon as your number is called.",
       "seated": "Scan the QR code on your table to order.",
       "noShow": "Your number was skipped. If you're still nearby, please ask a member of staff.",
-      "cancelled": "This ticket has been cancelled."
+      "cancelled": "This ticket has been cancelled.",
+      "expired": "This ticket has expired."
     },
     "notify": {
       "title": "{organizationName}: {ticketNumber}, it's your turn",

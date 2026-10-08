@@ -69,6 +69,7 @@ const STEPS = ["taken", "called", "seated"] as const;
 const ACTIVE_STEPS: Record<WaitlistTicketStatus, number> = {
   called: 2,
   cancelled: 1,
+  expired: 1,
   noShow: 2,
   seated: 3,
   waiting: 1,
@@ -217,14 +218,10 @@ const WaitlistTicket = ({
   ]);
 
   const isActive = ticket.status === "waiting" || ticket.status === "called";
+  const isVoided = ticket.status === "cancelled" || ticket.status === "expired";
   const activeStep =
-    ticket.status === "cancelled" && ticket.calledAt
-      ? 2
-      : ACTIVE_STEPS[ticket.status];
-  const errorStep =
-    ticket.status === "noShow" || ticket.status === "cancelled"
-      ? activeStep
-      : null;
+    isVoided && ticket.calledAt ? 2 : ACTIVE_STEPS[ticket.status];
+  const errorStep = ticket.status === "noShow" || isVoided ? activeStep : null;
 
   const handleConfirm = async () => {
     setIsConfirming(true);
@@ -399,7 +396,7 @@ const WaitlistTicket = ({
               </Button>
             </>
           ) : (
-            ticket.status === "cancelled" && (
+            isVoided && (
               <Button
                 onClick={() => router.push(`/waitlist/${organization.slug}`)}
                 startIcon={<Replay />}

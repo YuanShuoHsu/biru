@@ -49,13 +49,15 @@
       "called": "고객님 차례입니다",
       "seated": "착석 완료",
       "noShow": "순서 지남",
-      "cancelled": "취소됨"
+      "cancelled": "취소됨",
+      "expired": "번호표 만료"
     },
     "message": {
       "waiting": "이 페이지를 열어 두세요. 호출되면 바로 업데이트됩니다.",
       "seated": "테이블의 QR 코드를 스캔해 주문해 주세요.",
       "noShow": "순서가 지났습니다. 아직 근처에 계시면 직원에게 문의해 주세요.",
-      "cancelled": "이 번호표는 취소되었습니다."
+      "cancelled": "이 번호표는 취소되었습니다.",
+      "expired": "이 번호표는 시간이 지나 만료되었습니다."
     },
     "notify": {
       "title": "{organizationName}: {ticketNumber}번 고객님 차례입니다",
