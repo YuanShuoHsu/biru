@@ -40,14 +40,14 @@ export const proxy = async (request: NextRequest) => {
   if (isMaintenancePath)
     return NextResponse.redirect(new URL(`/${locale}`, request.url));
 
-  const isProtectedAuthPage = [
+  const isAccountPage = [
     `/${locale}/auth/coupons`,
     `/${locale}/auth/orders`,
     `/${locale}/auth/points`,
     `/${locale}/auth/settings`,
   ].some((prefix) => pathname.startsWith(prefix));
 
-  if (isProtectedAuthPage) {
+  if (isAccountPage) {
     const { data: session } = await authClient.getSession({
       fetchOptions: { headers: request.headers },
     });
