@@ -921,7 +921,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 查詢異動紀錄；帶 resource + resourceId 可取單一資源的歷史 */
+    /** 查詢異動紀錄；帶 resource + resourceId 可取單一資源的歷史。出勤與薪資紀錄只列出具備該資料讀取權限者 */
     get: operations["AuditController_findAll"];
     put?: never;
     post?: never;
@@ -1323,6 +1323,57 @@ export interface paths {
     put?: never;
     /** 還原同一次刪除的所有資料 */
     post: operations["DeletedRecordsController_restore"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/deleted-records": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢本店最近 30 天內刪除的資料 */
+    get: operations["OrganizationDeletedRecordsController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/deleted-records/permission": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 目前成員是否能還原本店的刪除資料 */
+    get: operations["OrganizationDeletedRecordsController_permission"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/deleted-records/{batchId}/restore": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 還原本店同一次刪除的資料，須具備各資料的建立權限 */
+    post: operations["OrganizationDeletedRecordsController_restore"];
     delete?: never;
     options?: never;
     head?: never;
@@ -4445,15 +4496,45 @@ export interface components {
       | "member"
       | "invitation"
       | "user"
-      | "team";
+      | "team"
+      | "employee"
+      | "attendanceSetting"
+      | "leaveCase"
+      | "leaveType"
+      | "leaveBalance"
+      | "leaveDeferral"
+      | "holidaySubstitute"
+      | "attendanceRequest"
+      | "shift"
+      | "shiftType"
+      | "parentalChild"
+      | "parentalReturn"
+      | "payrollTerm"
+      | "payslip"
+      | "earningType"
+      | "withholdingUnit"
+      | "taxIdentity"
+      | "withholdingCertificate";
     /** @enum {string} */
-    AuditAction: "create" | "update" | "delete";
+    AuditAction:
+      | "create"
+      | "update"
+      | "delete"
+      | "restore"
+      | "consume"
+      | "refund"
+      | "review"
+      | "withdraw"
+      | "cancel"
+      | "publish"
+      | "request";
     AuditLogResponseDto: {
       id: string;
       /** @description 操作者帳號被刪除後為 null，actorName / actorEmail 仍保留 */
       actorId?: string | null;
-      actorName: string;
-      actorEmail: string;
+      /** @description 出勤與薪資紀錄取自目前帳號，帳號刪除後為 null */
+      actorName?: string | null;
+      actorEmail?: string | null;
       /** @description 異動所屬店家；平台層異動（優惠券定義、輪播圖）為 null */
       organizationId?: string | null;
       resource: components["schemas"]["AuditResource"];
@@ -4470,7 +4551,7 @@ export interface components {
       /** @description 由根到父的 id，供前端拼出巢狀路由；頂層資源為空陣列 */
       ancestorIds?: string[] | null;
       action: components["schemas"]["AuditAction"];
-      /** @description 欄位名 → 變更前後值；建立的 before 與刪除的 after 為 null */
+      /** @description 欄位名 → 變更前後值；建立的 before 與刪除的 after 為 null。出勤與薪資紀錄只記當下的值時省略另一側 */
       changes: {
         [key: string]: {
           after?: unknown;
@@ -5100,6 +5181,12 @@ export interface components {
       relatedCount: number;
       /** @description 由稽核紀錄比對出的刪除者；查不到時為 null */
       deletedBy?: string | null;
+      /** @description 目前操作者可否還原（店內須具備各資料的建立權限） */
+      canRestore: boolean;
+    };
+    DeletedRecordPermissionDto: {
+      /** @description 目前成員是否能還原本店任何一種資料 */
+      canRestore: boolean;
     };
     WithholdingBracketResponseDto: {
       upTo?: number | null;
@@ -10321,7 +10408,7 @@ export interface operations {
       };
       header?: never;
       path: {
-        organizationSlug: string;
+        organizationSlug: unknown;
       };
       cookie?: never;
     };
@@ -11239,6 +11326,90 @@ export interface operations {
       header?: never;
       path: {
         batchId: number;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrganizationDeletedRecordsController_findAll: {
+    parameters: {
+      query?: {
+        limit?: number;
+        offset?: number;
+      };
+      header?: never;
+      path: {
+        organizationSlug: unknown;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrganizationDeletedRecordsController_permission: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: unknown;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["DeletedRecordPermissionDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrganizationDeletedRecordsController_restore: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        batchId: number;
+        organizationSlug: unknown;
       };
       cookie?: never;
     };
@@ -16144,10 +16315,40 @@ export const auditResourceValues: ReadonlyArray<
   "invitation",
   "user",
   "team",
+  "employee",
+  "attendanceSetting",
+  "leaveCase",
+  "leaveType",
+  "leaveBalance",
+  "leaveDeferral",
+  "holidaySubstitute",
+  "attendanceRequest",
+  "shift",
+  "shiftType",
+  "parentalChild",
+  "parentalReturn",
+  "payrollTerm",
+  "payslip",
+  "earningType",
+  "withholdingUnit",
+  "taxIdentity",
+  "withholdingCertificate",
 ];
 export const auditActionValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AuditAction"]
-> = ["create", "update", "delete"];
+> = [
+  "create",
+  "update",
+  "delete",
+  "restore",
+  "consume",
+  "refund",
+  "review",
+  "withdraw",
+  "cancel",
+  "publish",
+  "request",
+];
 export const auditLogFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AuditLogFilterField"]
 > = [
