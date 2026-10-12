@@ -47,7 +47,7 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
     ).catch(() => null),
   ]);
 
-  if (!organization || !status) notFound();
+  if (!organization || organization.closedAt || !status) notFound();
 
   return <Waitlist organization={organization} status={status} />;
 };

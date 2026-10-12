@@ -26,7 +26,13 @@ import { usePathname, useRouter } from "@/i18n/navigation";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
-import { Button, Chip, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Chip,
+  DialogContentText,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { getCartKey } from "@/stores/cart-store";
@@ -134,9 +140,14 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
     }
 
     setDialog({
-      contentText: tAuth("orders.reorderConfirmContentText", {
-        name: order.seller.name,
-      }),
+      content: (
+        <DialogContentText>
+          {tAuth.rich("orders.reorderConfirmContentText", {
+            bold: (chunks) => <strong>{chunks}</strong>,
+            name: order.seller.name,
+          })}
+        </DialogContentText>
+      ),
       onConfirm: async () => applyReorder(),
       open: true,
       title: getReorderLabel(order.mode),

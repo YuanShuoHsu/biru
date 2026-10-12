@@ -31,7 +31,7 @@ const OrderModeOrganizationSlugCheckoutPage = async ({
   setRequestLocale(locale);
 
   const organization = await getOrganization(organizationSlug);
-  if (!organization) return notFound();
+  if (!organization || organization.closedAt) return notFound();
 
   return <OrderModeOrganizationSlugCheckout organization={organization} />;
 };

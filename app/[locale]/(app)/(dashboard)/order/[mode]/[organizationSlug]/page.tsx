@@ -62,6 +62,9 @@ const OrderModeOrganizationSlugPage = async ({
 
   setRequestLocale(locale);
 
+  const organization = await getOrganization(organizationSlug);
+  if (!organization || organization.closedAt) return notFound();
+
   if (
     mode === ORDER_MODE.Counter ||
     mode === ORDER_MODE.DriveThru ||

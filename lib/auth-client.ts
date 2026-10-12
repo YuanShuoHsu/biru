@@ -81,6 +81,7 @@ export const authClient = createAuthClient({
 
             amountPerPoint: { type: "number", required: false },
             pointsEnabledAt: { type: "date", required: false },
+            closedAt: { type: "date", required: false, input: false },
             pointsValidityYears: { type: "number", required: false },
 
             pickupLeadMinutes: { type: "number", required: false },
@@ -140,6 +141,28 @@ const customErrorCodes: Record<string, Record<Locale, string>> = {
     [LocaleEnum.Ja]: "先にログインしてください",
     [LocaleEnum.Ko]: "먼저 로그인해 주세요",
     [LocaleEnum.ZhCN]: "请先登录",
+  },
+  USER_HAS_EMPLOYMENT_RECORDS: {
+    [LocaleEnum.ZhTW]: "此帳號有出勤或薪資紀錄，依法須保存，無法刪除",
+    [LocaleEnum.En]:
+      "This account has attendance or payroll records that must be retained by law, so it can't be deleted.",
+    [LocaleEnum.Ja]:
+      "このアカウントには法律で保存が義務付けられた勤怠・給与の記録があるため、削除できません",
+    [LocaleEnum.Ko]:
+      "이 계정에는 법적으로 보관해야 하는 근태 또는 급여 기록이 있어 삭제할 수 없습니다",
+    [LocaleEnum.ZhCN]: "此账号有考勤或薪资记录，依法须保存，无法删除",
+  },
+  USER_IS_SOLE_ORGANIZATION_OWNER: {
+    [LocaleEnum.ZhTW]:
+      "此帳號是店家唯一的擁有者，請先將擁有者身分移轉給其他成員再刪除",
+    [LocaleEnum.En]:
+      "This account is the only owner of a store. Transfer ownership to another member before deleting it.",
+    [LocaleEnum.Ja]:
+      "このアカウントは店舗の唯一のオーナーです。削除する前にオーナー権限を他のメンバーに移してください",
+    [LocaleEnum.Ko]:
+      "이 계정은 매장의 유일한 소유자입니다. 삭제하기 전에 다른 멤버에게 소유권을 이전하세요",
+    [LocaleEnum.ZhCN]:
+      "此账号是店家唯一的拥有者，请先将拥有者身份转移给其他成员再删除",
   },
   YOU_ARE_NOT_THE_RECIPIENT_OF_THE_INVITATION: {
     [LocaleEnum.ZhTW]: "此邀請不是發給您的",
