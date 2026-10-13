@@ -3,7 +3,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useSWRConfig } from "swr";
 
-import { swrKeys } from "@/constants/swr";
+import { deviceSessionsKey } from "@/hooks/useDeviceSessions";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 
@@ -46,7 +46,7 @@ export const useLogout = () => {
           const { data } = await authClient.getSession();
           setSession(data);
 
-          await mutate(swrKeys.deviceSessions);
+          await mutate(deviceSessionsKey);
 
           enqueueSnackbar(tAuth("signOut.success", { email }), {
             variant: "success",

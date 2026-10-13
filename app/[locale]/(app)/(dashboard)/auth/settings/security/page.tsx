@@ -7,11 +7,11 @@ import { SWRConfig, unstable_serialize } from "swr";
 
 import Security from ".";
 
-import { swrKeys } from "@/constants/swr";
-
 import { routing } from "@/i18n/routing";
 
 import { authClient } from "@/lib/auth-client";
+
+import { listAccountsKey } from "@/utils/auth";
 
 export const generateMetadata = async ({
   params,
@@ -40,7 +40,7 @@ const AuthSettingsSecurityPage = async ({
 
   const fallback = session
     ? {
-        [unstable_serialize([swrKeys.listAccounts, session.user.id])]: accounts,
+        [unstable_serialize([listAccountsKey, session.user.id])]: accounts,
       }
     : {};
 
