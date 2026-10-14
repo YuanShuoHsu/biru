@@ -1,8 +1,9 @@
-onlyBuiltDependencies:
-  - "@parcel/watcher"
-  - "@prisma/engines"
-  - "@swc/core"
-  - core-js-pure
-  - prisma
-  - sharp
-  - unrs-resolver
+allowBuilds:
+  "@parcel/watcher": true
+  "@prisma/engines": true
+  "@swc/core": true
+  "@tailwindcss/oxide": false
+  core-js-pure: true
+  prisma: true
+  sharp: true
+  unrs-resolver: true

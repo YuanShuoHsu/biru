@@ -23,7 +23,7 @@
     "@mui/material-nextjs": "^9.4.0",
     "@mui/x-date-pickers": "^9.14.0",
     "autosuggest-highlight": "^3.3.4",
-    "better-auth": "^1.6.30",
+    "better-auth": "^1.7.7",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.19",
     "js-cookie": "^3.0.8",
@@ -40,7 +40,7 @@
     "swiper": "^12.1.2",
     "swr": "^2.3.6",
     "ua-parser-js": "^2.0.9",
-    "zod": "^4.4.3",
+    "zod": "^4.6.7",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
