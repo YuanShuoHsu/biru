@@ -12,6 +12,7 @@ import { routing } from "@/i18n/routing";
 import { authClient } from "@/lib/auth-client";
 
 import { listAccountsKey } from "@/utils/auth";
+import { getSession } from "@/utils/session";
 
 export const generateMetadata = async ({
   params,
@@ -26,8 +27,8 @@ export const generateMetadata = async ({
 
 const AuthSettingsSecurityPage = async () => {
   const reqHeaders = await headers();
-  const [{ data: session }, { data: accounts }] = await Promise.all([
-    authClient.getSession({ fetchOptions: { headers: reqHeaders } }),
+  const [session, { data: accounts }] = await Promise.all([
+    getSession(),
     authClient.listAccounts({ fetchOptions: { headers: reqHeaders } }),
   ]);
 

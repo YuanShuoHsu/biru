@@ -2,15 +2,14 @@
 
 import { useAuthNavItems } from "@/hooks/useAuth";
 import { useRoutes } from "@/hooks/useRoutes";
-
-import { useAuthStore } from "@/providers/auth-store-provider";
+import { useSession } from "@/hooks/useSession";
 
 import type { NavItem } from "@/types/navItem";
 
 import { useAccountNavItems } from "@/utils/account";
 
 export const useNavChildren = (): Record<string, NavItem[]> => {
-  const session = useAuthStore((state) => state.session);
+  const session = useSession();
 
   const navItem = useRoutes();
 

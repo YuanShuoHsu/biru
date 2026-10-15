@@ -36,6 +36,7 @@ import { STORE_TIMEZONE } from "@/constants/timezone";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
+import { useSession } from "@/hooks/useSession";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
 
@@ -62,7 +63,6 @@ import { styled } from "@mui/material/styles";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import type { TimeView } from "@mui/x-date-pickers/models";
 
-import { useAuthStore } from "@/providers/auth-store-provider";
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
@@ -141,7 +141,7 @@ interface OrderModeOrganizationSlugCheckoutProps {
 const OrderModeOrganizationSlugCheckout = ({
   organization,
 }: OrderModeOrganizationSlugCheckoutProps) => {
-  const session = useAuthStore((state) => state.session);
+  const session = useSession();
 
   const { cartItemsList, checkoutKey, isCartEmpty, setLastOrderId } =
     useCartStore((state) => state);

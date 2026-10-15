@@ -1,25 +1,19 @@
 import { NextIntlClientProvider } from "next-intl";
-import { headers } from "next/headers";
 
 import AppClientProviders from "./AppClientProviders";
 
-import { authClient } from "@/lib/auth-client";
+import { getSession } from "@/utils/session";
 
 interface AppProvidersProps {
   children: React.ReactNode;
 }
 
-const AppProviders = async ({ children }: AppProvidersProps) => {
-  const requestHeaders = await headers();
-  const { data: initialSession } = await authClient.getSession({
-    fetchOptions: { headers: requestHeaders },
-  });
-
+const AppProviders = ({ children }: AppProvidersProps) => {
   const fallback = {};
 
   return (
     <NextIntlClientProvider>
-      <AppClientProviders fallback={fallback} initialSession={initialSession}>
+      <AppClientProviders fallback={fallback} sessionPromise={getSession()}>
         {children}
       </AppClientProviders>
     </NextIntlClientProvider>

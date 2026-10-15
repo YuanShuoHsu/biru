@@ -18,10 +18,9 @@ import TextMaskCustom from "@/components/TextMaskCustom";
 import WaitlistStatTile from "@/components/WaitlistStatTile";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
+import { useSession } from "@/hooks/useSession";
 
 import { useRouter } from "@/i18n/navigation";
-
-import { useAuthStore } from "@/providers/auth-store-provider";
 
 import { Campaign, HourglassTop, People } from "@mui/icons-material";
 import {
@@ -91,7 +90,7 @@ interface WaitlistProps {
 }
 
 const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
-  const session = useAuthStore((state) => state.session);
+  const session = useSession();
 
   const [idempotencyKey] = useState(() => crypto.randomUUID());
 
