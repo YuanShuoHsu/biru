@@ -121,7 +121,7 @@ const WaitlistTicket = ({
   organization,
   ticket: initialTicket,
 }: WaitlistTicketProps) => {
-  const setDialog = useDialogStore((state) => state.setDialog);
+  const { setDialog } = useDialogStore((state) => state);
 
   const [isConfirming, setIsConfirming] = useState(false);
 

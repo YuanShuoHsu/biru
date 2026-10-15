@@ -9,6 +9,8 @@ import createMiddleware from "next-intl/middleware";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+import { query } from "./constants/query";
+
 import { routing } from "./i18n/routing";
 import { authClient } from "./lib/auth-client";
 
@@ -56,7 +58,7 @@ export const proxy = async (request: NextRequest) => {
       const redirectTo =
         pathname.slice(`/${locale}`.length) + request.nextUrl.search;
       const url = new URL(`/${locale}/auth/sign-in`, request.url);
-      if (redirectTo) url.searchParams.set("redirectTo", redirectTo);
+      if (redirectTo) url.searchParams.set(query.redirectTo, redirectTo);
 
       return NextResponse.redirect(url);
     }
