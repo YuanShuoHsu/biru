@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import OrderModeOrganizationSlugCart from ".";
@@ -26,9 +26,7 @@ export const generateMetadata = async ({
 const OrderModeOrganizationSlugCartPage = async ({
   params,
 }: OrderModeOrganizationSlugCartPageProps) => {
-  const { locale, organizationSlug } = await params;
-
-  setRequestLocale(locale);
+  const { organizationSlug } = await params;
 
   const organization = await getOrganization(organizationSlug);
   if (!organization || organization.closedAt) notFound();

@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
-import { hasLocale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
-import { notFound } from "next/navigation";
 
 import StepperLayout from "./StepperLayout";
-
-import { routing } from "@/i18n/routing";
 
 interface OrderModeOrganizationSlugStepperLayoutProps {
   children: React.ReactNode;
@@ -16,15 +11,9 @@ export const metadata: Metadata = {
   robots: { follow: true, index: false },
 };
 
-const OrderModeOrganizationSlugStepperLayout = async ({
+const OrderModeOrganizationSlugStepperLayout = ({
   children,
-  params,
 }: OrderModeOrganizationSlugStepperLayoutProps) => {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-
-  setRequestLocale(locale);
-
   return <StepperLayout>{children}</StepperLayout>;
 };
 

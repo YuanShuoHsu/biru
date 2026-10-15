@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import Maintenance from ".";
 
@@ -24,11 +24,7 @@ export const generateMetadata = async ({
   };
 };
 
-const MaintenancePage = async ({ params }: MaintenancePageProps) => {
-  const { locale } = await params;
-
-  setRequestLocale(locale);
-
+const MaintenancePage = () => {
   return <Maintenance />;
 };
 

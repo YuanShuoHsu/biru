@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { hasLocale } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { SWRConfig, unstable_serialize } from "swr";
@@ -24,14 +24,7 @@ export const generateMetadata = async ({
   return { title: tAuth("settings.security.label") };
 };
 
-const AuthSettingsSecurityPage = async ({
-  params,
-}: PageProps<"/[locale]/auth/settings/security">) => {
-  const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-
-  setRequestLocale(locale);
-
+const AuthSettingsSecurityPage = async () => {
   const reqHeaders = await headers();
   const [{ data: session }, { data: accounts }] = await Promise.all([
     authClient.getSession({ fetchOptions: { headers: reqHeaders } }),

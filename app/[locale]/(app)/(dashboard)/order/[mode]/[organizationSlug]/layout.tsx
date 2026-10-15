@@ -1,13 +1,9 @@
-import { hasLocale } from "next-intl";
-import { setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { SWRConfig } from "swr";
 
 import MenuSocketInitializer from "./MenuSocketInitializer";
 
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
-
-import { routing } from "@/i18n/routing";
 
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 
@@ -30,9 +26,6 @@ const OrderModeOrganizationSlugLayout = async ({
   params,
 }: OrderModeOrganizationSlugLayoutProps) => {
   const { locale, organizationSlug } = await params;
-  if (!hasLocale(routing.locales, locale)) notFound();
-
-  setRequestLocale(locale);
 
   const organization = await getOrganization(organizationSlug);
   if (!organization) return notFound();

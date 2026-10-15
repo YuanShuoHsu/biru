@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import About from ".";
 
@@ -27,11 +27,7 @@ export const generateMetadata = async ({
   });
 };
 
-const AboutPage = async ({ params }: AboutPageProps) => {
-  const { locale } = await params;
-
-  setRequestLocale(locale);
-
+const AboutPage = async () => {
   const organizations = await getOrganizations();
 
   return <About organizations={organizations} />;

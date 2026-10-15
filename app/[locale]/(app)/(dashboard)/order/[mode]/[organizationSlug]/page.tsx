@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import { StyledStack } from "./styled";
@@ -57,10 +57,8 @@ const OrderModeOrganizationSlugPage = async ({
   params,
   searchParams,
 }: OrderModeOrganizationSlugPageProps) => {
-  const [{ locale, mode, organizationSlug }, { partySize, tableNumber }] =
+  const [{ mode, organizationSlug }, { partySize, tableNumber }] =
     await Promise.all([params, searchParams]);
-
-  setRequestLocale(locale);
 
   const organization = await getOrganization(organizationSlug);
   if (!organization || organization.closedAt) return notFound();

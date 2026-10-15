@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
 
 import type { Locale } from "@/i18n/routing";
@@ -31,10 +31,8 @@ const OrderModeOrganizationSlugCompletePage = async ({
   params,
   searchParams,
 }: OrderModeOrganizationSlugCompletePageProps) => {
-  const { locale, organizationSlug } = await params;
+  const { organizationSlug } = await params;
   const { orderId } = await searchParams;
-
-  setRequestLocale(locale);
 
   const reqHeaders = await headers();
 

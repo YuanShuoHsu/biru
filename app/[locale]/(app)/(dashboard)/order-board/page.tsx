@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import type { Locale } from "@/i18n/routing";
 
@@ -16,11 +16,7 @@ export const generateMetadata = async ({
   return { title: tOrder("board.label") };
 };
 
-const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
-  const { locale } = await params;
-
-  setRequestLocale(locale);
-
+const OrderBoardPage = () => {
   return null;
 };
 

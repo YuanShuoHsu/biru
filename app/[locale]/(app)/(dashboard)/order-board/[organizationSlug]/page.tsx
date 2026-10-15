@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import type { Locale } from "@/i18n/routing";
@@ -34,9 +34,7 @@ export const generateMetadata = async ({
 };
 
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
-  const { locale, organizationSlug } = await params;
-
-  setRequestLocale(locale);
+  const { organizationSlug } = await params;
 
   const organization = await fetcher<OrganizationResponse>(
     `/api/organizations/${organizationSlug}`,

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import AuthAcceptInvitation from ".";
@@ -24,12 +24,9 @@ export const generateMetadata = async ({
 };
 
 const AuthAcceptInvitationPage = async ({
-  params,
   searchParams,
 }: AuthAcceptInvitationPageProps) => {
-  const [{ locale }, { email, id }] = await Promise.all([params, searchParams]);
-
-  setRequestLocale(locale);
+  const { email, id } = await searchParams;
 
   const safeEmail = typeof email === "string" ? email : "";
   const safeInvitationId = typeof id === "string" ? id : "";

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import type { Locale } from "@/i18n/routing";
@@ -29,9 +29,7 @@ export const generateMetadata = async ({
 };
 
 const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
-  const { locale, organizationSlug, ticketId } = await params;
-
-  setRequestLocale(locale);
+  const { organizationSlug, ticketId } = await params;
 
   const [organization, ticket] = await Promise.all([
     fetcher<OrganizationResponse>(

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 
 import Home from ".";
 
@@ -27,11 +27,7 @@ export const generateMetadata = async ({
   });
 };
 
-const HomePage = async ({ params }: HomePageProps) => {
-  const { locale } = await params;
-
-  setRequestLocale(locale);
-
+const HomePage = async () => {
   const banners = await getBanners();
 
   return <Home banners={banners} />;
