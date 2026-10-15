@@ -1,6 +1,7 @@
 // https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap
 
 import type { MetadataRoute } from "next";
+import { cacheLife } from "next/cache";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
@@ -9,9 +10,10 @@ import { routing } from "@/i18n/routing";
 import { getOrganizations } from "@/utils/organizations";
 import { getSiteMeta } from "@/utils/siteMeta";
 
-export const revalidate = 3600;
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  "use cache";
+  cacheLife("hours");
+
   const { isBlockedHost, siteUrl } = getSiteMeta();
 
   if (isBlockedHost) return [];
