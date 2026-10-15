@@ -74,15 +74,5 @@
     },
     "again": "番号を取り直す",
     "store": "店舗情報"
-  },
-  "errors": {
-    "waitlistClosed": "営業時間外のため、受付を停止しています。",
-    "waitlistCutoff": "まもなく閉店のため、順番待ちの受付を終了しました。",
-    "waitlistDisabled": "当店では店頭の順番待ち受付を行っていません。",
-    "waitlistGroupsInvalid": "人数区分の設定が正しくありません。",
-    "waitlistPartySizeUnavailable": "この人数では受付できません。スタッフにお声がけください。",
-    "waitlistPaused": "ただいま受付を一時停止しています。スタッフにお声がけください。",
-    "waitlistPhoneInQueue": "この電話番号はすでに順番待ちに登録されています。",
-    "waitlistTransitionInvalid": "整理券の状態が変わりました。ページを再読み込みしてください。"
   }
 }

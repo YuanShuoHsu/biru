@@ -214,10 +214,7 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
 
       if (code) mutate();
 
-      enqueueSnackbar(
-        code ? tWaitlist(`errors.${code}`) : getErrorMessage(error),
-        { variant: "error" },
-      );
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     }
   };
 

@@ -53,11 +53,7 @@ import type {
 
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import {
-  enableCallAlertSound,
-  getWaitlistErrorCode,
-  playCallChime,
-} from "@/utils/waitlist";
+import { enableCallAlertSound, playCallChime } from "@/utils/waitlist";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
@@ -238,12 +234,7 @@ const WaitlistTicket = ({
         },
       );
     } catch (error) {
-      const code = getWaitlistErrorCode(error);
-
-      enqueueSnackbar(
-        code ? tWaitlist(`errors.${code}`) : getErrorMessage(error),
-        { variant: "error" },
-      );
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     } finally {
       await mutate();
       setIsConfirming(false);
@@ -253,24 +244,20 @@ const WaitlistTicket = ({
   const handleCancelConfirm = async () => {
     try {
       await fetcher(`${ticketUrl}/cancel`, { method: "POST" });
-    } catch (error) {
-      const code = getWaitlistErrorCode(error);
 
-      throw new Error(
-        code ? tWaitlist(`errors.${code}`) : getErrorMessage(error),
+      enqueueSnackbar(
+        tWaitlist("ticket.cancel.success", {
+          ticketNumber: ticket.ticketNumber,
+        }),
+        {
+          variant: "success",
+        },
       );
+    } catch (error) {
+      enqueueSnackbar(getErrorMessage(error), { variant: "error" });
     } finally {
       await mutate();
     }
-
-    enqueueSnackbar(
-      tWaitlist("ticket.cancel.success", {
-        ticketNumber: ticket.ticketNumber,
-      }),
-      {
-        variant: "success",
-      },
-    );
   };
 
   const handleCancelDialog = () =>

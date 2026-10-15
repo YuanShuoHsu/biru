@@ -74,15 +74,5 @@
     },
     "again": "重新取号",
     "store": "门店信息"
-  },
-  "errors": {
-    "waitlistClosed": "当前非营业时间，暂不开放取号。",
-    "waitlistCutoff": "已接近打烊时间，现场排队已停止取号。",
-    "waitlistDisabled": "本店当前未开放现场排队。",
-    "waitlistGroupsInvalid": "排队分组设置有误。",
-    "waitlistPartySizeUnavailable": "无法受理此用餐人数的排队，请咨询现场服务人员。",
-    "waitlistPaused": "当前暂停取号，请咨询现场服务人员。",
-    "waitlistPhoneInQueue": "此电话号码已在排队中，请勿重复取号。",
-    "waitlistTransitionInvalid": "号码牌状态已变更，请刷新页面。"
   }
 }

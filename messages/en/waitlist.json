@@ -74,15 +74,5 @@
     },
     "again": "Get a new number",
     "store": "Store info"
-  },
-  "errors": {
-    "waitlistClosed": "We're closed right now, so the waitlist isn't open.",
-    "waitlistCutoff": "We're close to closing time, so the waitlist is no longer taking new parties.",
-    "waitlistDisabled": "This store doesn't offer a walk-in waitlist.",
-    "waitlistGroupsInvalid": "The party size groups are invalid.",
-    "waitlistPartySizeUnavailable": "We can't take this party size on the waitlist. Please ask a member of staff.",
-    "waitlistPaused": "The waitlist is paused. Please ask a member of staff.",
-    "waitlistPhoneInQueue": "This phone number is already on the waitlist.",
-    "waitlistTransitionInvalid": "This ticket has changed. Please refresh the page."
   }
 }

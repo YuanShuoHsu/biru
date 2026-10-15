@@ -6,7 +6,7 @@ import type { FetchError } from "@/utils/fetcher";
 export const getWaitlistErrorCode = (
   error: unknown,
 ): WaitlistErrorCode | undefined => {
-  const code = (error as FetchError)?.info?.message;
+  const code = (error as FetchError)?.info?.code;
 
   return waitlistErrorCodeValues.find((value) => value === code);
 };
