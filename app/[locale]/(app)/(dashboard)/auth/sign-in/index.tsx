@@ -25,9 +25,8 @@ import { REMEMBER_ME } from "@/constants/sign-in";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useRouter } from "@/i18n/navigation";
-import type { Locale } from "@/i18n/routing";
 
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -72,12 +71,11 @@ const SwitchAuthStack = styled(Stack)(({ theme }) => ({
 }));
 
 interface AuthSignInProps {
-  locale: Locale;
   redirectTo?: string;
   rememberMe: boolean;
 }
 
-const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
+const AuthSignIn = ({ redirectTo, rememberMe }: AuthSignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const forgotPasswordHref = getHref("/auth/forgot-password", {
@@ -125,14 +123,13 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
     await authClient.signIn.email(
       { ...data },
       {
-        headers: { "Accept-Language": locale },
-        onError: async ({ error: { code } }) => {
+        onError: async ({ error: { code, message } }) => {
           if (code === "EMAIL_NOT_VERIFIED") {
             if (!items["verify-email"]) {
-              await authClient.sendVerificationEmail(
-                { callbackURL: redirectTo, email: data.email },
-                { headers: { "Accept-Language": locale } },
-              );
+              await authClient.sendVerificationEmail({
+                callbackURL: redirectTo,
+                email: data.email,
+              });
 
               startCountdown("verify-email");
             }
@@ -148,7 +145,7 @@ const AuthSignIn = ({ locale, redirectTo, rememberMe }: AuthSignInProps) => {
             return;
           }
 
-          enqueueSnackbar(getErrorMessage(code, locale), {
+          enqueueSnackbar(message, {
             variant: "error",
           });
         },

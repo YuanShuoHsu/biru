@@ -9,7 +9,7 @@ import { query } from "@/constants/query";
 
 import { usePathname } from "@/i18n/navigation";
 
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 import { Button } from "@mui/material";
 
@@ -64,8 +64,8 @@ const GoogleButton = ({ action, redirectTo }: GoogleButtonProps) => {
         errorCallbackURL,
       },
       {
-        onError: ({ error }) => {
-          enqueueSnackbar(getErrorMessage(error.code, locale), {
+        onError: ({ error: { message } }) => {
+          enqueueSnackbar(message, {
             variant: "error",
           });
 

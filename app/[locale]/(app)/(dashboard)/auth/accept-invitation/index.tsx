@@ -1,6 +1,6 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -24,7 +24,7 @@ import { useHref } from "@/hooks/useHref";
 
 import { useRouter } from "@/i18n/navigation";
 
-import { authClient, getErrorMessage } from "@/lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 import {
   CheckCircle,
@@ -86,8 +86,6 @@ const AuthAcceptInvitation = ({
 
   const currentHref = useHref();
 
-  const locale = useLocale();
-
   const router = useRouter();
 
   const tAuth = useTranslations("auth");
@@ -107,10 +105,9 @@ const AuthAcceptInvitation = ({
       await authClient.organization.acceptInvitation(
         { invitationId },
         {
-          headers: { "Accept-Language": locale },
-          onError: ({ error: { code } }) => {
+          onError: ({ error: { code, message } }) => {
             if (code === "UNAUTHORIZED") {
-              enqueueSnackbar(getErrorMessage(code, locale), {
+              enqueueSnackbar(message, {
                 variant: "error",
               });
 
@@ -122,7 +119,7 @@ const AuthAcceptInvitation = ({
             }
 
             setState({
-              errorMessage: getErrorMessage(code, locale),
+              errorMessage: message,
               status: ACCEPT_STATUS.FAILED,
             });
           },
@@ -137,7 +134,7 @@ const AuthAcceptInvitation = ({
     };
 
     accept();
-  }, [currentHref, invitationId, locale, router, startCountdown]);
+  }, [currentHref, invitationId, router, startCountdown]);
 
   const configs: Record<
     AcceptStatus,
