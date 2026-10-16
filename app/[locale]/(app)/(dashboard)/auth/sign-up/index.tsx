@@ -10,6 +10,7 @@ import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { type BaseSyntheticEvent, type ReactNode, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
+
 import { type SignUpForm, useSignUpFormSchema } from "./definitions";
 
 import FormCard, {
@@ -24,9 +25,9 @@ import UploadAvatars from "@/components/UploadAvatars";
 import { LegalLinkType } from "@/constants/legal";
 import { query } from "@/constants/query";
 
-import { LocaleEnum } from "@/enums/Locale";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { LocaleEnum } from "@/enums/Locale";
 
 import { usePasswordValidation } from "@/hooks/usePasswordValidation";
 import { useUploadAvatarSrc } from "@/hooks/useUploadAvatarSrc";
