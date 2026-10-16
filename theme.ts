@@ -281,11 +281,11 @@ const theme = createTheme({
     },
     MuiTab: {
       styleOverrides: {
-        icon: {
-          transition: "none",
-        },
         root: ({ theme }) => ({
           transition: theme.transitions.create("color"),
+          "& .MuiSvgIcon-root": {
+            transition: "none",
+          },
         }),
       },
     },
