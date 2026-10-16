@@ -25,9 +25,9 @@ import UploadAvatars from "@/components/UploadAvatars";
 import { LegalLinkType } from "@/constants/legal";
 import { query } from "@/constants/query";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import { LocaleEnum } from "@/enums/Locale";
+
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { usePasswordValidation } from "@/hooks/usePasswordValidation";
 import { useUploadAvatarSrc } from "@/hooks/useUploadAvatarSrc";

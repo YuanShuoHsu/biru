@@ -9,6 +9,8 @@ import useSWR from "swr";
 
 import { type WaitlistFormValues, useWaitlistFormSchema } from "./definitions";
 
+import { menuSocket } from "@/app/socket";
+
 import CountryAutocomplete from "@/components/CountryAutocomplete";
 import FormCard, { StyledCardContent } from "@/components/FormCard";
 import TextMaskCustom from "@/components/TextMaskCustom";
@@ -18,8 +20,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useSession } from "@/hooks/useSession";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
-
-import { menuSocket } from "@/app/socket";
 
 import { useRouter } from "@/i18n/navigation";
 
