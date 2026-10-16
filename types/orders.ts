@@ -3,6 +3,10 @@ import type { components } from "@/types/api";
 export type CreateOrderDto = components["schemas"]["CreateOrderDto"];
 export type CreateOrderPayment = CreateOrderDto["payment"];
 export type OrderResponse = components["schemas"]["OrderResponseDto"];
+export type CreateOrderResponse =
+  components["schemas"]["CreateOrderResponseDto"];
+export type OrderReceiptResponse =
+  components["schemas"]["OrderReceiptResponseDto"];
 export type OrderPaymentMethod = OrderResponse["paymentMethod"];
 export type OrderStatus = OrderResponse["orderStatus"];
 export type UserOrderListResponse =

@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderResponse } from "@/types/orders";
+import type { OrderReceiptResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { fetcher } from "@/utils/fetcher";
@@ -13,7 +13,7 @@ import OrderModeOrganizationSlugComplete from ".";
 
 interface OrderModeOrganizationSlugCompletePageProps {
   params: Promise<{ locale: Locale; mode: string; organizationSlug: string }>;
-  searchParams: Promise<{ orderId?: string }>;
+  searchParams: Promise<{ accessToken?: string; orderId?: string }>;
 }
 
 export const generateMetadata = async ({
@@ -32,14 +32,14 @@ const OrderModeOrganizationSlugCompletePage = async ({
   searchParams,
 }: OrderModeOrganizationSlugCompletePageProps) => {
   const { organizationSlug } = await params;
-  const { orderId } = await searchParams;
+  const { accessToken, orderId } = await searchParams;
 
   const reqHeaders = await headers();
 
   const [order, organization] = await Promise.all([
     orderId
-      ? fetcher<OrderResponse>(
-          `/api/organizations/${organizationSlug}/orders/${orderId}`,
+      ? fetcher<OrderReceiptResponse>(
+          `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`,
           { headers: { cookie: reqHeaders.get("cookie") || "" } },
         ).catch(() => null)
       : null,

@@ -44,7 +44,7 @@ import {
 import { type CSSObject, styled } from "@mui/material/styles";
 
 import type { CheckoutEcpayDto, CheckoutEcpayResponse } from "@/types/ecpay";
-import type { OrderResponse } from "@/types/orders";
+import type { OrderReceiptResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
@@ -105,7 +105,7 @@ const STATUS_ICON = {
   success: StyledCheckCircleOutline,
 } as const;
 
-const SUCCESS_ORDER_STATUSES: OrderResponse["orderStatus"][] = [
+const SUCCESS_ORDER_STATUSES: OrderReceiptResponse["orderStatus"][] = [
   "OrderDelivered",
   "OrderPickupAvailable",
   "OrderProcessing",
@@ -136,7 +136,7 @@ const InfoRow = ({
 );
 
 interface OrderModeOrganizationSlugCompleteProps {
-  order: OrderResponse | null;
+  order: OrderReceiptResponse | null;
   organization: OrganizationResponse | null;
 }
 
@@ -167,36 +167,43 @@ const OrderModeOrganizationSlugComplete = ({
 
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId");
+  const accessToken = searchParams.get("accessToken");
   const menuSearchParams = new URLSearchParams(searchParams);
   menuSearchParams.delete("orderId");
+  menuSearchParams.delete("accessToken");
   const menuQuery = menuSearchParams.size ? `?${menuSearchParams}` : "";
 
-  const { data: order = initialOrder, mutate } = useSWR<OrderResponse | null>(
-    orderId ? `/api/organizations/${organizationSlug}/orders/${orderId}` : null,
-    { fallbackData: initialOrder },
-  );
+  const { data: order = initialOrder, mutate } =
+    useSWR<OrderReceiptResponse | null>(
+      orderId
+        ? `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`
+        : null,
+      { fallbackData: initialOrder },
+    );
 
   const { isConnected } = useSocketConnection(menuSocket);
 
   useEffect(() => {
     if (!isConnected || !orderId) return;
 
-    const handleOrderStatusUpdated = () => {
+    const handleOrderUpdated = () => {
       mutate();
     };
 
     menuSocket
       .timeout(5000)
-      .emitWithAck("joinOrder", { orderId })
-      .then(handleOrderStatusUpdated)
+      .emitWithAck("joinOrder", { accessToken, orderId })
+      .then(handleOrderUpdated)
       .catch(() => {});
 
-    menuSocket.on("orderStatusUpdated", handleOrderStatusUpdated);
+    menuSocket.on("orderStatusUpdated", handleOrderUpdated);
+    menuSocket.on("orderUpdated", handleOrderUpdated);
 
     return () => {
-      menuSocket.off("orderStatusUpdated", handleOrderStatusUpdated);
+      menuSocket.off("orderStatusUpdated", handleOrderUpdated);
+      menuSocket.off("orderUpdated", handleOrderUpdated);
     };
-  }, [isConnected, mutate, orderId]);
+  }, [accessToken, isConnected, mutate, orderId]);
 
   const format = useFormatter();
 
@@ -239,6 +246,7 @@ const OrderModeOrganizationSlugComplete = ({
       submitEcpayCheckout(
         await fetcher<CheckoutEcpayResponse>("/api/ecpay", {
           body: JSON.stringify({
+            accessToken: accessToken || undefined,
             ClientBackURL: completeUrl,
             Language: ecpayLanguages[locale],
             orderId: order.id,

@@ -79,7 +79,7 @@ import type {
 import type {
   CreateOrderDto,
   CreateOrderPayment,
-  OrderResponse,
+  CreateOrderResponse,
 } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 import type { RouteParams } from "@/types/routeParams";
@@ -304,7 +304,7 @@ const OrderModeOrganizationSlugCheckout = ({
 
   const { trigger: triggerOrder } = useSWRMutation(
     `/api/organizations/${String(organizationSlug)}/orders`,
-    sendRequest<OrderResponse, CreateOrderDto>({
+    sendRequest<CreateOrderResponse, CreateOrderDto>({
       ...(checkoutKey && { headers: { "Idempotency-Key": checkoutKey } }),
     }),
   );
@@ -476,6 +476,7 @@ const OrderModeOrganizationSlugCheckout = ({
 
       const completeSearchParams = new URLSearchParams(search);
       completeSearchParams.set("orderId", order.id);
+      completeSearchParams.set("accessToken", order.accessToken);
       completePath = `${pathname.replace("/checkout", "/complete")}?${completeSearchParams}`;
 
       setIsRedirecting(true);
@@ -490,6 +491,7 @@ const OrderModeOrganizationSlugCheckout = ({
       const completeUrl = `${baseUrl}/${locale}${completePath}`;
 
       const dto: CheckoutEcpayDto = {
+        accessToken: order.accessToken,
         ClientBackURL: completeUrl,
         Language: ecpayLanguages[locale],
         orderId: order.id,
