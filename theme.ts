@@ -283,6 +283,7 @@ const theme = createTheme({
       styleOverrides: {
         root: ({ theme }) => ({
           transition: theme.transitions.create("color"),
+
           "& .MuiSvgIcon-root": {
             transition: "none",
           },
