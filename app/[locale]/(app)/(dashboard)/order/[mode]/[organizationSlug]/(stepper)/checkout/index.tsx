@@ -492,7 +492,7 @@ const OrderModeOrganizationSlugCheckout = ({
 
       const dto: CheckoutEcpayDto = {
         accessToken: order.accessToken,
-        ClientBackURL: completeUrl,
+        returnUrl: completeUrl,
         Language: ecpayLanguages[locale],
         orderId: order.id,
         TradeDesc: tOrder("checkout.tradeDesc"),

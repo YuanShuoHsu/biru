@@ -101,6 +101,7 @@ const StyledTypography = styled(Typography)({
 
 const STATUS_ICON = {
   error: StyledErrorOutline,
+  notFound: StyledErrorOutline,
   pending: StyledHourglassEmpty,
   success: StyledCheckCircleOutline,
 } as const;
@@ -247,7 +248,7 @@ const OrderModeOrganizationSlugComplete = ({
         await fetcher<CheckoutEcpayResponse>("/api/ecpay", {
           body: JSON.stringify({
             accessToken: accessToken || undefined,
-            ClientBackURL: completeUrl,
+            returnUrl: completeUrl,
             Language: ecpayLanguages[locale],
             orderId: order.id,
             TradeDesc: tOrder("checkout.tradeDesc"),
@@ -262,11 +263,13 @@ const OrderModeOrganizationSlugComplete = ({
     }
   };
 
-  const status: keyof typeof STATUS_ICON = isSuccess
-    ? "success"
-    : order?.orderStatus === "OrderPaymentDue"
-      ? "pending"
-      : "error";
+  const status: keyof typeof STATUS_ICON = !order
+    ? "notFound"
+    : isSuccess
+      ? "success"
+      : order.orderStatus === "OrderPaymentDue"
+        ? "pending"
+        : "error";
   const StatusIcon = STATUS_ICON[status];
 
   const handleCopy = async () => {
@@ -285,7 +288,11 @@ const OrderModeOrganizationSlugComplete = ({
     <>
       <Card variant="outlined">
         <StyledCardContent>
-          <StatusIcon color={status === "pending" ? "warning" : status} />
+          <StatusIcon
+            color={
+              status === "pending" || status === "notFound" ? "warning" : status
+            }
+          />
           <Stack>
             <BoldTypography align="center" gutterBottom variant="h5">
               {tOrder(`complete.${status}.title`)}
