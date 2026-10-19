@@ -88,7 +88,7 @@ import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
-import { sendRequest } from "@/utils/fetcher";
+import { type FetchError, sendRequest } from "@/utils/fetcher";
 import { getCartAvailableHours } from "@/utils/menus";
 import { isOpenAt } from "@/utils/openingHours";
 import {
@@ -143,8 +143,13 @@ const OrderModeOrganizationSlugCheckout = ({
 }: OrderModeOrganizationSlugCheckoutProps) => {
   const session = useSession();
 
-  const { cartItemsList, checkoutKey, isCartEmpty, setLastOrderId } =
-    useCartStore((state) => state);
+  const {
+    cartItemsList,
+    checkoutKey,
+    isCartEmpty,
+    renewCheckoutKey,
+    setLastOrderId,
+  } = useCartStore((state) => state);
 
   const { menu } = useMenuStore((state) => state);
 
@@ -470,6 +475,7 @@ const OrderModeOrganizationSlugCheckout = ({
         payment,
         pickupTime: pickupTime || undefined,
         tableNumber: Number(searchParams.get("tableNumber")) || undefined,
+        tableToken: searchParams.get("tableToken") || undefined,
       });
 
       setLastOrderId(order.id);
@@ -503,6 +509,7 @@ const OrderModeOrganizationSlugCheckout = ({
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
 
       if (completePath) router.replace(completePath);
+      else if ((error as FetchError).status === 409) renewCheckoutKey();
     }
   }, handleRefreshNow);
 

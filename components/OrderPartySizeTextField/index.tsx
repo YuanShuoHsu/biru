@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
@@ -25,23 +26,26 @@ interface OrderPartySizeTextFieldProps {
   organizationSlug: Organization["slug"];
   partySize?: string;
   readOnly?: boolean;
-  tableNumber: string;
 }
 
 const OrderPartySizeTextField = ({
   organizationSlug,
   partySize,
   readOnly = false,
-  tableNumber,
 }: OrderPartySizeTextFieldProps) => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const tOrder = useTranslations("order");
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const nextSearchParams = new URLSearchParams(searchParams);
+    nextSearchParams.set("partySize", event.target.value);
+
     router.push(
-      `/order/${ORDER_MODE.DineIn}/${organizationSlug}?tableNumber=${tableNumber}&partySize=${event.target.value}`,
+      `/order/${ORDER_MODE.DineIn}/${organizationSlug}?${nextSearchParams}`,
     );
+  };
 
   return (
     <StyledTextField

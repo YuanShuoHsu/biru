@@ -25,7 +25,6 @@ const SubheaderOrderModeOrganizationSlugCheckoutPage = async ({
       <OrderPartySizeTextField
         organizationSlug={organizationSlug}
         partySize={partySize}
-        tableNumber={tableNumber}
       />
     </StyledStack>
   );

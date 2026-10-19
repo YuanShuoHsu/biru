@@ -8,6 +8,7 @@ import type { OrderReceiptResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { fetcher } from "@/utils/fetcher";
+import { redirectToCurrentSlug } from "@/utils/organizations";
 
 import OrderModeOrganizationSlugComplete from ".";
 
@@ -31,8 +32,9 @@ const OrderModeOrganizationSlugCompletePage = async ({
   params,
   searchParams,
 }: OrderModeOrganizationSlugCompletePageProps) => {
-  const { organizationSlug } = await params;
-  const { accessToken, orderId } = await searchParams;
+  const { mode, organizationSlug } = await params;
+  const query = await searchParams;
+  const { accessToken, orderId } = query;
 
   const reqHeaders = await headers();
 
@@ -47,6 +49,13 @@ const OrderModeOrganizationSlugCompletePage = async ({
       `/api/organizations/${organizationSlug}`,
     ).catch(() => null),
   ]);
+
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/order/${mode}/${slug}/complete`,
+    query,
+  );
 
   return (
     <OrderModeOrganizationSlugComplete

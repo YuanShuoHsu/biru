@@ -6,10 +6,11 @@ import OrderModeOrganizationSlugCart from ".";
 
 import type { Locale } from "@/i18n/routing";
 
-import { getOrganization } from "@/utils/organizations";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugCartPageProps {
-  params: Promise<{ locale: Locale; organizationSlug: string }>;
+  params: Promise<{ locale: Locale; mode: string; organizationSlug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export const generateMetadata = async ({
@@ -25,10 +26,20 @@ export const generateMetadata = async ({
 
 const OrderModeOrganizationSlugCartPage = async ({
   params,
+  searchParams,
 }: OrderModeOrganizationSlugCartPageProps) => {
-  const { organizationSlug } = await params;
+  const [{ mode, organizationSlug }, query] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   const organization = await getOrganization(organizationSlug);
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/order/${mode}/${slug}/cart`,
+    query,
+  );
   if (!organization || organization.closedAt) notFound();
 
   return <OrderModeOrganizationSlugCart />;

@@ -6,10 +6,11 @@ import OrderModeOrganizationSlugCheckout from ".";
 
 import type { Locale } from "@/i18n/routing";
 
-import { getOrganization } from "@/utils/organizations";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugCheckoutPageProps {
-  params: Promise<{ locale: Locale; organizationSlug: string }>;
+  params: Promise<{ locale: Locale; mode: string; organizationSlug: string }>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export const generateMetadata = async ({
@@ -25,10 +26,20 @@ export const generateMetadata = async ({
 
 const OrderModeOrganizationSlugCheckoutPage = async ({
   params,
+  searchParams,
 }: OrderModeOrganizationSlugCheckoutPageProps) => {
-  const { organizationSlug } = await params;
+  const [{ mode, organizationSlug }, query] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   const organization = await getOrganization(organizationSlug);
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/order/${mode}/${slug}/checkout`,
+    query,
+  );
   if (!organization || organization.closedAt) return notFound();
 
   return <OrderModeOrganizationSlugCheckout organization={organization} />;

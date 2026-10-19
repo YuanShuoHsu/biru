@@ -213,7 +213,8 @@ const OrderModeOrganizationSlugComplete = ({
 
   const isSuccess =
     !!order &&
-    (order.paymentMethod === "Cash" ||
+    ((order.paymentMethod === "Cash" &&
+      order.orderStatus === "OrderPaymentDue") ||
       SUCCESS_ORDER_STATUSES.includes(order.orderStatus));
   const isPaid = !!order && order.orderStatus !== "OrderPaymentDue";
   const orderNo = order ? order.confirmationNumber || order.orderNumber : "";

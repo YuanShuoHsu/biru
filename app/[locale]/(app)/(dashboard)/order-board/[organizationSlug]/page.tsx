@@ -8,6 +8,7 @@ import type { OrderBoardItem } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { fetcher } from "@/utils/fetcher";
+import { redirectToCurrentSlug } from "@/utils/organizations";
 
 import OrderBoard from ".";
 
@@ -39,6 +40,12 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   const organization = await fetcher<OrganizationResponse>(
     `/api/organizations/${organizationSlug}`,
   ).catch(() => null);
+
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/order-board/${slug}`,
+  );
 
   if (!organization) notFound();
 

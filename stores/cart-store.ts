@@ -48,6 +48,7 @@ interface CartActions {
     menuItemId: string,
     excludedItem: CartItem | null,
   ) => number;
+  renewCheckoutKey: () => void;
   replaceCart: (
     mode: OrderMode,
     slug: Organization["slug"],
@@ -92,16 +93,25 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
   return createStore<CartStore>()(
     persist(
       (set, get) => {
-        const setActiveCart = (cartItemsMap: CartItemsMap) => {
-          const { cartKey, carts, checkoutKeys } = get();
-          if (!cartKey) return;
+        const nextCheckoutKey = () => {
+          const { cartKey, checkoutKeys } = get();
+          if (!cartKey) return {};
 
           const checkoutKey = crypto.randomUUID();
 
-          set({
-            carts: { ...carts, [cartKey]: cartItemsMap },
+          return {
             checkoutKey,
             checkoutKeys: { ...checkoutKeys, [cartKey]: checkoutKey },
+          };
+        };
+
+        const setActiveCart = (cartItemsMap: CartItemsMap) => {
+          const { cartKey, carts } = get();
+          if (!cartKey) return;
+
+          set({
+            carts: { ...carts, [cartKey]: cartItemsMap },
+            ...nextCheckoutKey(),
             ...deriveCartState(cartItemsMap),
           });
         };
@@ -149,6 +159,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
               0,
             );
           },
+          renewCheckoutKey: () => set(nextCheckoutKey()),
           replaceCart: (mode, slug, items) => {
             const key = getCartKey(mode, slug);
             const cartItemsMap: CartItemsMap = {};
@@ -184,7 +195,8 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
               ...deriveCartState((key && carts[key]) || {}),
             }));
           },
-          setLastOrderId: (orderId) => set({ lastOrderId: orderId }),
+          setLastOrderId: (orderId) =>
+            set({ lastOrderId: orderId, ...nextCheckoutKey() }),
           updateCartItem: (oldItem, newItem) => {
             const { cartItemsMap } = get();
             const oldKey = getItemKey(oldItem);

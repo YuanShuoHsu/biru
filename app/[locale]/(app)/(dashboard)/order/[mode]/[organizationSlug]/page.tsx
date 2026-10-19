@@ -16,7 +16,7 @@ import type { Locale } from "@/i18n/routing";
 import type { Organization } from "@/types/organizations";
 
 import { buildMetadata } from "@/utils/metadata";
-import { getOrganization } from "@/utils/organizations";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugPageProps {
   params: Promise<{
@@ -27,6 +27,7 @@ interface OrderModeOrganizationSlugPageProps {
   searchParams: Promise<{
     partySize?: string;
     tableNumber?: string;
+    tableToken?: string;
   }>;
 }
 
@@ -57,10 +58,19 @@ const OrderModeOrganizationSlugPage = async ({
   params,
   searchParams,
 }: OrderModeOrganizationSlugPageProps) => {
-  const [{ mode, organizationSlug }, { partySize, tableNumber }] =
-    await Promise.all([params, searchParams]);
+  const [{ mode, organizationSlug }, query] = await Promise.all([
+    params,
+    searchParams,
+  ]);
+  const { partySize, tableNumber, tableToken } = query;
 
   const organization = await getOrganization(organizationSlug);
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/order/${mode}/${slug}`,
+    query,
+  );
   if (!organization || organization.closedAt) return notFound();
 
   if (
@@ -74,16 +84,13 @@ const OrderModeOrganizationSlugPage = async ({
 
   const isValidTableNumber = !!tableNumber && /^[1-9]\d*$/.test(tableNumber);
 
-  if (!isValidTableNumber) return notFound();
+  if (!isValidTableNumber || !tableToken) return notFound();
 
   if (!partySize) {
     return (
       <StyledStack direction="row">
         <OrderTableNumberChip tableNumber={tableNumber} />
-        <OrderPartySizeTextField
-          organizationSlug={organizationSlug}
-          tableNumber={tableNumber}
-        />
+        <OrderPartySizeTextField organizationSlug={organizationSlug} />
       </StyledStack>
     );
   }
@@ -103,7 +110,6 @@ const OrderModeOrganizationSlugPage = async ({
         <OrderPartySizeTextField
           organizationSlug={organizationSlug}
           partySize={partySize}
-          tableNumber={tableNumber}
         />
       </StyledStack>
       <OrderMenuContent />

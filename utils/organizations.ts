@@ -1,6 +1,9 @@
+import { getLocale } from "next-intl/server";
 import { cache } from "react";
 
 import { fetcher } from "./fetcher";
+
+import { redirect } from "@/i18n/navigation";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
@@ -26,3 +29,25 @@ export const getOrganizations = cache(
     }
   },
 );
+
+// 印在桌上與門口的 QR 不會重印，店家改 slug 後舊網址要轉到現行網址並保留桌號簽章等參數
+export const redirectToCurrentSlug = async (
+  organization: OrganizationResponse | null,
+  organizationSlug: OrganizationResponse["slug"],
+  pathname: (slug: OrganizationResponse["slug"]) => string,
+  searchParams: Record<string, string | string[] | undefined> = {},
+) => {
+  if (!organization || organization.slug === organizationSlug) return;
+
+  const query = new URLSearchParams(
+    Object.entries(searchParams).flatMap(([key, value]) =>
+      [value ?? []].flat().map((item) => [key, item]),
+    ),
+  );
+  const target = pathname(organization.slug);
+
+  redirect({
+    href: query.size ? `${target}?${query}` : target,
+    locale: await getLocale(),
+  });
+};

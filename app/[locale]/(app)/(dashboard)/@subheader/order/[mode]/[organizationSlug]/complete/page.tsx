@@ -26,7 +26,6 @@ const SubheaderOrderModeOrganizationSlugCompletePage = async ({
         organizationSlug={organizationSlug}
         partySize={partySize}
         readOnly
-        tableNumber={tableNumber}
       />
     </StyledStack>
   );

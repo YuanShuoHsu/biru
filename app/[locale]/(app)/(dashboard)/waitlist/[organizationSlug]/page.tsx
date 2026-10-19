@@ -8,6 +8,7 @@ import type { OrganizationResponse } from "@/types/organizations";
 import type { WaitlistStatusResponse } from "@/types/waitlist";
 
 import { fetcher } from "@/utils/fetcher";
+import { redirectToCurrentSlug } from "@/utils/organizations";
 
 import Waitlist from ".";
 
@@ -44,6 +45,12 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
       `/api/organizations/${organizationSlug}/waitlist`,
     ).catch(() => null),
   ]);
+
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/waitlist/${slug}`,
+  );
 
   if (!organization || organization.closedAt || !status) notFound();
 

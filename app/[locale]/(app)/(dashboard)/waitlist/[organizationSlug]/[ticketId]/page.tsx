@@ -8,6 +8,7 @@ import type { OrganizationResponse } from "@/types/organizations";
 import type { WaitlistTicketDetailResponse } from "@/types/waitlist";
 
 import { fetcher } from "@/utils/fetcher";
+import { redirectToCurrentSlug } from "@/utils/organizations";
 
 import WaitlistTicket from ".";
 
@@ -39,6 +40,12 @@ const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
       `/api/organizations/${organizationSlug}/waitlist/tickets/${ticketId}`,
     ).catch(() => null),
   ]);
+
+  await redirectToCurrentSlug(
+    organization,
+    organizationSlug,
+    (slug) => `/waitlist/${slug}/${ticketId}`,
+  );
 
   if (!organization || !ticket) notFound();
 
