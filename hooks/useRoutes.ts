@@ -60,7 +60,8 @@ type RouteQuery =
   | "pageSize"
   | "partySize"
   | "redirectTo"
-  | "tableNumber";
+  | "tableNumber"
+  | "tableToken";
 
 interface Route {
   children?: Route[];
@@ -90,7 +91,7 @@ const storeRoute: Route = {
     },
   ],
   icon: Storefront,
-  query: ["partySize", "tableNumber"],
+  query: ["partySize", "tableNumber", "tableToken"],
   segment: "[organizationSlug]",
 };
 
@@ -318,6 +319,7 @@ export const useRoutes = () => {
     partySize: searchParams.get("partySize"),
     redirectTo: searchParams.get("redirectTo") || pathname,
     tableNumber: searchParams.get("tableNumber"),
+    tableToken: searchParams.get("tableToken"),
   };
 
   const buildHref = (href: string, query = findRoute(href)?.query) => {

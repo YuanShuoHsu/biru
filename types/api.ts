@@ -3408,7 +3408,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 取得交易對最近的委託紀錄 */
+    /** 取得交易對的手動委託紀錄（依時間由新到舊分頁） */
     get: operations["QuantAccountController_findOrders"];
     put?: never;
     /** 下單（實盤） */
@@ -3436,6 +3436,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/quant/credentials/{id}/orders/{orderId}/fills": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得一筆委託的成交明細 */
+    get: operations["QuantAccountController_findOrderFills"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/quant/credentials/{id}/fills": {
     parameters: {
       query?: never;
@@ -3443,10 +3460,45 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 取得交易對最近的成交紀錄 */
+    /** 取得交易對的手動成交紀錄（依時間由新到舊分頁） */
     get: operations["QuantAccountController_findFills"];
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/quant/credentials/{id}/assets": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得現貨與合約帳戶的總資產估值 */
+    get: operations["QuantAccountController_findAssets"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/quant/credentials/{id}/transfers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得現貨與合約帳戶間的劃轉紀錄（依時間由新到舊分頁） */
+    get: operations["QuantAccountController_findTransfers"];
+    put?: never;
+    /** 在現貨與合約帳戶間劃轉資金 */
+    post: operations["QuantAccountController_createTransfer"];
     delete?: never;
     options?: never;
     head?: never;
@@ -3460,7 +3512,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 取得自己綁定的 Claude API key（只回末 4 碼） */
+    /** 取得自己綁定的 Claude API key（只回末 4 碼）與本月費用 */
     get: operations["QuantAiController_find"];
     /** 綁定或更換 Claude API key（會先向 Anthropic 驗證） */
     put: operations["QuantAiController_set"];
@@ -3625,7 +3677,7 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/quant/bots/stop-all": {
+  "/api/quant/bots/ai": {
     parameters: {
       query?: never;
       header?: never;
@@ -3634,8 +3686,8 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 一鍵停止自己所有執行中的機器人 */
-    post: operations["QuantBotsController_stopAll"];
+    /** 建立 AI 交易機器人 */
+    post: operations["QuantBotsController_createAi"];
     delete?: never;
     options?: never;
     head?: never;
@@ -4212,7 +4264,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 取得已結束的合約委託 */
+    /** 取得已結束的合約委託（依時間由新到舊分頁） */
     get: operations["QuantFuturesController_findOrders"];
     put?: never;
     /** 合約下單（實盤） */
@@ -4257,6 +4309,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/quant/credentials/{id}/futures/orders/{orderId}/fills": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得一筆合約委託的成交明細 */
+    get: operations["QuantFuturesController_findOrderFills"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/quant/credentials/{id}/futures/fills": {
     parameters: {
       query?: never;
@@ -4264,7 +4333,7 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 取得合約成交紀錄 */
+    /** 取得合約成交紀錄（依時間由新到舊分頁） */
     get: operations["QuantFuturesController_findFills"];
     put?: never;
     post?: never;
@@ -9655,6 +9724,11 @@ export interface components {
       /** @description 最後更新時間（毫秒） */
       updateTime: number;
     };
+    QuantOrderPageDto: {
+      data: components["schemas"]["QuantOrderDto"][];
+      /** @description 下一頁要帶的 endTime；null 表示沒有更早的紀錄 */
+      nextEndTime: number | null;
+    };
     PlaceQuantOrderDto: {
       /** @example BTC_USDT */
       symbol: string;
@@ -9693,12 +9767,71 @@ export interface components {
       /** @description 成交時間（毫秒） */
       time: number;
     };
+    QuantFillPageDto: {
+      data: components["schemas"]["QuantFillDto"][];
+      /** @description 下一頁要帶的 endTime；null 表示沒有更早的紀錄 */
+      nextEndTime: number | null;
+    };
+    /**
+     * @description MAIN 現貨帳戶、TRADE 合約帳戶
+     * @enum {string}
+     */
+    QuantTransferAccount: "MAIN" | "TRADE";
+    QuantAssetCategoryDto: {
+      /** @description Pionex 的分類代碼 */
+      type: string;
+      /** @description Pionex 依語系翻譯的分類名稱 */
+      title: string;
+      totalInUsdt: number;
+    };
+    QuantAssetAccountDto: {
+      /** @description MAIN 現貨帳戶、TRADE 合約帳戶 */
+      account: components["schemas"]["QuantTransferAccount"];
+      totalInUsdt: number;
+      categories: components["schemas"]["QuantAssetCategoryDto"][];
+    };
+    QuantAssetsDto: {
+      /** @description 所有帳戶的 USDT 估值 */
+      totalInUsdt: number;
+      /** @description 所有帳戶的 BTC 估值 */
+      totalInBtc: number;
+      accounts: components["schemas"]["QuantAssetAccountDto"][];
+    };
+    /** @enum {string} */
+    QuantTransferStatus: "COMPLETED" | "PROCESSING" | "FAILED";
+    QuantTransferDto: {
+      transferId: string;
+      /** @description MAIN 現貨帳戶、TRADE 合約帳戶 */
+      fromAccount: components["schemas"]["QuantTransferAccount"];
+      /** @description MAIN 現貨帳戶、TRADE 合約帳戶 */
+      toAccount: components["schemas"]["QuantTransferAccount"];
+      currency: string;
+      amount: number;
+      status: components["schemas"]["QuantTransferStatus"];
+      /** @description 劃轉時間（毫秒） */
+      time: number;
+    };
+    QuantTransferPageDto: {
+      data: components["schemas"]["QuantTransferDto"][];
+      /** @description 下一頁要帶的 endTime；null 表示沒有更早的紀錄 */
+      nextEndTime: number | null;
+    };
+    CreateQuantTransferDto: {
+      /** @description 轉出帳戶，轉入另一個；MAIN 現貨帳戶、TRADE 合約帳戶 */
+      fromAccount: components["schemas"]["QuantTransferAccount"];
+      /** @example USDT */
+      currency: string;
+      /** @example 100 */
+      amount: string;
+    };
     QuantAiKeyDto: {
       configured: boolean;
       /** @description Claude API key 末 4 碼 */
       apiKeyLast4?: string;
       /** Format: date-time */
       createdAt?: string;
+      /** @description 本月（UTC）所有 AI 機器人的費用（美元） */
+      monthCost: number;
     };
     SetQuantAiKeyDto: {
       apiKey: string;
@@ -9797,6 +9930,8 @@ export interface components {
       trigger?: components["schemas"]["TriggerDto"];
       /** @description 停止時是否把持有的基礎幣賣回計價幣 */
       closeModel: components["schemas"]["QuantGridCloseModel"];
+      /** @description 實盤：初始買入價格最多高於下單時價格的 %；省略時依 Pionex 預設，模擬盤與回測不使用 */
+      slippage?: number;
     };
     CreateGridBotDto: {
       name: string;
@@ -9904,6 +10039,8 @@ export interface components {
       profitStop?: components["schemas"]["FuturesGridStopDto"];
       /** @description 價格觸及才開始 */
       trigger?: components["schemas"]["TriggerDto"];
+      /** @description 實盤：開倉成交價最多偏離下單時價格的 %；省略時依 Pionex 預設，模擬盤與回測不使用 */
+      slippage?: number;
     };
     SignalBotConfigDto: {
       leverage: number;
@@ -10009,8 +10146,14 @@ export interface components {
       equity: number;
       /** @description 總損益（計價幣） */
       pnl: number;
-      /** @description 已實現損益（計價幣） */
+      /** @description 已實現損益（計價幣）；網格機器人為網格利潤，Pionex 網格扣掉已提取的部分 */
       realizedPnl: number;
+      /** @description 浮動盈虧＝持倉 ×（現價 − 持倉均價）；Pionex 網格與 App 一致，為總損益 − 網格利潤 */
+      floatingPnl: number;
+      /** @description 總損益相對投入的年化報酬率（比例）；尚未啟動時不回傳 */
+      annualizedReturn?: number;
+      /** @description 網格：網格利潤相對投入的年化報酬率（比例）；尚未啟動時不回傳 */
+      gridAnnualizedReturn?: number;
       /** @description 持有基礎幣數量；合約做空為負數 */
       position: number;
       /** @description 持倉均價 */
@@ -10019,14 +10162,20 @@ export interface components {
       fillCount: number;
       /** @description 合約：預估強平價 */
       liquidationPrice?: number;
+      /** @description 合約：預估強平價與現價的距離（比例） */
+      liquidationDistance?: number;
+      /** @description Pionex 現貨網格：建立時的市價 */
+      openPrice?: number;
       /** @description 合約：累計資金費（正數為收入） */
       fundingFee?: number;
       /** @description Pionex 機器人目前的狀態，例如 running、paused */
       pionexStatus?: string;
       /** @description AI：本月（UTC）已花費的費用（美元） */
       aiMonthCost?: number;
-      /** @description Pionex 現貨網格：已提取的利潤 */
+      /** @description Pionex 網格：已提取的利潤 */
       profitWithdrawn?: number;
+      /** @description 向 Pionex 查詢失敗的原因；有值時其他數字都不是實際狀態 */
+      pionexError?: string;
     };
     CreateQuantBotResponseDto: {
       id: string;
@@ -10183,6 +10332,23 @@ export interface components {
       maxOrderAmount?: number;
       config: components["schemas"]["WebhookConfigDto"];
     };
+    CreateAiBotDto: {
+      name: string;
+      /** @example BTC_USDT */
+      symbol: string;
+      mode: components["schemas"]["QuantBotMode"];
+      /** @description 實盤必填 */
+      credentialId?: string;
+      /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
+      investment: number;
+      /** @description 模擬盤必填：手續費率（例如 0.0005） */
+      paperFeeRate?: number;
+      /** @description 每日最大虧損（計價幣），觸發即停止 */
+      maxDailyLoss?: number;
+      /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
+      maxOrderAmount?: number;
+      config: components["schemas"]["AiConfigDto"];
+    };
     QuantBotDto: {
       id: string;
       name: string;
@@ -10216,6 +10382,10 @@ export interface components {
       stoppedAt?: string;
       /** Format: date-time */
       createdAt: string;
+    };
+    StopQuantBotDto: {
+      /** @description 只用於現貨網格；省略時依建立時的設定 */
+      closeModel?: components["schemas"]["QuantGridCloseModel"];
     };
     WebhookTokenDto: {
       /** @description 新的 token，只在這次回傳；舊 token 立即失效 */
@@ -10253,6 +10423,7 @@ export interface components {
     QuantFuturesGridOperation:
       | "invest"
       | "range"
+      | "reinvest"
       | "reduce"
       | "pause"
       | "resume"
@@ -10274,6 +10445,10 @@ export interface components {
       /** @description reduce：減倉份數，以每格數量為單位，上限見試算的 maxReduceNum */
       reduceNum?: number;
       pauseMode?: components["schemas"]["QuantFuturesGridPauseMode"];
+      /** @description pause：暫停期間是否仍允許觸發停利，預設 true */
+      stopProfitEnabled?: boolean;
+      /** @description pause：暫停期間是否仍允許觸發停損，預設 true */
+      stopLossEnabled?: boolean;
       /** @description pause／resume：價格漲到此價才暫停或恢復，須高於現價 */
       triggerUp?: number;
       /** @description pause／resume：價格跌到此價才暫停或恢復，須低於現價 */
@@ -10645,6 +10820,11 @@ export interface components {
       /** @description 最後更新時間（毫秒） */
       updateTime: number;
     };
+    QuantFuturesOrderPageDto: {
+      data: components["schemas"]["QuantFuturesOrderDto"][];
+      /** @description 下一頁要帶的 endTime；null 表示沒有更早的紀錄 */
+      nextEndTime: number | null;
+    };
     PlaceFuturesOrderDto: {
       /** @example BTC_USDT_PERP */
       symbol: string;
@@ -10706,6 +10886,11 @@ export interface components {
       feeType: components["schemas"]["QuantFeeType"];
       /** @description 成交時間（毫秒） */
       time: number;
+    };
+    QuantFuturesFillPageDto: {
+      data: components["schemas"]["QuantFuturesFillDto"][];
+      /** @description 下一頁要帶的 endTime；null 表示沒有更早的紀錄 */
+      nextEndTime: number | null;
     };
     QuantFundingFeeDto: {
       symbol: string;
@@ -19176,6 +19361,11 @@ export interface operations {
     parameters: {
       query: {
         symbol: string;
+        limit?: number;
+        /** @description 起始時間（毫秒） */
+        startTime?: number;
+        /** @description 只回傳此時間（含）以前的紀錄（毫秒）；換頁時帶上一頁的 nextEndTime */
+        endTime?: number;
       };
       header?: never;
       path: {
@@ -19190,7 +19380,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["QuantOrderDto"][];
+          "application/json": components["schemas"]["QuantOrderPageDto"];
         };
       };
       /** @description Internal server error */
@@ -19263,10 +19453,46 @@ export interface operations {
       };
     };
   };
+  QuantAccountController_findOrderFills: {
+    parameters: {
+      query: {
+        symbol: string;
+      };
+      header?: never;
+      path: {
+        id: string;
+        orderId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["QuantFillDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   QuantAccountController_findFills: {
     parameters: {
       query: {
         symbol: string;
+        limit?: number;
+        /** @description 起始時間（毫秒） */
+        startTime?: number;
+        /** @description 只回傳此時間（含）以前的紀錄（毫秒）；換頁時帶上一頁的 nextEndTime */
+        endTime?: number;
       };
       header?: never;
       path: {
@@ -19281,8 +19507,98 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["QuantFillDto"][];
+          "application/json": components["schemas"]["QuantFillPageDto"];
         };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  QuantAccountController_findAssets: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["QuantAssetsDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  QuantAccountController_findTransfers: {
+    parameters: {
+      query?: {
+        limit?: number;
+        /** @description 只回傳此時間（含）以前的紀錄（毫秒）；換頁時帶上一頁的 nextEndTime */
+        endTime?: number;
+      };
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["QuantTransferPageDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  QuantAccountController_createTransfer: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateQuantTransferDto"];
+      };
+    };
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Internal server error */
       500: {
@@ -19648,20 +19964,26 @@ export interface operations {
       };
     };
   };
-  QuantBotsController_stopAll: {
+  QuantBotsController_createAi: {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateAiBotDto"];
+      };
+    };
     responses: {
-      204: {
+      201: {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["CreateQuantBotResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -19737,7 +20059,11 @@ export interface operations {
       };
       cookie?: never;
     };
-    requestBody?: never;
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["StopQuantBotDto"];
+      };
+    };
     responses: {
       201: {
         headers: {
@@ -20719,6 +21045,11 @@ export interface operations {
       query?: {
         /** @description 不帶則回傳全部交易對 */
         symbol?: string;
+        limit?: number;
+        /** @description 起始時間（毫秒） */
+        startTime?: number;
+        /** @description 只回傳此時間（含）以前的紀錄（毫秒）；換頁時帶上一頁的 nextEndTime */
+        endTime?: number;
       };
       header?: never;
       path: {
@@ -20733,7 +21064,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["QuantFuturesOrderDto"][];
+          "application/json": components["schemas"]["QuantFuturesOrderPageDto"];
         };
       };
       /** @description Internal server error */
@@ -20838,10 +21169,46 @@ export interface operations {
       };
     };
   };
+  QuantFuturesController_findOrderFills: {
+    parameters: {
+      query: {
+        symbol: string;
+      };
+      header?: never;
+      path: {
+        id: string;
+        orderId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["QuantFuturesFillDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   QuantFuturesController_findFills: {
     parameters: {
       query: {
         symbol: string;
+        limit?: number;
+        /** @description 起始時間（毫秒） */
+        startTime?: number;
+        /** @description 只回傳此時間（含）以前的紀錄（毫秒）；換頁時帶上一頁的 nextEndTime */
+        endTime?: number;
       };
       header?: never;
       path: {
@@ -20856,7 +21223,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["QuantFuturesFillDto"][];
+          "application/json": components["schemas"]["QuantFuturesFillPageDto"];
         };
       };
       /** @description Internal server error */
@@ -22588,6 +22955,12 @@ export const quantOrderStatusValues: ReadonlyArray<
 export const quantFillRoleValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantFillRole"]
 > = ["MAKER", "TAKER"];
+export const quantTransferAccountValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantTransferAccount"]
+> = ["MAIN", "TRADE"];
+export const quantTransferStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantTransferStatus"]
+> = ["COMPLETED", "PROCESSING", "FAILED"];
 export const quantBotOrderStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotOrderStatus"]
 > = ["open", "filled", "canceled", "rejected"];
@@ -22680,6 +23053,7 @@ export const quantFuturesGridOperationValues: ReadonlyArray<
 > = [
   "invest",
   "range",
+  "reinvest",
   "reduce",
   "pause",
   "resume",
