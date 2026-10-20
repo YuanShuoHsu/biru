@@ -195,8 +195,7 @@ export const createCartStore = (initState: CartState = defaultInitState) => {
               ...deriveCartState((key && carts[key]) || {}),
             }));
           },
-          setLastOrderId: (orderId) =>
-            set({ lastOrderId: orderId, ...nextCheckoutKey() }),
+          setLastOrderId: (orderId) => set({ lastOrderId: orderId }),
           updateCartItem: (oldItem, newItem) => {
             const { cartItemsMap } = get();
             const oldKey = getItemKey(oldItem);

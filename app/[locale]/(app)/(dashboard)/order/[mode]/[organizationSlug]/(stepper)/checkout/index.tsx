@@ -380,11 +380,18 @@ const OrderModeOrganizationSlugCheckout = ({
       },
     );
 
+  const cashUnavailableReason = isPickup
+    ? tOrder("checkout.payment.pickupUnavailable")
+    : (mode === ORDER_MODE.Counter || mode === ORDER_MODE.DriveThru) &&
+        !searchParams.get("modeToken")
+      ? tOrder("checkout.payment.inStoreQrCodeRequired")
+      : null;
+
   const paymentOptions = [
     {
-      ...(isPickup && {
+      ...(cashUnavailableReason && {
         disabled: true,
-        disabledReason: tOrder("checkout.payment.pickupUnavailable"),
+        disabledReason: cashUnavailableReason,
       }),
       icon: <Payments fontSize="small" />,
       id: "Cash",
@@ -471,6 +478,7 @@ const OrderModeOrganizationSlugCheckout = ({
         },
         items: cartItemsList,
         mode: API_ORDER_MODE[mode],
+        modeToken: searchParams.get("modeToken") || undefined,
         partySize: Number(searchParams.get("partySize")) || undefined,
         payment,
         pickupTime: pickupTime || undefined,

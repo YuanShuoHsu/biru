@@ -54,6 +54,7 @@ type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
 
 type RouteQuery =
   | "back"
+  | "modeToken"
   | "orderId"
   | "organization"
   | "page"
@@ -91,7 +92,7 @@ const storeRoute: Route = {
     },
   ],
   icon: Storefront,
-  query: ["partySize", "tableNumber", "tableToken"],
+  query: ["modeToken", "partySize", "tableNumber", "tableToken"],
   segment: "[organizationSlug]",
 };
 
@@ -312,6 +313,7 @@ export const useRoutes = () => {
 
   const values: Record<RouteQuery, string | null> = {
     back: pathname,
+    modeToken: searchParams.get("modeToken"),
     orderId: searchParams.get("orderId"),
     organization: searchParams.get("organization"),
     page: DEFAULT_PAGINATION_QUERY.page,

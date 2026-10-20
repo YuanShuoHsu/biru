@@ -77,6 +77,7 @@
       "ApplePay": "Apple Pay",
       "Cash": "现金",
       "Credit": "信用卡",
+      "inStoreQrCodeRequired": "请扫描店内二维码点餐才能付现金",
       "iPASS": "iPASS MONEY",
       "Jkopay": "街口支付",
       "pickupUnavailable": "线上自取不支持现金",

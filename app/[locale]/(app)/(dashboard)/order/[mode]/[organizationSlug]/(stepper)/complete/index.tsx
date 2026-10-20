@@ -147,9 +147,8 @@ const OrderModeOrganizationSlugComplete = ({
 }: OrderModeOrganizationSlugCompleteProps) => {
   const [isPaying, setIsPaying] = useState(false);
 
-  const { cartKey, clearCart, lastOrderId, setLastOrderId } = useCartStore(
-    (state) => state,
-  );
+  const { cartKey, clearCart, lastOrderId, renewCheckoutKey, setLastOrderId } =
+    useCartStore((state) => state);
 
   const formatMoney = useFormatMoney();
 
@@ -230,13 +229,6 @@ const OrderModeOrganizationSlugComplete = ({
   const invoice = order?.invoice;
   const showPickupInfo = mode === ORDER_MODE.Pickup && !!organization;
 
-  useEffect(() => {
-    if (!cartKey || !isSuccess || order?.id !== lastOrderId) return;
-
-    clearCart();
-    setLastOrderId(null);
-  }, [cartKey, clearCart, isSuccess, lastOrderId, order?.id, setLastOrderId]);
-
   const handleRetryPayment = async () => {
     if (!order) return;
 
@@ -272,6 +264,24 @@ const OrderModeOrganizationSlugComplete = ({
         ? "pending"
         : "error";
   const StatusIcon = STATUS_ICON[status];
+
+  useEffect(() => {
+    if (!cartKey || !order || order.id !== lastOrderId) return;
+
+    if (status === "success") clearCart();
+    else if (status === "error") renewCheckoutKey();
+    else return;
+
+    setLastOrderId(null);
+  }, [
+    cartKey,
+    clearCart,
+    lastOrderId,
+    order,
+    renewCheckoutKey,
+    setLastOrderId,
+    status,
+  ]);
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(orderNo);
