@@ -384,7 +384,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 打卡（上下班、休息起迄） */
+    /** 打卡（上下班） */
     post: operations["AttendanceShiftsController_punch"];
     delete?: never;
     options?: never;
@@ -660,6 +660,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/attendance/me/annual-leave-notices": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 我的特休年度書面通知（勞基法 §38 V：特休日期與未休日數工資） */
+    get: operations["AttendanceLeavesController_myAnnualLeaveNotices"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/annual-leave-notices": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 全店特休年度書面通知，含未休工資所以同時需要薪資單讀取權限 */
+    get: operations["AttendanceLeavesController_annualLeaveNotices"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/attendance/leave-balances": {
     parameters: {
       query?: never;
@@ -782,6 +816,24 @@ export interface paths {
     options?: never;
     head?: never;
     patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/attendance/children/{id}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 刪除尚未被請假案件使用的子女資料 */
+    delete: operations["AttendanceParentalController_deleteChild"];
+    options?: never;
+    head?: never;
+    /** 更正子女資料，已有育嬰案件時一併重驗期間 */
+    patch: operations["AttendanceParentalController_updateChild"];
     trace?: never;
   };
   "/api/organizations/{organizationSlug}/attendance/leave-cases/{id}/child": {
@@ -3581,44 +3633,10 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** Claude Code 機器人最近的判斷請求與待確認建議 */
+    /** Claude Code 機器人最近的判斷請求 */
     get: operations["QuantAiAdminController_listRequests"];
     put?: never;
     post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/quant/bots/{id}/ai-requests/{requestId}/approve": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** 確認 AI 建議並實際下單 */
-    post: operations["QuantAiAdminController_approve"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/quant/bots/{id}/ai-requests/{requestId}/reject": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** 略過 AI 建議，不下單 */
-    post: operations["QuantAiAdminController_reject"];
     delete?: never;
     options?: never;
     head?: never;
@@ -3738,7 +3756,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 回傳判斷；模擬盤與回測直接套用，實盤等使用者在後台確認 */
+    /** 回傳判斷，後台依判斷下單或推進回測 */
     post: operations["QuantAiAgentController_submit"];
     delete?: never;
     options?: never;
@@ -4663,6 +4681,7 @@ export interface components {
       | "implausibleMinimumWage"
       | "inconsistentDayKind"
       | "indigenousHolidayInUse"
+      | "childcareReductionInvalid"
       | "indigenousHolidayInvalid"
       | "insufficientLeaveBalance"
       | "invalidBusinessNumber"
@@ -4704,6 +4723,7 @@ export interface components {
       | "overlappingShift"
       | "overtimeAgreementRequired"
       | "parentalChildExists"
+      | "parentalChildInUse"
       | "parentalChildMismatch"
       | "parentalChildRequired"
       | "parentalChildUnassigned"
@@ -4802,6 +4822,7 @@ export interface components {
       workPermits: components["schemas"]["DatePeriodDto"][];
       pregnancyPeriods: components["schemas"]["DatePeriodDto"][];
       nursingPeriods: components["schemas"]["DatePeriodDto"][];
+      childcareReductionPeriods: components["schemas"]["DatePeriodDto"][];
       indigenousHolidays: string[];
       regularLeaveWeekday?: number | null;
       restDayWeekday?: number | null;
@@ -4895,6 +4916,7 @@ export interface components {
       workPermits: components["schemas"]["DatePeriodDto"][];
       pregnancyPeriods: components["schemas"]["DatePeriodDto"][];
       nursingPeriods: components["schemas"]["DatePeriodDto"][];
+      childcareReductionPeriods: components["schemas"]["DatePeriodDto"][];
       indigenousHolidays: string[];
       regularLeaveWeekday?: number | null;
       restDayWeekday?: number | null;
@@ -4960,6 +4982,8 @@ export interface components {
       workPermits: components["schemas"]["DatePeriodDto"][];
       pregnancyPeriods: components["schemas"]["DatePeriodDto"][];
       nursingPeriods: components["schemas"]["DatePeriodDto"][];
+      /** @description 性平法 §19 每日減少工作時間一小時的期間，須在已登記子女滿三歲前 */
+      childcareReductionPeriods: components["schemas"]["DatePeriodDto"][];
       indigenousHolidays: string[];
       terminationReason?: components["schemas"]["AttendanceTerminationReason"];
       userId: string;
@@ -5727,6 +5751,81 @@ export interface components {
       data: components["schemas"]["AttendanceLeaveBalanceResponseDto"][];
       total: number;
     };
+    /** @enum {string} */
+    AttendanceAnnualLeaveNoticeFilterField:
+      | "employeeName"
+      | "employeeEmail"
+      | "settlement"
+      | "periodStart"
+      | "periodEnd"
+      | "notifiedAt"
+      | "grantedMinutes"
+      | "carriedInMinutes"
+      | "usedMinutes"
+      | "unusedMinutes";
+    /** @enum {string} */
+    AttendanceAnnualLeaveNoticeSortField:
+      | "employeeName"
+      | "employeeEmail"
+      | "settlement"
+      | "periodStart"
+      | "periodEnd"
+      | "notifiedAt"
+      | "grantedMinutes"
+      | "carriedInMinutes"
+      | "usedMinutes"
+      | "unusedMinutes";
+    /** @enum {string} */
+    AttendanceAnnualLeaveSettlement:
+      | "ongoing"
+      | "paid"
+      | "deferred"
+      | "unrecorded"
+      | "nothingUnused";
+    AttendanceAnnualLeaveNoticeLeaveDto: {
+      /** Format: date-time */
+      startsAt: string;
+      /** Format: date-time */
+      endsAt: string;
+      leaveMinutes: number;
+    };
+    AttendanceAnnualLeaveNoticePayoutDto: {
+      month: string;
+      /** @description 舊薪資單只記錄當月特休未休工資合計，沒有逐年度時數 */
+      unusedMinutes?: number | null;
+      amountCents: string;
+      paidOn?: string | null;
+    };
+    AttendanceAnnualLeaveNoticeResponseDto: {
+      id: string;
+      employeeId: string;
+      employeeName: string;
+      employeeEmail: string;
+      /** Format: date-time */
+      periodStart: string;
+      /** Format: date-time */
+      periodEnd: string;
+      /** @description 特休年度尚未結束，未休為目前剩餘 */
+      ongoing: boolean;
+      /**
+       * Format: date-time
+       * @description 依勞基法 §38 III 寄出取得特休通知的時間
+       */
+      notifiedAt?: string | null;
+      grantedMinutes: number;
+      carriedInMinutes: number;
+      usedMinutes: number;
+      expiredMinutes: number;
+      unusedMinutes: number;
+      deferred: boolean;
+      settlement: components["schemas"]["AttendanceAnnualLeaveSettlement"];
+      leaves: components["schemas"]["AttendanceAnnualLeaveNoticeLeaveDto"][];
+      payouts: components["schemas"]["AttendanceAnnualLeaveNoticePayoutDto"][];
+    };
+    AttendanceAnnualLeaveNoticesResponseDto: {
+      data: components["schemas"]["AttendanceAnnualLeaveNoticeResponseDto"][];
+      total: number;
+    };
     SaveAttendanceLeaveBalanceDto: {
       /** Format: uuid */
       employeeId: string;
@@ -5813,6 +5912,7 @@ export interface components {
       birthDate: string;
       /** Format: date-time */
       createdAt: string;
+      deletable: boolean;
     };
     AttendanceParentalChildrenResponseDto: {
       data: components["schemas"]["AttendanceParentalChildResponseDto"][];
@@ -5834,6 +5934,11 @@ export interface components {
       birthDate: string;
       /** Format: date-time */
       createdAt: string;
+    };
+    UpdateAttendanceParentalChildDto: {
+      reference: string;
+      label: string;
+      birthDate: string;
     };
     AssignAttendanceParentalChildDto: {
       /** Format: uuid */
@@ -6647,6 +6752,7 @@ export interface components {
       | "attendance_shift_type"
       | "attendance_leave_type"
       | "attendance_leave_case"
+      | "attendance_parental_child"
       | "attendance_annual_leave_deferral"
       | "attendance_holiday_substitute"
       | "payroll_earning_type";
@@ -6885,6 +6991,7 @@ export interface components {
     PayrollDeductionLineCode:
       | "leaveDeduction"
       | "absenceDeduction"
+      | "childcareReductionDeduction"
       | "laborInsurance"
       | "healthInsurance"
       | "healthSupplement"
@@ -10093,13 +10200,7 @@ export interface components {
       code: string;
     };
     /** @enum {string} */
-    QuantAiRequestStatus:
-      | "pending"
-      | "awaiting_approval"
-      | "executed"
-      | "rejected"
-      | "expired"
-      | "answered";
+    QuantAiRequestStatus: "pending" | "executed" | "expired" | "answered";
     /**
      * @description open：依機器人方向加倉；close：減倉或平倉；hold：不動作
      * @enum {string}
@@ -10158,10 +10259,15 @@ export interface components {
       | "1W"
       | "1m";
     /**
-     * @description claude_api 必填
+     * @description 省略時用 medium
      * @enum {string}
      */
-    QuantAiEffort: "low" | "medium" | "high";
+    QuantAiEffort: "low" | "medium" | "high" | "xhigh" | "max";
+    /**
+     * @description 省略時用 claude-opus-5-5
+     * @enum {string}
+     */
+    QuantAiModel: "claude-opus-5-5" | "claude-sonnet-5-5" | "claude-haiku-5-5";
     /**
      * @description AI 寫判斷理由用的語言
      * @enum {string}
@@ -10174,7 +10280,7 @@ export interface components {
       leverage: number;
     };
     AiConfigDto: {
-      /** @description claude_api：伺服器用 Claude API key 呼叫；claude_code：本機 Claude Code 代理用訂閱額度判斷，實盤需人工確認才下單 */
+      /** @description claude_api：伺服器用 Claude API key 呼叫；claude_code：用 Claude Code 訂閱額度判斷 */
       source: components["schemas"]["QuantAiSource"];
       /** @description 每根 K 線收盤時請 AI 判斷一次 */
       interval: components["schemas"]["QuantCandleInterval"];
@@ -10184,8 +10290,10 @@ export interface components {
       maxOrderAmount: number;
       /** @description claude_api 必填：每月 AI 費用上限（美元），超過就停止機器人 */
       monthlyCostLimit?: number;
-      /** @description claude_api 必填 */
+      /** @description 省略時用 medium */
       effort?: components["schemas"]["QuantAiEffort"];
+      /** @description 省略時用 claude-opus-5-5 */
+      model?: components["schemas"]["QuantAiModel"];
       /** @description AI 寫判斷理由用的語言 */
       locale: components["schemas"]["QuantAiLocale"];
       /** @description 停利（%，相對持倉均價），由系統強制 */
@@ -10278,6 +10386,9 @@ export interface components {
       kind: components["schemas"]["QuantAgentRequestKind"];
       /** @description 交給 Claude 的系統指示 */
       instructions: string;
+      /** @description 傳給 claude --model */
+      model: string;
+      effort: components["schemas"]["QuantAiEffort"];
       /** @description 判斷用的市場與部位快照 */
       snapshot: {
         [key: string]: unknown;
@@ -10407,8 +10518,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["GridConfigDto"];
@@ -10611,7 +10720,6 @@ export interface components {
         | components["schemas"]["SignalBotConfigDto"]
         | components["schemas"]["AiConfigDto"];
       investment: number;
-      maxDailyLoss?: number;
       maxOrderAmount?: number;
       /** @description pionex：交給 Pionex 執行；engine：由本系統執行 */
       executor: components["schemas"]["QuantBotExecutor"];
@@ -10651,8 +10759,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["FuturesGridConfigDto"];
@@ -10685,8 +10791,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["SignalBotConfigDto"];
@@ -10700,8 +10804,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["DcaConfigDto"];
@@ -10715,8 +10817,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["IndicatorConfigDto"];
@@ -10730,8 +10830,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["WebhookConfigDto"];
@@ -10745,8 +10843,6 @@ export interface components {
       credentialId?: string;
       /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
       investment: number;
-      /** @description 每日最大虧損（計價幣），觸發即停止 */
-      maxDailyLoss?: number;
       /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
       maxOrderAmount?: number;
       config: components["schemas"]["AiConfigDto"];
@@ -10770,7 +10866,6 @@ export interface components {
         | components["schemas"]["SignalBotConfigDto"]
         | components["schemas"]["AiConfigDto"];
       investment: number;
-      maxDailyLoss?: number;
       maxOrderAmount?: number;
       /** @description pionex：交給 Pionex 執行；engine：由本系統執行 */
       executor: components["schemas"]["QuantBotExecutor"];
@@ -10785,7 +10880,7 @@ export interface components {
       createdAt: string;
     };
     StopQuantBotDto: {
-      /** @description 只用於現貨網格；省略時依建立時的設定 */
+      /** @description 現貨網格省略時依建立時的設定；現貨 DCA／指標／Webhook／AI 傳 TO_QUOTE 會市價平倉，省略時保留倉位；合約一律平倉 */
       closeModel?: components["schemas"]["QuantGridCloseModel"];
     };
     WebhookTokenDto: {
@@ -12852,6 +12947,80 @@ export interface operations {
       };
     };
   };
+  AttendanceLeavesController_myAnnualLeaveNotices: {
+    parameters: {
+      query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["AttendanceAnnualLeaveNoticeFilterField"];
+        sortBy?: components["schemas"]["AttendanceAnnualLeaveNoticeSortField"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceAnnualLeaveNoticesResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceLeavesController_annualLeaveNotices: {
+    parameters: {
+      query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["AttendanceAnnualLeaveNoticeFilterField"];
+        sortBy?: components["schemas"]["AttendanceAnnualLeaveNoticeSortField"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceAnnualLeaveNoticesResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   AttendanceLeavesController_leaveBalances: {
     parameters: {
       query?: {
@@ -13222,6 +13391,66 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AttendanceParentalChildrenResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceParentalController_deleteChild: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceIdResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceParentalController_updateChild: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateAttendanceParentalChildDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceParentalChildRecordResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -20134,60 +20363,6 @@ export interface operations {
       };
     };
   };
-  QuantAiAdminController_approve: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: string;
-        requestId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Internal server error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  QuantAiAdminController_reject: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        id: string;
-        requestId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-      /** @description Internal server error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
   QuantAiAdminController_listBacktests: {
     parameters: {
       query?: never;
@@ -22213,6 +22388,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "implausibleMinimumWage",
   "inconsistentDayKind",
   "indigenousHolidayInUse",
+  "childcareReductionInvalid",
   "indigenousHolidayInvalid",
   "insufficientLeaveBalance",
   "invalidBusinessNumber",
@@ -22254,6 +22430,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "overlappingShift",
   "overtimeAgreementRequired",
   "parentalChildExists",
+  "parentalChildInUse",
   "parentalChildMismatch",
   "parentalChildRequired",
   "parentalChildUnassigned",
@@ -22583,6 +22760,37 @@ export const attendanceLeaveBalanceSortFieldValues: ReadonlyArray<
   "grantedMinutes",
   "usedMinutes",
 ];
+export const attendanceAnnualLeaveNoticeFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceAnnualLeaveNoticeFilterField"]
+> = [
+  "employeeName",
+  "employeeEmail",
+  "settlement",
+  "periodStart",
+  "periodEnd",
+  "notifiedAt",
+  "grantedMinutes",
+  "carriedInMinutes",
+  "usedMinutes",
+  "unusedMinutes",
+];
+export const attendanceAnnualLeaveNoticeSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceAnnualLeaveNoticeSortField"]
+> = [
+  "employeeName",
+  "employeeEmail",
+  "settlement",
+  "periodStart",
+  "periodEnd",
+  "notifiedAt",
+  "grantedMinutes",
+  "carriedInMinutes",
+  "usedMinutes",
+  "unusedMinutes",
+];
+export const attendanceAnnualLeaveSettlementValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceAnnualLeaveSettlement"]
+> = ["ongoing", "paid", "deferred", "unrecorded", "nothingUnused"];
 export const attendanceHolidaySubstituteFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceHolidaySubstituteFilterField"]
 > = [
@@ -22849,6 +23057,7 @@ export const deletedRecordTableValues: ReadonlyArray<
   "attendance_shift_type",
   "attendance_leave_type",
   "attendance_leave_case",
+  "attendance_parental_child",
   "attendance_annual_leave_deferral",
   "attendance_holiday_substitute",
   "payroll_earning_type",
@@ -22920,6 +23129,7 @@ export const payrollDeductionLineCodeValues: ReadonlyArray<
 > = [
   "leaveDeduction",
   "absenceDeduction",
+  "childcareReductionDeduction",
   "laborInsurance",
   "healthInsurance",
   "healthSupplement",
@@ -23794,14 +24004,7 @@ export const quantTransferStatusValues: ReadonlyArray<
 > = ["COMPLETED", "PROCESSING", "FAILED"];
 export const quantAiRequestStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantAiRequestStatus"]
-> = [
-  "pending",
-  "awaiting_approval",
-  "executed",
-  "rejected",
-  "expired",
-  "answered",
-];
+> = ["pending", "executed", "expired", "answered"];
 export const quantAiDecisionActionValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantAiDecisionAction"]
 > = ["open", "close", "hold"];
@@ -23816,7 +24019,10 @@ export const quantCandleIntervalValues: ReadonlyArray<
 > = ["1M", "5M", "15M", "30M", "60M", "4H", "8H", "12H", "1D", "1W", "1m"];
 export const quantAiEffortValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantAiEffort"]
-> = ["low", "medium", "high"];
+> = ["low", "medium", "high", "xhigh", "max"];
+export const quantAiModelValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantAiModel"]
+> = ["claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"];
 export const quantAiLocaleValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantAiLocale"]
 > = ["zh-TW", "zh-CN", "en", "ja", "ko"];
