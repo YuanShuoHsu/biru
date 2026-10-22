@@ -681,6 +681,7 @@ const OrderModeOrganizationSlugCheckout = ({
           <ListRadioGroup
             error={!!errors.invoice?.type}
             helperText={errors.invoice?.type?.message}
+            inputRef={register("invoice.type").ref}
             label={tOrder("checkout.invoice.title")}
             onChange={(_, value) => {
               setValue("invoice.type", value as InvoiceType, {
@@ -831,6 +832,7 @@ const OrderModeOrganizationSlugCheckout = ({
           <ListRadioGroup
             error={!!errors.payment}
             helperText={errors.payment?.message}
+            inputRef={register("payment").ref}
             label={tOrder("checkout.paymentMethod")}
             onChange={(_, value) =>
               setValue("payment", value as CreateOrderPayment, {

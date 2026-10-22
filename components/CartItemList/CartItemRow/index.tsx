@@ -281,8 +281,12 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
           </StyledTypography>
           <StyledNumberSpinner
             {...(quantity <= 1 && {
-              decrementAriaLabel: "Delete",
-              decrementIcon: <Delete fontSize="small" />,
+              slotProps: {
+                decrement: {
+                  "aria-label": tCommon("delete"),
+                  children: <Delete fontSize="small" />,
+                },
+              },
             })}
             disabled={!quantity}
             error={!canIncrease}

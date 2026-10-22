@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { useParams, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 
 import CartAccordion from "@/components/CartAccordion";
 
@@ -31,6 +32,9 @@ const OrderModeOrganizationSlugCart = () => {
 
   const router = useRouter();
 
+  const [isBackPending, startBackTransition] = useTransition();
+  const [isNextPending, startNextTransition] = useTransition();
+
   const searchParams = useSearchParams();
   const search = searchParams.toString();
   const query = search ? `?${search}` : "";
@@ -42,8 +46,12 @@ const OrderModeOrganizationSlugCart = () => {
       <CartAccordion coupon={null} defaultExpanded />
       <StyledStack direction="row">
         <Button
+          loading={isBackPending}
+          loadingPosition="start"
           onClick={() =>
-            router.push(`/order/${mode}/${organizationSlug}${query}`)
+            startBackTransition(() =>
+              router.push(`/order/${mode}/${organizationSlug}${query}`),
+            )
           }
           startIcon={<MenuBook />}
           variant="outlined"
@@ -53,8 +61,14 @@ const OrderModeOrganizationSlugCart = () => {
         <Button
           disabled={isCartEmpty || hasInvalidItems}
           endIcon={<ShoppingCartCheckout />}
+          loading={isNextPending}
+          loadingPosition="end"
           onClick={() =>
-            router.push(`/order/${mode}/${organizationSlug}/checkout${query}`)
+            startNextTransition(() =>
+              router.push(
+                `/order/${mode}/${organizationSlug}/checkout${query}`,
+              ),
+            )
           }
           variant="contained"
         >

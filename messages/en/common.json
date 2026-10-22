@@ -1,11 +1,14 @@
 {
   "colon": ": ",
   "currency": "NT$",
+  "decrease": "Decrease",
+  "delete": "Delete",
   "delimiter": ", ",
   "discontinued": "Discontinued",
   "empty": "No items yet",
   "from": "from",
   "imageProcessingFailed": "Failed to process image",
+  "increase": "Increase",
   "loading": "Loading...",
   "location": {
     "empty": "No location information available",
@@ -32,6 +35,7 @@
   },
   "parenthesisClose": ")",
   "parenthesisOpen": "(",
+  "quantity": "Quantity",
   "reachStockLimit": "Stock limit reached {label}",
   "soldOut": "Sold out",
   "subtotal": "Subtotal",
