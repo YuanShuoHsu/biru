@@ -30,7 +30,7 @@ export const getOrganizations = cache(
   },
 );
 
-// 印在桌上與門口的 QR 不會重印，店家改 slug 後舊網址要轉到現行網址並保留桌號簽章等參數
+// 印在桌上與門口的 QR 不會重印，店家改 slug 後舊網址要轉到現行網址並保留桌號等參數
 export const redirectToCurrentSlug = async (
   organization: OrganizationResponse | null,
   organizationSlug: OrganizationResponse["slug"],

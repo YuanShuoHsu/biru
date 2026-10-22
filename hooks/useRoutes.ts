@@ -54,15 +54,13 @@ type MessageKey = MessageKeys<Messages, NestedKeyOf<Messages>>;
 
 type RouteQuery =
   | "back"
-  | "modeToken"
   | "orderId"
   | "organization"
   | "page"
   | "pageSize"
   | "partySize"
   | "redirectTo"
-  | "tableNumber"
-  | "tableToken";
+  | "tableNumber";
 
 interface Route {
   children?: Route[];
@@ -92,7 +90,7 @@ const storeRoute: Route = {
     },
   ],
   icon: Storefront,
-  query: ["modeToken", "partySize", "tableNumber", "tableToken"],
+  query: ["partySize", "tableNumber"],
   segment: "[organizationSlug]",
 };
 
@@ -313,7 +311,6 @@ export const useRoutes = () => {
 
   const values: Record<RouteQuery, string | null> = {
     back: pathname,
-    modeToken: searchParams.get("modeToken"),
     orderId: searchParams.get("orderId"),
     organization: searchParams.get("organization"),
     page: DEFAULT_PAGINATION_QUERY.page,
@@ -323,7 +320,6 @@ export const useRoutes = () => {
       searchParams.get("redirectTo") ||
       getHref(pathname, Object.fromEntries(searchParams)),
     tableNumber: searchParams.get("tableNumber"),
-    tableToken: searchParams.get("tableToken"),
   };
 
   const buildHref = (href: string, query = findRoute(href)?.query) => {
