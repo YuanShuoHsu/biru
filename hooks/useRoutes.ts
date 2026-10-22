@@ -319,7 +319,9 @@ export const useRoutes = () => {
     page: DEFAULT_PAGINATION_QUERY.page,
     pageSize: DEFAULT_PAGINATION_QUERY.pageSize,
     partySize: searchParams.get("partySize"),
-    redirectTo: searchParams.get("redirectTo") || pathname,
+    redirectTo:
+      searchParams.get("redirectTo") ||
+      getHref(pathname, Object.fromEntries(searchParams)),
     tableNumber: searchParams.get("tableNumber"),
     tableToken: searchParams.get("tableToken"),
   };
