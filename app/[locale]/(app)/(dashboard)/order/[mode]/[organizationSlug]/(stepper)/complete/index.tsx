@@ -219,12 +219,7 @@ const OrderModeOrganizationSlugComplete = ({
   const orderNo = order ? order.confirmationNumber || order.orderNumber : "";
   const currency = order?.items[0]?.priceCurrency;
   const discount = Number(order?.discount || 0);
-  const totalAmount =
-    (order?.items || []).reduce(
-      (sum, { orderQuantity, unitPrice }) =>
-        sum + Number(unitPrice) * orderQuantity,
-      0,
-    ) - discount;
+  const totalAmount = Number(order?.total || 0);
 
   const invoice = order?.invoice;
   const showPickupInfo = mode === ORDER_MODE.Pickup && !!organization;

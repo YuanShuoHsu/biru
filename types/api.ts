@@ -130,7 +130,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** 取得單一員工設定 */
+    get: operations["AttendanceEmployeesController_employee"];
     put?: never;
     post?: never;
     /** 刪除沒有任何出勤或薪資紀錄的員工設定 */
@@ -1041,23 +1042,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/users/deletability": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** 查詢使用者是否可刪除 */
-    get: operations["UsersController_deletability"];
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   "/api/users/{id}/sessions": {
     parameters: {
       query?: never;
@@ -1065,7 +1049,8 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    get?: never;
+    /** 查詢使用者的登入裝置 */
+    get: operations["UsersController_findSessions"];
     put?: never;
     post?: never;
     /** 批次撤銷使用者的登入裝置 */
@@ -2013,13 +1998,47 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 取得發票列印網址（熱感應紙，1 小時內有效） */
+    /** 列印發票：有發票印表機時排入印表機佇列，否則回傳列印頁（未印過時給正本，印完須回報 print-jobs/:jobId/confirmation） */
     post: operations["EcpayOrderInvoiceController_print"];
     delete?: never;
     options?: never;
     head?: never;
     /** 清除列印紀錄（紙沒印出來時還原正本） */
     patch: operations["EcpayOrderInvoiceController_resetPrint"];
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/invoice/print-jobs/{jobId}/confirmation": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 瀏覽器列印完成後回報，正本之後再印只會是補印聯 */
+    post: operations["EcpayOrderInvoiceController_confirmPrint"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/invoice/print-jobs/{jobId}/resolution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 確認列印結果不明的工作：有印出就結案，沒印出就重新排入佇列 */
+    post: operations["EcpayOrderInvoiceController_resolvePrintJob"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
     trace?: never;
   };
   "/api/organizations/{organizationSlug}/orders/{orderId}/invoice/verification": {
@@ -2108,15 +2127,34 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  "/api/organizations/{organizationSlug}/invoices/unprinted": {
+  "/api/organizations/{organizationSlug}/invoice-printer": {
     parameters: {
       query?: never;
       header?: never;
       path?: never;
       cookie?: never;
     };
-    /** 今天開立、可列印但尚未印過的發票（自動列印補印用） */
-    get: operations["EcpayOrganizationInvoiceController_listUnprinted"];
+    /** 查看發票印表機設定 */
+    get: operations["InvoicePrinterController_find"];
+    /** 設定發票印表機，或重設帳密（舊帳密立即失效） */
+    put: operations["InvoicePrinterController_register"];
+    post?: never;
+    /** 移除發票印表機，之後改回瀏覽器列印 */
+    delete: operations["InvoicePrinterController_remove"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/invoice-printer/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 發票印表機是否在線（訂單頁顯示離線提示用） */
+    get: operations["InvoicePrinterController_status"];
     put?: never;
     post?: never;
     delete?: never;
@@ -2405,6 +2443,109 @@ export interface paths {
     get: operations["OrderStatsController_findOne"];
     put?: never;
     post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/order-ticket-printers": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查看工作單印表機設定 */
+    get: operations["OrderTicketPrintersController_findAll"];
+    put?: never;
+    /** 新增工作單印表機，並把目前製作中的訂單排進它的佇列 */
+    post: operations["OrderTicketPrintersController_create"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/order-ticket-printers/status": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 工作單印表機是否在線（訂單頁顯示離線提示用） */
+    get: operations["OrderTicketPrintersController_status"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/order-ticket-printers/{printerId}/credentials": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    /** 重設工作單印表機帳密（舊帳密立即失效） */
+    put: operations["OrderTicketPrintersController_reset"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/order-ticket-printers/{printerId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 移除工作單印表機，尚未印出的工作單一併取消 */
+    delete: operations["OrderTicketPrintersController_remove"];
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/order-tickets/reprint": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 重印工作單：每台工作單印表機各補印一張 */
+    post: operations["OrderTicketPrintersController_reprint"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/order-tickets/{jobId}/resolution": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 確認列印結果不明的工作單：有印出就結案，沒印出就重新排入佇列 */
+    post: operations["OrderTicketPrintersController_resolve"];
     delete?: never;
     options?: never;
     head?: never;
@@ -3246,6 +3387,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/users/me/organizations": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢目前使用者所屬的組織與可執行的操作 */
+    get: operations["MyOrganizationsController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations": {
     parameters: {
       query?: never;
@@ -3360,23 +3518,6 @@ export interface paths {
     put?: never;
     /** 復業 */
     post: operations["OrganizationClosureController_reopen"];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/api/organizations/{organizationId}/deletability": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** 查詢組織是否可刪除 */
-    get: operations["OrganizationDeletabilityController_findOne"];
-    put?: never;
-    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -4757,6 +4898,7 @@ export interface components {
       | "payrollRuleSetMissing"
       | "payrollSourceChanged"
       | "payrollTermsRequired"
+      | "payrollViolationsUnacknowledged"
       | "pendingRequestExists"
       | "pensionIneligible"
       | "pensionRequired"
@@ -4911,7 +5053,8 @@ export interface components {
       | "terminatedAt"
       | "employmentType"
       | "legalStatus"
-      | "status";
+      | "status"
+      | "workPermitStatus";
     /** @enum {string} */
     AttendanceEmployeeSortField:
       | "name"
@@ -4920,41 +5063,27 @@ export interface components {
       | "terminatedAt"
       | "employmentType"
       | "legalStatus"
-      | "status";
-    AttendanceEmploymentResponseDto: {
+      | "status"
+      | "workPermitStatus";
+    /**
+     * @description 不需工作許可或已離職為 null
+     * @enum {string}
+     */
+    AttendanceWorkPermitStatus: "valid" | "expiring" | "invalid";
+    AttendanceMemberEmploymentResponseDto: {
       id: string;
-      organizationId: string;
-      userId: string;
-      name: string;
-      email: string;
       employmentType: components["schemas"]["AttendanceEmploymentType"];
       legalStatus: components["schemas"]["AttendanceLegalStatus"];
-      studentVacations: components["schemas"]["DatePeriodDto"][];
       workPermits: components["schemas"]["DatePeriodDto"][];
-      pregnancyPeriods: components["schemas"]["DatePeriodDto"][];
-      nursingPeriods: components["schemas"]["DatePeriodDto"][];
-      childcareReductionPeriods: components["schemas"]["DatePeriodDto"][];
-      indigenousHolidays: string[];
-      regularLeaveWeekday?: number | null;
-      restDayWeekday?: number | null;
       employmentInsuranceEligible: boolean;
       /** @description 報稅身分須填居留證號、居住地國與當地稅務識別碼 */
       foreignTaxIdentityRequired: boolean;
       workPermitRequired: boolean;
       pensionApplicable: boolean;
-      birthDate?: string | null;
-      taiwanStaySince?: string | null;
       /** Format: date-time */
       hiredAt: string;
       /** Format: date-time */
       terminatedAt?: string | null;
-      terminationReason?:
-        | components["schemas"]["AttendanceTerminationReason"]
-        | null;
-      /** Format: date-time */
-      terminationNoticedAt?: string | null;
-      /** Format: date-time */
-      createdAt: string;
     };
     AttendanceMemberResponseDto: {
       userId: string;
@@ -4965,8 +5094,13 @@ export interface components {
       /** @description 已設定且沒有任何出勤或薪資紀錄 */
       deletable: boolean;
       status: components["schemas"]["AttendanceEmployeeStatus"];
+      /** @description 不需工作許可或已離職為 null */
+      workPermitStatus:
+        | components["schemas"]["AttendanceWorkPermitStatus"]
+        | null;
+      workPermitDaysLeft: number | null;
       employee?:
-        | components["schemas"]["AttendanceEmploymentResponseDto"]
+        | components["schemas"]["AttendanceMemberEmploymentResponseDto"]
         | null;
     };
     AttendanceMembersResponseDto: {
@@ -4989,8 +5123,18 @@ export interface components {
       /** @description 行業別災害費率（百萬分率，不含上下班費率） */
       rateMicros: number;
     };
+    AttendanceEmployeeSummaryResponseDto: {
+      id: string;
+      name: string;
+      email: string;
+      employmentType: components["schemas"]["AttendanceEmploymentType"];
+      regularLeaveWeekday?: number | null;
+      employmentInsuranceEligible: boolean;
+      pensionApplicable: boolean;
+      status: components["schemas"]["AttendanceEmployeeStatus"];
+    };
     AttendanceEmployeesResponseDto: {
-      data: components["schemas"]["AttendanceEmployeeResponseDto"][];
+      data: components["schemas"]["AttendanceEmployeeSummaryResponseDto"][];
       total: number;
     };
     SaveAttendanceEmployeeDto: {
@@ -5501,6 +5645,8 @@ export interface components {
       extraWork: number;
       /** @description 本年度待指定或須撤銷的國定假日補假 */
       holidaySubstitutes: number;
+      /** @description 工作許可即將到期或已失效的員工 */
+      workPermits: number;
     };
     CorrectedEventDto: {
       action: components["schemas"]["AttendanceEventAction"];
@@ -6288,6 +6434,110 @@ export interface components {
       | "banned"
       | "emailSubscribed"
       | "createdAt";
+    UserListItemDto: {
+      /**
+       * @description ID
+       * @example 123e4567-e89b-12d3-a456-426614174000
+       */
+      id: string;
+      /**
+       * @description 角色
+       * @example user
+       */
+      role: components["schemas"]["UserRole"] | null;
+      /**
+       * @description 是否已封鎖
+       * @example false
+       */
+      banned: boolean | null;
+      /**
+       * @description 封鎖原因
+       * @example 違反使用條款
+       */
+      banReason?: string | null;
+      /**
+       * Format: date-time
+       * @description 封鎖到期時間；null 為永久
+       * @example 2025-12-31T23:59:59.000Z
+       */
+      banExpires?: string | null;
+      /**
+       * @description 個人簡介
+       * @example 喜歡精釀啤酒
+       */
+      bio?: string | null;
+      /**
+       * @description 姓名
+       * @example Coffee
+       */
+      name: string;
+      /**
+       * Format: date-time
+       * @description 建立時間
+       * @example 2025-10-14T12:34:56.000Z
+       */
+      createdAt: string;
+      /**
+       * @description 電子郵件
+       * @example biru@example.com
+       */
+      email: string;
+      /**
+       * @description 是否訂閱電子報
+       * @example true
+       */
+      emailSubscribed: boolean;
+      /**
+       * @description 是否已驗證電子郵件
+       * @example true
+       */
+      emailVerified: boolean;
+      /**
+       * @description 名
+       * @example Coffee
+       */
+      firstName: string;
+      /**
+       * @description 頭像 URL
+       * @example https://example.com/avatar.png
+       */
+      image?: string | null;
+      /**
+       * @description 語言
+       * @example zh-TW
+       * @enum {string}
+       */
+      lang: "en" | "ja" | "ko" | "zh-CN" | "zh-TW";
+      /**
+       * @description 姓
+       * @example Biru
+       */
+      lastName?: string | null;
+      /**
+       * @description 電話（E.164 格式）
+       * @example +886912345678
+       */
+      phoneNumber?: string | null;
+      /**
+       * @description 是否已驗證電話
+       * @example false
+       */
+      phoneNumberVerified: boolean;
+      /**
+       * Format: date-time
+       * @description 最後更新時間
+       * @example 2025-10-14T12:34:56.000Z
+       */
+      updatedAt: string;
+      /** @description 有出勤或薪資紀錄、或是某組織唯一的擁有者時不可刪除 */
+      deletable: boolean;
+      /** @description 有登入裝置紀錄（含已過期） */
+      hasSession: boolean;
+    };
+    UserListResponseDto: {
+      data: components["schemas"]["UserListItemDto"][];
+      total: number;
+    };
     /** @enum {string} */
     StatsBucketUnit: "day" | "hour";
     UserStatsBucketDto: {
@@ -6302,10 +6552,26 @@ export interface components {
       /** @description 上期新增使用者數 */
       previous: number;
     };
-    UserDeletabilityDto: {
+    /** @enum {string} */
+    UserSessionFilterField:
+      | "userAgent"
+      | "ipAddress"
+      | "createdAt"
+      | "expiresAt";
+    /** @enum {string} */
+    UserSessionSortField: "userAgent" | "ipAddress" | "createdAt" | "expiresAt";
+    UserSessionResponseDto: {
       id: string;
-      /** @description 有出勤或薪資紀錄、或是某組織唯一的擁有者時不可刪除 */
-      deletable: boolean;
+      ipAddress?: string | null;
+      userAgent?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      expiresAt: string;
+    };
+    UserSessionListResponseDto: {
+      data: components["schemas"]["UserSessionResponseDto"][];
+      total: number;
     };
     UpdateUserDto: {
       /**
@@ -7038,11 +7304,6 @@ export interface components {
       | "belowMinimumWage"
       | "birthDateRequired"
       | "calendarLeavePayRequired"
-      | "childLaborHoursExceeded"
-      | "childLaborNightWork"
-      | "childLaborRestDay"
-      | "consecutiveWorkdaysExceeded"
-      | "dailyHoursExceeded"
       | "emergencyDetailsRequired"
       | "employmentInsuranceExemptionInvalid"
       | "employmentInsuranceIneligible"
@@ -7062,16 +7323,13 @@ export interface components {
       | "laborInsuranceRequired"
       | "leavePolicyRequired"
       | "legacySeniorityUnsupported"
-      | "maternalNightWork"
       | "minimumWageUnconfirmed"
-      | "monthlyOvertimeExceeded"
       | "negativeNetPay"
       | "noShifts"
       | "occupationalAccidentRateRequired"
       | "openingHoursRequired"
       | "overlappingLeaveAttendance"
       | "parentalReturnPending"
-      | "overtimeAgreementRequired"
       | "partTimeLadderRequiresPartTime"
       | "payrollPeriodOpen"
       | "paydayRequired"
@@ -7080,15 +7338,25 @@ export interface components {
       | "pensionIneligible"
       | "pensionRequired"
       | "prorationRequired"
-      | "shiftRestTooShort"
-      | "studentWeeklyHoursExceeded"
       | "taiwanStaySinceRequired"
       | "terminationReasonRequired"
       | "unreviewedOvertime"
       | "unsupportedDayKind"
-      | "weeklyRestRequired"
       | "weeklyScheduleRequiresReview"
-      | "withholdingTableOutdated"
+      | "withholdingTableOutdated";
+    /** @enum {string} */
+    PayrollViolation:
+      | "childLaborHoursExceeded"
+      | "childLaborNightWork"
+      | "childLaborRestDay"
+      | "consecutiveWorkdaysExceeded"
+      | "dailyHoursExceeded"
+      | "maternalNightWork"
+      | "monthlyOvertimeExceeded"
+      | "overtimeAgreementRequired"
+      | "shiftRestTooShort"
+      | "studentWeeklyHoursExceeded"
+      | "weeklyRestRequired"
       | "workPermitRequired";
     PayrollSnapshotResponseDto: {
       terms: components["schemas"]["PayrollTermsValuesDto"];
@@ -7102,6 +7370,7 @@ export interface components {
       employerCosts?: components["schemas"]["PayrollEmployerCostResponseDto"][];
       workedSeconds: number;
       blockers: components["schemas"]["PayrollBlocker"][];
+      violations?: components["schemas"]["PayrollViolation"][];
       sourceFingerprint: string;
     };
     PayrollStatementListItemResponseDto: {
@@ -7177,10 +7446,12 @@ export interface components {
       reason?: string;
     };
     PayrollBatchReviewDto: {
+      acknowledgedViolations?: components["schemas"]["PayrollViolation"][];
       ids: string[];
       reason?: string;
     };
     PayrollReviewDto: {
+      acknowledgedViolations?: components["schemas"]["PayrollViolation"][];
       reason?: string;
     };
     /** @enum {string} */
@@ -7842,6 +8113,21 @@ export interface components {
       | "PaymentDeclined";
     /** @enum {string} */
     InvoiceStatus: "pending" | "issuing" | "issued" | "voided";
+    /** @enum {string} */
+    PrintCopy: "original" | "reprint";
+    /** @enum {string} */
+    PrintJobStatus: "queued" | "sent" | "printed" | "unknown" | "cancelled";
+    PrintJobDto: {
+      id: string;
+      copy: components["schemas"]["PrintCopy"];
+      status: components["schemas"]["PrintJobStatus"];
+      /** @description 印表機回報的錯誤碼 */
+      errorCode?: string | null;
+      /** Format: date-time */
+      sentAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+    };
     OrderInvoiceDto: {
       id: string;
       orderId: string;
@@ -7863,6 +8149,8 @@ export interface components {
       printedAt?: string | null;
       /** @description 已重設列印的次數 */
       printResetCount: number;
+      /** @description 送往發票印表機、尚未結案的列印工作 */
+      printJob?: components["schemas"]["PrintJobDto"] | null;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -7870,10 +8158,16 @@ export interface components {
     };
     OrderInvoicePrintDto: {
       /**
-       * @description 列印頁內容，前端以 iframe srcdoc 呈現後列印
+       * @description 未設定發票印表機時回傳列印頁內容，前端以 iframe srcdoc 呈現後列印，印完須回報 print-jobs/:jobId/confirmation
        * @example <html>…</html>
        */
-      printHtml: string;
+      printHtml?: string;
+      /** @description 這次列印的工作；瀏覽器列印在回報完成前都是結果不明 */
+      printJob: components["schemas"]["PrintJobDto"];
+    };
+    ResolvePrintJobDto: {
+      /** @description 店員確認紙本是否已印出 */
+      printed: boolean;
     };
     OrderInvoiceVerificationDto: {
       /** @description 綠界端的發票號碼 */
@@ -8030,9 +8324,69 @@ export interface components {
       /** @description 退款說明，會作為發票作廢／折讓原因送至綠界；原因分類為 other 時必填 */
       reason?: string;
     };
-    UnprintedInvoiceDto: {
-      /** @description 訂單 ID */
-      orderId: string;
+    /** @enum {string} */
+    PrinterPurpose: "invoice" | "orderTicket";
+    PrinterDto: {
+      id: string;
+      purpose: components["schemas"]["PrinterPurpose"];
+      /** @description 店家自訂的名稱（例如吧台、廚房）；發票印表機為 null */
+      name: string | null;
+      /** @description 填入印表機 Server Direct Print 的 ID */
+      username: string;
+      /** @description 填入印表機 Server Direct Print 的 URL */
+      url: string;
+      /**
+       * Format: date-time
+       * @description 印表機最後一次來拉列印工作的時間
+       */
+      lastSeenAt?: string | null;
+      /** @description 從印表機實際來拉工作的節奏量出的輪詢間隔（毫秒），還沒量到時為 null */
+      pollIntervalMs: number | null;
+      /** @description 印表機最近仍有來拉列印工作 */
+      online: boolean;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    InvoicePrinterSettingDto: {
+      printer?: components["schemas"]["PrinterDto"] | null;
+    };
+    InvoicePrinterStatusDto: {
+      /** @description 是否設定了發票印表機 */
+      configured: boolean;
+      /** @description 印表機最近仍有來拉列印工作；離線時列印發票改用瀏覽器 */
+      online: boolean;
+      /**
+       * Format: date-time
+       * @description 印表機最後一次連線的時間
+       */
+      lastSeenAt?: string | null;
+      /** @description 從印表機實際來拉工作的節奏量出的輪詢間隔（毫秒），還沒量到時為 null */
+      pollIntervalMs: number | null;
+    };
+    PrinterCredentialsDto: {
+      id: string;
+      purpose: components["schemas"]["PrinterPurpose"];
+      /** @description 店家自訂的名稱（例如吧台、廚房）；發票印表機為 null */
+      name: string | null;
+      /** @description 填入印表機 Server Direct Print 的 ID */
+      username: string;
+      /** @description 填入印表機 Server Direct Print 的 URL */
+      url: string;
+      /**
+       * Format: date-time
+       * @description 印表機最後一次來拉列印工作的時間
+       */
+      lastSeenAt?: string | null;
+      /** @description 從印表機實際來拉工作的節奏量出的輪詢間隔（毫秒），還沒量到時為 null */
+      pollIntervalMs: number | null;
+      /** @description 印表機最近仍有來拉列印工作 */
+      online: boolean;
+      /** Format: date-time */
+      createdAt: string;
+      /** @description 只在建立或重設時回傳一次 */
+      password: string;
+      /** @description 這次一併送印的張數 */
+      queuedCount: number;
     };
     /** @enum {string} */
     IngredientFilterField:
@@ -8536,6 +8890,43 @@ export interface components {
       /** @description 各冰量／溫度售出份數（含加購品項）；不分冷熱的品項不計 */
       servingTemperatureLevels: components["schemas"]["OrderStatsServingTemperatureLevelDto"][];
     };
+    OrderTicketPrinterStatusDto: {
+      id: string;
+      /** @description 店家自訂的名稱（例如吧台、廚房）；發票印表機為 null */
+      name: string | null;
+      /**
+       * Format: date-time
+       * @description 印表機最後一次來拉列印工作的時間
+       */
+      lastSeenAt?: string | null;
+      /** @description 從印表機實際來拉工作的節奏量出的輪詢間隔（毫秒），還沒量到時為 null */
+      pollIntervalMs: number | null;
+      /** @description 印表機最近仍有來拉列印工作 */
+      online: boolean;
+    };
+    CreateOrderTicketPrinterDto: {
+      /** @description 例如吧台、廚房 */
+      name: string;
+    };
+    /**
+     * @description order：訂單工作單；refund：退品單
+     * @enum {string}
+     */
+    OrderTicketKind: "order" | "refund";
+    OrderTicketJobDto: {
+      id: string;
+      copy: components["schemas"]["PrintCopy"];
+      status: components["schemas"]["PrintJobStatus"];
+      /** @description 印表機回報的錯誤碼 */
+      errorCode?: string | null;
+      /** Format: date-time */
+      sentAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** @description order：訂單工作單；refund：退品單 */
+      kind: components["schemas"]["OrderTicketKind"];
+      printerName: string;
+    };
     CreateOrderCustomerDto: {
       /** Format: email */
       email?: string;
@@ -8805,6 +9196,10 @@ export interface components {
       refundable: boolean;
       /** @description ecpay：可直接透過綠界退刷；manual：綠界不支援此付款方式的退款 API，系統僅登錄，需店家自行退款 */
       refundChannel: components["schemas"]["RefundChannel"];
+      /** @description 在途（排隊、列印中、結果不明）的工作單與退品單 */
+      orderTicketJobs: components["schemas"]["OrderTicketJobDto"][];
+      /** @description 訂單狀態是否允許重印工作單；店家有沒有工作單印表機要另外看印表機清單 */
+      orderTicketReprintable: boolean;
     };
     AdminOrderBoardColumnDto: {
       orderStatus: components["schemas"]["OrderFlowStatus"];
@@ -9998,6 +10393,43 @@ export interface components {
       /** @description 上期新建立的組織數（範圍同 total） */
       previous: number;
     };
+    MyOrganizationListItemDto: {
+      id: string;
+      name: string;
+      slug: string;
+      logo?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      metadata?: string | null;
+      addressCountry?: string | null;
+      addressLocality?: string | null;
+      addressRegion?: string | null;
+      extendedAddress?: string | null;
+      postalCode?: string | null;
+      streetAddress?: string | null;
+      hasMap?: string | null;
+      openingHours?: string | null;
+      telephone?: string | null;
+      /**
+       * @description 店家目錄定價幣別
+       * @example TWD
+       */
+      currency: string;
+      amountPerPoint?: string | null;
+      pointsValidityYears?: number | null;
+      pickupLeadMinutes: number;
+      pickupMaxAdvanceDays: number;
+      pickupCutoffMinutes: number;
+      /**
+       * Format: date-time
+       * @description 停業時間；營業中為 null
+       */
+      closedAt?: string | null;
+      /** @description 目前使用者可編輯組織資料 */
+      canUpdate: boolean;
+      /** @description 目前使用者有刪除權限；有訂單、出勤或薪資紀錄時依法須保存，不可刪除 */
+      deletable: boolean;
+    };
     OrganizationResponseDto: {
       id: string;
       name: string;
@@ -10030,10 +10462,6 @@ export interface components {
        * @description 停業時間；營業中為 null
        */
       closedAt?: string | null;
-    };
-    OrganizationDeletabilityDto: {
-      /** @description 有訂單、出勤或薪資紀錄時依法須保存，不可刪除 */
-      deletable: boolean;
     };
     OrganizationMemberTeamDto: {
       id: string;
@@ -11650,6 +12078,34 @@ export interface operations {
           [name: string]: unknown;
         };
         content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  AttendanceEmployeesController_employee: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        id: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["AttendanceEmployeeResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -13881,7 +14337,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["UserListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -13926,13 +14384,24 @@ export interface operations {
       };
     };
   };
-  UsersController_deletability: {
+  UsersController_findSessions: {
     parameters: {
-      query: {
-        ids: string[];
+      query?: {
+        filterField?: components["schemas"]["UserSessionFilterField"];
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortBy?: components["schemas"]["UserSessionSortField"];
+        sortDirection?: components["schemas"]["SortDirection"];
+        limit?: number;
+        offset?: number;
+        filterValue?: string;
+        quickFilterValue?: string;
       };
       header?: never;
-      path?: never;
+      path: {
+        id: string;
+      };
       cookie?: never;
     };
     requestBody?: never;
@@ -13942,7 +14411,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["UserDeletabilityDto"][];
+          "application/json": components["schemas"]["UserSessionListResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -16066,6 +16535,68 @@ export interface operations {
       };
     };
   };
+  EcpayOrderInvoiceController_confirmPrint: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+        jobId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  EcpayOrderInvoiceController_resolvePrintJob: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+        jobId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResolvePrintJobDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrintJobDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   EcpayOrderInvoiceController_verify: {
     parameters: {
       query?: never;
@@ -16252,7 +16783,7 @@ export interface operations {
       };
     };
   };
-  EcpayOrganizationInvoiceController_listUnprinted: {
+  InvoicePrinterController_find: {
     parameters: {
       query?: never;
       header?: never;
@@ -16268,7 +16799,89 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["UnprintedInvoiceDto"][];
+          "application/json": components["schemas"]["InvoicePrinterSettingDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  InvoicePrinterController_register: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrinterCredentialsDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  InvoicePrinterController_remove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  InvoicePrinterController_status: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["InvoicePrinterStatusDto"];
         };
       };
       /** @description Internal server error */
@@ -17203,6 +17816,213 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OrderStatsResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrinterDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateOrderTicketPrinterDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrinterCredentialsDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_status: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OrderTicketPrinterStatusDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_reset: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        printerId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrinterCredentialsDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_remove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        printerId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_reprint: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OrderTicketJobDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrderTicketPrintersController_resolve: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+        jobId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ResolvePrintJobDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["OrderTicketJobDto"];
         };
       };
       /** @description Internal server error */
@@ -19523,6 +20343,32 @@ export interface operations {
       };
     };
   };
+  MyOrganizationsController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["MyOrganizationListItemDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   OrganizationsController_findAll: {
     parameters: {
       query?: {
@@ -19746,34 +20592,6 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OrganizationResponseDto"];
-        };
-      };
-      /** @description Internal server error */
-      500: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  OrganizationDeletabilityController_findOne: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path: {
-        organizationId: string;
-      };
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content: {
-          "application/json": components["schemas"]["OrganizationDeletabilityDto"];
         };
       };
       /** @description Internal server error */
@@ -22500,6 +23318,7 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "payrollRuleSetMissing",
   "payrollSourceChanged",
   "payrollTermsRequired",
+  "payrollViolationsUnacknowledged",
   "pendingRequestExists",
   "pensionIneligible",
   "pensionRequired",
@@ -22596,6 +23415,7 @@ export const attendanceEmployeeFilterFieldValues: ReadonlyArray<
   "employmentType",
   "legalStatus",
   "status",
+  "workPermitStatus",
 ];
 export const attendanceEmployeeSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceEmployeeSortField"]
@@ -22607,7 +23427,11 @@ export const attendanceEmployeeSortFieldValues: ReadonlyArray<
   "employmentType",
   "legalStatus",
   "status",
+  "workPermitStatus",
 ];
+export const attendanceWorkPermitStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AttendanceWorkPermitStatus"]
+> = ["valid", "expiring", "invalid"];
 export const attendanceShiftTypeFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AttendanceShiftTypeFilterField"]
 > = ["name", "startTime", "endTime"];
@@ -23004,9 +23828,18 @@ export const userSearchOperatorValues: ReadonlyArray<
 export const userSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserSortField"]
 > = ["name", "email", "role", "banned", "emailSubscribed", "createdAt"];
+export const userListItemDtoLangValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserListItemDto"]["lang"]
+> = ["en", "ja", "ko", "zh-CN", "zh-TW"];
 export const statsBucketUnitValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["StatsBucketUnit"]
 > = ["day", "hour"];
+export const userSessionFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserSessionFilterField"]
+> = ["userAgent", "ipAddress", "createdAt", "expiresAt"];
+export const userSessionSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["UserSessionSortField"]
+> = ["userAgent", "ipAddress", "createdAt", "expiresAt"];
 export const updateUserDtoGenderValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UpdateUserDto"]["gender"]
 > = ["female", "male", "other"];
@@ -23207,11 +24040,6 @@ export const payrollBlockerValues: ReadonlyArray<
   "belowMinimumWage",
   "birthDateRequired",
   "calendarLeavePayRequired",
-  "childLaborHoursExceeded",
-  "childLaborNightWork",
-  "childLaborRestDay",
-  "consecutiveWorkdaysExceeded",
-  "dailyHoursExceeded",
   "emergencyDetailsRequired",
   "employmentInsuranceExemptionInvalid",
   "employmentInsuranceIneligible",
@@ -23231,16 +24059,13 @@ export const payrollBlockerValues: ReadonlyArray<
   "laborInsuranceRequired",
   "leavePolicyRequired",
   "legacySeniorityUnsupported",
-  "maternalNightWork",
   "minimumWageUnconfirmed",
-  "monthlyOvertimeExceeded",
   "negativeNetPay",
   "noShifts",
   "occupationalAccidentRateRequired",
   "openingHoursRequired",
   "overlappingLeaveAttendance",
   "parentalReturnPending",
-  "overtimeAgreementRequired",
   "partTimeLadderRequiresPartTime",
   "payrollPeriodOpen",
   "paydayRequired",
@@ -23249,15 +24074,27 @@ export const payrollBlockerValues: ReadonlyArray<
   "pensionIneligible",
   "pensionRequired",
   "prorationRequired",
-  "shiftRestTooShort",
-  "studentWeeklyHoursExceeded",
   "taiwanStaySinceRequired",
   "terminationReasonRequired",
   "unreviewedOvertime",
   "unsupportedDayKind",
-  "weeklyRestRequired",
   "weeklyScheduleRequiresReview",
   "withholdingTableOutdated",
+];
+export const payrollViolationValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["PayrollViolation"]
+> = [
+  "childLaborHoursExceeded",
+  "childLaborNightWork",
+  "childLaborRestDay",
+  "consecutiveWorkdaysExceeded",
+  "dailyHoursExceeded",
+  "maternalNightWork",
+  "monthlyOvertimeExceeded",
+  "overtimeAgreementRequired",
+  "shiftRestTooShort",
+  "studentWeeklyHoursExceeded",
+  "weeklyRestRequired",
   "workPermitRequired",
 ];
 export const payrollEarningTypeFilterFieldValues: ReadonlyArray<
@@ -23566,6 +24403,12 @@ export const invoicePaymentStatusValues: ReadonlyArray<
 export const invoiceStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["InvoiceStatus"]
 > = ["pending", "issuing", "issued", "voided"];
+export const printCopyValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["PrintCopy"]
+> = ["original", "reprint"];
+export const printJobStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["PrintJobStatus"]
+> = ["queued", "sent", "printed", "unknown", "cancelled"];
 export const ecpayCallbackEndpointValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["EcpayCallbackEndpoint"]
 > = ["return", "result", "query"];
@@ -23592,6 +24435,9 @@ export const refundReasonCodeValues: ReadonlyArray<
 export const orderRefundDtoScopeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderRefundDto"]["scope"]
 > = ["full", "partial"];
+export const printerPurposeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["PrinterPurpose"]
+> = ["invoice", "orderTicket"];
 export const ingredientFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["IngredientFilterField"]
 > = [
@@ -23667,6 +24513,9 @@ export const orderStatsModeDtoModeValues: ReadonlyArray<
 export const orderStatsPaymentMethodDtoPaymentMethodValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderStatsPaymentMethodDto"]["paymentMethod"]
 > = ["ApplePay", "Cash", "Credit", "iPASS", "Jkopay", "TWQR", "WeiXin"];
+export const orderTicketKindValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderTicketKind"]
+> = ["order", "refund"];
 export const createOrderInvoiceDtoTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["CreateOrderInvoiceDto"]["type"]
 > = ["personal", "company", "donate"];
