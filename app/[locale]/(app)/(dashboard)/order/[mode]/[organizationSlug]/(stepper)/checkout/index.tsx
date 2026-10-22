@@ -135,10 +135,12 @@ const INVOICE_TYPES: { icon: React.ElementType; type: InvoiceType }[] = [
 const CARRIER_TYPES: CarrierType[] = ["none", "mobile", "certificate"];
 
 interface OrderModeOrganizationSlugCheckoutProps {
+  hasOrderQrSession: boolean;
   organization: OrganizationResponse;
 }
 
 const OrderModeOrganizationSlugCheckout = ({
+  hasOrderQrSession,
   organization,
 }: OrderModeOrganizationSlugCheckoutProps) => {
   const session = useSession();
@@ -383,7 +385,7 @@ const OrderModeOrganizationSlugCheckout = ({
   const cashUnavailableReason = isPickup
     ? tOrder("checkout.payment.pickupUnavailable")
     : (mode === ORDER_MODE.Counter || mode === ORDER_MODE.DriveThru) &&
-        !searchParams.get("modeToken")
+        !hasOrderQrSession
       ? tOrder("checkout.payment.inStoreQrCodeRequired")
       : null;
 
@@ -478,12 +480,10 @@ const OrderModeOrganizationSlugCheckout = ({
         },
         items: cartItemsList,
         mode: API_ORDER_MODE[mode],
-        modeToken: searchParams.get("modeToken") || undefined,
         partySize: Number(searchParams.get("partySize")) || undefined,
         payment,
         pickupTime: pickupTime || undefined,
         tableNumber: Number(searchParams.get("tableNumber")) || undefined,
-        tableToken: searchParams.get("tableToken") || undefined,
       });
 
       setLastOrderId(order.id);

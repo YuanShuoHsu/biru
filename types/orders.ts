@@ -16,3 +16,5 @@ export type OrderItemResponse = components["schemas"]["OrderItemResponseDto"];
 export type OrderInvoiceResponse = components["schemas"]["OrderInvoiceDto"];
 export type InvoiceStatus = components["schemas"]["InvoiceStatus"];
 export type OrderBoardItem = components["schemas"]["OrderBoardItemDto"];
+export type OrderQrSessionResponse =
+  components["schemas"]["OrderQrSessionResponseDto"];
