@@ -87,16 +87,14 @@ All providers are composed in `components/AppProviders` — mounted at the root 
 ### Data Fetching
 
 - SWR with a custom `fetcher` in `utils/fetcher.ts` handles both JSON and text responses
-- Server components prefetch data (e.g. store/menu data in layouts) and pass as SWR `fallback`
+- Pages whose data only changes on navigation use SSR props directly, without SWR; SWR (with server-prefetched `fallback`) is only for pages that stay open waiting for live updates
 - `providers/SWRProvider.tsx` configures global SWR options and error handling via notistack
 
 ### Authentication
 
-- `lib/auth-client.ts` configures the better-auth client with custom user fields: `firstName`, `lastName`, `lang` (locale), `emailSubscribed`, `role`
+- `lib/auth-client.ts` configures the better-auth client and its custom user fields
 - Auth state is initialized server-side via `AuthStoreProvider` with `initialSession`
-- Session stored in cookie `better-auth.session_token` (managed by better-auth)
 - Middleware lives in `proxy.ts` as named exports (`proxy` function + `config`); handles i18n routing, maintenance mode redirect, and auth guard for the member account pages (`/auth/{coupons,orders,points,settings}`)
-- `hooks/useAuth.ts` composes auth-related navigation menu items
 
 ### Key Utility Locations
 
@@ -107,7 +105,6 @@ All providers are composed in `components/AppProviders` — mounted at the root 
 | Money formatting       | `hooks/useFormatMoney.ts` (the only formatter — don't add a util or call `Intl` directly) |
 | Order mode + table     | `hooks/useOrderModeLabel.ts` (single combined label)                                      |
 | Order QR session       | `utils/orderQrSession.ts` (server-only, cached per request)                               |
-| Socket.io client       | `app/socket.ts`                                                                           |
 | Auth utilities         | `utils/auth.ts`                                                                           |
 | Error extraction       | `utils/errors.ts`                                                                         |
 | Country data           | `utils/countries.ts`, `constants/countries.ts`                                            |
@@ -120,7 +117,7 @@ All providers are composed in `components/AppProviders` — mounted at the root 
 - MUI components are used for all UI elements, styled with `styled()` (no `sx`); Tailwind is only used in the root layout
 - Forms follow the pattern: Zod schema → React Hook Form (`register`, or `useWatch` + `setValue` + `formState.errors` for non-native inputs; avoid `Controller`) → MUI input, with `components/TextMaskCustom` (react-imask) for formatted fields
 - Phone validation uses `libphonenumber-js`
-- Snackbar/toast notifications use `notistack` via the SWRProvider error handler
+- Snackbar/toast notifications use `notistack` (`useSnackbar`); SWR errors are already toasted globally by `SWRProvider`
 
 ## biru-admin Sync
 
