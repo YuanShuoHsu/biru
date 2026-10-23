@@ -91,6 +91,7 @@ export const authClient = createAuthClient({
             pickupLeadMinutes: { type: "number", required: false },
             pickupMaxAdvanceDays: { type: "number", required: false },
             pickupCutoffMinutes: { type: "number", required: false },
+            dineInTableCount: { type: "number", required: false },
           },
         },
       },
