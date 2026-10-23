@@ -37,9 +37,14 @@ export const generateMetadata = async ({
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   const { organizationSlug } = await params;
 
-  const organization = await fetcher<OrganizationResponse>(
-    `/api/organizations/${organizationSlug}`,
-  ).catch(() => null);
+  const [organization, items] = await Promise.all([
+    fetcher<OrganizationResponse>(
+      `/api/organizations/${organizationSlug}`,
+    ).catch(() => null),
+    fetcher<OrderBoardItem[]>(
+      `/api/organizations/${organizationSlug}/orders/board`,
+    ).catch(() => []),
+  ]);
 
   await redirectToCurrentSlug(
     organization,
@@ -48,10 +53,6 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   );
 
   if (!organization) notFound();
-
-  const items = await fetcher<OrderBoardItem[]>(
-    `/api/organizations/${organizationSlug}/orders/board`,
-  ).catch(() => []);
 
   return <OrderBoard items={items} organization={organization} />;
 };
