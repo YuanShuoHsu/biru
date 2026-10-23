@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 import CartItemList from "@/components/CartItemList";
 
-import { usePathname } from "@/i18n/navigation";
+import { Link, usePathname } from "@/i18n/navigation";
 
 import {
   MenuBook,
@@ -125,6 +125,7 @@ const CartAnchorTemporaryDrawer = () => {
         </StyledStack>
         {(isCartPage || isCheckoutPage) && (
           <Button
+            component={Link}
             fullWidth
             href={menuHref}
             onClick={handleClose}
@@ -136,6 +137,7 @@ const CartAnchorTemporaryDrawer = () => {
         )}
         {!isCartPage && (
           <Button
+            component={Link}
             disabled={!isCheckoutPage && isCartEmpty}
             endIcon={isCheckoutPage ? undefined : <ShoppingCart />}
             fullWidth
@@ -149,6 +151,7 @@ const CartAnchorTemporaryDrawer = () => {
         )}
         {!isCheckoutPage && (
           <Button
+            component={Link}
             disabled={isCartEmpty || hasInvalidItems}
             endIcon={<ShoppingCartCheckout />}
             fullWidth
