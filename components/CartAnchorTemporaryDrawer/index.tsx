@@ -83,20 +83,25 @@ const CartAnchorTemporaryDrawer = () => {
   const pathname = usePathname();
 
   const searchParams = useSearchParams();
-  const search = searchParams.toString();
-  const query = search ? `?${search}` : "";
+  const orderSearchParams = new URLSearchParams(searchParams);
+  orderSearchParams.delete("orderId");
+  orderSearchParams.delete("accessToken");
+  const query = orderSearchParams.size ? `?${orderSearchParams}` : "";
 
   const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
 
   const isCheckoutPage = pathname.endsWith("/checkout");
   const isCartPage = pathname.endsWith("/cart");
+  const isCompletePage = pathname.endsWith("/complete");
 
   const basePath = isCheckoutPage
     ? pathname.slice(0, -"/checkout".length)
     : isCartPage
       ? pathname.slice(0, -"/cart".length)
-      : pathname;
+      : isCompletePage
+        ? pathname.slice(0, -"/complete".length)
+        : pathname;
   const menuHref = `${basePath}${query}`;
   const cartHref = `${basePath}/cart${query}`;
   const checkoutHref = `${basePath}/checkout${query}`;
