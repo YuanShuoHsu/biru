@@ -1,7 +1,5 @@
 "use client";
 
-import { Fragment } from "react";
-
 import { useLocale, useTranslations } from "next-intl";
 import { Autoplay, Mousewheel, Navigation } from "swiper/modules";
 
@@ -43,12 +41,6 @@ const StyledLink = styled(Link)({
   height: "100%",
 });
 
-const StyledAnchor = styled("a")({
-  display: "block",
-  width: "100%",
-  height: "100%",
-});
-
 const StyledViewCarousel = styled(ViewCarousel)(({ theme }) => ({
   fontSize: theme.spacing(8),
 }));
@@ -80,30 +72,25 @@ const Banner = ({ banners }: BannerProps) => {
             const slide = (
               <StyledImage
                 alt={alt?.[locale] || t("banner.slide", { index: index + 1 })}
+                key={id}
                 src={image}
               />
             );
 
-            if (url?.startsWith("/"))
-              return (
-                <StyledLink href={url} key={id}>
-                  {slide}
-                </StyledLink>
-              );
+            if (!url) return slide;
 
-            if (url?.startsWith("https://"))
-              return (
-                <StyledAnchor
-                  href={url}
-                  key={id}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {slide}
-                </StyledAnchor>
-              );
-
-            return <Fragment key={id}>{slide}</Fragment>;
+            return (
+              <StyledLink
+                href={url}
+                key={id}
+                {...(!url.startsWith("/") && {
+                  rel: "noopener noreferrer",
+                  target: "_blank",
+                })}
+              >
+                {slide}
+              </StyledLink>
+            );
           })}
         </Carousel>
       ) : (
