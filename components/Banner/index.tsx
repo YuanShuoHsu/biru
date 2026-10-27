@@ -15,8 +15,6 @@ import { styled } from "@mui/material/styles";
 
 import type { Banner as BannerType } from "@/types/banners";
 
-import { localize } from "@/utils/locale";
-
 const StyledBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
@@ -81,10 +79,7 @@ const Banner = ({ banners }: BannerProps) => {
           {banners.map(({ alt, id, image, url }, index) => {
             const slide = (
               <StyledImage
-                alt={
-                  localize(alt, locale) ||
-                  t("banner.slide", { index: index + 1 })
-                }
+                alt={alt?.[locale] || t("banner.slide", { index: index + 1 })}
                 src={image}
               />
             );
