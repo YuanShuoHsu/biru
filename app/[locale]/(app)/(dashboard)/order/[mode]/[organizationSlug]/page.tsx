@@ -73,12 +73,14 @@ const OrderModeOrganizationSlugPage = async ({
   );
   if (!organization || organization.closedAt) return notFound();
 
-  if (
-    mode === ORDER_MODE.Counter ||
-    mode === ORDER_MODE.DriveThru ||
-    mode === ORDER_MODE.Pickup
-  )
+  if (mode === ORDER_MODE.Pickup) return <OrderMenuContent />;
+
+  if (mode === ORDER_MODE.Counter || mode === ORDER_MODE.DriveThru) {
+    const qrSession = await getOrderQrSession(organization.slug);
+    if (qrSession?.mode !== API_ORDER_MODE[mode]) return notFound();
+
     return <OrderMenuContent />;
+  }
 
   if (mode !== ORDER_MODE.DineIn) return notFound();
 
