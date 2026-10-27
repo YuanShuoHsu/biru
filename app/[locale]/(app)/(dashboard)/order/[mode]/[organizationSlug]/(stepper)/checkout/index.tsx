@@ -89,7 +89,7 @@ import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { type FetchError, sendRequest } from "@/utils/fetcher";
-import { getCartAvailableHours } from "@/utils/menus";
+import { getCartAvailableHours, getCartLeadTimeMinutes } from "@/utils/menus";
 import { isOpenAt } from "@/utils/openingHours";
 import {
   getPickupWindow,
@@ -253,9 +253,14 @@ const OrderModeOrganizationSlugCheckout = ({
   const [now, setNow] = useState(() => dayjs().tz(STORE_TIMEZONE));
   const handleRefreshNow = () => setNow(dayjs().tz(STORE_TIMEZONE));
 
+  const cartLeadTimeMinutes = useMemo(
+    () => getCartLeadTimeMinutes(menu, cartItemsList),
+    [cartItemsList, menu],
+  );
+
   const pickupWindow = useMemo(
-    () => getPickupWindow(organization, now),
-    [now, organization],
+    () => getPickupWindow(organization, now, cartLeadTimeMinutes),
+    [cartLeadTimeMinutes, now, organization],
   );
 
   // MUI 以 callback 的 identity 當快取鍵，每次 render 換新的會讓整個月曆重掃
