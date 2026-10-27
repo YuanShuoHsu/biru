@@ -1,5 +1,7 @@
 "use client";
 
+import { Fragment } from "react";
+
 import { useLocale, useTranslations } from "next-intl";
 import { Autoplay, Mousewheel, Navigation } from "swiper/modules";
 
@@ -83,27 +85,30 @@ const Banner = ({ banners }: BannerProps) => {
                   localize(alt, locale) ||
                   t("banner.slide", { index: index + 1 })
                 }
-                key={id}
                 src={image}
               />
             );
 
-            if (!url) return slide;
+            if (url?.startsWith("/"))
+              return (
+                <StyledLink href={url} key={id}>
+                  {slide}
+                </StyledLink>
+              );
 
-            return url.startsWith("/") ? (
-              <StyledLink href={url} key={id}>
-                {slide}
-              </StyledLink>
-            ) : (
-              <StyledAnchor
-                href={url}
-                key={id}
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                {slide}
-              </StyledAnchor>
-            );
+            if (url?.startsWith("https://"))
+              return (
+                <StyledAnchor
+                  href={url}
+                  key={id}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {slide}
+                </StyledAnchor>
+              );
+
+            return <Fragment key={id}>{slide}</Fragment>;
           })}
         </Carousel>
       ) : (
