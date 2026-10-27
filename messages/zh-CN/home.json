@@ -1,4 +1,7 @@
 {
+  "banner": {
+    "slide": "第 {index} 张轮播图"
+  },
   "footer": {
     "brand": "Biru Coffee",
     "copyright": "Copyright © {year} {brand}.",
