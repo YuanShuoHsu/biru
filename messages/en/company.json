@@ -40,6 +40,7 @@
     },
     "team": {
       "description": "Contributing from all corners of Taiwan, Biru is a passionate team & community.",
+      "empty": "This store hasn't introduced its team yet.",
       "joinUs": "Join us",
       "label": "Team",
       "role": {

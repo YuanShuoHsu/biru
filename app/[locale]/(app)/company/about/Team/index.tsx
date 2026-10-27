@@ -9,8 +9,6 @@ import GradientBox from "@/components/GradientBox";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useOrganizationMembers } from "@/hooks/organizations";
-
 import {
   Avatar,
   Chip,
@@ -26,7 +24,10 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { OrganizationResponse } from "@/types/organizations";
+import type {
+  OrganizationResponse,
+  OrganizationTeamMember,
+} from "@/types/organizations";
 
 import { formatFullName } from "@/utils/auth";
 
@@ -81,10 +82,15 @@ const MemberNameStack = styled(Stack)(({ theme }) => ({
 
 interface TeamProps {
   organizations: OrganizationResponse[];
+  organizationTeams: Record<
+    OrganizationResponse["id"],
+    OrganizationTeamMember[]
+  >;
 }
 
-const Team = ({ organizations }: TeamProps) => {
-  const defaultOrganizationId = organizations[0]?.id || "";
+const Team = ({ organizations, organizationTeams }: TeamProps) => {
+  const defaultOrganizationId =
+    organizations.find(({ id }) => organizationTeams[id]?.length)?.id || "";
 
   const teamFormSchema = useTeamFormSchema();
   const {
@@ -99,7 +105,7 @@ const Team = ({ organizations }: TeamProps) => {
 
   const locale = useLocale();
 
-  const organizationMembers = useOrganizationMembers(selectedOrganizationId);
+  const organizationMembers = organizationTeams[selectedOrganizationId] ?? [];
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -155,6 +161,11 @@ const Team = ({ organizations }: TeamProps) => {
             </MenuItem>
           ))}
         </StyledOrganizationSelect>
+        {selectedOrganizationId && !organizationMembers.length && (
+          <Typography color="textSecondary" variant="body2">
+            {tCompanyAboutTeam("empty")}
+          </Typography>
+        )}
         <Grid container spacing={2}>
           {organizationMembers.map(
             ({ bio, firstName, id, image, lastName, role, teams }) => (
