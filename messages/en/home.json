@@ -1,4 +1,7 @@
 {
+  "banner": {
+    "slide": "Slide {index}"
+  },
   "footer": {
     "brand": "Biru Coffee",
     "copyright": "Copyright © {year} {brand}.",
