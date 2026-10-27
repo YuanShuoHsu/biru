@@ -51,14 +51,12 @@ import type {
   WaitlistTicketStatus,
 } from "@/types/waitlist";
 
+import { alertUser, enableAlertSound } from "@/utils/alerts";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import { enableCallAlertSound, playCallChime } from "@/utils/waitlist";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
-
-const ALERT_VIBRATION = [400, 200, 400, 200, 400];
 
 const STEPS = ["taken", "called", "seated"] as const;
 
@@ -139,7 +137,7 @@ const WaitlistTicket = ({
 
   useEffect(() => {
     const handleFirstInteraction = () => {
-      enableCallAlertSound();
+      enableAlertSound();
     };
 
     window.addEventListener("click", handleFirstInteraction, { once: true });
@@ -185,25 +183,14 @@ const WaitlistTicket = ({
     )
       return;
 
-    navigator.vibrate?.(ALERT_VIBRATION);
-
-    playCallChime();
-
-    if (
-      document.hidden &&
-      "Notification" in window &&
-      Notification.permission === "granted"
-    ) {
-      try {
-        new Notification(
-          tWaitlist("ticket.notify.title", {
-            organizationName: organization.name,
-            ticketNumber: ticket.ticketNumber,
-          }),
-          { body: tWaitlist("ticket.notify.body"), tag: ticket.id },
-        );
-      } catch {}
-    }
+    alertUser({
+      body: tWaitlist("ticket.notify.body"),
+      tag: ticket.id,
+      title: tWaitlist("ticket.notify.title", {
+        organizationName: organization.name,
+        ticketNumber: ticket.ticketNumber,
+      }),
+    });
   }, [
     organization.name,
     tWaitlist,

@@ -260,5 +260,11 @@
       "label": "店舗を選択",
       "placeholder": "あなたの店舗を選択してください"
     }
+  },
+  "ready": {
+    "notify": {
+      "body": "受け取り口でお受け取りください。",
+      "title": "{orderNumber} 番のご注文ができました"
+    }
   }
 }

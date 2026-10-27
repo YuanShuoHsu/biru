@@ -12,6 +12,7 @@ import { STATUS_COLORS } from "@/constants/orders";
 import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import { useOrderModeLabel } from "@/hooks/useOrderModeLabel";
+import { useOrderReadyAlert } from "@/hooks/useOrderReadyAlert";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import {
@@ -117,6 +118,8 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
     `/api/organizations/${organization.slug}/orders/board`,
     { fallbackData: initialItems },
   );
+
+  useOrderReadyAlert(items.find((item) => item.orderId === orderId) ?? null);
 
   const { isConnected } = useSocketConnection(menuSocket);
 

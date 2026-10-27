@@ -44,11 +44,12 @@ import type {
   WaitlistTicketResponse,
 } from "@/types/waitlist";
 
+import { enableAlerts } from "@/utils/alerts";
 import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import { enableCallAlerts, getWaitlistErrorCode } from "@/utils/waitlist";
+import { getWaitlistErrorCode } from "@/utils/waitlist";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
@@ -378,7 +379,7 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
             <Button
               fullWidth
               loading={isSubmitting}
-              onClick={enableCallAlerts}
+              onClick={enableAlerts}
               size="large"
               type="submit"
               variant="contained"
