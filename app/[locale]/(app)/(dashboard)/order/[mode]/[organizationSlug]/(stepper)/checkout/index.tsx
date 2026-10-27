@@ -84,6 +84,7 @@ import type {
 import type { OrganizationResponse } from "@/types/organizations";
 import type { RouteParams } from "@/types/routeParams";
 
+import { enableAlerts } from "@/utils/alerts";
 import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
@@ -869,6 +870,7 @@ const OrderModeOrganizationSlugCheckout = ({
           endIcon={<TaskAlt />}
           loading={isSubmitting || isRedirecting}
           loadingPosition="end"
+          onClick={enableAlerts}
           type="submit"
           variant="contained"
         >

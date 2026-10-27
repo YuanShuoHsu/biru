@@ -260,5 +260,11 @@
       "label": "지점 선택",
       "placeholder": "귀하의 지점을 선택해 주세요"
     }
+  },
+  "ready": {
+    "notify": {
+      "body": "픽업 장소에서 받아 가세요.",
+      "title": "{orderNumber}번 주문이 준비되었습니다"
+    }
   }
 }

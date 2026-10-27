@@ -17,6 +17,7 @@ import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOrderItemName } from "@/hooks/useOrderItemName";
+import { useOrderReadyAlert } from "@/hooks/useOrderReadyAlert";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useRouter } from "@/i18n/navigation";
@@ -204,6 +205,16 @@ const OrderModeOrganizationSlugComplete = ({
       menuSocket.off("orderUpdated", handleOrderUpdated);
     };
   }, [accessToken, isConnected, mutate, orderId]);
+
+  useOrderReadyAlert(
+    order
+      ? {
+          orderId: order.id,
+          orderNumber: order.orderNumber,
+          orderStatus: order.orderStatus,
+        }
+      : null,
+  );
 
   const format = useFormatter();
 

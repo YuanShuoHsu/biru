@@ -260,5 +260,11 @@
       "label": "選擇門市",
       "placeholder": "請選擇您的門市"
     }
+  },
+  "ready": {
+    "notify": {
+      "body": "請至取餐處取餐。",
+      "title": "{orderNumber} 號餐點好了"
+    }
   }
 }

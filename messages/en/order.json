@@ -260,5 +260,11 @@
       "label": "Select a store",
       "placeholder": "Please select your store"
     }
+  },
+  "ready": {
+    "notify": {
+      "body": "Please collect it at the pickup point.",
+      "title": "Order {orderNumber} is ready"
+    }
   }
 }
