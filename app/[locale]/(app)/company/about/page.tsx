@@ -29,16 +29,20 @@ export const generateMetadata = async ({
 
 const AboutPage = async () => {
   const organizations = await getOrganizations();
-  const teams = Object.fromEntries(
+  const organizationTeams = Object.fromEntries(
     await Promise.all(
-      organizations.map(async ({ id, slug }) => [
-        id,
-        await getOrganizationTeam(slug),
-      ]),
+      organizations.map(
+        async ({ id, slug }) => [id, await getOrganizationTeam(slug)] as const,
+      ),
     ),
   );
 
-  return <About organizations={organizations} teams={teams} />;
+  return (
+    <About
+      organizations={organizations}
+      organizationTeams={organizationTeams}
+    />
+  );
 };
 
 export default AboutPage;

@@ -82,12 +82,15 @@ const MemberNameStack = styled(Stack)(({ theme }) => ({
 
 interface TeamProps {
   organizations: OrganizationResponse[];
-  teams: Record<OrganizationResponse["id"], OrganizationTeamMember[]>;
+  organizationTeams: Record<
+    OrganizationResponse["id"],
+    OrganizationTeamMember[]
+  >;
 }
 
-const Team = ({ organizations, teams }: TeamProps) => {
+const Team = ({ organizations, organizationTeams }: TeamProps) => {
   const defaultOrganizationId =
-    organizations.find(({ id }) => teams[id]?.length)?.id || "";
+    organizations.find(({ id }) => organizationTeams[id]?.length)?.id || "";
 
   const teamFormSchema = useTeamFormSchema();
   const {
@@ -102,7 +105,7 @@ const Team = ({ organizations, teams }: TeamProps) => {
 
   const locale = useLocale();
 
-  const organizationMembers = teams[selectedOrganizationId] ?? [];
+  const organizationMembers = organizationTeams[selectedOrganizationId] ?? [];
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 

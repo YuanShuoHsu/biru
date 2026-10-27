@@ -19,18 +19,24 @@ import type {
 
 interface AboutProps {
   organizations: OrganizationResponse[];
-  teams: Record<OrganizationResponse["id"], OrganizationTeamMember[]>;
+  organizationTeams: Record<
+    OrganizationResponse["id"],
+    OrganizationTeamMember[]
+  >;
 }
 
-const About = ({ organizations, teams }: AboutProps) => (
+const About = ({ organizations, organizationTeams }: AboutProps) => (
   <>
     <Hero />
     <Divider />
     <Values />
     <Divider />
-    {Object.values(teams).some((members) => members.length) && (
+    {Object.values(organizationTeams).some((members) => members.length) && (
       <>
-        <Team organizations={organizations} teams={teams} />
+        <Team
+          organizations={organizations}
+          organizationTeams={organizationTeams}
+        />
         <Divider />
       </>
     )}
