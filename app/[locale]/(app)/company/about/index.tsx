@@ -12,20 +12,28 @@ import Footer from "@/components/Footer";
 
 import { Divider } from "@mui/material";
 
-import type { OrganizationResponse } from "@/types/organizations";
+import type {
+  OrganizationResponse,
+  OrganizationTeamMember,
+} from "@/types/organizations";
 
 interface AboutProps {
   organizations: OrganizationResponse[];
+  teams: Record<OrganizationResponse["id"], OrganizationTeamMember[]>;
 }
 
-const About = ({ organizations }: AboutProps) => (
+const About = ({ organizations, teams }: AboutProps) => (
   <>
     <Hero />
     <Divider />
     <Values />
     <Divider />
-    <Team organizations={organizations} />
-    <Divider />
+    {Object.values(teams).some((members) => members.length) && (
+      <>
+        <Team organizations={organizations} teams={teams} />
+        <Divider />
+      </>
+    )}
     {/* <Support />
     <Divider /> */}
     <Location organizations={organizations} />
