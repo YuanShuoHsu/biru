@@ -62,6 +62,11 @@ export const authClient = createAuthClient({
     organizationClient({
       teams: { enabled: true },
       schema: {
+        member: {
+          additionalFields: {
+            showcase: { type: "boolean", required: false, input: false },
+          },
+        },
         organization: {
           additionalFields: {
             // https://schema.org/PostalAddress
