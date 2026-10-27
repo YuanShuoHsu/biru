@@ -1,16 +1,28 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useRef } from "react";
 
+import type { OrderStatus } from "@/types/orders";
+
 import { alertUser, enableAlertSound } from "@/utils/alerts";
 
 export const useOrderReadyAlert = (
-  order: { orderId: string; orderNumber: string; orderStatus: string } | null,
+  order: {
+    orderId: string;
+    orderNumber: string;
+    orderStatus: OrderStatus;
+  } | null,
 ) => {
   const tOrder = useTranslations("order");
 
-  const previousStatusRef = useRef(order?.orderStatus);
+  const orderId = order?.orderId;
+  const orderNumber = order?.orderNumber;
+  const orderStatus = order?.orderStatus;
+
+  const previousStatusRef = useRef(orderStatus);
 
   useEffect(() => {
+    if (!orderId) return;
+
     const handleFirstInteraction = () => {
       enableAlertSound();
     };
@@ -20,11 +32,7 @@ export const useOrderReadyAlert = (
     return () => {
       window.removeEventListener("click", handleFirstInteraction);
     };
-  }, []);
-
-  const orderId = order?.orderId;
-  const orderNumber = order?.orderNumber;
-  const orderStatus = order?.orderStatus;
+  }, [orderId]);
 
   useEffect(() => {
     const previousStatus = previousStatusRef.current;
