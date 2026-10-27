@@ -97,7 +97,7 @@ const OrderModeOrganizationSlugPage = async ({
     return (
       <StyledStack direction="row">
         <OrderTableNumberChip tableNumber={tableNumber} />
-        <OrderPartySizeTextField organizationSlug={organizationSlug} />
+        <OrderPartySizeTextField />
       </StyledStack>
     );
   }
@@ -114,10 +114,7 @@ const OrderModeOrganizationSlugPage = async ({
     <>
       <StyledStack direction="row">
         <OrderTableNumberChip tableNumber={tableNumber} />
-        <OrderPartySizeTextField
-          organizationSlug={organizationSlug}
-          partySize={partySize}
-        />
+        <OrderPartySizeTextField partySize={partySize} />
       </StyledStack>
       <OrderMenuContent />
     </>
