@@ -103,6 +103,10 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
                 )}
                 {items.map((item) => {
                   const coupon = "coupon" in item ? item.coupon : item;
+                  const upcomingFrom =
+                    coupon.validFrom && new Date(coupon.validFrom) > new Date()
+                      ? new Date(coupon.validFrom)
+                      : null;
 
                   return (
                     <Card key={item.id} variant="outlined">
@@ -125,6 +129,17 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
                             }),
                           "source" in item &&
                             tAuth(`coupons.source.${item.source}`),
+                          Number(coupon.minSubtotal) > 0 &&
+                            tAuth("coupons.minSubtotal", {
+                              amount: formatMoney(
+                                Number(coupon.minSubtotal),
+                                coupon.discountCurrency,
+                              ),
+                            }),
+                          upcomingFrom &&
+                            tAuth("coupons.validFrom", {
+                              date: format.dateTime(upcomingFrom, "short"),
+                            }),
                           coupon.validThrough &&
                             tAuth("coupons.validUntil", {
                               date: format.dateTime(
@@ -144,18 +159,24 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
                             : `-${formatMoney(Number(coupon.discountValue), coupon.discountCurrency)}`}
                         </StyledTypography>
                         {"coupon" in item ? (
-                          <Button
-                            component={Link}
-                            href={
-                              item.applicableOrganizationSlugs?.length === 1
-                                ? `/order/${ORDER_MODE.Pickup}/${item.applicableOrganizationSlugs[0]}`
-                                : `/order/${ORDER_MODE.Pickup}`
-                            }
-                            size="small"
-                            variant="outlined"
-                          >
-                            {tAuth("coupons.use")}
-                          </Button>
+                          upcomingFrom ? (
+                            <Button disabled size="small" variant="outlined">
+                              {tAuth("coupons.notYetValid")}
+                            </Button>
+                          ) : (
+                            <Button
+                              component={Link}
+                              href={
+                                item.applicableOrganizationSlugs?.length === 1
+                                  ? `/order/${ORDER_MODE.Pickup}/${item.applicableOrganizationSlugs[0]}`
+                                  : `/order/${ORDER_MODE.Pickup}`
+                              }
+                              size="small"
+                              variant="outlined"
+                            >
+                              {tAuth("coupons.use")}
+                            </Button>
+                          )
                         ) : (
                           <Button
                             loading={claimingId === item.id}
