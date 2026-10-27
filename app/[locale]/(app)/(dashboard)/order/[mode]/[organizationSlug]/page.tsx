@@ -8,7 +8,7 @@ import OrderMenuContent from "@/components/OrderMenuContent";
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderTableNumberChip from "@/components/OrderTableNumberChip";
 
-import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
+import { ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
 import type { Locale } from "@/i18n/routing";
@@ -16,7 +16,7 @@ import type { Locale } from "@/i18n/routing";
 import type { Organization } from "@/types/organizations";
 
 import { buildMetadata } from "@/utils/metadata";
-import { getOrderQrSession } from "@/utils/orderQrSession";
+import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugPageProps {
@@ -73,27 +73,14 @@ const OrderModeOrganizationSlugPage = async ({
   );
   if (!organization || organization.closedAt) return notFound();
 
-  if (mode === ORDER_MODE.Pickup) return <OrderMenuContent />;
+  if (!(await hasOrderAccess(organization.slug, mode, tableNumber)))
+    return notFound();
 
-  if (mode === ORDER_MODE.Counter || mode === ORDER_MODE.DriveThru) {
-    const qrSession = await getOrderQrSession(organization.slug);
-    if (qrSession?.mode !== API_ORDER_MODE[mode]) return notFound();
-
-    return <OrderMenuContent />;
-  }
-
-  if (mode !== ORDER_MODE.DineIn) return notFound();
+  if (mode !== ORDER_MODE.DineIn) return <OrderMenuContent />;
 
   const isValidTableNumber = !!tableNumber && /^[1-9]\d*$/.test(tableNumber);
 
   if (!isValidTableNumber) return notFound();
-
-  const qrSession = await getOrderQrSession(organization.slug);
-  if (
-    qrSession?.mode !== API_ORDER_MODE[ORDER_MODE.DineIn] ||
-    qrSession.tableNumber !== Number(tableNumber)
-  )
-    return notFound();
 
   if (!partySize) {
     return (
