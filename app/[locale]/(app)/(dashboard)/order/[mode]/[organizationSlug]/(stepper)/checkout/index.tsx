@@ -135,12 +135,10 @@ const INVOICE_TYPES: { icon: React.ElementType; type: InvoiceType }[] = [
 const CARRIER_TYPES: CarrierType[] = ["none", "mobile", "certificate"];
 
 interface OrderModeOrganizationSlugCheckoutProps {
-  hasOrderQrSession: boolean;
   organization: OrganizationResponse;
 }
 
 const OrderModeOrganizationSlugCheckout = ({
-  hasOrderQrSession,
   organization,
 }: OrderModeOrganizationSlugCheckoutProps) => {
   const session = useSession();
@@ -389,10 +387,7 @@ const OrderModeOrganizationSlugCheckout = ({
 
   const cashUnavailableReason = isPickup
     ? tOrder("checkout.payment.pickupUnavailable")
-    : (mode === ORDER_MODE.Counter || mode === ORDER_MODE.DriveThru) &&
-        !hasOrderQrSession
-      ? tOrder("checkout.payment.inStoreQrCodeRequired")
-      : null;
+    : null;
 
   const paymentOptions = [
     {

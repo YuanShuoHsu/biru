@@ -6,6 +6,7 @@ import OrderModeOrganizationSlugCart from ".";
 
 import type { Locale } from "@/i18n/routing";
 
+import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugCartPageProps {
@@ -41,6 +42,9 @@ const OrderModeOrganizationSlugCartPage = async ({
     query,
   );
   if (!organization || organization.closedAt) notFound();
+
+  if (!(await hasOrderAccess(organization.slug, mode, query.tableNumber)))
+    notFound();
 
   return <OrderModeOrganizationSlugCart />;
 };
