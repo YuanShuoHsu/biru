@@ -66,9 +66,9 @@ const PhotoSlider = () => (
       {Array.from({ length: SLIDE_COUNT }, (_, index) => (
         <PhotoBox key={index}>
           <Image
-            alt={`Photo ${index + 1}`}
+            alt=""
             fill
-            priority={index < 4}
+            preload={index === 0}
             sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
             src="/images/IMG_4590.jpg"
             style={{ objectFit: "cover" }}

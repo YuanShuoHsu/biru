@@ -86,7 +86,7 @@ const Values = () => {
     <SectionBox component="section">
       <StyledContainer disableGutters maxWidth="lg">
         <HeaderStack>
-          <StyledTypography color="primary" component="h2" variant="body2">
+          <StyledTypography color="primary" variant="body2">
             {tCompanyAboutValues("subtitle")}
           </StyledTypography>
           <StyledTypography component="h2" variant="h5">

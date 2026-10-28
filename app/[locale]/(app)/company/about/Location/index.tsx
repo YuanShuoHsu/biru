@@ -76,7 +76,7 @@ const Location = ({ organizations }: LocationProps) => {
     <StyledBox component="section">
       <StyledContainer disableGutters maxWidth="lg">
         <HeaderStack>
-          <StyledTypography color="primary" component="h2" variant="body2">
+          <StyledTypography color="primary" variant="body2">
             {tCompanyAboutLocation("label")}
           </StyledTypography>
           <StyledTypography component="h2" variant="h5">

@@ -36,7 +36,7 @@ const JoinUs = () => {
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
       <StyledStack>
-        <StyledTypography color="primary" component="h2" variant="body2">
+        <StyledTypography color="primary" variant="body2">
           {tCompanyAboutJoinUs("label")}
         </StyledTypography>
         <StyledTypography align="center" component="h2" variant="h5">

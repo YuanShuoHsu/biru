@@ -58,10 +58,10 @@ const Hero = () => {
   return (
     <StyledContainer component="header" disableGutters maxWidth="lg">
       <CenteredStack>
-        <StyledTypography color="primary" component="h2" variant="body2">
+        <StyledTypography color="primary" variant="body2">
           {tCompanyAboutHero("subtitle")}
         </StyledTypography>
-        <StyledTypography align="center" component="h2" variant="h5">
+        <StyledTypography align="center" component="h1" variant="h5">
           {tCompanyAboutHero("titleLine1")}
           <br />
           <GradientBox component="span">
@@ -76,7 +76,7 @@ const Hero = () => {
       <StatsStack direction="row">
         {STATS.map(({ label, value }) => (
           <CenteredStack key={label}>
-            <StyledTypography color="primary" variant="h4">
+            <StyledTypography color="primary" component="p" variant="h4">
               {value}
             </StyledTypography>
             <Typography color="textSecondary" variant="body1">
