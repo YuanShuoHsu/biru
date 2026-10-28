@@ -5,6 +5,7 @@ import { useForm, useWatch } from "react-hook-form";
 
 import { type TeamForm, useTeamFormSchema } from "./definitions";
 
+import ErrorAlert from "@/components/ErrorAlert";
 import GradientBox from "@/components/GradientBox";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -99,7 +100,11 @@ const Team = ({ organizations }: TeamProps) => {
 
   const locale = useLocale();
 
-  const organizationMembers = useOrganizationMembers(selectedOrganizationId);
+  const {
+    error: organizationMembersError,
+    mutate: mutateOrganizationMembers,
+    organizationMembers,
+  } = useOrganizationMembers(selectedOrganizationId);
 
   const tCompanyAboutTeam = useTranslations("company.about.team");
 
@@ -155,6 +160,9 @@ const Team = ({ organizations }: TeamProps) => {
             </MenuItem>
           ))}
         </StyledOrganizationSelect>
+        {organizationMembersError && (
+          <ErrorAlert onRetry={() => mutateOrganizationMembers()} />
+        )}
         <Grid container spacing={2}>
           {organizationMembers.map(
             ({ bio, firstName, id, image, lastName, role, teams }) => (

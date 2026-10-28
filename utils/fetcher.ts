@@ -2,6 +2,7 @@
 // https://swr.vercel.app/docs/error-handling
 // https://github.com/vercel/swr/discussions/939
 // https://github.com/vercel/swr/blob/main/examples/basic-typescript/libs/fetch.ts
+// https://nextjs.org/docs/app/getting-started/error-handling#server-components
 
 import { unstable_rethrow } from "next/navigation";
 
@@ -73,7 +74,6 @@ export type FetchResult<T> =
   | { data: T; error?: undefined }
   | { data?: undefined; error: FetchError };
 
-// https://nextjs.org/docs/app/getting-started/error-handling#server-components
 export const settle = async <T>(
   promise: Promise<T>,
 ): Promise<FetchResult<T>> => {
@@ -82,7 +82,11 @@ export const settle = async <T>(
   } catch (error) {
     unstable_rethrow(error);
 
-    return { error: error as FetchError };
+    const fetchError = error as FetchError;
+    if (fetchError.status !== 403 && fetchError.status !== 404)
+      console.error(fetchError);
+
+    return { error: fetchError };
   }
 };
 
