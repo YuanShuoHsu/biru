@@ -148,172 +148,173 @@ const CouponAutocomplete = ({
   const value =
     availableCoupons.find((available) => available.code === couponCode) || null;
 
-  if (error) return <ErrorAlert onRetry={() => mutate()} />;
-
   return (
-    <StyledAutocomplete
-      autoHighlight
-      autoSelect
-      disablePortal
-      disabled={!cartItemsList.length}
-      filterOptions={(options, params) => {
-        if (params.inputValue === couponCode) return options;
+    <>
+      <StyledAutocomplete
+        autoHighlight
+        autoSelect
+        disablePortal
+        disabled={!cartItemsList.length}
+        filterOptions={(options, params) => {
+          if (params.inputValue === couponCode) return options;
 
-        return filter(options, params);
-      }}
-      freeSolo
-      fullWidth
-      getOptionKey={getOptionKey}
-      getOptionLabel={getOptionLabel}
-      groupBy={({ userCouponId }) =>
-        userCouponId
-          ? tOrder("checkout.coupon.wallet")
-          : tOrder("checkout.coupon.available")
-      }
-      id="coupon-autocomplete"
-      inputValue={couponCode || code}
-      isOptionEqualToValue={(option, selected) =>
-        option.code === getOptionLabel(selected)
-      }
-      onBlur={onBlur}
-      onChange={(_, newValue) => {
-        if (!newValue) setCode("");
-
-        const value = newValue
-          ? typeof newValue === "string"
-            ? newValue
-            : newValue.code
-          : "";
-        onChange?.({ target: { name: name || "", value } });
-      }}
-      onClose={() => {
-        hint.current = "";
-      }}
-      onInputChange={(_, newInputValue, reason) => {
-        setCode(newInputValue);
-
-        if (couponCode && (reason === "clear" || reason === "input")) {
-          onChange?.({ target: { name: name || "", value: "" } });
+          return filter(options, params);
+        }}
+        freeSolo
+        fullWidth
+        getOptionKey={getOptionKey}
+        getOptionLabel={getOptionLabel}
+        groupBy={({ userCouponId }) =>
+          userCouponId
+            ? tOrder("checkout.coupon.wallet")
+            : tOrder("checkout.coupon.available")
         }
-      }}
-      onKeyDown={(event) => {
-        if (event.key === "Tab" && hint.current) {
-          event.preventDefault();
-
-          setCode(hint.current);
+        id="coupon-autocomplete"
+        inputValue={couponCode || code}
+        isOptionEqualToValue={(option, selected) =>
+          option.code === getOptionLabel(selected)
         }
-      }}
-      options={availableCoupons}
-      renderGroup={({ children, group, key }) => (
-        <Box component="li" key={key}>
-          <GroupHeader>{group}</GroupHeader>
-          <GroupItems>{children}</GroupItems>
-        </Box>
-      )}
-      renderInput={(params) => (
-        <InputBox>
-          <HintTypography>{hint.current}</HintTypography>
-          <TextField
-            {...params}
-            {...textFieldProps}
-            onChange={({ target: { value: newValue } }) => {
-              const matchingOption = availableCoupons.find((option) =>
-                getOptionLabel(option).startsWith(newValue),
-              );
+        onBlur={onBlur}
+        onChange={(_, newValue) => {
+          if (!newValue) setCode("");
 
-              hint.current =
-                newValue && matchingOption
-                  ? getOptionLabel(matchingOption)
-                  : "";
-            }}
-            slotProps={{
-              ...params.slotProps,
-              htmlInput: {
-                ...params.slotProps.htmlInput,
-                autoComplete: "new-password",
-              },
-              input: {
-                ...params.slotProps.input,
-                endAdornment: (
-                  <>
-                    {loading ? (
-                      <CircularProgress size={20} />
-                    ) : (
-                      !!cartItemsList.length &&
-                      !textFieldProps.error &&
-                      couponCode && (
-                        <StyledStack direction="row">
-                          {value && (
-                            <Typography color="primary" variant="subtitle2">
-                              {value.discountType === "percentage"
-                                ? `-${format.number(Number(value.discountValue))}%`
-                                : `-${formatMoney(Number(value.discountValue), cartCurrency)}`}
-                            </Typography>
-                          )}
-                          <CheckCircle color="success" fontSize="small" />
-                        </StyledStack>
-                      )
-                    )}
-                    {params.slotProps.input.endAdornment}
-                  </>
-                ),
-              },
-            }}
-          />
-        </InputBox>
-      )}
-      renderOption={(
-        { key, ...optionProps },
-        option,
-        { inputValue },
-        ownerState,
-      ) => {
-        const { discountType, discountValue, minSubtotal } = option;
-        const optionLabelText = ownerState.getOptionLabel(option);
-        const searchValue = inputValue === couponCode ? "" : inputValue;
-        const matches = match(optionLabelText, searchValue, {
-          findAllOccurrences: true,
-          insideWords: true,
-        });
-        const parts = parse(optionLabelText, matches);
+          const value = newValue
+            ? typeof newValue === "string"
+              ? newValue
+              : newValue.code
+            : "";
+          onChange?.({ target: { name: name || "", value } });
+        }}
+        onClose={() => {
+          hint.current = "";
+        }}
+        onInputChange={(_, newInputValue, reason) => {
+          setCode(newInputValue);
 
-        return (
-          <ListItem key={key} {...optionProps}>
-            <ListItemIcon>
-              <LocalOffer fontSize="small" />
-            </ListItemIcon>
-            <ListItemText
-              primary={
-                <Typography variant="subtitle2">
-                  {parts.map(({ highlight, text }, index) => (
-                    <HighlightTypography
-                      component="span"
-                      highlight={highlight}
-                      key={index}
-                      variant="subtitle2"
-                    >
-                      {text}
-                    </HighlightTypography>
-                  ))}
-                </Typography>
-              }
-              secondary={
-                minSubtotal &&
-                tOrder("checkout.coupon.minSubtotal", {
-                  amount: formatMoney(Number(minSubtotal), cartCurrency),
-                })
-              }
+          if (couponCode && (reason === "clear" || reason === "input")) {
+            onChange?.({ target: { name: name || "", value: "" } });
+          }
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Tab" && hint.current) {
+            event.preventDefault();
+
+            setCode(hint.current);
+          }
+        }}
+        options={availableCoupons}
+        renderGroup={({ children, group, key }) => (
+          <Box component="li" key={key}>
+            <GroupHeader>{group}</GroupHeader>
+            <GroupItems>{children}</GroupItems>
+          </Box>
+        )}
+        renderInput={(params) => (
+          <InputBox>
+            <HintTypography>{hint.current}</HintTypography>
+            <TextField
+              {...params}
+              {...textFieldProps}
+              onChange={({ target: { value: newValue } }) => {
+                const matchingOption = availableCoupons.find((option) =>
+                  getOptionLabel(option).startsWith(newValue),
+                );
+
+                hint.current =
+                  newValue && matchingOption
+                    ? getOptionLabel(matchingOption)
+                    : "";
+              }}
+              slotProps={{
+                ...params.slotProps,
+                htmlInput: {
+                  ...params.slotProps.htmlInput,
+                  autoComplete: "new-password",
+                },
+                input: {
+                  ...params.slotProps.input,
+                  endAdornment: (
+                    <>
+                      {loading ? (
+                        <CircularProgress size={20} />
+                      ) : (
+                        !!cartItemsList.length &&
+                        !textFieldProps.error &&
+                        couponCode && (
+                          <StyledStack direction="row">
+                            {value && (
+                              <Typography color="primary" variant="subtitle2">
+                                {value.discountType === "percentage"
+                                  ? `-${format.number(Number(value.discountValue))}%`
+                                  : `-${formatMoney(Number(value.discountValue), cartCurrency)}`}
+                              </Typography>
+                            )}
+                            <CheckCircle color="success" fontSize="small" />
+                          </StyledStack>
+                        )
+                      )}
+                      {params.slotProps.input.endAdornment}
+                    </>
+                  ),
+                },
+              }}
             />
-            <Typography color="primary" variant="subtitle2">
-              {discountType === "percentage"
-                ? `-${format.number(Number(discountValue))}%`
-                : `-${formatMoney(Number(discountValue), cartCurrency)}`}
-            </Typography>
-          </ListItem>
-        );
-      }}
-      value={value}
-    />
+          </InputBox>
+        )}
+        renderOption={(
+          { key, ...optionProps },
+          option,
+          { inputValue },
+          ownerState,
+        ) => {
+          const { discountType, discountValue, minSubtotal } = option;
+          const optionLabelText = ownerState.getOptionLabel(option);
+          const searchValue = inputValue === couponCode ? "" : inputValue;
+          const matches = match(optionLabelText, searchValue, {
+            findAllOccurrences: true,
+            insideWords: true,
+          });
+          const parts = parse(optionLabelText, matches);
+
+          return (
+            <ListItem key={key} {...optionProps}>
+              <ListItemIcon>
+                <LocalOffer fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                primary={
+                  <Typography variant="subtitle2">
+                    {parts.map(({ highlight, text }, index) => (
+                      <HighlightTypography
+                        component="span"
+                        highlight={highlight}
+                        key={index}
+                        variant="subtitle2"
+                      >
+                        {text}
+                      </HighlightTypography>
+                    ))}
+                  </Typography>
+                }
+                secondary={
+                  minSubtotal &&
+                  tOrder("checkout.coupon.minSubtotal", {
+                    amount: formatMoney(Number(minSubtotal), cartCurrency),
+                  })
+                }
+              />
+              <Typography color="primary" variant="subtitle2">
+                {discountType === "percentage"
+                  ? `-${format.number(Number(discountValue))}%`
+                  : `-${formatMoney(Number(discountValue), cartCurrency)}`}
+              </Typography>
+            </ListItem>
+          );
+        }}
+        value={value}
+      />
+      {error && <ErrorAlert onRetry={() => mutate()} />}
+    </>
   );
 };
 
