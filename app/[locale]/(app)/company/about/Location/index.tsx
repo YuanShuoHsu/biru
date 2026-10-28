@@ -6,7 +6,9 @@ import { useForm, useWatch } from "react-hook-form";
 import { type LocationForm, useLocationFormSchema } from "./definitions";
 
 import GradientBox from "@/components/GradientBox";
-import LocationDetails from "@/components/LocationDetails";
+import LocationDetails, {
+  hasLocationDetails,
+} from "@/components/LocationDetails";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -57,7 +59,8 @@ interface LocationProps {
 }
 
 const Location = ({ organizations }: LocationProps) => {
-  const defaultOrganizationId = organizations[0]?.id || "";
+  const defaultOrganizationId =
+    (organizations.find(hasLocationDetails) ?? organizations[0])?.id || "";
 
   const locationFormSchema = useLocationFormSchema();
   const { control, register } = useForm<LocationForm>({

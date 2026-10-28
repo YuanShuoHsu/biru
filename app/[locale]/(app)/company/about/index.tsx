@@ -42,8 +42,12 @@ const About = ({ organizations, organizationTeams }: AboutProps) => (
     )}
     {/* <Support />
     <Divider /> */}
-    <Location organizations={organizations} />
-    <Divider />
+    {organizations.length > 0 && (
+      <>
+        <Location organizations={organizations} />
+        <Divider />
+      </>
+    )}
     <JoinUs />
     <Divider />
     <Footer />
