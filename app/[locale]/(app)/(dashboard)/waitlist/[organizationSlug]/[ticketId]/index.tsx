@@ -8,7 +8,7 @@ import { useSnackbar } from "notistack";
 import { useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 
-import { menuSocket } from "@/app/socket";
+import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
@@ -156,9 +156,7 @@ const WaitlistTicket = ({
       mutate();
     };
 
-    menuSocket
-      .timeout(5000)
-      .emitWithAck("joinPublicWaitlist", { organizationId: organization.id })
+    emitMenuWithAck("joinPublicWaitlist", { organizationId: organization.id })
       .then(handleUpdate)
       .catch(() => {});
 
