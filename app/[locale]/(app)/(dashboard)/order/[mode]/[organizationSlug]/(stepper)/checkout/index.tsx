@@ -357,34 +357,40 @@ const OrderModeOrganizationSlugCheckout = ({
     shouldRetryOnError: false,
   });
 
-  const { data: coupon, isLoading: isValidatingCoupon } =
-    useSWR<ValidateCouponResponse>(
-      couponCode && cartItemsList.length
-        ? [
-            `/api/organizations/${String(organizationSlug)}/coupons/validate`,
-            couponCode,
-            cartItemsList,
-            API_ORDER_MODE[mode],
-          ]
-        : null,
-      ([url, code, items, mode]: [
-        string,
-        string,
-        ValidateCouponDto["items"],
-        ValidateCouponDto["mode"],
-      ]) =>
-        sendRequest<ValidateCouponResponse, ValidateCouponDto>()(url, {
-          arg: { code, items, mode },
-        }),
-      {
-        onError: (error) => {
-          setError("coupon", { message: getErrorMessage(error) });
-        },
-        onSuccess: () => {
-          clearErrors("coupon");
-        },
+  const {
+    data: coupon,
+    error: couponError,
+    isLoading: isValidatingCoupon,
+  } = useSWR<ValidateCouponResponse>(
+    couponCode && cartItemsList.length
+      ? [
+          `/api/organizations/${String(organizationSlug)}/coupons/validate`,
+          couponCode,
+          cartItemsList,
+          API_ORDER_MODE[mode],
+        ]
+      : null,
+    ([url, code, items, mode]: [
+      string,
+      string,
+      ValidateCouponDto["items"],
+      ValidateCouponDto["mode"],
+    ]) =>
+      sendRequest<ValidateCouponResponse, ValidateCouponDto>()(url, {
+        arg: { code, items, mode },
+      }),
+    {
+      onError: (error) => {
+        setError("coupon", { message: getErrorMessage(error) });
       },
-    );
+      onSuccess: () => {
+        clearErrors("coupon");
+      },
+      shouldRetryOnError: false,
+    },
+  );
+
+  const isCouponUnresolved = !!couponCode && (!coupon || !!couponError);
 
   const cashUnavailableReason = isPickup
     ? tOrder("checkout.payment.pickupUnavailable")
@@ -866,7 +872,7 @@ const OrderModeOrganizationSlugCheckout = ({
         </Button>
         {/* 不能因 pickupUnavailableReason 而 disable：now 只在送出被擋時推進，擋住送出等於讓過期的區間再也回不來 */}
         <Button
-          disabled={isCartEmpty || hasInvalidItems || isValidatingCoupon}
+          disabled={isCartEmpty || hasInvalidItems || isCouponUnresolved}
           endIcon={<TaskAlt />}
           loading={isSubmitting || isRedirecting}
           loadingPosition="end"
