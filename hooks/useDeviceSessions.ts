@@ -4,6 +4,8 @@ import { useSession } from "@/hooks/useSession";
 
 import { authClient } from "@/lib/auth-client";
 
+import { toFetchError } from "@/utils/errors";
+
 export const deviceSessionsKey = "device-sessions";
 
 type DeviceSession = NonNullable<
@@ -16,9 +18,11 @@ const useDeviceSessions = () => {
   return useSWR<DeviceSession[]>(
     session ? deviceSessionsKey : null,
     async () => {
-      const { data } = await authClient.multiSession.listDeviceSessions();
+      const { data, error } =
+        await authClient.multiSession.listDeviceSessions();
+      if (error) throw toFetchError(error);
 
-      return data || [];
+      return data;
     },
   );
 };

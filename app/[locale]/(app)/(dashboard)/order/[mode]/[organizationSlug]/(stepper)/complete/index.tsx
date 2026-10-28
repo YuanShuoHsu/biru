@@ -139,7 +139,7 @@ const InfoRow = ({
 
 interface OrderModeOrganizationSlugCompleteProps {
   order: OrderReceiptResponse | null;
-  organization: OrganizationResponse | null;
+  organization: OrganizationResponse;
 }
 
 const OrderModeOrganizationSlugComplete = ({
@@ -232,7 +232,7 @@ const OrderModeOrganizationSlugComplete = ({
   const totalAmount = Number(order?.total || 0);
 
   const invoice = order?.invoice;
-  const showPickupInfo = mode === ORDER_MODE.Pickup && !!organization;
+  const showPickupInfo = mode === ORDER_MODE.Pickup;
 
   const handleRetryPayment = async () => {
     if (!order) return;
@@ -359,7 +359,7 @@ const OrderModeOrganizationSlugComplete = ({
               </Button>
             </StyledCardContent>
           </Card>
-          {showPickupInfo && organization && (
+          {showPickupInfo && (
             <Card variant="outlined">
               <StyledCardContent>
                 <BoldTypography color="textSecondary" variant="subtitle2">

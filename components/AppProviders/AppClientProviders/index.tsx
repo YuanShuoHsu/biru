@@ -59,8 +59,8 @@ const AppClientProviders = ({
         <Suspense>
           <OAuthSnackbar />
         </Suspense>
-        <SWRProvider fallback={fallback}>
-          <AuthStoreProvider sessionPromise={sessionPromise}>
+        <AuthStoreProvider sessionPromise={sessionPromise}>
+          <SWRProvider fallback={fallback}>
             <CartStoreProvider>
               <CountdownStoreProvider>
                 <DialogStoreProvider>
@@ -74,8 +74,8 @@ const AppClientProviders = ({
                 </DialogStoreProvider>
               </CountdownStoreProvider>
             </CartStoreProvider>
-          </AuthStoreProvider>
-        </SWRProvider>
+          </SWRProvider>
+        </AuthStoreProvider>
       </SnackbarProvider>
     </LocaleProvider>
   </AppRouterCacheProvider>

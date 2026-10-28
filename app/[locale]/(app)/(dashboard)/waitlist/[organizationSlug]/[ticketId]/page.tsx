@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import type { Locale } from "@/i18n/routing";
 
-import type { OrganizationResponse } from "@/types/organizations";
 import type { WaitlistTicketDetailResponse } from "@/types/waitlist";
 
-import { fetcher } from "@/utils/fetcher";
-import { redirectToCurrentSlug } from "@/utils/organizations";
+import { fetcher, settle } from "@/utils/fetcher";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 import WaitlistTicket from ".";
 
@@ -32,14 +33,17 @@ export const generateMetadata = async ({
 const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
   const { organizationSlug, ticketId } = await params;
 
-  const [organization, ticket] = await Promise.all([
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
-    fetcher<WaitlistTicketDetailResponse>(
-      `/api/organizations/${organizationSlug}/waitlist/tickets/${ticketId}`,
-    ).catch(() => null),
-  ]);
+  const [{ data: organization, error }, { data: ticket, error: ticketError }] =
+    await Promise.all([
+      settle(getOrganization(organizationSlug)),
+      settle(
+        fetcher<WaitlistTicketDetailResponse>(
+          `/api/organizations/${organizationSlug}/waitlist/tickets/${ticketId}`,
+        ),
+      ),
+    ]);
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
 
   await redirectToCurrentSlug(
     organization,
@@ -47,7 +51,8 @@ const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
     (slug) => `/waitlist/${slug}/${ticketId}`,
   );
 
-  if (!organization || !ticket) notFound();
+  if (ticketError?.status === 404) notFound();
+  if (ticketError) return <ErrorAlert />;
 
   return <WaitlistTicket organization={organization} ticket={ticket} />;
 };

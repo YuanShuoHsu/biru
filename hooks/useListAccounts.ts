@@ -5,6 +5,7 @@ import { useSession } from "@/hooks/useSession";
 import { authClient } from "@/lib/auth-client";
 
 import { listAccountsKey } from "@/utils/auth";
+import { toFetchError } from "@/utils/errors";
 
 const useListAccounts = () => {
   const session = useSession();
@@ -12,7 +13,8 @@ const useListAccounts = () => {
   return useSWR(
     session ? [listAccountsKey, session.user.id] : null,
     async () => {
-      const { data } = await authClient.listAccounts();
+      const { data, error } = await authClient.listAccounts();
+      if (error) throw toFetchError(error);
 
       return data;
     },
