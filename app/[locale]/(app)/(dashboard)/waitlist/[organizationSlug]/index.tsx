@@ -98,13 +98,22 @@ interface WaitlistProps {
 }
 
 const Waitlist = ({
-  hasQrSession: initialHasQrSession,
+  hasQrSession,
   organization,
   status: initialStatus,
 }: WaitlistProps) => {
   const session = useSession();
 
-  const [hasQrSession, setHasQrSession] = useState(initialHasQrSession);
+  const [qrRejected, setQrRejected] = useState(false);
+  const [previousHasQrSession, setPreviousHasQrSession] =
+    useState(hasQrSession);
+
+  if (hasQrSession !== previousHasQrSession) {
+    setPreviousHasQrSession(hasQrSession);
+    setQrRejected(false);
+  }
+
+  const canTakeTicket = hasQrSession && !qrRejected;
 
   const [idempotencyKey, setIdempotencyKey] = useState(() =>
     crypto.randomUUID(),
@@ -225,7 +234,7 @@ const Waitlist = ({
         },
       );
 
-      // cacheComponents 會保留離開的頁面狀態，按「完成」回來時不能沿用上一位的資料與冪等鍵
+      // cacheComponents 會保留離開的頁面狀態，回到此頁時不能沿用上一位的資料與冪等鍵
       reset();
       setIdempotencyKey(crypto.randomUUID());
       router.push(`/waitlist/${organization.slug}/${ticket.id}`);
@@ -233,7 +242,7 @@ const Waitlist = ({
       const code = getWaitlistErrorCode(error);
 
       if (code === "waitlistQrRequired") {
-        setHasQrSession(false);
+        setQrRejected(true);
         return;
       }
 
@@ -296,12 +305,12 @@ const Waitlist = ({
           </StyledCardContent>
         </Card>
       )}
-      {!unavailable && !hasQrSession && (
+      {!unavailable && !canTakeTicket && (
         <Alert icon={<QrCodeScanner />} severity="info">
           {tWaitlist("qrRequired")}
         </Alert>
       )}
-      {!unavailable && hasQrSession && (
+      {!unavailable && canTakeTicket && (
         <FormCard noValidate onSubmit={handleSubmit(handleFormSubmit)}>
           <StyledCardContent>
             <BoldTypography color="textSecondary" variant="subtitle2">
