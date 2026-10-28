@@ -5,7 +5,7 @@ import GradientBox from "@/components/GradientBox";
 
 import { CAREERS_URL } from "@/constants/company";
 
-import { OpenInNew } from "@mui/icons-material";
+import { OpenInNew, PhotoLibrary } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -43,6 +43,14 @@ const PhotoBox = styled(Box)(({ theme }) => ({
   aspectRatio: "4/3",
   borderRadius: theme.shape.borderRadius,
   overflow: "hidden",
+  backgroundColor: theme.vars.palette.action.hover,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
+
+const StyledPhotoLibrary = styled(PhotoLibrary)(({ theme }) => ({
+  fontSize: theme.spacing(8),
 }));
 
 interface JoinUsProps {
@@ -69,8 +77,8 @@ const JoinUs = ({ storePhoto }: JoinUsProps) => {
           {tCompanyAboutJoinUs("description")}
         </Typography>
       </StyledStack>
-      {storePhoto && (
-        <PhotoBox>
+      <PhotoBox>
+        {storePhoto ? (
           <Image
             alt={storePhoto.alt}
             fill
@@ -78,8 +86,10 @@ const JoinUs = ({ storePhoto }: JoinUsProps) => {
             src={storePhoto.image}
             style={{ objectFit: "cover" }}
           />
-        </PhotoBox>
-      )}
+        ) : (
+          <StyledPhotoLibrary color="disabled" />
+        )}
+      </PhotoBox>
       <Button
         endIcon={<OpenInNew />}
         href={CAREERS_URL}

@@ -5,6 +5,7 @@ import { Autoplay } from "swiper/modules";
 
 import Carousel from "@/components/Carousel";
 
+import { PhotoLibrary } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -46,11 +47,44 @@ const PhotoBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
+const EmptyBox = styled(Box)(({ theme }) => ({
+  width: "100%",
+  aspectRatio: "4/3",
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.vars.palette.action.hover,
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+
+  [theme.breakpoints.up("sm")]: {
+    aspectRatio: "8/3",
+  },
+
+  [theme.breakpoints.up("md")]: {
+    aspectRatio: "4/1",
+  },
+
+  [theme.breakpoints.up("lg")]: {
+    aspectRatio: "16/3",
+  },
+}));
+
+const StyledPhotoLibrary = styled(PhotoLibrary)(({ theme }) => ({
+  fontSize: theme.spacing(8),
+}));
+
 interface PhotoSliderProps {
   storePhotos: StorePhoto[];
 }
 
 const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
+  if (!storePhotos.length)
+    return (
+      <EmptyBox>
+        <StyledPhotoLibrary color="disabled" />
+      </EmptyBox>
+    );
+
   const repeat = Math.ceil(MIN_SLIDE_COUNT / storePhotos.length);
   const slides = Array.from({ length: repeat }, () => storePhotos).flat();
 

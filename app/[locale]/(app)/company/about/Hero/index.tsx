@@ -78,7 +78,7 @@ const Hero = ({ storePhotos }: HeroProps) => {
           {tCompanyAboutHero("description")}
         </Typography>
       </CenteredStack>
-      {!!storePhotos.length && <PhotoSlider storePhotos={storePhotos} />}
+      <PhotoSlider storePhotos={storePhotos} />
       <StatsStack direction="row">
         {STATS.map(({ label, value }) => (
           <CenteredStack key={label}>
