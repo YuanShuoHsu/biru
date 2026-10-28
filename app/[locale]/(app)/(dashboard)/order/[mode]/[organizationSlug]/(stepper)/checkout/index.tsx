@@ -167,7 +167,6 @@ const OrderModeOrganizationSlugCheckout = ({
   const phoneDefaults = getPhoneDefaults(session?.user.phoneNumber, locale);
 
   const {
-    clearErrors,
     control,
     formState: { errors, isSubmitted, isSubmitting },
     handleSubmit,
@@ -379,15 +378,7 @@ const OrderModeOrganizationSlugCheckout = ({
       sendRequest<ValidateCouponResponse, ValidateCouponDto>()(url, {
         arg: { code, items, mode },
       }),
-    {
-      onError: (error) => {
-        setError("coupon", { message: getErrorMessage(error) });
-      },
-      onSuccess: () => {
-        clearErrors("coupon");
-      },
-      shouldRetryOnError: false,
-    },
+    { shouldRetryOnError: false },
   );
 
   const isCouponUnresolved = !!couponCode && (!coupon || !!couponError);
@@ -554,13 +545,13 @@ const OrderModeOrganizationSlugCheckout = ({
             {...register("customer.remark")}
           />
           <CouponAutocomplete
-            error={!!errors.coupon}
-            helperText={errors.coupon?.message}
+            error={!!couponError}
+            helperText={couponError && getErrorMessage(couponError)}
             label={`${tOrder("checkout.coupon.label")} ${tCommon("optional")}`}
             loading={isValidatingCoupon}
             placeholder={tOrder("checkout.coupon.placeholder")}
             value={couponCode}
-            {...register("coupon", { onChange: () => clearErrors("coupon") })}
+            {...register("coupon")}
           />
         </StyledCardContent>
       </Card>
