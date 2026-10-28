@@ -158,10 +158,10 @@ export const calcCartItemAmount = (
   return (price + extraCost) * quantity;
 };
 
-export const getCartAvailableHours = (
+const getCartMenuItems = (
   menu: OrderMenu | null,
   cartItemsList: CartItem[],
-): { availableHours: string; name: string }[] =>
+): (OrderMenuItem | OrderMenuAddOnItem)[] =>
   cartItemsList.flatMap(({ addOns, menuItemId }) => {
     const item = findItemById(menu, menuItemId);
     if (!item) return [];
@@ -173,11 +173,28 @@ export const getCartAvailableHours = (
       ...addOns.flatMap(({ menuItemId }) =>
         addOnItems.filter(({ id }) => id === menuItemId),
       ),
-    ].map(({ name, offers }) => ({
-      availableHours: offers[0]?.availableHours || "",
-      name,
-    }));
+    ];
   });
+
+export const getCartAvailableHours = (
+  menu: OrderMenu | null,
+  cartItemsList: CartItem[],
+): { availableHours: string; name: string }[] =>
+  getCartMenuItems(menu, cartItemsList).map(({ name, offers }) => ({
+    availableHours: offers[0]?.availableHours || "",
+    name,
+  }));
+
+export const getCartLeadTimeMinutes = (
+  menu: OrderMenu | null,
+  cartItemsList: CartItem[],
+): number =>
+  Math.max(
+    0,
+    ...getCartMenuItems(menu, cartItemsList).map(
+      ({ offers }) => offers[0]?.deliveryLeadTimeMinutes ?? 0,
+    ),
+  );
 
 export const getItemKey = ({
   addOns,

@@ -20,9 +20,9 @@ import {
 } from "@/types/api";
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { getCartAvailableHours } from "@/utils/menus";
+import { getCartAvailableHours, getCartLeadTimeMinutes } from "@/utils/menus";
 import { getCloseTimeAt, isOpenAt } from "@/utils/openingHours";
-import { getPickupWindow } from "@/utils/pickup";
+import { getPickupLeadMinutes, getPickupWindow } from "@/utils/pickup";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
@@ -138,11 +138,16 @@ export const useCustomerPaymentFormSchema = (
 
       if (isPickup) {
         const pickupTime = dayjs(data.pickupTime).tz(STORE_TIMEZONE);
-        const leadMinutes = organization.pickupLeadMinutes;
+        const cartLeadTimeMinutes = getCartLeadTimeMinutes(menu, cartItemsList);
+        const leadMinutes = getPickupLeadMinutes(
+          organization,
+          cartLeadTimeMinutes,
+        );
         const advanceDays = organization.pickupMaxAdvanceDays;
         const { cutoffMinutes, from, openingHours, to } = getPickupWindow(
           organization,
           dayjs().tz(STORE_TIMEZONE),
+          cartLeadTimeMinutes,
         );
 
         const addPickupTimeIssue = (message: string) =>
