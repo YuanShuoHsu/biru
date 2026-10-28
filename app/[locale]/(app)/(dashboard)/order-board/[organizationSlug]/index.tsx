@@ -140,6 +140,9 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
 
     return () => {
       menuSocket.off("orderBoardUpdated", handleUpdate);
+      menuSocket.emit("leavePublicOrdersBoard", {
+        organizationId: organization.id,
+      });
     };
   }, [isConnected, mutate, organization.id]);
 

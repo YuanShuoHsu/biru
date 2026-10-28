@@ -203,6 +203,7 @@ const OrderModeOrganizationSlugComplete = ({
     return () => {
       menuSocket.off("orderStatusUpdated", handleOrderUpdated);
       menuSocket.off("orderUpdated", handleOrderUpdated);
+      menuSocket.emit("leaveOrder", { accessToken, orderId });
     };
   }, [accessToken, isConnected, mutate, orderId]);
 
