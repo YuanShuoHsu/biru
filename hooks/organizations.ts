@@ -20,9 +20,13 @@ export const useOrganization = () => {
 };
 
 export const useOrganizationMembers = (organizationId: string) => {
-  const { data: organizationMembers = [] } = useSWR<OrganizationMember[]>(
+  const {
+    data: organizationMembers = [],
+    error,
+    mutate,
+  } = useSWR<OrganizationMember[]>(
     organizationId ? `/api/organizations/${organizationId}/members` : null,
   );
 
-  return organizationMembers;
+  return { error, mutate, organizationMembers };
 };

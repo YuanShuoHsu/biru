@@ -14,6 +14,8 @@ import { useParams } from "next/navigation";
 import React, { useRef, useState } from "react";
 import useSWR from "swr";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import useCartTotals from "@/hooks/useCartTotals";
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 
@@ -135,12 +137,18 @@ const CouponAutocomplete = ({
 
   const tOrder = useTranslations("order");
 
-  const { data: availableCoupons = [] } = useSWR<AvailableCoupon[]>(
+  const {
+    data: availableCoupons = [],
+    error,
+    mutate,
+  } = useSWR<AvailableCoupon[]>(
     `/api/organizations/${String(organizationSlug)}/coupons/available`,
   );
 
   const value =
     availableCoupons.find((available) => available.code === couponCode) || null;
+
+  if (error) return <ErrorAlert onRetry={() => mutate()} />;
 
   return (
     <StyledAutocomplete
