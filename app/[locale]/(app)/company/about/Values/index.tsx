@@ -101,7 +101,10 @@ const Values = () => {
         </HeaderStack>
         <Grid container spacing={2}>
           {VALUE_KEYS.map(({ icon: Icon, key }) => {
-            const title = tCompanyAboutValues(`values.${key}.title`);
+            const [, prefix, initial, rest] =
+              tCompanyAboutValues(`values.${key}.title`).match(
+                /^([\p{Ps}\p{Pi}]*)(.)(.*)$/u,
+              ) ?? [];
 
             return (
               <StyledGrid key={key} size={{ xs: 12, md: 3 }}>
@@ -110,8 +113,9 @@ const Values = () => {
                     <Icon color="primary" fontSize="small" />
                   </IconBox>
                   <StyledTypography component="h3" variant="body2">
-                    <InitialBox component="span">{title[0]}</InitialBox>
-                    {title.slice(1)}
+                    {prefix}
+                    <InitialBox component="span">{initial}</InitialBox>
+                    {rest}
                   </StyledTypography>
                 </ValueTitleStack>
                 <Typography color="textSecondary" variant="body2">
