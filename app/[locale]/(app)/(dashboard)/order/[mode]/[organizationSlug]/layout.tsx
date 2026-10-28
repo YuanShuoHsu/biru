@@ -4,12 +4,13 @@ import { SWRConfig } from "swr";
 import MenuSocketInitializer from "./MenuSocketInitializer";
 
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
+import ErrorAlert from "@/components/ErrorAlert";
 
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 
 import type { OrderMenu } from "@/types/menus";
 
-import { fetcher } from "@/utils/fetcher";
+import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugLayoutProps {
@@ -27,12 +28,18 @@ const OrderModeOrganizationSlugLayout = async ({
 }: OrderModeOrganizationSlugLayoutProps) => {
   const { locale, organizationSlug } = await params;
 
-  const organization = await getOrganization(organizationSlug);
-  if (!organization) return notFound();
+  const { data: organization, error } = await settle(
+    getOrganization(organizationSlug),
+  );
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
 
-  const initialMenu = await fetcher<OrderMenu>(
-    `/api/organizations/${organization.id}/order-menu?lang=${locale}`,
-  ).catch(() => null);
+  const { data: initialMenu, error: menuError } = await settle(
+    fetcher<OrderMenu | null>(
+      `/api/organizations/${organization.id}/order-menu?lang=${locale}`,
+    ),
+  );
+  if (menuError) return <ErrorAlert />;
 
   const fallback = {
     [`/api/organizations/${organizationSlug}`]: organization,

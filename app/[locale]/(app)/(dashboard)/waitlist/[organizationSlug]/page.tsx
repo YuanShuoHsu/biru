@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import type { Locale } from "@/i18n/routing";
 
-import type { OrganizationResponse } from "@/types/organizations";
 import type { WaitlistStatusResponse } from "@/types/waitlist";
 
-import { fetcher } from "@/utils/fetcher";
-import { redirectToCurrentSlug } from "@/utils/organizations";
+import { fetcher, settle } from "@/utils/fetcher";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 import Waitlist from ".";
 
@@ -20,11 +21,9 @@ export const generateMetadata = async ({
   params,
 }: WaitlistPageProps): Promise<Metadata> => {
   const { locale, organizationSlug } = await params;
-  const [tWaitlist, organization] = await Promise.all([
+  const [tWaitlist, { data: organization }] = await Promise.all([
     getTranslations({ locale, namespace: "waitlist" }),
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
+    settle(getOrganization(organizationSlug)),
   ]);
 
   return {
@@ -37,14 +36,17 @@ export const generateMetadata = async ({
 const WaitlistPage = async ({ params }: WaitlistPageProps) => {
   const { organizationSlug } = await params;
 
-  const [organization, status] = await Promise.all([
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
-    fetcher<WaitlistStatusResponse>(
-      `/api/organizations/${organizationSlug}/waitlist`,
-    ).catch(() => null),
-  ]);
+  const [{ data: organization, error }, { data: status, error: statusError }] =
+    await Promise.all([
+      settle(getOrganization(organizationSlug)),
+      settle(
+        fetcher<WaitlistStatusResponse>(
+          `/api/organizations/${organizationSlug}/waitlist`,
+        ),
+      ),
+    ]);
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
 
   await redirectToCurrentSlug(
     organization,
@@ -52,7 +54,8 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
     (slug) => `/waitlist/${slug}`,
   );
 
-  if (!organization || organization.closedAt || !status) notFound();
+  if (organization.closedAt || statusError?.status === 404) notFound();
+  if (statusError) return <ErrorAlert />;
 
   return <Waitlist organization={organization} status={status} />;
 };

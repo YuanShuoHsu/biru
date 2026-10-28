@@ -3,6 +3,8 @@
 // https://github.com/vercel/swr/discussions/939
 // https://github.com/vercel/swr/blob/main/examples/basic-typescript/libs/fetch.ts
 
+import { unstable_rethrow } from "next/navigation";
+
 interface ErrorInfo {
   message: string;
   code?: string;
@@ -51,7 +53,7 @@ export const fetcher = async <T = unknown>(
     }
   } else {
     const text = await res.text();
-    data = { message: text };
+    data = res.ok && !text ? null : { message: text };
   }
 
   if (!res.ok) {
@@ -65,6 +67,23 @@ export const fetcher = async <T = unknown>(
   }
 
   return data;
+};
+
+export type FetchResult<T> =
+  | { data: T; error?: undefined }
+  | { data?: undefined; error: FetchError };
+
+// https://nextjs.org/docs/app/getting-started/error-handling#server-components
+export const settle = async <T>(
+  promise: Promise<T>,
+): Promise<FetchResult<T>> => {
+  try {
+    return { data: await promise };
+  } catch (error) {
+    unstable_rethrow(error);
+
+    return { error: error as FetchError };
+  }
 };
 
 export const sendRequest =
