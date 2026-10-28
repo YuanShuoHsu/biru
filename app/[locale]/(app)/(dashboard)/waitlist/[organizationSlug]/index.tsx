@@ -9,7 +9,7 @@ import useSWR from "swr";
 
 import { type WaitlistFormValues, useWaitlistFormSchema } from "./definitions";
 
-import { menuSocket } from "@/app/socket";
+import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import CountryAutocomplete from "@/components/CountryAutocomplete";
 import FormCard, { StyledCardContent } from "@/components/FormCard";
@@ -119,10 +119,10 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
   useEffect(() => {
     if (!isConnected) return;
 
-    menuSocket
-      .timeout(5000)
-      .emitWithAck("joinPublicWaitlist", { organizationId: organization.id })
-      .then((joined: WaitlistStatusResponse) => mutate(joined, false))
+    emitMenuWithAck<WaitlistStatusResponse>("joinPublicWaitlist", {
+      organizationId: organization.id,
+    })
+      .then((joined) => mutate(joined, false))
       .catch(() => {});
 
     const handleUpdate = () => {

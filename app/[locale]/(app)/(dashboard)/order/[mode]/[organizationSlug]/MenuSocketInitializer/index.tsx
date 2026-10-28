@@ -4,7 +4,7 @@ import { useLocale } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 
-import { menuSocket } from "@/app/socket";
+import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
@@ -36,9 +36,10 @@ const MenuSocketInitializer = ({
       setMenu({ isLoading: true });
 
       try {
-        const response: OrderMenu | null = await menuSocket
-          .timeout(5000)
-          .emitWithAck("orderMenu", { organizationId, lang: locale });
+        const response = await emitMenuWithAck<OrderMenu | null>("orderMenu", {
+          organizationId,
+          lang: locale,
+        });
 
         setMenu({ menu: response });
       } catch (error) {

@@ -6,7 +6,7 @@ import { useSnackbar } from "notistack";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 
-import { menuSocket } from "@/app/socket";
+import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
@@ -191,9 +191,7 @@ const OrderModeOrganizationSlugComplete = ({
       mutate();
     };
 
-    menuSocket
-      .timeout(5000)
-      .emitWithAck("joinOrder", { accessToken, orderId })
+    emitMenuWithAck("joinOrder", { accessToken, orderId })
       .then(handleOrderUpdated)
       .catch(() => {});
 
