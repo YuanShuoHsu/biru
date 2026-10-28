@@ -42,31 +42,14 @@ const MaskBox = styled(Box)(({ theme }) => ({
 
 const PhotoBox = styled(Box)(({ theme }) => ({
   position: "relative",
-  aspectRatio: "4/3",
-  borderRadius: theme.shape.borderRadius,
-  overflow: "hidden",
-}));
-
-const EmptyBox = styled(Box)(({ theme }) => ({
   width: "100%",
   aspectRatio: "4/3",
   borderRadius: theme.shape.borderRadius,
+  overflow: "hidden",
   backgroundColor: theme.vars.palette.action.hover,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-
-  [theme.breakpoints.up("sm")]: {
-    aspectRatio: "8/3",
-  },
-
-  [theme.breakpoints.up("md")]: {
-    aspectRatio: "4/1",
-  },
-
-  [theme.breakpoints.up("lg")]: {
-    aspectRatio: "16/3",
-  },
 }));
 
 const StyledPhotoLibrary = styled(PhotoLibrary)(({ theme }) => ({
@@ -78,15 +61,12 @@ interface PhotoSliderProps {
 }
 
 const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
-  if (!storePhotos.length)
-    return (
-      <EmptyBox>
-        <StyledPhotoLibrary color="disabled" />
-      </EmptyBox>
-    );
-
-  const repeat = Math.ceil(MIN_SLIDE_COUNT / storePhotos.length);
-  const slides = Array.from({ length: repeat }, () => storePhotos).flat();
+  const slides: (StorePhoto | null)[] = storePhotos.length
+    ? Array.from(
+        { length: Math.ceil(MIN_SLIDE_COUNT / storePhotos.length) },
+        () => storePhotos,
+      ).flat()
+    : Array.from({ length: MIN_SLIDE_COUNT }, () => null);
 
   return (
     <MaskBox>
@@ -107,22 +87,26 @@ const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
         spaceBetween={8}
         speed={4000}
       >
-        {slides.map(({ alt, id, image }, index) => {
+        {slides.map((storePhoto, index) => {
           const isRepeat = index >= storePhotos.length;
 
           return (
             <PhotoBox
               aria-hidden={isRepeat || undefined}
-              key={`${id}-${index}`}
+              key={storePhoto ? `${storePhoto.id}-${index}` : index}
             >
-              <Image
-                alt={isRepeat ? "" : alt}
-                fill
-                loading={index === 0 ? "eager" : "lazy"}
-                sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-                src={image}
-                style={{ objectFit: "cover" }}
-              />
+              {storePhoto ? (
+                <Image
+                  alt={isRepeat ? "" : storePhoto.alt}
+                  fill
+                  loading={index === 0 ? "eager" : "lazy"}
+                  sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                  src={storePhoto.image}
+                  style={{ objectFit: "cover" }}
+                />
+              ) : (
+                <StyledPhotoLibrary color="disabled" />
+              )}
             </PhotoBox>
           );
         })}
