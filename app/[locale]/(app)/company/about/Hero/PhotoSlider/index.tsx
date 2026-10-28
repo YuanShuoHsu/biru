@@ -1,5 +1,7 @@
 "use client";
 
+// https://swiperjs.com/swiper-api#param-loop
+
 import Image from "next/image";
 import { Autoplay } from "swiper/modules";
 
@@ -11,17 +13,8 @@ import { styled } from "@mui/material/styles";
 
 import type { StorePhoto } from "@/types/storePhotos";
 
-const BREAKPOINTS = {
-  0: { slidesPerView: 1, spaceBetween: 8 },
-  600: { slidesPerView: 2, spaceBetween: 12 },
-  900: { slidesPerView: 3, spaceBetween: 16 },
-  1200: { slidesPerView: 4, spaceBetween: 16 },
-} as const;
-
-const MIN_LOOP_SLIDE_COUNT =
-  Math.max(
-    ...Object.values(BREAKPOINTS).map(({ slidesPerView }) => slidesPerView),
-  ) + 1;
+// Loop needs slidesPerView + slidesPerGroup slides at the widest breakpoint (4 + 1)
+const MIN_LOOP_SLIDE_COUNT = 5;
 
 const MaskBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -82,7 +75,12 @@ const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
     <MaskBox>
       <Carousel
         autoplay={{ delay: 0, disableOnInteraction: false }}
-        breakpoints={BREAKPOINTS}
+        breakpoints={{
+          0: { slidesPerView: 1, spaceBetween: 8 },
+          600: { slidesPerView: 2, spaceBetween: 12 },
+          900: { slidesPerView: 3, spaceBetween: 16 },
+          1200: { slidesPerView: 4, spaceBetween: 16 },
+        }}
         loop={true}
         modules={[Autoplay]}
         onSetTransition={(swiper) => {
