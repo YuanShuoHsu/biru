@@ -99,7 +99,6 @@ const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
                 <Image
                   alt={isRepeat ? "" : storePhoto.alt}
                   fill
-                  loading={index === 0 ? "eager" : "lazy"}
                   sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
                   src={storePhoto.image}
                   style={{ objectFit: "cover" }}
