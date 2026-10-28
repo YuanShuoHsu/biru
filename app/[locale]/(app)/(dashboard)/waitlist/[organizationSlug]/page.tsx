@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import type { Locale } from "@/i18n/routing";
 
 import type { OrganizationResponse } from "@/types/organizations";
-import type { WaitlistStatusResponse } from "@/types/waitlist";
+import type {
+  WaitlistQrSessionResponse,
+  WaitlistStatusResponse,
+} from "@/types/waitlist";
 
 import { fetcher } from "@/utils/fetcher";
 import { redirectToCurrentSlug } from "@/utils/organizations";
@@ -36,13 +40,18 @@ export const generateMetadata = async ({
 
 const WaitlistPage = async ({ params }: WaitlistPageProps) => {
   const { organizationSlug } = await params;
+  const cookieStore = await cookies();
 
-  const [organization, status] = await Promise.all([
+  const [organization, status, qrSession] = await Promise.all([
     fetcher<OrganizationResponse>(
       `/api/organizations/${organizationSlug}`,
     ).catch(() => null),
     fetcher<WaitlistStatusResponse>(
       `/api/organizations/${organizationSlug}/waitlist`,
+    ).catch(() => null),
+    fetcher<WaitlistQrSessionResponse>(
+      `/api/organizations/${organizationSlug}/waitlist/qr-session`,
+      { headers: { cookie: cookieStore.toString() } },
     ).catch(() => null),
   ]);
 
@@ -54,7 +63,13 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
 
   if (!organization || organization.closedAt || !status) notFound();
 
-  return <Waitlist organization={organization} status={status} />;
+  return (
+    <Waitlist
+      hasQrSession={!!qrSession}
+      organization={organization}
+      status={status}
+    />
+  );
 };
 
 export default WaitlistPage;

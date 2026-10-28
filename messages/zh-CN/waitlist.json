@@ -16,6 +16,7 @@
     "disabled": "本店当前未开放现场排队。",
     "paused": "当前暂停取号，请咨询现场服务人员。"
   },
+  "qrRequired": "请扫描门店现场的二维码取号。",
   "form": {
     "title": "填写排队信息",
     "partySize": {
@@ -73,6 +74,7 @@
       "success": "已确认 {ticketNumber} 前往"
     },
     "again": "重新取号",
+    "done": "完成",
     "store": "门店信息"
   }
 }

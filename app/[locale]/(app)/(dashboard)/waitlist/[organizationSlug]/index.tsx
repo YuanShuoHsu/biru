@@ -23,7 +23,12 @@ import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useRouter } from "@/i18n/navigation";
 
-import { Campaign, HourglassTop, People } from "@mui/icons-material";
+import {
+  Campaign,
+  HourglassTop,
+  People,
+  QrCodeScanner,
+} from "@mui/icons-material";
 import {
   Alert,
   Button,
@@ -87,14 +92,23 @@ const PartySizeStack = styled(Stack)(({ theme }) => ({
 }));
 
 interface WaitlistProps {
+  hasQrSession: boolean;
   organization: OrganizationResponse;
   status: WaitlistStatusResponse;
 }
 
-const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
+const Waitlist = ({
+  hasQrSession: initialHasQrSession,
+  organization,
+  status: initialStatus,
+}: WaitlistProps) => {
   const session = useSession();
 
-  const [idempotencyKey] = useState(() => crypto.randomUUID());
+  const [hasQrSession, setHasQrSession] = useState(initialHasQrSession);
+
+  const [idempotencyKey, setIdempotencyKey] = useState(() =>
+    crypto.randomUUID(),
+  );
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -143,6 +157,7 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
     formState: { errors, isSubmitted, isSubmitting },
     handleSubmit,
     register,
+    reset,
     setValue,
   } = useForm<WaitlistFormValues>({
     defaultValues: {
@@ -210,9 +225,17 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
         },
       );
 
+      // cacheComponents 會保留離開的頁面狀態，按「完成」回來時不能沿用上一位的資料與冪等鍵
+      reset();
+      setIdempotencyKey(crypto.randomUUID());
       router.push(`/waitlist/${organization.slug}/${ticket.id}`);
     } catch (error) {
       const code = getWaitlistErrorCode(error);
+
+      if (code === "waitlistQrRequired") {
+        setHasQrSession(false);
+        return;
+      }
 
       if (code) mutate();
 
@@ -273,7 +296,12 @@ const Waitlist = ({ organization, status: initialStatus }: WaitlistProps) => {
           </StyledCardContent>
         </Card>
       )}
-      {!unavailable && (
+      {!unavailable && !hasQrSession && (
+        <Alert icon={<QrCodeScanner />} severity="info">
+          {tWaitlist("qrRequired")}
+        </Alert>
+      )}
+      {!unavailable && hasQrSession && (
         <FormCard noValidate onSubmit={handleSubmit(handleFormSubmit)}>
           <StyledCardContent>
             <BoldTypography color="textSecondary" variant="subtitle2">

@@ -16,6 +16,7 @@
     "disabled": "本店目前未開放現場候位。",
     "paused": "目前暫停取號，請洽現場服務人員。"
   },
+  "qrRequired": "請掃描門市現場的 QR code 取號。",
   "form": {
     "title": "填寫候位資料",
     "partySize": {
@@ -73,6 +74,7 @@
       "success": "已確認 {ticketNumber} 前往"
     },
     "again": "重新取號",
+    "done": "完成",
     "store": "門市資訊"
   }
 }
