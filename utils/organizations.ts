@@ -21,18 +21,16 @@ export const getOrganization = cache(
   },
 );
 
-export const getOrganizations = cache(
-  async (fetchOptions?: { headers: { cookie: string } }) => {
-    try {
-      return await fetcher<OrganizationResponse[]>(
-        "/api/organizations",
-        fetchOptions,
-      );
-    } catch {
-      return [];
-    }
-  },
-);
+export const getOrganizations = async () => {
+  "use cache";
+  cacheLife("minutes");
+
+  try {
+    return await fetcher<OrganizationResponse[]>("/api/organizations");
+  } catch {
+    return [];
+  }
+};
 
 export const getOrganizationTeam = async (
   slug: OrganizationResponse["slug"],
