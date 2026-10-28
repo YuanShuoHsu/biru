@@ -3,14 +3,11 @@
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 
-import { ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
-import { useRouter } from "@/i18n/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
 
 import { MenuItem, TextField, styled } from "@mui/material";
-
-import type { Organization } from "@/types/organizations";
 
 const StyledTextField = styled(TextField)(({ theme }) => ({
   flex: 1,
@@ -23,16 +20,15 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
 const HiddenSelectIcon = () => null;
 
 interface OrderPartySizeTextFieldProps {
-  organizationSlug: Organization["slug"];
   partySize?: string;
   readOnly?: boolean;
 }
 
 const OrderPartySizeTextField = ({
-  organizationSlug,
   partySize,
   readOnly = false,
 }: OrderPartySizeTextFieldProps) => {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -42,9 +38,7 @@ const OrderPartySizeTextField = ({
     const nextSearchParams = new URLSearchParams(searchParams);
     nextSearchParams.set("partySize", event.target.value);
 
-    router.push(
-      `/order/${ORDER_MODE.DineIn}/${organizationSlug}?${nextSearchParams}`,
-    );
+    router.push(`${pathname}?${nextSearchParams}`);
   };
 
   return (

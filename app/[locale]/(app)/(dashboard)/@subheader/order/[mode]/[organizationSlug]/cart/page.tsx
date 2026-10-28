@@ -14,18 +14,17 @@ const SubheaderOrderModeOrganizationSlugCartPage = async ({
   params,
   searchParams,
 }: SubheaderOrderModeOrganizationSlugCartPageProps) => {
-  const [{ mode, organizationSlug }, { tableNumber, partySize }] =
-    await Promise.all([params, searchParams]);
+  const [{ mode }, { tableNumber, partySize }] = await Promise.all([
+    params,
+    searchParams,
+  ]);
 
   if (mode !== ORDER_MODE.DineIn || !tableNumber || !partySize) return null;
 
   return (
     <StyledStack direction="row">
       <OrderTableNumberChip tableNumber={tableNumber} />
-      <OrderPartySizeTextField
-        organizationSlug={organizationSlug}
-        partySize={partySize}
-      />
+      <OrderPartySizeTextField partySize={partySize} />
     </StyledStack>
   );
 };
