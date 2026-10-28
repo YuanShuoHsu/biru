@@ -4,13 +4,9 @@ import { notFound } from "next/navigation";
 
 import OrderModeOrganizationSlugCheckout from ".";
 
-import { API_ORDER_MODE } from "@/constants/orderMode";
-
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderMode } from "@/types/orderMode";
-
-import { getOrderQrSession } from "@/utils/orderQrSession";
+import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugCheckoutPageProps {
@@ -47,14 +43,10 @@ const OrderModeOrganizationSlugCheckoutPage = async ({
   );
   if (!organization || organization.closedAt) return notFound();
 
-  const qrSession = await getOrderQrSession(organization.slug);
+  if (!(await hasOrderAccess(organization.slug, mode, query.tableNumber)))
+    return notFound();
 
-  return (
-    <OrderModeOrganizationSlugCheckout
-      hasOrderQrSession={qrSession?.mode === API_ORDER_MODE[mode as OrderMode]}
-      organization={organization}
-    />
-  );
+  return <OrderModeOrganizationSlugCheckout organization={organization} />;
 };
 
 export default OrderModeOrganizationSlugCheckoutPage;
