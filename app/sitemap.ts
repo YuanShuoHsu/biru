@@ -7,6 +7,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 
 import { routing } from "@/i18n/routing";
 
+import { settle } from "@/utils/fetcher";
 import { getOrganizations } from "@/utils/organizations";
 import { getSiteMeta } from "@/utils/siteMeta";
 
@@ -18,7 +19,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   if (isBlockedHost) return [];
 
-  const organizations = await getOrganizations();
+  const { data: organizations = [] } = await settle(getOrganizations());
 
   const pathnames = [
     "",

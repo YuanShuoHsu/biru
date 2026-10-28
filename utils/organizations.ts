@@ -7,37 +7,23 @@ import { redirect } from "@/i18n/navigation";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
-export const getOrganization = cache(
-  async (slug: OrganizationResponse["slug"]) => {
-    try {
-      return await fetcher<OrganizationResponse>(`/api/organizations/${slug}`);
-    } catch {
-      return null;
-    }
-  },
+export const getOrganization = cache((slug: OrganizationResponse["slug"]) =>
+  fetcher<OrganizationResponse>(`/api/organizations/${slug}`),
 );
 
 export const getOrganizations = cache(
-  async (fetchOptions?: { headers: { cookie: string } }) => {
-    try {
-      return await fetcher<OrganizationResponse[]>(
-        "/api/organizations",
-        fetchOptions,
-      );
-    } catch {
-      return [];
-    }
-  },
+  (fetchOptions?: { headers: { cookie: string } }) =>
+    fetcher<OrganizationResponse[]>("/api/organizations", fetchOptions),
 );
 
 // 印在桌上與門口的 QR 不會重印，店家改 slug 後舊網址要轉到現行網址並保留桌號等參數
 export const redirectToCurrentSlug = async (
-  organization: OrganizationResponse | null,
+  organization: OrganizationResponse,
   organizationSlug: OrganizationResponse["slug"],
   pathname: (slug: OrganizationResponse["slug"]) => string,
   searchParams: Record<string, string | string[] | undefined> = {},
 ) => {
-  if (!organization || organization.slug === organizationSlug) return;
+  if (organization.slug === organizationSlug) return;
 
   const query = new URLSearchParams(
     Object.entries(searchParams).flatMap(([key, value]) =>
