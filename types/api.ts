@@ -2741,6 +2741,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/orders/prep-times": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢各品項設定的備餐時間與近 14 天實際平均 */
+    get: operations["OrdersController_findPrepTimes"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/orders/{orderId}": {
     parameters: {
       query?: never;
@@ -9729,11 +9746,21 @@ export interface components {
     };
     PrepEstimateResponseDto: {
       /** @enum {string} */
-      basis: "leadTime";
+      basis: "observed" | "leadTime";
       /** @description 無條件進位到 5 分鐘 */
       estimatedMinutes: number;
       /** @description 計入估算的製作中訂單數 */
       queuedOrders: number;
+    };
+    PrepTimeResponseDto: {
+      menuItemId: string;
+      name: components["schemas"]["LocalizedTextDto"];
+      /** @description 估算採用的備餐分鐘數：門市備餐時間與此品項設定的備餐時間取大者，不含加購 */
+      leadTimeMinutes: number;
+      /** @description 近 14 天含此品項、非預約的已出餐訂單，從付款（未付款則下單）到可取餐的整張單分鐘數中位數，含同單其他品項與排隊等待；樣本不足 5 筆時為 null */
+      medianMinutes: number | null;
+      /** @description 近 14 天含此品項、非預約的已出餐訂單數 */
+      sampleSize: number;
     };
     OrderReceiptResponseDto: {
       id: string;
@@ -10785,6 +10812,14 @@ export interface components {
       minPartySize: number;
       /** @example B */
       prefix: string;
+      /**
+       * @description 叫號中尚未入座、過號或取消的號碼，最近叫號的在前，最多 5 筆
+       * @example [
+       *       "A008",
+       *       "A007"
+       *     ]
+       */
+      calledTicketNumbers: string[];
       /**
        * @description 最近一次叫號的號碼（之後入座、過號或取消仍保留），尚未叫號為 null
        * @example A008
@@ -14988,16 +15023,16 @@ export interface operations {
   AdminAuditController_findAll: {
     parameters: {
       query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
-        filterOperator?: components["schemas"]["FilterOperator"];
-        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
-        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["AuditLogSortField"];
-        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -15027,16 +15062,16 @@ export interface operations {
   AuditController_findAll: {
     parameters: {
       query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
-        filterOperator?: components["schemas"]["FilterOperator"];
-        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
-        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["AuditLogSortField"];
-        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -19254,6 +19289,34 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["PrepEstimateResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrdersController_findPrepTimes: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrepTimeResponseDto"][];
         };
       };
       /** @description Internal server error */
@@ -26436,7 +26499,7 @@ export const adminOrderResponseDtoOrderStatusValues: ReadonlyArray<
 ];
 export const prepEstimateResponseDtoBasisValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PrepEstimateResponseDto"]["basis"]
-> = ["leadTime"];
+> = ["observed", "leadTime"];
 export const orderReceiptResponseDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderReceiptResponseDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];

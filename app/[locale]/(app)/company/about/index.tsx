@@ -16,6 +16,7 @@ import type {
   OrganizationResponse,
   OrganizationTeamMember,
 } from "@/types/organizations";
+import type { StorePhoto } from "@/types/storePhotos";
 
 interface AboutProps {
   organizations: OrganizationResponse[];
@@ -23,11 +24,16 @@ interface AboutProps {
     OrganizationResponse["id"],
     OrganizationTeamMember[]
   >;
+  storePhotos: StorePhoto[];
 }
 
-const About = ({ organizations, organizationTeams }: AboutProps) => (
+const About = ({
+  organizations,
+  organizationTeams,
+  storePhotos,
+}: AboutProps) => (
   <>
-    <Hero />
+    <Hero storePhotos={storePhotos} />
     <Divider />
     <Values />
     <Divider />
@@ -44,7 +50,7 @@ const About = ({ organizations, organizationTeams }: AboutProps) => (
     <Divider /> */}
     <Location organizations={organizations} />
     <Divider />
-    <JoinUs />
+    <JoinUs storePhoto={storePhotos[0]} />
     <Divider />
     <Footer />
   </>

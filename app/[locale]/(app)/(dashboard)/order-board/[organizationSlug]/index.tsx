@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import useSWR from "swr";
 
-import { menuSocket } from "@/app/socket";
+import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import { MODE_COLORS } from "@/constants/orderMode";
 import { STATUS_COLORS } from "@/constants/orders";
@@ -126,10 +126,10 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
   useEffect(() => {
     if (!isConnected) return;
 
-    menuSocket
-      .timeout(5000)
-      .emitWithAck("joinPublicOrdersBoard", { organizationId: organization.id })
-      .then((joined: OrderBoardItem[]) => mutate(joined, false))
+    emitMenuWithAck<OrderBoardItem[]>("joinPublicOrdersBoard", {
+      organizationId: organization.id,
+    })
+      .then((joined) => mutate(joined, false))
       .catch(() => {});
 
     const handleUpdate = () => {
@@ -140,6 +140,9 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
 
     return () => {
       menuSocket.off("orderBoardUpdated", handleUpdate);
+      menuSocket.emit("leavePublicOrdersBoard", {
+        organizationId: organization.id,
+      });
     };
   }, [isConnected, mutate, organization.id]);
 

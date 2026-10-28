@@ -132,7 +132,7 @@ For each changed file, read both versions and decide:
 
 2. **All other mirrored files** — if biru-admin has the same path, check whether its content differs only because it's an older version of biru (safe to `cp`) or because it has intentional admin-specific differences (transplant hunks only).
 
-3. **Same path, different file** — `utils/orders.ts`, `utils/banners.ts`, `utils/openingHours.ts`, `types/banners.ts` are separate admin implementations; merge only the relevant change by hand, never `cp`.
+3. **Same path, different file** — `utils/orders.ts`, `utils/banners.ts`, `utils/openingHours.ts`, `utils/storePhotos.ts`, `types/banners.ts`, `types/storePhotos.ts` are separate admin implementations; merge only the relevant change by hand, never `cp`.
 
 4. **Renamed or deleted files** — apply the same operation in biru-admin (rename directory, delete file).
 
