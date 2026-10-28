@@ -35,7 +35,7 @@ const OrderModeOrganizationSlugLayout = async ({
   if (error) return <ErrorAlert />;
 
   const { data: initialMenu, error: menuError } = await settle(
-    fetcher<OrderMenu>(
+    fetcher<OrderMenu | null>(
       `/api/organizations/${organization.id}/order-menu?lang=${locale}`,
     ),
   );
