@@ -54,6 +54,7 @@ const MenuSocketInitializer = ({
 
     return () => {
       menuSocket.off("menuUpdated", initMenus);
+      menuSocket.emit("leaveOrderMenu", { organizationId });
     };
   }, [enqueueSnackbar, isConnected, locale, organizationId, setMenu]);
 

@@ -166,6 +166,9 @@ const WaitlistTicket = ({
 
     return () => {
       menuSocket.off("publicWaitlistUpdated", handleUpdate);
+      menuSocket.emit("leavePublicWaitlist", {
+        organizationId: organization.id,
+      });
     };
   }, [isConnected, mutate, organization.id]);
 
