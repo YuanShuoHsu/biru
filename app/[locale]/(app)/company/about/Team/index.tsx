@@ -112,7 +112,7 @@ const Team = ({ organizations, organizationTeams }: TeamProps) => {
   return (
     <StyledContainer component="section" disableGutters maxWidth="lg">
       <HeaderStack>
-        <StyledTypography color="primary" component="h2" variant="body2">
+        <StyledTypography color="primary" variant="body2">
           {tCompanyAboutTeam("label")}
         </StyledTypography>
         <StyledTypography component="h2" variant="h5">
@@ -171,7 +171,12 @@ const Team = ({ organizations, organizationTeams }: TeamProps) => {
             ({ bio, firstName, id, image, lastName, role, teams }) => (
               <StyledGrid key={id} size={{ xs: 12, sm: 6, md: 3 }}>
                 <MemberHeaderStack direction="row">
-                  <MemberAvatar src={image || undefined} variant="rounded">
+                  <MemberAvatar
+                    alt=""
+                    aria-hidden
+                    src={image || undefined}
+                    variant="rounded"
+                  >
                     {firstName[0]}
                   </MemberAvatar>
                   <Chip

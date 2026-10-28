@@ -5,7 +5,7 @@ import { Autoplay } from "swiper/modules";
 
 import Carousel from "@/components/Carousel";
 
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 const SLIDE_COUNT = 10;
@@ -44,39 +44,49 @@ const PhotoBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const PhotoSlider = () => (
-  <MaskBox>
-    <Carousel
-      autoplay={{ delay: 0, disableOnInteraction: false }}
-      breakpoints={{
-        0: { slidesPerView: 1, spaceBetween: 8 },
-        600: { slidesPerView: 2, spaceBetween: 12 },
-        900: { slidesPerView: 3, spaceBetween: 16 },
-        1200: { slidesPerView: 4, spaceBetween: 16 },
-      }}
-      loop={true}
-      modules={[Autoplay]}
-      onSetTransition={(swiper) => {
-        swiper.wrapperEl.style.transitionTimingFunction = "linear";
-      }}
-      pagination={false}
-      spaceBetween={8}
-      speed={4000}
-    >
-      {Array.from({ length: SLIDE_COUNT }, (_, index) => (
-        <PhotoBox key={index}>
-          <Image
-            alt={`Photo ${index + 1}`}
-            fill
-            priority={index < 4}
-            sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-            src="/images/IMG_4590.jpg"
-            style={{ objectFit: "cover" }}
-          />
-        </PhotoBox>
-      ))}
-    </Carousel>
-  </MaskBox>
-);
+const PhotoSlider = () => {
+  const prefersReducedMotion = useMediaQuery(
+    "(prefers-reduced-motion: reduce)",
+    { noSsr: true },
+  );
+
+  return (
+    <MaskBox>
+      <Carousel
+        autoplay={
+          !prefersReducedMotion && { delay: 0, disableOnInteraction: false }
+        }
+        breakpoints={{
+          0: { slidesPerView: 1, spaceBetween: 8 },
+          600: { slidesPerView: 2, spaceBetween: 12 },
+          900: { slidesPerView: 3, spaceBetween: 16 },
+          1200: { slidesPerView: 4, spaceBetween: 16 },
+        }}
+        key={String(prefersReducedMotion)}
+        loop={true}
+        modules={[Autoplay]}
+        onSetTransition={(swiper) => {
+          swiper.wrapperEl.style.transitionTimingFunction = "linear";
+        }}
+        pagination={false}
+        spaceBetween={8}
+        speed={4000}
+      >
+        {Array.from({ length: SLIDE_COUNT }, (_, index) => (
+          <PhotoBox key={index}>
+            <Image
+              alt=""
+              fill
+              preload={index === 0}
+              sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+              src="/images/IMG_4590.jpg"
+              style={{ objectFit: "cover" }}
+            />
+          </PhotoBox>
+        ))}
+      </Carousel>
+    </MaskBox>
+  );
+};
 
 export default PhotoSlider;
