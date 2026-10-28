@@ -11,7 +11,17 @@ import { styled } from "@mui/material/styles";
 
 import type { StorePhoto } from "@/types/storePhotos";
 
-const MIN_SLIDE_COUNT = 10;
+const BREAKPOINTS = {
+  0: { slidesPerView: 1, spaceBetween: 8 },
+  600: { slidesPerView: 2, spaceBetween: 12 },
+  900: { slidesPerView: 3, spaceBetween: 16 },
+  1200: { slidesPerView: 4, spaceBetween: 16 },
+} as const;
+
+const MIN_LOOP_SLIDE_COUNT =
+  Math.max(
+    ...Object.values(BREAKPOINTS).map(({ slidesPerView }) => slidesPerView),
+  ) + 1;
 
 const MaskBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -63,21 +73,16 @@ interface PhotoSliderProps {
 const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
   const slides: (StorePhoto | null)[] = storePhotos.length
     ? Array.from(
-        { length: Math.ceil(MIN_SLIDE_COUNT / storePhotos.length) },
+        { length: Math.ceil(MIN_LOOP_SLIDE_COUNT / storePhotos.length) },
         () => storePhotos,
       ).flat()
-    : Array.from({ length: MIN_SLIDE_COUNT }, () => null);
+    : Array.from({ length: MIN_LOOP_SLIDE_COUNT }, () => null);
 
   return (
     <MaskBox>
       <Carousel
         autoplay={{ delay: 0, disableOnInteraction: false }}
-        breakpoints={{
-          0: { slidesPerView: 1, spaceBetween: 8 },
-          600: { slidesPerView: 2, spaceBetween: 12 },
-          900: { slidesPerView: 3, spaceBetween: 16 },
-          1200: { slidesPerView: 4, spaceBetween: 16 },
-        }}
+        breakpoints={BREAKPOINTS}
         loop={true}
         modules={[Autoplay]}
         onSetTransition={(swiper) => {
