@@ -8,7 +8,9 @@ import Carousel from "@/components/Carousel";
 import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const SLIDE_COUNT = 10;
+import type { StorePhoto } from "@/types/storePhotos";
+
+const MIN_SLIDE_COUNT = 10;
 
 const MaskBox = styled(Box)(({ theme }) => ({
   position: "relative",
@@ -44,39 +46,55 @@ const PhotoBox = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const PhotoSlider = () => (
-  <MaskBox>
-    <Carousel
-      autoplay={{ delay: 0, disableOnInteraction: false }}
-      breakpoints={{
-        0: { slidesPerView: 1, spaceBetween: 8 },
-        600: { slidesPerView: 2, spaceBetween: 12 },
-        900: { slidesPerView: 3, spaceBetween: 16 },
-        1200: { slidesPerView: 4, spaceBetween: 16 },
-      }}
-      loop={true}
-      modules={[Autoplay]}
-      onSetTransition={(swiper) => {
-        swiper.wrapperEl.style.transitionTimingFunction = "linear";
-      }}
-      pagination={false}
-      spaceBetween={8}
-      speed={4000}
-    >
-      {Array.from({ length: SLIDE_COUNT }, (_, index) => (
-        <PhotoBox key={index}>
-          <Image
-            alt=""
-            fill
-            preload={index === 0}
-            sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-            src="/images/IMG_4590.jpg"
-            style={{ objectFit: "cover" }}
-          />
-        </PhotoBox>
-      ))}
-    </Carousel>
-  </MaskBox>
-);
+interface PhotoSliderProps {
+  storePhotos: StorePhoto[];
+}
+
+const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
+  const repeat = Math.ceil(MIN_SLIDE_COUNT / storePhotos.length);
+  const slides = Array.from({ length: repeat }, () => storePhotos).flat();
+
+  return (
+    <MaskBox>
+      <Carousel
+        autoplay={{ delay: 0, disableOnInteraction: false }}
+        breakpoints={{
+          0: { slidesPerView: 1, spaceBetween: 8 },
+          600: { slidesPerView: 2, spaceBetween: 12 },
+          900: { slidesPerView: 3, spaceBetween: 16 },
+          1200: { slidesPerView: 4, spaceBetween: 16 },
+        }}
+        loop={true}
+        modules={[Autoplay]}
+        onSetTransition={(swiper) => {
+          swiper.wrapperEl.style.transitionTimingFunction = "linear";
+        }}
+        pagination={false}
+        spaceBetween={8}
+        speed={4000}
+      >
+        {slides.map(({ alt, id, image }, index) => {
+          const isRepeat = index >= storePhotos.length;
+
+          return (
+            <PhotoBox
+              aria-hidden={isRepeat || undefined}
+              key={`${id}-${index}`}
+            >
+              <Image
+                alt={isRepeat ? "" : alt}
+                fill
+                loading={index === 0 ? "eager" : "lazy"}
+                sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
+                src={image}
+                style={{ objectFit: "cover" }}
+              />
+            </PhotoBox>
+          );
+        })}
+      </Carousel>
+    </MaskBox>
+  );
+};
 
 export default PhotoSlider;

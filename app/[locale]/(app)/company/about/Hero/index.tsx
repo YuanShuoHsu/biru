@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import type { StorePhoto } from "@/types/storePhotos";
+
 const StyledContainer = styled(Container)<ContainerProps>(({ theme }) => ({
   padding: theme.spacing(5, 2),
   display: "flex",
@@ -37,7 +39,11 @@ const StatsStack = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(5),
 }));
 
-const Hero = () => {
+interface HeroProps {
+  storePhotos: StorePhoto[];
+}
+
+const Hero = ({ storePhotos }: HeroProps) => {
   const tCompanyAboutHero = useTranslations("company.about.hero");
 
   const STATS = [
@@ -72,7 +78,7 @@ const Hero = () => {
           {tCompanyAboutHero("description")}
         </Typography>
       </CenteredStack>
-      <PhotoSlider />
+      {!!storePhotos.length && <PhotoSlider storePhotos={storePhotos} />}
       <StatsStack direction="row">
         {STATS.map(({ label, value }) => (
           <CenteredStack key={label}>

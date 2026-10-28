@@ -7,6 +7,7 @@ import type { Locale } from "@/i18n/routing";
 
 import { buildMetadata } from "@/utils/metadata";
 import { getOrganizations, getOrganizationTeam } from "@/utils/organizations";
+import { getStorePhotos } from "@/utils/storePhotos";
 
 interface AboutPageProps {
   params: Promise<{ locale: Locale }>;
@@ -27,8 +28,12 @@ export const generateMetadata = async ({
   });
 };
 
-const AboutPage = async () => {
-  const organizations = await getOrganizations();
+const AboutPage = async ({ params }: AboutPageProps) => {
+  const { locale } = await params;
+  const [organizations, storePhotos] = await Promise.all([
+    getOrganizations(),
+    getStorePhotos(locale),
+  ]);
   const organizationTeams = Object.fromEntries(
     await Promise.all(
       organizations.map(
@@ -41,6 +46,7 @@ const AboutPage = async () => {
     <About
       organizations={organizations}
       organizationTeams={organizationTeams}
+      storePhotos={storePhotos}
     />
   );
 };
