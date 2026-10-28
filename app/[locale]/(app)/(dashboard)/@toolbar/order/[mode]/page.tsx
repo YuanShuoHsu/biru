@@ -1,5 +1,7 @@
+import ErrorAlert from "@/components/ErrorAlert";
 import OrderOrganizationTextField from "@/components/OrderOrganizationTextField";
 
+import { settle } from "@/utils/fetcher";
 import { getOrganizations } from "@/utils/organizations";
 
 interface ToolbarOrderModePageProps {
@@ -9,7 +11,8 @@ interface ToolbarOrderModePageProps {
 const ToolbarOrderModePage = async ({ params }: ToolbarOrderModePageProps) => {
   const { mode } = await params;
 
-  const organizations = await getOrganizations();
+  const { data: organizations, error } = await settle(getOrganizations());
+  if (error) return <ErrorAlert />;
 
   return (
     <OrderOrganizationTextField

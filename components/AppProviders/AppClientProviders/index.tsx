@@ -8,7 +8,6 @@ import { SWRConfiguration } from "swr";
 
 import LocaleProvider from "@/components/LocaleProvider";
 import OAuthSnackbar from "@/components/OAuthSnackbar";
-import UserLanguageSync from "@/components/UserLanguageSync";
 
 import { Close } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
@@ -60,11 +59,8 @@ const AppClientProviders = ({
         <Suspense>
           <OAuthSnackbar />
         </Suspense>
-        <SWRProvider fallback={fallback}>
-          <AuthStoreProvider sessionPromise={sessionPromise}>
-            <Suspense>
-              <UserLanguageSync />
-            </Suspense>
+        <AuthStoreProvider sessionPromise={sessionPromise}>
+          <SWRProvider fallback={fallback}>
             <CartStoreProvider>
               <CountdownStoreProvider>
                 <DialogStoreProvider>
@@ -78,8 +74,8 @@ const AppClientProviders = ({
                 </DialogStoreProvider>
               </CountdownStoreProvider>
             </CartStoreProvider>
-          </AuthStoreProvider>
-        </SWRProvider>
+          </SWRProvider>
+        </AuthStoreProvider>
       </SnackbarProvider>
     </LocaleProvider>
   </AppRouterCacheProvider>

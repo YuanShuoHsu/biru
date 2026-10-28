@@ -3,8 +3,11 @@ import { getTranslations } from "next-intl/server";
 
 import About from ".";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import type { Locale } from "@/i18n/routing";
 
+import { settle } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
 import { getOrganizations } from "@/utils/organizations";
 
@@ -28,7 +31,8 @@ export const generateMetadata = async ({
 };
 
 const AboutPage = async () => {
-  const organizations = await getOrganizations();
+  const { data: organizations, error } = await settle(getOrganizations());
+  if (error) return <ErrorAlert />;
 
   return <About organizations={organizations} />;
 };

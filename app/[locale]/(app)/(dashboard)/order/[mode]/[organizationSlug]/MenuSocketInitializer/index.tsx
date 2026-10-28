@@ -42,7 +42,6 @@ const MenuSocketInitializer = ({
 
         setMenu({ menu: response });
       } catch (error) {
-        setMenu({ menu: null });
         enqueueSnackbar(getErrorMessage(error), { variant: "error" });
       } finally {
         setMenu({ isLoading: false });
