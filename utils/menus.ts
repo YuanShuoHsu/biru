@@ -294,7 +294,6 @@ const isInvalidSweetnessLevel = (
   sweetnessLevel: SweetnessLevel | null,
 ): boolean => sweetness === "Adjustable" && !sweetnessLevel;
 
-// 可調為客人所選、固定為品項當下的設定
 export const getDisplaySweetnessLevel = (
   { fixedSweetnessLevel, sweetness }: OrderMenuItem | OrderMenuAddOnItem,
   sweetnessLevel: SweetnessLevel | null,
