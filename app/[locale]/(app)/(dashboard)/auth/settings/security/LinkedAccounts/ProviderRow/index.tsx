@@ -4,6 +4,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
+import {
+  CustomizedDialogActions,
+  CustomizedDialogContent,
+} from "@/components/CustomizedDialogs";
 import { StyledListItem, StyledListItemText } from "@/components/FormCard";
 
 import { query } from "@/constants/query";
@@ -66,12 +70,17 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
   const handleLinkDialog = () => {
     setDialog({
       content: (
-        <DialogContentText>
-          {tAuth.rich("settings.linkedAccounts.confirmLinkContentText", {
-            bold: (chunks) => <strong>{chunks}</strong>,
-            provider: label,
-          })}
-        </DialogContentText>
+        <>
+          <CustomizedDialogContent>
+            <DialogContentText>
+              {tAuth.rich("settings.linkedAccounts.confirmLinkContentText", {
+                bold: (chunks) => <strong>{chunks}</strong>,
+                provider: label,
+              })}
+            </DialogContentText>
+          </CustomizedDialogContent>
+          <CustomizedDialogActions />
+        </>
       ),
       onConfirm: handleLinkConfirm,
       open: true,
@@ -108,12 +117,17 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
   const handleUnlinkDialog = () => {
     setDialog({
       content: (
-        <DialogContentText>
-          {tAuth.rich("settings.linkedAccounts.confirmUnlinkContentText", {
-            bold: (chunks) => <strong>{chunks}</strong>,
-            provider: label,
-          })}
-        </DialogContentText>
+        <>
+          <CustomizedDialogContent>
+            <DialogContentText>
+              {tAuth.rich("settings.linkedAccounts.confirmUnlinkContentText", {
+                bold: (chunks) => <strong>{chunks}</strong>,
+                provider: label,
+              })}
+            </DialogContentText>
+          </CustomizedDialogContent>
+          <CustomizedDialogActions />
+        </>
       ),
       onConfirm: handleUnlinkConfirm,
       open: true,

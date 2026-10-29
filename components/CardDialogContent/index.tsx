@@ -1,12 +1,16 @@
 import { useFormatter, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 
 import CheckboxesGroup from "@/components/CheckboxesGroup";
+import {
+  CustomizedDialogActions,
+  CustomizedDialogContent,
+} from "@/components/CustomizedDialogs";
 import FormBox from "@/components/FormBox";
 import NumberSpinner from "@/components/NumberSpinner";
 import RadioButtonsGroup from "@/components/RadioButtonsGroup";
@@ -328,7 +332,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     Math.max(Math.min(value, availableToAdd), minQuantity);
   const quantity = clampQuantity(rawQuantity);
 
-  const { closeDialog, setDialog } = useDialogStore((state) => state);
+  const { closeDialog } = useDialogStore((state) => state);
 
   const amount = (price + extraCost) * quantity;
   const displayPrice = formatMoney(amount, priceCurrency);
@@ -350,10 +354,6 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         : itemStockLeft === 0
           ? tCommon("soldOut")
           : tCommon("reachStockLimit", { label: limitingLabel });
-
-  useEffect(() => {
-    setDialog({ confirmDisabled: quantity <= 0 });
-  }, [quantity, setDialog]);
 
   const handleChoicesChange = (groupId: string, next: string[]) =>
     setValue(`choices.${groupId}`, next, { shouldValidate: isSubmitted });
@@ -661,262 +661,269 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   };
 
   return (
-    <FormBox id="add-to-cart-form" onSubmit={onSubmit}>
-      <ImageBox>
-        {image ? (
-          <Image
-            alt={name}
-            draggable={false}
-            fill
-            sizes="(min-width: 600px) 600px, 100vw"
-            src={image}
-            style={{ objectFit: "cover" }}
-          />
-        ) : (
-          <StyledRestaurantMenu color="disabled" />
-        )}
-      </ImageBox>
-      {description && (
-        <WrapTypography color="textSecondary" variant="body2">
-          {description}
-        </WrapTypography>
-      )}
-      {suitableForDiet && suitableForDiet.length > 0 && (
-        <DietStack direction="row">
-          {suitableForDiet.map((diet) => (
-            <Chip
-              key={diet}
-              label={tOrder(`menuItem.diet.${diet}`)}
-              size="small"
-            />
-          ))}
-        </DietStack>
-      )}
-      {nutrition?.calories && (
-        <Typography color="textSecondary" variant="caption">
-          {tOrder("menuItem.calories", { value: nutrition.calories })}
-        </Typography>
-      )}
-      {itemAvailableHoursLabel && (
-        <MetaStack direction="row">
-          <EventAvailable color="disabled" fontSize="small" />
-          <Typography color="textSecondary" variant="caption">
-            {itemAvailableHoursLabel}
-          </Typography>
-        </MetaStack>
-      )}
-      {leadTimeMinutes != null && (
-        <MetaStack direction="row">
-          <AccessTime color="disabled" fontSize="small" />
-          <Typography color="textSecondary" variant="caption">
-            {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
-          </Typography>
-        </MetaStack>
-      )}
-      <Divider flexItem />
-      {servingTemperatures.length > 0 &&
-        renderServingTemperatureLevelGroup(
-          servingTemperatures,
-          recommendedServingTemperatureLevel || null,
-          servingTemperatureLevel,
-          handleServingTemperatureLevelChange,
-          errors.servingTemperatureLevel,
-        )}
-      {sweetness !== "NotApplicable" && (
-        <>
-          {servingTemperatures.length > 0 && (
-            <Divider flexItem variant="inset" />
+    <>
+      <CustomizedDialogContent>
+        <FormBox id="add-to-cart-form" onSubmit={onSubmit}>
+          <ImageBox>
+            {image ? (
+              <Image
+                alt={name}
+                draggable={false}
+                fill
+                sizes="(min-width: 600px) 600px, 100vw"
+                src={image}
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <StyledRestaurantMenu color="disabled" />
+            )}
+          </ImageBox>
+          {description && (
+            <WrapTypography color="textSecondary" variant="body2">
+              {description}
+            </WrapTypography>
           )}
-          {renderSweetnessGroup(
-            sweetness,
-            fixedSweetnessLevel || null,
-            recommendedSweetnessLevel || null,
-            sweetnessLevel,
-            handleSweetnessLevelChange,
-            errors.sweetnessLevel,
+          {suitableForDiet && suitableForDiet.length > 0 && (
+            <DietStack direction="row">
+              {suitableForDiet.map((diet) => (
+                <Chip
+                  key={diet}
+                  label={tOrder(`menuItem.diet.${diet}`)}
+                  size="small"
+                />
+              ))}
+            </DietStack>
           )}
-        </>
-      )}
-      {modifierGroups.map((group, index) => (
-        <Fragment key={group.id}>
-          {(index > 0 || hasBuiltInChoices) && (
-            <Divider flexItem variant="inset" />
-          )}
-          {renderModifierGroup(
-            group,
-            choices,
-            handleChoicesChange,
-            errors.choices?.[group.id],
-          )}
-        </Fragment>
-      ))}
-      {(hasBuiltInChoices || modifierGroups.length > 0) &&
-        addOnItems.length > 0 && <Divider flexItem variant="inset" />}
-      {addOnItems.length > 0 && (
-        <CheckboxesGroup
-          error={!!errors.choices?.[ADD_ON_OPTION_ID]}
-          fullWidth
-          helperText={errors.choices?.[ADD_ON_OPTION_ID]?.message}
-          label={tOrder("menuItem.addOn")}
-          onChange={(event, next) =>
-            setValue(`choices.${ADD_ON_OPTION_ID}`, next)
-          }
-          options={addOnItems.map((addOnItem) => {
-            const {
-              availableModes,
-              id,
-              image,
-              modifierGroups,
-              name,
-              offers,
-              servingTemperatures,
-              recommendedServingTemperatureLevel:
-                addOnRecommendedServingTemperatureLevel,
-              sweetness: addOnSweetness,
-              fixedSweetnessLevel: addOnFixedSweetnessLevel,
-              recommendedSweetnessLevel: addOnRecommendedSweetnessLevel,
-            } = addOnItem;
-            const addOnHasBuiltInChoices =
-              servingTemperatures.length > 0 ||
-              addOnSweetness !== "NotApplicable";
-            const checked = selectedAddOnIds.includes(id);
-            const addOnStock = getOfferStock(offers[0]);
-            const outOfStockInCart =
-              !checked &&
-              addOnStock !== null &&
-              addOnStock - getCartItemTotalQuantity(id, editingItem) <= 0;
-            const unavailableLabel =
-              getUnavailableLabel(
-                offers[0]?.availability,
-                availableModes,
-                offers[0]?.availableHours,
-              ) ||
-              (hasUnsatisfiableModifierGroup(modifierGroups, apiMode)
-                ? tCommon("soldOut")
-                : "") ||
-              (outOfStockInCart
-                ? tCommon("reachStockLimit", { label: "" })
-                : "");
-
-            return {
-              children: (addOnHasBuiltInChoices ||
-                modifierGroups.length > 0) && (
-                <Collapse in={checked} timeout="auto" unmountOnExit>
-                  <AddOnOptionsStack>
-                    {servingTemperatures.length > 0 &&
-                      renderServingTemperatureLevelGroup(
-                        servingTemperatures,
-                        addOnRecommendedServingTemperatureLevel || null,
-                        addOnServingTemperatureLevels[id] || null,
-                        handleAddOnServingTemperatureLevelChange(id),
-                        errors.addOnServingTemperatureLevels?.[id],
-                      )}
-                    {addOnSweetness !== "NotApplicable" && (
-                      <>
-                        {servingTemperatures.length > 0 && (
-                          <Divider flexItem variant="inset" />
-                        )}
-                        {renderSweetnessGroup(
-                          addOnSweetness,
-                          addOnFixedSweetnessLevel || null,
-                          addOnRecommendedSweetnessLevel || null,
-                          addOnSweetnessLevels[id] || null,
-                          handleAddOnSweetnessLevelChange(id),
-                          errors.addOnSweetnessLevels?.[id],
-                        )}
-                      </>
-                    )}
-                    {modifierGroups.map((group, index) => (
-                      <Fragment key={group.id}>
-                        {(index > 0 || addOnHasBuiltInChoices) && (
-                          <Divider flexItem variant="inset" />
-                        )}
-                        {renderModifierGroup(
-                          group,
-                          addOnChoices[id] || {},
-                          handleAddOnChoicesChange(id),
-                          errors.addOnChoices?.[id]?.[group.id],
-                        )}
-                      </Fragment>
-                    ))}
-                  </AddOnOptionsStack>
-                </Collapse>
-              ),
-              disabled: !checked && !!unavailableLabel,
-              label: (
-                <AddOnLabelStack direction="row">
-                  <AddOnAvatar
-                    alt={name}
-                    disabled={!checked && !!unavailableLabel}
-                    src={image || undefined}
-                    variant="rounded"
-                  >
-                    <RestaurantMenu color="disabled" />
-                  </AddOnAvatar>
-                  {renderChoiceLabel(
-                    name,
-                    getAddOnPrice(addOnItem),
-                    getAvailableHoursLabel(offers[0]?.availableHours),
-                    unavailableLabel,
-                  )}
-                </AddOnLabelStack>
-              ),
-              value: id,
-            };
-          })}
-          value={selectedAddOnIds}
-        />
-      )}
-      {(hasBuiltInChoices ||
-        modifierGroups.length > 0 ||
-        addOnItems.length > 0) && <Divider flexItem />}
-      <FooterStack direction="row">
-        <PriceStack direction="column">
-          {promoInfo && (
-            <OriginalPriceTypography
-              color="textDisabled"
-              isPromo
-              variant="caption"
-            >
-              {formatMoney(basePrice, priceCurrency)}
-            </OriginalPriceTypography>
-          )}
-          <PriceTypography
-            color={promoInfo ? "error" : "primary"}
-            component="span"
-            variant="h6"
-          >
-            {displayPrice}
-          </PriceTypography>
-          {promoInfo?.validThrough && (
-            <Typography color="error" variant="caption">
-              {tOrder("menuItem.promoUntil", {
-                date: format.dateTime(promoInfo.validThrough, "monthDay", {
-                  timeZone: STORE_TIMEZONE,
-                }),
-              })}
-            </Typography>
-          )}
-          {showLowStock && (
+          {nutrition?.calories && (
             <Typography color="textSecondary" variant="caption">
-              {tOrder("menuItem.stockLeft", {
-                stock: [stock, stockUnit].filter(Boolean).join(" "),
-              })}
+              {tOrder("menuItem.calories", { value: nutrition.calories })}
             </Typography>
           )}
-        </PriceStack>
-        <StyledNumberSpinner
-          disabled={!quantity}
-          error={isAtLimit}
-          fullWidth
-          helperText={isAtLimit ? formHelperText : undefined}
-          max={availableToAdd}
-          min={minQuantity}
-          onValueChange={(value) => setValue("quantity", value || minQuantity)}
-          value={quantity}
-        />
-      </FooterStack>
-    </FormBox>
+          {itemAvailableHoursLabel && (
+            <MetaStack direction="row">
+              <EventAvailable color="disabled" fontSize="small" />
+              <Typography color="textSecondary" variant="caption">
+                {itemAvailableHoursLabel}
+              </Typography>
+            </MetaStack>
+          )}
+          {leadTimeMinutes != null && (
+            <MetaStack direction="row">
+              <AccessTime color="disabled" fontSize="small" />
+              <Typography color="textSecondary" variant="caption">
+                {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
+              </Typography>
+            </MetaStack>
+          )}
+          <Divider flexItem />
+          {servingTemperatures.length > 0 &&
+            renderServingTemperatureLevelGroup(
+              servingTemperatures,
+              recommendedServingTemperatureLevel || null,
+              servingTemperatureLevel,
+              handleServingTemperatureLevelChange,
+              errors.servingTemperatureLevel,
+            )}
+          {sweetness !== "NotApplicable" && (
+            <>
+              {servingTemperatures.length > 0 && (
+                <Divider flexItem variant="inset" />
+              )}
+              {renderSweetnessGroup(
+                sweetness,
+                fixedSweetnessLevel || null,
+                recommendedSweetnessLevel || null,
+                sweetnessLevel,
+                handleSweetnessLevelChange,
+                errors.sweetnessLevel,
+              )}
+            </>
+          )}
+          {modifierGroups.map((group, index) => (
+            <Fragment key={group.id}>
+              {(index > 0 || hasBuiltInChoices) && (
+                <Divider flexItem variant="inset" />
+              )}
+              {renderModifierGroup(
+                group,
+                choices,
+                handleChoicesChange,
+                errors.choices?.[group.id],
+              )}
+            </Fragment>
+          ))}
+          {(hasBuiltInChoices || modifierGroups.length > 0) &&
+            addOnItems.length > 0 && <Divider flexItem variant="inset" />}
+          {addOnItems.length > 0 && (
+            <CheckboxesGroup
+              error={!!errors.choices?.[ADD_ON_OPTION_ID]}
+              fullWidth
+              helperText={errors.choices?.[ADD_ON_OPTION_ID]?.message}
+              label={tOrder("menuItem.addOn")}
+              onChange={(event, next) =>
+                setValue(`choices.${ADD_ON_OPTION_ID}`, next)
+              }
+              options={addOnItems.map((addOnItem) => {
+                const {
+                  availableModes,
+                  id,
+                  image,
+                  modifierGroups,
+                  name,
+                  offers,
+                  servingTemperatures,
+                  recommendedServingTemperatureLevel:
+                    addOnRecommendedServingTemperatureLevel,
+                  sweetness: addOnSweetness,
+                  fixedSweetnessLevel: addOnFixedSweetnessLevel,
+                  recommendedSweetnessLevel: addOnRecommendedSweetnessLevel,
+                } = addOnItem;
+                const addOnHasBuiltInChoices =
+                  servingTemperatures.length > 0 ||
+                  addOnSweetness !== "NotApplicable";
+                const checked = selectedAddOnIds.includes(id);
+                const addOnStock = getOfferStock(offers[0]);
+                const outOfStockInCart =
+                  !checked &&
+                  addOnStock !== null &&
+                  addOnStock - getCartItemTotalQuantity(id, editingItem) <= 0;
+                const unavailableLabel =
+                  getUnavailableLabel(
+                    offers[0]?.availability,
+                    availableModes,
+                    offers[0]?.availableHours,
+                  ) ||
+                  (hasUnsatisfiableModifierGroup(modifierGroups, apiMode)
+                    ? tCommon("soldOut")
+                    : "") ||
+                  (outOfStockInCart
+                    ? tCommon("reachStockLimit", { label: "" })
+                    : "");
+
+                return {
+                  children: (addOnHasBuiltInChoices ||
+                    modifierGroups.length > 0) && (
+                    <Collapse in={checked} timeout="auto" unmountOnExit>
+                      <AddOnOptionsStack>
+                        {servingTemperatures.length > 0 &&
+                          renderServingTemperatureLevelGroup(
+                            servingTemperatures,
+                            addOnRecommendedServingTemperatureLevel || null,
+                            addOnServingTemperatureLevels[id] || null,
+                            handleAddOnServingTemperatureLevelChange(id),
+                            errors.addOnServingTemperatureLevels?.[id],
+                          )}
+                        {addOnSweetness !== "NotApplicable" && (
+                          <>
+                            {servingTemperatures.length > 0 && (
+                              <Divider flexItem variant="inset" />
+                            )}
+                            {renderSweetnessGroup(
+                              addOnSweetness,
+                              addOnFixedSweetnessLevel || null,
+                              addOnRecommendedSweetnessLevel || null,
+                              addOnSweetnessLevels[id] || null,
+                              handleAddOnSweetnessLevelChange(id),
+                              errors.addOnSweetnessLevels?.[id],
+                            )}
+                          </>
+                        )}
+                        {modifierGroups.map((group, index) => (
+                          <Fragment key={group.id}>
+                            {(index > 0 || addOnHasBuiltInChoices) && (
+                              <Divider flexItem variant="inset" />
+                            )}
+                            {renderModifierGroup(
+                              group,
+                              addOnChoices[id] || {},
+                              handleAddOnChoicesChange(id),
+                              errors.addOnChoices?.[id]?.[group.id],
+                            )}
+                          </Fragment>
+                        ))}
+                      </AddOnOptionsStack>
+                    </Collapse>
+                  ),
+                  disabled: !checked && !!unavailableLabel,
+                  label: (
+                    <AddOnLabelStack direction="row">
+                      <AddOnAvatar
+                        alt={name}
+                        disabled={!checked && !!unavailableLabel}
+                        src={image || undefined}
+                        variant="rounded"
+                      >
+                        <RestaurantMenu color="disabled" />
+                      </AddOnAvatar>
+                      {renderChoiceLabel(
+                        name,
+                        getAddOnPrice(addOnItem),
+                        getAvailableHoursLabel(offers[0]?.availableHours),
+                        unavailableLabel,
+                      )}
+                    </AddOnLabelStack>
+                  ),
+                  value: id,
+                };
+              })}
+              value={selectedAddOnIds}
+            />
+          )}
+          {(hasBuiltInChoices ||
+            modifierGroups.length > 0 ||
+            addOnItems.length > 0) && <Divider flexItem />}
+          <FooterStack direction="row">
+            <PriceStack direction="column">
+              {promoInfo && (
+                <OriginalPriceTypography
+                  color="textDisabled"
+                  isPromo
+                  variant="caption"
+                >
+                  {formatMoney(basePrice, priceCurrency)}
+                </OriginalPriceTypography>
+              )}
+              <PriceTypography
+                color={promoInfo ? "error" : "primary"}
+                component="span"
+                variant="h6"
+              >
+                {displayPrice}
+              </PriceTypography>
+              {promoInfo?.validThrough && (
+                <Typography color="error" variant="caption">
+                  {tOrder("menuItem.promoUntil", {
+                    date: format.dateTime(promoInfo.validThrough, "monthDay", {
+                      timeZone: STORE_TIMEZONE,
+                    }),
+                  })}
+                </Typography>
+              )}
+              {showLowStock && (
+                <Typography color="textSecondary" variant="caption">
+                  {tOrder("menuItem.stockLeft", {
+                    stock: [stock, stockUnit].filter(Boolean).join(" "),
+                  })}
+                </Typography>
+              )}
+            </PriceStack>
+            <StyledNumberSpinner
+              disabled={!quantity}
+              error={isAtLimit}
+              fullWidth
+              helperText={isAtLimit ? formHelperText : undefined}
+              max={availableToAdd}
+              min={minQuantity}
+              onValueChange={(value) =>
+                setValue("quantity", value || minQuantity)
+              }
+              value={quantity}
+            />
+          </FooterStack>
+        </FormBox>
+      </CustomizedDialogContent>
+      <CustomizedDialogActions confirmDisabled={quantity <= 0} />
+    </>
   );
 };
 
