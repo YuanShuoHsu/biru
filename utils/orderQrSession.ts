@@ -8,7 +8,7 @@ import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
 import type { OrganizationResponse } from "@/types/organizations";
 import type { OrderQrSessionResponse } from "@/types/orders";
 
-export const getOrderQrSession = cache(
+const getOrderQrSession = cache(
   async (organizationSlug: OrganizationResponse["slug"]) => {
     const cookieStore = await cookies();
 

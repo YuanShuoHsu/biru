@@ -13,7 +13,7 @@ type MenuActions = {
 
 export type MenuStore = MenuState & MenuActions;
 
-export const defaultInitState: MenuState = {
+const defaultInitState: MenuState = {
   isLoading: true,
   menu: null,
 };
