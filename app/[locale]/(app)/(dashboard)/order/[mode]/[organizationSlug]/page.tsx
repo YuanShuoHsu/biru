@@ -6,6 +6,7 @@ import { StyledStack } from "./styled";
 
 import OrderMenuContent from "@/components/OrderMenuContent";
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
+import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
 import OrderTableNumberChip from "@/components/OrderTableNumberChip";
 
 import { ORDER_MODE } from "@/constants/orderMode";
@@ -13,8 +14,10 @@ import { PARTY_SIZE_MAX } from "@/constants/partySize";
 
 import type { Locale } from "@/i18n/routing";
 
+import type { PrepEstimate } from "@/types/orders";
 import type { Organization } from "@/types/organizations";
 
+import { fetcher } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
 import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
@@ -73,10 +76,28 @@ const OrderModeOrganizationSlugPage = async ({
   );
   if (!organization || organization.closedAt) return notFound();
 
-  if (!(await hasOrderAccess(organization.slug, mode, tableNumber)))
-    return notFound();
+  const [hasAccess, prepEstimate] = await Promise.all([
+    hasOrderAccess(organization.slug, mode, tableNumber),
+    fetcher<PrepEstimate>(
+      `/api/organizations/${organization.slug}/orders/prep-estimate`,
+    ).catch(() => null),
+  ]);
+  if (!hasAccess) return notFound();
 
-  if (mode !== ORDER_MODE.DineIn) return <OrderMenuContent />;
+  const prepEstimateChip = (
+    <OrderPrepEstimateChip
+      initialEstimate={prepEstimate}
+      organizationSlug={organization.slug}
+    />
+  );
+
+  if (mode !== ORDER_MODE.DineIn)
+    return (
+      <>
+        {prepEstimateChip}
+        <OrderMenuContent />
+      </>
+    );
 
   const isValidTableNumber = !!tableNumber && /^[1-9]\d*$/.test(tableNumber);
 
@@ -104,6 +125,7 @@ const OrderModeOrganizationSlugPage = async ({
       <StyledStack direction="row">
         <OrderTableNumberChip tableNumber={tableNumber} />
         <OrderPartySizeTextField partySize={partySize} />
+        {prepEstimateChip}
       </StyledStack>
       <OrderMenuContent />
     </>

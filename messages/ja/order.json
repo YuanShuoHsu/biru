@@ -260,6 +260,9 @@
       "placeholder": "あなたの店舗を選択してください"
     }
   },
+  "prepEstimate": {
+    "label": "現在、提供まで約{minutes}分"
+  },
   "ready": {
     "notify": {
       "body": "受け取り口でお受け取りください。",
