@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import ErrorAlert from "@/components/ErrorAlert";
 import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
 
 import type { Locale } from "@/i18n/routing";
 
 import type { OrderBoardItem, PrepEstimate } from "@/types/orders";
-import type { OrganizationResponse } from "@/types/organizations";
 
-import { fetcher } from "@/utils/fetcher";
-import { redirectToCurrentSlug } from "@/utils/organizations";
+import { fetcher, settle } from "@/utils/fetcher";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 import OrderBoard from ".";
 
@@ -22,11 +22,9 @@ export const generateMetadata = async ({
   params,
 }: OrderBoardPageProps): Promise<Metadata> => {
   const { locale, organizationSlug } = await params;
-  const [tOrder, organization] = await Promise.all([
+  const [tOrder, { data: organization }] = await Promise.all([
     getTranslations({ locale, namespace: "order" }),
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
+    settle(getOrganization(organizationSlug)),
   ]);
 
   return {
@@ -39,17 +37,23 @@ export const generateMetadata = async ({
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   const { organizationSlug } = await params;
 
-  const [organization, items, prepEstimate] = await Promise.all([
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
-    fetcher<OrderBoardItem[]>(
-      `/api/organizations/${organizationSlug}/orders/board`,
-    ).catch(() => []),
+  const [
+    { data: organization, error },
+    { data: items, error: itemsError },
+    prepEstimate,
+  ] = await Promise.all([
+    settle(getOrganization(organizationSlug)),
+    settle(
+      fetcher<OrderBoardItem[]>(
+        `/api/organizations/${organizationSlug}/orders/board`,
+      ),
+    ),
     fetcher<PrepEstimate>(
       `/api/organizations/${organizationSlug}/orders/prep-estimate`,
     ).catch(() => null),
   ]);
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
 
   await redirectToCurrentSlug(
     organization,
@@ -57,7 +61,7 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
     (slug) => `/order-board/${slug}`,
   );
 
-  if (!organization) notFound();
+  if (itemsError) return <ErrorAlert />;
 
   return (
     <>

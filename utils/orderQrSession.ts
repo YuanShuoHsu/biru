@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { fetcher } from "./fetcher";
+import { type FetchError, fetcher } from "./fetcher";
 
 import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
 
@@ -17,8 +17,10 @@ export const getOrderQrSession = cache(
         `/api/organizations/${organizationSlug}/order-qr-sessions/current`,
         { headers: { cookie: cookieStore.toString() } },
       );
-    } catch {
-      return null;
+    } catch (error) {
+      if ((error as FetchError).status === 404) return null;
+
+      throw error;
     }
   },
 );

@@ -3,8 +3,11 @@ import { getTranslations } from "next-intl/server";
 
 import About from ".";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import type { Locale } from "@/i18n/routing";
 
+import { settle } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
 import { getOrganizations, getOrganizationTeam } from "@/utils/organizations";
 import { getStorePhotos } from "@/utils/storePhotos";
@@ -30,16 +33,22 @@ export const generateMetadata = async ({
 
 const AboutPage = async ({ params }: AboutPageProps) => {
   const { locale } = await params;
-  const [organizations, storePhotos] = await Promise.all([
-    getOrganizations(),
+  const [{ data: organizations, error }, storePhotos] = await Promise.all([
+    settle(getOrganizations()),
     getStorePhotos(locale),
   ]);
-  const organizationTeams = Object.fromEntries(
-    await Promise.all(
-      organizations.map(
-        async ({ id, slug }) => [id, await getOrganizationTeam(slug)] as const,
-      ),
+  if (error) return <ErrorAlert />;
+
+  const teamResults = await Promise.all(
+    organizations.map(
+      async ({ id, slug }) =>
+        [id, await settle(getOrganizationTeam(slug))] as const,
     ),
+  );
+  if (teamResults.some(([, result]) => result.error)) return <ErrorAlert />;
+
+  const organizationTeams = Object.fromEntries(
+    teamResults.map(([id, { data = [] }]) => [id, data]),
   );
 
   return (

@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { headers } from "next/headers";
+import { notFound } from "next/navigation";
+
+import ErrorAlert from "@/components/ErrorAlert";
 
 import type { Locale } from "@/i18n/routing";
 
 import type { OrderReceiptResponse } from "@/types/orders";
-import type { OrganizationResponse } from "@/types/organizations";
 
-import { fetcher } from "@/utils/fetcher";
-import { redirectToCurrentSlug } from "@/utils/organizations";
+import { fetcher, settle } from "@/utils/fetcher";
+import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
 import OrderModeOrganizationSlugComplete from ".";
 
@@ -38,17 +40,23 @@ const OrderModeOrganizationSlugCompletePage = async ({
 
   const reqHeaders = await headers();
 
-  const [order, organization] = await Promise.all([
-    orderId
-      ? fetcher<OrderReceiptResponse>(
-          `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`,
-          { headers: { cookie: reqHeaders.get("cookie") || "" } },
-        ).catch(() => null)
-      : null,
-    fetcher<OrganizationResponse>(
-      `/api/organizations/${organizationSlug}`,
-    ).catch(() => null),
-  ]);
+  const [{ data: organization, error }, { data: order, error: orderError }] =
+    await Promise.all([
+      settle(getOrganization(organizationSlug)),
+      orderId
+        ? settle(
+            fetcher<OrderReceiptResponse>(
+              `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`,
+              { headers: { cookie: reqHeaders.get("cookie") || "" } },
+            ),
+          )
+        : { data: null, error: undefined },
+    ]);
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
+
+  if (orderError && orderError.status !== 403 && orderError.status !== 404)
+    return <ErrorAlert />;
 
   await redirectToCurrentSlug(
     organization,
@@ -59,7 +67,7 @@ const OrderModeOrganizationSlugCompletePage = async ({
 
   return (
     <OrderModeOrganizationSlugComplete
-      order={order}
+      order={order ?? null}
       organization={organization}
     />
   );

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import { StyledStack } from "./styled";
 
+import ErrorAlert from "@/components/ErrorAlert";
 import OrderMenuContent from "@/components/OrderMenuContent";
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
@@ -17,7 +18,7 @@ import type { Locale } from "@/i18n/routing";
 import type { PrepEstimate } from "@/types/orders";
 import type { Organization } from "@/types/organizations";
 
-import { fetcher } from "@/utils/fetcher";
+import { fetcher, settle } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
 import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
@@ -39,7 +40,9 @@ export const generateMetadata = async ({
 }: OrderModeOrganizationSlugPageProps): Promise<Metadata> => {
   const { locale, mode, organizationSlug } = await params;
 
-  const organization = await getOrganization(organizationSlug);
+  const { data: organization } = await settle(
+    getOrganization(organizationSlug),
+  );
   if (!organization) return {};
 
   if (mode !== ORDER_MODE.Pickup)
@@ -67,22 +70,29 @@ const OrderModeOrganizationSlugPage = async ({
   ]);
   const { partySize, tableNumber } = query;
 
-  const organization = await getOrganization(organizationSlug);
+  const { data: organization, error } = await settle(
+    getOrganization(organizationSlug),
+  );
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
+
   await redirectToCurrentSlug(
     organization,
     organizationSlug,
     (slug) => `/order/${mode}/${slug}`,
     query,
   );
-  if (!organization || organization.closedAt) return notFound();
+  if (organization.closedAt) return notFound();
 
-  const [hasAccess, prepEstimate] = await Promise.all([
-    hasOrderAccess(organization.slug, mode, tableNumber),
-    fetcher<PrepEstimate>(
-      `/api/organizations/${organization.slug}/orders/prep-estimate`,
-    ).catch(() => null),
-  ]);
-  if (!hasAccess) return notFound();
+  const [{ data: canOrder, error: accessError }, prepEstimate] =
+    await Promise.all([
+      settle(hasOrderAccess(organization.slug, mode, tableNumber)),
+      fetcher<PrepEstimate>(
+        `/api/organizations/${organization.slug}/orders/prep-estimate`,
+      ).catch(() => null),
+    ]);
+  if (accessError) return <ErrorAlert />;
+  if (!canOrder) return notFound();
 
   const prepEstimateChip = (
     <OrderPrepEstimateChip

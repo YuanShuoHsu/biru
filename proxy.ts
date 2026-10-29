@@ -50,9 +50,11 @@ export const proxy = async (request: NextRequest) => {
   ].some((prefix) => pathname.startsWith(prefix));
 
   if (isAccountPage) {
-    const { data: session } = await authClient.getSession({
+    const { data: session, error } = await authClient.getSession({
       fetchOptions: { headers: request.headers },
     });
+
+    if (error) return response;
 
     if (!session) {
       const redirectTo =

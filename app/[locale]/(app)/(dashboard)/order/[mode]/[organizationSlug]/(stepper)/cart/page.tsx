@@ -4,8 +4,11 @@ import { notFound } from "next/navigation";
 
 import OrderModeOrganizationSlugCart from ".";
 
+import ErrorAlert from "@/components/ErrorAlert";
+
 import type { Locale } from "@/i18n/routing";
 
+import { settle } from "@/utils/fetcher";
 import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
@@ -34,17 +37,25 @@ const OrderModeOrganizationSlugCartPage = async ({
     searchParams,
   ]);
 
-  const organization = await getOrganization(organizationSlug);
+  const { data: organization, error } = await settle(
+    getOrganization(organizationSlug),
+  );
+  if (error?.status === 404) notFound();
+  if (error) return <ErrorAlert />;
+
   await redirectToCurrentSlug(
     organization,
     organizationSlug,
     (slug) => `/order/${mode}/${slug}/cart`,
     query,
   );
-  if (!organization || organization.closedAt) notFound();
+  if (organization.closedAt) notFound();
 
-  if (!(await hasOrderAccess(organization.slug, mode, query.tableNumber)))
-    notFound();
+  const { data: canOrder, error: accessError } = await settle(
+    hasOrderAccess(organization.slug, mode, query.tableNumber),
+  );
+  if (accessError) return <ErrorAlert />;
+  if (!canOrder) notFound();
 
   return <OrderModeOrganizationSlugCart />;
 };
