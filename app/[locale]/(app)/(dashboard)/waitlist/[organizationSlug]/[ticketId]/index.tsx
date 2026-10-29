@@ -27,6 +27,7 @@ import {
   AccessTime,
   Campaign,
   CheckCircleOutlined,
+  Done,
   HelpOutlined,
   HourglassTop,
   People,
@@ -362,6 +363,13 @@ const WaitlistTicket = ({
                   {tWaitlist("ticket.confirm.label")}
                 </Button>
               )}
+              <Button
+                onClick={() => router.push(`/waitlist/${organization.slug}`)}
+                startIcon={<Done />}
+                variant="outlined"
+              >
+                {tWaitlist("ticket.done")}
+              </Button>
               <Button
                 color="error"
                 onClick={handleCancelDialog}

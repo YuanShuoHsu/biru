@@ -3,6 +3,8 @@ import type { components } from "@/types/api";
 export type CreateWaitlistTicketDto =
   components["schemas"]["CreateWaitlistTicketDto"];
 export type WaitlistErrorCode = components["schemas"]["WaitlistErrorCode"];
+export type WaitlistQrSessionResponse =
+  components["schemas"]["WaitlistQrSessionResponseDto"];
 export type WaitlistStatusResponse =
   components["schemas"]["WaitlistStatusResponseDto"];
 export type WaitlistTicketDetailResponse =
