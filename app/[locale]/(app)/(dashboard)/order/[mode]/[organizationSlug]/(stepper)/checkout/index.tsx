@@ -436,6 +436,7 @@ const OrderModeOrganizationSlugCheckout = ({
     if (!payment || !invoice.type) return;
 
     const carrier = invoice.type === "personal" ? invoice.carrierType : "";
+    const company = invoice.type === "company" ? invoice : null;
 
     if (carrier === "mobile") {
       const barcode = await triggerCheckBarcode({
@@ -473,10 +474,11 @@ const OrderModeOrganizationSlugCheckout = ({
             carrier === "mobile" || carrier === "certificate"
               ? invoice.carrierNum
               : undefined,
-          customerAddr: invoice.customerAddr || undefined,
-          customerIdentifier: invoice.customerIdentifier || undefined,
-          customerName: invoice.customerName || undefined,
-          donateCode: invoice.donateCode || undefined,
+          customerAddr: company?.customerAddr || undefined,
+          customerIdentifier: company?.customerIdentifier || undefined,
+          customerName: company?.customerName || undefined,
+          donateCode:
+            invoice.type === "donate" ? invoice.donateCode : undefined,
           type: invoice.type,
         },
         items: cartItemsList,
