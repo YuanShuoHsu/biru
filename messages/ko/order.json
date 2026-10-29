@@ -260,6 +260,9 @@
       "placeholder": "귀하의 지점을 선택해 주세요"
     }
   },
+  "prepEstimate": {
+    "label": "현재 준비 시간 약 {minutes}분"
+  },
   "ready": {
     "notify": {
       "body": "픽업 장소에서 받아 가세요.",

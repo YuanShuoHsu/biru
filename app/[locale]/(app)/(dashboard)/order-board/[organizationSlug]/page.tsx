@@ -3,10 +3,11 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderBoardItem } from "@/types/orders";
+import type { OrderBoardItem, PrepEstimate } from "@/types/orders";
 
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
@@ -36,15 +37,21 @@ export const generateMetadata = async ({
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   const { organizationSlug } = await params;
 
-  const [{ data: organization, error }, { data: items, error: itemsError }] =
-    await Promise.all([
-      settle(getOrganization(organizationSlug)),
-      settle(
-        fetcher<OrderBoardItem[]>(
-          `/api/organizations/${organizationSlug}/orders/board`,
-        ),
+  const [
+    { data: organization, error },
+    { data: items, error: itemsError },
+    prepEstimate,
+  ] = await Promise.all([
+    settle(getOrganization(organizationSlug)),
+    settle(
+      fetcher<OrderBoardItem[]>(
+        `/api/organizations/${organizationSlug}/orders/board`,
       ),
-    ]);
+    ),
+    fetcher<PrepEstimate>(
+      `/api/organizations/${organizationSlug}/orders/prep-estimate`,
+    ).catch(() => null),
+  ]);
   if (error?.status === 404) notFound();
   if (error) return <ErrorAlert />;
 
@@ -56,7 +63,15 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
 
   if (itemsError) return <ErrorAlert />;
 
-  return <OrderBoard items={items} organization={organization} />;
+  return (
+    <>
+      <OrderPrepEstimateChip
+        initialEstimate={prepEstimate}
+        organizationSlug={organization.slug}
+      />
+      <OrderBoard items={items} organization={organization} />
+    </>
+  );
 };
 
 export default OrderBoardPage;

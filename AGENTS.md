@@ -57,7 +57,7 @@ app/[locale]/(app)/(dashboard)/order/[mode]/[organizationSlug]/(stepper)/
 
 Route parameter types are defined in `types/routeParams.ts` (`locale`, `mode`, `organizationSlug`). The `(stepper)` directory is a route group for shared layout without URL impact.
 
-**When adding a new route inside `(dashboard)`**, you must also add the corresponding slot pages in all three parallel route directories (`@breadcrumb`, `@subheader`, `@toolbar`) — or a `default.tsx` fallback if the slot is unused for that route.
+**When adding a new route inside `(dashboard)`**, `@subheader` and `@toolbar` already have a `[...segments]` catch-all returning `null`, and `@breadcrumb/default.tsx` builds the trail from `hooks/useRoutes.ts` — so a new route needs no slot files unless it actually has a subheader/toolbar, but it must be registered in `hooks/useRoutes.ts` (and in `components/TemporaryDrawer/NestedList` or `hooks/useNavChildren.ts` if it belongs in the drawer).
 
 **Page file convention** used throughout the app:
 
