@@ -1,6 +1,16 @@
 {
   "label": "현장 대기",
   "title": "{organizationName} 현장 대기",
+  "board": {
+    "label": "호출 보드",
+    "title": "{organizationName} 호출 보드",
+    "calling": "호출 중",
+    "empty": "아직 호출된 번호가 없습니다",
+    "specialDay": {
+      "closed": "오늘 휴무",
+      "hours": "오늘은 특별 영업시간입니다"
+    }
+  },
   "groups": {
     "title": "현재 대기 현황",
     "group": "{prefix} 그룹",

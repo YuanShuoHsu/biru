@@ -1,6 +1,16 @@
 {
   "label": "現場候位",
   "title": "{organizationName} 現場候位",
+  "board": {
+    "label": "叫號看板",
+    "title": "{organizationName} 叫號看板",
+    "calling": "叫號中",
+    "empty": "尚未叫號",
+    "specialDay": {
+      "closed": "本日公休",
+      "hours": "本日為特殊營業時間"
+    }
+  },
   "groups": {
     "title": "目前候位狀況",
     "group": "{prefix} 組",
