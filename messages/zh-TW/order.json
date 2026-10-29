@@ -260,6 +260,9 @@
       "placeholder": "請選擇您的門市"
     }
   },
+  "prepEstimate": {
+    "label": "目前出餐約需 {minutes} 分鐘"
+  },
   "ready": {
     "notify": {
       "body": "請至取餐處取餐。",

@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 
+import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
+
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderBoardItem } from "@/types/orders";
+import type { OrderBoardItem, PrepEstimate } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { fetcher } from "@/utils/fetcher";
@@ -37,13 +39,16 @@ export const generateMetadata = async ({
 const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
   const { organizationSlug } = await params;
 
-  const [organization, items] = await Promise.all([
+  const [organization, items, prepEstimate] = await Promise.all([
     fetcher<OrganizationResponse>(
       `/api/organizations/${organizationSlug}`,
     ).catch(() => null),
     fetcher<OrderBoardItem[]>(
       `/api/organizations/${organizationSlug}/orders/board`,
     ).catch(() => []),
+    fetcher<PrepEstimate>(
+      `/api/organizations/${organizationSlug}/orders/prep-estimate`,
+    ).catch(() => null),
   ]);
 
   await redirectToCurrentSlug(
@@ -54,7 +59,15 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
 
   if (!organization) notFound();
 
-  return <OrderBoard items={items} organization={organization} />;
+  return (
+    <>
+      <OrderPrepEstimateChip
+        initialEstimate={prepEstimate}
+        organizationSlug={organization.slug}
+      />
+      <OrderBoard items={items} organization={organization} />
+    </>
+  );
 };
 
 export default OrderBoardPage;

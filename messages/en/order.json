@@ -260,6 +260,9 @@
       "placeholder": "Please select your store"
     }
   },
+  "prepEstimate": {
+    "label": "Currently ready in about {minutes} min"
+  },
   "ready": {
     "notify": {
       "body": "Please collect it at the pickup point.",
