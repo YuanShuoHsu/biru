@@ -27,6 +27,7 @@ import { styled } from "@mui/material/styles";
 import type { OrganizationResponse } from "@/types/organizations";
 import type { WaitlistStatusResponse } from "@/types/waitlist";
 
+import { formatOpeningHoursForDisplay } from "@/utils/openingHours";
 import { getWaitlistUnavailable } from "@/utils/waitlist";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
@@ -79,12 +80,13 @@ const WaitlistBoard = ({
   organization,
   status: initialStatus,
 }: WaitlistBoardProps) => {
+  const tCommon = useTranslations("common");
   const tWaitlist = useTranslations("waitlist");
 
   const { data: status = initialStatus, mutate } =
     useSWR<WaitlistStatusResponse>(
       `/api/organizations/${organization.slug}/waitlist`,
-      { fallbackData: initialStatus },
+      { fallbackData: initialStatus, refreshInterval: 60_000 },
     );
 
   const { isConnected } = useSocketConnection(menuSocket);
@@ -127,6 +129,19 @@ const WaitlistBoard = ({
                 : "board.specialDay.hours",
             )}
           </AlertTitle>
+          {specialDay.openingHours &&
+            formatOpeningHoursForDisplay(specialDay.openingHours, {
+              formatDay: (day) => tCommon(`location.openingHours.${day}`),
+              formatNextDayTime: (time) =>
+                tCommon("location.openingHours.nextDayTime", { time }),
+              allDayLabel: tCommon("location.openingHours.allDay"),
+              rangeSeparator: tCommon("location.openingHours.rangeSeparator"),
+              delimiter: tCommon("delimiter"),
+            }).map((line) => (
+              <Typography key={line} variant="body2">
+                {line}
+              </Typography>
+            ))}
           {specialDay.note}
         </Alert>
       )}
