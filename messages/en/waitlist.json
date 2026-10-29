@@ -16,6 +16,7 @@
     "disabled": "This store doesn't offer a walk-in waitlist.",
     "paused": "The waitlist is paused. Please ask a member of staff."
   },
+  "qrRequired": "Please scan the QR code at the store to join the waitlist.",
   "form": {
     "title": "Join the waitlist",
     "partySize": {
@@ -73,6 +74,7 @@
       "success": "Confirmed attendance for {ticketNumber}"
     },
     "again": "Get a new number",
+    "done": "Done",
     "store": "Store info"
   }
 }

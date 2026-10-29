@@ -2724,6 +2724,40 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/orders/prep-estimate": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢目前出餐約需幾分鐘（公開） */
+    get: operations["OrdersController_findPrepEstimate"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/prep-times": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢各品項設定的備餐時間與近 14 天實際平均 */
+    get: operations["OrdersController_findPrepTimes"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/orders/{orderId}": {
     parameters: {
       query?: never;
@@ -3847,6 +3881,42 @@ export interface paths {
     head?: never;
     /** 設定成員是否顯示在官網的團隊介紹；只有本人能開啟，owner／admin 只能關閉其他成員 */
     patch: operations["OrganizationsController_setMemberShowcase"];
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/special-hours": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查看今天以後的特殊營業日 */
+    get: operations["SpecialHoursController_findAll"];
+    put?: never;
+    /** 新增特殊營業日（臨時公休或調整時段） */
+    post: operations["SpecialHoursController_create"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/special-hours/{specialHoursId}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    post?: never;
+    /** 刪除特殊營業日 */
+    delete: operations["SpecialHoursController_remove"];
+    options?: never;
+    head?: never;
+    /** 更新特殊營業日 */
+    patch: operations["SpecialHoursController_update"];
     trace?: never;
   };
   "/api/quant/credentials": {
@@ -6024,6 +6094,7 @@ export interface components {
       startsAt: string;
       endsAt: string;
       reason: string;
+      /** Format: uuid */
       leaveTypeId?: string;
       correctedEvents?: components["schemas"]["CorrectedEventDto"][];
     };
@@ -6667,6 +6738,10 @@ export interface components {
      * @enum {string}
      */
     UserRole: "admin" | "user";
+    AuditLogListResponseDto: {
+      data: components["schemas"]["AuditLogResponseDto"][];
+      total: number;
+    };
     UserResponseDto: {
       /**
        * @description ID
@@ -7040,6 +7115,10 @@ export interface components {
       | "endsAt"
       | "createdAt"
       | "updatedAt";
+    BannerListResponseDto: {
+      data: components["schemas"]["BannerResponseDto"][];
+      total: number;
+    };
     ReorderBannersDto: {
       ids: string[];
       /** @default 0 */
@@ -7489,6 +7568,10 @@ export interface components {
     DeletedRecordFilterField: "organizationName" | "tableName" | "deletedAt";
     /** @enum {string} */
     DeletedRecordSortField: "organizationName" | "tableName" | "deletedAt";
+    DeletedRecordBatchListResponseDto: {
+      data: components["schemas"]["DeletedRecordBatchResponseDto"][];
+      total: number;
+    };
     RestoreDeletedRecordsDto: {
       ids: number[];
     };
@@ -8689,6 +8772,7 @@ export interface components {
       | "longWait"
       | "customerMistake"
       | "customerCancelled"
+      | "storeClosed"
       | "other";
     OrderRefundDto: {
       /** @description 退款 ID */
@@ -8747,11 +8831,23 @@ export interface components {
       /** @description 這次退完後整張訂單是否已全額退款 */
       isFull: boolean;
     };
+    /**
+     * @description 退款原因分類，用於統計出錯比例
+     * @enum {string}
+     */
+    StaffRefundReasonCode:
+      | "wrongItem"
+      | "qualityIssue"
+      | "outOfStock"
+      | "longWait"
+      | "customerMistake"
+      | "customerCancelled"
+      | "other";
     CreateOrderRefundDto: {
       /** @description 退款品項與數量；省略代表整單全額退款。金額由後端依原單價計算，不接受自訂金額，否則湊不出合法的發票折讓明細 */
       items?: components["schemas"]["RefundItemInputDto"][];
       /** @description 退款原因分類，用於統計出錯比例 */
-      reasonCode: components["schemas"]["RefundReasonCode"];
+      reasonCode: components["schemas"]["StaffRefundReasonCode"];
       /** @description 退款說明，會作為發票作廢／折讓原因送至綠界；原因分類為 other 時必填 */
       reason?: string;
     };
@@ -8855,6 +8951,10 @@ export interface components {
      * @enum {string}
      */
     UnitCode: "GRM" | "KGM" | "LTR" | "MLT" | "H87";
+    IngredientListResponseDto: {
+      data: components["schemas"]["IngredientResponseDto"][];
+      total: number;
+    };
     CreateIngredientDto: {
       /**
        * @example {
@@ -8963,6 +9063,10 @@ export interface components {
       | "note"
       | "createdAt"
       | "updatedAt";
+    SupplierListResponseDto: {
+      data: components["schemas"]["SupplierResponseDto"][];
+      total: number;
+    };
     CreateSupplierDto: {
       /** @example 全國食材廣場 */
       name: string;
@@ -8995,6 +9099,10 @@ export interface components {
     RecipeFilterField: "name" | "recipeYield" | "createdAt" | "updatedAt";
     /** @enum {string} */
     RecipeSortField: "name" | "recipeYield" | "createdAt" | "updatedAt";
+    RecipeListResponseDto: {
+      data: components["schemas"]["RecipeResponseDto"][];
+      total: number;
+    };
     CreateRecipeDto: {
       /**
        * @example {
@@ -9118,6 +9226,10 @@ export interface components {
       | "unitCost"
       | "createdAt"
       | "reason";
+    InventoryTransactionListResponseDto: {
+      data: components["schemas"]["InventoryTransactionResponseDto"][];
+      total: number;
+    };
     CreateInventoryTransactionDto: {
       /**
        * @description 清點後的現有數量；異動量由系統與帳上數量相減求得
@@ -9189,6 +9301,10 @@ export interface components {
       | "updatedAt"
       | "unitPrice"
       | "cost";
+    RecipeIngredientListResponseDto: {
+      data: components["schemas"]["RecipeIngredientResponseDto"][];
+      total: number;
+    };
     CreateRecipeIngredientDto: {
       ingredientId: string;
       /**
@@ -9555,6 +9671,10 @@ export interface components {
       | "OrderPaymentDue"
       | "OrderProcessing"
       | "OrderPickupAvailable";
+    AdminOrderListResponseDto: {
+      data: components["schemas"]["AdminOrderResponseDto"][];
+      total: number;
+    };
     OrderBoardItemDto: {
       orderId: string;
       orderNumber: string;
@@ -9659,6 +9779,24 @@ export interface components {
     AdminOrderBoardColumnDto: {
       orderStatus: components["schemas"]["OrderFlowStatus"];
       orders: components["schemas"]["AdminOrderResponseDto"][];
+    };
+    PrepEstimateResponseDto: {
+      /** @enum {string} */
+      basis: "observed" | "leadTime";
+      /** @description 無條件進位到 5 分鐘 */
+      estimatedMinutes: number;
+      /** @description 計入估算的製作中訂單數 */
+      queuedOrders: number;
+    };
+    PrepTimeResponseDto: {
+      menuItemId: string;
+      name: components["schemas"]["LocalizedTextDto"];
+      /** @description 估算採用的備餐分鐘數：門市備餐時間與此品項設定的備餐時間取大者，不含加購 */
+      leadTimeMinutes: number;
+      /** @description 近 14 天含此品項、非預約的已出餐訂單，從付款（未付款則下單）到可取餐的整張單分鐘數中位數，含同單其他品項與排隊等待；樣本不足 5 筆時為 null */
+      medianMinutes: number | null;
+      /** @description 近 14 天含此品項、非預約的已出餐訂單數 */
+      sampleSize: number;
     };
     OrderReceiptResponseDto: {
       id: string;
@@ -9997,6 +10135,10 @@ export interface components {
     MenuSectionFilterField: "name" | "description" | "createdAt" | "updatedAt";
     /** @enum {string} */
     MenuSectionSortField: "name" | "description" | "createdAt" | "updatedAt";
+    MenuSectionListResponseDto: {
+      data: components["schemas"]["MenuSectionResponseDto"][];
+      total: number;
+    };
     OrderTicketPrinterOptionDto: {
       id: string;
       /** @description 店家自訂的名稱（例如吧台、廚房）；發票印表機為 null */
@@ -10240,6 +10382,10 @@ export interface components {
       | "updatedAt"
       | "priceSpecificationValidFrom"
       | "priceSpecificationValidThrough";
+    MenuItemListResponseDto: {
+      data: components["schemas"]["MenuItemResponseDto"][];
+      total: number;
+    };
     UpdateMenuItemDto: {
       /**
        * @example {
@@ -10344,6 +10490,10 @@ export interface components {
       | "addOnMenuItemName"
       | "createdAt"
       | "updatedAt";
+    MenuItemAddOnListResponseDto: {
+      data: components["schemas"]["MenuItemAddOnResponseDto"][];
+      total: number;
+    };
     UpdateMenuItemAddOnDto: {
       /** @description Add-on menu item ID */
       addOnMenuItemId?: string | null;
@@ -10414,6 +10564,10 @@ export interface components {
       | "maxSelectionCount"
       | "createdAt"
       | "updatedAt";
+    ModifierGroupListResponseDto: {
+      data: components["schemas"]["ModifierGroupResponseDto"][];
+      total: number;
+    };
     UpdateModifierGroupDto: {
       /** @description 群組名稱 */
       displayName?: components["schemas"]["LocalizedTextDto"];
@@ -10455,6 +10609,10 @@ export interface components {
       | "availability"
       | "createdAt"
       | "updatedAt";
+    ModifierListResponseDto: {
+      data: components["schemas"]["ModifierResponseDto"][];
+      total: number;
+    };
     UpdateModifierDto: {
       /** @description 選項名稱 */
       displayName?: components["schemas"]["LocalizedTextDto"];
@@ -10485,6 +10643,10 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+    };
+    MenuItemModifierGroupListResponseDto: {
+      data: components["schemas"]["MenuItemModifierGroupResponseDto"][];
+      total: number;
     };
     OrderMenuOfferResponseDto: {
       id: string;
@@ -10711,11 +10873,28 @@ export interface components {
       /** @example B */
       prefix: string;
       /**
+       * @description 叫號中尚未入座、過號或取消的號碼，最近叫號的在前，最多 5 筆
+       * @example [
+       *       "A008",
+       *       "A007"
+       *     ]
+       */
+      calledTicketNumbers: string[];
+      /**
        * @description 最近一次叫號的號碼（之後入座、過號或取消仍保留），尚未叫號為 null
        * @example A008
        */
       currentTicketNumber?: string | null;
       waitingCount: number;
+    };
+    PublicSpecialHoursDto: {
+      id: string;
+      /** @example 2027-02-05 */
+      validFrom: string;
+      /** @example 2027-02-07 */
+      validThrough: string;
+      openingHours: string | null;
+      note: string | null;
     };
     WaitlistStatusResponseDto: {
       /** @description 營業中但已過打烊前停止取號時間 */
@@ -10725,6 +10904,8 @@ export interface components {
       /** @description 是否在營業時間內 */
       open: boolean;
       paused: boolean;
+      /** @description 日期範圍涵蓋今天的特殊營業日（最多一筆）；open 與 cutoff 另外也套用了前一天特殊營業日延到今天凌晨的跨夜時段，該筆不列在這裡 */
+      specialHours: components["schemas"]["PublicSpecialHoursDto"][];
     };
     WaitlistQrSessionResponseDto: {
       /** Format: date-time */
@@ -10835,6 +11016,8 @@ export interface components {
       /** @description 是否在營業時間內 */
       open: boolean;
       paused: boolean;
+      /** @description 日期範圍涵蓋今天的特殊營業日（最多一筆）；open 與 cutoff 另外也套用了前一天特殊營業日延到今天凌晨的跨夜時段，該筆不列在這裡 */
+      specialHours: components["schemas"]["PublicSpecialHoursDto"][];
       /** @description 進行中的號碼牌與今日已結束的號碼牌 */
       tickets: components["schemas"]["AdminWaitlistTicketDto"][];
     };
@@ -10860,6 +11043,10 @@ export interface components {
       | "createdAt"
       | "calledAt"
       | "endedAt";
+    WaitlistTicketListResponseDto: {
+      data: components["schemas"]["WaitlistTicketListItemDto"][];
+      total: number;
+    };
     WaitlistStatsResponseDto: {
       /** @description 期間內取號組數，含仍在進行中的號碼牌 */
       total: number;
@@ -11048,6 +11235,43 @@ export interface components {
       showcase: boolean;
       userId: string;
     };
+    OrganizationDetailResponseDto: {
+      id: string;
+      name: string;
+      slug: string;
+      logo?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      metadata?: string | null;
+      addressCountry: string;
+      addressLocality: string;
+      addressRegion: string;
+      extendedAddress?: string | null;
+      postalCode?: string | null;
+      streetAddress: string;
+      hasMap?: string | null;
+      openingHours?: string | null;
+      telephone?: string | null;
+      /**
+       * @description 店家目錄定價幣別
+       * @example TWD
+       */
+      currency: string;
+      amountPerPoint?: string | null;
+      pointsValidityYears?: number | null;
+      pickupLeadMinutes: number;
+      pickupMaxAdvanceDays: number;
+      pickupCutoffMinutes: number;
+      /** @description 內用桌數，桌號為 1 到此數；null 代表不開放內用 */
+      dineInTableCount?: number | null;
+      /**
+       * Format: date-time
+       * @description 停業時間；營業中為 null
+       */
+      closedAt?: string | null;
+      /** @description 與今天到 30 天後（含兩端）重疊的特殊營業日，不隨店家的自取預約天數設定變動 */
+      specialHours: components["schemas"]["PublicSpecialHoursDto"][];
+    };
     OrganizationMemberTeamDto: {
       id: string;
       name: string;
@@ -11070,6 +11294,52 @@ export interface components {
       id: string;
       /** @description 是否顯示在官網「關於我們」的團隊介紹 */
       showcase: boolean;
+    };
+    SpecialHoursDto: {
+      id: string;
+      organizationId: string;
+      /** @example 2027-02-05 */
+      validFrom: string;
+      /** @example 2027-02-07 */
+      validThrough: string;
+      openingHours: string | null;
+      note: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    CreateSpecialHoursDto: {
+      /**
+       * @description 開始日期（平台時區）
+       * @example 2027-02-05
+       */
+      validFrom: string;
+      /**
+       * @description 結束日期（平台時區，含當天）
+       * @example 2027-02-07
+       */
+      validThrough: string;
+      /** @description 期間內各天依星期套用，格式同門市營業時間（如 "Mo-Su 10:00-15:00"）；null 代表整天公休 */
+      openingHours: string | null;
+      /** @example 颱風停業 */
+      note?: string | null;
+    };
+    UpdateSpecialHoursDto: {
+      /**
+       * @description 開始日期（平台時區）
+       * @example 2027-02-05
+       */
+      validFrom?: string;
+      /**
+       * @description 結束日期（平台時區，含當天）
+       * @example 2027-02-07
+       */
+      validThrough?: string;
+      /** @description 期間內各天依星期套用，格式同門市營業時間（如 "Mo-Su 10:00-15:00"）；null 代表整天公休 */
+      openingHours?: string | null;
+      /** @example 颱風停業 */
+      note?: string | null;
     };
     QuantCredentialDto: {
       id: string;
@@ -11462,6 +11732,10 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
+    QuantBotOrderListResponseDto: {
+      data: components["schemas"]["QuantBotOrderDto"][];
+      total: number;
+    };
     QuantBotFillDto: {
       id: string;
       orderId: string;
@@ -11548,6 +11822,10 @@ export interface components {
       closeModel: components["schemas"]["QuantGridCloseModel"];
       /** @description 實盤：初始買入價格最多高於下單時價格的 %；省略時依 Pionex 預設，模擬盤與回測不使用 */
       slippage?: number;
+    };
+    QuantBotListResponseDto: {
+      data: components["schemas"]["QuantBotDto"][];
+      total: number;
     };
     CreateGridBotDto: {
       name: string;
@@ -12029,6 +12307,10 @@ export interface components {
       | "tag";
     /** @enum {string} */
     QuantBotFillSortField: "filledAt" | "side" | "price" | "size" | "fee";
+    QuantBotFillListResponseDto: {
+      data: components["schemas"]["QuantBotFillDto"][];
+      total: number;
+    };
     QuantBotFillMarkerDto: {
       side: components["schemas"]["QuantOrderSide"];
       price: number;
@@ -12045,6 +12327,10 @@ export interface components {
     };
     /** @enum {string} */
     QuantBotEventSortField: "createdAt" | "kind";
+    QuantBotEventListResponseDto: {
+      data: components["schemas"]["QuantBotEventDto"][];
+      total: number;
+    };
     GridAiStrategyDto: {
       /** @description 建議上界 */
       top: number;
@@ -12446,6 +12732,10 @@ export interface components {
     StorePhotoFilterField: "alt" | "isActive" | "createdAt" | "updatedAt";
     /** @enum {string} */
     StorePhotoSortField: "alt" | "isActive" | "createdAt" | "updatedAt";
+    StorePhotoListResponseDto: {
+      data: components["schemas"]["StorePhotoResponseDto"][];
+      total: number;
+    };
     ReorderStorePhotosDto: {
       ids: string[];
       /** @default 0 */
@@ -14817,16 +15107,16 @@ export interface operations {
   AdminAuditController_findAll: {
     parameters: {
       query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
-        filterOperator?: components["schemas"]["FilterOperator"];
-        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
-        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["AuditLogSortField"];
-        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -14842,7 +15132,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["AuditLogListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -14856,16 +15148,16 @@ export interface operations {
   AuditController_findAll: {
     parameters: {
       query?: {
+        filterOperator?: components["schemas"]["FilterOperator"];
+        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
+        quickFilterEnums?: string[];
+        sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
-        filterOperator?: components["schemas"]["FilterOperator"];
-        /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
-        quickFilterEnums?: string[];
         sortBy?: components["schemas"]["AuditLogSortField"];
-        sortDirection?: components["schemas"]["SortDirection"];
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -14883,7 +15175,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["AuditLogListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -15240,7 +15534,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["BannerListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -15941,7 +16237,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["DeletedRecordBatchListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -16006,7 +16304,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["DeletedRecordBatchListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -17614,7 +17914,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["IngredientListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -17741,7 +18043,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["SupplierListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -17838,7 +18142,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["RecipeListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -17993,7 +18299,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["InventoryTransactionListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -18176,7 +18484,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["RecipeIngredientListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -18964,7 +19274,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["AdminOrderListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -19055,6 +19367,62 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["AdminOrderBoardColumnDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrdersController_findPrepEstimate: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrepEstimateResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  OrdersController_findPrepTimes: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PrepTimeResponseDto"][];
         };
       };
       /** @description Internal server error */
@@ -19500,7 +19868,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["MenuSectionListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -19748,7 +20118,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["MenuItemListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -20115,7 +20487,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["MenuItemAddOnListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -20304,7 +20678,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ModifierGroupListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -20521,7 +20897,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["ModifierListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -20740,7 +21118,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["MenuItemModifierGroupListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -21140,7 +21520,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["WaitlistTicketListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -21311,7 +21693,7 @@ export interface operations {
       path: {
         organizationSlug: string;
         ticketId: string;
-        status: "cancelled" | "called" | "waiting" | "seated" | "noShow";
+        status: "cancelled" | "waiting" | "called" | "seated" | "noShow";
       };
       cookie?: never;
     };
@@ -21822,7 +22204,7 @@ export interface operations {
           [name: string]: unknown;
         };
         content: {
-          "application/json": components["schemas"]["OrganizationResponseDto"];
+          "application/json": components["schemas"]["OrganizationDetailResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -21884,6 +22266,140 @@ export interface operations {
         content: {
           "application/json": components["schemas"]["MemberShowcaseResponseDto"];
         };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SpecialHoursController_findAll: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SpecialHoursDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SpecialHoursController_create: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["CreateSpecialHoursDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SpecialHoursDto"];
+        };
+      };
+      /** @description 與既有區間重疊；回應的 conflict 為衝突的那筆 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SpecialHoursController_remove: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        specialHoursId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      204: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  SpecialHoursController_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        specialHoursId: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateSpecialHoursDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["SpecialHoursDto"];
+        };
+      };
+      /** @description 與既有區間重疊；回應的 conflict 為衝突的那筆 */
+      409: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
       };
       /** @description Internal server error */
       500: {
@@ -22808,7 +23324,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["QuantBotListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -23403,7 +23921,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["QuantBotOrderListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -23434,7 +23954,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["QuantBotFillListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -23526,7 +24048,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["QuantBotEventListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -24443,7 +24967,9 @@ export interface operations {
         headers: {
           [name: string]: unknown;
         };
-        content?: never;
+        content: {
+          "application/json": components["schemas"]["StorePhotoListResponseDto"];
+        };
       };
       /** @description Internal server error */
       500: {
@@ -24661,7 +25187,7 @@ export const pathsApiOrganizationsOrganizationIdOrderMenuGetParametersQueryLangV
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
 export const pathsApiOrganizationsOrganizationSlugWaitlistTicketsTicketIdTransitionsStatusPatchParametersPathStatusValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/organizations/{organizationSlug}/waitlist/tickets/{ticketId}/transitions/{status}"]["patch"]["parameters"]["path"]["status"]
-> = ["cancelled", "called", "waiting", "seated", "noShow"];
+> = ["cancelled", "waiting", "called", "seated", "noShow"];
 export const pathsApiStorePhotosActiveGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/store-photos/active"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
@@ -25889,11 +26415,23 @@ export const refundReasonCodeValues: ReadonlyArray<
   "longWait",
   "customerMistake",
   "customerCancelled",
+  "storeClosed",
   "other",
 ];
 export const orderRefundDtoScopeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderRefundDto"]["scope"]
 > = ["full", "partial"];
+export const staffRefundReasonCodeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["StaffRefundReasonCode"]
+> = [
+  "wrongItem",
+  "qualityIssue",
+  "outOfStock",
+  "longWait",
+  "customerMistake",
+  "customerCancelled",
+  "other",
+];
 export const printerPurposeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PrinterPurpose"]
 > = ["invoice", "orderTicket"];
@@ -26089,6 +26627,9 @@ export const adminOrderResponseDtoOrderStatusValues: ReadonlyArray<
   "OrderProblem",
   "OrderReturned",
 ];
+export const prepEstimateResponseDtoBasisValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["PrepEstimateResponseDto"]["basis"]
+> = ["observed", "leadTime"];
 export const orderReceiptResponseDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderReceiptResponseDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];

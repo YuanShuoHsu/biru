@@ -1,12 +1,16 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import ErrorAlert from "@/components/ErrorAlert";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { WaitlistStatusResponse } from "@/types/waitlist";
+import type {
+  WaitlistQrSessionResponse,
+  WaitlistStatusResponse,
+} from "@/types/waitlist";
 
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
@@ -35,16 +39,26 @@ export const generateMetadata = async ({
 
 const WaitlistPage = async ({ params }: WaitlistPageProps) => {
   const { organizationSlug } = await params;
+  const cookieStore = await cookies();
 
-  const [{ data: organization, error }, { data: status, error: statusError }] =
-    await Promise.all([
-      settle(getOrganization(organizationSlug)),
-      settle(
-        fetcher<WaitlistStatusResponse>(
-          `/api/organizations/${organizationSlug}/waitlist`,
-        ),
+  const [
+    { data: organization, error },
+    { data: status, error: statusError },
+    { data: qrSession, error: qrSessionError },
+  ] = await Promise.all([
+    settle(getOrganization(organizationSlug)),
+    settle(
+      fetcher<WaitlistStatusResponse>(
+        `/api/organizations/${organizationSlug}/waitlist`,
       ),
-    ]);
+    ),
+    settle(
+      fetcher<WaitlistQrSessionResponse>(
+        `/api/organizations/${organizationSlug}/waitlist/qr-session`,
+        { headers: { cookie: cookieStore.toString() } },
+      ),
+    ),
+  ]);
   if (error?.status === 404) notFound();
   if (error) return <ErrorAlert />;
 
@@ -55,9 +69,16 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
   );
 
   if (organization.closedAt || statusError?.status === 404) notFound();
-  if (statusError) return <ErrorAlert />;
+  if (statusError || (qrSessionError && qrSessionError.status !== 404))
+    return <ErrorAlert />;
 
-  return <Waitlist organization={organization} status={status} />;
+  return (
+    <Waitlist
+      hasQrSession={!!qrSession}
+      organization={organization}
+      status={status}
+    />
+  );
 };
 
 export default WaitlistPage;
