@@ -14,15 +14,17 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-interface OrderBoardOrganizationTextFieldProps {
+interface BoardOrganizationTextFieldProps {
+  board: "order-board" | "waitlist-board";
   organizations: OrganizationResponse[];
   organizationSlug: string;
 }
 
-const OrderBoardOrganizationTextField = ({
+const BoardOrganizationTextField = ({
+  board,
   organizations,
   organizationSlug,
-}: OrderBoardOrganizationTextFieldProps) => {
+}: BoardOrganizationTextFieldProps) => {
   const router = useRouter();
 
   const tOrder = useTranslations("order");
@@ -32,7 +34,7 @@ const OrderBoardOrganizationTextField = ({
   );
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    router.push(`/order-board/${event.target.value}`);
+    router.push(`/${board}/${event.target.value}`);
 
   return (
     <StyledTextField
@@ -69,4 +71,4 @@ const OrderBoardOrganizationTextField = ({
   );
 };
 
-export default OrderBoardOrganizationTextField;
+export default BoardOrganizationTextField;

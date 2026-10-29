@@ -18,6 +18,7 @@ import { usePathname } from "@/i18n/navigation";
 import {
   AccountCircle,
   Apartment,
+  Campaign,
   ConfirmationNumber,
   DeleteForever,
   DirectionsCar,
@@ -160,6 +161,12 @@ const routes: Route[] = [
     label: "waitlist.label",
     segment: "waitlist",
     to: null,
+  },
+  {
+    children: [{ icon: Storefront, segment: "[organizationSlug]" }],
+    icon: Campaign,
+    label: "waitlist.board.label",
+    segment: "waitlist-board",
   },
   {
     children: [

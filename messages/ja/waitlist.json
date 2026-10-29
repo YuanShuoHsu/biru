@@ -1,6 +1,16 @@
 {
   "label": "順番待ち",
   "title": "{organizationName} 順番待ち",
+  "board": {
+    "label": "呼び出しボード",
+    "title": "{organizationName} 呼び出しボード",
+    "calling": "呼び出し中",
+    "empty": "まだ呼び出しはありません",
+    "specialDay": {
+      "closed": "本日休業",
+      "hours": "本日は特別営業時間です"
+    }
+  },
   "groups": {
     "title": "現在の待ち状況",
     "group": "{prefix} グループ",
