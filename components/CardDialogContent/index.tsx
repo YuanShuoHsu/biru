@@ -7,7 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 
 import CheckboxesGroup from "@/components/CheckboxesGroup";
-import { CustomizedDialogActions } from "@/components/CustomizedDialogs";
+import CustomizedDialogActions from "@/components/CustomizedDialogActions";
 import FormBox from "@/components/FormBox";
 import NumberSpinner from "@/components/NumberSpinner";
 import RadioButtonsGroup from "@/components/RadioButtonsGroup";
