@@ -7,10 +7,7 @@ import { useForm, useWatch } from "react-hook-form";
 import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 
 import CheckboxesGroup from "@/components/CheckboxesGroup";
-import {
-  CustomizedDialogActions,
-  CustomizedDialogContent,
-} from "@/components/CustomizedDialogs";
+import { CustomizedDialogActions } from "@/components/CustomizedDialogs";
 import FormBox from "@/components/FormBox";
 import NumberSpinner from "@/components/NumberSpinner";
 import RadioButtonsGroup from "@/components/RadioButtonsGroup";
@@ -36,6 +33,7 @@ import {
   Box,
   Chip,
   Collapse,
+  DialogContent,
   Divider,
   Radio,
   Stack,
@@ -662,7 +660,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
   return (
     <>
-      <CustomizedDialogContent>
+      <DialogContent dividers>
         <FormBox id="add-to-cart-form" onSubmit={onSubmit}>
           <ImageBox>
             {image ? (
@@ -921,7 +919,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             />
           </FooterStack>
         </FormBox>
-      </CustomizedDialogContent>
+      </DialogContent>
       <CustomizedDialogActions confirmDisabled={quantity <= 0} />
     </>
   );

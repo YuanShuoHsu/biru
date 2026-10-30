@@ -11,7 +11,6 @@ type DialogState = {
   content?: React.ReactNode;
   contentText?: string;
   customLayout: boolean;
-  dividers: boolean;
   formId?: string;
   onCancel?: () => Promise<void>;
   onConfirm?: () => Promise<void>;
@@ -39,7 +38,6 @@ export const defaultInitState: DialogState = {
   content: null,
   contentText: "",
   customLayout: false,
-  dividers: true,
   formId: undefined,
   onCancel: undefined,
   onConfirm: undefined,
