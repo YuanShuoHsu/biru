@@ -4,10 +4,6 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useState } from "react";
 
 import CustomizedAccordions from "@/components/CustomizedAccordions";
-import {
-  CustomizedDialogActions,
-  CustomizedDialogContent,
-} from "@/components/CustomizedDialogs";
 import FormCard, {
   StyledCardContent,
   StyledCardHeader,
@@ -145,17 +141,12 @@ const Orders = ({ orders: data, page, pageSize }: OrdersProps) => {
 
     setDialog({
       content: (
-        <>
-          <CustomizedDialogContent>
-            <DialogContentText>
-              {tAuth.rich("orders.reorderConfirmContentText", {
-                bold: (chunks) => <strong>{chunks}</strong>,
-                name: order.seller.name,
-              })}
-            </DialogContentText>
-          </CustomizedDialogContent>
-          <CustomizedDialogActions />
-        </>
+        <DialogContentText>
+          {tAuth.rich("orders.reorderConfirmContentText", {
+            bold: (chunks) => <strong>{chunks}</strong>,
+            name: order.seller.name,
+          })}
+        </DialogContentText>
       ),
       onConfirm: async () => applyReorder(),
       open: true,

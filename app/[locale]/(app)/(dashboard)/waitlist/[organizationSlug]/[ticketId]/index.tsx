@@ -10,10 +10,6 @@ import useSWR from "swr";
 
 import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
-import {
-  CustomizedDialogActions,
-  CustomizedDialogContent,
-} from "@/components/CustomizedDialogs";
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
 import WaitlistStatTile from "@/components/WaitlistStatTile";
@@ -256,17 +252,12 @@ const WaitlistTicket = ({
   const handleCancelDialog = () =>
     setDialog({
       content: (
-        <>
-          <CustomizedDialogContent>
-            <DialogContentText>
-              {tWaitlist.rich("ticket.cancel.contentText", {
-                bold: (chunks) => <strong>{chunks}</strong>,
-                ticketNumber: ticket.ticketNumber,
-              })}
-            </DialogContentText>
-          </CustomizedDialogContent>
-          <CustomizedDialogActions />
-        </>
+        <DialogContentText>
+          {tWaitlist.rich("ticket.cancel.contentText", {
+            bold: (chunks) => <strong>{chunks}</strong>,
+            ticketNumber: ticket.ticketNumber,
+          })}
+        </DialogContentText>
       ),
       onConfirm: handleCancelConfirm,
       open: true,
