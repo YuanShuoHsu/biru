@@ -54,7 +54,6 @@ const CustomizedDialogs = () => {
   const {
     cancelText,
     closeDialog,
-    confirmDisabled,
     confirmLoading,
     confirmText,
     container,
@@ -158,7 +157,6 @@ const CustomizedDialogs = () => {
         {showConfirm && (
           <Button
             autoFocus={!formId}
-            disabled={confirmDisabled}
             form={formId}
             loading={confirmLoading}
             loadingPosition="end"
