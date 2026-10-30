@@ -238,7 +238,6 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
       cancelText: tDialog("close"),
       confirmText: tDialog("updateCart"),
       content: <CardDialogContent cartItem={item} menuItem={menuItem} />,
-      customLayout: true,
       formId: "add-to-cart-form",
       open: true,
       title: itemName,

@@ -116,7 +116,6 @@ All providers are composed in `components/AppProviders` — mounted at the root 
 - Each component lives in its own directory with an `index.tsx` entry
 - MUI components are used for all UI elements, styled with `styled()` (no `sx`); Tailwind is only used in the root layout
 - Forms follow the pattern: Zod schema → React Hook Form (`register`, or `useWatch` + `setValue` + `formState.errors` for non-native inputs; avoid `Controller`) → MUI input, with `components/TextMaskCustom` (react-imask) for formatted fields. Async work that only feeds a form (e.g. creating a parent record first) goes in its submit handler, covered by `isSubmitting` or the dialog's `confirmLoading` — no separate loading state.
-- Dialogs are opened through the dialog store (`useDialogStore().setDialog`); the single `components/CustomizedDialogs` shell renders title, close button, `DialogContent` and `components/CustomizedDialogActions`. A dialog whose confirm button depends on its own form state sets `customLayout: true` and renders MUI `DialogContent` + `CustomizedDialogActions` itself (see `components/CardDialogContent`) — never sync derived state back into the store with an effect
 - Phone validation uses `libphonenumber-js`
 - Snackbar/toast notifications use `notistack` (`useSnackbar`); SWR errors are already toasted globally by `SWRProvider`
 

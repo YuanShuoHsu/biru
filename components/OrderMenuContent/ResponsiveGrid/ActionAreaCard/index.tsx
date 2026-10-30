@@ -233,7 +233,6 @@ const ActionAreaCard = ({
       cancelText: tDialog("close"),
       confirmText: tDialog("addToCart"),
       content: <CardDialogContent menuItem={menuItem} />,
-      customLayout: true,
       formId: "add-to-cart-form",
       open: true,
       title: name,
