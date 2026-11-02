@@ -15131,6 +15131,8 @@ export interface operations {
         sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
+        /** @description 只列出此操作者的紀錄 */
+        actorId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
@@ -15172,6 +15174,8 @@ export interface operations {
         sortDirection?: components["schemas"]["SortDirection"];
         resource?: components["schemas"]["AuditResource"];
         resourceId?: string;
+        /** @description 只列出此操作者的紀錄 */
+        actorId?: string;
         /** @description 篩出祖先含此 id 的紀錄,例如某張券的所有發放 */
         ancestorId?: string;
         filterField?: components["schemas"]["AuditLogFilterField"];
