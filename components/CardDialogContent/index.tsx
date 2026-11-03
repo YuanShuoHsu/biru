@@ -1,7 +1,7 @@
 import { useFormatter, useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { Fragment, useEffect, useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { useForm, useWatch } from "react-hook-form";
 
 import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
@@ -328,7 +328,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     Math.max(Math.min(value, availableToAdd), minQuantity);
   const quantity = clampQuantity(rawQuantity);
 
-  const { closeDialog, setDialog } = useDialogStore((state) => state);
+  const { closeDialog } = useDialogStore((state) => state);
 
   const amount = (price + extraCost) * quantity;
   const displayPrice = formatMoney(amount, priceCurrency);
@@ -350,10 +350,6 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         : itemStockLeft === 0
           ? tCommon("soldOut")
           : tCommon("reachStockLimit", { label: limitingLabel });
-
-  useEffect(() => {
-    setDialog({ confirmDisabled: quantity <= 0 });
-  }, [quantity, setDialog]);
 
   const handleChoicesChange = (groupId: string, next: string[]) =>
     setValue(`choices.${groupId}`, next, { shouldValidate: isSubmitted });

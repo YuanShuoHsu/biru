@@ -1,6 +1,16 @@
 {
   "label": "Waitlist",
   "title": "{organizationName} waitlist",
+  "board": {
+    "label": "Waitlist board",
+    "title": "{organizationName} waitlist board",
+    "calling": "Now calling",
+    "empty": "No numbers called yet",
+    "specialDay": {
+      "closed": "Closed today",
+      "hours": "Special opening hours today"
+    }
+  },
   "groups": {
     "title": "Current wait",
     "group": "Group {prefix}",

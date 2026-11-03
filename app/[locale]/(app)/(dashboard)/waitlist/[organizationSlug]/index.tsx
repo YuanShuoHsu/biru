@@ -54,7 +54,7 @@ import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
-import { getWaitlistErrorCode } from "@/utils/waitlist";
+import { getWaitlistErrorCode, getWaitlistUnavailable } from "@/utils/waitlist";
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignSelf: "center",
@@ -199,15 +199,7 @@ const Waitlist = ({
     ...status.groups.map(({ maxPartySize }) => maxPartySize),
   );
 
-  const unavailable = !status.enabled
-    ? "disabled"
-    : status.paused
-      ? "paused"
-      : !status.open
-        ? "closed"
-        : status.cutoff
-          ? "cutoff"
-          : null;
+  const unavailable = getWaitlistUnavailable(status);
 
   const handleFormSubmit = async ({
     countryCode,
