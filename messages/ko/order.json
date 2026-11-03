@@ -14,8 +14,10 @@
   },
   "cart": {
     "back": "메뉴로 돌아가기",
+    "expectedPoints": "이 주문으로 약 {points}포인트 적립 예정",
     "next": "결제하기",
     "quantityExceedsStock": "{label} {stock} 개 남음",
+    "signInForPoints": "로그인하면 {points}포인트를 적립할 수 있어요",
     "title": "장바구니",
     "totalQuantity": "총 {quantity} 개",
     "view": "장바구니 보기"
@@ -106,6 +108,8 @@
     },
     "summary": {
       "discount": "할인",
+      "earnedPoints": "이 주문으로 {points}포인트가 적립되었어요",
+      "expectedPoints": "결제가 완료되면 {points}포인트가 적립돼요",
       "title": "주문 내역",
       "total": "합계"
     },

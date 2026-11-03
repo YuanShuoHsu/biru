@@ -14,8 +14,10 @@
   },
   "cart": {
     "back": "Back to menu",
+    "expectedPoints": "Earn about {points} points with this order",
     "next": "Proceed to checkout",
     "quantityExceedsStock": "{label} {stock} left",
+    "signInForPoints": "Sign in to earn {points} points",
     "title": "Shopping cart",
     "totalQuantity": "{quantity} items",
     "view": "View cart"
@@ -106,6 +108,8 @@
     },
     "summary": {
       "discount": "Discount",
+      "earnedPoints": "You earned {points} points with this order",
+      "expectedPoints": "You will earn {points} points once payment is complete",
       "title": "Order summary",
       "total": "Total"
     },

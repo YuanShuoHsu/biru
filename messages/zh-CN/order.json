@@ -14,8 +14,10 @@
   },
   "cart": {
     "back": "返回菜单",
+    "expectedPoints": "预估本单可得 {points} 点",
     "next": "前往结账",
     "quantityExceedsStock": "{label} 剩 {stock} 件",
+    "signInForPoints": "登录即可获得 {points} 点",
     "title": "购物车",
     "totalQuantity": "共 {quantity} 件",
     "view": "查看购物车"
@@ -106,6 +108,8 @@
     },
     "summary": {
       "discount": "折扣",
+      "earnedPoints": "本单获得 {points} 点",
+      "expectedPoints": "付款完成后可得 {points} 点",
       "title": "订单明细",
       "total": "总计"
     },

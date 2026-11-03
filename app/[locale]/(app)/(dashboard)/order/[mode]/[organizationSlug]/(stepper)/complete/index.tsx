@@ -419,6 +419,16 @@ const OrderModeOrganizationSlugComplete = ({
                   {formatMoney(totalAmount, currency)}
                 </BoldTypography>
               </TotalStack>
+              {!!order.expectedPoints && (
+                <Typography color="textSecondary" variant="body2">
+                  {tOrder(
+                    isPaid
+                      ? "complete.summary.earnedPoints"
+                      : "complete.summary.expectedPoints",
+                    { points: order.expectedPoints },
+                  )}
+                </Typography>
+              )}
             </StyledCardContent>
           </Card>
           <Card variant="outlined">
