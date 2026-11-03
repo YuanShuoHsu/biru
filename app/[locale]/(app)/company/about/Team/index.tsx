@@ -57,7 +57,7 @@ const StyledOrganizationSelect = styled(TextField)({
 const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
   backgroundColor: theme.vars.palette.background.paper,
-  border: `1px solid ${theme.palette.divider}`,
+  border: `1px solid ${theme.vars.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
