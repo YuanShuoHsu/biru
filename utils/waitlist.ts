@@ -1,5 +1,8 @@
 import { waitlistErrorCodeValues } from "@/types/api";
-import type { WaitlistErrorCode } from "@/types/waitlist";
+import type {
+  WaitlistErrorCode,
+  WaitlistStatusResponse,
+} from "@/types/waitlist";
 
 import type { FetchError } from "@/utils/fetcher";
 
@@ -10,3 +13,19 @@ export const getWaitlistErrorCode = (
 
   return waitlistErrorCodeValues.find((value) => value === code);
 };
+
+export const getWaitlistUnavailable = ({
+  cutoff,
+  enabled,
+  open,
+  paused,
+}: WaitlistStatusResponse) =>
+  !enabled
+    ? "disabled"
+    : paused
+      ? "paused"
+      : !open
+        ? "closed"
+        : cutoff
+          ? "cutoff"
+          : null;

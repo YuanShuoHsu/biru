@@ -53,18 +53,22 @@ const Banner = ({ banners }: BannerProps) => {
   const locale = useLocale();
   const t = useTranslations("home");
 
+  const isSlideshow = banners.length > 1;
+
   return (
     <StyledBox>
       {banners.length ? (
         <Carousel
-          autoplay={{
-            delay: 2500,
-            disableOnInteraction: false,
-          }}
-          loop={true}
+          autoplay={
+            isSlideshow && {
+              delay: 2500,
+              disableOnInteraction: false,
+            }
+          }
+          loop={isSlideshow}
           modules={[Autoplay, Mousewheel, Navigation]}
           mousewheel={{ forceToAxis: true }}
-          navigation={true}
+          navigation={isSlideshow}
           slidesPerView={1}
           spaceBetween={0}
         >

@@ -46,6 +46,7 @@ const useNavItems = (): NavItem[] => {
       children: orderChildren,
     },
     navItem("/order-board"),
+    navItem("/waitlist-board"),
     { slot: DividerSlot },
     {
       ...navItem("/auth"),

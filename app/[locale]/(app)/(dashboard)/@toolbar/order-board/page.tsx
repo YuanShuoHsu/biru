@@ -1,5 +1,5 @@
 import ErrorAlert from "@/components/ErrorAlert";
-import OrderBoardOrganizationTextField from "@/components/OrderBoardOrganizationTextField";
+import BoardOrganizationTextField from "@/components/BoardOrganizationTextField";
 
 import { settle } from "@/utils/fetcher";
 import { getOrganizations } from "@/utils/organizations";
@@ -9,7 +9,8 @@ const ToolbarOrderBoardPage = async () => {
   if (error) return <ErrorAlert />;
 
   return (
-    <OrderBoardOrganizationTextField
+    <BoardOrganizationTextField
+      board="order-board"
       organizations={organizations}
       organizationSlug=""
     />

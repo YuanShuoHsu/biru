@@ -1,6 +1,16 @@
 {
   "label": "现场排队",
   "title": "{organizationName} 现场排队",
+  "board": {
+    "label": "叫号看板",
+    "title": "{organizationName} 叫号看板",
+    "calling": "叫号中",
+    "empty": "尚未叫号",
+    "specialDay": {
+      "closed": "本日休息",
+      "hours": "本日为特殊营业时间"
+    }
+  },
   "groups": {
     "title": "当前排队情况",
     "group": "{prefix} 组",
