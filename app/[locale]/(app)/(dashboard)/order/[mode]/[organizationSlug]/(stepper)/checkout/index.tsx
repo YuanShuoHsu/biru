@@ -526,6 +526,7 @@ const OrderModeOrganizationSlugCheckout = ({
       <Card variant="outlined">
         <CartAccordion
           coupon={coupon || null}
+          couponUnresolved={isCouponUnresolved}
           defaultExpanded={false}
           variant="elevation"
         />

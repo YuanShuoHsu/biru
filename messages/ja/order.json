@@ -14,8 +14,10 @@
   },
   "cart": {
     "back": "メニューに戻る",
+    "expectedPoints": "この注文で約 {points} ポイント獲得予定",
     "next": "レジへ進む",
     "quantityExceedsStock": "{label} 残り {stock} 個",
+    "signInForPoints": "ログインすると {points} ポイント獲得できます",
     "title": "カート",
     "totalQuantity": "合計 {quantity} 点",
     "view": "カートを見る"
@@ -106,6 +108,8 @@
     },
     "summary": {
       "discount": "割引",
+      "earnedPoints": "この注文で {points} ポイント獲得しました",
+      "expectedPoints": "お支払い完了後に {points} ポイント獲得できます",
       "title": "注文明細",
       "total": "合計"
     },

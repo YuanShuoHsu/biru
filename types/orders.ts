@@ -5,6 +5,9 @@ export type CreateOrderPayment = CreateOrderDto["payment"];
 export type OrderResponse = components["schemas"]["OrderResponseDto"];
 export type CreateOrderResponse =
   components["schemas"]["CreateOrderResponseDto"];
+export type ExpectedPointsDto = components["schemas"]["ExpectedPointsDto"];
+export type ExpectedPointsResponse =
+  components["schemas"]["ExpectedPointsResponseDto"];
 export type OrderReceiptResponse =
   components["schemas"]["OrderReceiptResponseDto"];
 export type OrderPaymentMethod = OrderResponse["paymentMethod"];

@@ -2690,6 +2690,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/orders/expected-points": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    get?: never;
+    put?: never;
+    /** 預估這張單登入會員可得的點數 */
+    post: operations["OrdersController_estimatePoints"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/orders/board": {
     parameters: {
       query?: never;
@@ -9636,8 +9653,20 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+      /** @description 這張單可得的點數，與實際入點同一算法；未付款訂單依目前點數設定、已付款訂單依付款時的快照計算。訪客訂單、終止狀態（取消／異常／退貨）或未付款且點數未啟用時為 null */
+      expectedPoints: number | null;
       /** @description 查詢此訂單、訂閱狀態與付款時帶上；訪客訂單沒有登入身分，只能靠它證明是下單者 */
       accessToken: string;
+    };
+    ExpectedPointsDto: {
+      /** @enum {string} */
+      mode: "counter" | "dineIn" | "driveThru" | "pickup";
+      discountCode?: string;
+      items: components["schemas"]["CreateOrderItemDto"][];
+    };
+    ExpectedPointsResponseDto: {
+      /** @description 登入會員下這張單可得的點數，與實際入點同一算法，依目前點數設定與優惠折抵後金額計算；點數未啟用時為 null */
+      expectedPoints: number | null;
     };
     /** @enum {string} */
     OrderFilterField:
@@ -9851,6 +9880,8 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+      /** @description 這張單可得的點數，與實際入點同一算法；未付款訂單依目前點數設定、已付款訂單依付款時的快照計算。訪客訂單、終止狀態（取消／異常／退貨）或未付款且點數未啟用時為 null */
+      expectedPoints: number | null;
     };
     OrderResponseDto: {
       id: string;
@@ -9960,6 +9991,8 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+      /** @description 這張單可得的點數，與實際入點同一算法；未付款訂單依目前點數設定、已付款訂單依付款時的快照計算。訪客訂單、終止狀態（取消／異常／退貨）或未付款且點數未啟用時為 null */
+      expectedPoints: number | null;
       seller: components["schemas"]["OrderSellerDto"];
     };
     UserOrderListResponseDto: {
@@ -19355,6 +19388,38 @@ export interface operations {
       };
     };
   };
+  OrdersController_estimatePoints: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["ExpectedPointsDto"];
+      };
+    };
+    responses: {
+      201: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["ExpectedPointsResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   OrdersController_findBoard: {
     parameters: {
       query?: never;
@@ -26585,6 +26650,9 @@ export const createOrderResponseDtoOrderStatusValues: ReadonlyArray<
   "OrderProblem",
   "OrderReturned",
 ];
+export const expectedPointsDtoModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["ExpectedPointsDto"]["mode"]
+> = ["counter", "dineIn", "driveThru", "pickup"];
 export const orderFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderFilterField"]
 > = [
