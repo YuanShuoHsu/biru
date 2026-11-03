@@ -38,9 +38,10 @@ const LabelTypography = styled(Typography)<TypographyProps>({
   flex: 1,
 });
 
-const AmountStack = styled(Stack)({
-  alignItems: "center",
-});
+const PointsBox = styled(Box)(({ theme }) => ({
+  paddingBlock: theme.spacing(1),
+  paddingInline: theme.spacing(2),
+}));
 
 const StyledStack = styled(Stack)(({ theme }) => ({
   alignItems: "center",
@@ -62,9 +63,14 @@ const StyledBox = styled(Box)({
 
 interface CartAccordionProps extends Omit<AccordionProps, "children"> {
   coupon: ValidateCouponResponse | null;
+  couponUnresolved?: boolean;
 }
 
-const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
+const CartAccordion = ({
+  coupon,
+  couponUnresolved,
+  ...props
+}: CartAccordionProps) => {
   const { cartCurrency, cartTotalAmount } = useCartTotals();
   const { cartItemsList } = useCartStore((state) => state);
 
@@ -97,19 +103,24 @@ const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
       sendRequest<ExpectedPointsResponse, ExpectedPointsDto>()(url, {
         arg: { discountCode, items, mode },
       }),
-    { onError: () => {}, shouldRetryOnError: false },
+    {
+      onError: () => {},
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
   );
   const expectedPoints = data?.expectedPoints;
 
   return (
-    <CustomizedAccordions
-      elevation={0}
-      summary={
-        <>
-          <LabelTypography component="span" variant="subtitle1">
-            {tCommon(coupon ? "total" : "subtotal")}
-          </LabelTypography>
-          <AmountStack>
+    <>
+      <CustomizedAccordions
+        elevation={0}
+        summary={
+          <>
+            <LabelTypography component="span" variant="subtitle1">
+              {tCommon(coupon ? "total" : "subtotal")}
+            </LabelTypography>
             <StyledStack direction="row">
               {coupon && (
                 <OriginalPriceTypography color="textDisabled" variant="caption">
@@ -123,30 +134,33 @@ const CartAccordion = ({ coupon, ...props }: CartAccordionProps) => {
                 )}
               </AmountTypography>
             </StyledStack>
-            {!!expectedPoints &&
-              (session ? (
-                <Typography color="textSecondary" variant="caption">
-                  {tOrder("cart.expectedPoints", { points: expectedPoints })}
-                </Typography>
-              ) : (
-                <MuiLink
-                  color="textSecondary"
-                  component={Link}
-                  href={navItem("/auth/sign-in").to ?? "/auth/sign-in"}
-                  underline="always"
-                  variant="caption"
-                >
-                  {tOrder("cart.signInForPoints", { points: expectedPoints })}
-                </MuiLink>
-              ))}
-          </AmountStack>
-          <StyledBox />
-        </>
-      }
-      {...props}
-    >
-      <CartItemList compact />
-    </CustomizedAccordions>
+            <StyledBox />
+          </>
+        }
+        {...props}
+      >
+        <CartItemList compact />
+      </CustomizedAccordions>
+      {!!expectedPoints && !couponUnresolved && (
+        <PointsBox>
+          {session ? (
+            <Typography color="textSecondary" variant="caption">
+              {tOrder("cart.expectedPoints", { points: expectedPoints })}
+            </Typography>
+          ) : (
+            <MuiLink
+              color="textSecondary"
+              component={Link}
+              href={navItem("/auth/sign-in").to ?? "/auth/sign-in"}
+              underline="always"
+              variant="caption"
+            >
+              {tOrder("cart.signInForPoints", { points: expectedPoints })}
+            </MuiLink>
+          )}
+        </PointsBox>
+      )}
+    </>
   );
 };
 
