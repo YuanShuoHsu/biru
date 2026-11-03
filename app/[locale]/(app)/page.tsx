@@ -6,7 +6,9 @@ import Home from ".";
 import type { Locale } from "@/i18n/routing";
 
 import { getBanners } from "@/utils/banners";
+import { settle } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
+import { getOrganizations } from "@/utils/organizations";
 
 interface HomePageProps {
   params: Promise<{ locale: Locale }>;
@@ -28,9 +30,17 @@ export const generateMetadata = async ({
 };
 
 const HomePage = async () => {
-  const banners = await getBanners();
+  const [banners, { data: organizations = [] }] = await Promise.all([
+    getBanners(),
+    settle(getOrganizations()),
+  ]);
 
-  return <Home banners={banners} />;
+  return (
+    <Home
+      banners={banners}
+      organizations={organizations.filter(({ closedAt }) => !closedAt)}
+    />
+  );
 };
 
 export default HomePage;

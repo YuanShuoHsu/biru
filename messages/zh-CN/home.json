@@ -2,10 +2,91 @@
   "banner": {
     "slide": "第 {index} 张轮播图"
   },
+  "faq": {
+    "items": {
+      "dineIn": {
+        "answer": "堂食、柜台与得来速都从门店现场的二维码开始点餐：扫描桌上或柜台的二维码，即可浏览菜单、选择餐点并完成支付，无需排队。",
+        "question": "到店堂食要怎么点餐？"
+      },
+      "invoice": {
+        "answer": "结账时可选择纸质发票、手机条码、自然人凭证、公司统编或捐赠发票，电子发票会按您的选择开立。",
+        "question": "可以开立电子发票或公司发票吗？"
+      },
+      "payment": {
+        "answer": "在线自取支持信用卡、Apple Pay、街口支付、iPASS MONEY、微信支付与 TWQR 移动支付；现金仅限门店现场支付。",
+        "question": "支持哪些支付方式？"
+      },
+      "pickup": {
+        "answer": "选择门店、挑选餐点并完成在线支付后，按取餐时间到店出示取餐号码即可领取，取餐进度可在取餐号码看板实时查看。",
+        "question": "外带自取怎么使用？"
+      },
+      "points": {
+        "answer": "登录会员后，每笔消费按门店设置自动累积积分，积分可在结账时抵扣或兑换优惠券；有效期与累积规则以各门店公告为准。",
+        "question": "会员积分如何累积与使用？"
+      },
+      "waitlist": {
+        "answer": "扫描门店现场的候位二维码并填写用餐人数即可取号，留下电子邮箱可在轮到您时收到通知，也可随时在叫号看板查看当前进度。",
+        "question": "客满时要怎么候位？"
+      }
+    },
+    "subtitle": "常见问题",
+    "titleHighlight": "常见问题",
+    "titlePrefix": "点餐前的 "
+  },
   "footer": {
     "brand": "Biru Coffee",
     "copyright": "Copyright © {year} {brand}.",
     "tagline": "为你的每一天，冲一杯好咖啡。"
   },
-  "label": "首页"
+  "hero": {
+    "description": "在线点餐、到店扫码、现场候位与会员积分，一个平台完成您在 Biru Coffee 的每一次体验。",
+    "orderBoard": "查看取餐号码",
+    "pickup": "立即外带自取",
+    "subtitle": "Biru Coffee",
+    "titleLine1": "为你的每一天",
+    "titleLine2": "冲一杯好咖啡"
+  },
+  "highlights": {
+    "description": "从在线下单到到店取餐，我们把等待与排队的时间还给您。",
+    "items": {
+      "coupons": {
+        "description": "领取与管理您的优惠券，结账时一键抵扣。",
+        "title": "优惠券"
+      },
+      "orderBoard": {
+        "description": "实时查看各门店的取餐号码与准备进度，餐点好了马上知道。",
+        "title": "取餐号码看板"
+      },
+      "pickup": {
+        "description": "在线选择门店与餐点并完成支付，按取餐时间到店直接领取。",
+        "title": "外带自取"
+      },
+      "points": {
+        "description": "登录会员即可在每次消费累积积分，抵扣消费或兑换优惠券。",
+        "title": "会员积分"
+      },
+      "qrOrder": {
+        "description": "堂食、柜台与得来速扫描门店二维码即可点餐支付，不必排队。",
+        "title": "到店扫码点餐"
+      },
+      "waitlist": {
+        "description": "客满时扫码取号，轮到您时以电子邮箱通知，也可在叫号看板查看进度。",
+        "title": "现场候位"
+      }
+    },
+    "subtitle": "服务特色",
+    "titleHighlight": "更轻松",
+    "titlePrefix": "让每一次光临都 "
+  },
+  "label": "首页",
+  "stores": {
+    "closed": "休息中",
+    "description": "查看各门店的地址、营业时间与联系方式，直接在线开始点餐。",
+    "open": "营业中",
+    "orderBoard": "取餐号码",
+    "pickup": "外带自取",
+    "subtitle": "门店",
+    "titleHighlight": "Biru Coffee",
+    "titlePrefix": "找到离你最近的 "
+  }
 }

@@ -2,10 +2,91 @@
   "banner": {
     "slide": "第 {index} 張輪播圖"
   },
+  "faq": {
+    "items": {
+      "dineIn": {
+        "answer": "內用、櫃檯與得來速皆以門市現場的 QR code 開始點餐：掃描桌上或櫃檯的 QR code，即可瀏覽菜單、選擇餐點並完成付款，不需要排隊等候。",
+        "question": "到店內用要怎麼點餐？"
+      },
+      "invoice": {
+        "answer": "結帳時可選擇紙本發票、手機條碼、自然人憑證、公司統編或捐贈發票，電子發票會依您的選擇開立。",
+        "question": "可以開立電子發票或公司發票嗎？"
+      },
+      "payment": {
+        "answer": "線上自取支援信用卡、Apple Pay、街口支付、iPASS MONEY、微信支付與行動支付；現金僅限門市現場付款。",
+        "question": "支援哪些付款方式？"
+      },
+      "pickup": {
+        "answer": "選擇門市、挑選餐點並完成線上付款後，依取餐時間到店出示取餐號碼即可領取，取餐進度可在取餐號碼看板即時查看。",
+        "question": "外帶自取怎麼使用？"
+      },
+      "points": {
+        "answer": "登入會員後，每筆消費依門市設定自動累積點數，點數可在結帳時折抵或兌換優惠券；有效期限與累點規則依各門市公告為準。",
+        "question": "會員點數如何累積與使用？"
+      },
+      "waitlist": {
+        "answer": "掃描門市現場的候位 QR code 並填寫用餐人數即可取號，留下電子信箱可在輪到您時收到通知，也可隨時在叫號看板查看目前進度。",
+        "question": "客滿時要怎麼候位？"
+      }
+    },
+    "subtitle": "常見問題",
+    "titleHighlight": "常見問題",
+    "titlePrefix": "點餐前的 "
+  },
   "footer": {
     "brand": "Biru Coffee",
     "copyright": "Copyright © {year} {brand}.",
     "tagline": "為你的每一天，沖煮一杯好咖啡。"
   },
-  "label": "首頁"
+  "hero": {
+    "description": "線上點餐、到店掃碼、現場候位與會員點數，一個平台完成您在 Biru Coffee 的每一次體驗。",
+    "orderBoard": "查看取餐號碼",
+    "pickup": "立即外帶自取",
+    "subtitle": "Biru Coffee",
+    "titleLine1": "為你的每一天",
+    "titleLine2": "沖煮一杯好咖啡"
+  },
+  "highlights": {
+    "description": "從線上下單到到店取餐，我們把等待與排隊的時間還給您。",
+    "items": {
+      "coupons": {
+        "description": "領取與管理您的優惠券，結帳時一鍵折抵。",
+        "title": "優惠券"
+      },
+      "orderBoard": {
+        "description": "即時查看各門市的取餐號碼與準備進度，餐點好了馬上知道。",
+        "title": "取餐號碼看板"
+      },
+      "pickup": {
+        "description": "線上選擇門市與餐點並完成付款，依取餐時間到店直接領取。",
+        "title": "外帶自取"
+      },
+      "points": {
+        "description": "登入會員即可在每次消費累積點數，折抵消費或兌換優惠券。",
+        "title": "會員點數"
+      },
+      "qrOrder": {
+        "description": "內用、櫃檯與得來速掃描門市 QR code 即可點餐付款，不必排隊。",
+        "title": "到店掃碼點餐"
+      },
+      "waitlist": {
+        "description": "客滿時掃碼取號，輪到您時以電子信箱通知，也可在叫號看板查看進度。",
+        "title": "現場候位"
+      }
+    },
+    "subtitle": "服務特色",
+    "titleHighlight": "更輕鬆",
+    "titlePrefix": "讓每一次光臨都 "
+  },
+  "label": "首頁",
+  "stores": {
+    "closed": "休息中",
+    "description": "查看各門市的地址、營業時間與聯絡方式，直接在線上開始點餐。",
+    "open": "營業中",
+    "orderBoard": "取餐號碼",
+    "pickup": "外帶自取",
+    "subtitle": "門市",
+    "titleHighlight": "Biru Coffee",
+    "titlePrefix": "找到離你最近的 "
+  }
 }
