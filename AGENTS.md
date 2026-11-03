@@ -18,6 +18,8 @@ No test suite is currently configured.
 
 The pre-commit hook (Husky + lint-staged) runs `pnpm format`, `pnpm lint`, and `prettier --write` on staged files. Do not bypass with `--no-verify`.
 
+Branch from `develop` and open every PR against `develop`. GitHub's default branch is `master`, so set the base explicitly (`gh pr create --base develop`): a PR merged only into `master` never reaches `develop`, so work branched from `develop` misses it and conflicts when `master` is merged back.
+
 ## Environment Variables
 
 Copy and configure `.env` with:
@@ -128,7 +130,7 @@ Only files both repos use are mirrored: a file only one repo uses is not created
 For each changed file, read both versions and decide:
 
 1. **Superset files** (admin has extra content — transplant only the changed hunks, never overwrite the whole file):
-   `utils/menus.ts`, `CustomerPaymentForm`, `messages/*/common.json`, `types/api.ts`
+   `utils/menus.ts`, `messages/*/common.json`, `types/api.ts`
 
 2. **All other mirrored files** — if biru-admin has the same path, check whether its content differs only because it's an older version of biru (safe to `cp`) or because it has intentional admin-specific differences (transplant hunks only).
 
