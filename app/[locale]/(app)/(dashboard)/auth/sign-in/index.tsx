@@ -129,8 +129,8 @@ const AuthSignIn = ({ redirectTo, rememberMe }: AuthSignInProps) => {
               await authClient.sendVerificationEmail(
                 { callbackURL: redirectTo, email: data.email },
                 {
-                  onError: ({ error }) => {
-                    enqueueSnackbar(error.message, { variant: "error" });
+                  onError: ({ error: { message } }) => {
+                    enqueueSnackbar(message, { variant: "error" });
                   },
                   onSuccess: () => {
                     startCountdown("verify-email");
