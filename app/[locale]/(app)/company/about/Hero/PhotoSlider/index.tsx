@@ -34,12 +34,12 @@ const MaskBox = styled(Box)(({ theme }) => ({
 
   "&::before": {
     left: 0,
-    background: `linear-gradient(to right, ${theme.palette.background.default}, transparent)`,
+    background: `linear-gradient(to right, ${theme.vars.palette.background.default}, transparent)`,
   },
 
   "&::after": {
     right: 0,
-    background: `linear-gradient(to left, ${theme.palette.background.default}, transparent)`,
+    background: `linear-gradient(to left, ${theme.vars.palette.background.default}, transparent)`,
   },
 }));
 

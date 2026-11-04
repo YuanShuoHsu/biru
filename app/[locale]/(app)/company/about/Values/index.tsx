@@ -18,7 +18,7 @@ import {
   Typography,
   type TypographyProps,
 } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 type ValueKey =
   | "userObsessed"
@@ -54,7 +54,7 @@ const StyledTypography = styled(Typography)<TypographyProps>({
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(2),
-  border: `1px solid ${theme.palette.divider}`,
+  border: `1px solid ${theme.vars.palette.divider}`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   flexDirection: "column",
@@ -68,7 +68,7 @@ const ValueTitleStack = styled(Stack)(({ theme }) => ({
 
 const IconBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
-  backgroundColor: alpha(theme.palette.primary.main, 0.2),
+  backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / 0.2)`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   justifyContent: "center",
