@@ -21,7 +21,7 @@
         "question": "How does pickup work?"
       },
       "points": {
-        "answer": "Once signed in, every purchase earns points according to the store's settings. Points can be applied at checkout or redeemed for coupons; validity and earning rules follow each store's announcement.",
+        "answer": "Once signed in, every purchase earns points automatically. Points can be applied at checkout or redeemed for coupons, and are valid for one year from the day they are earned.",
         "question": "How do I earn and use points?"
       },
       "waitlist": {
