@@ -46,8 +46,6 @@ const About = ({
         <Divider />
       </>
     )}
-    {/* <Support />
-    <Divider /> */}
     <Location organizations={organizations} />
     <Divider />
     <JoinUs storePhoto={storePhotos[0]} />
