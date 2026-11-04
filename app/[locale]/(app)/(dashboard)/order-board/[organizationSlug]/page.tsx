@@ -9,6 +9,7 @@ import type { Locale } from "@/i18n/routing";
 
 import type { OrderBoardItem, PrepEstimate } from "@/types/orders";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
@@ -46,10 +47,12 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
     settle(
       fetcher<OrderBoardItem[]>(
         `/api/organizations/${organizationSlug}/orders/board`,
+        { headers: await clientIpHeaders() },
       ),
     ),
     fetcher<PrepEstimate>(
       `/api/organizations/${organizationSlug}/orders/prep-estimate`,
+      { headers: await clientIpHeaders() },
     ).catch(() => null),
   ]);
   if (error?.status === 404) notFound();

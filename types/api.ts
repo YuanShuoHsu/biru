@@ -1486,7 +1486,7 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 從政府開放資料更新投保級距 */
+    /** 從政府開放資料更新投保級距與國定假日 */
     post: operations["AdminPayrollRulesController_ingest"];
     delete?: never;
     options?: never;
@@ -2067,6 +2067,23 @@ export interface paths {
     };
     /** 向綠界查證發票狀態 */
     get: operations["EcpayOrderInvoiceController_verify"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/organizations/{organizationSlug}/orders/{orderId}/invoice/voided": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢訂單已作廢的發票與作廢人員、原因 */
+    get: operations["EcpayOrderInvoiceController_findVoided"];
     put?: never;
     post?: never;
     delete?: never;
@@ -7563,6 +7580,11 @@ export interface components {
       | "attendance_annual_leave_deferral"
       | "attendance_holiday_substitute"
       | "payroll_earning_type";
+    /**
+     * @description 不能還原的原因：ownerOnly＝要還原擁有者成員或邀請、操作者不是擁有者；forbidden＝角色沒有這些資料的權限；closed＝門市停業中。可以還原時為 null
+     * @enum {string}
+     */
+    DeletedRecordRestoreBlockedBy: "ownerOnly" | "forbidden" | "closed";
     DeletedRecordBatchResponseDto: {
       /** @description 同一次刪除（同一個交易）的編號 */
       batchId: number;
@@ -7586,6 +7608,10 @@ export interface components {
       deletedBy?: string | null;
       /** @description 目前操作者可否還原（店內須具備各資料的建立權限） */
       canRestore: boolean;
+      /** @description 不能還原的原因：ownerOnly＝要還原擁有者成員或邀請、操作者不是擁有者；forbidden＝角色沒有這些資料的權限；closed＝門市停業中。可以還原時為 null */
+      restoreBlockedBy:
+        | components["schemas"]["DeletedRecordRestoreBlockedBy"]
+        | null;
     };
     /** @enum {string} */
     DeletedRecordFilterField: "organizationName" | "tableName" | "deletedAt";
@@ -7665,6 +7691,7 @@ export interface components {
       skipped: string[];
       rejected: string[];
       checked: boolean;
+      holidayYears: number[];
     };
     ConfirmRuleSetDto: {
       minimumHourlyWageCents: string;
@@ -8722,6 +8749,28 @@ export interface components {
       uploaded: boolean;
       /** @description 綠界端狀態是否與本機一致；false 代表兩邊對不起來，需人工處理 */
       matchesLocal: boolean;
+    };
+    VoidedInvoiceDto: {
+      /** @description 發票 ID */
+      id: string;
+      /** @description 發票號碼 */
+      invoiceNumber: string | null;
+      /**
+       * Format: date-time
+       * @description 開立時間
+       */
+      invoiceDate: string | null;
+      /**
+       * Format: date-time
+       * @description 作廢時間；早期作廢的舊資料為 null
+       */
+      voidedAt: string | null;
+      /** @description 送給綠界的作廢原因；未記錄時為 null */
+      reason: string | null;
+      /** @description 作廢人員姓名；未記錄作廢人員（早期資料、或對帳時才發現綠界已作廢）或帳號已刪除時為 null */
+      operatorName: string | null;
+      /** @description 作廢人員帳號已刪除（姓名因此為 null） */
+      operatorDeleted: boolean;
     };
     VoidInvoiceDto: {
       /** @description 作廢原因 */
@@ -17679,6 +17728,35 @@ export interface operations {
       };
     };
   };
+  EcpayOrderInvoiceController_findVoided: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+        orderId: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["VoidedInvoiceDto"][];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   EcpayOrderInvoiceController_void: {
     parameters: {
       query?: never;
@@ -26026,6 +26104,9 @@ export const deletedRecordTableValues: ReadonlyArray<
   "attendance_holiday_substitute",
   "payroll_earning_type",
 ];
+export const deletedRecordRestoreBlockedByValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["DeletedRecordRestoreBlockedBy"]
+> = ["ownerOnly", "forbidden", "closed"];
 export const deletedRecordFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["DeletedRecordFilterField"]
 > = ["organizationName", "tableName", "deletedAt"];
