@@ -2,6 +2,7 @@ import { cacheLife } from "next/cache";
 import { getLocale } from "next-intl/server";
 import { cache } from "react";
 
+import { clientIpHeaders } from "./clientIp";
 import { fetcher } from "./fetcher";
 
 import { redirect } from "@/i18n/navigation";
@@ -11,8 +12,11 @@ import type {
   OrganizationTeamMember,
 } from "@/types/organizations";
 
-export const getOrganization = cache((slug: OrganizationResponse["slug"]) =>
-  fetcher<OrganizationResponse>(`/api/organizations/${slug}`),
+export const getOrganization = cache(
+  async (slug: OrganizationResponse["slug"]) =>
+    fetcher<OrganizationResponse>(`/api/organizations/${slug}`, {
+      headers: await clientIpHeaders(),
+    }),
 );
 
 export const getOrganizations = async () => {

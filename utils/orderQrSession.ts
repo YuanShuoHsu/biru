@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { cache } from "react";
 
+import { clientIpHeaders } from "./clientIp";
 import { type FetchError, fetcher } from "./fetcher";
 
 import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
@@ -15,7 +16,12 @@ const getOrderQrSession = cache(
     try {
       return await fetcher<OrderQrSessionResponse>(
         `/api/organizations/${organizationSlug}/order-qr-sessions/current`,
-        { headers: { cookie: cookieStore.toString() } },
+        {
+          headers: {
+            cookie: cookieStore.toString(),
+            ...(await clientIpHeaders()),
+          },
+        },
       );
     } catch (error) {
       if ((error as FetchError).status === 404) return null;
