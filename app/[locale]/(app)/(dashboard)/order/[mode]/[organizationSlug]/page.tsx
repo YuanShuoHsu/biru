@@ -18,6 +18,7 @@ import type { Locale } from "@/i18n/routing";
 import type { PrepEstimate } from "@/types/orders";
 import type { Organization } from "@/types/organizations";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { buildMetadata } from "@/utils/metadata";
 import { hasOrderAccess } from "@/utils/orderQrSession";
@@ -89,6 +90,7 @@ const OrderModeOrganizationSlugPage = async ({
       settle(hasOrderAccess(organization.slug, mode, tableNumber)),
       fetcher<PrepEstimate>(
         `/api/organizations/${organization.slug}/orders/prep-estimate`,
+        { headers: await clientIpHeaders() },
       ).catch(() => null),
     ]);
   if (accessError) return <ErrorAlert />;

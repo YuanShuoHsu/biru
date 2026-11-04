@@ -8,6 +8,7 @@ import type { Locale } from "@/i18n/routing";
 
 import type { WaitlistTicketDetailResponse } from "@/types/waitlist";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
@@ -39,6 +40,7 @@ const WaitlistTicketPage = async ({ params }: WaitlistTicketPageProps) => {
       settle(
         fetcher<WaitlistTicketDetailResponse>(
           `/api/organizations/${organizationSlug}/waitlist/tickets/${ticketId}`,
+          { headers: await clientIpHeaders() },
         ),
       ),
     ]);

@@ -9,6 +9,7 @@ import type { Locale } from "@/i18n/routing";
 
 import type { OrderReceiptResponse } from "@/types/orders";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
@@ -47,7 +48,12 @@ const OrderModeOrganizationSlugCompletePage = async ({
         ? settle(
             fetcher<OrderReceiptResponse>(
               `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`,
-              { headers: { cookie: reqHeaders.get("cookie") || "" } },
+              {
+                headers: {
+                  cookie: reqHeaders.get("cookie") || "",
+                  ...(await clientIpHeaders()),
+                },
+              },
             ),
           )
         : { data: null, error: undefined },

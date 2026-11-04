@@ -12,6 +12,7 @@ import type {
   WaitlistStatusResponse,
 } from "@/types/waitlist";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
 
@@ -50,12 +51,18 @@ const WaitlistPage = async ({ params }: WaitlistPageProps) => {
     settle(
       fetcher<WaitlistStatusResponse>(
         `/api/organizations/${organizationSlug}/waitlist`,
+        { headers: await clientIpHeaders() },
       ),
     ),
     settle(
       fetcher<WaitlistQrSessionResponse>(
         `/api/organizations/${organizationSlug}/waitlist/qr-session`,
-        { headers: { cookie: cookieStore.toString() } },
+        {
+          headers: {
+            cookie: cookieStore.toString(),
+            ...(await clientIpHeaders()),
+          },
+        },
       ),
     ),
   ]);

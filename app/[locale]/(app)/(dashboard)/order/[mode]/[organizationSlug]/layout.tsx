@@ -10,6 +10,7 @@ import { MenuStoreProvider } from "@/providers/menu-store-provider";
 
 import type { OrderMenu } from "@/types/menus";
 
+import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
 import { getOrganization } from "@/utils/organizations";
 
@@ -37,6 +38,7 @@ const OrderModeOrganizationSlugLayout = async ({
   const { data: initialMenu, error: menuError } = await settle(
     fetcher<OrderMenu | null>(
       `/api/organizations/${organization.id}/order-menu?lang=${locale}`,
+      { headers: await clientIpHeaders() },
     ),
   );
   if (menuError) return <ErrorAlert />;
