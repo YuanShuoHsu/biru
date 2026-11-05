@@ -102,7 +102,7 @@ const WaitlistBoard = ({
       organizationId: organization.id,
     })
       .then((joined) => mutate(joined, false))
-      .catch(() => {});
+      .catch(() => mutate());
 
     const handleUpdate = () => {
       mutate();

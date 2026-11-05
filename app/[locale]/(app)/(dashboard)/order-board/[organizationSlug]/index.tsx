@@ -130,7 +130,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
       organizationId: organization.id,
     })
       .then((joined) => mutate(joined, false))
-      .catch(() => {});
+      .catch(() => mutate());
 
     const handleUpdate = () => {
       mutate();
