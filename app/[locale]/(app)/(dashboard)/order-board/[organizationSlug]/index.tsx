@@ -116,7 +116,7 @@ const OrderBoard = ({ items: initialItems, organization }: OrderBoardProps) => {
 
   const { data: items = initialItems, mutate } = useSWR<OrderBoardItem[]>(
     `/api/organizations/${organization.slug}/orders/board`,
-    { fallbackData: initialItems },
+    { fallbackData: initialItems, revalidateOnMount: false },
   );
 
   useOrderReadyAlert(items.find((item) => item.orderId === orderId) ?? null);

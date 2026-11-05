@@ -86,7 +86,11 @@ const WaitlistBoard = ({
   const { data: status = initialStatus, mutate } =
     useSWR<WaitlistStatusResponse>(
       `/api/organizations/${organization.slug}/waitlist`,
-      { fallbackData: initialStatus, refreshInterval: 60_000 },
+      {
+        fallbackData: initialStatus,
+        refreshInterval: 60_000,
+        revalidateOnMount: false,
+      },
     );
 
   const { isConnected } = useSocketConnection(menuSocket);
