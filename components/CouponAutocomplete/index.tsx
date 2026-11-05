@@ -297,7 +297,7 @@ const CouponAutocomplete = ({
                   </Typography>
                 }
                 secondary={
-                  minSubtotal &&
+                  Number(minSubtotal) > 0 &&
                   tOrder("checkout.coupon.minSubtotal", {
                     amount: formatMoney(Number(minSubtotal), cartCurrency),
                   })
