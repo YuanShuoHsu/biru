@@ -147,7 +147,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const menuItem = findItemById(menu, menuItemId);
   const itemName = menuItem?.name || "";
   const offer = menuItem?.offers[0];
-  const image = menuItem?.image || null;
+  const imageUrl = menuItem?.imageUrl ?? null;
   const priceCurrency = offer?.priceCurrency || "";
   const amount = calcCartItemAmount(menu, item);
   const choiceNames = getChoiceNames(menu, item, {
@@ -259,13 +259,13 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
         <InfoStack direction="row">
           <StyledListItemAvatar>
             <ImageBox>
-              {image ? (
+              {imageUrl ? (
                 <Image
                   alt={itemName}
                   draggable={false}
                   fill
                   sizes={compact ? "(min-width: 600px) 280px, 50vw" : "104px"}
-                  src={image}
+                  src={imageUrl}
                   style={{ objectFit: "cover" }}
                 />
               ) : (

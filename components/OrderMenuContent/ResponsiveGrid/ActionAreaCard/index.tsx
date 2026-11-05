@@ -171,7 +171,7 @@ const ActionAreaCard = ({
   const {
     availableModes,
     description,
-    image,
+    imageUrl,
     name,
     offers,
     servingTemperatures,
@@ -250,14 +250,14 @@ const ActionAreaCard = ({
         viewDirection={viewDirection}
       >
         <ImageBox viewDirection={viewDirection}>
-          {image ? (
+          {imageUrl ? (
             <Image
               alt={name}
               draggable={false}
               fill
               priority={priority}
               sizes={ViewImageSizes[view]}
-              src={image}
+              src={imageUrl}
               style={{ objectFit: "cover" }}
             />
           ) : (

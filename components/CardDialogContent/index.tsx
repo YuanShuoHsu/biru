@@ -172,7 +172,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     id,
     name,
     description,
-    image,
+    imageUrl,
     offers,
     suitableForDiet,
     nutrition,
@@ -659,13 +659,13 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
   return (
     <FormBox id="add-to-cart-form" onSubmit={onSubmit}>
       <ImageBox>
-        {image ? (
+        {imageUrl ? (
           <Image
             alt={name}
             draggable={false}
             fill
             sizes="(min-width: 600px) 600px, 100vw"
-            src={image}
+            src={imageUrl}
             style={{ objectFit: "cover" }}
           />
         ) : (
@@ -761,7 +761,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
             const {
               availableModes,
               id,
-              image,
+              imageUrl,
               modifierGroups,
               name,
               offers,
@@ -844,7 +844,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                   <AddOnAvatar
                     alt={name}
                     disabled={!checked && !!unavailableLabel}
-                    src={image || undefined}
+                    src={imageUrl ?? undefined}
                     variant="rounded"
                   >
                     <RestaurantMenu color="disabled" />

@@ -78,12 +78,12 @@ const JoinUs = ({ storePhoto }: JoinUsProps) => {
         </Typography>
       </StyledStack>
       <PhotoBox>
-        {storePhoto ? (
+        {storePhoto?.imageUrl ? (
           <Image
             alt={storePhoto.alt}
             fill
             sizes="(min-width: 600px) 600px, 100vw"
-            src={storePhoto.image}
+            src={storePhoto.imageUrl}
             style={{ objectFit: "cover" }}
           />
         ) : (

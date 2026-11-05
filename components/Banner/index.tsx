@@ -72,12 +72,12 @@ const Banner = ({ banners }: BannerProps) => {
           slidesPerView={1}
           spaceBetween={0}
         >
-          {banners.map(({ alt, id, image, url }, index) => {
+          {banners.map(({ alt, id, imageUrl, url }, index) => {
             const slide = (
               <StyledImage
                 alt={alt?.[locale] || t("banner.slide", { index: index + 1 })}
                 key={id}
-                src={image}
+                src={imageUrl ?? undefined}
               />
             );
 
