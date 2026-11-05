@@ -13,7 +13,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 
-import { Link, useRouter } from "@/i18n/navigation";
+import { useRouter } from "@/i18n/navigation";
 
 import { LocalOffer } from "@mui/icons-material";
 import { Avatar, Button, Card, CardActions, Typography } from "@mui/material";
@@ -165,7 +165,6 @@ const Coupons = ({ claimableCoupons, coupons }: CouponsProps) => {
                             </Button>
                           ) : (
                             <Button
-                              component={Link}
                               href={
                                 item.applicableOrganizationSlugs?.length === 1
                                   ? `/order/${ORDER_MODE.Pickup}/${item.applicableOrganizationSlugs[0]}`

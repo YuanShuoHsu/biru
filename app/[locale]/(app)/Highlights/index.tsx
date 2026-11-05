@@ -4,8 +4,6 @@ import GradientBox from "@/components/GradientBox";
 
 import { ORDER_MODE } from "@/constants/orderMode";
 
-import { Link } from "@/i18n/navigation";
-
 import {
   ConfirmationNumber,
   HourglassTop,
@@ -140,9 +138,7 @@ const Highlights = () => {
               <Grid key={key} size={{ xs: 12, sm: 6, md: 4 }}>
                 <StyledCard variant="outlined">
                   {href ? (
-                    <CardActionArea component={Link} href={href}>
-                      {content}
-                    </CardActionArea>
+                    <CardActionArea href={href}>{content}</CardActionArea>
                   ) : (
                     content
                   )}
