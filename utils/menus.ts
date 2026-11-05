@@ -25,6 +25,9 @@ import type {
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 
+dayjs.extend(utc);
+dayjs.extend(timezonePlugin);
+
 export const isLowStock = (offer?: OrderMenuOffer): boolean => {
   const stock = offer?.inventoryLevel?.value;
   if (stock == null || stock <= 0) return false;
@@ -38,10 +41,12 @@ export interface PromoInfo {
   validThrough: Date | null;
 }
 
-dayjs.extend(utc);
-dayjs.extend(timezonePlugin);
+// API 計價用同一個格式判斷促銷期間，改這裡要一起改
+const PROMO_DATE_PATTERN =
+  /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$/;
 
-const storeDateOf = (value: string): string | null => {
+export const storeDateOf = (value: string): string | null => {
+  if (!PROMO_DATE_PATTERN.test(value)) return null;
   const date = dayjs.utc(value);
   return date.isValid() ? date.tz(STORE_TIMEZONE).format("YYYY-MM-DD") : null;
 };
@@ -51,20 +56,17 @@ export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
   if (!priceSpecification) return null;
 
   const { validFrom, validThrough } = priceSpecification;
+  const firstDay = validFrom ? storeDateOf(validFrom) : undefined;
+  const lastDay = validThrough ? storeDateOf(validThrough) : undefined;
   const today = dayjs().tz(STORE_TIMEZONE).format("YYYY-MM-DD");
 
-  if (validFrom) {
-    const firstDay = storeDateOf(validFrom);
-    if (!firstDay || today < firstDay) return null;
-  }
-  if (validThrough) {
-    const lastDay = storeDateOf(validThrough);
-    if (!lastDay || today > lastDay) return null;
-  }
+  if (firstDay === null || lastDay === null) return null;
+  if (firstDay && today < firstDay) return null;
+  if (lastDay && today > lastDay) return null;
 
   return {
     price: Number(priceSpecification.price),
-    validThrough: validThrough ? new Date(validThrough) : null,
+    validThrough: lastDay ? new Date(lastDay) : null,
   };
 };
 
