@@ -64,6 +64,7 @@ const OrderBoardPage = async ({ params }: OrderBoardPageProps) => {
     (slug) => `/order-board/${slug}`,
   );
 
+  if (organization.closedAt) notFound();
   if (itemsError) return <ErrorAlert />;
 
   return (
