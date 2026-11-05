@@ -1,7 +1,12 @@
+import dayjs from "dayjs";
+import timezonePlugin from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
 import {
   LOW_STOCK_THRESHOLD,
   SERVING_TEMPERATURE_OF_LEVEL,
 } from "@/constants/menus";
+import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import type { CartAddOn, CartItem } from "@/stores/cart-store";
 
@@ -20,6 +25,9 @@ import type {
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
 
+dayjs.extend(utc);
+dayjs.extend(timezonePlugin);
+
 export const isLowStock = (offer?: OrderMenuOffer): boolean => {
   const stock = offer?.inventoryLevel?.value;
   if (stock == null || stock <= 0) return false;
@@ -33,22 +41,33 @@ export interface PromoInfo {
   validThrough: Date | null;
 }
 
+// API 計價用同一個格式判斷促銷期間，改這裡要一起改
+const PROMO_DATE_PATTERN =
+  /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$/;
+
+export const storeDateOf = (value: string): string | null => {
+  if (!PROMO_DATE_PATTERN.test(value)) return null;
+  const date = dayjs.utc(value);
+  return date.isValid() ? date.tz(STORE_TIMEZONE).format("YYYY-MM-DD") : null;
+};
+
 export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
   const priceSpecification = offer?.priceSpecification;
   if (!priceSpecification) return null;
 
-  const now = new Date();
-  const validFrom = priceSpecification.validFrom
-    ? new Date(priceSpecification.validFrom)
-    : null;
-  const validThrough = priceSpecification.validThrough
-    ? new Date(priceSpecification.validThrough)
-    : null;
+  const { validFrom, validThrough } = priceSpecification;
+  const firstDay = validFrom ? storeDateOf(validFrom) : undefined;
+  const lastDay = validThrough ? storeDateOf(validThrough) : undefined;
+  const today = dayjs().tz(STORE_TIMEZONE).format("YYYY-MM-DD");
 
-  if (validFrom && now < validFrom) return null;
-  if (validThrough && now > validThrough) return null;
+  if (firstDay === null || lastDay === null) return null;
+  if (firstDay && today < firstDay) return null;
+  if (lastDay && today > lastDay) return null;
 
-  return { price: Number(priceSpecification.price), validThrough };
+  return {
+    price: Number(priceSpecification.price),
+    validThrough: lastDay ? new Date(lastDay) : null,
+  };
 };
 
 export const getServingTemperatureLevels = (
