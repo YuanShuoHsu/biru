@@ -1,7 +1,12 @@
+import dayjs from "dayjs";
+import timezonePlugin from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc";
+
 import {
   LOW_STOCK_THRESHOLD,
   SERVING_TEMPERATURE_OF_LEVEL,
 } from "@/constants/menus";
+import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import type { CartAddOn, CartItem } from "@/stores/cart-store";
 
@@ -33,22 +38,34 @@ export interface PromoInfo {
   validThrough: Date | null;
 }
 
+dayjs.extend(utc);
+dayjs.extend(timezonePlugin);
+
+const storeDateOf = (value: string): string | null => {
+  const date = dayjs.utc(value);
+  return date.isValid() ? date.tz(STORE_TIMEZONE).format("YYYY-MM-DD") : null;
+};
+
 export const getActivePromo = (offer?: OrderMenuOffer): PromoInfo | null => {
   const priceSpecification = offer?.priceSpecification;
   if (!priceSpecification) return null;
 
-  const now = new Date();
-  const validFrom = priceSpecification.validFrom
-    ? new Date(priceSpecification.validFrom)
-    : null;
-  const validThrough = priceSpecification.validThrough
-    ? new Date(priceSpecification.validThrough)
-    : null;
+  const { validFrom, validThrough } = priceSpecification;
+  const today = dayjs().tz(STORE_TIMEZONE).format("YYYY-MM-DD");
 
-  if (validFrom && now < validFrom) return null;
-  if (validThrough && now > validThrough) return null;
+  if (validFrom) {
+    const firstDay = storeDateOf(validFrom);
+    if (!firstDay || today < firstDay) return null;
+  }
+  if (validThrough) {
+    const lastDay = storeDateOf(validThrough);
+    if (!lastDay || today > lastDay) return null;
+  }
 
-  return { price: Number(priceSpecification.price), validThrough };
+  return {
+    price: Number(priceSpecification.price),
+    validThrough: validThrough ? new Date(validThrough) : null,
+  };
 };
 
 export const getServingTemperatureLevels = (
