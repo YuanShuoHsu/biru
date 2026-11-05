@@ -24,8 +24,6 @@ import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useRoutes } from "@/hooks/useRoutes";
 import { useSession } from "@/hooks/useSession";
 
-import { Link } from "@/i18n/navigation";
-
 import { useCartStore } from "@/providers/cart-store-provider";
 
 import type { ValidateCouponResponse } from "@/types/coupons";
@@ -150,7 +148,6 @@ const CartAccordion = ({
           ) : (
             <MuiLink
               color="textSecondary"
-              component={Link}
               href={navItem("/auth/sign-in").to ?? "/auth/sign-in"}
               underline="always"
               variant="caption"

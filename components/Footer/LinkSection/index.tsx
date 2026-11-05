@@ -56,10 +56,10 @@ const LinkSection = () => {
               return (
                 <Link
                   color="textSecondary"
-                  component={onClick ? "button" : "a"}
-                  href={onClick ? undefined : childTo}
                   key={itemIndex}
-                  onClick={onClick}
+                  {...(onClick
+                    ? { component: "button", onClick }
+                    : { href: childTo })}
                   underline="hover"
                   variant="body2"
                 >
