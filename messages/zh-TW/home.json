@@ -13,7 +13,7 @@
         "question": "可以開立電子發票或公司發票嗎？"
       },
       "payment": {
-        "answer": "線上自取支援信用卡、Apple Pay、街口支付、iPASS MONEY、微信支付與行動支付；現金僅限門市現場付款。",
+        "answer": "線上自取支援信用卡、Apple Pay、街口支付、iPASS MONEY、微信支付與 TWQR 行動支付；現金僅限門市現場付款。",
         "question": "支援哪些付款方式？"
       },
       "pickup": {

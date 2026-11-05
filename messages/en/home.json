@@ -40,7 +40,7 @@
   },
   "hero": {
     "description": "Online ordering, in-store QR ordering, waitlist and member points—everything for your Biru Coffee visit in one place.",
-    "orderBoard": "View pickup board",
+    "orderBoard": "View pickup numbers",
     "pickup": "Order for pickup",
     "subtitle": "Biru Coffee",
     "titleLine1": "Coffee, crafted",
@@ -83,7 +83,7 @@
     "closed": "Closed",
     "description": "Find each store's address, opening hours and contact details, and start ordering online right away.",
     "open": "Open now",
-    "orderBoard": "Pickup board",
+    "orderBoard": "Pickup numbers",
     "pickup": "Pickup",
     "subtitle": "Stores",
     "titleHighlight": "Biru Coffee",
