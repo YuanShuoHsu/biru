@@ -98,12 +98,12 @@ const PhotoSlider = ({ storePhotos }: PhotoSliderProps) => {
               aria-hidden={isRepeat || undefined}
               key={storePhoto ? `${storePhoto.id}-${index}` : index}
             >
-              {storePhoto ? (
+              {storePhoto?.imageUrl ? (
                 <Image
                   alt={isRepeat ? "" : storePhoto.alt}
                   fill
                   sizes="(min-width: 1200px) 288px, (min-width: 900px) 33vw, (min-width: 600px) 50vw, 100vw"
-                  src={storePhoto.image}
+                  src={storePhoto.imageUrl}
                   style={{ objectFit: "cover" }}
                 />
               ) : (
