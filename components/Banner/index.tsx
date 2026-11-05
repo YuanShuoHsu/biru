@@ -6,6 +6,7 @@ import { Autoplay, Mousewheel, Navigation } from "swiper/modules";
 import Carousel from "@/components/Carousel";
 
 import { Link } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 
 import { ViewCarousel } from "@mui/icons-material";
 import { Box } from "@mui/material";
@@ -75,7 +76,12 @@ const Banner = ({ banners }: BannerProps) => {
           {banners.map(({ alt, id, imageUrl, url }, index) => {
             const slide = (
               <StyledImage
-                alt={alt?.[locale] || t("banner.slide", { index: index + 1 })}
+                alt={
+                  alt?.[locale] ||
+                  alt?.[routing.defaultLocale] ||
+                  Object.values(alt ?? {}).find(Boolean) ||
+                  t("banner.slide", { index: index + 1 })
+                }
                 key={id}
                 src={imageUrl ?? undefined}
               />
