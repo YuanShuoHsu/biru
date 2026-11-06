@@ -378,7 +378,7 @@ const OrderModeOrganizationSlugCheckout = ({
       sendRequest<ValidateCouponResponse, ValidateCouponDto>()(url, {
         arg: { code, items, mode },
       }),
-    { shouldRetryOnError: false },
+    { onError: () => {}, shouldRetryOnError: false },
   );
 
   const isCouponUnresolved = !!couponCode && (!coupon || !!couponError);
