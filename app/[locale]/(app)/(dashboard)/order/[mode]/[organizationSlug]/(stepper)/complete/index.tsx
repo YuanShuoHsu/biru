@@ -179,7 +179,7 @@ const OrderModeOrganizationSlugComplete = ({
       orderId
         ? `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`
         : null,
-      { fallbackData: initialOrder },
+      { fallbackData: initialOrder, revalidateOnMount: false },
     );
 
   const { isConnected } = useSocketConnection(menuSocket);
@@ -193,7 +193,7 @@ const OrderModeOrganizationSlugComplete = ({
 
     emitMenuWithAck("joinOrder", { accessToken, orderId })
       .then(handleOrderUpdated)
-      .catch(() => {});
+      .catch(() => mutate());
 
     menuSocket.on("orderStatusUpdated", handleOrderUpdated);
     menuSocket.on("orderUpdated", handleOrderUpdated);
