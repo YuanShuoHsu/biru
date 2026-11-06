@@ -1,7 +1,7 @@
 import type { Dayjs } from "dayjs";
 
-export const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
-export type Day = (typeof DAYS)[number];
+const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
+type Day = (typeof DAYS)[number];
 
 const DAYS_SET = new Set<string>(DAYS);
 const isDayCode = (code: string): code is Day => DAYS_SET.has(code);
@@ -145,7 +145,7 @@ export const getCloseTimeAt = (value: string, at: Dayjs): Dayjs | null => {
 export const isOpenAt = (value: string, at: Dayjs): boolean =>
   isUnrestricted(value) || !!getCloseTimeAt(value, at);
 
-export interface OpeningHoursDisplayConfig {
+interface OpeningHoursDisplayConfig {
   formatDay: (day: Day) => string;
   formatNextDayTime: (time: string) => string;
   allDayLabel: string;
