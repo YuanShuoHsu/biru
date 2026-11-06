@@ -8,6 +8,10 @@
     "minDate": "请选择 1900-01-01 或之后的出生日期。",
     "required": "出生日期为必填。"
   },
+  "businessNumber": {
+    "checksum": "统一编号校验码不符，请确认号码是否正确。",
+    "invalid": "请输入 8 位统一编号。"
+  },
   "carrierNum": {
     "certificate": {
       "invalid": "自然人凭证格式无效。"
@@ -43,8 +47,6 @@
     "required": "公司地址为必填。"
   },
   "customerIdentifier": {
-    "invalid": "统一编号格式无效。",
-    "notFound": "查无对应的公司资料。",
     "required": "统一编号为必填。"
   },
   "customerName": {

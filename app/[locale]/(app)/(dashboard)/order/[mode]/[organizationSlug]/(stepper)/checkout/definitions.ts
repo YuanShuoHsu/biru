@@ -20,6 +20,10 @@ import {
 } from "@/types/api";
 import type { OrganizationResponse } from "@/types/organizations";
 
+import {
+  BUSINESS_NUMBER_PATTERN,
+  isValidBusinessNumber,
+} from "@/utils/businessNumber";
 import { getCartAvailableHours, getCartLeadTimeMinutes } from "@/utils/menus";
 import { getCloseTimeAt, isOpenAt } from "@/utils/openingHours";
 import { getPickupLeadMinutes, getPickupWindow } from "@/utils/pickup";
@@ -77,13 +81,7 @@ export const useCustomerPaymentFormSchema = (
         ]),
         carrierNum: z.string().trim(),
         customerAddr: z.string().trim(),
-        customerIdentifier: z
-          .string()
-          .trim()
-          .refine(
-            (val) => !val || /^\d{8}$/.test(val),
-            tValidation("customerIdentifier.invalid"),
-          ),
+        customerIdentifier: z.string().trim(),
         customerName: z.string().trim(),
         donateCode: z
           .string()
@@ -233,6 +231,20 @@ export const useCustomerPaymentFormSchema = (
             ctx.addIssue({
               code: "custom",
               message: tValidation("customerIdentifier.required"),
+              path: ["invoice", "customerIdentifier"],
+            });
+          } else if (
+            !BUSINESS_NUMBER_PATTERN.test(data.invoice.customerIdentifier)
+          ) {
+            ctx.addIssue({
+              code: "custom",
+              message: tValidation("businessNumber.invalid"),
+              path: ["invoice", "customerIdentifier"],
+            });
+          } else if (!isValidBusinessNumber(data.invoice.customerIdentifier)) {
+            ctx.addIssue({
+              code: "custom",
+              message: tValidation("businessNumber.checksum"),
               path: ["invoice", "customerIdentifier"],
             });
           }

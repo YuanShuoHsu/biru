@@ -2931,6 +2931,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/point-transactions/adjustment-limit": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢目前使用者在本店對同一會員每日可補點或扣點的合計上限 */
+    get: operations["OrganizationPointsController_getAdjustmentLimit"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/organizations/{organizationSlug}/point-transactions/adjustments": {
     parameters: {
       query?: never;
@@ -2940,8 +2957,25 @@ export interface paths {
     };
     get?: never;
     put?: never;
-    /** 為會員手動補點或扣點；扣點只扣本店發出且未過期的剩餘點數；單筆超過 NT$3,000 換算點數只有 owner 能做 */
+    /** 為本店顧客（在本店有已付款訂單或點數明細）手動補點或扣點，其他 email 與不存在的一樣回 404；扣點只扣本店發出且未過期的剩餘點數；同一會員在本店當日合計超過 NT$3,000 換算點數只有 owner 能做 */
     post: operations["OrganizationPointsController_adjust"];
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/point-settings/public": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 前台顯示集點規則用的全品牌點數設定（公開） */
+    get: operations["PointSettingsController_getPublic"];
+    put?: never;
+    post?: never;
     delete?: never;
     options?: never;
     head?: never;
@@ -3671,8 +3705,25 @@ export interface paths {
       path?: never;
       cookie?: never;
     };
-    /** 依統一編號查詢公司名稱、地址與負責人 */
+    /** 依統一編號查詢公司或商業登記的名稱、地址與負責人 */
     get: operations["GcisController_findOne"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
+  "/api/images/{kind}/{id}/{version}.{extension}": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 取得菜單、分類、品項、橫幅與門市照片的圖片 */
+    get: operations["ImagesController_find"];
     put?: never;
     post?: never;
     delete?: never;
@@ -5294,6 +5345,24 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/organizations/{organizationSlug}/store-layout": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 門市平面圖；尚未建立時回 404 */
+    get: operations["StoreLayoutController_get"];
+    /** 建立或整份取代門市平面圖 */
+    put: operations["StoreLayoutController_update"];
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/store-photos/active": {
     parameters: {
       query?: never;
@@ -5413,7 +5482,6 @@ export interface components {
       | "childcareReductionInvalid"
       | "indigenousHolidayInvalid"
       | "insufficientLeaveBalance"
-      | "invalidBusinessNumber"
       | "invalidEarningType"
       | "invalidEmergencyDetails"
       | "invalidEventSequence"
@@ -6811,6 +6879,23 @@ export interface components {
       | "taxIdentity"
       | "withholdingCertificate";
     /** @enum {string} */
+    AuditLogFilterField:
+      | "actorName"
+      | "actorEmail"
+      | "resourceId"
+      | "organizationId"
+      | "resource"
+      | "action"
+      | "createdAt";
+    /** @enum {string} */
+    AuditLogSortField:
+      | "organizationId"
+      | "actorName"
+      | "actorEmail"
+      | "resource"
+      | "action"
+      | "createdAt";
+    /** @enum {string} */
     AuditAction:
       | "create"
       | "update"
@@ -6866,32 +6951,15 @@ export interface components {
       /** Format: date-time */
       createdAt: string;
     };
-    /** @enum {string} */
-    AuditLogFilterField:
-      | "actorName"
-      | "actorEmail"
-      | "resourceId"
-      | "organizationId"
-      | "resource"
-      | "action"
-      | "createdAt";
-    /** @enum {string} */
-    AuditLogSortField:
-      | "organizationId"
-      | "actorName"
-      | "actorEmail"
-      | "resource"
-      | "action"
-      | "createdAt";
+    AuditLogListResponseDto: {
+      data: components["schemas"]["AuditLogResponseDto"][];
+      total: number;
+    };
     /**
      * @description 角色
      * @enum {string}
      */
     UserRole: "admin" | "user";
-    AuditLogListResponseDto: {
-      data: components["schemas"]["AuditLogResponseDto"][];
-      total: number;
-    };
     UserResponseDto: {
       /**
        * @description ID
@@ -7660,6 +7728,10 @@ export interface components {
       applicableOrganizationSlugs?: string[] | null;
     };
     /** @enum {string} */
+    DeletedRecordFilterField: "organizationName" | "tableName" | "deletedAt";
+    /** @enum {string} */
+    DeletedRecordSortField: "organizationName" | "tableName" | "deletedAt";
+    /** @enum {string} */
     DeletedRecordTable:
       | "organization"
       | "user"
@@ -7722,10 +7794,6 @@ export interface components {
         | components["schemas"]["DeletedRecordRestoreBlockedBy"]
         | null;
     };
-    /** @enum {string} */
-    DeletedRecordFilterField: "organizationName" | "tableName" | "deletedAt";
-    /** @enum {string} */
-    DeletedRecordSortField: "organizationName" | "tableName" | "deletedAt";
     DeletedRecordBatchListResponseDto: {
       data: components["schemas"]["DeletedRecordBatchResponseDto"][];
       total: number;
@@ -7791,6 +7859,8 @@ export interface components {
       fetchedAt?: string | null;
       /** Format: date-time */
       checkedAt?: string | null;
+      /** @description 最新一期且本月（平台時區）尚未成功確認官方來源 */
+      stale: boolean;
       unconfirmed: "minimumHourlyWageCents"[];
       /** Format: date-time */
       createdAt: string;
@@ -8148,11 +8218,12 @@ export interface components {
       name: string;
     };
     PayrollWithholdingUnitResponseDto: {
+      /** @description 統一編號（8 位數字，須通過檢查碼） */
+      businessNumber: string;
       /** @description 國稅局分局、稽徵所或服務處代號 */
       taxOfficeCode: string;
       /** @description 扣繳單位稅籍編號 */
       taxRegistrationNumber: string;
-      businessNumber: string;
       name: string;
       address: string;
       agentName: string;
@@ -8204,11 +8275,12 @@ export interface components {
       content: string;
     };
     PayrollWithholdingUnitDto: {
+      /** @description 統一編號（8 位數字，須通過檢查碼） */
+      businessNumber: string;
       /** @description 國稅局分局、稽徵所或服務處代號 */
       taxOfficeCode: string;
       /** @description 扣繳單位稅籍編號 */
       taxRegistrationNumber: string;
-      businessNumber: string;
       name: string;
       address: string;
       agentName: string;
@@ -8485,6 +8557,7 @@ export interface components {
     /** @enum {string} */
     MyWithholdingCertificateKind: "annual" | "nonResident";
     MyWithholdingUnitResponseDto: {
+      /** @description 統一編號（8 位數字，須通過檢查碼） */
       businessNumber: string;
       name: string;
       address: string;
@@ -8884,7 +8957,7 @@ export interface components {
     VoidInvoiceDto: {
       /** @description 作廢原因 */
       reason: string;
-      /** @description 重新開立時要更正的統一編號；省略則沿用作廢那張的買受人資訊 */
+      /** @description 重新開立時要更正的統一編號（須通過檢查碼）；省略則沿用作廢那張的買受人資訊 */
       customerIdentifier?: string;
       /** @description 重新開立時要更正的買受人抬頭 */
       customerName?: string;
@@ -9126,16 +9199,53 @@ export interface components {
       | "eligibleQuantity"
       | "unitPrice";
     /** @enum {string} */
-    BaseUnitCode: "GRM" | "MLT" | "H87";
-    /**
-     * @description eligibleQuantity 的單位，需與 unitCode 同維度
-     * @enum {string}
-     */
     UnitCode: "GRM" | "KGM" | "LTR" | "MLT" | "H87";
+    IngredientResponseDto: {
+      id: string;
+      organizationId: string;
+      name: components["schemas"]["LocalizedTextDto"];
+      brand?: string | null;
+      image?: string | null;
+      /** @description 無 purchasing 權限時不回傳 */
+      supplierId?: string | null;
+      /** @description 無 purchasing 權限時不回傳 */
+      supplierName?: string | null;
+      unitCode: components["schemas"]["UnitCode"];
+      inventoryLevel: string;
+      unlimitedStock: boolean;
+      /** @description inventoryLevel 顯示用的單位；不參與 unitCode 的換算 */
+      inventoryLevelUnitText?: string | null;
+      lowStockThreshold?: string | null;
+      /** @description 一個包裝的價錢；無 purchasing 權限時不回傳 */
+      price?: string | null;
+      priceCurrency: string;
+      eligibleQuantity?: string | null;
+      /** @description eligibleQuantity 的單位 */
+      eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
+      /** @description 採購連結；無 purchasing 權限時不回傳 */
+      url?: string | null;
+      note?: string | null;
+      /** @description 自製半成品的來源食譜 */
+      recipeId?: string | null;
+      /** @description 每基準單位價格 */
+      unitPrice?: number | null;
+      /** @description 包裝量，與 eligibleQuantity 相同 */
+      packageQuantity?: string | null;
+      /** @description packageQuantity 的單位 */
+      packageUnitCode?: components["schemas"]["UnitCode"] | null;
+      /** @description 一個包裝換算為基準單位的量 */
+      packageBaseQuantity?: number | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      updatedAt: string;
+    };
     IngredientListResponseDto: {
       data: components["schemas"]["IngredientResponseDto"][];
       total: number;
     };
+    /** @enum {string} */
+    BaseUnitCode: "GRM" | "MLT" | "H87";
     CreateIngredientDto: {
       /**
        * @example {
@@ -9193,41 +9303,33 @@ export interface components {
       /** @description inventoryLevel 寫入帳本時的異動原因；不會存到 ingredient */
       transactionNote?: string | null;
     };
-    IngredientResponseDto: {
-      id: string;
-      organizationId: string;
-      name: components["schemas"]["LocalizedTextDto"];
-      brand?: string | null;
-      image?: string | null;
-      /** @description 無 purchasing 權限時不回傳 */
-      supplierId?: string | null;
-      /** @description 無 purchasing 權限時不回傳 */
-      supplierName?: string | null;
-      unitCode: components["schemas"]["UnitCode"];
-      inventoryLevel: string;
-      unlimitedStock: boolean;
-      /** @description inventoryLevel 顯示用的單位；不參與 unitCode 的換算 */
-      inventoryLevelUnitText?: string | null;
-      lowStockThreshold?: string | null;
-      /** @description 一個包裝的價錢；無 purchasing 權限時不回傳 */
-      price?: string | null;
-      priceCurrency: string;
-      eligibleQuantity?: string | null;
-      /** @description eligibleQuantity 的單位 */
-      eligibleQuantityUnitCode?: components["schemas"]["UnitCode"] | null;
-      /** @description 採購連結；無 purchasing 權限時不回傳 */
-      url?: string | null;
+    CreateIngredientBatchDto: {
+      /**
+       * @description 這批實際產出的數量，單位為食材的 unitCode
+       * @example 2300.000
+       */
+      quantity: string;
+      /** @description 異動原因，自由填寫 */
       note?: string | null;
-      /** @description 自製半成品的來源食譜 */
-      recipeId?: string | null;
-      /** @description 每基準單位價格 */
-      unitPrice?: number | null;
-      /** @description 包裝量，與 eligibleQuantity 相同 */
-      packageQuantity?: string | null;
-      /** @description packageQuantity 的單位 */
-      packageUnitCode?: components["schemas"]["UnitCode"] | null;
-      /** @description 一個包裝換算為基準單位的量 */
-      packageBaseQuantity?: number | null;
+    };
+    /** @enum {string} */
+    InventoryTransactionReason: "count" | "consume" | "restore" | "batch";
+    InventoryTransactionResponseDto: {
+      id: string;
+      ingredientId: string;
+      organizationId: string;
+      /** @description 帶正負的異動量 */
+      quantity: string;
+      /** @description 這筆異動之後的帳上結存 */
+      balance: string;
+      reason: components["schemas"]["InventoryTransactionReason"];
+      /** @description 無 purchasing 權限時不回傳 */
+      unitCost?: string | null;
+      /** @description 同一次製作批次的異動共用 */
+      productionBatchId?: string | null;
+      orderId?: string | null;
+      orderNumber?: string | null;
+      note?: string | null;
       /** Format: date-time */
       createdAt: string;
       /** Format: date-time */
@@ -9254,20 +9356,6 @@ export interface components {
       | "note"
       | "createdAt"
       | "updatedAt";
-    SupplierListResponseDto: {
-      data: components["schemas"]["SupplierResponseDto"][];
-      total: number;
-    };
-    CreateSupplierDto: {
-      /** @example 全國食材廣場 */
-      name: string;
-      telephone?: string | null;
-      /** Format: uri */
-      url?: string | null;
-      note?: string | null;
-      /** @description 由這家供應的食材；一個食材只屬於一家供應商，選入原本屬於別家的食材會改綁到這家 */
-      ingredientIds?: string[];
-    };
     SupplierIngredientResponseDto: {
       id: string;
       name: components["schemas"]["LocalizedTextDto"];
@@ -9286,47 +9374,24 @@ export interface components {
       /** Format: date-time */
       updatedAt: string;
     };
+    SupplierListResponseDto: {
+      data: components["schemas"]["SupplierResponseDto"][];
+      total: number;
+    };
+    CreateSupplierDto: {
+      /** @example 全國食材廣場 */
+      name: string;
+      telephone?: string | null;
+      /** Format: uri */
+      url?: string | null;
+      note?: string | null;
+      /** @description 由這家供應的食材；一個食材只屬於一家供應商，選入原本屬於別家的食材會改綁到這家 */
+      ingredientIds?: string[];
+    };
     /** @enum {string} */
     RecipeFilterField: "name" | "recipeYield" | "createdAt" | "updatedAt";
     /** @enum {string} */
     RecipeSortField: "name" | "recipeYield" | "createdAt" | "updatedAt";
-    RecipeListResponseDto: {
-      data: components["schemas"]["RecipeResponseDto"][];
-      total: number;
-    };
-    CreateRecipeDto: {
-      /**
-       * @example {
-       *       "zh-TW": "抹茶奶酪",
-       *       "en": "Matcha Panna Cotta"
-       *     }
-       */
-      name: components["schemas"]["LocalizedTextDto"];
-      /** @description 對應的菜單品項，一個品項只能有一份食譜 */
-      menuItemId?: string | null;
-      /** @description 對應的客製選項，一個選項只能有一份食譜；與 menuItemId 擇一，份量必須為 1 */
-      modifierId?: string | null;
-      /**
-       * @description 份量
-       * @default 1
-       */
-      recipeYield: number;
-      /**
-       * @description 做出的總量；作為食材來源食譜時必填，與 recipeYieldUnitCode 一起帶
-       * @example 1500.000
-       */
-      recipeYieldQuantity?: string | null;
-      /** @description recipeYieldQuantity 的單位 */
-      recipeYieldUnitCode?: components["schemas"]["UnitCode"] | null;
-      /**
-       * @example [
-       *       {
-       *         "zh-TW": "吉利丁片泡冷水軟化，約 5 分鐘。"
-       *       }
-       *     ]
-       */
-      recipeInstructions?: components["schemas"]["LocalizedTextDto"][];
-    };
     RecipeIngredientResponseDto: {
       id: string;
       recipeId: string;
@@ -9365,6 +9430,43 @@ export interface components {
       createdAt: string;
       /** Format: date-time */
       updatedAt: string;
+    };
+    RecipeListResponseDto: {
+      data: components["schemas"]["RecipeResponseDto"][];
+      total: number;
+    };
+    CreateRecipeDto: {
+      /**
+       * @example {
+       *       "zh-TW": "抹茶奶酪",
+       *       "en": "Matcha Panna Cotta"
+       *     }
+       */
+      name: components["schemas"]["LocalizedTextDto"];
+      /** @description 對應的菜單品項，一個品項只能有一份食譜 */
+      menuItemId?: string | null;
+      /** @description 對應的客製選項，一個選項只能有一份食譜；與 menuItemId 擇一，份量必須為 1 */
+      modifierId?: string | null;
+      /**
+       * @description 份量
+       * @default 1
+       */
+      recipeYield: number;
+      /**
+       * @description 做出的總量；作為食材來源食譜時必填，與 recipeYieldUnitCode 一起帶
+       * @example 1500.000
+       */
+      recipeYieldQuantity?: string | null;
+      /** @description recipeYieldQuantity 的單位 */
+      recipeYieldUnitCode?: components["schemas"]["UnitCode"] | null;
+      /**
+       * @example [
+       *       {
+       *         "zh-TW": "吉利丁片泡冷水軟化，約 5 分鐘。"
+       *       }
+       *     ]
+       */
+      recipeInstructions?: components["schemas"]["LocalizedTextDto"][];
     };
     UpdateIngredientDto: {
       /**
@@ -9449,36 +9551,6 @@ export interface components {
       inventoryLevel: string;
       /** @description 異動原因，自由填寫 */
       note?: string | null;
-    };
-    CreateIngredientBatchDto: {
-      /**
-       * @description 這批實際產出的數量，單位為食材的 unitCode
-       * @example 2300.000
-       */
-      quantity: string;
-      /** @description 異動原因，自由填寫 */
-      note?: string | null;
-    };
-    /** @enum {string} */
-    InventoryTransactionReason: "count" | "consume" | "restore" | "batch";
-    InventoryTransactionResponseDto: {
-      id: string;
-      ingredientId: string;
-      organizationId: string;
-      /** @description 帶正負的異動量 */
-      quantity: string;
-      /** @description 這筆異動之後的帳上結存 */
-      balance: string;
-      reason: components["schemas"]["InventoryTransactionReason"];
-      /** @description 無 purchasing 權限時不回傳 */
-      unitCost?: string | null;
-      orderId?: string | null;
-      orderNumber?: string | null;
-      note?: string | null;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      updatedAt: string;
     };
     MenuItemRecipeDetailResponseDto: {
       recipe: components["schemas"]["RecipeResponseDto"] | null;
@@ -9739,14 +9811,22 @@ export interface components {
     CreateOrderInvoiceDto: {
       /** @enum {string} */
       type: "personal" | "company" | "donate";
-      /** @enum {string} */
+      /**
+       * @description 僅個人發票使用；未帶則開紙本
+       * @enum {string}
+       */
       carrierType?: "mobile" | "certificate";
+      /** @description 個人發票帶載具時必填：手機條碼為 / 加 7 碼，自然人憑證為 2 碼大寫英文加 14 碼數字 */
       carrierNum?: string;
       /** Format: email */
       email?: string;
+      /** @description 公司發票必填，8 碼數字且須通過統一編號檢查碼 */
       customerIdentifier?: string;
+      /** @description 公司發票必填 */
       customerName?: string;
+      /** @description 公司發票必填 */
       customerAddr?: string;
+      /** @description 捐贈發票必填，3 至 7 碼數字 */
       donateCode?: string;
     };
     CreateOrderDto: {
@@ -9907,31 +9987,6 @@ export interface components {
       | "customerEmail"
       | "invoiceType"
       | "invoiceStatus";
-    /** @enum {string} */
-    OrderBoardStatus:
-      | "OrderPaymentDue"
-      | "OrderProcessing"
-      | "OrderPickupAvailable";
-    AdminOrderListResponseDto: {
-      data: components["schemas"]["AdminOrderResponseDto"][];
-      total: number;
-    };
-    OrderBoardItemDto: {
-      orderId: string;
-      orderNumber: string;
-      orderStatus: components["schemas"]["OrderBoardStatus"];
-      /** @enum {string} */
-      mode: "counter" | "dineIn" | "driveThru" | "pickup";
-      /** Format: date-time */
-      pickupTime?: string | null;
-      tableNumber?: number | null;
-    };
-    /** @enum {string} */
-    OrderFlowStatus:
-      | "OrderPaymentDue"
-      | "OrderProcessing"
-      | "OrderPickupAvailable"
-      | "OrderDelivered";
     OrderCustomerDto: {
       email?: string | null;
       name: string;
@@ -10017,6 +10072,31 @@ export interface components {
       /** @description 訂單狀態是否允許重印工作單；店家有沒有工作單印表機要另外看印表機清單 */
       orderTicketReprintable: boolean;
     };
+    AdminOrderListResponseDto: {
+      data: components["schemas"]["AdminOrderResponseDto"][];
+      total: number;
+    };
+    /** @enum {string} */
+    OrderBoardStatus:
+      | "OrderPaymentDue"
+      | "OrderProcessing"
+      | "OrderPickupAvailable";
+    OrderBoardItemDto: {
+      orderId: string;
+      orderNumber: string;
+      orderStatus: components["schemas"]["OrderBoardStatus"];
+      /** @enum {string} */
+      mode: "counter" | "dineIn" | "driveThru" | "pickup";
+      /** Format: date-time */
+      pickupTime?: string | null;
+      tableNumber?: number | null;
+    };
+    /** @enum {string} */
+    OrderFlowStatus:
+      | "OrderPaymentDue"
+      | "OrderProcessing"
+      | "OrderPickupAvailable"
+      | "OrderDelivered";
     AdminOrderBoardColumnDto: {
       orderStatus: components["schemas"]["OrderFlowStatus"];
       orders: components["schemas"]["AdminOrderResponseDto"][];
@@ -10322,6 +10402,12 @@ export interface components {
       data: components["schemas"]["OrganizationPointTransactionDto"][];
       total: number;
     };
+    PointAdjustmentLimitDto: {
+      /** @description 點數是否已啟用；未啟用時無法補點或扣點 */
+      enabled: boolean;
+      /** @description 非 owner 在本店對同一會員每個台灣日可補扣的合計點數上限（NT$3,000 依每點金額換算，補點與扣點都以絕對值累計）；超過只有 owner 能做，0 = 只有 owner 能調整；呼叫者是 owner（含平台管理員）時為 null，不受上限限制 */
+      ownerOnlyAbovePoints: number | null;
+    };
     AdjustPointsDto: {
       /**
        * Format: email
@@ -10332,6 +10418,10 @@ export interface components {
       points: number;
       /** @description 調整原因 */
       note: string;
+    };
+    PublicPointSettingResponseDto: {
+      amountPerPoint: string | null;
+      enabled: boolean;
     };
     MenuResponseDto: {
       id: string;
@@ -10465,13 +10555,13 @@ export interface components {
       /** @example 150.00 */
       price: string;
       /**
-       * @description 促銷開始時間（ISO 8601）
-       * @example 2025-06-01T00:00:00+08:00
+       * @description 促銷開始日（平台時區，含當天）
+       * @example 2025-06-01
        */
       validFrom?: string;
       /**
-       * @description 促銷結束時間（ISO 8601）
-       * @example 2025-06-30T23:59:59+08:00
+       * @description 促銷結束日（平台時區，含當天）
+       * @example 2025-06-30
        */
       validThrough?: string;
     };
@@ -10791,6 +10881,8 @@ export interface components {
       /** @description priceAdjustment 的幣別；來自店家設定 */
       priceCurrency: string;
       availability?: components["schemas"]["ItemAvailability"] | null;
+      /** @description true 代表系統因食材不足而自動售完，補貨後會自動恢復供應 */
+      autoSoldOut: boolean;
       /** @description 可販售的點餐模式 */
       availableModes: components["schemas"]["OrderMode"][];
       sortOrder: number;
@@ -11084,10 +11176,13 @@ export interface components {
       | "waitlistCutoff"
       | "waitlistDisabled"
       | "waitlistGroupsInvalid"
+      | "waitlistIdempotencyConflict"
       | "waitlistPartySizeUnavailable"
       | "waitlistPaused"
       | "waitlistPhoneInQueue"
       | "waitlistQrRequired"
+      | "waitlistQrSessionNotFound"
+      | "waitlistTicketNotFound"
       | "waitlistTransitionInvalid";
     WaitlistErrorResponseDto: {
       message: components["schemas"]["WaitlistErrorCode"];
@@ -11097,38 +11192,6 @@ export interface components {
       path: string;
       success: boolean;
       timestamp: string;
-    };
-    /** @enum {string} */
-    WaitlistTicketStatus:
-      | "waiting"
-      | "called"
-      | "seated"
-      | "noShow"
-      | "cancelled"
-      | "expired";
-    WaitlistTicketListItemDto: {
-      /** Format: date-time */
-      calledAt?: string | null;
-      /**
-       * Format: date-time
-       * @description 顧客回覆確認前往的時間
-       */
-      confirmedAt?: string | null;
-      /** Format: date-time */
-      createdAt: string;
-      /** Format: date-time */
-      endedAt?: string | null;
-      id: string;
-      partySize: number;
-      prefix: string;
-      status: components["schemas"]["WaitlistTicketStatus"];
-      /** @example A012 */
-      ticketNumber: string;
-      email?: string | null;
-      /** @description 候位結束 30 天後清除個資，此時為 null */
-      name?: string | null;
-      /** @description 候位結束 30 天後清除個資，此時為 null */
-      phoneNumber?: string | null;
     };
     WaitlistGroupStatusDto: {
       /** @example 4 */
@@ -11191,6 +11254,14 @@ export interface components {
        */
       phoneNumber: string;
     };
+    /** @enum {string} */
+    WaitlistTicketStatus:
+      | "waiting"
+      | "called"
+      | "seated"
+      | "noShow"
+      | "cancelled"
+      | "expired";
     WaitlistTicketResponseDto: {
       /** @description 前方候位組數，非候位中為 0 */
       aheadCount: number;
@@ -11308,6 +11379,30 @@ export interface components {
       | "createdAt"
       | "calledAt"
       | "endedAt";
+    WaitlistTicketListItemDto: {
+      /** Format: date-time */
+      calledAt?: string | null;
+      /**
+       * Format: date-time
+       * @description 顧客回覆確認前往的時間
+       */
+      confirmedAt?: string | null;
+      /** Format: date-time */
+      createdAt: string;
+      /** Format: date-time */
+      endedAt?: string | null;
+      id: string;
+      partySize: number;
+      prefix: string;
+      status: components["schemas"]["WaitlistTicketStatus"];
+      /** @example A012 */
+      ticketNumber: string;
+      email?: string | null;
+      /** @description 候位結束 30 天後清除個資，此時為 null */
+      name?: string | null;
+      /** @description 候位結束 30 天後清除個資，此時為 null */
+      phoneNumber?: string | null;
+    };
     WaitlistTicketListResponseDto: {
       data: components["schemas"]["WaitlistTicketListItemDto"][];
       total: number;
@@ -11984,48 +12079,6 @@ export interface components {
     SetQuantAiKeyDto: {
       apiKey: string;
     };
-    QuantBotEventDto: {
-      id: string;
-      /** @description 事件種類，例如 started、stopped、risk_blocked */
-      kind: string;
-      payload?: {
-        [key: string]: unknown;
-      };
-      /** Format: date-time */
-      createdAt: string;
-    };
-    QuantBotOrderListResponseDto: {
-      data: components["schemas"]["QuantBotOrderDto"][];
-      total: number;
-    };
-    QuantBotFillDto: {
-      id: string;
-      orderId: string;
-      side: components["schemas"]["QuantOrderSide"];
-      price: number;
-      size: number;
-      fee: number;
-      feeCoin: string;
-      /** Format: date-time */
-      filledAt: string;
-    };
-    /** @enum {string} */
-    QuantBotOrderStatus: "open" | "filled" | "canceled" | "rejected";
-    QuantBotOrderDto: {
-      id: string;
-      side: components["schemas"]["QuantOrderSide"];
-      type: components["schemas"]["QuantOrderType"];
-      price?: number;
-      size?: number;
-      amount?: number;
-      filledSize: number;
-      filledAmount: number;
-      fee: number;
-      status: components["schemas"]["QuantBotOrderStatus"];
-      tag?: string;
-      /** Format: date-time */
-      createdAt: string;
-    };
     /** @enum {string} */
     QuantBotFilterField:
       | "name"
@@ -12047,61 +12100,7 @@ export interface components {
       | "investment"
       | "startedAt";
     /** @enum {string} */
-    QuantBotMode: "paper" | "live";
-    /** @enum {string} */
     QuantGridType: "arithmetic" | "geometric";
-    /** @enum {string} */
-    QuantGridStopType: "price" | "profit_amount" | "profit_ratio";
-    GridStopDto: {
-      type: components["schemas"]["QuantGridStopType"];
-      /** @description price：觸發價；profit_amount：金額（計價幣）；profit_ratio：相對投入的 %。停損也填正數 */
-      value: number;
-    };
-    /** @enum {string} */
-    QuantTriggerDirection: "above" | "below";
-    TriggerDto: {
-      price: number;
-      direction: components["schemas"]["QuantTriggerDirection"];
-    };
-    /**
-     * @description 停止時是否把持有的基礎幣賣回計價幣
-     * @enum {string}
-     */
-    QuantGridCloseModel: "NOT_SELL" | "TO_QUOTE";
-    GridConfigDto: {
-      /** @description 上界 */
-      top: number;
-      /** @description 下界 */
-      bottom: number;
-      /** @description 格數 */
-      row: number;
-      gridType: components["schemas"]["QuantGridType"];
-      lossStop?: components["schemas"]["GridStopDto"];
-      profitStop?: components["schemas"]["GridStopDto"];
-      /** @description 價格觸及才開始 */
-      trigger?: components["schemas"]["TriggerDto"];
-      /** @description 停止時是否把持有的基礎幣賣回計價幣 */
-      closeModel: components["schemas"]["QuantGridCloseModel"];
-      /** @description 實盤：初始買入價格最多高於下單時價格的 %；省略時依 Pionex 預設，模擬盤與回測不使用 */
-      slippage?: number;
-    };
-    QuantBotListResponseDto: {
-      data: components["schemas"]["QuantBotDto"][];
-      total: number;
-    };
-    CreateGridBotDto: {
-      name: string;
-      /** @example BTC_USDT */
-      symbol: string;
-      mode: components["schemas"]["QuantBotMode"];
-      /** @description 實盤必填 */
-      credentialId?: string;
-      /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
-      investment: number;
-      /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
-      maxOrderAmount?: number;
-      config: components["schemas"]["GridConfigDto"];
-    };
     /**
      * @description long 做多、short 做空、no_trend 中性
      * @enum {string}
@@ -12119,6 +12118,12 @@ export interface components {
       value: number;
       /** @description price_limit：觸發後掛限價單平倉的價格 */
       limitPrice?: number;
+    };
+    /** @enum {string} */
+    QuantTriggerDirection: "above" | "below";
+    TriggerDto: {
+      price: number;
+      direction: components["schemas"]["QuantTriggerDirection"];
     };
     FuturesGridConfigDto: {
       /** @description 上界 */
@@ -12154,6 +12159,35 @@ export interface components {
       stopLoss?: number;
       /** @description 獲利是否滾入下一筆的本金 */
       compound: boolean;
+    };
+    /** @enum {string} */
+    QuantGridStopType: "price" | "profit_amount" | "profit_ratio";
+    GridStopDto: {
+      type: components["schemas"]["QuantGridStopType"];
+      /** @description price：觸發價；profit_amount：金額（計價幣）；profit_ratio：相對投入的 %。停損也填正數 */
+      value: number;
+    };
+    /**
+     * @description 停止時是否把持有的基礎幣賣回計價幣
+     * @enum {string}
+     */
+    QuantGridCloseModel: "NOT_SELL" | "TO_QUOTE";
+    GridConfigDto: {
+      /** @description 上界 */
+      top: number;
+      /** @description 下界 */
+      bottom: number;
+      /** @description 格數 */
+      row: number;
+      gridType: components["schemas"]["QuantGridType"];
+      lossStop?: components["schemas"]["GridStopDto"];
+      profitStop?: components["schemas"]["GridStopDto"];
+      /** @description 價格觸及才開始 */
+      trigger?: components["schemas"]["TriggerDto"];
+      /** @description 停止時是否把持有的基礎幣賣回計價幣 */
+      closeModel: components["schemas"]["QuantGridCloseModel"];
+      /** @description 實盤：初始買入價格最多高於下單時價格的 %；省略時依 Pionex 預設，模擬盤與回測不使用 */
+      slippage?: number;
     };
     DcaConfigDto: {
       /** @description 首單金額（計價幣） */
@@ -12239,6 +12273,8 @@ export interface components {
       | "signal"
       | "ai";
     /** @enum {string} */
+    QuantBotMode: "paper" | "live";
+    /** @enum {string} */
     QuantBotStatus: "running" | "stopped" | "error";
     /**
      * @description pionex：交給 Pionex 執行；engine：由本系統執行
@@ -12280,6 +12316,55 @@ export interface components {
       profitWithdrawn?: number;
       /** @description 向 Pionex 查詢失敗的原因；有值時其他數字都不是實際狀態 */
       pionexError?: string;
+    };
+    QuantBotDto: {
+      id: string;
+      name: string;
+      type: components["schemas"]["QuantBotType"];
+      mode: components["schemas"]["QuantBotMode"];
+      symbol: string;
+      status: components["schemas"]["QuantBotStatus"];
+      /** @description 停止或錯誤的原因 */
+      statusReason?: string;
+      credentialId?: string;
+      config:
+        | components["schemas"]["GridConfigDto"]
+        | components["schemas"]["DcaConfigDto"]
+        | components["schemas"]["IndicatorConfigDto"]
+        | components["schemas"]["WebhookConfigDto"]
+        | components["schemas"]["FuturesGridConfigDto"]
+        | components["schemas"]["SignalBotConfigDto"]
+        | components["schemas"]["AiConfigDto"];
+      investment: number;
+      maxOrderAmount?: number;
+      /** @description pionex：交給 Pionex 執行；engine：由本系統執行 */
+      executor: components["schemas"]["QuantBotExecutor"];
+      /** @description Pionex 內建機器人 id */
+      pionexBotId?: string;
+      summary: components["schemas"]["QuantBotSummaryDto"];
+      /** Format: date-time */
+      startedAt?: string;
+      /** Format: date-time */
+      stoppedAt?: string;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    QuantBotListResponseDto: {
+      data: components["schemas"]["QuantBotDto"][];
+      total: number;
+    };
+    CreateGridBotDto: {
+      name: string;
+      /** @example BTC_USDT */
+      symbol: string;
+      mode: components["schemas"]["QuantBotMode"];
+      /** @description 實盤必填 */
+      credentialId?: string;
+      /** @description 投入金額（計價幣），也是機器人可動用資金的上限 */
+      investment: number;
+      /** @description DCA／指標／Webhook：開倉單的單筆金額上限（計價幣），超過就略過；平倉不受限 */
+      maxOrderAmount?: number;
+      config: components["schemas"]["GridConfigDto"];
     };
     CreateQuantBotResponseDto: {
       id: string;
@@ -12427,38 +12512,6 @@ export interface components {
       maxOrderAmount?: number;
       config: components["schemas"]["AiConfigDto"];
     };
-    QuantBotDto: {
-      id: string;
-      name: string;
-      type: components["schemas"]["QuantBotType"];
-      mode: components["schemas"]["QuantBotMode"];
-      symbol: string;
-      status: components["schemas"]["QuantBotStatus"];
-      /** @description 停止或錯誤的原因 */
-      statusReason?: string;
-      credentialId?: string;
-      config:
-        | components["schemas"]["GridConfigDto"]
-        | components["schemas"]["DcaConfigDto"]
-        | components["schemas"]["IndicatorConfigDto"]
-        | components["schemas"]["WebhookConfigDto"]
-        | components["schemas"]["FuturesGridConfigDto"]
-        | components["schemas"]["SignalBotConfigDto"]
-        | components["schemas"]["AiConfigDto"];
-      investment: number;
-      maxOrderAmount?: number;
-      /** @description pionex：交給 Pionex 執行；engine：由本系統執行 */
-      executor: components["schemas"]["QuantBotExecutor"];
-      /** @description Pionex 內建機器人 id */
-      pionexBotId?: string;
-      summary: components["schemas"]["QuantBotSummaryDto"];
-      /** Format: date-time */
-      startedAt?: string;
-      /** Format: date-time */
-      stoppedAt?: string;
-      /** Format: date-time */
-      createdAt: string;
-    };
     StopQuantBotDto: {
       /** @description 現貨網格省略時依建立時的設定；現貨 DCA／指標／Webhook／AI 傳 TO_QUOTE 會市價平倉，省略時保留倉位；合約一律平倉 */
       closeModel?: components["schemas"]["QuantGridCloseModel"];
@@ -12568,7 +12621,39 @@ export interface components {
       | "status"
       | "tag";
     /** @enum {string} */
+    QuantBotOrderStatus: "open" | "filled" | "canceled" | "rejected";
+    QuantBotOrderDto: {
+      id: string;
+      side: components["schemas"]["QuantOrderSide"];
+      type: components["schemas"]["QuantOrderType"];
+      price?: number;
+      size?: number;
+      amount?: number;
+      filledSize: number;
+      filledAmount: number;
+      fee: number;
+      status: components["schemas"]["QuantBotOrderStatus"];
+      tag?: string;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    QuantBotOrderListResponseDto: {
+      data: components["schemas"]["QuantBotOrderDto"][];
+      total: number;
+    };
+    /** @enum {string} */
     QuantBotFillSortField: "filledAt" | "side" | "price" | "size" | "fee";
+    QuantBotFillDto: {
+      id: string;
+      orderId: string;
+      side: components["schemas"]["QuantOrderSide"];
+      price: number;
+      size: number;
+      fee: number;
+      feeCoin: string;
+      /** Format: date-time */
+      filledAt: string;
+    };
     QuantBotFillListResponseDto: {
       data: components["schemas"]["QuantBotFillDto"][];
       total: number;
@@ -12589,6 +12674,16 @@ export interface components {
     };
     /** @enum {string} */
     QuantBotEventSortField: "createdAt" | "kind";
+    QuantBotEventDto: {
+      id: string;
+      /** @description 事件種類，例如 started、stopped、risk_blocked */
+      kind: string;
+      payload?: {
+        [key: string]: unknown;
+      };
+      /** Format: date-time */
+      createdAt: string;
+    };
     QuantBotEventListResponseDto: {
       data: components["schemas"]["QuantBotEventDto"][];
       total: number;
@@ -13028,20 +13123,6 @@ export interface components {
       /** @description 店家目前所有食材，依食材排序；數量為小數點後三位的字串，與食材庫存相同 */
       rows: components["schemas"]["InventoryReportRowDto"][];
     };
-    PersonnelCostReportTotalsDto: {
-      /** @description 已發布薪資單的人數 */
-      headcount: number;
-      /** @description 應發薪資（分） */
-      grossCents: string;
-      /** @description 雇主負擔的勞保、就保、健保、職災與工資墊償（分）；所有薪資單都沒有這筆資料時為 null */
-      employerInsuranceCents: string | null;
-      /** @description 沒有雇主勞健保資料、該項未計入的薪資單張數 */
-      missingEmployerInsurance: number;
-      /** @description 雇主提繳勞退（分） */
-      employerPensionCents: string;
-      /** @description 以上三項中有資料者的合計（分）；不含補充保費 */
-      totalCents: string;
-    };
     PersonnelCostReportRowDto: {
       /** @description 已發布薪資單的人數 */
       headcount: number;
@@ -13058,12 +13139,99 @@ export interface components {
       /** @description 員工目前的職位；未設定為 null */
       jobTitle: string | null;
     };
+    PersonnelCostReportTotalsDto: {
+      /** @description 已發布薪資單的人數 */
+      headcount: number;
+      /** @description 應發薪資（分） */
+      grossCents: string;
+      /** @description 雇主負擔的勞保、就保、健保、職災與工資墊償（分）；所有薪資單都沒有這筆資料時為 null */
+      employerInsuranceCents: string | null;
+      /** @description 沒有雇主勞健保資料、該項未計入的薪資單張數 */
+      missingEmployerInsurance: number;
+      /** @description 雇主提繳勞退（分） */
+      employerPensionCents: string;
+      /** @description 以上三項中有資料者的合計（分）；不含補充保費 */
+      totalCents: string;
+    };
     PersonnelCostReportResponseDto: {
       month: string;
       rows: components["schemas"]["PersonnelCostReportRowDto"][];
       totals: components["schemas"]["PersonnelCostReportTotalsDto"];
       /** @description 當月在職但沒有已發布薪資單、未計入的員工數 */
       unpublishedEmployees: number;
+    };
+    /** @enum {string} */
+    StoreLayoutFloor: "ground" | "upper" | "roof";
+    /** @enum {string} */
+    StoreLayoutItemKind:
+      | "wash"
+      | "prep"
+      | "heat"
+      | "cold"
+      | "storage"
+      | "front"
+      | "bar"
+      | "equipment"
+      | "restroom"
+      | "seat"
+      | "plant"
+      | "lawn";
+    StoreLayoutItemDto: {
+      floor: components["schemas"]["StoreLayoutFloor"];
+      /** @description 左右位置（公尺） */
+      x: number;
+      /** @description 前後位置（公尺） */
+      z: number;
+      /** @description 寬（公尺） */
+      width: number;
+      /** @description 深（公尺） */
+      depth: number;
+      /** @description 高（公尺） */
+      height: number;
+      /** @description 離該樓層地面的高度（公尺） */
+      elevation: number;
+      /**
+       * @description 前台翻譯用的鍵
+       * @example prepTable
+       */
+      label: string;
+      kind: components["schemas"]["StoreLayoutItemKind"];
+      /** @description 內用桌號；有值的項目就是內用桌，同一門市不可重複 */
+      tableNumber?: number;
+    };
+    StoreLayoutSeatDto: {
+      floor: components["schemas"]["StoreLayoutFloor"];
+      /** @description 左右位置（公尺） */
+      x: number;
+      /** @description 前後位置（公尺） */
+      z: number;
+      /** @description 寬（公尺） */
+      width: number;
+      /** @description 深（公尺） */
+      depth: number;
+      /** @description 高（公尺） */
+      height: number;
+      /** @description 離該樓層地面的高度（公尺） */
+      elevation: number;
+      /**
+       * @description 前台翻譯用的鍵
+       * @example prepTable
+       */
+      label: string;
+    };
+    StoreLayoutDataDto: {
+      items: components["schemas"]["StoreLayoutItemDto"][];
+      seats: components["schemas"]["StoreLayoutSeatDto"][];
+    };
+    StoreLayoutResponseDto: {
+      organizationId: string;
+      schemaVersion: number;
+      data: components["schemas"]["StoreLayoutDataDto"];
+      /** Format: date-time */
+      updatedAt: string;
+    };
+    UpdateStoreLayoutDto: {
+      data: components["schemas"]["StoreLayoutDataDto"];
     };
     PublicStorePhotoResponseDto: {
       id: string;
@@ -15617,7 +15785,7 @@ export interface operations {
   UsersController_getStats: {
     parameters: {
       query: {
-        /** @description 本期起始時間；上期為緊接在前、等長的區間 */
+        /** @description 本期起始時間，須帶時區；上期為緊接在前、等長的區間，只取到和本期已經過的時間等長。bucketUnit 為 month 時須為平台時區的月初 */
         since: string;
         bucketUnit: components["schemas"]["StatsBucketUnit"];
         /** @description 每個區間包含幾個 bucketUnit */
@@ -15651,12 +15819,12 @@ export interface operations {
   UsersController_findSessions: {
     parameters: {
       query?: {
-        filterField?: components["schemas"]["UserSessionFilterField"];
         filterOperator?: components["schemas"]["FilterOperator"];
         /** @description 快速搜尋命中的列舉條件,格式為 field:value1,value2 */
         quickFilterEnums?: string[];
-        sortBy?: components["schemas"]["UserSessionSortField"];
         sortDirection?: components["schemas"]["SortDirection"];
+        filterField?: components["schemas"]["UserSessionFilterField"];
+        sortBy?: components["schemas"]["UserSessionSortField"];
         limit?: number;
         offset?: number;
         filterValue?: string;
@@ -18313,7 +18481,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        organizationSlug: string;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -18475,7 +18645,9 @@ export interface operations {
     parameters: {
       query?: never;
       header?: never;
-      path?: never;
+      path: {
+        organizationSlug: string;
+      };
       cookie?: never;
     };
     requestBody: {
@@ -19180,9 +19352,9 @@ export interface operations {
   MenuItemSalesController_findAll: {
     parameters: {
       query?: {
-        /** @description 統計起始時間；預設為近 30 天 */
+        /** @description 統計起始時間，須帶時區；預設為近 30 天 */
         since?: string;
-        /** @description 統計結束時間（不含）；預設為現在 */
+        /** @description 統計結束時間（不含），須帶時區；預設為現在 */
         until?: string;
       };
       header?: never;
@@ -19388,7 +19560,7 @@ export interface operations {
   OrderStatsController_findOne: {
     parameters: {
       query: {
-        /** @description 本期起始時間；上期為緊接在前、等長的區間 */
+        /** @description 本期起始時間，須帶時區；上期為緊接在前、等長的區間，只取到和本期已經過的時間等長。bucketUnit 為 month 時須為平台時區的月初 */
         since: string;
         bucketUnit: components["schemas"]["StatsBucketUnit"];
         /** @description 每個區間包含幾個 bucketUnit */
@@ -20166,6 +20338,34 @@ export interface operations {
       };
     };
   };
+  OrganizationPointsController_getAdjustmentLimit: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PointAdjustmentLimitDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
   OrganizationPointsController_adjust: {
     parameters: {
       query?: never;
@@ -20187,6 +20387,32 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["OrganizationPointTransactionDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  PointSettingsController_getPublic: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PublicPointSettingResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -22009,9 +22235,9 @@ export interface operations {
   WaitlistController_stats: {
     parameters: {
       query: {
-        /** @description 統計起始時間（以取號時間計） */
+        /** @description 統計起始時間（以取號時間計），須帶時區 */
         since: string;
-        /** @description 統計結束時間（不含）；預設為現在 */
+        /** @description 統計結束時間（不含），須帶時區；預設為現在 */
         until?: string;
       };
       header?: never;
@@ -22286,7 +22512,7 @@ export interface operations {
       query?: never;
       header?: never;
       path: {
-        /** @description 統一編號（8位數字） */
+        /** @description 統一編號（8 位數字，須通過檢查碼） */
         businessNo: string;
       };
       cookie?: never;
@@ -22301,6 +22527,59 @@ export interface operations {
           "application/json": components["schemas"]["BusinessInfoResponseDto"];
         };
       };
+      /** @description 統一編號格式或檢查碼不符 */
+      400: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 查無公司或商業登記，需手動填寫名稱與地址 */
+      404: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+      /** @description 商工登記查詢服務暫時無法使用 */
+      503: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  ImagesController_find: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        kind: "menu" | "menuSection" | "menuItem" | "banner" | "storePhoto";
+        id: string;
+        /** @description 圖片所屬資料的 updatedAt（毫秒） */
+        version: string;
+        extension: "avif" | "gif" | "jpg" | "png" | "svg" | "webp";
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "image/*": string;
+        };
+      };
       /** @description Internal server error */
       500: {
         headers: {
@@ -22313,7 +22592,7 @@ export interface operations {
   MyOrganizationStatsController_getStats: {
     parameters: {
       query: {
-        /** @description 本期起始時間；上期為緊接在前、等長的區間 */
+        /** @description 本期起始時間，須帶時區；上期為緊接在前、等長的區間，只取到和本期已經過的時間等長。bucketUnit 為 month 時須為平台時區的月初 */
         since: string;
         bucketUnit: components["schemas"]["StatsBucketUnit"];
         /** @description 每個區間包含幾個 bucketUnit */
@@ -24443,7 +24722,7 @@ export interface operations {
   QuantBotsController_findFillMarkers: {
     parameters: {
       query: {
-        /** @description 只回傳此時間之後的成交 */
+        /** @description 只回傳此時間之後的成交，須帶時區 */
         since: string;
       };
       header?: never;
@@ -25391,9 +25670,9 @@ export interface operations {
   ReportsController_findSales: {
     parameters: {
       query: {
-        /** @description 統計起始時間 */
+        /** @description 統計起始時間，須帶時區 */
         since: string;
-        /** @description 統計結束時間（不含）；須晚於 since，區間最多 366 天 */
+        /** @description 統計結束時間（不含），須帶時區；須晚於 since，區間最多 366 天 */
         until: string;
         groupBy: components["schemas"]["SalesReportGroupBy"];
       };
@@ -25425,9 +25704,9 @@ export interface operations {
   ReportsController_exportSales: {
     parameters: {
       query: {
-        /** @description 統計起始時間 */
+        /** @description 統計起始時間，須帶時區 */
         since: string;
-        /** @description 統計結束時間（不含）；須晚於 since，區間最多 366 天 */
+        /** @description 統計結束時間（不含），須帶時區；須晚於 since，區間最多 366 天 */
         until: string;
         groupBy: components["schemas"]["SalesReportGroupBy"];
       };
@@ -25459,9 +25738,9 @@ export interface operations {
   ReportsController_findInventory: {
     parameters: {
       query: {
-        /** @description 統計起始時間 */
+        /** @description 統計起始時間，須帶時區 */
         since: string;
-        /** @description 統計結束時間（不含）；須晚於 since，區間最多 366 天 */
+        /** @description 統計結束時間（不含），須帶時區；須晚於 since，區間最多 366 天 */
         until: string;
       };
       header?: never;
@@ -25492,9 +25771,9 @@ export interface operations {
   ReportsController_exportInventory: {
     parameters: {
       query: {
-        /** @description 統計起始時間 */
+        /** @description 統計起始時間，須帶時區 */
         since: string;
-        /** @description 統計結束時間（不含）；須晚於 since，區間最多 366 天 */
+        /** @description 統計結束時間（不含），須帶時區；須晚於 since，區間最多 366 天 */
         until: string;
       };
       header?: never;
@@ -25573,6 +25852,66 @@ export interface operations {
         };
         content: {
           "text/csv": string;
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  StoreLayoutController_get: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StoreLayoutResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  StoreLayoutController_update: {
+    parameters: {
+      query?: never;
+      header?: never;
+      path: {
+        organizationSlug: string;
+      };
+      cookie?: never;
+    };
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["UpdateStoreLayoutDto"];
+      };
+    };
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["StoreLayoutResponseDto"];
         };
       };
       /** @description Internal server error */
@@ -25857,6 +26196,12 @@ export const pathsApiOrganizationsOrganizationIdOrderMenuGetParametersQueryLangV
 export const pathsApiOrganizationsOrganizationSlugWaitlistTicketsTicketIdTransitionsStatusPatchParametersPathStatusValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/organizations/{organizationSlug}/waitlist/tickets/{ticketId}/transitions/{status}"]["patch"]["parameters"]["path"]["status"]
 > = ["cancelled", "waiting", "called", "seated", "noShow"];
+export const pathsApiImagesKindIdVersionExtensionGetParametersPathKindValues: ReadonlyArray<
+  FlattenedDeepRequired<paths>["/api/images/{kind}/{id}/{version}.{extension}"]["get"]["parameters"]["path"]["kind"]
+> = ["menu", "menuSection", "menuItem", "banner", "storePhoto"];
+export const pathsApiImagesKindIdVersionExtensionGetParametersPathExtensionValues: ReadonlyArray<
+  FlattenedDeepRequired<paths>["/api/images/{kind}/{id}/{version}.{extension}"]["get"]["parameters"]["path"]["extension"]
+> = ["avif", "gif", "jpg", "png", "svg", "webp"];
 export const pathsApiStorePhotosActiveGetParametersQueryLangValues: ReadonlyArray<
   FlattenedDeepRequired<paths>["/api/store-photos/active"]["get"]["parameters"]["query"]["lang"]
 > = ["en", "ja", "ko", "zh-CN", "zh-TW"];
@@ -25905,7 +26250,6 @@ export const attendanceErrorCodeValues: ReadonlyArray<
   "childcareReductionInvalid",
   "indigenousHolidayInvalid",
   "insufficientLeaveBalance",
-  "invalidBusinessNumber",
   "invalidEarningType",
   "invalidEmergencyDetails",
   "invalidEventSequence",
@@ -26411,21 +26755,6 @@ export const auditResourceValues: ReadonlyArray<
   "taxIdentity",
   "withholdingCertificate",
 ];
-export const auditActionValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["AuditAction"]
-> = [
-  "create",
-  "update",
-  "delete",
-  "restore",
-  "consume",
-  "refund",
-  "review",
-  "withdraw",
-  "cancel",
-  "publish",
-  "request",
-];
 export const auditLogFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["AuditLogFilterField"]
 > = [
@@ -26446,6 +26775,21 @@ export const auditLogSortFieldValues: ReadonlyArray<
   "resource",
   "action",
   "createdAt",
+];
+export const auditActionValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["AuditAction"]
+> = [
+  "create",
+  "update",
+  "delete",
+  "restore",
+  "consume",
+  "refund",
+  "review",
+  "withdraw",
+  "cancel",
+  "publish",
+  "request",
 ];
 export const userRoleValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UserRole"]
@@ -26573,6 +26917,12 @@ export const sweetnessLevelValues: ReadonlyArray<
 export const validateCouponDtoModeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["ValidateCouponDto"]["mode"]
 > = ["counter", "dineIn", "driveThru", "pickup"];
+export const deletedRecordFilterFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["DeletedRecordFilterField"]
+> = ["organizationName", "tableName", "deletedAt"];
+export const deletedRecordSortFieldValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["DeletedRecordSortField"]
+> = ["organizationName", "tableName", "deletedAt"];
 export const deletedRecordTableValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["DeletedRecordTable"]
 > = [
@@ -26608,12 +26958,6 @@ export const deletedRecordTableValues: ReadonlyArray<
 export const deletedRecordRestoreBlockedByValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["DeletedRecordRestoreBlockedBy"]
 > = ["ownerOnly", "forbidden", "closed"];
-export const deletedRecordFilterFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["DeletedRecordFilterField"]
-> = ["organizationName", "tableName", "deletedAt"];
-export const deletedRecordSortFieldValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["DeletedRecordSortField"]
-> = ["organizationName", "tableName", "deletedAt"];
 export const payrollRuleSetResponseDtoUnconfirmedValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PayrollRuleSetResponseDto"]["unconfirmed"]
 > = ["minimumHourlyWageCents"];
@@ -27145,12 +27489,15 @@ export const ingredientSortFieldValues: ReadonlyArray<
   "eligibleQuantity",
   "unitPrice",
 ];
-export const baseUnitCodeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["BaseUnitCode"]
-> = ["GRM", "MLT", "H87"];
 export const unitCodeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["UnitCode"]
 > = ["GRM", "KGM", "LTR", "MLT", "H87"];
+export const baseUnitCodeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["BaseUnitCode"]
+> = ["GRM", "MLT", "H87"];
+export const inventoryTransactionReasonValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["InventoryTransactionReason"]
+> = ["count", "consume", "restore", "batch"];
 export const supplierFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["SupplierFilterField"]
 > = ["name", "telephone", "url", "note", "createdAt", "updatedAt"];
@@ -27169,9 +27516,6 @@ export const inventoryTransactionFilterFieldValues: ReadonlyArray<
 export const inventoryTransactionSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["InventoryTransactionSortField"]
 > = ["note", "quantity", "unitCost", "createdAt", "reason"];
-export const inventoryTransactionReasonValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["InventoryTransactionReason"]
-> = ["count", "consume", "restore", "batch"];
 export const recipeIngredientFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["RecipeIngredientFilterField"]
 > = ["ingredientName", "requiredQuantity", "createdAt", "updatedAt"];
@@ -27266,20 +27610,6 @@ export const orderSortFieldValues: ReadonlyArray<
   "invoiceType",
   "invoiceStatus",
 ];
-export const orderBoardStatusValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["OrderBoardStatus"]
-> = ["OrderPaymentDue", "OrderProcessing", "OrderPickupAvailable"];
-export const orderBoardItemDtoModeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["OrderBoardItemDto"]["mode"]
-> = ["counter", "dineIn", "driveThru", "pickup"];
-export const orderFlowStatusValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["OrderFlowStatus"]
-> = [
-  "OrderPaymentDue",
-  "OrderProcessing",
-  "OrderPickupAvailable",
-  "OrderDelivered",
-];
 export const orderTransitionDirectionValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["OrderTransitionDirection"]
 > = ["advance", "cancel", "revert"];
@@ -27310,6 +27640,20 @@ export const adminOrderResponseDtoOrderStatusValues: ReadonlyArray<
   "OrderCancelled",
   "OrderProblem",
   "OrderReturned",
+];
+export const orderBoardStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderBoardStatus"]
+> = ["OrderPaymentDue", "OrderProcessing", "OrderPickupAvailable"];
+export const orderBoardItemDtoModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderBoardItemDto"]["mode"]
+> = ["counter", "dineIn", "driveThru", "pickup"];
+export const orderFlowStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["OrderFlowStatus"]
+> = [
+  "OrderPaymentDue",
+  "OrderProcessing",
+  "OrderPickupAvailable",
+  "OrderDelivered",
 ];
 export const prepEstimateResponseDtoBasisValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["PrepEstimateResponseDto"]["basis"]
@@ -27560,10 +27904,13 @@ export const waitlistErrorCodeValues: ReadonlyArray<
   "waitlistCutoff",
   "waitlistDisabled",
   "waitlistGroupsInvalid",
+  "waitlistIdempotencyConflict",
   "waitlistPartySizeUnavailable",
   "waitlistPaused",
   "waitlistPhoneInQueue",
   "waitlistQrRequired",
+  "waitlistQrSessionNotFound",
+  "waitlistTicketNotFound",
   "waitlistTransitionInvalid",
 ];
 export const waitlistTicketStatusValues: ReadonlyArray<
@@ -27655,9 +28002,6 @@ export const quantAgentConnectStatusValues: ReadonlyArray<
 export const quantAgentRequestKindValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantAgentRequestKind"]
 > = ["bot", "backtest"];
-export const quantBotOrderStatusValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["QuantBotOrderStatus"]
-> = ["open", "filled", "canceled", "rejected"];
 export const quantBotFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotFilterField"]
 > = [
@@ -27682,27 +28026,24 @@ export const quantBotSortFieldValues: ReadonlyArray<
   "investment",
   "startedAt",
 ];
-export const quantBotModeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["QuantBotMode"]
-> = ["paper", "live"];
 export const quantGridTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantGridType"]
 > = ["arithmetic", "geometric"];
-export const quantGridStopTypeValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["QuantGridStopType"]
-> = ["price", "profit_amount", "profit_ratio"];
-export const quantTriggerDirectionValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["QuantTriggerDirection"]
-> = ["above", "below"];
-export const quantGridCloseModelValues: ReadonlyArray<
-  FlattenedDeepRequired<components>["schemas"]["QuantGridCloseModel"]
-> = ["NOT_SELL", "TO_QUOTE"];
 export const quantFuturesGridTrendValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantFuturesGridTrend"]
 > = ["long", "short", "no_trend"];
 export const quantFuturesGridStopTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantFuturesGridStopType"]
 > = ["price", "profit_amount", "profit_ratio", "price_limit"];
+export const quantTriggerDirectionValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantTriggerDirection"]
+> = ["above", "below"];
+export const quantGridStopTypeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantGridStopType"]
+> = ["price", "profit_amount", "profit_ratio"];
+export const quantGridCloseModelValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantGridCloseModel"]
+> = ["NOT_SELL", "TO_QUOTE"];
 export const quantIndicatorKindValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantIndicatorKind"]
 > = ["rsi", "maCross", "emaCross", "macdCross", "bollinger"];
@@ -27718,6 +28059,9 @@ export const quantBollingerBandValues: ReadonlyArray<
 export const quantBotTypeValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotType"]
 > = ["grid", "dca", "indicator", "webhook", "futures_grid", "signal", "ai"];
+export const quantBotModeValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantBotMode"]
+> = ["paper", "live"];
 export const quantBotStatusValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotStatus"]
 > = ["running", "stopped", "error"];
@@ -27749,6 +28093,9 @@ export const quantFuturesGridPauseModeValues: ReadonlyArray<
 export const quantBotOrderSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotOrderSortField"]
 > = ["createdAt", "side", "type", "price", "filledSize", "status", "tag"];
+export const quantBotOrderStatusValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["QuantBotOrderStatus"]
+> = ["open", "filled", "canceled", "rejected"];
 export const quantBotFillSortFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["QuantBotFillSortField"]
 > = ["filledAt", "side", "price", "size", "fee"];
@@ -27791,6 +28138,25 @@ export const quantWebhookActionValues: ReadonlyArray<
 export const salesReportGroupByValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["SalesReportGroupBy"]
 > = ["day", "hour", "paymentMethod", "mode", "menuItem", "category"];
+export const storeLayoutFloorValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["StoreLayoutFloor"]
+> = ["ground", "upper", "roof"];
+export const storeLayoutItemKindValues: ReadonlyArray<
+  FlattenedDeepRequired<components>["schemas"]["StoreLayoutItemKind"]
+> = [
+  "wash",
+  "prep",
+  "heat",
+  "cold",
+  "storage",
+  "front",
+  "bar",
+  "equipment",
+  "restroom",
+  "seat",
+  "plant",
+  "lawn",
+];
 export const storePhotoFilterFieldValues: ReadonlyArray<
   FlattenedDeepRequired<components>["schemas"]["StorePhotoFilterField"]
 > = ["alt", "isActive", "createdAt", "updatedAt"];

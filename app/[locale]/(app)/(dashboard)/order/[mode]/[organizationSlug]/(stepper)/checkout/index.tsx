@@ -10,7 +10,8 @@ import { useParams, useSearchParams } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useCallback, useMemo, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import useSWR from "swr";
+import useSWR, { useSWRConfig } from "swr";
+import useSWRImmutable from "swr/immutable";
 import useSWRMutation from "swr/mutation";
 
 import {
@@ -76,6 +77,7 @@ import type {
   CheckoutEcpayDto,
   CheckoutEcpayResponse,
 } from "@/types/ecpay";
+import type { BusinessInfoResponse } from "@/types/gcis";
 import type {
   CreateOrderDto,
   CreateOrderPayment,
@@ -86,6 +88,10 @@ import type { RouteParams } from "@/types/routeParams";
 
 import { enableAlerts } from "@/utils/alerts";
 import { formatFullName } from "@/utils/auth";
+import {
+  BUSINESS_NUMBER_PATTERN,
+  isValidBusinessNumber,
+} from "@/utils/businessNumber";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
@@ -167,6 +173,7 @@ const OrderModeOrganizationSlugCheckout = ({
   const phoneDefaults = getPhoneDefaults(session?.user.phoneNumber, locale);
 
   const {
+    clearErrors,
     control,
     formState: { errors, isSubmitted, isSubmitting },
     handleSubmit,
@@ -211,7 +218,9 @@ const OrderModeOrganizationSlugCheckout = ({
     email,
     telephone,
     carrierType,
+    customerAddr,
     customerIdentifier,
+    customerName,
     donateCode,
     invoiceType,
     payment,
@@ -224,7 +233,9 @@ const OrderModeOrganizationSlugCheckout = ({
       "customer.email",
       "customer.telephone",
       "invoice.carrierType",
+      "invoice.customerAddr",
       "invoice.customerIdentifier",
+      "invoice.customerName",
       "invoice.donateCode",
       "invoice.type",
       "payment",
@@ -320,7 +331,7 @@ const OrderModeOrganizationSlugCheckout = ({
   );
 
   const shouldFetch =
-    invoiceType === "company" && /^\d{8}$/.test(customerIdentifier);
+    invoiceType === "company" && isValidBusinessNumber(customerIdentifier);
 
   const isEmailRequired = !!invoiceType && !telephone;
   const isTelephoneRequired = isPickup || (!!invoiceType && !email);
@@ -329,32 +340,42 @@ const OrderModeOrganizationSlugCheckout = ({
   const tOrder = useTranslations("order");
   const tValidation = useTranslations("validation");
 
-  const { data: businessInfo, error: businessInfoError } = useSWR<{
-    address: string;
-    name: string;
-  }>(shouldFetch ? `/api/gcis/${customerIdentifier}` : null, {
+  const fillBusinessInfo = (
+    { address, name }: Pick<BusinessInfoResponse, "address" | "name">,
+    options: { shouldValidate: boolean },
+  ) => {
+    setValue("invoice.customerAddr", address, options);
+    setValue("invoice.customerName", name, options);
+  };
+
+  const [businessInfoIdentifier, setBusinessInfoIdentifier] = useState("");
+
+  // https://swr.vercel.app/docs/advanced/cache#access-current-cache-provider
+  const { cache } = useSWRConfig();
+
+  // https://swr.vercel.app/docs/revalidation#disable-automatic-revalidations
+  const { error: businessInfoError } = useSWRImmutable<
+    BusinessInfoResponse,
+    FetchError
+  >(shouldFetch ? `/api/gcis/${customerIdentifier}` : null, {
     onError: () => {
-      setError("invoice.customerIdentifier", {
-        message: tValidation("customerIdentifier.notFound"),
-      });
-      setValue("invoice.customerAddr", "", {
-        shouldValidate: isSubmitted,
-      });
-      setValue("invoice.customerName", "", {
-        shouldValidate: isSubmitted,
-      });
+      if (isSubmitted)
+        void triggerValidation([
+          "invoice.customerAddr",
+          "invoice.customerName",
+        ]);
     },
-    onSuccess: (data) => {
-      setValue("invoice.customerAddr", data.address, {
-        shouldValidate: isSubmitted,
-      });
-      setValue("invoice.customerName", data.name, {
-        shouldValidate: isSubmitted,
-      });
-    },
-    revalidateOnFocus: false,
+    onSuccess: (data) =>
+      fillBusinessInfo(data, { shouldValidate: isSubmitted }),
     shouldRetryOnError: false,
   });
+
+  const businessInfoErrorMessage =
+    !!businessInfoError &&
+    !customerName.trim() &&
+    getErrorMessage(businessInfoError);
+  const isBusinessInfoNotFound =
+    !!businessInfoErrorMessage && businessInfoError?.status === 404;
 
   const {
     data: coupon,
@@ -771,21 +792,54 @@ const OrderModeOrganizationSlugCheckout = ({
           {invoiceType === "company" && (
             <>
               <TextField
-                error={!!errors.invoice?.customerIdentifier}
+                error={
+                  !!errors.invoice?.customerIdentifier || isBusinessInfoNotFound
+                }
                 fullWidth
-                helperText={errors.invoice?.customerIdentifier?.message}
+                helperText={
+                  errors.invoice?.customerIdentifier?.message ||
+                  businessInfoErrorMessage
+                }
                 label={tOrder("checkout.invoice.customerIdentifier")}
                 required
                 slotProps={{
                   input: {
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     inputComponent: TextMaskCustom as any,
-                    inputProps: { mask: "00000000", placeholder: "12345678" },
+                    inputProps: { mask: "00000000", placeholder: "12345675" },
                   },
                 }}
                 {...register("invoice.customerIdentifier", {
-                  onChange: () =>
-                    triggerValidation("invoice.customerIdentifier"),
+                  onChange: (event) => {
+                    const nextIdentifier = event.target.value;
+                    if (
+                      isSubmitted ||
+                      BUSINESS_NUMBER_PATTERN.test(nextIdentifier)
+                    )
+                      void triggerValidation("invoice.customerIdentifier");
+                    else clearErrors("invoice.customerIdentifier");
+                    if (
+                      !isValidBusinessNumber(nextIdentifier) ||
+                      nextIdentifier === businessInfoIdentifier
+                    )
+                      return;
+                    setBusinessInfoIdentifier(nextIdentifier);
+                    const nextBusinessInfo: BusinessInfoResponse | undefined =
+                      cache.get(`/api/gcis/${nextIdentifier}`)?.data;
+                    if (nextBusinessInfo)
+                      return fillBusinessInfo(nextBusinessInfo, {
+                        shouldValidate: isSubmitted,
+                      });
+                    // 查詢結果回來前不驗證，否則送出過後會先閃出必填錯誤
+                    fillBusinessInfo(
+                      { address: "", name: "" },
+                      { shouldValidate: false },
+                    );
+                    clearErrors([
+                      "invoice.customerAddr",
+                      "invoice.customerName",
+                    ]);
+                  },
                 })}
               />
               {shouldFetch && (
@@ -798,7 +852,8 @@ const OrderModeOrganizationSlugCheckout = ({
                     required
                     slotProps={{
                       input: { readOnly: !businessInfoError },
-                      inputLabel: { shrink: !!businessInfo || undefined },
+                      // https://mui.com/material-ui/react-text-field/#shrink
+                      inputLabel: { shrink: !!customerName || undefined },
                     }}
                     {...register("invoice.customerName")}
                   />
@@ -810,7 +865,7 @@ const OrderModeOrganizationSlugCheckout = ({
                     required
                     slotProps={{
                       input: { readOnly: !businessInfoError },
-                      inputLabel: { shrink: !!businessInfo || undefined },
+                      inputLabel: { shrink: !!customerAddr || undefined },
                     }}
                     {...register("invoice.customerAddr")}
                   />

@@ -8,6 +8,10 @@
     "minDate": "請選擇 1900-01-01 或之後的出生日期。",
     "required": "出生日期為必填。"
   },
+  "businessNumber": {
+    "checksum": "統一編號檢查碼不符，請確認號碼是否正確。",
+    "invalid": "請輸入 8 碼統一編號。"
+  },
   "carrierNum": {
     "certificate": {
       "invalid": "自然人憑證格式無效。"
@@ -43,8 +47,6 @@
     "required": "公司地址為必填。"
   },
   "customerIdentifier": {
-    "invalid": "統一編號格式無效。",
-    "notFound": "查無對應的公司資料。",
     "required": "統一編號為必填。"
   },
   "customerName": {

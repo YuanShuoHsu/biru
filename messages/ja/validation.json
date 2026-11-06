@@ -8,6 +8,10 @@
     "minDate": "1900-01-01以降の生年月日を選択してください。",
     "required": "生年月日は必須です。"
   },
+  "businessNumber": {
+    "checksum": "統一番号のチェックディジットが一致しません。番号をご確認ください。",
+    "invalid": "8 桁の統一番号を入力してください。"
+  },
   "carrierNum": {
     "certificate": {
       "invalid": "自然人証明書が無効です。"
@@ -43,8 +47,6 @@
     "required": "会社住所は必須です。"
   },
   "customerIdentifier": {
-    "invalid": "統一番号が無効です。",
-    "notFound": "該当する会社が見つかりません。",
     "required": "統一番号は必須です。"
   },
   "customerName": {
