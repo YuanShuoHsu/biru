@@ -30,10 +30,8 @@ export const generateMetadata = async ({
 };
 
 const HomePage = async () => {
-  const [banners, { data: organizations = [] }] = await Promise.all([
-    getBanners(),
-    settle(getOrganizations()),
-  ]);
+  const [{ data: banners = [] }, { data: organizations = [] }] =
+    await Promise.all([settle(getBanners()), settle(getOrganizations())]);
 
   return (
     <Home

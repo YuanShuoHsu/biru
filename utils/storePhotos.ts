@@ -10,11 +10,5 @@ export const getStorePhotos = async (locale: Locale) => {
   "use cache";
   cacheLife("minutes");
 
-  try {
-    return await fetcher<StorePhoto[]>(
-      `/api/store-photos/active?lang=${locale}`,
-    );
-  } catch {
-    return [];
-  }
+  return fetcher<StorePhoto[]>(`/api/store-photos/active?lang=${locale}`);
 };

@@ -8,9 +8,5 @@ export const getBanners = async () => {
   "use cache";
   cacheLife("minutes");
 
-  try {
-    return await fetcher<Banner[]>("/api/banners/active");
-  } catch {
-    return [];
-  }
+  return fetcher<Banner[]>("/api/banners/active");
 };
