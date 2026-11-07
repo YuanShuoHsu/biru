@@ -134,7 +134,7 @@ const Waitlist = ({
   const { data: status = initialStatus, mutate } =
     useSWR<WaitlistStatusResponse>(
       `/api/organizations/${organization.slug}/waitlist`,
-      { fallbackData: initialStatus },
+      { fallbackData: initialStatus, refreshInterval: 60_000 },
     );
 
   const { isConnected } = useSocketConnection(menuSocket);
