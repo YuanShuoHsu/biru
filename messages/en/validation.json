@@ -70,6 +70,7 @@
     "notSelected": "Please select your invoice type."
   },
   "name": {
+    "maxLength": "Name cannot exceed 50 characters.",
     "required": "Name is required."
   },
   "newPassword": {
