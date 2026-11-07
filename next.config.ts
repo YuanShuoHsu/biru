@@ -44,6 +44,15 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "picsum.photos",
       },
+      ...(process.env.NEXT_PUBLIC_IMAGE_HOST
+        ? [
+            {
+              protocol: "https" as const,
+              hostname: process.env.NEXT_PUBLIC_IMAGE_HOST,
+              pathname: "/storage/v1/object/public/**",
+            },
+          ]
+        : []),
     ],
   },
 };
