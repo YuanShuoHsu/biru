@@ -33,10 +33,11 @@ export const generateMetadata = async ({
 
 const AboutPage = async ({ params }: AboutPageProps) => {
   const { locale } = await params;
-  const [{ data: organizations, error }, storePhotos] = await Promise.all([
-    settle(getOrganizations()),
-    getStorePhotos(locale),
-  ]);
+  const [{ data: organizations, error }, { data: storePhotos = [] }] =
+    await Promise.all([
+      settle(getOrganizations()),
+      settle(getStorePhotos(locale)),
+    ]);
   if (error) return <ErrorAlert />;
 
   const teamResults = await Promise.all(
