@@ -70,6 +70,7 @@
     "notSelected": "请选择您的发票类型。"
   },
   "name": {
+    "maxLength": "姓名不能超过 50 个字符。",
     "required": "姓名为必填。"
   },
   "newPassword": {
