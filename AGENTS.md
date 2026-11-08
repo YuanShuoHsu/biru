@@ -30,6 +30,7 @@ Copy and configure `.env` with:
 - `NEXT_PUBLIC_NEST_URL` – NestJS backend URL (e.g. `http://localhost:3001`)
 - `NEXT_PUBLIC_MAINTENANCE` – Maintenance mode flag
 - `NEXT_PUBLIC_ADMIN_URL` – biru-admin URL (redirect target after accepting an organization invitation)
+- `NEXT_PUBLIC_IMAGE_HOST` – Host of the image storage's public URLs (biru-api `S3_PUBLIC_URL`, e.g. `<project_ref>.supabase.co`); `next/image` only loads remote images under its `/storage/v1/object/public/` path. Unset allows none
 - `CLIENT_IP_FORWARD_SECRET` – Same value as biru-api's; server-only, never `NEXT_PUBLIC_`. Server-side API calls send it with the visitor's IP (`utils/clientIp.ts`) so the API rate-limits each visitor instead of the Next server. Pass `clientIpHeaders()` on every uncached server-side call; `"use cache"` functions can't read request headers and go without it
 
 All `/api/*` requests are rewritten to `NEXT_PUBLIC_NEST_URL/api/*` via `next.config.ts`.
