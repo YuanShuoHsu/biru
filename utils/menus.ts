@@ -77,6 +77,50 @@ export const getServingTemperatureLevels = (
     servingTemperatures.includes(SERVING_TEMPERATURE_OF_LEVEL[level]),
   );
 
+const isModifierGroupOfferedIn = (
+  { modifiers }: OrderMenuModifierGroup,
+  mode: ApiOrderMode,
+) => {
+  const listed = modifiers.filter(
+    ({ availability }) => availability !== "Discontinued",
+  );
+
+  return (
+    listed.length === 0 ||
+    listed.some(({ availableModes }) => availableModes.includes(mode))
+  );
+};
+
+export const scopeMenuToMode = (
+  menu: OrderMenu,
+  mode: ApiOrderMode,
+): OrderMenu => {
+  const scopeModifierGroups = <
+    T extends { modifierGroups: OrderMenuModifierGroup[] },
+  >(
+    item: T,
+  ): T => ({
+    ...item,
+    modifierGroups: item.modifierGroups.filter((group) =>
+      isModifierGroupOfferedIn(group, mode),
+    ),
+  });
+
+  return {
+    ...menu,
+    sections: menu.sections.map((section) => ({
+      ...section,
+      menuItems: section.menuItems.map((item) => ({
+        ...scopeModifierGroups(item),
+        addOns: item.addOns.map((addOn) => ({
+          ...addOn,
+          menuItems: addOn.menuItems.map(scopeModifierGroups),
+        })),
+      })),
+    })),
+  };
+};
+
 export const hasUnsatisfiableModifierGroup = (
   modifierGroups: OrderMenuModifierGroup[],
   mode: ApiOrderMode,

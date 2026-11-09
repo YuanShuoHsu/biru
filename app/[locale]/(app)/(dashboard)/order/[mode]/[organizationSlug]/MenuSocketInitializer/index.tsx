@@ -1,18 +1,23 @@
 "use client";
 
 import { useLocale } from "next-intl";
+import { useParams } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useEffect } from "react";
 
 import { emitMenuWithAck, menuSocket } from "@/app/socket";
+
+import { API_ORDER_MODE } from "@/constants/orderMode";
 
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useMenuStore } from "@/providers/menu-store-provider";
 
 import type { OrderMenu } from "@/types/menus";
+import type { RouteParams } from "@/types/routeParams";
 
 import { getErrorMessage } from "@/utils/errors";
+import { scopeMenuToMode } from "@/utils/menus";
 
 interface MenuSocketInitializerProps {
   organizationId: string;
@@ -22,6 +27,8 @@ const MenuSocketInitializer = ({
   organizationId,
 }: MenuSocketInitializerProps) => {
   const locale = useLocale();
+  const { mode } = useParams<RouteParams<"mode">>();
+  const apiMode = API_ORDER_MODE[mode];
 
   const { setMenu } = useMenuStore((state) => state);
 
@@ -41,7 +48,7 @@ const MenuSocketInitializer = ({
           lang: locale,
         });
 
-        setMenu({ menu: response });
+        setMenu({ menu: response && scopeMenuToMode(response, apiMode) });
       } catch (error) {
         enqueueSnackbar(getErrorMessage(error), { variant: "error" });
       } finally {
@@ -57,7 +64,7 @@ const MenuSocketInitializer = ({
       menuSocket.off("menuUpdated", initMenus);
       menuSocket.emit("leaveOrderMenu", { organizationId });
     };
-  }, [enqueueSnackbar, isConnected, locale, organizationId, setMenu]);
+  }, [apiMode, enqueueSnackbar, isConnected, locale, organizationId, setMenu]);
 
   return null;
 };
