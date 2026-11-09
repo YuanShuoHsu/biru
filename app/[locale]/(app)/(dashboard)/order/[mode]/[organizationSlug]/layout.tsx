@@ -6,12 +6,16 @@ import MenuSocketInitializer from "./MenuSocketInitializer";
 import CartAnchorTemporaryDrawer from "@/components/CartAnchorTemporaryDrawer";
 import ErrorAlert from "@/components/ErrorAlert";
 
+import { API_ORDER_MODE } from "@/constants/orderMode";
+
 import { MenuStoreProvider } from "@/providers/menu-store-provider";
 
 import type { OrderMenu } from "@/types/menus";
+import type { OrderMode } from "@/types/orderMode";
 
 import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
+import { scopeMenuToMode } from "@/utils/menus";
 import { getOrganization } from "@/utils/organizations";
 
 interface OrderModeOrganizationSlugLayoutProps {
@@ -27,7 +31,7 @@ const OrderModeOrganizationSlugLayout = async ({
   children,
   params,
 }: OrderModeOrganizationSlugLayoutProps) => {
-  const { locale, organizationSlug } = await params;
+  const { locale, mode, organizationSlug } = await params;
 
   const { data: organization, error } = await settle(
     getOrganization(organizationSlug),
@@ -49,7 +53,12 @@ const OrderModeOrganizationSlugLayout = async ({
 
   return (
     <SWRConfig value={{ fallback }}>
-      <MenuStoreProvider initialMenu={initialMenu}>
+      <MenuStoreProvider
+        initialMenu={
+          initialMenu &&
+          scopeMenuToMode(initialMenu, API_ORDER_MODE[mode as OrderMode])
+        }
+      >
         <MenuSocketInitializer organizationId={organization.id} />
         <CartAnchorTemporaryDrawer />
         {children}
