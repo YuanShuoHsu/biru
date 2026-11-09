@@ -11043,6 +11043,7 @@ export interface components {
       | "waitlistClosed"
       | "waitlistCutoff"
       | "waitlistDisabled"
+      | "waitlistGroupChanged"
       | "waitlistGroupsInUse"
       | "waitlistGroupsInvalid"
       | "waitlistIdempotencyConflict"
@@ -27686,6 +27687,7 @@ export const waitlistErrorCodeValues: ReadonlyArray<
   "waitlistClosed",
   "waitlistCutoff",
   "waitlistDisabled",
+  "waitlistGroupChanged",
   "waitlistGroupsInUse",
   "waitlistGroupsInvalid",
   "waitlistIdempotencyConflict",
