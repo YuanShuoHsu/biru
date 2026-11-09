@@ -20,6 +20,8 @@ The pre-commit hook (Husky + lint-staged) runs `pnpm format`, `pnpm lint`, and `
 
 Format with the repo's own Prettier (`pnpm format` or `pnpm exec prettier`) after `pnpm install --frozen-lockfile`, never `npx prettier`: without `node_modules` it downloads whatever Prettier is latest, which can format differently from the pinned one.
 
+`pnpm codegen` rewrites the whole of `types/api.ts` from the running API, so it also removes types the running biru-api branch lacks, e.g. those of a backend PR that is not merged into it. Keep only the hunks your backend change produced and restore the rest before committing.
+
 Branch from `develop` and open every PR against `develop`. GitHub's default branch is `master`, so set the base explicitly (`gh pr create --base develop`): a PR merged only into `master` never reaches `develop`, so work branched from `develop` misses it and conflicts when `master` is merged back.
 
 ## Environment Variables
