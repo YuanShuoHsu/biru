@@ -147,7 +147,8 @@ const CouponAutocomplete = ({
 
   const value =
     availableCoupons.find(
-      (available) => available.code.toLowerCase() === couponCode.toLowerCase(),
+      (available) =>
+        available.code.toLowerCase() === couponCode.trim().toLowerCase(),
     ) || null;
 
   return (
