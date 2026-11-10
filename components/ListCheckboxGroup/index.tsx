@@ -1,4 +1,4 @@
-// https://mui.com/material-ui/react-checkbox/#CheckboxesGroup.tsx
+// https://mui.com/material-ui/react-checkbox/#formgroup
 // https://v7.mui.com/joy-ui/react-radio-button/#RadioPositionEnd.tsx
 
 "use client";
@@ -9,9 +9,11 @@ import {
   Checkbox,
   Chip,
   Divider,
+  FormControl,
   FormControlLabel,
   FormGroup,
   FormHelperText,
+  FormLabel,
   Paper,
   Stack,
   Typography,
@@ -19,14 +21,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const GroupStack = styled(Stack)(({ theme }) => ({
-  width: "100%",
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const StyledTypography = styled(Typography)({
+const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
+  ...theme.typography.subtitle2,
   fontWeight: "bold",
-});
+}));
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   margin: 0,
@@ -41,6 +43,7 @@ const OptionLabelStack = styled(Stack)(({ theme }) => ({
 }));
 
 interface ListCheckboxGroupOption {
+  children?: React.ReactNode;
   disabled?: boolean;
   disabledReason?: string;
   icon?: React.ReactNode;
@@ -84,11 +87,15 @@ const ListCheckboxGroup = ({
   };
 
   return (
-    <GroupStack>
-      <StyledTypography color="textSecondary" id={labelId} variant="subtitle2">
+    <StyledFormControl
+      error={error}
+      fullWidth
+      required={required}
+      variant="standard"
+    >
+      <StyledFormLabel focused={false} id={labelId}>
         {label}
-        {required && "\u2009*"}
-      </StyledTypography>
+      </StyledFormLabel>
       <Paper variant="outlined">
         <FormGroup
           aria-describedby={helperText ? helperTextId : undefined}
@@ -98,6 +105,7 @@ const ListCheckboxGroup = ({
           {options.map(
             (
               {
+                children,
                 disabled,
                 disabledReason,
                 icon,
@@ -136,17 +144,16 @@ const ListCheckboxGroup = ({
                     </OptionLabelStack>
                   }
                 />
+                {children}
               </Fragment>
             ),
           )}
         </FormGroup>
       </Paper>
       {helperText && (
-        <FormHelperText error={error} id={helperTextId}>
-          {helperText}
-        </FormHelperText>
+        <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
       )}
-    </GroupStack>
+    </StyledFormControl>
   );
 };
 

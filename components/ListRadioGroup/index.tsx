@@ -1,3 +1,4 @@
+// https://mui.com/material-ui/react-radio-button/#show-error
 // https://v7.mui.com/joy-ui/react-radio-button/#ExamplePaymentChannels.tsx
 // https://v7.mui.com/joy-ui/react-radio-button/#RadioPositionEnd.tsx
 
@@ -8,8 +9,10 @@ import { Fragment, useId } from "react";
 import {
   Chip,
   Divider,
+  FormControl,
   FormControlLabel,
   FormHelperText,
+  FormLabel,
   Paper,
   Radio,
   RadioGroup,
@@ -20,14 +23,14 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-const GroupStack = styled(Stack)(({ theme }) => ({
-  width: "100%",
+const StyledFormControl = styled(FormControl)(({ theme }) => ({
   gap: theme.spacing(2),
 }));
 
-const StyledTypography = styled(Typography)({
+const StyledFormLabel = styled(FormLabel)(({ theme }) => ({
+  ...theme.typography.subtitle2,
   fontWeight: "bold",
-});
+}));
 
 const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   margin: 0,
@@ -55,7 +58,7 @@ interface ListRadioGroupProps {
   helperText?: FormHelperTextProps["children"];
   inputRef?: React.Ref<HTMLInputElement>;
   label: string;
-  onChange: RadioGroupProps["onChange"];
+  onChange?: RadioGroupProps["onChange"];
   options: ListRadioGroupOption[];
   required?: boolean;
   value: string;
@@ -77,11 +80,15 @@ const ListRadioGroup = ({
   const firstEnabledValue = options.find(({ disabled }) => !disabled)?.value;
 
   return (
-    <GroupStack>
-      <StyledTypography color="textSecondary" id={labelId} variant="subtitle2">
+    <StyledFormControl
+      error={error}
+      fullWidth
+      required={required}
+      variant="standard"
+    >
+      <StyledFormLabel focused={false} id={labelId}>
         {label}
-        {required && "\u2009*"}
-      </StyledTypography>
+      </StyledFormLabel>
       <Paper variant="outlined">
         <RadioGroup
           aria-describedby={helperText ? helperTextId : undefined}
@@ -142,11 +149,9 @@ const ListRadioGroup = ({
         </RadioGroup>
       </Paper>
       {helperText && (
-        <FormHelperText error={error} id={helperTextId}>
-          {helperText}
-        </FormHelperText>
+        <FormHelperText id={helperTextId}>{helperText}</FormHelperText>
       )}
-    </GroupStack>
+    </StyledFormControl>
   );
 };
 

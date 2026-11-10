@@ -6,12 +6,10 @@ import { useForm, useWatch } from "react-hook-form";
 
 import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 
-import CheckboxesGroup from "@/components/CheckboxesGroup";
 import FormBox from "@/components/FormBox";
 import ListCheckboxGroup from "@/components/ListCheckboxGroup";
 import ListRadioGroup from "@/components/ListRadioGroup";
 import NumberSpinner from "@/components/NumberSpinner";
-import RadioButtonsGroup from "@/components/RadioButtonsGroup";
 
 import { MAX_QUANTITY } from "@/constants/cart";
 import { API_ORDER_MODE } from "@/constants/orderMode";
@@ -35,7 +33,6 @@ import {
   Chip,
   Collapse,
   Divider,
-  Radio,
   Stack,
   Typography,
   type TypographyProps,
@@ -104,21 +101,9 @@ const MetaStack = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(0.5),
 }));
 
-const ChoiceLabelStack = styled(Stack)(({ theme }) => ({
-  alignItems: "baseline",
-  flexWrap: "wrap",
-  gap: theme.spacing(1),
-}));
-
 const AddOnOptionsStack = styled(Stack)(({ theme }) => ({
-  paddingLeft: theme.spacing(3),
+  padding: theme.spacing(1, 2, 2),
   gap: theme.spacing(2),
-}));
-
-const AddOnLabelStack = styled(Stack)(({ theme }) => ({
-  paddingBlock: theme.spacing(0.75),
-  alignItems: "center",
-  gap: theme.spacing(1.5),
 }));
 
 const AddOnAvatar = styled(Avatar, {
@@ -436,32 +421,6 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       ? ""
       : `${adjustment > 0 ? "+" : "-"}${formatMoney(Math.abs(adjustment), priceCurrency)}`;
 
-  const renderChoiceLabel = (
-    choiceName: string,
-    choiceExtraCost: number,
-    noteLabel: string,
-    tagLabel: string,
-  ) => (
-    <ChoiceLabelStack direction="row">
-      <WrapTypography variant="body2">{choiceName}</WrapTypography>
-      {choiceExtraCost !== 0 && (
-        <Typography color="textSecondary" variant="caption">
-          {formatPriceAdjustment(choiceExtraCost)}
-        </Typography>
-      )}
-      {noteLabel && (
-        <Typography color="textSecondary" variant="caption">
-          {noteLabel}
-        </Typography>
-      )}
-      {tagLabel && (
-        <Typography color="error" variant="caption">
-          {tagLabel}
-        </Typography>
-      )}
-    </ChoiceLabelStack>
-  );
-
   const getModifierGroupHint = ({
     minSelectionCount,
     maxSelectionCount,
@@ -485,21 +444,16 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     onValueChange: (next: ServingTemperatureLevel) => void,
     error?: { message?: string },
   ) => (
-    <RadioButtonsGroup
+    <ListRadioGroup
       error={!!error}
-      fullWidth
       helperText={error?.message}
       label={getServingTemperatureLabel(servingTemperaturesOffered)}
       onChange={(event, next) => onValueChange(next as ServingTemperatureLevel)}
       options={getServingTemperatureLevels(servingTemperaturesOffered).map(
         (level) => ({
-          control: <Radio size="small" />,
-          label: renderChoiceLabel(
-            tOrder(`menuItem.servingTemperatureLevels.${level}`),
-            0,
-            "",
+          label: tOrder(`menuItem.servingTemperatureLevels.${level}`),
+          secondary:
             level === recommendedLevel ? tOrder("menuItem.recommended") : "",
-          ),
           value: level,
         }),
       )}
@@ -517,22 +471,14 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
     error?: { message?: string },
   ) =>
     sweetnessOffered === "Fixed" ? (
-      <RadioButtonsGroup
-        fullWidth
-        helperText={null}
+      <ListRadioGroup
         label={tOrder("menuItem.sweetness.label")}
-        onChange={undefined}
         options={
           fixedLevel
             ? [
                 {
-                  control: <Radio size="small" />,
-                  label: renderChoiceLabel(
-                    tOrder(`menuItem.sweetnessLevels.${fixedLevel}`),
-                    0,
-                    "",
-                    tOrder("menuItem.sweetness.fixed"),
-                  ),
+                  label: tOrder(`menuItem.sweetnessLevels.${fixedLevel}`),
+                  secondary: tOrder("menuItem.sweetness.fixed"),
                   value: fixedLevel,
                 },
               ]
@@ -542,20 +488,15 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         value={fixedLevel || ""}
       />
     ) : (
-      <RadioButtonsGroup
+      <ListRadioGroup
         error={!!error}
-        fullWidth
         helperText={error?.message}
         label={tOrder("menuItem.sweetness.label")}
         onChange={(event, next) => onValueChange(next as SweetnessLevel)}
         options={sweetnessLevelValues.map((level) => ({
-          control: <Radio size="small" />,
-          label: renderChoiceLabel(
-            tOrder(`menuItem.sweetnessLevels.${level}`),
-            0,
-            "",
+          label: tOrder(`menuItem.sweetnessLevels.${level}`),
+          secondary:
             level === recommendedLevel ? tOrder("menuItem.recommended") : "",
-          ),
           value: level,
         }))}
         required
@@ -737,9 +678,8 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       {(hasBuiltInChoices || modifierGroups.length > 0) &&
         addOnItems.length > 0 && <Divider flexItem variant="inset" />}
       {addOnItems.length > 0 && (
-        <CheckboxesGroup
+        <ListCheckboxGroup
           error={!!errors.choices?.[ADD_ON_OPTION_ID]}
-          fullWidth
           helperText={errors.choices?.[ADD_ON_OPTION_ID]?.message}
           label={tOrder("menuItem.addOn")}
           onChange={(event, next) =>
@@ -781,6 +721,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
               (outOfStockInCart
                 ? tCommon("reachStockLimit", { label: "" })
                 : "");
+            const disabled = !checked && !!unavailableLabel;
 
             return {
               children: (addOnHasBuiltInChoices ||
@@ -826,25 +767,23 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
                   </AddOnOptionsStack>
                 </Collapse>
               ),
-              disabled: !checked && !!unavailableLabel,
-              label: (
-                <AddOnLabelStack direction="row">
-                  <AddOnAvatar
-                    alt={name}
-                    disabled={!checked && !!unavailableLabel}
-                    src={imageUrl ?? undefined}
-                    variant="rounded"
-                  >
-                    <RestaurantMenu color="disabled" />
-                  </AddOnAvatar>
-                  {renderChoiceLabel(
-                    name,
-                    getAddOnPrice(addOnItem),
-                    getAvailableHoursLabel(offers[0]?.availableHours),
-                    unavailableLabel,
-                  )}
-                </AddOnLabelStack>
-              ),
+              disabled,
+              disabledReason: unavailableLabel,
+              icon: imageUrl ? (
+                <AddOnAvatar
+                  alt={name}
+                  disabled={disabled}
+                  src={imageUrl}
+                  variant="rounded"
+                />
+              ) : undefined,
+              label: name,
+              secondary: [
+                formatPriceAdjustment(getAddOnPrice(addOnItem)),
+                getAvailableHoursLabel(offers[0]?.availableHours),
+              ]
+                .filter(Boolean)
+                .join(tCommon("delimiter")),
               value: id,
             };
           })}
