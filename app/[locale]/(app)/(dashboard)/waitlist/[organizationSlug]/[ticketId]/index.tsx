@@ -131,6 +131,7 @@ const WaitlistTicket = ({
   const { data: ticket = initialTicket, mutate } =
     useSWR<WaitlistTicketDetailResponse>(ticketUrl, {
       fallbackData: initialTicket,
+      revalidateOnMount: false,
     });
 
   const previousCalledAtRef = useRef(ticket.calledAt);
@@ -159,7 +160,7 @@ const WaitlistTicket = ({
 
     emitMenuWithAck("joinPublicWaitlist", { organizationId: organization.id })
       .then(handleUpdate)
-      .catch(() => {});
+      .catch(handleUpdate);
 
     menuSocket.on("publicWaitlistUpdated", handleUpdate);
 
