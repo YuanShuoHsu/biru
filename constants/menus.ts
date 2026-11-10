@@ -1,11 +1,12 @@
 import type { ElementType } from "react";
 
-import { AcUnit, LocalCafe } from "@mui/icons-material";
+import { AcUnit, Egg, LocalCafe, Spa } from "@mui/icons-material";
 import type { SvgIconProps } from "@mui/material";
 import { lightBlue } from "@mui/material/colors";
 import { styled } from "@mui/material/styles";
 
 import type {
+  RestrictedDiet,
   ServingTemperature,
   ServingTemperatureLevel,
 } from "@/types/menus";
@@ -42,4 +43,19 @@ export const SERVING_TEMPERATURE_ICONS: Record<
 > = {
   Hot: StyledLocalCafe,
   Iced: StyledAcUnit,
+};
+
+const StyledSpa = styled(Spa)(({ theme }) => ({
+  color: theme.vars.palette.success.main,
+}));
+
+const StyledEgg = styled(Egg)(({ theme }) => ({
+  color: theme.vars.palette.success.main,
+}));
+
+export const RESTRICTED_DIET_ICONS: Partial<
+  Record<RestrictedDiet, ElementType<SvgIconProps>>
+> = {
+  VeganDiet: StyledSpa,
+  VegetarianDiet: StyledEgg,
 };

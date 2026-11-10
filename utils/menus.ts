@@ -6,6 +6,7 @@ import {
   LOW_STOCK_THRESHOLD,
   SERVING_TEMPERATURE_OF_LEVEL,
 } from "@/constants/menus";
+import { FEATURED_LIMIT, NEW_PRODUCT_DAYS } from "@/constants/tab";
 import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import type { CartAddOn, CartItem } from "@/stores/cart-store";
@@ -316,6 +317,23 @@ export const findItemById = (
   menu?.sections
     ?.flatMap(({ menuItems }) => menuItems)
     .find(({ id }) => id === itemId);
+
+export const getTopSoldItems = (menu: OrderMenu | null): OrderMenuItem[] =>
+  (menu?.sections || [])
+    .flatMap(({ menuItems }) => menuItems)
+    .filter(({ sold }) => sold > 0)
+    .sort((a, b) => b.sold - a.sold)
+    .slice(0, FEATURED_LIMIT);
+
+export const getLatestItems = (menu: OrderMenu | null): OrderMenuItem[] =>
+  (menu?.sections || [])
+    .flatMap(({ menuItems }) => menuItems)
+    .filter(
+      ({ createdAt }) =>
+        dayjs().diff(dayjs(createdAt), "day") <= NEW_PRODUCT_DAYS,
+    )
+    .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
+    .slice(0, FEATURED_LIMIT);
 
 export const getOfferStock = (offer?: OrderMenuOffer): number | null => {
   if (

@@ -14,6 +14,9 @@ export type OrderMenuModifier =
   components["schemas"]["OrderMenuModifierResponseDto"];
 
 export type ItemAvailability = components["schemas"]["ItemAvailability"];
+export type RestrictedDiet = NonNullable<
+  OrderMenuItem["suitableForDiet"]
+>[number];
 export type ServingTemperature = components["schemas"]["ServingTemperature"];
 export type ServingTemperatureLevel =
   components["schemas"]["ServingTemperatureLevel"];
