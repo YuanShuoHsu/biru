@@ -130,7 +130,7 @@ const ListCheckboxGroup = ({
                           </Typography>
                         )}
                       </Stack>
-                      {disabled && disabledReason && (
+                      {disabledReason && (
                         <Chip label={disabledReason} size="small" />
                       )}
                     </OptionLabelStack>
