@@ -39,6 +39,10 @@ const StyledFormControlLabel = styled(FormControlLabel)(({ theme }) => ({
   justifyContent: "space-between",
 }));
 
+const LabelTypography = styled(Typography)({
+  overflowWrap: "anywhere",
+});
+
 const OptionLabelStack = styled(Stack)(({ theme }) => ({
   alignItems: "center",
   gap: theme.spacing(2),
@@ -129,7 +133,9 @@ const ListRadioGroup = ({
                     <OptionLabelStack direction="row">
                       {icon}
                       <Stack>
-                        <Typography variant="body2">{label}</Typography>
+                        <LabelTypography variant="body2">
+                          {label}
+                        </LabelTypography>
                         {secondary && (
                           <Typography color="textSecondary" variant="caption">
                             {secondary}
