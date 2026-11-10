@@ -37,6 +37,7 @@ import { STORE_TIMEZONE } from "@/constants/timezone";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
+import { usePickupLeadMinutes } from "@/hooks/usePickupLeadMinutes";
 import { useSession } from "@/hooks/useSession";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -96,7 +97,7 @@ import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { type FetchError, sendRequest } from "@/utils/fetcher";
-import { getCartAvailableHours, getCartLeadTimeMinutes } from "@/utils/menus";
+import { getCartAvailableHours } from "@/utils/menus";
 import { isOpenAt } from "@/utils/openingHours";
 import {
   getPickupWindow,
@@ -260,16 +261,16 @@ const OrderModeOrganizationSlugCheckout = ({
 
   // 每次 render 重算會讓下方的區間掃描永遠無法快取，只在有機會過期的時機推進
   const [now, setNow] = useState(() => dayjs().tz(STORE_TIMEZONE));
-  const handleRefreshNow = () => setNow(dayjs().tz(STORE_TIMEZONE));
-
-  const cartLeadTimeMinutes = useMemo(
-    () => getCartLeadTimeMinutes(menu, cartItemsList),
-    [cartItemsList, menu],
-  );
+  const { pickupLeadMinutes, refreshPickupLeadMinutes } =
+    usePickupLeadMinutes(organization);
+  const handleRefreshNow = () => {
+    setNow(dayjs().tz(STORE_TIMEZONE));
+    refreshPickupLeadMinutes();
+  };
 
   const pickupWindow = useMemo(
-    () => getPickupWindow(organization, now, cartLeadTimeMinutes),
-    [cartLeadTimeMinutes, now, organization],
+    () => getPickupWindow(organization, now, pickupLeadMinutes),
+    [now, organization, pickupLeadMinutes],
   );
 
   // MUI 以 callback 的 identity 當快取鍵，每次 render 換新的會讓整個月曆重掃
@@ -536,6 +537,7 @@ const OrderModeOrganizationSlugCheckout = ({
       submitEcpayCheckout(await triggerEcpay(dto));
     } catch (error) {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+      handleRefreshNow();
 
       if (completePath) router.replace(completePath);
       else if ((error as FetchError).status === 409) renewCheckoutKey();

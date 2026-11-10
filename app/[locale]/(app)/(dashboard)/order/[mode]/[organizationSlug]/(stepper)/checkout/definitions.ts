@@ -10,6 +10,8 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { PICKUP_MINUTES_STEP } from "@/constants/pickup";
 import { STORE_TIMEZONE } from "@/constants/timezone";
 
+import { usePickupLeadMinutes } from "@/hooks/usePickupLeadMinutes";
+
 import { useCartStore } from "@/providers/cart-store-provider";
 import { useMenuStore } from "@/providers/menu-store-provider";
 
@@ -24,7 +26,7 @@ import {
   BUSINESS_NUMBER_PATTERN,
   isValidBusinessNumber,
 } from "@/utils/businessNumber";
-import { getCartAvailableHours, getCartLeadTimeMinutes } from "@/utils/menus";
+import { getCartAvailableHours } from "@/utils/menus";
 import { getCloseTimeAt, isOpenAt } from "@/utils/openingHours";
 import { getPickupLeadMinutes, getPickupWindow } from "@/utils/pickup";
 
@@ -44,6 +46,7 @@ export const useCustomerPaymentFormSchema = (
 
   const { cartItemsList } = useCartStore((state) => state);
   const { menu } = useMenuStore((state) => state);
+  const { pickupLeadMinutes } = usePickupLeadMinutes(organization);
 
   const tValidation = useTranslations("validation");
 
@@ -136,16 +139,15 @@ export const useCustomerPaymentFormSchema = (
 
       if (isPickup) {
         const pickupTime = dayjs(data.pickupTime).tz(STORE_TIMEZONE);
-        const cartLeadTimeMinutes = getCartLeadTimeMinutes(menu, cartItemsList);
         const leadMinutes = getPickupLeadMinutes(
           organization,
-          cartLeadTimeMinutes,
+          pickupLeadMinutes,
         );
         const advanceDays = organization.pickupMaxAdvanceDays;
         const { cutoffMinutes, from, openingHours, to } = getPickupWindow(
           organization,
           dayjs().tz(STORE_TIMEZONE),
-          cartLeadTimeMinutes,
+          pickupLeadMinutes,
         );
 
         const addPickupTimeIssue = (message: string) =>
