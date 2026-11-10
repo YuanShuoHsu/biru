@@ -537,6 +537,7 @@ const OrderModeOrganizationSlugCheckout = ({
       submitEcpayCheckout(await triggerEcpay(dto));
     } catch (error) {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
+      handleRefreshNow();
 
       if (completePath) router.replace(completePath);
       else if ((error as FetchError).status === 409) renewCheckoutKey();
