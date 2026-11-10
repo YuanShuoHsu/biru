@@ -87,7 +87,7 @@ const ListCheckboxGroup = ({
     <GroupStack>
       <StyledTypography color="textSecondary" id={labelId} variant="subtitle2">
         {label}
-        {required && " *"}
+        {required && "\u2009*"}
       </StyledTypography>
       <Paper variant="outlined">
         <FormGroup
