@@ -46,16 +46,18 @@ interface ListRadioGroupOption {
   disabledReason?: string;
   icon?: React.ReactNode;
   label: string;
+  secondary?: string;
   value: string;
 }
 
 interface ListRadioGroupProps {
   error?: FormHelperTextProps["error"];
   helperText?: FormHelperTextProps["children"];
-  inputRef: React.Ref<HTMLInputElement>;
+  inputRef?: React.Ref<HTMLInputElement>;
   label: string;
   onChange: RadioGroupProps["onChange"];
   options: ListRadioGroupOption[];
+  required?: boolean;
   value: string;
 }
 
@@ -66,6 +68,7 @@ const ListRadioGroup = ({
   label,
   onChange,
   options,
+  required,
   value,
 }: ListRadioGroupProps) => {
   const id = useId();
@@ -77,6 +80,7 @@ const ListRadioGroup = ({
     <GroupStack>
       <StyledTypography color="textSecondary" id={labelId} variant="subtitle2">
         {label}
+        {required && "\u2009*"}
       </StyledTypography>
       <Paper variant="outlined">
         <RadioGroup
@@ -87,7 +91,14 @@ const ListRadioGroup = ({
         >
           {options.map(
             (
-              { disabled, disabledReason, icon, label, value: optionValue },
+              {
+                disabled,
+                disabledReason,
+                icon,
+                label,
+                secondary,
+                value: optionValue,
+              },
               index,
             ) => (
               <Fragment key={optionValue}>
@@ -110,7 +121,14 @@ const ListRadioGroup = ({
                   label={
                     <OptionLabelStack direction="row">
                       {icon}
-                      <Typography variant="body2">{label}</Typography>
+                      <Stack>
+                        <Typography variant="body2">{label}</Typography>
+                        {secondary && (
+                          <Typography color="textSecondary" variant="caption">
+                            {secondary}
+                          </Typography>
+                        )}
+                      </Stack>
                       {disabled && disabledReason && (
                         <Chip label={disabledReason} size="small" />
                       )}

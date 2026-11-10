@@ -8,6 +8,8 @@ import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 
 import CheckboxesGroup from "@/components/CheckboxesGroup";
 import FormBox from "@/components/FormBox";
+import ListCheckboxGroup from "@/components/ListCheckboxGroup";
+import ListRadioGroup from "@/components/ListRadioGroup";
 import NumberSpinner from "@/components/NumberSpinner";
 import RadioButtonsGroup from "@/components/RadioButtonsGroup";
 
@@ -429,6 +431,11 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           ? tCommon("soldOut")
           : "";
 
+  const formatPriceAdjustment = (adjustment: number) =>
+    adjustment === 0
+      ? ""
+      : `${adjustment > 0 ? "+" : "-"}${formatMoney(Math.abs(adjustment), priceCurrency)}`;
+
   const renderChoiceLabel = (
     choiceName: string,
     choiceExtraCost: number,
@@ -439,8 +446,7 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
       <WrapTypography variant="body2">{choiceName}</WrapTypography>
       {choiceExtraCost !== 0 && (
         <Typography color="textSecondary" variant="caption">
-          {choiceExtraCost > 0 ? "+" : "-"}
-          {formatMoney(Math.abs(choiceExtraCost), priceCurrency)}
+          {formatPriceAdjustment(choiceExtraCost)}
         </Typography>
       )}
       {noteLabel && (
@@ -575,81 +581,63 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
 
     const atMax =
       maxSelectionCount != null && selected.length >= maxSelectionCount;
+    const isSingleChoice = minSelectionCount === 1 && maxSelectionCount === 1;
 
-    return minSelectionCount === 1 && maxSelectionCount === 1 ? (
-      <RadioButtonsGroup
+    const options = modifiers.map(
+      ({
+        availability,
+        availableModes,
+        displayName,
+        id,
+        imageUrl,
+        priceAdjustment,
+      }) => {
+        const unavailableLabel = getUnavailableLabel(
+          availability,
+          availableModes,
+          null,
+        );
+        const disabled = isSingleChoice
+          ? !!unavailableLabel
+          : !selected.includes(id) && (!!unavailableLabel || atMax);
+
+        return {
+          disabled,
+          disabledReason: unavailableLabel,
+          icon: imageUrl ? (
+            <AddOnAvatar
+              alt={displayName}
+              disabled={disabled}
+              src={imageUrl}
+              variant="rounded"
+            />
+          ) : undefined,
+          label: displayName,
+          secondary: formatPriceAdjustment(Number(priceAdjustment || 0)),
+          value: id,
+        };
+      },
+    );
+
+    return isSingleChoice ? (
+      <ListRadioGroup
         key={groupId}
         error={!!error}
-        fullWidth
         helperText={helperText}
         label={displayName}
         onChange={(event, next) => onGroupChange(groupId, [next])}
-        options={modifiers.map(
-          ({
-            availability,
-            availableModes,
-            displayName,
-            id,
-            priceAdjustment,
-          }) => {
-            const unavailableLabel = getUnavailableLabel(
-              availability,
-              availableModes,
-              null,
-            );
-
-            return {
-              control: <Radio size="small" />,
-              disabled: !!unavailableLabel,
-              label: renderChoiceLabel(
-                displayName,
-                Number(priceAdjustment || 0),
-                "",
-                unavailableLabel,
-              ),
-              value: id,
-            };
-          },
-        )}
+        options={options}
         required
         value={selected[0] || ""}
       />
     ) : (
-      <CheckboxesGroup
+      <ListCheckboxGroup
         key={groupId}
         error={!!error}
-        fullWidth
         helperText={helperText}
         label={displayName}
         onChange={(event, next) => onGroupChange(groupId, next)}
-        options={modifiers.map(
-          ({
-            availability,
-            availableModes,
-            displayName,
-            id,
-            priceAdjustment,
-          }) => {
-            const checked = selected.includes(id);
-            const unavailableLabel = getUnavailableLabel(
-              availability,
-              availableModes,
-              null,
-            );
-
-            return {
-              children: null,
-              disabled: !checked && (!!unavailableLabel || atMax),
-              label: renderChoiceLabel(
-                displayName,
-                Number(priceAdjustment || 0),
-                "",
-                unavailableLabel,
-              ),
-              value: id,
-            };
-          },
-        )}
+        options={options}
         required={minSelectionCount >= 1}
         value={selected}
       />
