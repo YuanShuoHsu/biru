@@ -306,7 +306,7 @@ const Waitlist = ({
         </Alert>
       )}
       {!unavailable && canTakeTicket && (
-        <FormCard noValidate onSubmit={handleSubmit(handleFormSubmit)}>
+        <FormCard onSubmit={handleSubmit(handleFormSubmit)}>
           <StyledCardContent>
             <BoldTypography color="textSecondary" variant="subtitle2">
               {tWaitlist("form.title")}
