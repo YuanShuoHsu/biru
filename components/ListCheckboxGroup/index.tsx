@@ -41,7 +41,6 @@ const OptionLabelStack = styled(Stack)(({ theme }) => ({
 }));
 
 interface ListCheckboxGroupOption {
-  children?: React.ReactNode;
   disabled?: boolean;
   disabledReason?: string;
   icon?: React.ReactNode;
@@ -99,7 +98,6 @@ const ListCheckboxGroup = ({
           {options.map(
             (
               {
-                children,
                 disabled,
                 disabledReason,
                 icon,
@@ -138,7 +136,6 @@ const ListCheckboxGroup = ({
                     </OptionLabelStack>
                   }
                 />
-                {children}
               </Fragment>
             ),
           )}
