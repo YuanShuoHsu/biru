@@ -5,15 +5,15 @@ import { useParams } from "next/navigation";
 import ItemSoldOut from "./ItemSoldOut";
 
 import CardDialogContent from "@/components/CardDialogContent";
+import MenuItemIcons from "@/components/MenuItemIcons";
 
-import { SERVING_TEMPERATURE_ICONS } from "@/constants/menus";
 import { API_ORDER_MODE } from "@/constants/orderMode";
 import { ViewDirections, ViewImageSizes } from "@/constants/view";
 
 import { useAvailableHoursLabel } from "@/hooks/useAvailableHoursLabel";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
 
-import { AutoAwesome, RestaurantMenu, ThumbUp } from "@mui/icons-material";
+import { RestaurantMenu } from "@mui/icons-material";
 import {
   Badge,
   Box,
@@ -23,7 +23,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { amber } from "@mui/material/colors";
 import { type CSSObject, styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
@@ -114,20 +113,6 @@ const TitleBox = styled(Box)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const IconBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  flexShrink: 0,
-  gap: theme.spacing(0.5),
-}));
-
-const StyledAutoAwesome = styled(AutoAwesome)(({ theme }) => ({
-  color: amber[700],
-
-  ...theme.applyStyles("dark", {
-    color: amber[300],
-  }),
-}));
-
 const wrapStyle: CSSObject = {
   overflowWrap: "anywhere",
 };
@@ -168,14 +153,7 @@ const ActionAreaCard = ({
   menuItem,
   priority,
 }: ActionAreaCardProps) => {
-  const {
-    availableModes,
-    description,
-    imageUrl,
-    name,
-    offers,
-    servingTemperatures,
-  } = menuItem;
+  const { availableModes, description, imageUrl, name, offers } = menuItem;
   const offer = offers[0];
   const price = Number(offer.price);
   const priceCurrency = offer.priceCurrency;
@@ -232,7 +210,13 @@ const ActionAreaCard = ({
     setDialog({
       cancelText: tDialog("close"),
       confirmText: tDialog("addToCart"),
-      content: <CardDialogContent menuItem={menuItem} />,
+      content: (
+        <CardDialogContent
+          isLatest={isLatest}
+          isTopSold={isTopSold}
+          menuItem={menuItem}
+        />
+      ),
       formId: "add-to-cart-form",
       open: true,
       title: name,
@@ -267,36 +251,11 @@ const ActionAreaCard = ({
         <StyledCardContent>
           <TitleBox>
             <WrapTypography variant="subtitle1">{name}</WrapTypography>
-            {(isTopSold || isLatest || servingTemperatures.length > 0) && (
-              <IconBox>
-                {isTopSold && (
-                  <ThumbUp
-                    color="primary"
-                    fontSize="small"
-                    titleAccess={tOrder("mode.storeSlug.tableNumber.topSold")}
-                  />
-                )}
-                {isLatest && (
-                  <StyledAutoAwesome
-                    fontSize="small"
-                    titleAccess={tOrder("mode.storeSlug.tableNumber.latest")}
-                  />
-                )}
-                {servingTemperatures.map((value) => {
-                  const Icon = SERVING_TEMPERATURE_ICONS[value];
-
-                  return (
-                    <Icon
-                      fontSize="small"
-                      key={value}
-                      titleAccess={tOrder(
-                        `menuItem.servingTemperatures.${value}`,
-                      )}
-                    />
-                  );
-                })}
-              </IconBox>
-            )}
+            <MenuItemIcons
+              isLatest={isLatest}
+              isTopSold={isTopSold}
+              menuItem={menuItem}
+            />
           </TitleBox>
           {description && (
             <ClampTypography color="textSecondary" variant="body2">

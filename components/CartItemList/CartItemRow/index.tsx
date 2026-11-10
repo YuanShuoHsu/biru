@@ -41,7 +41,9 @@ import {
   getCartAvailableHours,
   getChoiceNames,
   getItemStock,
+  getLatestItems,
   getLimitingAddOnsCap,
+  getTopSoldItems,
   hasInvalidChoices,
 } from "@/utils/menus";
 
@@ -237,7 +239,14 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
     setDialog({
       cancelText: tDialog("close"),
       confirmText: tDialog("updateCart"),
-      content: <CardDialogContent cartItem={item} menuItem={menuItem} />,
+      content: (
+        <CardDialogContent
+          cartItem={item}
+          isLatest={getLatestItems(menu).some(({ id }) => id === menuItemId)}
+          isTopSold={getTopSoldItems(menu).some(({ id }) => id === menuItemId)}
+          menuItem={menuItem}
+        />
+      ),
       formId: "add-to-cart-form",
       open: true,
       title: itemName,

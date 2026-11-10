@@ -3,7 +3,6 @@
 
 "use client";
 
-import dayjs from "dayjs";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
@@ -21,12 +20,7 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
-import {
-  FEATURED_LIMIT,
-  LATEST,
-  NEW_PRODUCT_DAYS,
-  TOP_SOLD,
-} from "@/constants/tab";
+import { LATEST, TOP_SOLD } from "@/constants/tab";
 
 import {
   Badge,
@@ -43,6 +37,8 @@ import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
+
+import { getLatestItems, getTopSoldItems } from "@/utils/menus";
 
 const TABS_HEIGHT = 48;
 const CONTROLS_HEIGHT = 72;
@@ -150,21 +146,10 @@ const OrderMenuContent = () => {
 
   const sections = menu?.sections || [];
 
-  const allItems = sections.flatMap(({ menuItems }) => menuItems);
-
-  const topSoldItems = allItems
-    .filter(({ sold }) => sold > 0)
-    .sort((a, b) => b.sold - a.sold)
-    .slice(0, FEATURED_LIMIT);
+  const topSoldItems = getTopSoldItems(menu);
   const topSoldIds = new Set(topSoldItems.map(({ id }) => id));
 
-  const latestItems = allItems
-    .filter(
-      ({ createdAt }) =>
-        dayjs().diff(dayjs(createdAt), "day") <= NEW_PRODUCT_DAYS,
-    )
-    .sort((a, b) => dayjs(b.createdAt).diff(dayjs(a.createdAt)))
-    .slice(0, FEATURED_LIMIT);
+  const latestItems = getLatestItems(menu);
   const latestIds = new Set(latestItems.map(({ id }) => id));
 
   const combinedSections = [

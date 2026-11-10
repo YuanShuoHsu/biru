@@ -9,6 +9,7 @@ import { type AddToCartFormInput, useAddToCartFormSchema } from "./definitions";
 import FormBox from "@/components/FormBox";
 import ListCheckboxGroup from "@/components/ListCheckboxGroup";
 import ListRadioGroup from "@/components/ListRadioGroup";
+import MenuItemIcons from "@/components/MenuItemIcons";
 import NumberSpinner from "@/components/NumberSpinner";
 
 import { MAX_QUANTITY } from "@/constants/cart";
@@ -151,10 +152,17 @@ const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
 
 interface CardDialogContentProps {
   cartItem?: CartItem;
+  isLatest: boolean;
+  isTopSold: boolean;
   menuItem: OrderMenuItem;
 }
 
-const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
+const CardDialogContent = ({
+  cartItem,
+  isLatest,
+  isTopSold,
+  menuItem,
+}: CardDialogContentProps) => {
   const {
     id,
     name,
@@ -601,6 +609,11 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
           <StyledRestaurantMenu color="disabled" />
         )}
       </ImageBox>
+      <MenuItemIcons
+        isLatest={isLatest}
+        isTopSold={isTopSold}
+        menuItem={menuItem}
+      />
       {description && (
         <WrapTypography color="textSecondary" variant="body2">
           {description}
