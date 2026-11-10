@@ -1,6 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
+import Image from "next/image";
 import { Autoplay, Mousewheel, Navigation } from "swiper/modules";
 
 import Carousel from "@/components/Carousel";
@@ -29,11 +30,13 @@ const StyledBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const StyledImage = styled("img")({
-  display: "block",
+const SlideBox = styled(Box)({
+  position: "relative",
   width: "100%",
   height: "100%",
-  objectFit: "cover",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
 });
 
 const StyledLink = styled(Link)({
@@ -75,16 +78,26 @@ const Banner = ({ banners }: BannerProps) => {
         >
           {banners.map(({ alt, id, imageUrl, url }, index) => {
             const slide = (
-              <StyledImage
-                alt={
-                  alt?.[locale] ||
-                  alt?.[routing.defaultLocale] ||
-                  Object.values(alt ?? {}).find(Boolean) ||
-                  t("banner.slide", { index: index + 1 })
-                }
-                key={id}
-                src={imageUrl ?? undefined}
-              />
+              <SlideBox key={id}>
+                {imageUrl ? (
+                  <Image
+                    alt={
+                      alt?.[locale] ||
+                      alt?.[routing.defaultLocale] ||
+                      Object.values(alt ?? {}).find(Boolean) ||
+                      t("banner.slide", { index: index + 1 })
+                    }
+                    fetchPriority={index === 0 ? "high" : undefined}
+                    fill
+                    loading={index === 0 ? "eager" : undefined}
+                    sizes="(min-width: 1200px) 1200px, 100vw"
+                    src={imageUrl}
+                    style={{ objectFit: "cover" }}
+                  />
+                ) : (
+                  <StyledViewCarousel color="disabled" />
+                )}
+              </SlideBox>
             );
 
             if (!url) return slide;
