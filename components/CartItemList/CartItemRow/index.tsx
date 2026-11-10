@@ -218,13 +218,15 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const handleValueChange = (value: number | null) => {
     if (value === null) return;
 
-    if (value <= 0) {
+    const nextQuantity = Math.round(value);
+
+    if (nextQuantity <= 0) {
       deleteCartItem(item);
 
       return;
     }
 
-    const delta = value - quantity;
+    const delta = nextQuantity - quantity;
 
     if (delta) {
       addCartItem({ ...item, quantity: delta });
@@ -290,6 +292,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
             })}
             disabled={!quantity}
             error={!canIncrease}
+            format={{ maximumFractionDigits: 0 }}
             fullWidth
             helperText={!canIncrease ? formHelperText : undefined}
             max={quantity + availableToAdd}

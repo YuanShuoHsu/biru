@@ -892,11 +892,14 @@ const CardDialogContent = ({ cartItem, menuItem }: CardDialogContentProps) => {
         <StyledNumberSpinner
           disabled={!quantity}
           error={isAtLimit}
+          format={{ maximumFractionDigits: 0 }}
           fullWidth
           helperText={isAtLimit ? formHelperText : undefined}
           max={availableToAdd}
           min={minQuantity}
-          onValueChange={(value) => setValue("quantity", value || minQuantity)}
+          onValueChange={(value) =>
+            setValue("quantity", Math.round(value ?? 0) || minQuantity)
+          }
           value={quantity}
         />
       </FooterStack>
