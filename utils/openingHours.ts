@@ -110,7 +110,7 @@ const ALL_DAY: Schedule = {
   endTime: "00:00",
 };
 
-const MINUTES_PER_DAY = 24 * 60;
+export const MINUTES_PER_DAY = 24 * 60;
 
 const findSpecialHours = (
   specialHours: SpecialHours[],
@@ -122,13 +122,6 @@ const findSpecialHours = (
     ({ validFrom, validThrough }) => validFrom <= date && date <= validThrough,
   );
 };
-
-export const hasSpecialHoursAt = (
-  specialHours: SpecialHours[],
-  at: Dayjs,
-): boolean =>
-  !!findSpecialHours(specialHours, at) ||
-  !!findSpecialHours(specialHours, at.subtract(1, "day"));
 
 const getDaySchedules = (
   value: string,
@@ -144,6 +137,20 @@ const getDaySchedules = (
   return (special || schedules.length ? schedules : [ALL_DAY]).filter(
     (schedule) =>
       schedule.days.includes(day) && !!schedule.startTime && !!schedule.endTime,
+  );
+};
+
+export const hasSpecialHoursAt = (
+  specialHours: SpecialHours[],
+  at: Dayjs,
+): boolean => {
+  if (findSpecialHours(specialHours, at)) return true;
+
+  const yesterday = at.subtract(1, "day");
+
+  return (
+    !!findSpecialHours(specialHours, yesterday) &&
+    getDaySchedules("", specialHours, yesterday).some(hasNextDayTail)
   );
 };
 
@@ -165,7 +172,7 @@ const getOpenIntervals = (
     .map((schedule): Interval => [0, toMinutes(schedule.endTime)]),
 ];
 
-export interface OpeningDay {
+interface OpeningDay {
   isOpen: boolean;
   isOpenAt: (minute: number) => boolean;
   minutesUntilClose: (minute: number, enough: number) => number;
@@ -216,13 +223,7 @@ export const getOpeningDay = (
   };
 };
 
-const minuteOfDay = (at: Dayjs): number => at.hour() * 60 + at.minute();
-
-export const isOpenOn = (
-  value: string,
-  at: Dayjs,
-  specialHours: SpecialHours[] = [],
-): boolean => getOpeningDay(value, at, specialHours).isOpen;
+export const minuteOfDay = (at: Dayjs): number => at.hour() * 60 + at.minute();
 
 export const isOpenAt = (
   value: string,

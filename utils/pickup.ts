@@ -4,7 +4,11 @@ import { PICKUP_MINUTES_STEP } from "@/constants/pickup";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { getOpeningDay } from "@/utils/openingHours";
+import {
+  getOpeningDay,
+  MINUTES_PER_DAY,
+  minuteOfDay,
+} from "@/utils/openingHours";
 
 export interface PickupWindow {
   cutoffMinutes: number;
@@ -46,10 +50,6 @@ export const getPickupWindow = (
     to: base.add(organization.pickupMaxAdvanceDays, "day").endOf("day"),
   };
 };
-
-const MINUTES_PER_DAY = 24 * 60;
-
-const minuteOfDay = (at: Dayjs): number => at.hour() * 60 + at.minute();
 
 const stepMinutesFrom = (start: number, length: number): number[] =>
   Array.from(
