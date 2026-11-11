@@ -4,7 +4,7 @@ import { PICKUP_MINUTES_STEP } from "@/constants/pickup";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { getMinutesUntilClose, isOpenAt, isOpenOn } from "@/utils/openingHours";
+import { getOpeningDay } from "@/utils/openingHours";
 
 export interface PickupWindow {
   cutoffMinutes: number;
@@ -47,49 +47,76 @@ export const getPickupWindow = (
   };
 };
 
-export const isStorePickupTime = (
+const MINUTES_PER_DAY = 24 * 60;
+
+const minuteOfDay = (at: Dayjs): number => at.hour() * 60 + at.minute();
+
+const stepMinutesFrom = (start: number, length: number): number[] =>
+  Array.from(
+    { length: length / PICKUP_MINUTES_STEP },
+    (_, index) => start + index * PICKUP_MINUTES_STEP,
+  );
+
+const DAY_MINUTES = stepMinutesFrom(0, MINUTES_PER_DAY);
+
+const hasPickupMinute = (
   { cutoffMinutes, from, openingHours, specialHours, to }: PickupWindow,
-  value: Dayjs,
+  availableHours: string[],
+  date: Dayjs,
+  minutes: number[],
 ): boolean => {
-  const at = value.second(0).millisecond(0);
+  if (date.isBefore(from, "day") || date.isAfter(to, "day")) return false;
 
-  if (at.isBefore(from) || at.isAfter(to)) return false;
+  const store = getOpeningDay(openingHours, date, specialHours);
+  const items = availableHours.map((hours) => getOpeningDay(hours, date));
+  if (!store.isOpen || items.some(({ isOpen }) => !isOpen)) return false;
 
-  return (
-    isOpenAt(openingHours, at, specialHours) &&
-    getMinutesUntilClose(openingHours, at, specialHours, cutoffMinutes) >=
-      cutoffMinutes
+  const earliest = date.isSame(from, "day") ? minuteOfDay(from) : 0;
+  const latest = date.isSame(to, "day") ? minuteOfDay(to) : MINUTES_PER_DAY;
+
+  return minutes.some(
+    (minute) =>
+      minute >= earliest &&
+      minute <= latest &&
+      store.isOpenAt(minute) &&
+      items.every((item) => item.isOpenAt(minute)) &&
+      store.minutesUntilClose(minute, cutoffMinutes) >= cutoffMinutes,
   );
 };
 
-export const hasPickupTimeInHour = (
+export const isPickupTime = (
+  pickupWindow: PickupWindow,
+  availableHours: string[],
   at: Dayjs,
-  isAllowed: (at: Dayjs) => boolean,
 ): boolean =>
-  Array.from({ length: 60 / PICKUP_MINUTES_STEP }, (_, index) =>
-    at.minute(index * PICKUP_MINUTES_STEP),
-  ).some(isAllowed);
+  hasPickupMinute(pickupWindow, availableHours, at, [minuteOfDay(at)]);
+
+export const hasPickupTimeInHour = (
+  pickupWindow: PickupWindow,
+  availableHours: string[],
+  at: Dayjs,
+): boolean =>
+  hasPickupMinute(
+    pickupWindow,
+    availableHours,
+    at,
+    stepMinutesFrom(at.hour() * 60, 60),
+  );
 
 export const hasPickupTimeOnDate = (
-  { from, openingHours, specialHours, to }: PickupWindow,
+  pickupWindow: PickupWindow,
+  availableHours: string[],
   date: Dayjs,
-  isAllowed: (at: Dayjs) => boolean,
-): boolean =>
-  !date.isBefore(from, "day") &&
-  !date.isAfter(to, "day") &&
-  isOpenOn(openingHours, date, specialHours) &&
-  Array.from({ length: 24 }, (_, hour) => date.hour(hour)).some((at) =>
-    hasPickupTimeInHour(at, isAllowed),
-  );
+): boolean => hasPickupMinute(pickupWindow, availableHours, date, DAY_MINUTES);
 
 export const hasPickupTimeInWindow = (
   pickupWindow: PickupWindow,
-  isAllowed: (at: Dayjs) => boolean,
+  availableHours: string[],
 ): boolean => {
   const { from, to } = pickupWindow;
   const days = Math.max(to.diff(from, "day") + 1, 0);
 
   return Array.from({ length: days }, (_, index) =>
     from.add(index, "day"),
-  ).some((date) => hasPickupTimeOnDate(pickupWindow, date, isAllowed));
+  ).some((date) => hasPickupTimeOnDate(pickupWindow, availableHours, date));
 };

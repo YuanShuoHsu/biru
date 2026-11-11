@@ -98,13 +98,12 @@ import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { type FetchError, sendRequest } from "@/utils/fetcher";
 import { getCartAvailableHours } from "@/utils/menus";
-import { isOpenAt } from "@/utils/openingHours";
 import {
   getPickupWindow,
   hasPickupTimeInHour,
   hasPickupTimeInWindow,
   hasPickupTimeOnDate,
-  isStorePickupTime,
+  isPickupTime,
 } from "@/utils/pickup";
 
 dayjs.extend(utc);
@@ -255,7 +254,10 @@ const OrderModeOrganizationSlugCheckout = ({
   const query = search ? `?${search}` : "";
 
   const cartAvailableHours = useMemo(
-    () => getCartAvailableHours(menu, cartItemsList),
+    () =>
+      getCartAvailableHours(menu, cartItemsList).map(
+        ({ availableHours }) => availableHours,
+      ),
     [cartItemsList, menu],
   );
 
@@ -275,41 +277,32 @@ const OrderModeOrganizationSlugCheckout = ({
 
   // MUI 以 callback 的 identity 當快取鍵，每次 render 換新的會讓整個月曆重掃
   const isPickupTimeAllowed = useCallback(
-    (at: Dayjs) =>
-      isStorePickupTime(pickupWindow, at) &&
-      cartAvailableHours.every(({ availableHours }) =>
-        isOpenAt(availableHours, at),
-      ),
+    (at: Dayjs) => isPickupTime(pickupWindow, cartAvailableHours, at),
     [cartAvailableHours, pickupWindow],
   );
 
   const pickupUnavailableReason = useMemo(() => {
     if (!isPickup) return null;
 
-    if (
-      !hasPickupTimeInWindow(pickupWindow, (at) =>
-        isStorePickupTime(pickupWindow, at),
-      )
-    )
-      return "storeUnavailable";
+    if (!hasPickupTimeInWindow(pickupWindow, [])) return "storeUnavailable";
 
-    return hasPickupTimeInWindow(pickupWindow, isPickupTimeAllowed)
+    return hasPickupTimeInWindow(pickupWindow, cartAvailableHours)
       ? null
       : "itemsConflict";
-  }, [isPickup, isPickupTimeAllowed, pickupWindow]);
+  }, [cartAvailableHours, isPickup, pickupWindow]);
 
   const handleDisableDate = useCallback(
     (date: Dayjs) =>
-      !hasPickupTimeOnDate(pickupWindow, date, isPickupTimeAllowed),
-    [isPickupTimeAllowed, pickupWindow],
+      !hasPickupTimeOnDate(pickupWindow, cartAvailableHours, date),
+    [cartAvailableHours, pickupWindow],
   );
 
   const handleDisableTime = useCallback(
     (value: Dayjs, view: TimeView) =>
       view === "hours"
-        ? !hasPickupTimeInHour(value, isPickupTimeAllowed)
+        ? !hasPickupTimeInHour(pickupWindow, cartAvailableHours, value)
         : !isPickupTimeAllowed(value),
-    [isPickupTimeAllowed],
+    [cartAvailableHours, isPickupTimeAllowed, pickupWindow],
   );
 
   const router = useRouter();

@@ -23,7 +23,7 @@ import { styled } from "@mui/material/styles";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { isOpenAt } from "@/utils/openingHours";
+import { hasSpecialHoursAt, isOpenAt } from "@/utils/openingHours";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
@@ -74,9 +74,10 @@ const Stores = ({ organizations }: StoresProps) => {
           <Grid key={organization.id} size={{ xs: 12, md: 6 }}>
             <StoreCard
               isOpen={
-                organization.openingHours
+                organization.openingHours ||
+                hasSpecialHoursAt(organization.specialHours, now)
                   ? isOpenAt(
-                      organization.openingHours,
+                      organization.openingHours ?? "",
                       now,
                       organization.specialHours,
                     )

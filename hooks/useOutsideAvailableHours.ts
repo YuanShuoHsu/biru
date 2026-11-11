@@ -14,11 +14,7 @@ import type { RouteParams } from "@/types/routeParams";
 
 import { isOpenAt } from "@/utils/openingHours";
 import type { PickupWindow } from "@/utils/pickup";
-import {
-  getPickupWindow,
-  hasPickupTimeInWindow,
-  isStorePickupTime,
-} from "@/utils/pickup";
+import { getPickupWindow, hasPickupTimeInWindow } from "@/utils/pickup";
 
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
@@ -31,15 +27,17 @@ const isOutsidePickupWindow = (
   availableHours: string,
 ): boolean => {
   const { cutoffMinutes, from, openingHours, specialHours, to } = pickupWindow;
-  const key = `${from.valueOf()}|${to.valueOf()}|${cutoffMinutes}|${openingHours}|${JSON.stringify(specialHours)}|${availableHours}`;
+  const specialKey = specialHours
+    .map((special) =>
+      [special.validFrom, special.validThrough, special.openingHours].join("~"),
+    )
+    .join(",");
+  const key = `${from.valueOf()}|${to.valueOf()}|${cutoffMinutes}|${openingHours}|${specialKey}|${availableHours}`;
 
   const cached = resultCache.get(key);
   if (cached !== undefined) return cached;
 
-  const result = !hasPickupTimeInWindow(
-    pickupWindow,
-    (at) => isOpenAt(availableHours, at) && isStorePickupTime(pickupWindow, at),
-  );
+  const result = !hasPickupTimeInWindow(pickupWindow, [availableHours]);
   resultCache.set(key, result);
 
   if (resultCache.size > RESULT_CACHE_LIMIT) {
