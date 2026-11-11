@@ -1,5 +1,7 @@
 import type { Dayjs } from "dayjs";
 
+import type { components } from "@/types/api";
+
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
 type Day = (typeof DAYS)[number];
 
@@ -100,28 +102,53 @@ const parseSchedules = (value: string): Schedule[] => {
   });
 };
 
-const getDaySchedules = (value: string, at: Dayjs): Schedule[] => {
+type SpecialHours = components["schemas"]["PublicSpecialHoursDto"];
+
+const ALL_DAY: Schedule = {
+  days: [...DAYS],
+  startTime: "00:00",
+  endTime: "00:00",
+};
+
+const getDaySchedules = (
+  value: string,
+  specialHours: SpecialHours[],
+  at: Dayjs,
+): Schedule[] => {
+  const date = at.format("YYYY-MM-DD");
+  const special = specialHours.find(
+    ({ validFrom, validThrough }) => validFrom <= date && date <= validThrough,
+  );
+  const schedules = parseOpeningHours(
+    special ? (special.openingHours ?? "") : value,
+  );
   const day = DAYS[(at.day() + 6) % 7];
 
-  return parseOpeningHours(value).filter(
+  return (special || schedules.length ? schedules : [ALL_DAY]).filter(
     (schedule) =>
       schedule.days.includes(day) && !!schedule.startTime && !!schedule.endTime,
   );
 };
 
-export const isUnrestricted = (value: string): boolean =>
-  parseOpeningHours(value).length === 0;
+export const isOpenOn = (
+  value: string,
+  at: Dayjs,
+  specialHours: SpecialHours[] = [],
+): boolean =>
+  getDaySchedules(value, specialHours, at).length > 0 ||
+  getDaySchedules(value, specialHours, at.subtract(1, "day")).some(
+    hasNextDayTail,
+  );
 
-export const isOpenOn = (value: string, at: Dayjs): boolean =>
-  isUnrestricted(value) ||
-  getDaySchedules(value, at).length > 0 ||
-  getDaySchedules(value, at.subtract(1, "day")).some(hasNextDayTail);
-
-export const getCloseTimeAt = (value: string, at: Dayjs): Dayjs | null => {
+const getSegmentEndAt = (
+  value: string,
+  specialHours: SpecialHours[],
+  at: Dayjs,
+): Dayjs | null => {
   const minutes = at.hour() * 60 + at.minute();
   const startOfDay = at.startOf("day");
 
-  const current = getDaySchedules(value, at).find((schedule) =>
+  const current = getDaySchedules(value, specialHours, at).find((schedule) =>
     isOvernight(schedule)
       ? minutes >= toMinutes(schedule.startTime)
       : minutes >= toMinutes(schedule.startTime) &&
@@ -132,7 +159,11 @@ export const getCloseTimeAt = (value: string, at: Dayjs): Dayjs | null => {
       .add(isOvernight(current) ? 1 : 0, "day")
       .add(toMinutes(current.endTime), "minute");
 
-  const previous = getDaySchedules(value, at.subtract(1, "day")).find(
+  const previous = getDaySchedules(
+    value,
+    specialHours,
+    at.subtract(1, "day"),
+  ).find(
     (schedule) =>
       isOvernight(schedule) && minutes < toMinutes(schedule.endTime),
   );
@@ -142,8 +173,30 @@ export const getCloseTimeAt = (value: string, at: Dayjs): Dayjs | null => {
     : null;
 };
 
-export const isOpenAt = (value: string, at: Dayjs): boolean =>
-  isUnrestricted(value) || !!getCloseTimeAt(value, at);
+export const isOpenAt = (
+  value: string,
+  at: Dayjs,
+  specialHours: SpecialHours[] = [],
+): boolean => !!getSegmentEndAt(value, specialHours, at);
+
+export const getMinutesUntilClose = (
+  value: string,
+  at: Dayjs,
+  specialHours: SpecialHours[],
+  enough: number,
+): number => {
+  let cursor = at;
+  let elapsed = 0;
+
+  for (;;) {
+    const end = getSegmentEndAt(value, specialHours, cursor);
+    if (!end) return elapsed;
+
+    elapsed += end.diff(cursor, "minute");
+    if (elapsed >= enough) return elapsed;
+    cursor = end;
+  }
+};
 
 interface OpeningHoursDisplayConfig {
   formatDay: (day: Day) => string;

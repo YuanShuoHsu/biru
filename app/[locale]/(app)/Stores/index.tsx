@@ -75,7 +75,11 @@ const Stores = ({ organizations }: StoresProps) => {
             <StoreCard
               isOpen={
                 organization.openingHours
-                  ? isOpenAt(organization.openingHours, now)
+                  ? isOpenAt(
+                      organization.openingHours,
+                      now,
+                      organization.specialHours,
+                    )
                   : null
               }
               organization={organization}

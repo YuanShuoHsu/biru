@@ -30,8 +30,8 @@ const isOutsidePickupWindow = (
   pickupWindow: PickupWindow,
   availableHours: string,
 ): boolean => {
-  const { cutoffMinutes, from, openingHours, to } = pickupWindow;
-  const key = `${from.valueOf()}|${to.valueOf()}|${cutoffMinutes}|${openingHours}|${availableHours}`;
+  const { cutoffMinutes, from, openingHours, specialHours, to } = pickupWindow;
+  const key = `${from.valueOf()}|${to.valueOf()}|${cutoffMinutes}|${openingHours}|${JSON.stringify(specialHours)}|${availableHours}`;
 
   const cached = resultCache.get(key);
   if (cached !== undefined) return cached;

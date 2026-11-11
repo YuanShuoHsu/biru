@@ -4,12 +4,13 @@ import { PICKUP_MINUTES_STEP } from "@/constants/pickup";
 
 import type { OrganizationResponse } from "@/types/organizations";
 
-import { getCloseTimeAt, isOpenOn, isUnrestricted } from "@/utils/openingHours";
+import { getMinutesUntilClose, isOpenAt, isOpenOn } from "@/utils/openingHours";
 
 export interface PickupWindow {
   cutoffMinutes: number;
   from: Dayjs;
   openingHours: string;
+  specialHours: OrganizationResponse["specialHours"];
   to: Dayjs;
 }
 
@@ -19,6 +20,7 @@ type PickupOrganization = Pick<
   | "pickupCutoffMinutes"
   | "pickupLeadMinutes"
   | "pickupMaxAdvanceDays"
+  | "specialHours"
 >;
 
 export const getPickupLeadMinutes = (
@@ -40,22 +42,24 @@ export const getPickupWindow = (
       "minute",
     ),
     openingHours: organization.openingHours || "",
+    specialHours: organization.specialHours,
     to: base.add(organization.pickupMaxAdvanceDays, "day").endOf("day"),
   };
 };
 
 export const isStorePickupTime = (
-  { cutoffMinutes, from, openingHours, to }: PickupWindow,
+  { cutoffMinutes, from, openingHours, specialHours, to }: PickupWindow,
   value: Dayjs,
 ): boolean => {
   const at = value.second(0).millisecond(0);
 
   if (at.isBefore(from) || at.isAfter(to)) return false;
-  if (isUnrestricted(openingHours)) return true;
 
-  const closeTime = getCloseTimeAt(openingHours, at);
-
-  return !!closeTime && closeTime.diff(at, "minute") >= cutoffMinutes;
+  return (
+    isOpenAt(openingHours, at, specialHours) &&
+    getMinutesUntilClose(openingHours, at, specialHours, cutoffMinutes) >=
+      cutoffMinutes
+  );
 };
 
 export const hasPickupTimeInHour = (
@@ -67,25 +71,23 @@ export const hasPickupTimeInHour = (
   ).some(isAllowed);
 
 export const hasPickupTimeOnDate = (
-  { from, openingHours, to }: PickupWindow,
+  { from, openingHours, specialHours, to }: PickupWindow,
   date: Dayjs,
   isAllowed: (at: Dayjs) => boolean,
 ): boolean =>
   !date.isBefore(from, "day") &&
   !date.isAfter(to, "day") &&
-  isOpenOn(openingHours, date) &&
+  isOpenOn(openingHours, date, specialHours) &&
   Array.from({ length: 24 }, (_, hour) => date.hour(hour)).some((at) =>
     hasPickupTimeInHour(at, isAllowed),
   );
-
-const MAX_SCAN_DAYS = 8;
 
 export const hasPickupTimeInWindow = (
   pickupWindow: PickupWindow,
   isAllowed: (at: Dayjs) => boolean,
 ): boolean => {
   const { from, to } = pickupWindow;
-  const days = Math.min(Math.max(to.diff(from, "day") + 1, 0), MAX_SCAN_DAYS);
+  const days = Math.max(to.diff(from, "day") + 1, 0);
 
   return Array.from({ length: days }, (_, index) =>
     from.add(index, "day"),

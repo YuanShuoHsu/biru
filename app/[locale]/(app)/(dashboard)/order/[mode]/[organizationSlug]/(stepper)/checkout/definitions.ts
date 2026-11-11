@@ -27,7 +27,7 @@ import {
   isValidBusinessNumber,
 } from "@/utils/businessNumber";
 import { getCartAvailableHours } from "@/utils/menus";
-import { getCloseTimeAt, isOpenAt } from "@/utils/openingHours";
+import { getMinutesUntilClose, isOpenAt } from "@/utils/openingHours";
 import { getPickupLeadMinutes, getPickupWindow } from "@/utils/pickup";
 
 dayjs.extend(utc);
@@ -144,11 +144,12 @@ export const useCustomerPaymentFormSchema = (
           pickupLeadMinutes,
         );
         const advanceDays = organization.pickupMaxAdvanceDays;
-        const { cutoffMinutes, from, openingHours, to } = getPickupWindow(
-          organization,
-          dayjs().tz(STORE_TIMEZONE),
-          pickupLeadMinutes,
-        );
+        const { cutoffMinutes, from, openingHours, specialHours, to } =
+          getPickupWindow(
+            organization,
+            dayjs().tz(STORE_TIMEZONE),
+            pickupLeadMinutes,
+          );
 
         const addPickupTimeIssue = (message: string) =>
           ctx.addIssue({ code: "custom", message, path: ["pickupTime"] });
@@ -171,16 +172,22 @@ export const useCustomerPaymentFormSchema = (
               minutes: PICKUP_MINUTES_STEP,
             }),
           );
-        } else if (!isOpenAt(openingHours, pickupTime)) {
+        } else if (!isOpenAt(openingHours, pickupTime, specialHours)) {
           addPickupTimeIssue(tValidation("pickupTime.closed"));
         } else {
-          const closeTime = getCloseTimeAt(openingHours, pickupTime);
           const unavailableItem = getCartAvailableHours(
             menu,
             cartItemsList,
           ).find(({ availableHours }) => !isOpenAt(availableHours, pickupTime));
 
-          if (closeTime && closeTime.diff(pickupTime, "minute") < cutoffMinutes)
+          if (
+            getMinutesUntilClose(
+              openingHours,
+              pickupTime,
+              specialHours,
+              cutoffMinutes,
+            ) < cutoffMinutes
+          )
             addPickupTimeIssue(
               tValidation("pickupTime.beforeClosing", {
                 minutes: cutoffMinutes,
