@@ -6,6 +6,7 @@ import { StyledStack } from "./styled";
 
 import ErrorAlert from "@/components/ErrorAlert";
 import JsonLd from "@/components/JsonLd";
+import LocationDetails from "@/components/LocationDetails";
 import OrderMenuContent from "@/components/OrderMenuContent";
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
@@ -109,7 +110,10 @@ const OrderModeOrganizationSlugPage = async ({
     return (
       <>
         {mode === ORDER_MODE.Pickup && (
-          <JsonLd data={buildCafeOrCoffeeShop(organization, locale)} />
+          <>
+            <JsonLd data={buildCafeOrCoffeeShop(organization, locale)} />
+            <LocationDetails organization={organization} showMap={false} />
+          </>
         )}
         {prepEstimateChip}
         <OrderMenuContent />
