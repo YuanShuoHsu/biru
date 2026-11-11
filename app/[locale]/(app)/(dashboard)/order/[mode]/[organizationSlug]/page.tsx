@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { StyledStack } from "./styled";
 
 import ErrorAlert from "@/components/ErrorAlert";
+import JsonLd from "@/components/JsonLd";
 import OrderMenuContent from "@/components/OrderMenuContent";
 import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
@@ -20,6 +21,7 @@ import type { Organization } from "@/types/organizations";
 
 import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
+import { buildCafeOrCoffeeShop } from "@/utils/jsonLd";
 import { buildMetadata } from "@/utils/metadata";
 import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
@@ -65,7 +67,7 @@ const OrderModeOrganizationSlugPage = async ({
   params,
   searchParams,
 }: OrderModeOrganizationSlugPageProps) => {
-  const [{ mode, organizationSlug }, query] = await Promise.all([
+  const [{ locale, mode, organizationSlug }, query] = await Promise.all([
     params,
     searchParams,
   ]);
@@ -106,6 +108,9 @@ const OrderModeOrganizationSlugPage = async ({
   if (mode !== ORDER_MODE.DineIn)
     return (
       <>
+        {mode === ORDER_MODE.Pickup && (
+          <JsonLd data={buildCafeOrCoffeeShop(organization, locale)} />
+        )}
         {prepEstimateChip}
         <OrderMenuContent />
       </>
