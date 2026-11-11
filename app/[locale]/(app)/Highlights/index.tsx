@@ -42,7 +42,7 @@ const HIGHLIGHTS: {
 }[] = [
   { href: `/order/${ORDER_MODE.Pickup}`, icon: LocalMall, key: "pickup" },
   { icon: QrCodeScanner, key: "qrOrder" },
-  { icon: HourglassTop, key: "waitlist" },
+  { href: "/waitlist-board", icon: HourglassTop, key: "waitlist" },
   { href: "/order-board", icon: ReceiptLong, key: "orderBoard" },
   { href: "/auth/points", icon: Stars, key: "points" },
   { href: "/auth/coupons", icon: ConfirmationNumber, key: "coupons" },
