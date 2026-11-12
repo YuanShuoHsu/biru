@@ -154,6 +154,7 @@
     "addOn": "Add-ons",
     "availableHours": "Available {value}",
     "calories": "{value} kcal",
+    "customizationChanged": "Some of your last choices have changed. Please check them before adding to cart.",
     "diet": {
       "DiabeticDiet": "Diabetic",
       "GlutenFreeDiet": "Gluten-free",
@@ -235,6 +236,7 @@
     "storeSlug": {
       "selectTable": "Select a table",
       "tableNumber": {
+        "frequent": "Your usuals",
         "latest": "New arrivals",
         "new": "New",
         "search": {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 import { StyledStack } from "./styled";
@@ -12,12 +13,14 @@ import OrderPartySizeTextField from "@/components/OrderPartySizeTextField";
 import OrderPrepEstimateChip from "@/components/OrderPrepEstimateChip";
 import OrderTableNumberChip from "@/components/OrderTableNumberChip";
 
-import { ORDER_MODE } from "@/constants/orderMode";
+import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
+import { FEATURED_LIMIT } from "@/constants/tab";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { PrepEstimate } from "@/types/orders";
+import type { OrderMode } from "@/types/orderMode";
+import type { FrequentItem, PrepEstimate } from "@/types/orders";
 import type { Organization } from "@/types/organizations";
 
 import { clientIpHeaders } from "@/utils/clientIp";
@@ -26,6 +29,7 @@ import { buildCafeOrCoffeeShop } from "@/utils/jsonLd";
 import { buildMetadata } from "@/utils/metadata";
 import { hasOrderAccess } from "@/utils/orderQrSession";
 import { getOrganization, redirectToCurrentSlug } from "@/utils/organizations";
+import { getSession } from "@/utils/session";
 
 interface OrderModeOrganizationSlugPageProps {
   params: Promise<{
@@ -64,6 +68,28 @@ export const generateMetadata = async ({
   });
 };
 
+const getFrequentItems = async (
+  organizationSlug: Organization["slug"],
+  mode: string,
+): Promise<FrequentItem[]> => {
+  const apiMode = API_ORDER_MODE[mode as OrderMode];
+  if (!apiMode || !(await getSession())) return [];
+
+  return fetcher<FrequentItem[]>(
+    `/api/users/me/frequent-items?${new URLSearchParams({
+      limit: String(FEATURED_LIMIT),
+      mode: apiMode,
+      organizationSlug,
+    })}`,
+    {
+      headers: {
+        cookie: (await cookies()).toString(),
+        ...(await clientIpHeaders()),
+      },
+    },
+  ).catch(() => []);
+};
+
 const OrderModeOrganizationSlugPage = async ({
   params,
   searchParams,
@@ -88,13 +114,14 @@ const OrderModeOrganizationSlugPage = async ({
   );
   if (organization.closedAt) return notFound();
 
-  const [{ data: canOrder, error: accessError }, prepEstimate] =
+  const [{ data: canOrder, error: accessError }, prepEstimate, frequentItems] =
     await Promise.all([
       settle(hasOrderAccess(organization.slug, mode, tableNumber)),
       fetcher<PrepEstimate>(
         `/api/organizations/${organization.slug}/orders/prep-estimate`,
         { headers: await clientIpHeaders() },
       ).catch(() => null),
+      getFrequentItems(organization.slug, mode),
     ]);
   if (accessError) return <ErrorAlert />;
   if (!canOrder) return notFound();
@@ -116,7 +143,7 @@ const OrderModeOrganizationSlugPage = async ({
           </>
         )}
         {prepEstimateChip}
-        <OrderMenuContent />
+        <OrderMenuContent frequentItems={frequentItems} />
       </>
     );
 
@@ -148,7 +175,7 @@ const OrderModeOrganizationSlugPage = async ({
         <OrderPartySizeTextField partySize={partySize} />
         {prepEstimateChip}
       </StyledStack>
-      <OrderMenuContent />
+      <OrderMenuContent frequentItems={frequentItems} />
     </>
   );
 };

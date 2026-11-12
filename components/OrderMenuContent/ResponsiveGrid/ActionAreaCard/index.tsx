@@ -30,6 +30,7 @@ import { useDialogStore } from "@/providers/dialog-store-provider";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
+import type { FrequentItem } from "@/types/orders";
 import type { RouteParams } from "@/types/routeParams";
 import type { ViewDirection } from "@/types/view";
 
@@ -141,6 +142,7 @@ const OriginalPriceTypography = styled(Typography, {
 }));
 
 interface ActionAreaCardProps {
+  frequentItem?: FrequentItem;
   isLatest: boolean;
   isTopSold: boolean;
   menuItem: OrderMenuItem;
@@ -148,6 +150,7 @@ interface ActionAreaCardProps {
 }
 
 const ActionAreaCard = ({
+  frequentItem,
   isLatest,
   isTopSold,
   menuItem,
@@ -212,6 +215,7 @@ const ActionAreaCard = ({
       confirmText: tDialog("addToCart"),
       content: (
         <CardDialogContent
+          frequentItem={frequentItem}
           isLatest={isLatest}
           isTopSold={isTopSold}
           menuItem={menuItem}

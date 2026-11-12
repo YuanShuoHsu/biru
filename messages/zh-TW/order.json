@@ -154,6 +154,7 @@
     "addOn": "加購",
     "availableHours": "供應時段 {value}",
     "calories": "熱量 {value} kcal",
+    "customizationChanged": "上次的客製選項有變動，請確認後再加入購物車",
     "diet": {
       "DiabeticDiet": "糖尿病飲食",
       "GlutenFreeDiet": "無麩質",
@@ -235,6 +236,7 @@
     "storeSlug": {
       "selectTable": "選擇桌號",
       "tableNumber": {
+        "frequent": "你常點的",
         "latest": "新品上架",
         "new": "新品",
         "search": {

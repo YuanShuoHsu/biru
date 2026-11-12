@@ -29,6 +29,7 @@ import {
   RestaurantMenu,
 } from "@mui/icons-material";
 import {
+  Alert,
   Avatar,
   Box,
   Chip,
@@ -56,6 +57,7 @@ import type {
   SweetnessLevel,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
+import type { FrequentItem } from "@/types/orders";
 import type { RouteParams } from "@/types/routeParams";
 
 import {
@@ -152,6 +154,7 @@ const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
 
 interface CardDialogContentProps {
   cartItem?: CartItem;
+  frequentItem?: FrequentItem;
   isLatest: boolean;
   isTopSold: boolean;
   menuItem: OrderMenuItem;
@@ -159,6 +162,7 @@ interface CardDialogContentProps {
 
 const CardDialogContent = ({
   cartItem,
+  frequentItem,
   isLatest,
   isTopSold,
   menuItem,
@@ -212,6 +216,40 @@ const CardDialogContent = ({
 
   const addToCartFormSchema = useAddToCartFormSchema(menuItem);
 
+  const getUnavailableLabel = (
+    availability: ItemAvailability | null | undefined,
+    availableModes: ApiOrderMode[],
+    availableHours: string | null | undefined,
+  ) =>
+    !availableModes.includes(apiMode)
+      ? tOrder(`mode.${apiMode}.unavailable`)
+      : isOutsideAvailableHours(availableHours)
+        ? tOrder("menuItem.outsideAvailableHours")
+        : availability === "SoldOut" || availability === "Discontinued"
+          ? tCommon("soldOut")
+          : "";
+
+  const addOnItems = useMemo(() => getAddOnItems(menuItem), [menuItem]);
+
+  const initialItem = cartItem ?? frequentItem;
+  const initialAddOns = cartItem
+    ? cartItem.addOns
+    : (frequentItem?.addOns ?? []).filter(({ menuItemId }) => {
+        const addOnItem = addOnItems.find(({ id }) => id === menuItemId);
+        return (
+          addOnItem &&
+          !getUnavailableLabel(
+            addOnItem.offers[0]?.availability,
+            addOnItem.availableModes,
+            addOnItem.offers[0]?.availableHours,
+          )
+        );
+      });
+  const customizationChanged =
+    !!frequentItem &&
+    (frequentItem.customizationChanged ||
+      initialAddOns.length !== frequentItem.addOns.length);
+
   const {
     control,
     handleSubmit,
@@ -220,35 +258,35 @@ const CardDialogContent = ({
   } = useForm<AddToCartFormInput>({
     defaultValues: {
       quantity: cartItem?.quantity || 1,
-      servingTemperatureLevel: cartItem?.servingTemperatureLevel || null,
-      sweetnessLevel: cartItem?.sweetnessLevel || null,
-      choices: cartItem
+      servingTemperatureLevel: initialItem?.servingTemperatureLevel || null,
+      sweetnessLevel: initialItem?.sweetnessLevel || null,
+      choices: initialItem
         ? {
-            ...cartItem.modifiers,
-            [ADD_ON_OPTION_ID]: cartItem.addOns.map(
+            ...initialItem.modifiers,
+            [ADD_ON_OPTION_ID]: initialAddOns.map(
               ({ menuItemId }) => menuItemId,
             ),
           }
         : {},
-      addOnServingTemperatureLevels: cartItem
+      addOnServingTemperatureLevels: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, servingTemperatureLevel }) => [
+            initialAddOns.map(({ menuItemId, servingTemperatureLevel }) => [
               menuItemId,
               servingTemperatureLevel,
             ]),
           )
         : {},
-      addOnSweetnessLevels: cartItem
+      addOnSweetnessLevels: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, sweetnessLevel }) => [
+            initialAddOns.map(({ menuItemId, sweetnessLevel }) => [
               menuItemId,
               sweetnessLevel,
             ]),
           )
         : {},
-      addOnChoices: cartItem
+      addOnChoices: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, modifiers }) => [
+            initialAddOns.map(({ menuItemId, modifiers }) => [
               menuItemId,
               modifiers,
             ]),
@@ -278,8 +316,6 @@ const CardDialogContent = ({
       "quantity",
     ],
   });
-
-  const addOnItems = useMemo(() => getAddOnItems(menuItem), [menuItem]);
 
   const selectedAddOnIds = choices[ADD_ON_OPTION_ID] || [];
   const selectedAddOnItems = addOnItems.filter(({ id }) =>
@@ -410,19 +446,6 @@ const CardDialogContent = ({
       closeDialog();
     },
   );
-
-  const getUnavailableLabel = (
-    availability: ItemAvailability | null | undefined,
-    availableModes: ApiOrderMode[],
-    availableHours: string | null | undefined,
-  ) =>
-    !availableModes.includes(apiMode)
-      ? tOrder(`mode.${apiMode}.unavailable`)
-      : isOutsideAvailableHours(availableHours)
-        ? tOrder("menuItem.outsideAvailableHours")
-        : availability === "SoldOut" || availability === "Discontinued"
-          ? tCommon("soldOut")
-          : "";
 
   const formatPriceAdjustment = (adjustment: number) =>
     adjustment === 0
@@ -650,6 +673,9 @@ const CardDialogContent = ({
             {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
           </Typography>
         </MetaStack>
+      )}
+      {customizationChanged && (
+        <Alert severity="info">{tOrder("menuItem.customizationChanged")}</Alert>
       )}
       <Divider flexItem />
       {servingTemperatures.length > 0 &&
