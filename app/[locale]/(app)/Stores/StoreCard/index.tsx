@@ -1,10 +1,17 @@
-import { useTranslations } from "next-intl";
+import dayjs from "dayjs";
+import { useFormatter, useTranslations } from "next-intl";
 
 import LocationDetails from "@/components/LocationDetails";
 
 import { ORDER_MODE } from "@/constants/orderMode";
+import { STORE_TIMEZONE } from "@/constants/timezone";
 
-import { LocalMall, ReceiptLong, Storefront } from "@mui/icons-material";
+import {
+  EventBusy,
+  LocalMall,
+  ReceiptLong,
+  Storefront,
+} from "@mui/icons-material";
 import {
   Avatar,
   Button,
@@ -13,10 +20,15 @@ import {
   CardContent,
   CardHeader,
   Chip,
+  Stack,
+  Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import type { components } from "@/types/api";
 import type { OrganizationResponse } from "@/types/organizations";
+
+import { formatOpeningHoursForDisplay } from "@/utils/openingHours";
 
 const StyledCard = styled(Card)({
   height: "100%",
@@ -31,6 +43,14 @@ const StyledCardContent = styled(CardContent)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+const SpecialHoursStack = styled(Stack)(({ theme }) => ({
+  gap: theme.spacing(1),
+}));
+
+const StyledEventBusy = styled(EventBusy)(({ theme }) => ({
+  marginTop: theme.spacing(0.25),
+}));
+
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
   padding: theme.spacing(2),
   flexWrap: "wrap",
@@ -40,9 +60,19 @@ const StyledCardActions = styled(CardActions)(({ theme }) => ({
 interface StoreCardProps {
   isOpen: boolean | null;
   organization: OrganizationResponse;
+  upcomingSpecialHours: components["schemas"]["PublicSpecialHoursDto"][];
 }
 
-const StoreCard = ({ isOpen, organization }: StoreCardProps) => {
+const toStoreDate = (date: string) => dayjs.tz(date, STORE_TIMEZONE).toDate();
+
+const StoreCard = ({
+  isOpen,
+  organization,
+  upcomingSpecialHours,
+}: StoreCardProps) => {
+  const format = useFormatter();
+
+  const tCommon = useTranslations("common");
   const tHomeStores = useTranslations("home.stores");
 
   return (
@@ -67,6 +97,52 @@ const StoreCard = ({ isOpen, organization }: StoreCardProps) => {
       />
       <StyledCardContent>
         <LocationDetails organization={organization} showMap={false} />
+        {upcomingSpecialHours.map(
+          ({ id, note, openingHours, validFrom, validThrough }) => (
+            <SpecialHoursStack direction="row" key={id}>
+              <StyledEventBusy color="warning" fontSize="small" />
+              <Stack>
+                <Typography color="textSecondary" variant="body2">
+                  {[
+                    format.dateTimeRange(
+                      toStoreDate(validFrom),
+                      toStoreDate(validThrough),
+                      "monthDay",
+                      { timeZone: STORE_TIMEZONE },
+                    ),
+                    tHomeStores(
+                      openingHours === null
+                        ? "specialHours.closed"
+                        : "specialHours.hours",
+                    ),
+                    note,
+                  ]
+                    .filter(Boolean)
+                    .join(tCommon("middleDot"))}
+                </Typography>
+                {openingHours &&
+                  formatOpeningHoursForDisplay(openingHours, {
+                    formatDay: (day) => tCommon(`location.openingHours.${day}`),
+                    formatNextDayTime: (time) =>
+                      tCommon("location.openingHours.nextDayTime", { time }),
+                    allDayLabel: tCommon("location.openingHours.allDay"),
+                    rangeSeparator: tCommon(
+                      "location.openingHours.rangeSeparator",
+                    ),
+                    delimiter: tCommon("delimiter"),
+                  }).map((line) => (
+                    <Typography
+                      color="textSecondary"
+                      key={line}
+                      variant="body2"
+                    >
+                      {line}
+                    </Typography>
+                  ))}
+              </Stack>
+            </SpecialHoursStack>
+          ),
+        )}
       </StyledCardContent>
       <StyledCardActions>
         <Button

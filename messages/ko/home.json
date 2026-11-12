@@ -85,6 +85,10 @@
     "open": "영업 중",
     "orderBoard": "픽업 번호",
     "pickup": "픽업",
+    "specialHours": {
+      "closed": "휴무",
+      "hours": "특별 영업시간"
+    },
     "subtitle": "매장",
     "titleHighlight": "Biru Coffee",
     "titlePrefix": "가까운 "

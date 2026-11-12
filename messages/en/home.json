@@ -85,6 +85,10 @@
     "open": "Open now",
     "orderBoard": "Pickup numbers",
     "pickup": "Pickup",
+    "specialHours": {
+      "closed": "Closed",
+      "hours": "Special hours"
+    },
     "subtitle": "Stores",
     "titleHighlight": "Biru Coffee",
     "titlePrefix": "Find your nearest "

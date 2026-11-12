@@ -84,6 +84,9 @@ const Stores = ({ organizations }: StoresProps) => {
                   : null
               }
               organization={organization}
+              upcomingSpecialHours={organization.specialHours.filter(
+                ({ validThrough }) => validThrough >= now.format("YYYY-MM-DD"),
+              )}
             />
           </Grid>
         ))}
