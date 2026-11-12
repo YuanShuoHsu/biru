@@ -1,6 +1,6 @@
 {
   "board": {
-    "count": "{count} orders",
+    "count": "{count, plural, one {# order} other {# orders}}",
     "empty": "No orders right now",
     "label": "Pickup numbers",
     "link": "View pickup numbers",
@@ -215,7 +215,7 @@
         "select": {
           "label": "Party size",
           "placeholder": "Please select your party size",
-          "value": "{count} people"
+          "value": "{count, plural, one {# person} other {# people}}"
         }
       },
       "tableNumber": {
