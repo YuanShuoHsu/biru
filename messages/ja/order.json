@@ -154,6 +154,7 @@
     "addOn": "追加",
     "availableHours": "提供時間 {value}",
     "calories": "{value} kcal",
+    "customizationChanged": "前回のカスタマイズ内容が変更されています。ご確認のうえカートに追加してください。",
     "diet": {
       "DiabeticDiet": "糖尿病食",
       "GlutenFreeDiet": "グルテンフリー",
@@ -235,6 +236,7 @@
     "storeSlug": {
       "selectTable": "テーブルを選択",
       "tableNumber": {
+        "frequent": "いつもの注文",
         "latest": "新着商品",
         "new": "新着",
         "search": {

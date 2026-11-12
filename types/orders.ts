@@ -22,3 +22,4 @@ export type OrderBoardItem = components["schemas"]["OrderBoardItemDto"];
 export type PrepEstimate = components["schemas"]["PrepEstimateResponseDto"];
 export type OrderQrSessionResponse =
   components["schemas"]["OrderQrSessionResponseDto"];
+export type FrequentItem = components["schemas"]["FrequentItemDto"];

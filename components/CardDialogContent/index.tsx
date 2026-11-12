@@ -29,6 +29,7 @@ import {
   RestaurantMenu,
 } from "@mui/icons-material";
 import {
+  Alert,
   Avatar,
   Box,
   Chip,
@@ -56,6 +57,7 @@ import type {
   SweetnessLevel,
 } from "@/types/menus";
 import type { ApiOrderMode } from "@/types/orderMode";
+import type { FrequentItem } from "@/types/orders";
 import type { RouteParams } from "@/types/routeParams";
 
 import {
@@ -152,6 +154,7 @@ const StyledNumberSpinner = styled(NumberSpinner)(({ theme }) => ({
 
 interface CardDialogContentProps {
   cartItem?: CartItem;
+  frequentItem?: FrequentItem;
   isLatest: boolean;
   isTopSold: boolean;
   menuItem: OrderMenuItem;
@@ -159,6 +162,7 @@ interface CardDialogContentProps {
 
 const CardDialogContent = ({
   cartItem,
+  frequentItem,
   isLatest,
   isTopSold,
   menuItem,
@@ -212,6 +216,8 @@ const CardDialogContent = ({
 
   const addToCartFormSchema = useAddToCartFormSchema(menuItem);
 
+  const initialItem = cartItem ?? frequentItem;
+
   const {
     control,
     handleSubmit,
@@ -220,35 +226,37 @@ const CardDialogContent = ({
   } = useForm<AddToCartFormInput>({
     defaultValues: {
       quantity: cartItem?.quantity || 1,
-      servingTemperatureLevel: cartItem?.servingTemperatureLevel || null,
-      sweetnessLevel: cartItem?.sweetnessLevel || null,
-      choices: cartItem
+      servingTemperatureLevel: initialItem?.servingTemperatureLevel || null,
+      sweetnessLevel: initialItem?.sweetnessLevel || null,
+      choices: initialItem
         ? {
-            ...cartItem.modifiers,
-            [ADD_ON_OPTION_ID]: cartItem.addOns.map(
+            ...initialItem.modifiers,
+            [ADD_ON_OPTION_ID]: initialItem.addOns.map(
               ({ menuItemId }) => menuItemId,
             ),
           }
         : {},
-      addOnServingTemperatureLevels: cartItem
+      addOnServingTemperatureLevels: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, servingTemperatureLevel }) => [
-              menuItemId,
-              servingTemperatureLevel,
-            ]),
+            initialItem.addOns.map(
+              ({ menuItemId, servingTemperatureLevel }) => [
+                menuItemId,
+                servingTemperatureLevel,
+              ],
+            ),
           )
         : {},
-      addOnSweetnessLevels: cartItem
+      addOnSweetnessLevels: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, sweetnessLevel }) => [
+            initialItem.addOns.map(({ menuItemId, sweetnessLevel }) => [
               menuItemId,
               sweetnessLevel,
             ]),
           )
         : {},
-      addOnChoices: cartItem
+      addOnChoices: initialItem
         ? Object.fromEntries(
-            cartItem.addOns.map(({ menuItemId, modifiers }) => [
+            initialItem.addOns.map(({ menuItemId, modifiers }) => [
               menuItemId,
               modifiers,
             ]),
@@ -650,6 +658,9 @@ const CardDialogContent = ({
             {tOrder("menuItem.preparationTime", { value: leadTimeMinutes })}
           </Typography>
         </MetaStack>
+      )}
+      {frequentItem?.customizationChanged && (
+        <Alert severity="info">{tOrder("menuItem.customizationChanged")}</Alert>
       )}
       <Divider flexItem />
       {servingTemperatures.length > 0 &&

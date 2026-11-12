@@ -11,6 +11,7 @@ import { styled } from "@mui/material/styles";
 import { useViewStore } from "@/providers/view-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
+import type { FrequentItem } from "@/types/orders";
 
 const StyledCarousel = styled(Carousel)(({ theme }) => ({
   paddingBottom: `${theme.spacing(5)} !important`,
@@ -21,6 +22,7 @@ const StyledCarousel = styled(Carousel)(({ theme }) => ({
 }));
 
 interface FeaturedSliderProps {
+  frequentItems?: Map<string, FrequentItem>;
   latestIds: Set<string>;
   menuItems: OrderMenuItem[];
   priority: boolean;
@@ -28,6 +30,7 @@ interface FeaturedSliderProps {
 }
 
 const FeaturedSlider = ({
+  frequentItems,
   latestIds,
   menuItems,
   priority,
@@ -46,6 +49,7 @@ const FeaturedSlider = ({
     >
       {menuItems.map((menuItem, index) => (
         <ActionAreaCard
+          frequentItem={frequentItems?.get(menuItem.id)}
           isLatest={latestIds.has(menuItem.id)}
           isTopSold={topSoldIds.has(menuItem.id)}
           key={menuItem.id}

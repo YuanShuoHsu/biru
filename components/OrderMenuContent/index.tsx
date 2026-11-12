@@ -20,7 +20,7 @@ import {
   APP_BAR_TOOLBAR_HEIGHT_XS_UP_LANDSCAPE,
 } from "@/constants/appBar";
 import { SCROLL_TRIGGER_THRESHOLD } from "@/constants/scroll";
-import { LATEST, TOP_SOLD } from "@/constants/tab";
+import { FREQUENT, LATEST, TOP_SOLD } from "@/constants/tab";
 
 import {
   Badge,
@@ -37,8 +37,9 @@ import { useMenuStore } from "@/providers/menu-store-provider";
 import { useOrderSearchStore } from "@/providers/order-search-store-provider";
 
 import type { OrderMenuItem } from "@/types/menus";
+import type { FrequentItem } from "@/types/orders";
 
-import { getLatestItems, getTopSoldItems } from "@/utils/menus";
+import { findItemById, getLatestItems, getTopSoldItems } from "@/utils/menus";
 
 const TABS_HEIGHT = 48;
 const CONTROLS_HEIGHT = 72;
@@ -120,7 +121,11 @@ const SectionTypography = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
 }));
 
-const OrderMenuContent = () => {
+interface OrderMenuContentProps {
+  frequentItems: FrequentItem[];
+}
+
+const OrderMenuContent = ({ frequentItems }: OrderMenuContentProps) => {
   const [selectedId, setSelectedId] = useState("");
 
   const headerRef = useRef<HTMLDivElement>(null);
@@ -146,6 +151,13 @@ const OrderMenuContent = () => {
 
   const sections = menu?.sections || [];
 
+  const frequentItemsById = new Map(
+    frequentItems.map((item) => [item.menuItemId, item]),
+  );
+  const frequentMenuItems = frequentItems.flatMap(
+    ({ menuItemId }) => findItemById(menu, menuItemId) ?? [],
+  );
+
   const topSoldItems = getTopSoldItems(menu);
   const topSoldIds = new Set(topSoldItems.map(({ id }) => id));
 
@@ -153,6 +165,15 @@ const OrderMenuContent = () => {
   const latestIds = new Set(latestItems.map(({ id }) => id));
 
   const combinedSections = [
+    ...(frequentMenuItems.length
+      ? [
+          {
+            id: FREQUENT,
+            menuItems: frequentMenuItems,
+            name: tOrder("mode.storeSlug.tableNumber.frequent"),
+          },
+        ]
+      : []),
     ...(topSoldItems.length
       ? [
           {
@@ -291,7 +312,7 @@ const OrderMenuContent = () => {
             <Tab
               key={id}
               label={
-                id === TOP_SOLD || id === LATEST ? (
+                id === FREQUENT || id === TOP_SOLD || id === LATEST ? (
                   name
                 ) : (
                   <QuantityBadge
@@ -327,8 +348,9 @@ const OrderMenuContent = () => {
           <SectionTypography color="primary" variant="subtitle1">
             {name}
           </SectionTypography>
-          {id === TOP_SOLD || id === LATEST ? (
+          {id === FREQUENT || id === TOP_SOLD || id === LATEST ? (
             <FeaturedSlider
+              frequentItems={id === FREQUENT ? frequentItemsById : undefined}
               latestIds={latestIds}
               menuItems={menuItems}
               priority={sectionIndex === 0}

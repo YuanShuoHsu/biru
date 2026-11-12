@@ -154,6 +154,7 @@
     "addOn": "추가 옵션",
     "availableHours": "제공 시간 {value}",
     "calories": "{value} kcal",
+    "customizationChanged": "지난번 옵션이 변경되었습니다. 확인 후 장바구니에 담아 주세요.",
     "diet": {
       "DiabeticDiet": "당뇨병식",
       "GlutenFreeDiet": "글루텐프리",
@@ -235,6 +236,7 @@
     "storeSlug": {
       "selectTable": "테이블 선택",
       "tableNumber": {
+        "frequent": "자주 주문한 메뉴",
         "latest": "신상품",
         "new": "신상품",
         "search": {
