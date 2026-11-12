@@ -8,7 +8,7 @@ import { routing } from "@/i18n/routing";
 
 import { getSiteMeta } from "./siteMeta";
 
-const SITE_NAME = "Biru Coffee";
+export const SITE_NAME = "Biru Coffee";
 
 const getOpenGraphLocale = (locale: Locale) => {
   const { language, region } = new Intl.Locale(locale).maximize();

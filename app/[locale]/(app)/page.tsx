@@ -3,10 +3,13 @@ import { getTranslations } from "next-intl/server";
 
 import Home from ".";
 
+import JsonLd from "@/components/JsonLd";
+
 import type { Locale } from "@/i18n/routing";
 
 import { getBanners } from "@/utils/banners";
 import { settle } from "@/utils/fetcher";
+import { buildOrganization } from "@/utils/jsonLd";
 import { buildMetadata } from "@/utils/metadata";
 import { getOrganizations } from "@/utils/organizations";
 
@@ -29,15 +32,22 @@ export const generateMetadata = async ({
   });
 };
 
-const HomePage = async () => {
-  const [{ data: banners = [] }, { data: organizations = [] }] =
-    await Promise.all([settle(getBanners()), settle(getOrganizations())]);
+const HomePage = async ({ params }: HomePageProps) => {
+  const [{ locale }, { data: banners = [] }, { data: organizations = [] }] =
+    await Promise.all([
+      params,
+      settle(getBanners()),
+      settle(getOrganizations()),
+    ]);
 
   return (
-    <Home
-      banners={banners}
-      organizations={organizations.filter(({ closedAt }) => !closedAt)}
-    />
+    <>
+      <JsonLd data={buildOrganization(locale)} />
+      <Home
+        banners={banners}
+        organizations={organizations.filter(({ closedAt }) => !closedAt)}
+      />
+    </>
   );
 };
 
