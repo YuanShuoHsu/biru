@@ -7,6 +7,7 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import {
+  EventAvailable,
   EventBusy,
   LocalMall,
   ReceiptLong,
@@ -23,7 +24,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { styled, type Theme } from "@mui/material/styles";
 
 import type { components } from "@/types/api";
 import type { OrganizationResponse } from "@/types/organizations";
@@ -47,8 +48,18 @@ const SpecialHoursStack = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const StyledEventBusy = styled(EventBusy)(({ theme }) => ({
+const iconStyle = ({ theme }: { theme: Theme }) => ({
   marginTop: theme.spacing(0.25),
+});
+
+const StyledEventBusy = styled(EventBusy)(iconStyle);
+
+const StyledEventAvailable = styled(EventAvailable)(iconStyle);
+
+const SpecialHoursLinesStack = styled(Stack)(({ theme }) => ({
+  minWidth: 0,
+  gap: theme.spacing(0.5),
+  overflowWrap: "anywhere",
 }));
 
 const StyledCardActions = styled(CardActions)(({ theme }) => ({
@@ -100,8 +111,12 @@ const StoreCard = ({
         {upcomingSpecialHours.map(
           ({ id, note, openingHours, validFrom, validThrough }) => (
             <SpecialHoursStack direction="row" key={id}>
-              <StyledEventBusy color="warning" fontSize="small" />
-              <Stack>
+              {openingHours === null ? (
+                <StyledEventBusy color="warning" fontSize="small" />
+              ) : (
+                <StyledEventAvailable color="info" fontSize="small" />
+              )}
+              <SpecialHoursLinesStack>
                 <Typography color="textSecondary" variant="body2">
                   {[
                     format.dateTimeRange(
@@ -139,7 +154,7 @@ const StoreCard = ({
                       {line}
                     </Typography>
                   ))}
-              </Stack>
+              </SpecialHoursLinesStack>
             </SpecialHoursStack>
           ),
         )}

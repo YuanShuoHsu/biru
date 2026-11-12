@@ -86,8 +86,8 @@
     "orderBoard": "取餐号码",
     "pickup": "外带自取",
     "specialHours": {
-      "closed": "公休",
-      "hours": "特别营业时间"
+      "closed": "休息",
+      "hours": "特殊营业时间"
     },
     "subtitle": "门店",
     "titleHighlight": "Biru Coffee",
