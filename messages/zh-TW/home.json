@@ -85,6 +85,10 @@
     "open": "營業中",
     "orderBoard": "取餐號碼",
     "pickup": "外帶自取",
+    "specialHours": {
+      "closed": "公休",
+      "hours": "特殊營業時間"
+    },
     "subtitle": "門市",
     "titleHighlight": "Biru Coffee",
     "titlePrefix": "找到離你最近的 "
