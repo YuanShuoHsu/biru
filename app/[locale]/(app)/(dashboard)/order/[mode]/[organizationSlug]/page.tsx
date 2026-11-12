@@ -15,6 +15,7 @@ import OrderTableNumberChip from "@/components/OrderTableNumberChip";
 
 import { API_ORDER_MODE, ORDER_MODE } from "@/constants/orderMode";
 import { PARTY_SIZE_MAX } from "@/constants/partySize";
+import { FEATURED_LIMIT } from "@/constants/tab";
 
 import type { Locale } from "@/i18n/routing";
 
@@ -76,6 +77,7 @@ const getFrequentItems = async (
 
   return fetcher<FrequentItem[]>(
     `/api/users/me/frequent-items?${new URLSearchParams({
+      limit: String(FEATURED_LIMIT),
       mode: apiMode,
       organizationSlug,
     })}`,
