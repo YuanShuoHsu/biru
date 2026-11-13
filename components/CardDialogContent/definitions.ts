@@ -166,7 +166,3 @@ export const useAddToCartFormSchema = (menuItem: OrderMenuItem) => {
 export type AddToCartFormInput = z.input<
   ReturnType<typeof useAddToCartFormSchema>
 >;
-
-export type AddToCartFormOutput = z.output<
-  ReturnType<typeof useAddToCartFormSchema>
->;
