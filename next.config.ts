@@ -31,8 +31,12 @@ const nextConfig: NextConfig = {
         destination: `${process.env.NEXT_PUBLIC_NEST_URL}/api/organizations/:organizationSlug/order-qr?mode=${API_ORDER_MODE[mode]}`,
       })),
       {
-        source: "/api/:path*",
-        destination: `${process.env.NEXT_PUBLIC_NEST_URL}/api/:path*`,
+        source: "/api/organizations/:organizationSlug/waitlist/qr",
+        destination: `${process.env.NEXT_PUBLIC_NEST_URL}/api/organizations/:organizationSlug/waitlist/qr`,
+      },
+      {
+        source: "/api/images/:path*",
+        destination: `${process.env.NEXT_PUBLIC_NEST_URL}/api/images/:path*`,
       },
     ];
   },
