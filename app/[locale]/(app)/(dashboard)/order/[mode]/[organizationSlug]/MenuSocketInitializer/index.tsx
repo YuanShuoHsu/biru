@@ -40,8 +40,6 @@ const MenuSocketInitializer = ({
     if (!isConnected) return;
 
     const initMenus = async () => {
-      setMenu({ isLoading: true });
-
       try {
         const response = await emitMenuWithAck<OrderMenu | null>("orderMenu", {
           organizationId,
@@ -51,8 +49,6 @@ const MenuSocketInitializer = ({
         setMenu({ menu: response && scopeMenuToMode(response, apiMode) });
       } catch (error) {
         enqueueSnackbar(getErrorMessage(error), { variant: "error" });
-      } finally {
-        setMenu({ isLoading: false });
       }
     };
 
