@@ -220,12 +220,15 @@ const CouponAutocomplete = ({
               {...textFieldProps}
               onChange={({ target: { value: newValue } }) => {
                 const matchingOption = availableCoupons.find((option) =>
-                  getOptionLabel(option).startsWith(newValue),
+                  getOptionLabel(option)
+                    .toLowerCase()
+                    .startsWith(newValue.toLowerCase()),
                 );
 
                 hint.current =
                   newValue && matchingOption
-                    ? getOptionLabel(matchingOption)
+                    ? newValue +
+                      getOptionLabel(matchingOption).slice(newValue.length)
                     : "";
               }}
               slotProps={{
