@@ -150,7 +150,7 @@ export const getAddOnItems = (item: OrderMenuItem): OrderMenuAddOnItem[] => {
     });
 };
 
-export const getItemPrice = (offer?: OrderMenuOffer): number => {
+const getItemPrice = (offer?: OrderMenuOffer): number => {
   const promo = getActivePromo(offer);
 
   return promo !== null ? promo.price : Number(offer?.price || 0);
@@ -178,7 +178,7 @@ export const getGroupsExtraCost = (
     );
   }, 0);
 
-export const calcCartItemExtraCost = (
+const calcCartItemExtraCost = (
   menu: OrderMenu | null,
   menuItemId: string,
   modifiers: Record<string, string[]>,
@@ -375,7 +375,7 @@ const isInvalidSweetnessLevel = (
   sweetnessLevel: SweetnessLevel | null,
 ): boolean => sweetness === "Adjustable" && !sweetnessLevel;
 
-export const getDisplaySweetnessLevel = (
+const getDisplaySweetnessLevel = (
   { fixedSweetnessLevel, sweetness }: OrderMenuItem | OrderMenuAddOnItem,
   sweetnessLevel: SweetnessLevel | null,
 ): SweetnessLevel | null =>
