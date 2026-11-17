@@ -203,6 +203,7 @@ const CouponAutocomplete = ({
             event.preventDefault();
 
             setCode(hint.current);
+            hint.current = "";
           }
         }}
         options={availableCoupons}
@@ -226,7 +227,9 @@ const CouponAutocomplete = ({
                 );
 
                 hint.current =
-                  newValue && matchingOption
+                  newValue &&
+                  matchingOption &&
+                  newValue.length < getOptionLabel(matchingOption).length
                     ? newValue +
                       getOptionLabel(matchingOption).slice(newValue.length)
                     : "";
