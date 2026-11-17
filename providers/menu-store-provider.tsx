@@ -30,7 +30,6 @@ export const MenuStoreProvider = ({
 
   const [store] = useState(() =>
     createMenuStore({
-      isLoading: false,
       menu: initialMenu && scopeMenuToMode(initialMenu, API_ORDER_MODE[mode]),
     }),
   );

@@ -3,7 +3,6 @@ import { createStore } from "zustand/vanilla";
 import type { OrderMenu } from "@/types/menus";
 
 type MenuState = {
-  isLoading: boolean;
   menu: OrderMenu | null;
 };
 
@@ -14,7 +13,6 @@ type MenuActions = {
 export type MenuStore = MenuState & MenuActions;
 
 const defaultInitState: MenuState = {
-  isLoading: true,
   menu: null,
 };
 
