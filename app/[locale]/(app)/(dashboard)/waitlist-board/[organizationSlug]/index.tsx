@@ -1,14 +1,10 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
-import useSWR from "swr";
-
-import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import WaitlistStatTile from "@/components/WaitlistStatTile";
 
-import { useSocketConnection } from "@/hooks/useSocketConnection";
+import { usePublicWaitlistStatus } from "@/hooks/usePublicWaitlistStatus";
 
 import { HourglassTop } from "@mui/icons-material";
 import {
@@ -83,40 +79,7 @@ const WaitlistBoard = ({
   const tCommon = useTranslations("common");
   const tWaitlist = useTranslations("waitlist");
 
-  const { data: status = initialStatus, mutate } =
-    useSWR<WaitlistStatusResponse>(
-      `/api/organizations/${organization.slug}/waitlist`,
-      {
-        fallbackData: initialStatus,
-        refreshInterval: 60_000,
-        revalidateOnMount: false,
-      },
-    );
-
-  const { isConnected } = useSocketConnection(menuSocket);
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    emitMenuWithAck<WaitlistStatusResponse>("joinPublicWaitlist", {
-      organizationId: organization.id,
-    })
-      .then((joined) => mutate(joined, false))
-      .catch(() => mutate());
-
-    const handleUpdate = () => {
-      mutate();
-    };
-
-    menuSocket.on("publicWaitlistUpdated", handleUpdate);
-
-    return () => {
-      menuSocket.off("publicWaitlistUpdated", handleUpdate);
-      menuSocket.emit("leavePublicWaitlist", {
-        organizationId: organization.id,
-      });
-    };
-  }, [isConnected, mutate, organization.id]);
+  const { status } = usePublicWaitlistStatus(organization, initialStatus);
 
   const [specialDay] = status.specialHours;
   const isClosedDay = specialDay?.openingHours === null;
