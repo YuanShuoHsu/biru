@@ -3,20 +3,12 @@
 import { useTranslations } from "next-intl";
 import { enqueueSnackbar } from "notistack";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-
-import {
-  type AcceptInvitationForm,
-  useAcceptInvitationFormSchema,
-} from "./definitions";
 
 import StatusFormCard, {
   type StatusFormCardConfig,
 } from "@/components/StatusFormCard";
 
 import { query } from "@/constants/query";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useHref } from "@/hooks/useHref";
 
@@ -69,15 +61,6 @@ const AuthAcceptInvitation = ({
 
   const tAuth = useTranslations("auth");
   const verifyingTitle = tAuth("acceptInvitation.verifying.title");
-
-  const acceptInvitationFormSchema = useAcceptInvitationFormSchema();
-  const {
-    formState: { errors },
-    register,
-  } = useForm<AcceptInvitationForm>({
-    defaultValues: { email },
-    resolver: zodResolver(acceptInvitationFormSchema),
-  });
 
   useEffect(() => {
     const accept = async () => {
@@ -173,13 +156,7 @@ const AuthAcceptInvitation = ({
 
   const config = configs[state.status];
 
-  return (
-    <StatusFormCard
-      config={config}
-      emailError={errors.email}
-      emailField={register("email")}
-    />
-  );
+  return <StatusFormCard config={config} email={email} />;
 };
 
 export default AuthAcceptInvitation;
