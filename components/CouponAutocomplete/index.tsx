@@ -125,6 +125,8 @@ const CouponAutocomplete = ({
 
   const hint = useRef("");
 
+  const inputValue = couponCode || code;
+
   const { cartItemsList } = useCartStore((state) => state);
 
   const { cartCurrency } = useCartTotals();
@@ -173,7 +175,7 @@ const CouponAutocomplete = ({
             : tOrder("checkout.coupon.available")
         }
         id="coupon-autocomplete"
-        inputValue={couponCode || code}
+        inputValue={inputValue}
         isOptionEqualToValue={(option, selected) =>
           option.code === getOptionLabel(selected)
         }
@@ -194,6 +196,8 @@ const CouponAutocomplete = ({
         onInputChange={(_, newInputValue, reason) => {
           setCode(newInputValue);
 
+          if (reason === "clear") hint.current = "";
+
           if (couponCode && (reason === "clear" || reason === "input")) {
             onChange?.({ target: { name: name || "", value: "" } });
           }
@@ -203,6 +207,7 @@ const CouponAutocomplete = ({
             event.preventDefault();
 
             setCode(hint.current);
+            hint.current = "";
           }
         }}
         options={availableCoupons}
@@ -214,14 +219,22 @@ const CouponAutocomplete = ({
         )}
         renderInput={(params) => (
           <InputBox>
-            <HintTypography>{hint.current}</HintTypography>
+            <HintTypography>
+              {hint.current &&
+                inputValue + hint.current.slice(inputValue.length)}
+            </HintTypography>
             <TextField
               {...params}
               {...textFieldProps}
               onChange={({ target: { value: newValue } }) => {
-                const matchingOption = availableCoupons.find((option) =>
-                  getOptionLabel(option).startsWith(newValue),
-                );
+                const matchingOption = availableCoupons.find((option) => {
+                  const label = getOptionLabel(option);
+
+                  return (
+                    label.length > newValue.length &&
+                    label.toLowerCase().startsWith(newValue.toLowerCase())
+                  );
+                });
 
                 hint.current =
                   newValue && matchingOption
