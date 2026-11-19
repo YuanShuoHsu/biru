@@ -1,5 +1,3 @@
-import type { ReactNode } from "react";
-
 import { Button, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -35,7 +33,7 @@ const StyledTypography = styled(Typography)({
 
 interface SoldOutOverlayProps {
   active: boolean;
-  children?: ReactNode;
+  children?: React.ReactNode;
   message: string;
   onClick?: () => void;
   square?: boolean;
