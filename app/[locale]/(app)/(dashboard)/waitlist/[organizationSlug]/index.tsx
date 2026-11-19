@@ -3,13 +3,10 @@
 import { type CountryCode, parsePhoneNumberWithError } from "libphonenumber-js";
 import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import useSWR from "swr";
 
 import { type WaitlistFormValues, useWaitlistFormSchema } from "./definitions";
-
-import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
 import CountryAutocomplete from "@/components/CountryAutocomplete";
 import FormCard, { StyledCardContent } from "@/components/FormCard";
@@ -18,8 +15,8 @@ import WaitlistStatTile from "@/components/WaitlistStatTile";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { usePublicWaitlistStatus } from "@/hooks/usePublicWaitlistStatus";
 import { useSession } from "@/hooks/useSession";
-import { useSocketConnection } from "@/hooks/useSocketConnection";
 
 import { useRouter } from "@/i18n/navigation";
 
@@ -131,40 +128,10 @@ const Waitlist = ({
 
   const waitlistFormSchema = useWaitlistFormSchema();
 
-  const { data: status = initialStatus, mutate } =
-    useSWR<WaitlistStatusResponse>(
-      `/api/organizations/${organization.slug}/waitlist`,
-      {
-        fallbackData: initialStatus,
-        refreshInterval: 60_000,
-        revalidateOnMount: false,
-      },
-    );
-
-  const { isConnected } = useSocketConnection(menuSocket);
-
-  useEffect(() => {
-    if (!isConnected) return;
-
-    emitMenuWithAck<WaitlistStatusResponse>("joinPublicWaitlist", {
-      organizationId: organization.id,
-    })
-      .then((joined) => mutate(joined, false))
-      .catch(() => mutate());
-
-    const handleUpdate = () => {
-      mutate();
-    };
-
-    menuSocket.on("publicWaitlistUpdated", handleUpdate);
-
-    return () => {
-      menuSocket.off("publicWaitlistUpdated", handleUpdate);
-      menuSocket.emit("leavePublicWaitlist", {
-        organizationId: organization.id,
-      });
-    };
-  }, [isConnected, mutate, organization.id]);
+  const { mutate, status } = usePublicWaitlistStatus(
+    organization,
+    initialStatus,
+  );
 
   const phoneDefaults = getPhoneDefaults(session?.user.phoneNumber, locale);
 
