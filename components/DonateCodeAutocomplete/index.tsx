@@ -9,8 +9,8 @@
 
 import match from "autosuggest-highlight/match";
 import parse from "autosuggest-highlight/parse";
-import React, { useRef, useState } from "react";
-import useSWR from "swr";
+import React, { useMemo, useRef, useState } from "react";
+import useSWRImmutable from "swr/immutable";
 
 import ErrorAlert from "@/components/ErrorAlert";
 
@@ -118,13 +118,13 @@ const DonateCodeAutocomplete = ({
   value: donateCode,
   ...textFieldProps
 }: DonateCodeAutocompleteProps) => {
-  const {
-    data = [],
-    error,
-    mutate,
-  } = useSWR<DonateCodeType[]>("/api/donate-codes");
-  const options = [...data].sort((a, b) =>
-    a.donateNm.localeCompare(b.donateNm),
+  // https://swr.vercel.app/docs/revalidation#disable-automatic-revalidations
+  const { data, error, mutate } =
+    useSWRImmutable<DonateCodeType[]>("/api/donate-codes");
+  const options = useMemo(
+    () =>
+      [...(data ?? [])].sort((a, b) => a.donateNm.localeCompare(b.donateNm)),
+    [data],
   );
   const value =
     options.find((option) => option.donateCode === donateCode) || null;
@@ -148,7 +148,7 @@ const DonateCodeAutocomplete = ({
       }}
       fullWidth
       getOptionLabel={getOptionLabel}
-      groupBy={(option) => option.donateNm[0].toUpperCase()}
+      groupBy={(option) => option.donateNm.charAt(0).toUpperCase()}
       id="donate-code-autocomplete"
       inputValue={inputValue}
       isOptionEqualToValue={(option, selected) =>
