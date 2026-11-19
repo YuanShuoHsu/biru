@@ -2,10 +2,9 @@ import { useTranslations } from "next-intl";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 
-import ItemSoldOut from "./ItemSoldOut";
-
 import CardDialogContent from "@/components/CardDialogContent";
 import MenuItemIcons from "@/components/MenuItemIcons";
+import SoldOutOverlay from "@/components/SoldOutOverlay";
 
 import { API_ORDER_MODE } from "@/constants/orderMode";
 import { ViewDirections, ViewImageSizes } from "@/constants/view";
@@ -229,7 +228,7 @@ const ActionAreaCard = ({
 
   return (
     <StyledCard variant="outlined">
-      <ItemSoldOut soldOutLabel={soldOutLabel} />
+      <SoldOutOverlay active={!!soldOutLabel} message={soldOutLabel} />
       <QuantityBadge badgeContent={cartItemQuantity} color="secondary" />
       <StyledCardActionArea
         disableRipple={isItemOutOfStock}
