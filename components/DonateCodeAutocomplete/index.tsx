@@ -118,6 +118,7 @@ const DonateCodeAutocomplete = ({
   value: donateCode,
   ...textFieldProps
 }: DonateCodeAutocompleteProps) => {
+  // https://swr.vercel.app/docs/revalidation#disable-automatic-revalidations
   const { data, error, mutate } =
     useSWRImmutable<DonateCodeType[]>("/api/donate-codes");
   const options = useMemo(
