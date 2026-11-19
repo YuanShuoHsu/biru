@@ -96,6 +96,7 @@
   "complete": {
     "backToMenu": "Order again",
     "copied": "Order number copied",
+    "copyFailed": "Couldn't copy to the clipboard",
     "error": {
       "subtitle": "The transaction was not completed. Please try again, or ask our staff for assistance.",
       "title": "Payment failed"
