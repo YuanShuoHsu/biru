@@ -47,11 +47,11 @@ const OrderPrepEstimateChip = ({
   useEffect(() => {
     if (!isConnected) return;
 
-    const handleUpdate = () => {
-      mutate();
+    const handleUpdate = (estimate: PrepEstimate) => {
+      mutate(estimate, false);
     };
 
-    handleUpdate();
+    mutate();
 
     menuSocket.on("prepEstimateUpdated", handleUpdate);
 
