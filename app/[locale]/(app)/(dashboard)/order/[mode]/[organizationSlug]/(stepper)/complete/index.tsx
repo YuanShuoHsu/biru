@@ -291,15 +291,25 @@ const OrderModeOrganizationSlugComplete = ({
   ]);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(orderNo);
+    try {
+      await navigator.clipboard.writeText(orderNo);
 
-    enqueueSnackbar(tOrder("complete.copied"), { variant: "success" });
+      enqueueSnackbar(tOrder("complete.copied"), { variant: "success" });
+    } catch {
+      enqueueSnackbar(tOrder("complete.copyFailed"), { variant: "error" });
+    }
   };
 
   const handleCopyInvoiceNumber = async () => {
-    await navigator.clipboard.writeText(invoice?.invoiceNumber || "");
+    try {
+      await navigator.clipboard.writeText(invoice?.invoiceNumber || "");
 
-    enqueueSnackbar(tOrder("complete.invoice.copied"), { variant: "success" });
+      enqueueSnackbar(tOrder("complete.invoice.copied"), {
+        variant: "success",
+      });
+    } catch {
+      enqueueSnackbar(tOrder("complete.copyFailed"), { variant: "error" });
+    }
   };
 
   return (
