@@ -17,6 +17,7 @@ import { STORE_TIMEZONE } from "@/constants/timezone";
 
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOrderItemName } from "@/hooks/useOrderItemName";
+import { useOrderModeLabel } from "@/hooks/useOrderModeLabel";
 import { useOrderReadyAlert } from "@/hooks/useOrderReadyAlert";
 import { useSocketConnection } from "@/hooks/useSocketConnection";
 
@@ -156,6 +157,7 @@ const OrderModeOrganizationSlugComplete = ({
   const locale = useLocale();
 
   const getOrderItemName = useOrderItemName();
+  const getOrderModeLabel = useOrderModeLabel();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -466,7 +468,7 @@ const OrderModeOrganizationSlugComplete = ({
               />
               <InfoRow
                 label={tOrder("complete.transaction.mode")}
-                value={tOrder(`mode.${order.mode}.label`)}
+                value={getOrderModeLabel(order.mode, order.tableNumber)}
               />
               {order.pickupTime && (
                 <InfoRow
