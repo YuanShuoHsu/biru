@@ -4,12 +4,12 @@ import { styled } from "@mui/material/styles";
 import { getTypographyVariant } from "@/utils/soldOut";
 
 const StyledButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock, theme }) => ({
+  shouldForwardProp: (prop) => prop !== "inStock" && prop !== "square",
+})<{ inStock: boolean; square: boolean }>(({ inStock, square, theme }) => ({
   position: "absolute",
   inset: 0,
   backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
-  borderRadius: theme.shape.borderRadius,
+  borderRadius: square ? 0 : theme.shape.borderRadius,
   opacity: inStock ? 0 : 1,
   pointerEvents: inStock ? "none" : "auto",
   transition: theme.transitions.create([
@@ -31,24 +31,37 @@ const StyledTypography = styled(Typography)({
   transform: "rotate(-30deg)",
 });
 
-interface ItemSoldOutProps {
-  soldOutLabel: string;
+interface SoldOutOverlayProps {
+  active: boolean;
+  children?: React.ReactNode;
+  message: string;
+  onClick?: () => void;
+  square?: boolean;
 }
 
-const ItemSoldOut = ({ soldOutLabel }: ItemSoldOutProps) => {
-  const message = soldOutLabel;
-
-  const handleClick = (event: React.MouseEvent) => event.stopPropagation();
+const SoldOutOverlay = ({
+  active,
+  children,
+  message,
+  onClick,
+  square = false,
+}: SoldOutOverlayProps) => {
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    onClick?.();
+  };
 
   return (
     <StyledButton
       aria-label={message}
       color="error"
-      disabled={!message}
-      inStock={!message}
+      disabled={!active}
+      inStock={!active}
       onClick={handleClick}
+      square={square}
       variant="outlined"
     >
+      {children}
       {message && (
         <StyledTypography color="error" variant={getTypographyVariant(message)}>
           {message}
@@ -58,4 +71,4 @@ const ItemSoldOut = ({ soldOutLabel }: ItemSoldOutProps) => {
   );
 };
 
-export default ItemSoldOut;
+export default SoldOutOverlay;

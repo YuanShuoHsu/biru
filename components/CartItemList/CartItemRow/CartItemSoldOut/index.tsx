@@ -1,35 +1,14 @@
 import { useTranslations } from "next-intl";
 
+import SoldOutOverlay from "@/components/SoldOutOverlay";
+
 import { Delete, Edit } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useCartStore } from "@/providers/cart-store-provider";
 
 import type { CartItem } from "@/stores/cart-store";
-
-import { getTypographyVariant } from "@/utils/soldOut";
-
-const StyledButton = styled(Button, {
-  shouldForwardProp: (prop) => prop !== "inStock",
-})<{ inStock: boolean }>(({ inStock, theme }) => ({
-  position: "absolute",
-  inset: 0,
-  backgroundColor: `rgba(${theme.vars.palette.background.paperChannel} / 0.8)`,
-  borderRadius: 0,
-  opacity: inStock ? 0 : 1,
-  pointerEvents: inStock ? "none" : "auto",
-  transition: theme.transitions.create([
-    "background-color",
-    "border-color",
-    "opacity",
-  ]),
-  zIndex: 2,
-
-  "&:hover": {
-    backgroundColor: `rgba(${theme.vars.palette.error.mainChannel} / 0.2)`,
-  },
-}));
 
 const StyledBox = styled(Box)(({ theme }) => ({
   position: "absolute",
@@ -45,13 +24,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
   alignItems: "center",
   transition: theme.transitions.create("background-color"),
 }));
-
-const StyledTypography = styled(Typography)({
-  whiteSpace: "pre-line",
-  wordBreak: "break-word",
-  fontWeight: "bold",
-  transform: "rotate(-30deg)",
-});
 
 interface CartItemSoldOutProps {
   addOnCapLeft: number;
@@ -103,8 +75,7 @@ const CartItemSoldOut = ({
           : ""
       : "";
 
-  const handleClick = (event: React.MouseEvent) => {
-    event.stopPropagation();
+  const handleClick = () => {
     if (!showOverlay) return;
 
     if (shouldDeleteItem) {
@@ -118,13 +89,11 @@ const CartItemSoldOut = ({
   };
 
   return (
-    <StyledButton
-      aria-label={message}
-      color="error"
-      disabled={!showOverlay}
-      inStock={!showOverlay}
+    <SoldOutOverlay
+      active={showOverlay}
+      message={message}
       onClick={handleClick}
-      variant="outlined"
+      square
     >
       <StyledBox>
         {shouldDeleteItem ? (
@@ -133,12 +102,7 @@ const CartItemSoldOut = ({
           <Edit fontSize="small" />
         )}
       </StyledBox>
-      {message && (
-        <StyledTypography color="error" variant={getTypographyVariant(message)}>
-          {message}
-        </StyledTypography>
-      )}
-    </StyledButton>
+    </SoldOutOverlay>
   );
 };
 
