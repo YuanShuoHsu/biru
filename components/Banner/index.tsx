@@ -15,6 +15,10 @@ import { styled } from "@mui/material/styles";
 
 import type { Banner as BannerType } from "@/types/banners";
 
+const LOCALE_PREFIX = new RegExp(
+  `^/(?:${routing.locales.join("|")})(?=[/?#]|$)`,
+);
+
 const StyledBox = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
@@ -104,7 +108,7 @@ const Banner = ({ banners }: BannerProps) => {
 
             return (
               <StyledLink
-                href={url}
+                href={url.replace(LOCALE_PREFIX, "/").replace(/^\/\//, "/")}
                 key={id}
                 {...(!url.startsWith("/") && {
                   rel: "noopener noreferrer",
