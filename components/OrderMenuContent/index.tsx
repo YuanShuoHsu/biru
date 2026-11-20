@@ -196,12 +196,16 @@ const OrderMenuContent = ({ frequentItems }: OrderMenuContentProps) => {
   ];
 
   const filteredSections = combinedSections
-    .map((section) => ({
-      ...section,
-      menuItems: section.menuItems.filter(({ name }) =>
-        name.toLowerCase().includes(searchText),
-      ),
-    }))
+    .map((section) =>
+      section.name.toLowerCase().includes(searchText)
+        ? section
+        : {
+            ...section,
+            menuItems: section.menuItems.filter(({ name }) =>
+              name.toLowerCase().includes(searchText),
+            ),
+          },
+    )
     .filter(
       ({ menuItems, name }) =>
         name.toLowerCase().includes(searchText) || menuItems.length > 0,
