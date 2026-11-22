@@ -4,8 +4,8 @@ const APP_NAME = "Biru Coffee";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Biru Coffee",
-    short_name: "Biru",
+    name: APP_NAME,
+    short_name: APP_NAME,
     description: APP_NAME,
     start_url: "/",
     scope: "/",
