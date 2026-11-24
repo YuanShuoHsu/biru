@@ -1,6 +1,7 @@
 // https://mui.com/material-ui/customization/breakpoints/
 // https://mui.com/material-ui/customization/css-theme-variables/configuration/#preventing-ssr-flickering
 // https://mui.com/material-ui/customization/css-theme-variables/usage/#typescript
+// https://mui.com/material-ui/integrations/nextjs/#font-optimization
 // https://mui.com/material-ui/integrations/routing/
 // https://mui.com/x/react-date-pickers/quickstart/#typescript
 // https://mui.com/x/react-date-pickers/quickstart/#date-value-types
@@ -339,6 +340,9 @@ const theme = createTheme({
   },
   cssVariables: {
     colorSchemeSelector: "class",
+  },
+  typography: {
+    fontFamily: "var(--font-brand), sans-serif",
   },
 });
 
