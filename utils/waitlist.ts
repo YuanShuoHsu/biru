@@ -18,14 +18,5 @@ export const getWaitlistUnavailable = ({
   cutoff,
   enabled,
   open,
-  paused,
 }: WaitlistStatusResponse) =>
-  !enabled
-    ? "disabled"
-    : paused
-      ? "paused"
-      : !open
-        ? "closed"
-        : cutoff
-          ? "cutoff"
-          : null;
+  !enabled ? "disabled" : !open ? "closed" : cutoff ? "cutoff" : null;
