@@ -128,6 +128,7 @@ All providers are composed in `components/AppProviders` — mounted at the root 
 - Forms follow the pattern: Zod schema → React Hook Form (`register`, or `useWatch` + `setValue` + `formState.errors` for non-native inputs; avoid `Controller`) → MUI input, with `components/TextMaskCustom` (react-imask) for formatted fields. Async work that only feeds a form (e.g. creating a parent record first) goes in its submit handler, covered by `isSubmitting` or the dialog's `confirmLoading` — no separate loading state. The dialog's confirm button is never disabled: invalid or incomplete input is rejected on submit by the schema and shown as field errors. New-password fields show their errors through the rule list of `hooks/usePasswordValidation.ts`, not the schema's message, so a rule added to their schema must be added there too.
 - Phone validation uses `libphonenumber-js`
 - Snackbar/toast notifications use `notistack` (`useSnackbar`); SWR errors are already toasted globally by `SWRProvider`
+- Auth and account UI built on better-auth (sign-in, sign-up, two-factor, account and security settings) takes its flow and layout from better-auth's own demo (`demo/nextjs` in the better-auth repo) and, where the demo has none, from Better Auth UI: which card a feature lives in, its steps and its states. Build it with this repo's MUI components and the conventions above (`FormCard`, the dialog store, React Hook Form + Zod, next-intl); never install Better Auth UI or copy its markup or localization.
 
 ## biru-admin Sync
 
