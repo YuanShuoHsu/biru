@@ -37,7 +37,7 @@ export const isLowStock = (offer?: OrderMenuOffer): boolean => {
   return stock <= LOW_STOCK_THRESHOLD;
 };
 
-export interface PromoInfo {
+interface PromoInfo {
   price: number;
   validThrough: Date | null;
 }
@@ -46,7 +46,7 @@ export interface PromoInfo {
 const PROMO_DATE_PATTERN =
   /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$/;
 
-export const storeDateOf = (value: string): string | null => {
+const storeDateOf = (value: string): string | null => {
   if (!PROMO_DATE_PATTERN.test(value)) return null;
   const date = dayjs.utc(value);
   return date.isValid() ? date.tz(STORE_TIMEZONE).format("YYYY-MM-DD") : null;
