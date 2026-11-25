@@ -67,6 +67,7 @@ const Banner = ({ banners }: BannerProps) => {
             isSlideshow && {
               delay: 2500,
               disableOnInteraction: false,
+              pauseOnMouseEnter: true,
             }
           }
           loop={isSlideshow}
