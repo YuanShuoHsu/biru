@@ -59,6 +59,8 @@ import { fetcher } from "@/utils/fetcher";
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
 
+const POLL_INTERVAL_MS = 15_000;
+
 const STEPS = ["taken", "called", "seated"] as const;
 
 const ACTIVE_STEPS: Record<WaitlistTicketStatus, number> = {
@@ -128,10 +130,13 @@ const WaitlistTicket = ({
 
   const ticketUrl = `/api/organizations/${organization.slug}/waitlist/tickets/${initialTicket.id}`;
 
+  const { isConnected } = useSocketConnection(menuSocket);
+
   const { data: ticket = initialTicket, mutate } =
     useSWR<WaitlistTicketDetailResponse>(ticketUrl, {
       fallbackData: initialTicket,
       revalidateOnMount: false,
+      refreshInterval: isConnected ? 0 : POLL_INTERVAL_MS,
     });
 
   const previousCalledAtRef = useRef(ticket.calledAt);
@@ -148,8 +153,6 @@ const WaitlistTicket = ({
       window.removeEventListener("click", handleFirstInteraction);
     };
   }, []);
-
-  const { isConnected } = useSocketConnection(menuSocket);
 
   useEffect(() => {
     if (!isConnected) return;
