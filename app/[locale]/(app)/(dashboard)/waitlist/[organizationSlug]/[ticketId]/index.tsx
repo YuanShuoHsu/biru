@@ -56,10 +56,10 @@ import { alertUser, enableAlertSound } from "@/utils/alerts";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
 
-const POLL_INTERVAL_MS = 15_000;
-
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
+
+const POLL_INTERVAL_MS = 15_000;
 
 const STEPS = ["taken", "called", "seated"] as const;
 
