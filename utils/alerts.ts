@@ -1,3 +1,10 @@
+import type { components } from "@/types/api";
+
+import { fetcher } from "@/utils/fetcher";
+
+type CreatePushSubscriptionDto =
+  components["schemas"]["CreatePushSubscriptionDto"];
+
 let alertAudio: AudioContext | null = null;
 
 export const enableAlertSound = () => {
@@ -11,9 +18,66 @@ const requestAlertPermission = async () => {
     await Notification.requestPermission();
 };
 
+// https://nextjs.org/docs/app/guides/progressive-web-apps#2-implementing-web-push-notifications
+const registerAlertWorker = async () => {
+  if ("serviceWorker" in navigator)
+    await navigator.serviceWorker
+      .register("/sw.js", { scope: "/", updateViaCache: "none" })
+      .catch(() => undefined);
+};
+
 // Safari 只在點擊的同一輪事件內才會跳出通知詢問，必須在 onClick 裡同步呼叫
 export const enableAlerts = () =>
-  Promise.all([enableAlertSound(), requestAlertPermission()]);
+  Promise.all([
+    enableAlertSound(),
+    requestAlertPermission(),
+    registerAlertWorker(),
+  ]);
+
+// https://nextjs.org/docs/app/guides/progressive-web-apps#2-implementing-web-push-notifications
+const urlBase64ToUint8Array = (base64String: string) => {
+  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
+  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
+  const rawData = window.atob(base64);
+
+  return Uint8Array.from(rawData, (char) => char.charCodeAt(0));
+};
+
+export const subscribePush = async (
+  target: Pick<
+    CreatePushSubscriptionDto,
+    "accessToken" | "orderId" | "organizationSlug" | "waitlistTicketId"
+  >,
+) => {
+  const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+
+  if (
+    !vapidPublicKey ||
+    !("serviceWorker" in navigator) ||
+    !("PushManager" in window) ||
+    Notification.permission !== "granted"
+  )
+    return;
+
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.subscribe({
+      applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
+      userVisibleOnly: true,
+    });
+
+    await fetcher("/api/push/subscriptions", {
+      body: JSON.stringify({
+        ...target,
+        app: "storefront",
+        endpoint: subscription.endpoint,
+        keys: subscription.toJSON().keys as CreatePushSubscriptionDto["keys"],
+      } satisfies CreatePushSubscriptionDto),
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+    });
+  } catch {}
+};
 
 const playChime = () => {
   if (alertAudio?.state !== "running") return;
@@ -32,6 +96,21 @@ const playChime = () => {
     oscillator.start(startAt);
     oscillator.stop(startAt + 0.3);
   });
+};
+
+const showNotification = async (
+  title: string,
+  options: NotificationOptions,
+) => {
+  const registration =
+    "serviceWorker" in navigator
+      ? await navigator.serviceWorker.getRegistration()
+      : undefined;
+
+  if (registration?.active)
+    return registration.showNotification(title, options);
+
+  new Notification(title, options);
 };
 
 export const alertUser = ({
@@ -54,7 +133,5 @@ export const alertUser = ({
   )
     return;
 
-  try {
-    new Notification(title, { body, tag });
-  } catch {}
+  showNotification(title, { body, tag }).catch(() => {});
 };

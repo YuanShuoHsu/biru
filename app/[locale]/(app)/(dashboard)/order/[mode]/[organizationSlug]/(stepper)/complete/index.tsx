@@ -49,6 +49,7 @@ import type { CheckoutEcpayDto, CheckoutEcpayResponse } from "@/types/ecpay";
 import type { OrderReceiptResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
+import { subscribePush } from "@/utils/alerts";
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
 import { getErrorMessage } from "@/utils/errors";
 import { fetcher } from "@/utils/fetcher";
@@ -206,6 +207,11 @@ const OrderModeOrganizationSlugComplete = ({
       menuSocket.emit("leaveOrder", { accessToken, orderId });
     };
   }, [accessToken, isConnected, mutate, orderId]);
+
+  useEffect(() => {
+    if (orderId)
+      subscribePush({ accessToken: accessToken || undefined, orderId });
+  }, [accessToken, orderId]);
 
   useOrderReadyAlert(
     order
