@@ -1,4 +1,7 @@
 {
+  "backupCode": {
+    "required": "備用碼為必填。"
+  },
   "bio": {
     "maxLength": "個人簡介不能超過 160 個字元。"
   },
@@ -113,6 +116,9 @@
   "telephone": {
     "invalid": "電話格式無效。",
     "required": "電話為必填。"
+  },
+  "twoFactorCode": {
+    "invalid": "請輸入 6 位數驗證碼。"
   },
   "servingTemperatureLevel": {
     "notSelected": "請選擇您的{label}。"

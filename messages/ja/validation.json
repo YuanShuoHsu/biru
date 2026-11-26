@@ -1,4 +1,7 @@
 {
+  "backupCode": {
+    "required": "バックアップコードは必須です。"
+  },
   "bio": {
     "maxLength": "自己紹介は160文字以内で入力してください。"
   },
@@ -113,6 +116,9 @@
   "telephone": {
     "invalid": "電話番号が無効です。",
     "required": "電話番号は必須です。"
+  },
+  "twoFactorCode": {
+    "invalid": "6桁の認証コードを入力してください。"
   },
   "servingTemperatureLevel": {
     "notSelected": "{label}を選択してください。"
