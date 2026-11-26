@@ -17,16 +17,18 @@ self.addEventListener("notificationclick", (event) => {
   event.notification.close();
 
   const path = event.notification.data?.path;
-  const url = path && new URL(path, self.location.origin).href;
+  const pathname = path && new URL(path, self.location.origin).pathname;
 
   event.waitUntil(
     self.clients
       .matchAll({ includeUncontrolled: true, type: "window" })
       .then((windows) => {
-        const target = windows.find((window) => !url || window.url === url);
+        const target = windows.find(
+          (window) => !pathname || new URL(window.url).pathname === pathname,
+        );
 
         if (target) return target.focus();
-        if (url) return self.clients.openWindow(url);
+        if (path) return self.clients.openWindow(path);
       }),
   );
 });

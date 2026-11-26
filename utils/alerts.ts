@@ -6,6 +6,7 @@ type CreatePushSubscriptionDto =
   components["schemas"]["CreatePushSubscriptionDto"];
 
 let alertAudio: AudioContext | null = null;
+let alertPermission: Promise<void> | null = null;
 
 export const enableAlertSound = () => {
   alertAudio ??= new AudioContext();
@@ -27,12 +28,15 @@ const registerAlertWorker = async () => {
 };
 
 // Safari 只在點擊的同一輪事件內才會跳出通知詢問，必須在 onClick 裡同步呼叫
-export const enableAlerts = () =>
-  Promise.all([
+export const enableAlerts = () => {
+  alertPermission = requestAlertPermission();
+
+  return Promise.all([
     enableAlertSound(),
-    requestAlertPermission(),
+    alertPermission,
     registerAlertWorker(),
   ]);
+};
 
 // https://nextjs.org/docs/app/guides/progressive-web-apps#2-implementing-web-push-notifications
 const urlBase64ToUint8Array = (base64String: string) => {
@@ -46,7 +50,7 @@ const urlBase64ToUint8Array = (base64String: string) => {
 export const subscribePush = async (
   target: Pick<
     CreatePushSubscriptionDto,
-    "accessToken" | "orderId" | "organizationSlug" | "waitlistTicketId"
+    "organizationSlug" | "waitlistTicketId"
   >,
 ) => {
   const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
@@ -55,11 +59,17 @@ export const subscribePush = async (
     !vapidPublicKey ||
     !("serviceWorker" in navigator) ||
     !("PushManager" in window) ||
-    Notification.permission !== "granted"
+    !("Notification" in window)
   )
     return;
 
   try {
+    await alertPermission;
+
+    if (Notification.permission !== "granted") return;
+
+    await registerAlertWorker();
+
     const registration = await navigator.serviceWorker.ready;
     const subscription = await registration.pushManager.subscribe({
       applicationServerKey: urlBase64ToUint8Array(vapidPublicKey),
@@ -133,5 +143,9 @@ export const alertUser = ({
   )
     return;
 
-  showNotification(title, { body, tag }).catch(() => {});
+  showNotification(title, {
+    body,
+    data: { path: location.pathname },
+    tag,
+  }).catch(() => {});
 };
