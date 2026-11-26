@@ -117,13 +117,13 @@
     "invalid": "Phone is not valid.",
     "required": "Phone is required."
   },
-  "twoFactorCode": {
-    "invalid": "Enter the 6-digit code."
-  },
   "servingTemperatureLevel": {
     "notSelected": "Please select your {label}."
   },
   "sweetnessLevel": {
     "notSelected": "Please select your sweetness."
+  },
+  "twoFactorCode": {
+    "invalid": "Enter the 6-digit code."
   }
 }

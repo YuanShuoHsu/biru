@@ -117,13 +117,13 @@
     "invalid": "電話番号が無効です。",
     "required": "電話番号は必須です。"
   },
-  "twoFactorCode": {
-    "invalid": "6桁の認証コードを入力してください。"
-  },
   "servingTemperatureLevel": {
     "notSelected": "{label}を選択してください。"
   },
   "sweetnessLevel": {
     "notSelected": "甘さを選択してください。"
+  },
+  "twoFactorCode": {
+    "invalid": "6桁の認証コードを入力してください。"
   }
 }

@@ -117,13 +117,13 @@
     "invalid": "电话格式无效。",
     "required": "电话为必填。"
   },
-  "twoFactorCode": {
-    "invalid": "请输入 6 位验证码。"
-  },
   "servingTemperatureLevel": {
     "notSelected": "请选择您的{label}。"
   },
   "sweetnessLevel": {
     "notSelected": "请选择您的甜度。"
+  },
+  "twoFactorCode": {
+    "invalid": "请输入 6 位验证码。"
   }
 }
