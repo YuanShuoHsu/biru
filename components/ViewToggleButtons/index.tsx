@@ -10,7 +10,6 @@ import { ViewMode } from "@/types/view";
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   backgroundColor: theme.vars.palette.background.paper,
-  transition: theme.transitions.create("background-color"),
 }));
 
 const ViewToggleButtons = () => {

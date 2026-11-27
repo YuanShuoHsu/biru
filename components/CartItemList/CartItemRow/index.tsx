@@ -92,16 +92,12 @@ const StyledRestaurantMenu = styled(RestaurantMenu)(({ theme }) => ({
   fontSize: theme.spacing(4),
 }));
 
-const StyledListItemText = styled(ListItemText)(({ theme }) => ({
+const StyledListItemText = styled(ListItemText)({
   margin: 0,
   flex: 1,
   wordBreak: "break-word",
   whiteSpace: "pre-line",
-
-  "& .MuiTypography-root": {
-    transition: theme.transitions.create("color"),
-  },
-}));
+});
 
 const ControlsStack = styled(Stack, {
   shouldForwardProp: (prop) => prop !== "compact",

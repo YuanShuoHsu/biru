@@ -18,12 +18,7 @@ const StyledButton = styled(Button, {
   height: theme.spacing(4.5),
   borderRadius: "50%",
   zIndex: 1,
-  transition: theme.transitions.create([
-    "background-color",
-    "border-color",
-    "color",
-    "opacity",
-  ]),
+  transition: theme.transitions.create(["background-color", "opacity"]),
 
   "&.swiper-button-disabled": {
     opacity: 0.5,

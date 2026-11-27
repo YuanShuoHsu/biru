@@ -51,7 +51,7 @@ const HeaderBox = styled(Box, {
   position: "sticky",
   top: trigger ? -CONTROLS_HEIGHT : APP_BAR_TOOLBAR_HEIGHT,
   backgroundColor: theme.vars.palette.background.paper,
-  transition: theme.transitions.create(["background-color", "top"]),
+  transition: theme.transitions.create("top"),
   zIndex: theme.zIndex.appBar - 1,
   borderRadius: theme.vars.shape.borderRadius,
   boxShadow: `inset 0 0 0 1px ${theme.vars.palette.divider}`,
