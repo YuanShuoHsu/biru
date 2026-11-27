@@ -30,6 +30,7 @@
       "label": "Promo code",
       "minSubtotal": "Min. spend {amount}",
       "placeholder": "Please enter your promo code",
+      "validUntil": "Valid until {date}",
       "wallet": "My coupon"
     },
     "customer": {
