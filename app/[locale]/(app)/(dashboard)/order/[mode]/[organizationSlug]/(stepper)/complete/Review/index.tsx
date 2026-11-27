@@ -187,7 +187,7 @@ const Review = ({
   const formatDate = (value: string) =>
     format.dateTime(new Date(value), "short", { timeZone: STORE_TIMEZONE });
 
-  if (isLoading) return null;
+  if (review === undefined && isLoading) return null;
 
   return (
     <FormCard onSubmit={handleSubmit(handleFormSubmit)} variant="outlined">
@@ -211,7 +211,7 @@ const Review = ({
           </Typography>
         </Stack>
         <RatingStack
-          aria-labelledby={titleId}
+          aria-labelledby={isLocked ? undefined : titleId}
           role={isLocked ? undefined : "radiogroup"}
         >
           <Rating
