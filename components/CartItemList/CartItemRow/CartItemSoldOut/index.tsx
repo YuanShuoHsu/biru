@@ -22,7 +22,6 @@ const StyledBox = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  transition: theme.transitions.create("background-color"),
 }));
 
 interface CartItemSoldOutProps {
