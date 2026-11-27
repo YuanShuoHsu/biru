@@ -27,6 +27,8 @@ pnpm codegen      # 從 NestJS OpenAPI spec 重新產生 types/api.ts（需要 b
 
 目前沒有設定測試。
 
+開 PR 前依序跑 `pnpm install --frozen-lockfile`、`pnpm format`、`pnpm lint`、`npx tsc --noEmit`、`pnpm build`。`tsc` 前先 `rm -rf .next/types .next/dev` 再 `npx next typegen`：別的分支或 dev server 留下的過期型別會讓 `tsc` 誤報。
+
 pre-commit hook（Husky + lint-staged）會對 staged 的檔案跑 `pnpm format`、`pnpm lint` 與 `prettier --write`。不要用 `--no-verify` 跳過。
 
 格式化一律在 `pnpm install --frozen-lockfile` 之後用 repo 自己的 Prettier（`pnpm format` 或 `pnpm exec prettier`），絕不用 `npx prettier`：沒有 `node_modules` 時它會下載最新版的 Prettier，格式可能和鎖定的版本不同。
