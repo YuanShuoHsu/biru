@@ -1,191 +1,198 @@
 # AGENTS.md
 
-This file provides guidance to coding agents (Claude Code, Codex) when working with code in this repository.
+本檔是給 coding agent（Claude Code、Codex）在這個 repo 寫程式時的指引。
 
-## Commands
+## 語言（Language）
+
+- 與開發者的對話、PR 描述、issue 與留言用繁體中文。
+- commit 與 PR 標題用英文 Conventional Commits、小寫開頭。
+- 程式碼註解用繁體中文；識別字、指令、路徑、套件與 API 名稱維持原文。
+- 本檔的「Behavioral Guidelines」（照抄上游）與 `next dev` 自動產生的 Next.js 區塊維持英文原文，不要翻譯。
+
+## 指令（Commands）
 
 ```bash
-pnpm dev          # Start development server (http://localhost:3000)
-pnpm build        # Production build
-pnpm start        # Start production server
-pnpm lint         # Run ESLint
-pnpm format       # Format all files with Prettier
-pnpm format:check # Check formatting without writing changes
-pnpm codegen      # Regenerate types/api.ts from NestJS OpenAPI spec (requires biru-api running on :3001)
+pnpm dev          # 啟動開發伺服器（http://localhost:3000）
+pnpm build        # production build
+pnpm start        # 啟動 production 伺服器
+pnpm lint         # 執行 ESLint
+pnpm format       # 用 Prettier 格式化所有檔案
+pnpm format:check # 檢查格式但不寫入
+pnpm codegen      # 從 NestJS OpenAPI spec 重新產生 types/api.ts（需要 biru-api 在 :3001 執行中）
 ```
 
-No test suite is currently configured.
+目前沒有設定測試。
 
-The pre-commit hook (Husky + lint-staged) runs `pnpm format`, `pnpm lint`, and `prettier --write` on staged files. Do not bypass with `--no-verify`.
+pre-commit hook（Husky + lint-staged）會對 staged 的檔案跑 `pnpm format`、`pnpm lint` 與 `prettier --write`。不要用 `--no-verify` 跳過。
 
-Format with the repo's own Prettier (`pnpm format` or `pnpm exec prettier`) after `pnpm install --frozen-lockfile`, never `npx prettier`: without `node_modules` it downloads whatever Prettier is latest, which can format differently from the pinned one.
+格式化一律在 `pnpm install --frozen-lockfile` 之後用 repo 自己的 Prettier（`pnpm format` 或 `pnpm exec prettier`），絕不用 `npx prettier`：沒有 `node_modules` 時它會下載最新版的 Prettier，格式可能和鎖定的版本不同。
 
-Where `fonts.googleapis.com` is unreachable (e.g. a sandbox), `next/font/google` fails the build. Point `NEXT_FONT_GOOGLE_MOCKED_RESPONSES` at a CommonJS file exporting `{ [url]: css }`, one entry per font in `app/[locale]/layout.tsx`: the URL as `node_modules/next/dist/compiled/@next/font/dist/google/get-google-fonts-url.js` builds it (`https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap`, likewise JP, KR and SC), the css one `@font-face` with `font-weight: 100 900` whose `src` is `url(<absolute path to any local .woff2>)`. Only the webpack build reads it (`next build --webpack`); a `Missing mocked response for URL` error names a URL to add.
+連不到 `fonts.googleapis.com` 的環境（例如 sandbox）會讓 `next/font/google` build 失敗。把 `NEXT_FONT_GOOGLE_MOCKED_RESPONSES` 指向一個 export `{ [url]: css }` 的 CommonJS 檔，`app/[locale]/layout.tsx` 的每個字型一筆：URL 照 `node_modules/next/dist/compiled/@next/font/dist/google/get-google-fonts-url.js` 組出來的寫（`https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@100..900&display=swap`，JP、KR、SC 同理），css 寫一個 `font-weight: 100 900` 的 `@font-face`，`src` 為 `url(<任一本機 .woff2 的絕對路徑>)`。只有 webpack build 會讀它（`next build --webpack`）；出現 `Missing mocked response for URL` 錯誤時，訊息會指出要補的 URL。
 
-`pnpm codegen` rewrites the whole of `types/api.ts` from the running API, so it also removes types the running biru-api branch lacks, e.g. those of a backend PR that is not merged into it. Keep only the hunks your backend change produced and restore the rest before committing.
+`pnpm codegen` 會用執行中的 API 整份重寫 `types/api.ts`，所以執行中的 biru-api 分支沒有的型別也會被刪掉，例如還沒 merge 進該分支的後端 PR 的型別。commit 前只留你的後端改動產生的 hunk，其餘還原。
 
-Branch from `develop` and open every PR against `develop`, which is GitHub's default branch. Never target `master`: a PR merged only into `master` never reaches `develop`, so work branched from `develop` misses it and conflicts when `master` is merged back. Because `develop` is the default branch, `Closes #n` in a PR closes the issue when the PR merges into `develop`; use `Part of #n` for PRs that only finish part of an issue.
+從 `develop` 開分支，所有 PR 都開向 `develop`（GitHub 的預設分支）。絕不開向 `master`：只 merge 進 `master` 的 PR 永遠不會進到 `develop`，之後從 `develop` 開的分支會漏掉它，`master` merge 回來時也會衝突。因為 `develop` 是預設分支，PR 裡的 `Closes #n` 會在 PR merge 進 `develop` 時關閉 issue；只完成 issue 一部分的 PR 用 `Part of #n`。
 
-## Environment Variables
+## 環境變數（Environment Variables）
 
-Copy and configure `.env` with:
+複製並設定 `.env`：
 
-- `NEXT_PUBLIC_NEXT_URL` – Frontend base URL (e.g. `http://localhost:3000`)
-- `NEXT_PUBLIC_NEST_URL` – NestJS backend URL (e.g. `http://localhost:3001`)
-- `NEXT_PUBLIC_MAINTENANCE` – Maintenance mode flag
-- `NEXT_PUBLIC_ADMIN_URL` – biru-admin URL (redirect target after accepting an organization invitation)
-- `NEXT_PUBLIC_IMAGE_HOST` – Host of the image storage's public URLs (biru-api `S3_PUBLIC_URL`, e.g. `<project_ref>.supabase.co`); `next/image` only loads remote images under its `/storage/v1/object/public/` path. Unset allows none
-- `CLIENT_IP_FORWARD_SECRET` – Same value as biru-api's; server-only, never `NEXT_PUBLIC_`. Server-side API calls send it with the visitor's IP (`utils/clientIp.ts`) so the API rate-limits each visitor instead of the Next server. Pass `clientIpHeaders()` on every uncached server-side call; `"use cache"` functions can't read request headers and go without it
-- `NEXT_PUBLIC_SENTRY_DSN` – Sentry project DSN; browser and server errors are reported only when set (`instrumentation.ts`, `instrumentation-client.ts`)
-- `NEXT_PUBLIC_SENTRY_ENVIRONMENT` – Sentry `environment` tag (e.g. `production`, `stage`)
-- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` – Web Push VAPID public key, the same value as biru-api's variable of the same name; unset means the browser is never subscribed to push (`utils/alerts.ts`)
+- `NEXT_PUBLIC_NEXT_URL` – 前台 base URL（例如 `http://localhost:3000`）
+- `NEXT_PUBLIC_NEST_URL` – NestJS 後端 URL（例如 `http://localhost:3001`）
+- `NEXT_PUBLIC_MAINTENANCE` – 維護模式旗標
+- `NEXT_PUBLIC_ADMIN_URL` – biru-admin 的 URL（接受組織邀請後的導向目標）
+- `NEXT_PUBLIC_IMAGE_HOST` – 圖片儲存公開 URL 的 host（biru-api 的 `S3_PUBLIC_URL`，例如 `<project_ref>.supabase.co`）；`next/image` 只載入其 `/storage/v1/object/public/` 路徑下的遠端圖片。未設定則一律不允許
+- `CLIENT_IP_FORWARD_SECRET` – 與 biru-api 相同的值；只在伺服器端用，絕不加 `NEXT_PUBLIC_`。伺服器端的 API 呼叫會連同訪客 IP 一起送出它（`utils/clientIp.ts`），讓 API 依每位訪客限流，而不是依 Next 伺服器。每個沒有快取的伺服器端呼叫都要帶 `clientIpHeaders()`；`"use cache"` 函式讀不到 request header，就不帶
+- `NEXT_PUBLIC_SENTRY_DSN` – Sentry 專案 DSN；有設定時才回報瀏覽器與伺服器錯誤（`instrumentation.ts`、`instrumentation-client.ts`）
+- `NEXT_PUBLIC_SENTRY_ENVIRONMENT` – Sentry 的 `environment` 標籤（例如 `production`、`stage`）
+- `NEXT_PUBLIC_VAPID_PUBLIC_KEY` – Web Push 的 VAPID 公鑰，與 biru-api 同名變數相同；未設定代表瀏覽器永遠不會訂閱推播（`utils/alerts.ts`）
 
-Browser calls go straight to `NEXT_PUBLIC_NEST_URL`: `utils/fetcher.ts` prefixes relative `/api/...` paths and sends `credentials: "include"`, and it is the better-auth client's `baseURL`; a browser request that bypasses both must do the same. The session and site cookies reach the API host and this app's server-side requests only because biru-api scopes them to the shared parent domain (biru-api AGENTS.md, Global Setup). `next.config.ts` rewrites only the order QR URLs, the waitlist QR `/api/organizations/:organizationSlug/waitlist/qr` (printed codes whose relative redirect must land on this app) and `/api/images/*` (the relative image URLs the API returns). A relative better-auth `callbackURL` / `redirectTo` resolves against the API, not this app; pass a relative one only where biru-api's mails turn it into this app's `redirectTo` query (sign-up, verification and password-reset mails).
+瀏覽器的呼叫直接打 `NEXT_PUBLIC_NEST_URL`：`utils/fetcher.ts` 會替相對路徑 `/api/...` 加上前綴並送出 `credentials: "include"`，它也是 better-auth client 的 `baseURL`；繞過這兩者的瀏覽器請求必須做同樣的事。session 與 site cookie 能送到 API host 與本 app 的伺服器端請求，只是因為 biru-api 把它們設在共用的上層網域（biru-api AGENTS.md「Global Setup」）。`next.config.ts` 只 rewrite 點餐 QR URL、候位 QR `/api/organizations/:organizationSlug/waitlist/qr`（印出來的 QR code，其相對導向必須落在本 app）與 `/api/images/*`（API 回傳的相對圖片 URL）。相對的 better-auth `callbackURL`／`redirectTo` 是相對於 API 解析，不是本 app；只有在 biru-api 的信件會把它轉成本 app 的 `redirectTo` query 時（註冊、驗證與重設密碼信）才傳相對路徑。
 
-## Architecture
+## 架構（Architecture）
 
-### Tech Stack
+### 技術棧（Tech Stack）
 
-- **Next.js 16** (App Router) + **React 19** + **TypeScript** (strict mode)
-- **Material UI v9** with Emotion for styling; **Tailwind CSS v4** for utilities
-- **Zustand v5** for global state, **SWR v2** for data fetching
-- **next-intl v4** for i18n (5 locales: `zh-TW` default, `en`, `ja`, `ko`, `zh-CN`)
-- **React Hook Form** + **Zod v4** for forms and validation
-- **better-auth** for authentication
-- **Socket.io** client for real-time updates
-- **pnpm** as the package manager
+- **Next.js 16**（App Router）+ **React 19** + **TypeScript**（strict mode）
+- **Material UI v9** 搭配 Emotion 做樣式；**Tailwind CSS v4** 做 utility
+- **Zustand v5** 做全域狀態，**SWR v2** 做資料抓取
+- **next-intl v4** 做 i18n（5 個語系：預設 `zh-TW`，以及 `en`、`ja`、`ko`、`zh-CN`）
+- **React Hook Form** + **Zod v4** 做表單與驗證
+- **better-auth** 做身分驗證
+- **Socket.io** client 做即時更新
+- **pnpm** 為套件管理工具
 
-### Routing Structure
+### 路由結構（Routing Structure）
 
-All pages live under `app/[locale]/`. Two nested route groups wrap all user-facing pages:
+所有頁面都在 `app/[locale]/` 底下。兩層巢狀 route group 包住所有面向使用者的頁面：
 
-- `(app)` — adds the AppBar, TemporaryDrawer, and global dialogs
-- `(dashboard)` — adds **parallel routes** (`@breadcrumb`, `@subheader`, `@toolbar`) rendered as named slots in the dashboard layout
+- `(app)` — 加上 AppBar、TemporaryDrawer 與全域對話框
+- `(dashboard)` — 加上 **parallel routes**（`@breadcrumb`、`@subheader`、`@toolbar`），在 dashboard layout 中以具名 slot 渲染
 
-The order flow path:
+點餐流程的路徑：
 
 ```
 app/[locale]/(app)/(dashboard)/order/[mode]/[organizationSlug]/(stepper)/
 ```
 
-Route parameter types are defined in `types/routeParams.ts` (`locale`, `mode`, `organizationSlug`). The `(stepper)` directory is a route group for shared layout without URL impact.
+路由參數型別定義在 `types/routeParams.ts`（`locale`、`mode`、`organizationSlug`）。`(stepper)` 目錄是共用 layout 的 route group，不影響 URL。
 
-**When adding a new route inside `(dashboard)`**, `@subheader` and `@toolbar` already have a `[...segments]` catch-all returning `null`, and `@breadcrumb/default.tsx` builds the trail from `hooks/useRoutes.ts` — so a new route needs no slot files unless it actually has a subheader/toolbar, but it must be registered in `hooks/useRoutes.ts` (and in `components/TemporaryDrawer/NestedList` or `hooks/useNavChildren.ts` if it belongs in the drawer).
+**在 `(dashboard)` 裡新增路由時**，`@subheader` 與 `@toolbar` 已經有回傳 `null` 的 `[...segments]` catch-all，`@breadcrumb/default.tsx` 也會從 `hooks/useRoutes.ts` 組出麵包屑，所以新路由除非真的有 subheader／toolbar，否則不需要 slot 檔案，但必須註冊在 `hooks/useRoutes.ts`（若屬於 drawer，也要加進 `components/TemporaryDrawer/NestedList` 或 `hooks/useNavChildren.ts`）。
 
-**Page file convention** used throughout the app:
+整個 app 使用的**頁面檔案慣例**：
 
-- `page.tsx` — thin Next.js page that passes params/data to the content component
-- `index.tsx` — actual page content component
-- `definitions.ts` — Zod schema + inferred form type (only in form pages)
+- `page.tsx` — 精簡的 Next.js page，把 params／資料傳給內容元件
+- `index.tsx` — 實際的頁面內容元件
+- `definitions.ts` — Zod schema 與推導出的表單型別（只在表單頁）
 
-### State Management Pattern
+### 狀態管理模式（State Management Pattern）
 
-Zustand uses a **vanilla store + Context provider** pattern to support SSR:
+Zustand 採用 **vanilla store + Context provider** 模式以支援 SSR：
 
-1. Stores are created in `stores/` as factory functions accepting initial state (e.g. `createCartStore(initialState)`)
-2. Providers in `providers/` create each store instance and expose it via Context
-3. Components access stores via custom hooks (e.g. `useCartStore`, `useAuthStore`)
-4. Cart store uses `persist` middleware to sync with `localStorage`
+1. store 建在 `stores/`，是接受初始狀態的 factory 函式（例如 `createCartStore(initialState)`）
+2. `providers/` 裡的 provider 建立各個 store 實例，並透過 Context 提供
+3. 元件透過自訂 hook 存取 store（例如 `useCartStore`、`useAuthStore`）
+4. 購物車 store 用 `persist` middleware 與 `localStorage` 同步
 
-All providers are composed in `components/AppProviders` — mounted at the root `app/[locale]/layout.tsx`.
+所有 provider 組合在 `components/AppProviders`，掛在根 `app/[locale]/layout.tsx`。
 
-### i18n Pattern
+### i18n 模式（i18n Pattern）
 
-- Locale is the first URL segment: `/{locale}/path`
-- Translation files: `messages/{locale}/*.json`, aggregated in `messages/index.ts`
-- Use `i18n/navigation.ts` (wraps next-intl) for locale-aware `Link`, `useRouter`, `usePathname`
-- Multi-locale data structures use `Record<Locale, string>` for translated content
-- Server-side config: `i18n/request.ts`; locale routing config: `i18n/routing.ts`
+- 語系是 URL 的第一段：`/{locale}/path`
+- 翻譯檔：`messages/{locale}/*.json`，彙整在 `messages/index.ts`
+- 用 `i18n/navigation.ts`（包裝 next-intl）取得會帶語系的 `Link`、`useRouter`、`usePathname`
+- 多語系資料結構用 `Record<Locale, string>` 存翻譯內容
+- 伺服器端設定：`i18n/request.ts`；語系路由設定：`i18n/routing.ts`
 
-### Data Fetching
+### 資料抓取（Data Fetching）
 
-- SWR with a custom `fetcher` in `utils/fetcher.ts` handles both JSON and text responses
-- Pages whose data only changes on navigation use SSR props directly, without SWR; SWR (with server-prefetched `fallback`) is only for pages that stay open waiting for live updates
-- `providers/SWRProvider.tsx` configures global SWR options and error handling via notistack
+- SWR 搭配 `utils/fetcher.ts` 的自訂 `fetcher`，同時處理 JSON 與文字回應
+- 資料只在切換頁面時才會變的頁面，直接用 SSR props，不用 SWR；SWR（搭配伺服器預抓的 `fallback`）只用在會一直開著等即時更新的頁面
+- `providers/SWRProvider.tsx` 設定全域 SWR 選項，並透過 notistack 處理錯誤
 
-### Authentication
+### 身分驗證（Authentication）
 
-- `lib/auth-client.ts` configures the better-auth client and its custom user fields
-- Auth state is initialized server-side via `AuthStoreProvider` with `initialSession`
-- Middleware lives in `proxy.ts` as named exports (`proxy` function + `config`); handles i18n routing, maintenance mode redirect, and auth guard for the member account pages (`/auth/{coupons,orders,points,settings}`)
+- `lib/auth-client.ts` 設定 better-auth client 與自訂的使用者欄位
+- auth 狀態在伺服器端透過 `AuthStoreProvider` 的 `initialSession` 初始化
+- middleware 在 `proxy.ts`，以具名 export（`proxy` 函式 + `config`）提供；處理 i18n 路由、維護模式導向，以及會員帳號頁（`/auth/{coupons,orders,points,settings}`）的登入檢查
 
-### Key Utility Locations
+### 主要工具位置（Key Utility Locations）
 
-| Concern                | Location                                                                                  |
-| ---------------------- | ----------------------------------------------------------------------------------------- |
-| URL/path generation    | `utils/href.ts`, `hooks/useHref.ts`                                                       |
-| Menu data helpers      | `utils/menus.ts` (item lookup, stock calc)                                                |
-| Money formatting       | `hooks/useFormatMoney.ts` (the only formatter — don't add a util or call `Intl` directly) |
-| Order mode + table     | `hooks/useOrderModeLabel.ts` (single combined label)                                      |
-| Order QR session       | `utils/orderQrSession.ts` (server-only, cached per request)                               |
-| Auth utilities         | `utils/auth.ts`                                                                           |
-| Error extraction       | `utils/errors.ts`                                                                         |
-| Country data           | `utils/countries.ts`, `constants/countries.ts`                                            |
-| Client-only UI toggles | `utils/useSsr.ts` (theme switcher only — never use it to blank out content for hydration) |
-| Backend API types      | `types/api.ts` (auto-generated by openapi-typescript — do not edit)                       |
+| 用途                     | 位置                                                                           |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| URL／路徑產生            | `utils/href.ts`、`hooks/useHref.ts`                                            |
+| 菜單資料 helper          | `utils/menus.ts`（品項查找、庫存計算）                                         |
+| 金額格式化               | `hooks/useFormatMoney.ts`（唯一的格式化工具，不要另加 util 或直接呼叫 `Intl`） |
+| 點餐模式 + 桌號          | `hooks/useOrderModeLabel.ts`（單一合併標籤）                                   |
+| 點餐 QR session          | `utils/orderQrSession.ts`（只在伺服器端，每個 request 快取）                   |
+| Auth 工具                | `utils/auth.ts`                                                                |
+| 錯誤擷取                 | `utils/errors.ts`                                                              |
+| 國家資料                 | `utils/countries.ts`、`constants/countries.ts`                                 |
+| 只在 client 端的 UI 切換 | `utils/useSsr.ts`（只給主題切換用，絕不用它在 hydration 時把內容清空）         |
+| 後端 API 型別            | `types/api.ts`（由 openapi-typescript 自動產生，不要編輯）                     |
 
-### Component Conventions
+### 元件慣例（Component Conventions）
 
-- Each component lives in its own directory with an `index.tsx` entry
-- MUI components are used for all UI elements, styled with `styled()` (no `sx`); Tailwind is only used in the root layout
-- Forms follow the pattern: Zod schema → React Hook Form (`register`, or `useWatch` + `setValue` + `formState.errors` for non-native inputs; avoid `Controller`) → MUI input, with `components/TextMaskCustom` (react-imask) for formatted fields. Async work that only feeds a form (e.g. creating a parent record first) goes in its submit handler, covered by `isSubmitting` or the dialog's `confirmLoading` — no separate loading state. The dialog's confirm button is never disabled: invalid or incomplete input is rejected on submit by the schema and shown as field errors. New-password fields show their errors through the rule list of `hooks/usePasswordValidation.ts`, not the schema's message, so a rule added to their schema must be added there too.
-- Light/dark switching: `ThemeSwitcher` crossfades the whole page with `document.startViewTransition` + `flushSync`, `ThemeProvider` keeps `disableTransitionOnChange`, and `theme.ts` turns CSS transitions off while a view transition runs. Don't add `color` / `background-color` / `border-color` / `fill` / `box-shadow` transitions for the theme switch; transitions are only for interaction states (hover, open, expanded, active step). React's `<ViewTransition>` doesn't replace this: it cancels the root crossfade, so the body and portalled Dialogs, Menus and Drawers would switch instantly. If Next.js `viewTransition` or React `<ViewTransition>` is adopted for navigation, move the theme crossfade under React, since two view transitions abort each other.
-- Phone validation uses `libphonenumber-js`
-- Snackbar/toast notifications use `notistack` (`useSnackbar`); SWR errors are already toasted globally by `SWRProvider`
-- Auth and account UI built on better-auth (sign-in, sign-up, two-factor, account and security settings) takes its flow and layout from better-auth's own demo (`demo/nextjs` in the better-auth repo) and, where the demo has none, from Better Auth UI: which card a feature lives in, its steps and its states. Build it with this repo's MUI components and the conventions above (`FormCard`, the dialog store, React Hook Form + Zod, next-intl); never install Better Auth UI or copy its markup or localization.
+- 每個元件放在自己的目錄，入口為 `index.tsx`
+- 所有 UI 元素都用 MUI 元件，以 `styled()` 設定樣式（不用 `sx`）；Tailwind 只用在根 layout
+- 表單照這個模式：Zod schema → React Hook Form（用 `register`，非原生 input 則用 `useWatch` + `setValue` + `formState.errors`；避免 `Controller`）→ MUI input，格式化欄位用 `components/TextMaskCustom`（react-imask）。只為表單服務的非同步工作（例如先建立上層資料）放在它的 submit handler，由 `isSubmitting` 或對話框的 `confirmLoading` 涵蓋，不另加 loading state。對話框的確認按鈕永遠不 disable：無效或不完整的輸入在送出時由 schema 擋下，顯示為欄位錯誤。新密碼欄位透過 `hooks/usePasswordValidation.ts` 的規則清單顯示錯誤，而不是 schema 的訊息，所以在它們的 schema 加規則時也要加到那裡。
+- 淺色／深色切換：`ThemeSwitcher` 用 `document.startViewTransition` + `flushSync` 讓整頁淡入淡出，`ThemeProvider` 保留 `disableTransitionOnChange`，`theme.ts` 在 view transition 進行時關掉 CSS transition。不要為主題切換加 `color`／`background-color`／`border-color`／`fill`／`box-shadow` 的 transition；transition 只用在互動狀態（hover、open、expanded、active step）。React 的 `<ViewTransition>` 取代不了這個做法：它會取消根層的淡入淡出，讓 body 與 portal 出去的 Dialog、Menu、Drawer 瞬間切換。若導覽改用 Next.js `viewTransition` 或 React `<ViewTransition>`，要把主題淡入淡出移到 React 底下，因為兩個 view transition 會互相中斷。
+- 電話驗證用 `libphonenumber-js`
+- Snackbar／toast 通知用 `notistack`（`useSnackbar`）；SWR 錯誤已由 `SWRProvider` 全域 toast
+- 建立在 better-auth 上的身分驗證與帳號 UI（登入、註冊、雙重驗證、帳號與安全設定），流程與版面取自 better-auth 自己的 demo（better-auth repo 的 `demo/nextjs`），demo 沒有的再參考 Better Auth UI：功能放在哪張卡片、有哪些步驟與狀態。用本 repo 的 MUI 元件與上述慣例實作（`FormCard`、dialog store、React Hook Form + Zod、next-intl）；絕不安裝 Better Auth UI，也不複製它的 markup 或翻譯。
 
-## biru-admin Sync
+## biru-admin 同步（biru-admin Sync）
 
-Mirror repo (admin panel): `/Users/yuanshuohsu/Desktop/biru-admin`. After completing any file changes, always sync to biru-admin before considering the task done.
+鏡像 repo（後台）：`/Users/yuanshuohsu/Desktop/biru-admin`。完成任何檔案改動後，一定要同步到 biru-admin 才算完成。
 
-Only files both repos use are mirrored: a file only one repo uses is not created in the other, and a changed file with no copy in the mirror needs no sync unless the task makes the mirror use it.
+只有兩個 repo 都用到的檔案才鏡像：只有一邊用到的檔案不在另一邊建立；改到的檔案在鏡像沒有對應副本時不用同步，除非這次任務讓鏡像也要用到它。
 
-For each changed file, read both versions and decide:
+每個改到的檔案，讀兩邊的版本後決定：
 
-1. **Superset files** (admin has extra content — transplant only the changed hunks, never overwrite the whole file):
-   `messages/*/common.json`, `types/api.ts`
+1. **Superset 檔案**（後台有額外內容，只移植改到的 hunk，絕不覆寫整個檔案）：
+   `messages/*/common.json`、`types/api.ts`
 
-2. **All other mirrored files** — if biru-admin has the same path, check whether its content differs only because it's an older version of biru (safe to `cp`) or because it has intentional admin-specific differences (transplant hunks only).
+2. **其他所有鏡像檔案** — 若 biru-admin 有同路徑的檔案，判斷內容不同是因為它只是 biru 的舊版（可以直接 `cp`），還是有刻意的後台差異（只移植 hunk）。
 
-3. **Same path, different file** — `utils/menus.ts`, `utils/orders.ts`, `utils/banners.ts`, `utils/openingHours.ts`, `utils/storePhotos.ts`, `types/banners.ts`, `types/storePhotos.ts` are separate admin implementations; merge only the relevant change by hand, never `cp`.
+3. **同路徑、不同檔案** — `utils/menus.ts`、`utils/orders.ts`、`utils/banners.ts`、`utils/openingHours.ts`、`utils/storePhotos.ts`、`types/banners.ts`、`types/storePhotos.ts` 是後台各自的實作；只手動合併相關的改動，絕不 `cp`。
 
-4. **Renamed or deleted files** — apply the same operation in biru-admin (rename directory, delete file).
+4. **改名或刪除的檔案** — 在 biru-admin 做同樣的操作（改目錄名、刪檔案）。
 
-When unsure whether a difference is intentional, read the biru-admin file first before deciding.
+不確定差異是否刻意時，先讀 biru-admin 的檔案再決定。
 
-## Code Comments
+## 程式碼註解（Code Comments）
 
-**Default: no comment.** Write one only when its absence would cause a mistake — it states a consequence or precondition that lives outside the code:
+**預設：不寫註解。** 只有在少了它會導致改錯時才寫，內容是程式碼本身表達不出來的後果或前提：
 
-- `// 店家角色尚未選到店家時不打 API，否則會落到平台管理員專用端點` (would 403)
-- `// palette 色位名不能含小寫 "mode"，否則 MUI 產不出 CSS 變數` (framework trap)
+- `// 店家角色尚未選到店家時不打 API，否則會落到平台管理員專用端點`（會 403）
+- `// palette 色位名不能含小寫 "mode"，否則 MUI 產不出 CSS 變數`（框架陷阱）
 
-The test: delete it. Would a competent editor now make a wrong change? If the honest answer is only "會比較難懂", leave it deleted.
+檢驗方式：把它刪掉，一個稱職的人會不會因此改錯？如果老實的答案只是「會比較難懂」，就刪掉。
 
-**Exception: official documentation links are wanted.** When code follows a specific page of the official docs — a library (Next.js, MUI, better-auth, Drizzle, NestJS, …), an external API spec (ECPay, data.gov.tw, …) or a regulation (law.moj.gov.tw) — put a `// https://…` link to that page above the code, or at the top of the file when the whole file follows it, pointing at the installed version when the site versions its docs. Keep existing links (unless the user removed that link); when the code no longer follows the linked page, fix or delete the link in the same change. Links don't count toward the one-or-two-comments signal below.
+**例外：官方文件連結是要的。** 程式碼照著官方文件某一頁寫時，不論是套件（Next.js、MUI、better-auth、Drizzle、NestJS…）、外部 API 規格（ECPay、data.gov.tw…）或法規（law.moj.gov.tw），在程式碼上方放該頁的 `// https://…` 連結；整個檔案都照它寫時放在檔案開頭。網站有分版本時指向已安裝的版本。既有連結要保留（除非開發者刪掉了）；程式碼不再照該頁寫時，在同一個改動修正或刪除連結。連結不計入下面「一兩個註解」的訊號。
 
-Never write:
+絕不寫：
 
-- a restatement of the next line, or of a field/constant name (`// 取得目前語系` on `useLocale()`)
-- the reasoning from our conversation, or a defence of your own tradeoff
-- JSDoc on a private helper
-- a description of what the code currently does — it becomes a lie after the next change
+- 重述下一行，或重述欄位、常數名稱（在 `useLocale()` 上寫 `// 取得目前語系`）
+- 我們對話中的推理，或為自己的取捨辯護
+- private helper 的 JSDoc
+- 描述程式碼目前在做什麼：下次改動後就會變成謊言
 
-**Adding more than one or two comments to a change is itself the signal** that the code isn't saying enough. Fix the naming or the structure instead; do not narrate.
+**一個改動加了超過一兩個註解，本身就是訊號**，代表程式碼表達得不夠。改命名或結構，不要旁白。
 
-**Never reintroduce a removed comment.** Even when a comment would pass the test above, if the user has said they do not want one there, or the comment was deleted before, a later change must not add it back — the user's decision outranks this rule. If you have something to say about it, say it in your reply, not in the code.
+**絕不加回被刪掉的註解。** 即使某個註解通過上面的檢驗，只要開發者說過那裡不要註解，或那個註解之前被刪過，之後的改動就不能把它加回來；開發者的決定優先於本規則。有話要說就寫在回覆裡，不要寫在程式碼裡。
 
-When a change makes an existing comment false, fix or delete it in the same change — a stale comment is worse than none. Don't hardcode identifiers into comments; they rot into misinformation after a rename.
+改動讓既有註解變得不正確時，在同一個改動修正或刪除它；過時的註解比沒有更糟。不要把識別字寫死在註解裡，改名後就會變成錯誤資訊。
 
-## Implementation Approach
+## 實作方式（Implementation Approach）
 
-**Default: act, don't ask.** Ask only when the answer changes the data model, an API contract, or requires an irreversible or outward-facing action (shared-DB migration, deploy, push). For every other ambiguity, decide and proceed, then list the assumptions you made in the reply so the user can correct them afterward. This overrides "If uncertain, ask" in the vendored guidelines below.
+**預設：直接做，不要問（act, don't ask）。** 只有答案會改變資料模型、API 契約，或需要不可逆或對外的動作（共用資料庫的 migration、部署、push）時才問。其他不明確之處，自己決定並繼續，然後在回覆列出所做的假設，讓開發者事後修正。這一條優先於下方引用準則的「If uncertain, ask」。
 
-Decide in this order:
+依以下順序決定：
 
-1. **Official docs for the installed version** — check the version in `package.json` / `node_modules` first, never rely on memory. Next.js (`node_modules/next/dist/docs/`, next-devtools MCP), MUI (mui-mcp), better-auth, Drizzle, NestJS, next-intl, SWR, Zod, etc. Use the documented pattern over a workaround; never use APIs the docs mark deprecated.
-2. **The existing pattern in this repo** — when the docs leave room, match how the codebase already does it. Before copying it, check it doesn't have the defect you are fixing; if it does, don't copy that part, and name the copy in the PR so it gets fixed too.
-3. **The most mainstream option** — when neither settles it.
+1. **已安裝版本的官方文件**：先查 `package.json`／`node_modules` 的版本，絕不憑記憶。Next.js（`node_modules/next/dist/docs/`、next-devtools MCP）、MUI（mui-mcp）、better-auth、Drizzle、NestJS、next-intl、SWR、Zod 等。用文件示範的寫法，不用繞路；絕不用文件標為 deprecated 的 API。
+2. **本 repo 的既有模式**：文件沒定死時，照 codebase 現有的做法。照抄前先確認它沒有你正在修的缺陷；有的話那部分不要抄，並在 PR 點名那份複本，讓它也被修掉。
+3. **最主流的選項**：前兩者都決定不了時。
 
 ## Behavioral Guidelines
 
