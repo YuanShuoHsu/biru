@@ -1,5 +1,6 @@
 // https://mui.com/material-ui/guides/localization/#Locales.tsx
 // https://mui.com/x/react-date-pickers/adapters-locale/#LocalizationDayjs.tsx
+// https://mui.com/material-ui/customization/dark-mode/#disable-transitions
 
 "use client";
 
@@ -19,8 +20,6 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import * as pickersLocales from "@mui/x-date-pickers/locales";
-
-import ColorSchemeTransitionGuard from "@/components/ColorSchemeTransitionGuard";
 
 import theme from "@/theme";
 
@@ -51,8 +50,7 @@ const LocaleProvider = ({ children }: LocaleProviderProps) => {
   );
 
   return (
-    <ThemeProvider theme={themeWithLocale}>
-      <ColorSchemeTransitionGuard />
+    <ThemeProvider disableTransitionOnChange theme={themeWithLocale}>
       <LocalizationProvider
         adapterLocale={locale.toLowerCase()}
         dateAdapter={AdapterDayjs}
