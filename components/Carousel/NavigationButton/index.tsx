@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { Button, type SvgIconProps } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -37,14 +39,21 @@ interface NavigationButtonProps {
   icon: React.ComponentType<SvgIconProps>;
 }
 
-const NavigationButton = ({ direction, icon: Icon }: NavigationButtonProps) => (
-  <StyledButton
-    className={`custom-swiper-button-${direction}`}
-    direction={direction}
-    variant="contained"
-  >
-    <Icon />
-  </StyledButton>
-);
+const NavigationButton = ({ direction, icon: Icon }: NavigationButtonProps) => {
+  const tCommon = useTranslations("common");
+
+  return (
+    <StyledButton
+      aria-label={tCommon(
+        direction === "next" ? "carousel.next" : "carousel.previous",
+      )}
+      className={`custom-swiper-button-${direction}`}
+      direction={direction}
+      variant="contained"
+    >
+      <Icon />
+    </StyledButton>
+  );
+};
 
 export default NavigationButton;
