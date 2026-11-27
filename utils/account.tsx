@@ -19,6 +19,9 @@ export const useAccountNavItems = (): NavItem[] => {
   const logoutItem = useLogoutNavItem();
 
   return [
+    navItem("/auth/orders"),
+    navItem("/auth/coupons"),
+    navItem("/auth/points"),
     navItem("/auth/settings"),
     logoutItem,
     { slot: DividerSlot },
