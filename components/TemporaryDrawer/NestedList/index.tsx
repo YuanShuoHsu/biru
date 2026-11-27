@@ -1,9 +1,11 @@
 // https://mui.com/material-ui/react-list/#NestedList.tsx
+// https://mui.com/material-ui/react-list/#sticky-subheader
 
 "use client";
 
 import { useTranslations } from "next-intl";
 import { useParams } from "next/navigation";
+import { Fragment } from "react";
 
 import DividerSlot from "./DividerSlot";
 import OrderModeMenuItem from "./OrderModeMenuItem";
@@ -16,16 +18,22 @@ import { useRoutes } from "@/hooks/useRoutes";
 
 import { Home } from "@mui/icons-material";
 import { List, ListSubheader, Toolbar } from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-import type { NavItem } from "@/types/navItem";
+import type { NavGroup, NavItem } from "@/types/navItem";
 import type { RouteParams } from "@/types/routeParams";
 
-const useNavItems = (): NavItem[] => {
+const StyledGroupLabel = styled(ListSubheader)({
+  backgroundImage: "var(--Paper-overlay)",
+});
+
+const useNavGroups = (): NavGroup[] => {
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
   const navChildren = useNavChildren();
   const navItem = useRoutes();
 
+  const tAppBar = useTranslations("appBar");
   const tHome = useTranslations("home");
 
   const isInStoreOrder =
@@ -40,27 +48,36 @@ const useNavItems = (): NavItem[] => {
   ];
 
   return [
-    { icon: Home, label: tHome("label"), to: "/" },
     {
-      ...navItem("/order"),
-      children: orderChildren,
+      items: [
+        { icon: Home, label: tHome("label"), to: "/" },
+        {
+          ...navItem("/order"),
+          children: orderChildren,
+        },
+        navItem("/order-board"),
+        navItem("/waitlist-board"),
+      ],
+      label: tAppBar("navGroup.ordering"),
     },
-    navItem("/order-board"),
-    navItem("/waitlist-board"),
-    { slot: DividerSlot },
     {
-      ...navItem("/auth"),
-      children: navChildren["/auth"],
-    },
-    {
-      ...navItem("/company"),
-      children: navChildren["/company"],
+      items: [
+        {
+          ...navItem("/auth"),
+          children: navChildren["/auth"],
+        },
+        {
+          ...navItem("/company"),
+          children: navChildren["/company"],
+        },
+      ],
+      label: tAppBar("navGroup.more"),
     },
   ];
 };
 
 const NestedList = () => {
-  const navItems = useNavItems();
+  const navGroups = useNavGroups();
 
   return (
     <List
@@ -71,8 +88,14 @@ const NestedList = () => {
         </ListSubheader>
       }
     >
-      {navItems.map((item, index) => (
-        <SelectedListItem item={item} key={item.path || index} />
+      {navGroups.map(({ items, label }, groupIndex) => (
+        <Fragment key={label || items[0]?.path || groupIndex}>
+          {groupIndex > 0 && <DividerSlot level={0} />}
+          {label && <StyledGroupLabel disableSticky>{label}</StyledGroupLabel>}
+          {items.map((item, index) => (
+            <SelectedListItem item={item} key={item.path || index} />
+          ))}
+        </Fragment>
       ))}
     </List>
   );

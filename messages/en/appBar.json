@@ -1,6 +1,10 @@
 {
   "cart": "Cart",
   "darkMode": "Dark mode",
+  "navGroup": {
+    "more": "More",
+    "ordering": "Ordering"
+  },
   "languageSwitcher": "Change Language",
   "lightMode": "Light mode",
   "switchMode": "Switch mode",

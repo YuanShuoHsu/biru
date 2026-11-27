@@ -1,6 +1,10 @@
 {
   "cart": "購物車",
   "darkMode": "暗色模式",
+  "navGroup": {
+    "more": "更多",
+    "ordering": "點餐服務"
+  },
   "languageSwitcher": "切換語言",
   "lightMode": "亮色模式",
   "switchMode": "切換模式",
