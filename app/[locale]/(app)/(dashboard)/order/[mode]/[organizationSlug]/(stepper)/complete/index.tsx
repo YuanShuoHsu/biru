@@ -8,6 +8,8 @@ import useSWR from "swr";
 
 import { emitMenuWithAck, menuSocket } from "@/app/socket";
 
+import Review from "./Review";
+
 import { StyledCardContent } from "@/components/FormCard";
 import LocationDetails from "@/components/LocationDetails";
 
@@ -46,7 +48,7 @@ import {
 import { type CSSObject, styled } from "@mui/material/styles";
 
 import type { CheckoutEcpayDto, CheckoutEcpayResponse } from "@/types/ecpay";
-import type { OrderReceiptResponse } from "@/types/orders";
+import type { OrderReceiptResponse, OrderReviewResponse } from "@/types/orders";
 import type { OrganizationResponse } from "@/types/organizations";
 
 import { ecpayLanguages, submitEcpayCheckout } from "@/utils/ecpay";
@@ -141,11 +143,13 @@ const InfoRow = ({
 interface OrderModeOrganizationSlugCompleteProps {
   order: OrderReceiptResponse | null;
   organization: OrganizationResponse;
+  review: OrderReviewResponse | null | undefined;
 }
 
 const OrderModeOrganizationSlugComplete = ({
   order: initialOrder,
   organization,
+  review,
 }: OrderModeOrganizationSlugCompleteProps) => {
   const [isPaying, setIsPaying] = useState(false);
 
@@ -443,6 +447,14 @@ const OrderModeOrganizationSlugComplete = ({
               )}
             </StyledCardContent>
           </Card>
+          {order.orderStatus === "OrderDelivered" && (
+            <Review
+              accessToken={accessToken}
+              initialReview={review}
+              order={order}
+              organizationSlug={organizationSlug}
+            />
+          )}
           <Card variant="outlined">
             <StyledCardContent>
               <BoldTypography color="textSecondary" variant="subtitle2">

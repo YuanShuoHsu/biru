@@ -104,6 +104,27 @@
     },
     "pickupLocation": "픽업 장소",
     "pickupNumber": "픽업 번호",
+    "review": {
+      "comment": {
+        "label": "댓글",
+        "maxLength": "댓글은 {max}자를 넘을 수 없습니다.",
+        "placeholder": "매장에 전하고 싶은 말"
+      },
+      "dislike": "별로예요",
+      "editableUntil": "{date}까지 수정할 수 있습니다",
+      "like": "좋아요",
+      "locked": "수정 가능 기간이 지났습니다",
+      "rating": {
+        "required": "평점을 선택해 주세요"
+      },
+      "reply": "매장 답글",
+      "sent": "의견을 보냈습니다. 감사합니다!",
+      "submit": "의견 보내기",
+      "subtitle": "평점과 댓글은 매장만 볼 수 있으며 더 나은 서비스를 위해 활용됩니다",
+      "title": "의견을 남겨 주세요",
+      "update": "의견 수정",
+      "updated": "의견을 수정했습니다"
+    },
     "success": {
       "subtitle": "주문이 접수되어 준비 중입니다",
       "title": "결제 완료"

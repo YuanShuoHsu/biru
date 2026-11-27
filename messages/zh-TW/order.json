@@ -104,6 +104,27 @@
     },
     "pickupLocation": "取餐地點",
     "pickupNumber": "取餐號碼",
+    "review": {
+      "comment": {
+        "label": "留言",
+        "maxLength": "留言不能超過 {max} 個字元。",
+        "placeholder": "想對門市說的話"
+      },
+      "dislike": "不喜歡",
+      "editableUntil": "可於 {date} 前修改",
+      "like": "喜歡",
+      "locked": "回饋已超過可修改期限",
+      "rating": {
+        "required": "請選擇評分"
+      },
+      "reply": "門市回覆",
+      "sent": "已送出回饋，謝謝您！",
+      "submit": "送出回饋",
+      "subtitle": "您的評分與留言只有門市看得到，幫助我們做得更好",
+      "title": "給我們回饋",
+      "update": "更新回饋",
+      "updated": "已更新回饋"
+    },
     "success": {
       "subtitle": "已收到您的訂單，餐點準備中",
       "title": "付款成功"

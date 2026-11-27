@@ -104,6 +104,27 @@
     },
     "pickupLocation": "Pickup location",
     "pickupNumber": "Pickup number",
+    "review": {
+      "comment": {
+        "label": "Comment",
+        "maxLength": "Comment must be {max} characters or fewer.",
+        "placeholder": "Anything you'd like to tell the store"
+      },
+      "dislike": "Dislike",
+      "editableUntil": "You can edit this until {date}",
+      "like": "Like",
+      "locked": "This feedback can no longer be edited",
+      "rating": {
+        "required": "Please choose a rating"
+      },
+      "reply": "Reply from the store",
+      "sent": "Feedback sent. Thank you!",
+      "submit": "Send feedback",
+      "subtitle": "Only the store can see your rating and comments. They help us do better.",
+      "title": "Give us feedback",
+      "update": "Update feedback",
+      "updated": "Feedback updated"
+    },
     "success": {
       "subtitle": "We have received your order and are preparing it",
       "title": "Payment successful"
