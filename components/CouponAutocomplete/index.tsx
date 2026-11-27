@@ -137,6 +137,7 @@ const CouponAutocomplete = ({
 
   const { organizationSlug } = useParams();
 
+  const tCommon = useTranslations("common");
   const tOrder = useTranslations("order");
 
   const {
@@ -283,7 +284,8 @@ const CouponAutocomplete = ({
           { inputValue },
           ownerState,
         ) => {
-          const { discountType, discountValue, minSubtotal } = option;
+          const { discountType, discountValue, minSubtotal, validThrough } =
+            option;
           const optionLabelText = ownerState.getOptionLabel(option);
           const searchValue = inputValue === couponCode ? "" : inputValue;
           const matches = match(optionLabelText, searchValue, {
@@ -312,12 +314,18 @@ const CouponAutocomplete = ({
                     ))}
                   </Typography>
                 }
-                secondary={
+                secondary={[
                   Number(minSubtotal) > 0 &&
-                  tOrder("checkout.coupon.minSubtotal", {
-                    amount: formatMoney(Number(minSubtotal), cartCurrency),
-                  })
-                }
+                    tOrder("checkout.coupon.minSubtotal", {
+                      amount: formatMoney(Number(minSubtotal), cartCurrency),
+                    }),
+                  validThrough &&
+                    tOrder("checkout.coupon.validUntil", {
+                      date: format.dateTime(new Date(validThrough), "short"),
+                    }),
+                ]
+                  .filter(Boolean)
+                  .join(tCommon("middleDot"))}
               />
               <Typography color="primary" variant="subtitle2">
                 {discountType === "percentage"

@@ -30,6 +30,7 @@
       "label": "優惠碼",
       "minSubtotal": "滿 {amount} 可用",
       "placeholder": "請輸入您的優惠碼",
+      "validUntil": "有效期限至 {date}",
       "wallet": "我的優惠券"
     },
     "customer": {
