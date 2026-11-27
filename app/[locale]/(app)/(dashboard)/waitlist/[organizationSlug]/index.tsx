@@ -46,7 +46,7 @@ import type {
   WaitlistTicketResponse,
 } from "@/types/waitlist";
 
-import { enableAlerts } from "@/utils/alerts";
+import { enableAlerts, subscribePush } from "@/utils/alerts";
 import { formatFullName } from "@/utils/auth";
 import { getPhoneDefaults, getPhoneFormatting } from "@/utils/countries";
 import { getErrorMessage } from "@/utils/errors";
@@ -199,6 +199,11 @@ const Waitlist = ({
           method: "POST",
         },
       );
+
+      subscribePush({
+        organizationSlug: organization.slug,
+        waitlistTicketId: ticket.id,
+      });
 
       // cacheComponents 會保留離開的頁面狀態，回到此頁時不能沿用上一位的資料與冪等鍵
       reset();
