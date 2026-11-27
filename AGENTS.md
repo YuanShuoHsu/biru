@@ -27,7 +27,7 @@ pnpm codegen      # 從 NestJS OpenAPI spec 重新產生 types/api.ts（需要 b
 
 目前沒有設定測試。
 
-開 PR 前依序跑 `pnpm install --frozen-lockfile`、`pnpm format`、`pnpm lint`、`npx tsc --noEmit`、`pnpm build`。`tsc` 前先 `rm -rf .next/types .next/dev` 再 `npx next typegen`：別的分支或 dev server 留下的過期型別會讓 `tsc` 誤報。
+開 PR 前依序跑 `pnpm install --frozen-lockfile`、`pnpm format`、`pnpm lint`、`npx tsc --noEmit`、`pnpm build`。`tsc` 前先 `rm -rf .next/types .next/dev` 再 `npx next typegen`：別的分支或 dev server 留下的過期型別會讓 `tsc` 誤報。`pnpm format` 會格式化整個 repo，develop 上格式不符的檔案也會被改到：commit 前用 `git status` 確認，PR 範圍以外的檔案用 `git checkout -- <檔案>` 還原。
 
 pre-commit hook（Husky + lint-staged）會對 staged 的檔案跑 `pnpm format`、`pnpm lint` 與 `prettier --write`。不要用 `--no-verify` 跳過。
 
@@ -168,7 +168,7 @@ Zustand 採用 **vanilla store + Context provider** 模式以支援 SSR：
 
 ## 程式碼註解（Code Comments）
 
-**預設：不寫註解。** 只有在少了它會導致改錯時才寫，內容是程式碼本身表達不出來的後果或前提：
+**預設：不寫註解。** 不為了解釋而加註解；新程式碼除非被要求，否則零註解。只有在少了它會導致改錯時才寫，內容是程式碼本身表達不出來的後果或前提：
 
 - `// 店家角色尚未選到店家時不打 API，否則會落到平台管理員專用端點`（會 403）
 - `// palette 色位名不能含小寫 "mode"，否則 MUI 產不出 CSS 變數`（框架陷阱）
