@@ -1,6 +1,10 @@
 {
   "cart": "カート",
   "darkMode": "ダークモード",
+  "navGroup": {
+    "more": "その他",
+    "ordering": "注文サービス"
+  },
   "languageSwitcher": "言語を変更",
   "lightMode": "ライトモード",
   "switchMode": "モード切替",
