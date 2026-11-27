@@ -40,6 +40,7 @@ import {
   QrCodeScanner,
   ReceiptLong,
   Restaurant,
+  Security,
   Settings,
   ShoppingCart,
   Stars,
@@ -245,6 +246,11 @@ const routes: Route[] = [
         label: "auth.signUp.label",
         query: ["redirectTo"],
         segment: "sign-up",
+      },
+      {
+        icon: Security,
+        label: "auth.twoFactor.label",
+        segment: "two-factor",
       },
       {
         icon: Email,

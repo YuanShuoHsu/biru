@@ -1,4 +1,7 @@
 {
+  "backupCode": {
+    "required": "Backup code is required."
+  },
   "bio": {
     "maxLength": "Bio must not exceed 160 characters."
   },
@@ -119,5 +122,8 @@
   },
   "sweetnessLevel": {
     "notSelected": "Please select your sweetness."
+  },
+  "twoFactorCode": {
+    "invalid": "Enter the 6-digit code."
   }
 }

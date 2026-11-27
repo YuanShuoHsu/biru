@@ -1,4 +1,7 @@
 {
+  "backupCode": {
+    "required": "バックアップコードは必須です。"
+  },
   "bio": {
     "maxLength": "自己紹介は160文字以内で入力してください。"
   },
@@ -119,5 +122,8 @@
   },
   "sweetnessLevel": {
     "notSelected": "甘さを選択してください。"
+  },
+  "twoFactorCode": {
+    "invalid": "6桁の認証コードを入力してください。"
   }
 }
