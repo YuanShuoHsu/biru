@@ -2,7 +2,7 @@
 
 import { useFormatter, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import useSWR from "swr";
 
@@ -110,13 +110,16 @@ const Review = ({
 
   const reviewUrl = `/api/organizations/${organizationSlug}/orders/${order.id}/review${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`;
 
-  const { data: review, mutate } = useSWR<OrderReviewResponse | null>(
-    reviewUrl,
-    {
-      fallbackData: initialReview,
-      revalidateOnMount: initialReview === undefined,
-    },
-  );
+  const titleId = useId();
+
+  const {
+    data: review,
+    isLoading,
+    mutate,
+  } = useSWR<OrderReviewResponse | null>(reviewUrl, {
+    fallbackData: initialReview,
+    revalidateOnMount: initialReview === undefined,
+  });
 
   const {
     control,
@@ -184,11 +187,17 @@ const Review = ({
   const formatDate = (value: string) =>
     format.dateTime(new Date(value), "short", { timeZone: STORE_TIMEZONE });
 
+  if (isLoading) return null;
+
   return (
-    <FormCard onSubmit={handleSubmit(handleFormSubmit)}>
+    <FormCard onSubmit={handleSubmit(handleFormSubmit)} variant="outlined">
       <StyledCardContent>
         <Stack>
-          <BoldTypography color="textSecondary" variant="subtitle2">
+          <BoldTypography
+            color="textSecondary"
+            id={titleId}
+            variant="subtitle2"
+          >
             {tOrder("complete.review.title")}
           </BoldTypography>
           <Typography color="textSecondary" variant="caption">
@@ -201,7 +210,10 @@ const Review = ({
                 : tOrder("complete.review.subtitle")}
           </Typography>
         </Stack>
-        <RatingStack>
+        <RatingStack
+          aria-labelledby={titleId}
+          role={isLocked ? undefined : "radiogroup"}
+        >
           <Rating
             name="rating"
             onChange={(_, value) =>
@@ -221,6 +233,7 @@ const Review = ({
               {getOrderItemName(item)}
             </ItemNameTypography>
             <ToggleButtonGroup
+              aria-label={getOrderItemName(item)}
               disabled={isLocked}
               exclusive
               onChange={(_, value: boolean | null) =>

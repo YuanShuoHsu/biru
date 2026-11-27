@@ -50,18 +50,29 @@ const OrderModeOrganizationSlugCompletePage = async ({
     ? `?${new URLSearchParams({ accessToken })}`
     : "";
 
-  const [{ data: organization, error }, { data: order, error: orderError }] =
-    await Promise.all([
-      settle(getOrganization(organizationSlug)),
-      orderId
-        ? settle(
-            fetcher<OrderReceiptResponse>(
-              `/api/organizations/${organizationSlug}/orders/${orderId}${orderQuery}`,
-              fetchInit,
-            ),
-          )
-        : { data: null, error: undefined },
-    ]);
+  const [
+    { data: organization, error },
+    { data: order, error: orderError },
+    { data: review },
+  ] = await Promise.all([
+    settle(getOrganization(organizationSlug)),
+    orderId
+      ? settle(
+          fetcher<OrderReceiptResponse>(
+            `/api/organizations/${organizationSlug}/orders/${orderId}${orderQuery}`,
+            fetchInit,
+          ),
+        )
+      : { data: null, error: undefined },
+    orderId
+      ? settle(
+          fetcher<OrderReviewResponse | null>(
+            `/api/organizations/${organizationSlug}/orders/${orderId}/review${orderQuery}`,
+            fetchInit,
+          ),
+        )
+      : { data: undefined },
+  ]);
   if (error?.status === 404) notFound();
   if (error) return <ErrorAlert />;
 
@@ -75,21 +86,11 @@ const OrderModeOrganizationSlugCompletePage = async ({
     query,
   );
 
-  const { data: review } =
-    order?.orderStatus === "OrderDelivered"
-      ? await settle(
-          fetcher<OrderReviewResponse | null>(
-            `/api/organizations/${organizationSlug}/orders/${order.id}/review${orderQuery}`,
-            fetchInit,
-          ),
-        )
-      : { data: undefined };
-
   return (
     <OrderModeOrganizationSlugComplete
       order={order ?? null}
       organization={organization}
-      review={review}
+      review={order?.orderStatus === "OrderDelivered" ? review : undefined}
     />
   );
 };
