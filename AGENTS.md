@@ -5,7 +5,7 @@
 ## 語言（Language）
 
 - 與開發者的對話、PR 描述、issue 與留言用繁體中文。
-- commit 與 PR 標題用英文 Conventional Commits、小寫開頭。
+- commit 與 PR 標題用英文 Conventional Commits、小寫開頭，用詞先對照 `git log --format=%s -20`。
 - 程式碼註解用繁體中文；識別字、指令、路徑、套件與 API 名稱維持原文。
 - 本檔的「Behavioral Guidelines」（照抄上游）與 `next dev` 自動產生的 Next.js 區塊維持英文原文，不要翻譯。
 
@@ -26,6 +26,8 @@ pnpm codegen      # 從 NestJS OpenAPI spec 重新產生 types/api.ts（需要 b
 ```
 
 目前沒有設定測試。
+
+開 PR 前依序跑 `pnpm install --frozen-lockfile`、`pnpm format`、`pnpm lint`、`npx tsc --noEmit`、`pnpm build`。`tsc` 前先 `rm -rf .next/types .next/dev` 再 `npx next typegen`：別的分支或 dev server 留下的過期型別會讓 `tsc` 誤報。`pnpm format` 會格式化整個 repo，develop 上格式不符的檔案也會被改到：commit 前用 `git status` 確認，PR 範圍以外的檔案用 `git checkout -- <檔案>` 還原。
 
 pre-commit hook（Husky + lint-staged）會對 staged 的檔案跑 `pnpm format`、`pnpm lint` 與 `prettier --write`。不要用 `--no-verify` 跳過。
 
@@ -166,7 +168,7 @@ Zustand 採用 **vanilla store + Context provider** 模式以支援 SSR：
 
 ## 程式碼註解（Code Comments）
 
-**預設：不寫註解。** 只有在少了它會導致改錯時才寫，內容是程式碼本身表達不出來的後果或前提：
+**預設：不寫註解。** 不為了解釋而加註解；新程式碼除非被要求，否則零註解。只有在少了它會導致改錯時才寫，內容是程式碼本身表達不出來的後果或前提：
 
 - `// 店家角色尚未選到店家時不打 API，否則會落到平台管理員專用端點`（會 403）
 - `// palette 色位名不能含小寫 "mode"，否則 MUI 產不出 CSS 變數`（框架陷阱）
@@ -194,9 +196,11 @@ Zustand 採用 **vanilla store + Context provider** 模式以支援 SSR：
 
 依以下順序決定：
 
-1. **已安裝版本的官方文件**：先查 `package.json`／`node_modules` 的版本，絕不憑記憶。Next.js（`node_modules/next/dist/docs/`、next-devtools MCP）、MUI（mui-mcp）、better-auth、Drizzle、NestJS、next-intl、SWR、Zod 等。用文件示範的寫法，不用繞路；絕不用文件標為 deprecated 的 API。
-2. **本 repo 的既有模式**：文件沒定死時，照 codebase 現有的做法。照抄前先確認它沒有你正在修的缺陷；有的話那部分不要抄，並在 PR 點名那份複本，讓它也被修掉。
+1. **已安裝版本的官方文件**：先查 `package.json`／`node_modules` 的版本，絕不憑記憶。Next.js（`node_modules/next/dist/docs/`、next-devtools MCP）、MUI（mui-mcp）、better-auth、Drizzle、NestJS、next-intl、SWR、Zod 等。用文件示範的寫法，不用繞路；絕不用文件標為 deprecated 的 API。已安裝套件的 `.d.ts` 是最終依據；部落格、問答等二手資料不能當依據。
+2. **本 repo 的既有模式**：文件沒定死時，先用 `rg` 找同 repo 解決同一類問題的既有機制（helper、hook、元件、表單、store、SWR mutate），有就重用，照最相近實作的結構、命名與位置寫。照抄前先確認它沒有你正在修的缺陷；有的話那部分不要抄，並在 PR 點名那份複本，讓它也被修掉。
 3. **最主流的選項**：前兩者都決定不了時。
+
+**分層**：計算、驗證、權限判斷與業務規則放在 biru-api，前端只負責顯示與操作；需要後端配合時一起改 biru-api，不在前端繞過去。API 型別一律取自 `types/api.ts`，不手寫；能用 Server Component 就不加 `'use client'`。
 
 ## Behavioral Guidelines
 
