@@ -7,13 +7,11 @@ import ExportUserData from "./ExportUserData";
 import FormCard, {
   StyledCardContent,
   StyledCardHeader,
-  StyledListItem,
+  StyledStackedListItem,
   StyledListItemText,
 } from "@/components/FormCard";
 
 import useListAccounts from "@/hooks/useListAccounts";
-
-import { Link } from "@/i18n/navigation";
 
 import { Download, OpenInNew, Policy } from "@mui/icons-material";
 import { Button, Link as MuiLink, Stack, Typography } from "@mui/material";
@@ -34,7 +32,7 @@ const StyledMuiLink = styled(MuiLink)(({ theme }) => ({
   display: "inline-flex",
   alignItems: "center",
   gap: theme.spacing(0.5),
-})) as typeof MuiLink;
+}));
 
 const Privacy = () => {
   const { setDialog } = useDialogStore((state) => state);
@@ -69,7 +67,7 @@ const Privacy = () => {
         }
       />
       <StyledCardContent>
-        <StyledListItem
+        <StyledStackedListItem
           disablePadding
           secondaryAction={
             <Button
@@ -88,7 +86,6 @@ const Privacy = () => {
               <SecondaryStack>
                 {tAuth("settings.privacy.download.subtitle")}
                 <StyledMuiLink
-                  component={Link}
                   href="/company/privacy"
                   rel="noopener noreferrer"
                   target="_blank"
@@ -101,7 +98,7 @@ const Privacy = () => {
             }
             slotProps={{ secondary: { component: "div", variant: "caption" } }}
           />
-        </StyledListItem>
+        </StyledStackedListItem>
       </StyledCardContent>
     </FormCard>
   );

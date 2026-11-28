@@ -7,7 +7,7 @@ import { useState } from "react";
 import FormCard, {
   StyledCardContent,
   StyledCardHeader,
-  StyledListItem,
+  StyledStackedListItem,
   StyledListItemText,
 } from "@/components/FormCard";
 
@@ -91,7 +91,7 @@ const Danger = () => {
         }
       />
       <StyledCardContent>
-        <StyledListItem
+        <StyledStackedListItem
           disablePadding
           secondaryAction={
             <Button
@@ -110,9 +110,9 @@ const Danger = () => {
             secondary={tAuth("settings.danger.signOutSubtitle")}
             slotProps={{ secondary: { variant: "caption" } }}
           />
-        </StyledListItem>
+        </StyledStackedListItem>
         <Divider flexItem />
-        <StyledListItem
+        <StyledStackedListItem
           disablePadding
           secondaryAction={
             <Button
@@ -131,7 +131,7 @@ const Danger = () => {
             secondary={tAuth("settings.danger.subtitle")}
             slotProps={{ secondary: { variant: "caption" } }}
           />
-        </StyledListItem>
+        </StyledStackedListItem>
       </StyledCardContent>
     </StyledFormCard>
   );

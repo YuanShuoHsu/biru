@@ -14,13 +14,15 @@ import FormCard, {
 
 import { authClient } from "@/lib/auth-client";
 
-import { Laptop } from "@mui/icons-material";
-import { Stack, Typography } from "@mui/material";
+import { Laptop, Login } from "@mui/icons-material";
+import { Alert, Button, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
+import { useRoutes } from "@/hooks/useRoutes";
 import { useSession } from "@/hooks/useSession";
 
 import { toFetchError } from "@/utils/errors";
+import type { FetchError } from "@/utils/fetcher";
 
 const StyledTypography = styled(Typography)({
   fontWeight: "bold",
@@ -30,6 +32,12 @@ const StyledStack = styled(Stack)(({ theme }) => ({
   width: "100%",
   gap: theme.spacing(2),
 }));
+
+const StyledAlert = styled(Alert)({
+  "& .MuiAlert-action": {
+    flexShrink: 0,
+  },
+});
 
 export const sessionsKey = "sessions";
 
@@ -44,15 +52,25 @@ const Sessions = () => {
     data: sessions = [],
     error,
     mutate,
-  } = useSWR<UserSession[]>(session ? sessionsKey : null, async () => {
-    const { data, error } = await authClient.listSessions();
-    if (error) throw toFetchError(error);
+  } = useSWR<UserSession[], FetchError>(
+    session ? sessionsKey : null,
+    async () => {
+      const { data, error } = await authClient.listSessions();
+      if (error) throw toFetchError(error);
 
-    return data;
-  });
+      return data;
+    },
+    {
+      shouldRetryOnError: (error: FetchError) =>
+        error.info?.code !== "SESSION_NOT_FRESH",
+    },
+  );
+  const isSessionNotFresh = error?.info?.code === "SESSION_NOT_FRESH";
   const otherSessions = sessions.filter(
     ({ token }) => token !== session?.session.token,
   );
+
+  const navItem = useRoutes();
 
   const tAuth = useTranslations("auth");
 
@@ -76,7 +94,25 @@ const Sessions = () => {
               session={session.session}
             />
           )}
-          {error && <ErrorAlert onRetry={() => mutate()} />}
+          {isSessionNotFresh ? (
+            <StyledAlert
+              action={
+                <Button
+                  color="inherit"
+                  href={navItem("/auth/sign-in").to ?? "/auth/sign-in"}
+                  size="small"
+                  startIcon={<Login />}
+                >
+                  {tAuth("settings.sessions.notFresh.action")}
+                </Button>
+              }
+              severity="info"
+            >
+              {tAuth("settings.sessions.notFresh.description")}
+            </StyledAlert>
+          ) : (
+            error && <ErrorAlert onRetry={() => mutate()} />
+          )}
           {otherSessions.map((session) => (
             <OtherSessionItem key={session.token} session={session} />
           ))}
