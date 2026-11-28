@@ -6,10 +6,13 @@ import { useState } from "react";
 import CustomizedAccordions from "@/components/CustomizedAccordions";
 import GradientBox from "@/components/GradientBox";
 
+import { LegalLinkType } from "@/constants/legal";
+
 import {
   Box,
   type BoxProps,
   Container,
+  Link,
   Stack,
   Typography,
   type TypographyProps,
@@ -22,6 +25,7 @@ const FAQ_KEYS = [
   "waitlist",
   "points",
   "payment",
+  "refund",
   "invoice",
 ] as const;
 
@@ -88,14 +92,23 @@ const FAQ = () => {
               key={key}
               onChange={handleChange(key)}
               summary={
-                <Typography component="h3" variant="subtitle2">
+                <Typography component="span" variant="subtitle2">
                   {tHomeFaq(`items.${key}.question`)}
                 </Typography>
               }
             >
               <DetailsBox>
                 <Typography color="textSecondary" variant="body2">
-                  {tHomeFaq(`items.${key}.answer`)}
+                  {tHomeFaq.rich(`items.${key}.answer`, {
+                    terms: (chunks) => (
+                      <Link
+                        href={`/company/${LegalLinkType.Terms}`}
+                        underline="hover"
+                      >
+                        {chunks}
+                      </Link>
+                    ),
+                  })}
                 </Typography>
               </DetailsBox>
             </CustomizedAccordions>

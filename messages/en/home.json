@@ -24,6 +24,10 @@
         "answer": "Once signed in, every purchase earns points automatically. Points can be redeemed for coupons to use at checkout, and are valid for one year from the day they are earned. We'll email you 30 days before any points expire.",
         "question": "How do I earn and use points?"
       },
+      "refund": {
+        "answer": "To cancel or get a refund after paying online, please contact the store directly. The store will help based on your order type and how far your order has been prepared, and refunds are made to the original payment method or by other reasonable means. See the <terms>Terms of Service</terms> for details.",
+        "question": "Can I cancel my order or get a refund?"
+      },
       "waitlist": {
         "answer": "Scan the waitlist QR code at the store and enter your party size to take a number. Leave an email to be notified when it's your turn, or check the progress on the calling board anytime.",
         "question": "How do I join the waitlist when the store is full?"
