@@ -10,6 +10,10 @@ export type ExpectedPointsResponse =
   components["schemas"]["ExpectedPointsResponseDto"];
 export type OrderReceiptResponse =
   components["schemas"]["OrderReceiptResponseDto"];
+export type OrderReviewResponse =
+  components["schemas"]["OrderReviewResponseDto"];
+export type UpsertOrderReviewDto =
+  components["schemas"]["UpsertOrderReviewDto"];
 export type OrderPaymentMethod = OrderResponse["paymentMethod"];
 export type OrderStatus = OrderResponse["orderStatus"];
 export type UserOrderListResponse =

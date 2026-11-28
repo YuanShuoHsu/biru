@@ -104,6 +104,27 @@
     },
     "pickupLocation": "受け取り場所",
     "pickupNumber": "受け取り番号",
+    "review": {
+      "comment": {
+        "label": "コメント",
+        "maxLength": "コメントは {max} 文字以内で入力してください。",
+        "placeholder": "店舗へのメッセージ"
+      },
+      "dislike": "良くない",
+      "editableUntil": "{date} まで編集できます",
+      "like": "良い",
+      "locked": "編集できる期間を過ぎました",
+      "rating": {
+        "required": "評価を選択してください"
+      },
+      "reply": "店舗からの返信",
+      "sent": "ご意見を送信しました。ありがとうございます！",
+      "submit": "送信する",
+      "subtitle": "評価とコメントは店舗のみが閲覧でき、サービス向上に役立てます",
+      "title": "ご意見をお聞かせください",
+      "update": "更新する",
+      "updated": "ご意見を更新しました"
+    },
     "success": {
       "subtitle": "ご注文を承りました。お料理を準備しています",
       "title": "決済が完了しました"

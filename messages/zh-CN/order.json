@@ -104,6 +104,27 @@
     },
     "pickupLocation": "取餐地点",
     "pickupNumber": "取餐号码",
+    "review": {
+      "comment": {
+        "label": "留言",
+        "maxLength": "留言不能超过 {max} 个字符。",
+        "placeholder": "想对门店说的话"
+      },
+      "dislike": "不喜欢",
+      "editableUntil": "可于 {date} 前修改",
+      "like": "喜欢",
+      "locked": "反馈已超过可修改期限",
+      "rating": {
+        "required": "请选择评分"
+      },
+      "reply": "门店回复",
+      "sent": "已提交反馈，谢谢您！",
+      "submit": "提交反馈",
+      "subtitle": "您的评分与留言只有门店看得到，帮助我们做得更好",
+      "title": "给我们反馈",
+      "update": "更新反馈",
+      "updated": "已更新反馈"
+    },
     "success": {
       "subtitle": "已收到您的订单，餐点准备中",
       "title": "付款成功"

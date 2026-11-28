@@ -7,7 +7,7 @@ import ErrorAlert from "@/components/ErrorAlert";
 
 import type { Locale } from "@/i18n/routing";
 
-import type { OrderReceiptResponse } from "@/types/orders";
+import type { OrderReceiptResponse, OrderReviewResponse } from "@/types/orders";
 
 import { clientIpHeaders } from "@/utils/clientIp";
 import { fetcher, settle } from "@/utils/fetcher";
@@ -40,24 +40,39 @@ const OrderModeOrganizationSlugCompletePage = async ({
   const { accessToken, orderId } = query;
 
   const reqHeaders = await headers();
+  const fetchInit = {
+    headers: {
+      cookie: reqHeaders.get("cookie") || "",
+      ...(await clientIpHeaders()),
+    },
+  };
+  const orderQuery = accessToken
+    ? `?${new URLSearchParams({ accessToken })}`
+    : "";
 
-  const [{ data: organization, error }, { data: order, error: orderError }] =
-    await Promise.all([
-      settle(getOrganization(organizationSlug)),
-      orderId
-        ? settle(
-            fetcher<OrderReceiptResponse>(
-              `/api/organizations/${organizationSlug}/orders/${orderId}${accessToken ? `?${new URLSearchParams({ accessToken })}` : ""}`,
-              {
-                headers: {
-                  cookie: reqHeaders.get("cookie") || "",
-                  ...(await clientIpHeaders()),
-                },
-              },
-            ),
-          )
-        : { data: null, error: undefined },
-    ]);
+  const [
+    { data: organization, error },
+    { data: order, error: orderError },
+    { data: review },
+  ] = await Promise.all([
+    settle(getOrganization(organizationSlug)),
+    orderId
+      ? settle(
+          fetcher<OrderReceiptResponse>(
+            `/api/organizations/${organizationSlug}/orders/${orderId}${orderQuery}`,
+            fetchInit,
+          ),
+        )
+      : { data: null, error: undefined },
+    orderId
+      ? settle(
+          fetcher<OrderReviewResponse | null>(
+            `/api/organizations/${organizationSlug}/orders/${orderId}/review${orderQuery}`,
+            fetchInit,
+          ),
+        )
+      : { data: undefined },
+  ]);
   if (error?.status === 404) notFound();
   if (error) return <ErrorAlert />;
 
@@ -75,6 +90,7 @@ const OrderModeOrganizationSlugCompletePage = async ({
     <OrderModeOrganizationSlugComplete
       order={order ?? null}
       organization={organization}
+      review={order?.orderStatus === "OrderDelivered" ? review : undefined}
     />
   );
 };
