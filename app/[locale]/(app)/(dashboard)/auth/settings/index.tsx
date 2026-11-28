@@ -1,6 +1,7 @@
 import Accounts from "./Accounts";
 import Danger from "./Danger";
 import LinkedAccounts from "./LinkedAccounts";
+import Organizations from "./Organizations";
 import Password from "./Password";
 import Privacy from "./Privacy";
 import Profile from "./Profile";
@@ -10,6 +11,7 @@ const Settings = () => (
   <>
     <Profile />
     <Accounts />
+    <Organizations />
     <LinkedAccounts />
     <Password />
     <Sessions />

@@ -8,6 +8,8 @@ import type { Session } from "@/types/auth";
 
 export const listAccountsKey = "list-accounts";
 
+export const listOrganizationsKey = "list-organizations";
+
 export const formatUserAgent = (
   userAgent: string | null | undefined,
   delimiter: string,

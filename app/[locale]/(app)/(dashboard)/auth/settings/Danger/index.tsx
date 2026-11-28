@@ -7,8 +7,8 @@ import { useState } from "react";
 import FormCard, {
   StyledCardContent,
   StyledCardHeader,
-  StyledStackedListItem,
   StyledListItemText,
+  StyledStackedListItem,
 } from "@/components/FormCard";
 
 import { useLogout } from "@/hooks/useLogout";
@@ -23,7 +23,9 @@ import { styled } from "@mui/material/styles";
 import { useDialogStore } from "@/providers/dialog-store-provider";
 
 const StyledFormCard = styled(FormCard)(({ theme }) => ({
-  borderColor: theme.vars.palette.error.main,
+  "&.MuiPaper-outlined": {
+    borderColor: theme.vars.palette.error.main,
+  },
 }));
 
 const StyledTypography = styled(Typography)({
@@ -81,7 +83,7 @@ const Danger = () => {
     });
 
   return (
-    <StyledFormCard variant="outlined">
+    <StyledFormCard>
       <StyledCardHeader
         subheader={tAuth("settings.danger.description")}
         title={

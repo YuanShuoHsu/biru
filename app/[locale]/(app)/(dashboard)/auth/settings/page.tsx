@@ -11,7 +11,7 @@ import { routing } from "@/i18n/routing";
 
 import { authClient } from "@/lib/auth-client";
 
-import { listAccountsKey } from "@/utils/auth";
+import { listAccountsKey, listOrganizationsKey } from "@/utils/auth";
 import { getSession } from "@/utils/session";
 
 export const generateMetadata = async ({
@@ -27,14 +27,18 @@ export const generateMetadata = async ({
 
 const AuthSettingsPage = async () => {
   const reqHeaders = await headers();
-  const [session, { data: accounts }] = await Promise.all([
-    getSession(),
-    authClient.listAccounts({ fetchOptions: { headers: reqHeaders } }),
-  ]);
+  const [session, { data: accounts }, { data: organizations }] =
+    await Promise.all([
+      getSession(),
+      authClient.listAccounts({ fetchOptions: { headers: reqHeaders } }),
+      authClient.organization.list({ fetchOptions: { headers: reqHeaders } }),
+    ]);
 
   const fallback = session
     ? {
         [unstable_serialize([listAccountsKey, session.user.id])]: accounts,
+        [unstable_serialize([listOrganizationsKey, session.user.id])]:
+          organizations,
       }
     : {};
 
