@@ -8,7 +8,10 @@ import type { Session } from "@/types/auth";
 
 export const listAccountsKey = "list-accounts";
 
-export const formatUserAgent = (userAgent?: string | null): string => {
+export const formatUserAgent = (
+  userAgent: string | null | undefined,
+  delimiter: string,
+): string => {
   if (!userAgent) return "";
 
   const {
@@ -16,7 +19,7 @@ export const formatUserAgent = (userAgent?: string | null): string => {
     os: { name: osName },
   } = new UAParser(userAgent).getResult();
 
-  return [browserName, osName].filter(Boolean).join(" · ");
+  return [osName, browserName].filter(Boolean).join(delimiter);
 };
 
 export const formatFullName = (

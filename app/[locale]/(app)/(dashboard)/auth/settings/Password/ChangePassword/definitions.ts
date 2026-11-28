@@ -27,6 +27,7 @@ export const useChangePasswordFormSchema = () => {
         .string()
         .trim()
         .min(1, { error: tValidation("confirmNewPassword.required") }),
+      revokeOtherSessions: z.boolean(),
     })
     .refine(
       ({ currentPassword, newPassword }) => currentPassword !== newPassword,

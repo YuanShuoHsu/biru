@@ -11,11 +11,13 @@ import FormCard, {
   StyledListItemText,
 } from "@/components/FormCard";
 
+import { useLogout } from "@/hooks/useLogout";
 import { useSession } from "@/hooks/useSession";
 
 import { authClient } from "@/lib/auth-client";
 
-import { Button, DialogContentText, Typography } from "@mui/material";
+import { Logout } from "@mui/icons-material";
+import { Button, DialogContentText, Divider, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import { useDialogStore } from "@/providers/dialog-store-provider";
@@ -33,6 +35,8 @@ const Danger = () => {
 
   const session = useSession();
   const { setDialog } = useDialogStore((state) => state);
+
+  const { handleLogoutDialog } = useLogout();
 
   const locale = useLocale();
 
@@ -77,8 +81,9 @@ const Danger = () => {
     });
 
   return (
-    <StyledFormCard component="form" variant="outlined">
+    <StyledFormCard variant="outlined">
       <StyledCardHeader
+        subheader={tAuth("settings.danger.description")}
         title={
           <StyledTypography color="error" variant="h6">
             {tAuth("settings.danger.label")}
@@ -86,6 +91,27 @@ const Danger = () => {
         }
       />
       <StyledCardContent>
+        <StyledListItem
+          disablePadding
+          secondaryAction={
+            <Button
+              color="error"
+              onClick={handleLogoutDialog}
+              size="small"
+              startIcon={<Logout />}
+              variant="outlined"
+            >
+              {tAuth("signOut.label")}
+            </Button>
+          }
+        >
+          <StyledListItemText
+            primary={tAuth("signOut.label")}
+            secondary={tAuth("settings.danger.signOutSubtitle")}
+            slotProps={{ secondary: { variant: "caption" } }}
+          />
+        </StyledListItem>
+        <Divider flexItem />
         <StyledListItem
           disablePadding
           secondaryAction={

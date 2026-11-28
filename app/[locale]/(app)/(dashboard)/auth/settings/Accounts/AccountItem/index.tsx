@@ -1,4 +1,7 @@
-import { StyledListItem, StyledListItemText } from "@/components/FormCard";
+import {
+  StyledListItemText,
+  StyledOutlinedListItem,
+} from "@/components/FormCard";
 
 import { Avatar, ListItemIcon } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -31,7 +34,7 @@ const AccountItem = ({ secondaryAction, user }: AccountItemProps) => {
   const displayName = getDisplayName(user);
 
   return (
-    <StyledListItem disablePadding secondaryAction={secondaryAction}>
+    <StyledOutlinedListItem secondaryAction={secondaryAction}>
       <ListItemIcon>
         <StyledAvatar alt={displayName} src={user?.image || undefined}>
           {displayName[0]}
@@ -42,7 +45,7 @@ const AccountItem = ({ secondaryAction, user }: AccountItemProps) => {
         secondary={user?.email}
         slotProps={{ secondary: { variant: "caption" } }}
       />
-    </StyledListItem>
+    </StyledOutlinedListItem>
   );
 };
 

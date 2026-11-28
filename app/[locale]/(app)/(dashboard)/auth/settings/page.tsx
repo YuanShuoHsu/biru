@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { SWRConfig, unstable_serialize } from "swr";
 
-import Security from ".";
+import Settings from ".";
 
 import { routing } from "@/i18n/routing";
 
@@ -16,16 +16,16 @@ import { getSession } from "@/utils/session";
 
 export const generateMetadata = async ({
   params,
-}: PageProps<"/[locale]/auth/settings/security">): Promise<Metadata> => {
+}: PageProps<"/[locale]/auth/settings">): Promise<Metadata> => {
   const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) notFound();
 
   const tAuth = await getTranslations({ locale, namespace: "auth" });
 
-  return { title: tAuth("settings.security.label") };
+  return { title: tAuth("settings.label") };
 };
 
-const AuthSettingsSecurityPage = async () => {
+const AuthSettingsPage = async () => {
   const reqHeaders = await headers();
   const [session, { data: accounts }] = await Promise.all([
     getSession(),
@@ -40,9 +40,9 @@ const AuthSettingsSecurityPage = async () => {
 
   return (
     <SWRConfig value={{ fallback }}>
-      <Security />
+      <Settings />
     </SWRConfig>
   );
 };
 
-export default AuthSettingsSecurityPage;
+export default AuthSettingsPage;

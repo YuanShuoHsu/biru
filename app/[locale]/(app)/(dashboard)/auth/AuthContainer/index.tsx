@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "@/i18n/navigation";
+
 import { Container } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
@@ -14,10 +16,21 @@ interface AuthContainerProps {
   children: React.ReactNode;
 }
 
-const AuthContainer = ({ children }: AuthContainerProps) => (
-  <StyledContainer disableGutters maxWidth="sm">
-    {children}
-  </StyledContainer>
-);
+const AuthContainer = ({ children }: AuthContainerProps) => {
+  const pathname = usePathname();
+
+  const isAccountPage = [
+    "/auth/coupons",
+    "/auth/orders",
+    "/auth/points",
+    "/auth/settings",
+  ].some((prefix) => pathname.startsWith(prefix));
+
+  return (
+    <StyledContainer disableGutters maxWidth={isAccountPage ? "md" : "sm"}>
+      {children}
+    </StyledContainer>
+  );
+};
 
 export default AuthContainer;

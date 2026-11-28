@@ -29,11 +29,9 @@ import {
   HelpOutlined,
   Info,
   LocalMall,
-  Lock,
   LockReset,
   Login,
   Payment,
-  Person,
   PersonAdd,
   Pets,
   Policy,
@@ -218,22 +216,9 @@ const routes: Route[] = [
         segment: "reset-password",
       },
       {
-        children: [
-          {
-            icon: Person,
-            label: "auth.settings.account.label",
-            segment: "account",
-          },
-          {
-            icon: Lock,
-            label: "auth.settings.security.label",
-            segment: "security",
-          },
-        ],
         icon: Settings,
         label: "auth.settings.label",
         segment: "settings",
-        to: "/auth/settings/account",
       },
       {
         icon: Login,

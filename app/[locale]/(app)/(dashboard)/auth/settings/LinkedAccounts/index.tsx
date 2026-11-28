@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Fragment, type ComponentType } from "react";
+import type { ComponentType } from "react";
 
 import ProviderRow from "./ProviderRow";
 
@@ -12,7 +12,8 @@ import FormCard, {
 } from "@/components/FormCard";
 import GoogleIcon from "@/components/GoogleIcon";
 
-import { Divider, Typography } from "@mui/material";
+import { Link } from "@mui/icons-material";
+import { Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 import useListAccounts from "@/hooks/useListAccounts";
@@ -37,8 +38,10 @@ const LinkedAccounts = () => {
   const tAuth = useTranslations("auth");
 
   return (
-    <FormCard component="form">
+    <FormCard>
       <StyledCardHeader
+        avatar={<Link color="primary" />}
+        subheader={tAuth("settings.linkedAccounts.description")}
         title={
           <StyledTypography color="primary" variant="h6">
             {tAuth("settings.linkedAccounts.label")}
@@ -48,11 +51,8 @@ const LinkedAccounts = () => {
       <StyledCardContent>
         {error && <ErrorAlert onRetry={() => mutate()} />}
         {!error &&
-          providers.map(({ id, Icon, label }, index) => (
-            <Fragment key={id}>
-              {index > 0 && <Divider flexItem />}
-              <ProviderRow id={id} Icon={Icon} label={label} />
-            </Fragment>
+          providers.map(({ id, Icon, label }) => (
+            <ProviderRow Icon={Icon} id={id} key={id} label={label} />
           ))}
       </StyledCardContent>
     </FormCard>

@@ -4,7 +4,10 @@ import { useLocale, useTranslations } from "next-intl";
 import { useSnackbar } from "notistack";
 import { useState } from "react";
 
-import { StyledListItem, StyledListItemText } from "@/components/FormCard";
+import {
+  StyledListItemText,
+  StyledOutlinedListItem,
+} from "@/components/FormCard";
 
 import { query } from "@/constants/query";
 
@@ -44,7 +47,7 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
   const tAuth = useTranslations("auth");
 
   const handleLinkConfirm = async () => {
-    const callbackURL = `${process.env.NEXT_PUBLIC_NEXT_URL}/${locale}/auth/settings/security`;
+    const callbackURL = `${process.env.NEXT_PUBLIC_NEXT_URL}/${locale}/auth/settings`;
     const errorCallbackURL = new URL(callbackURL);
     errorCallbackURL.searchParams.set(query.oauth, id);
 
@@ -145,7 +148,7 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
   );
 
   return (
-    <StyledListItem disablePadding secondaryAction={secondaryAction}>
+    <StyledOutlinedListItem secondaryAction={secondaryAction}>
       <ListItemIcon>
         <StyledAvatar variant="rounded">
           <Icon />
@@ -158,7 +161,7 @@ const ProviderRow = ({ id, Icon, label }: Provider) => {
         })}
         slotProps={{ secondary: { variant: "caption" } }}
       />
-    </StyledListItem>
+    </StyledOutlinedListItem>
   );
 };
 
