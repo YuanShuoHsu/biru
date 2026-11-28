@@ -32,6 +32,7 @@ interface CartItemSoldOutProps {
   itemLimitCapLeft: number;
   itemStockCapLeft: number;
   limitingAddOnsLabel: string;
+  purchaseLimitReached: boolean;
   unavailableLabel: string;
 }
 
@@ -43,6 +44,7 @@ const CartItemSoldOut = ({
   itemLimitCapLeft,
   itemStockCapLeft,
   limitingAddOnsLabel,
+  purchaseLimitReached,
   unavailableLabel,
 }: CartItemSoldOutProps) => {
   const { quantity } = item;
@@ -58,14 +60,18 @@ const CartItemSoldOut = ({
   const shouldEditItem = availableToAdd < 0 && targetQuantity > 0;
   const showOverlay = shouldDeleteItem || shouldEditItem;
   const exceedsPurchaseLimit =
-    itemLimitCapLeft === availableToAdd && itemStockCapLeft > availableToAdd;
+    itemLimitCapLeft === availableToAdd &&
+    itemStockCapLeft > availableToAdd &&
+    addOnCapLeft > availableToAdd;
 
   const message = shouldDeleteItem
     ? discontinued
       ? tCommon("discontinued")
       : unavailableLabel ||
         (exceedsPurchaseLimit
-          ? tOrder("menuItem.eligibleQuantity.reached")
+          ? purchaseLimitReached
+            ? tOrder("menuItem.eligibleQuantity.reachedToday")
+            : tOrder("menuItem.eligibleQuantity.reached")
           : tCommon("soldOut"))
     : shouldEditItem
       ? itemStockCapLeft === availableToAdd

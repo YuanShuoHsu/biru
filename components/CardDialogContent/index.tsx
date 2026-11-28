@@ -235,9 +235,10 @@ const CardDialogContent = ({
           ? tCommon("soldOut")
           : "";
 
-  const soldOutLabel = isDailyLimited
-    ? tOrder("menuItem.soldOutToday")
-    : tCommon("soldOut");
+  const soldOutLabel =
+    isDailyLimited && offer?.inventoryLevel?.value === 0
+      ? tOrder("menuItem.soldOutToday")
+      : tCommon("soldOut");
 
   const addOnItems = useMemo(() => getAddOnItems(menuItem), [menuItem]);
 

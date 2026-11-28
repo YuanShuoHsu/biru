@@ -212,7 +212,7 @@ const ActionAreaCard = ({
         : isOutsideHours
           ? tOrder("menuItem.outsideAvailableHours")
           : isItemOutOfStock
-            ? isDailyLimited
+            ? isDailyLimited && stock === 0
               ? tOrder("menuItem.soldOutToday")
               : tCommon("soldOut")
             : "";

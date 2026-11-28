@@ -219,7 +219,9 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
       : itemStockCapLeft === availableToAdd
         ? tCommon("reachStockLimit", { label: "" })
         : itemLimitCapLeft === availableToAdd
-          ? tOrder("menuItem.eligibleQuantity.reached")
+          ? purchaseLimit === 0
+            ? tOrder("menuItem.eligibleQuantity.reachedToday")
+            : tOrder("menuItem.eligibleQuantity.reached")
           : addOnCapLeft === availableToAdd
             ? tCommon("reachStockLimit", { label: limitingAddOnsLabel })
             : "";
@@ -274,6 +276,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
         itemLimitCapLeft={itemLimitCapLeft}
         itemStockCapLeft={itemStockCapLeft}
         limitingAddOnsLabel={limitingAddOnsLabel}
+        purchaseLimitReached={purchaseLimit === 0}
         unavailableLabel={unavailableLabel}
       />
       <ContentStack>
