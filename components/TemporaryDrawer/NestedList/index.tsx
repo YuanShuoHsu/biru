@@ -43,9 +43,9 @@ const useNavGroups = (): NavGroup[] => {
   ];
 
   return [
+    { items: [{ icon: Home, label: tHome("label"), to: "/" }] },
     {
       items: [
-        { icon: Home, label: tHome("label"), to: "/" },
         {
           ...navItem("/order"),
           children: orderChildren,
