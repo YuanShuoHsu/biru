@@ -3348,6 +3348,23 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
+  "/api/users/me/purchased-today": {
+    parameters: {
+      query?: never;
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    /** 查詢我今天在此門市已買的限購品項份數（同營業日，不含取消、付款失敗與全額退款；沒買過的品項不列出） */
+    get: operations["UserPurchasedTodayController_findAll"];
+    put?: never;
+    post?: never;
+    delete?: never;
+    options?: never;
+    head?: never;
+    patch?: never;
+    trace?: never;
+  };
   "/api/point-reports": {
     parameters: {
       query?: never;
@@ -11861,6 +11878,10 @@ export interface components {
       data: components["schemas"]["UserOrderResponseDto"][];
       total: number;
     };
+    PurchasedTodayDto: {
+      menuItemId: string;
+      quantity: number;
+    };
     PointReportAmountsDto: {
       earnedAmount: number;
       grantedAmount: number;
@@ -12163,6 +12184,13 @@ export interface components {
       unitText?: string;
       value?: number;
     };
+    EligibleQuantityDto: {
+      /**
+       * @description 最多可買份數
+       * @example 2
+       */
+      maxValue: number;
+    };
     CreateOfferDto: {
       /** @example 150.00 */
       price: string;
@@ -12176,6 +12204,10 @@ export interface components {
       deliveryLeadTimeMinutes?: number | null;
       /** @description 當日剩餘庫存數量 */
       inventoryLevel?: components["schemas"]["QuantitativeValueDto"] | null;
+      /** @description 每日限量；每天 04:00（台灣時間）把剩餘數量恢復為此數。null 代表非每日限量 */
+      dailyLimit?: number | null;
+      /** @description 限購；登入會員以同門市同營業日累計，未登入以每筆訂單計。只有設了每日限量才可設，且不得大於每日限量。null 代表不限購 */
+      eligibleQuantity?: components["schemas"]["EligibleQuantityDto"] | null;
       priceSpecification?:
         | components["schemas"]["PriceSpecificationDto"]
         | null;
@@ -12239,6 +12271,10 @@ export interface components {
       /** @description 預計準備時間（分鐘） */
       deliveryLeadTimeMinutes?: number | null;
       inventoryLevel?: components["schemas"]["QuantitativeValueDto"] | null;
+      /** @description 每日限量；null 代表非每日限量 */
+      dailyLimit?: number | null;
+      /** @description 限購；null 代表不限購 */
+      eligibleQuantity?: components["schemas"]["EligibleQuantityDto"] | null;
       priceSpecification?:
         | components["schemas"]["PriceSpecificationDto"]
         | null;
@@ -12396,6 +12432,10 @@ export interface components {
       deliveryLeadTimeMinutes?: number | null;
       /** @description 當日剩餘庫存數量 */
       inventoryLevel?: components["schemas"]["QuantitativeValueDto"] | null;
+      /** @description 每日限量；每天 04:00（台灣時間）把剩餘數量恢復為此數。null 代表非每日限量 */
+      dailyLimit?: number | null;
+      /** @description 限購；登入會員以同門市同營業日累計，未登入以每筆訂單計。只有設了每日限量才可設，且不得大於每日限量。null 代表不限購 */
+      eligibleQuantity?: components["schemas"]["EligibleQuantityDto"] | null;
       priceSpecification?:
         | components["schemas"]["PriceSpecificationDto"]
         | null;
@@ -12408,6 +12448,10 @@ export interface components {
       availability: components["schemas"]["ItemAvailability"];
       /** @description 僅含數量；單位 unitText 屬菜單定義，需 menu:update 才能改 */
       inventoryLevel?: components["schemas"]["OfferInventoryLevelValueDto"];
+      /** @description 每日限量；每天 04:00（台灣時間）把剩餘數量恢復為此數。null 代表非每日限量；需 menu:update 才能改 */
+      dailyLimit?: number | null;
+      /** @description 限購；只有設了每日限量才可設，且不得大於每日限量。null 代表不限購；需 menu:update 才能改 */
+      eligibleQuantity?: components["schemas"]["EligibleQuantityDto"] | null;
     };
     CreateMenuItemAddOnDto: {
       /** @description Add-on menu item ID */
@@ -12619,6 +12663,10 @@ export interface components {
       /** @description 預計準備時間（分鐘） */
       deliveryLeadTimeMinutes?: number | null;
       inventoryLevel?: components["schemas"]["QuantitativeValueDto"] | null;
+      /** @description 每日限量；null 代表非每日限量 */
+      dailyLimit?: number | null;
+      /** @description 限購；null 代表不限購 */
+      eligibleQuantity?: components["schemas"]["EligibleQuantityDto"] | null;
       priceSpecification?:
         | components["schemas"]["PriceSpecificationDto"]
         | null;
@@ -23711,6 +23759,34 @@ export interface operations {
         };
         content: {
           "application/json": components["schemas"]["UserOrderListResponseDto"];
+        };
+      };
+      /** @description Internal server error */
+      500: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content?: never;
+      };
+    };
+  };
+  UserPurchasedTodayController_findAll: {
+    parameters: {
+      query: {
+        organizationSlug: string;
+      };
+      header?: never;
+      path?: never;
+      cookie?: never;
+    };
+    requestBody?: never;
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown;
+        };
+        content: {
+          "application/json": components["schemas"]["PurchasedTodayDto"][];
         };
       };
       /** @description Internal server error */

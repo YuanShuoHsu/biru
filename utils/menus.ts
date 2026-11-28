@@ -29,12 +29,12 @@ import type { ApiOrderMode } from "@/types/orderMode";
 dayjs.extend(utc);
 dayjs.extend(timezonePlugin);
 
-export const isLowStock = (offer?: OrderMenuOffer): boolean => {
+export const isStockLeftShown = (offer?: OrderMenuOffer): boolean => {
   const stock = offer?.inventoryLevel?.value;
   if (stock == null || stock <= 0) return false;
   if (offer?.availability === "SoldOut") return false;
 
-  return stock <= LOW_STOCK_THRESHOLD;
+  return offer?.dailyLimit != null || stock <= LOW_STOCK_THRESHOLD;
 };
 
 interface PromoInfo {
@@ -346,6 +346,32 @@ export const getOfferStock = (offer?: OrderMenuOffer): number | null => {
   return offer?.inventoryLevel?.value ?? null;
 };
 
+export const getOfferPurchaseLimit = (
+  offer: OrderMenuOffer | undefined,
+  purchasedToday: number,
+): number | null => {
+  const maxValue = offer?.eligibleQuantity?.maxValue;
+
+  return maxValue == null ? null : Math.max(0, maxValue - purchasedToday);
+};
+
+const getOfferCap = (
+  offer: OrderMenuOffer | undefined,
+  purchasedToday: number,
+): number => {
+  const stock = getOfferStock(offer);
+  const limit = getOfferPurchaseLimit(offer, purchasedToday);
+
+  return Math.min(stock ?? Infinity, limit ?? Infinity);
+};
+
+export const getItemPurchaseLimit = (
+  menu: OrderMenu | null,
+  itemId: string,
+  purchasedToday: number,
+): number | null =>
+  getOfferPurchaseLimit(findItemById(menu, itemId)?.offers[0], purchasedToday);
+
 export const getItemStock = (
   menu: OrderMenu | null,
   itemId: string,
@@ -458,11 +484,12 @@ type AddOnLimitResult = { cap: number; names: string[] };
 export const getAddOnsCap = (
   selectedAddOnItems: OrderMenuAddOnItem[],
   getUsedQuantity: (addOnId: string) => number,
+  getPurchasedToday: (addOnId: string) => number,
 ): AddOnLimitResult =>
   selectedAddOnItems.reduce<AddOnLimitResult>(
     (acc, { id, name, offers }) => {
-      const stock = getOfferStock(offers[0]);
-      const available = stock === null ? Infinity : stock - getUsedQuantity(id);
+      const available =
+        getOfferCap(offers[0], getPurchasedToday(id)) - getUsedQuantity(id);
 
       if (available < acc.cap) return { cap: available, names: [name] };
       if (
@@ -482,6 +509,7 @@ export const getLimitingAddOnsCap = (
   menuItemId: string,
   addOns: CartAddOn[],
   getUsedQuantity: (addOnId: string) => number,
+  getPurchasedToday: (addOnId: string) => number,
 ): AddOnLimitResult => {
   const item = findItemById(menu, menuItemId);
   if (!item) return { cap: Infinity, names: [] };
@@ -490,7 +518,7 @@ export const getLimitingAddOnsCap = (
     addOns.some((addOn) => addOn.menuItemId === id),
   );
 
-  return getAddOnsCap(selectedAddOnItems, getUsedQuantity);
+  return getAddOnsCap(selectedAddOnItems, getUsedQuantity, getPurchasedToday);
 };
 
 interface ChoiceNameOptions {

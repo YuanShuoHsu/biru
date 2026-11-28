@@ -29,6 +29,7 @@ interface CartItemSoldOutProps {
   availableToAdd: number;
   discontinued: boolean;
   item: CartItem;
+  itemLimitCapLeft: number;
   itemStockCapLeft: number;
   limitingAddOnsLabel: string;
   unavailableLabel: string;
@@ -39,6 +40,7 @@ const CartItemSoldOut = ({
   availableToAdd,
   discontinued,
   item,
+  itemLimitCapLeft,
   itemStockCapLeft,
   limitingAddOnsLabel,
   unavailableLabel,
@@ -55,23 +57,32 @@ const CartItemSoldOut = ({
     !!unavailableLabel || (availableToAdd < 0 && targetQuantity <= 0);
   const shouldEditItem = availableToAdd < 0 && targetQuantity > 0;
   const showOverlay = shouldDeleteItem || shouldEditItem;
+  const exceedsPurchaseLimit =
+    itemLimitCapLeft === availableToAdd && itemStockCapLeft > availableToAdd;
 
   const message = shouldDeleteItem
     ? discontinued
       ? tCommon("discontinued")
-      : unavailableLabel || tCommon("soldOut")
+      : unavailableLabel ||
+        (exceedsPurchaseLimit
+          ? tOrder("menuItem.eligibleQuantity.reached")
+          : tCommon("soldOut"))
     : shouldEditItem
       ? itemStockCapLeft === availableToAdd
         ? tOrder("cart.quantityExceedsStock", {
             label: "",
             stock: targetQuantity,
           })
-        : addOnCapLeft === availableToAdd
-          ? tOrder("cart.quantityExceedsStock", {
-              label: `${limitingAddOnsLabel}\n`,
-              stock: targetQuantity,
+        : exceedsPurchaseLimit
+          ? tOrder("menuItem.eligibleQuantity.left", {
+              quantity: targetQuantity,
             })
-          : ""
+          : addOnCapLeft === availableToAdd
+            ? tOrder("cart.quantityExceedsStock", {
+                label: `${limitingAddOnsLabel}\n`,
+                stock: targetQuantity,
+              })
+            : ""
       : "";
 
   const handleClick = () => {
