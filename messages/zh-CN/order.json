@@ -178,6 +178,7 @@
     "availableHours": "供应时段 {value}",
     "calories": "热量 {value} kcal",
     "customizationChanged": "上次的定制选项有变动，请确认后再加入购物车",
+    "dailyLimit": "每日限量",
     "diet": {
       "DiabeticDiet": "糖尿病饮食",
       "GlutenFreeDiet": "无麸质",
@@ -190,6 +191,13 @@
       "LowSaltDiet": "低盐",
       "VeganDiet": "纯素",
       "VegetarianDiet": "蛋奶素"
+    },
+    "eligibleQuantity": {
+      "guest": "每笔订单限购 {quantity} 份",
+      "left": "限购，还可购买 {quantity} 份",
+      "member": "每人每日限购 {quantity} 份",
+      "reached": "已达限购上限",
+      "reachedToday": "今日已达限购"
     },
     "outsideAvailableHours": "非供应时间",
     "preparationTime": "预计准备约 {value} 分钟",
@@ -214,7 +222,9 @@
       "Iced": "冰",
       "label": "冰量／温度"
     },
+    "soldOutToday": "今日已售罄",
     "stockLeft": "剩余 {stock}",
+    "stockLeftToday": "今日剩余 {stock}",
     "sweetness": {
       "fixed": "甜度固定",
       "label": "甜度"

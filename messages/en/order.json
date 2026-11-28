@@ -178,6 +178,7 @@
     "availableHours": "Available {value}",
     "calories": "{value} kcal",
     "customizationChanged": "Some of your last choices have changed. Please check them before adding to cart.",
+    "dailyLimit": "Limited daily",
     "diet": {
       "DiabeticDiet": "Diabetic",
       "GlutenFreeDiet": "Gluten-free",
@@ -190,6 +191,13 @@
       "LowSaltDiet": "Low-salt",
       "VeganDiet": "Vegan",
       "VegetarianDiet": "Vegetarian"
+    },
+    "eligibleQuantity": {
+      "guest": "Limit {quantity} per order",
+      "left": "Purchase limit: {quantity} more available",
+      "member": "Limit {quantity} per person per day",
+      "reached": "Purchase limit reached",
+      "reachedToday": "Today's purchase limit reached"
     },
     "outsideAvailableHours": "Outside serving hours",
     "preparationTime": "Ready in about {value} min",
@@ -214,7 +222,9 @@
       "Iced": "Iced",
       "label": "Ice / Temperature"
     },
+    "soldOutToday": "Sold out for today",
     "stockLeft": "Only {stock} left",
+    "stockLeftToday": "{stock} left today",
     "sweetness": {
       "fixed": "Fixed sweetness",
       "label": "Sweetness"

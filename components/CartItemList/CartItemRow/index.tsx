@@ -13,6 +13,7 @@ import { API_ORDER_MODE } from "@/constants/orderMode";
 
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
+import { usePurchasedToday } from "@/hooks/usePurchasedToday";
 import { useServingTemperatureLabel } from "@/hooks/useServingTemperatureLabel";
 
 import { Delete, RestaurantMenu } from "@mui/icons-material";
@@ -40,6 +41,7 @@ import {
   findItemById,
   getCartAvailableHours,
   getChoiceNames,
+  getItemPurchaseLimit,
   getItemStock,
   getLatestItems,
   getLimitingAddOnsCap,
@@ -136,6 +138,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const { setDialog } = useDialogStore((state) => state);
 
   const isOutsideAvailableHours = useOutsideAvailableHours();
+  const { getPurchasedToday } = usePurchasedToday();
   const getServingTemperatureLabel = useServingTemperatureLabel();
 
   const tCommon = useTranslations("common");
@@ -168,16 +171,23 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
 
   const itemStock = getItemStock(menu, menuItemId, apiMode);
   const itemStockLeft = itemStock === null ? Infinity : itemStock;
+  const purchaseLimit = getItemPurchaseLimit(
+    menu,
+    menuItemId,
+    getPurchasedToday(menuItemId),
+  );
   const cartItemTotalQuantity = getCartItemTotalQuantity(menuItemId, null);
 
   const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
+  const itemLimitCapLeft = (purchaseLimit ?? Infinity) - cartItemTotalQuantity;
 
   const { names: limitingAddOnNames, cap: addOnCapLeft } = getLimitingAddOnsCap(
     menu,
     menuItemId,
     addOns,
     (addOnId) => getCartItemTotalQuantity(addOnId, null),
+    getPurchasedToday,
   );
 
   const limitingAddOnsLabel =
@@ -188,6 +198,7 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
   const availableToAdd = Math.min(
     perItemCapLeft,
     itemStockCapLeft,
+    itemLimitCapLeft,
     addOnCapLeft,
   );
 
@@ -207,9 +218,13 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
       ? tCommon("maxQuantity", { quantity: MAX_QUANTITY })
       : itemStockCapLeft === availableToAdd
         ? tCommon("reachStockLimit", { label: "" })
-        : addOnCapLeft === availableToAdd
-          ? tCommon("reachStockLimit", { label: limitingAddOnsLabel })
-          : "";
+        : itemLimitCapLeft === availableToAdd
+          ? purchaseLimit === 0
+            ? tOrder("menuItem.eligibleQuantity.reachedToday")
+            : tOrder("menuItem.eligibleQuantity.reached")
+          : addOnCapLeft === availableToAdd
+            ? tCommon("reachStockLimit", { label: limitingAddOnsLabel })
+            : "";
 
   const canIncrease = availableToAdd > 0;
 
@@ -258,8 +273,10 @@ const CartItemRow = ({ compact = false, item }: CartItemRowProps) => {
         availableToAdd={availableToAdd}
         discontinued={offer?.availability === "Discontinued" || !menuItem}
         item={item}
+        itemLimitCapLeft={itemLimitCapLeft}
         itemStockCapLeft={itemStockCapLeft}
         limitingAddOnsLabel={limitingAddOnsLabel}
+        purchaseLimitReached={purchaseLimit === 0}
         unavailableLabel={unavailableLabel}
       />
       <ContentStack>

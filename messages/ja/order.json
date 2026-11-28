@@ -178,6 +178,7 @@
     "availableHours": "提供時間 {value}",
     "calories": "{value} kcal",
     "customizationChanged": "前回のカスタマイズ内容が変更されています。ご確認のうえカートに追加してください。",
+    "dailyLimit": "1日数量限定",
     "diet": {
       "DiabeticDiet": "糖尿病食",
       "GlutenFreeDiet": "グルテンフリー",
@@ -190,6 +191,13 @@
       "LowSaltDiet": "低塩",
       "VeganDiet": "ビーガン",
       "VegetarianDiet": "ベジタリアン"
+    },
+    "eligibleQuantity": {
+      "guest": "1回のご注文につき {quantity} 点まで",
+      "left": "購入制限：あと {quantity} 点購入できます",
+      "member": "お一人様1日 {quantity} 点まで",
+      "reached": "購入上限に達しました",
+      "reachedToday": "本日の購入上限に達しました"
     },
     "outsideAvailableHours": "提供時間外",
     "preparationTime": "提供まで約{value}分",
@@ -214,7 +222,9 @@
       "Iced": "アイス",
       "label": "氷の量／温度"
     },
+    "soldOutToday": "本日完売",
     "stockLeft": "残り {stock}",
+    "stockLeftToday": "本日残り {stock}",
     "sweetness": {
       "fixed": "甘さ固定",
       "label": "甘さ"

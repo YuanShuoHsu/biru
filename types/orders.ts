@@ -24,6 +24,7 @@ export type OrderInvoiceResponse = components["schemas"]["OrderInvoiceDto"];
 export type InvoiceStatus = components["schemas"]["InvoiceStatus"];
 export type OrderBoardItem = components["schemas"]["OrderBoardItemDto"];
 export type PrepEstimate = components["schemas"]["PrepEstimateResponseDto"];
+export type PurchasedToday = components["schemas"]["PurchasedTodayDto"];
 export type OrderQrSessionResponse =
   components["schemas"]["OrderQrSessionResponseDto"];
 export type FrequentItem = components["schemas"]["FrequentItemDto"];

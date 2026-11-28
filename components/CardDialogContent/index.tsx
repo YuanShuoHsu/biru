@@ -19,6 +19,7 @@ import { STORE_TIMEZONE } from "@/constants/timezone";
 import { useAvailableHoursLabel } from "@/hooks/useAvailableHoursLabel";
 import { useFormatMoney } from "@/hooks/useFormatMoney";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
+import { usePurchasedToday } from "@/hooks/usePurchasedToday";
 import { useServingTemperatureLabel } from "@/hooks/useServingTemperatureLabel";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -67,10 +68,11 @@ import {
   getAddOnPrice,
   getAddOnsCap,
   getGroupsExtraCost,
+  getOfferPurchaseLimit,
   getOfferStock,
   getServingTemperatureLevels,
   hasUnsatisfiableModifierGroup,
-  isLowStock,
+  isStockLeftShown,
 } from "@/utils/menus";
 
 const ImageBox = styled(Box)(({ theme }) => ({
@@ -193,10 +195,14 @@ const CardDialogContent = ({
 
   const promoInfo = getActivePromo(offer);
   const price = promoInfo?.price || basePrice;
-  const showLowStock = isLowStock(offer);
+  const showStockLeft = isStockLeftShown(offer);
+  const isDailyLimited = offer?.dailyLimit != null;
+  const maxPurchaseQuantity = offer?.eligibleQuantity?.maxValue;
 
   const { addCartItem, getCartItemTotalQuantity, updateCartItem } =
     useCartStore((state) => state);
+
+  const { getPurchasedToday, isMember } = usePurchasedToday();
 
   const format = useFormatter();
 
@@ -228,6 +234,11 @@ const CardDialogContent = ({
         : availability === "SoldOut" || availability === "Discontinued"
           ? tCommon("soldOut")
           : "";
+
+  const soldOutLabel =
+    isDailyLimited && offer?.inventoryLevel?.value === 0
+      ? tOrder("menuItem.soldOutToday")
+      : tCommon("soldOut");
 
   const addOnItems = useMemo(() => getAddOnItems(menuItem), [menuItem]);
 
@@ -340,18 +351,22 @@ const CardDialogContent = ({
   const editingItem = cartItem || null;
   const cartItemTotalQuantity = getCartItemTotalQuantity(id, editingItem);
   const itemStockLeft = stock === null ? Infinity : stock;
+  const purchaseLimit = getOfferPurchaseLimit(offer, getPurchasedToday(id));
 
   const perItemCapLeft = MAX_QUANTITY - cartItemTotalQuantity;
   const itemStockCapLeft = itemStockLeft - cartItemTotalQuantity;
+  const itemLimitCapLeft = (purchaseLimit ?? Infinity) - cartItemTotalQuantity;
 
   const { names: limitingAddOnNames, cap: addOnCapLeft } = getAddOnsCap(
     selectedAddOnItems,
     (addOnId) => getCartItemTotalQuantity(addOnId, editingItem),
+    getPurchasedToday,
   );
 
   const availableToAdd = Math.min(
     perItemCapLeft,
     itemStockCapLeft,
+    itemLimitCapLeft,
     addOnCapLeft,
   );
   const minQuantity = availableToAdd > 0 ? 1 : 0;
@@ -373,14 +388,24 @@ const CardDialogContent = ({
   const formHelperText =
     perItemCapLeft === availableToAdd
       ? tCommon("maxQuantity", { quantity: MAX_QUANTITY })
-      : availableToAdd > 0
-        ? tDialog("maxStock", {
-            label: limitingLabel,
-            quantity: availableToAdd,
-          })
-        : itemStockLeft === 0
-          ? tCommon("soldOut")
-          : tCommon("reachStockLimit", { label: limitingLabel });
+      : itemLimitCapLeft === availableToAdd &&
+          itemStockCapLeft > availableToAdd &&
+          addOnCapLeft > availableToAdd
+        ? availableToAdd > 0
+          ? tOrder("menuItem.eligibleQuantity.left", {
+              quantity: availableToAdd,
+            })
+          : purchaseLimit === 0
+            ? tOrder("menuItem.eligibleQuantity.reachedToday")
+            : tOrder("menuItem.eligibleQuantity.reached")
+        : availableToAdd > 0
+          ? tDialog("maxStock", {
+              label: limitingLabel,
+              quantity: availableToAdd,
+            })
+          : itemStockLeft === 0
+            ? soldOutLabel
+            : tCommon("reachStockLimit", { label: limitingLabel });
 
   const handleChoicesChange = (groupId: string, next: string[]) =>
     setValue(`choices.${groupId}`, next, { shouldValidate: isSubmitted });
@@ -743,11 +768,12 @@ const CardDialogContent = ({
               servingTemperatures.length > 0 ||
               addOnSweetness !== "NotApplicable";
             const checked = selectedAddOnIds.includes(id);
-            const addOnStock = getOfferStock(offers[0]);
-            const outOfStockInCart =
-              !checked &&
-              addOnStock !== null &&
-              addOnStock - getCartItemTotalQuantity(id, editingItem) <= 0;
+            const { cap: addOnCap } = getAddOnsCap(
+              [addOnItem],
+              (addOnId) => getCartItemTotalQuantity(addOnId, editingItem),
+              getPurchasedToday,
+            );
+            const outOfStockInCart = !checked && addOnCap <= 0;
             const unavailableLabel =
               getUnavailableLabel(
                 offers[0]?.availability,
@@ -859,11 +885,31 @@ const CardDialogContent = ({
               })}
             </Typography>
           )}
-          {showLowStock && (
+          {isDailyLimited && (
             <Typography color="textSecondary" variant="caption">
-              {tOrder("menuItem.stockLeft", {
-                stock: [stock, stockUnit].filter(Boolean).join(" "),
-              })}
+              {tOrder("menuItem.dailyLimit")}
+            </Typography>
+          )}
+          {showStockLeft && (
+            <Typography color="textSecondary" variant="caption">
+              {tOrder(
+                isDailyLimited
+                  ? "menuItem.stockLeftToday"
+                  : "menuItem.stockLeft",
+                { stock: [stock, stockUnit].filter(Boolean).join(" ") },
+              )}
+            </Typography>
+          )}
+          {maxPurchaseQuantity != null && (
+            <Typography color="textSecondary" variant="caption">
+              {purchaseLimit === 0
+                ? tOrder("menuItem.eligibleQuantity.reachedToday")
+                : tOrder(
+                    isMember
+                      ? "menuItem.eligibleQuantity.member"
+                      : "menuItem.eligibleQuantity.guest",
+                    { quantity: maxPurchaseQuantity },
+                  )}
             </Typography>
           )}
         </PriceStack>

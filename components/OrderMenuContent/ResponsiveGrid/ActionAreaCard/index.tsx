@@ -11,6 +11,7 @@ import { ViewDirections, ViewImageSizes } from "@/constants/view";
 
 import { useAvailableHoursLabel } from "@/hooks/useAvailableHoursLabel";
 import { useOutsideAvailableHours } from "@/hooks/useOutsideAvailableHours";
+import { usePurchasedToday } from "@/hooks/usePurchasedToday";
 
 import { RestaurantMenu } from "@mui/icons-material";
 import {
@@ -35,8 +36,9 @@ import type { ViewDirection } from "@/types/view";
 
 import {
   getActivePromo,
+  getOfferPurchaseLimit,
   hasUnsatisfiableModifierGroup,
-  isLowStock,
+  isStockLeftShown,
 } from "@/utils/menus";
 
 const StyledCard = styled(Card)({
@@ -162,6 +164,8 @@ const ActionAreaCard = ({
   const stock = offer.inventoryLevel?.value;
   const stockUnit = offer.inventoryLevel?.unitText;
   const availability = offer.availability;
+  const isDailyLimited = offer.dailyLimit != null;
+  const maxPurchaseQuantity = offer.eligibleQuantity?.maxValue;
 
   const promoInfo = getActivePromo(offer);
 
@@ -172,6 +176,7 @@ const ActionAreaCard = ({
     state.getCartItemTotalQuantity(menuItem.id, null),
   );
   const { setDialog } = useDialogStore((state) => state);
+  const { getPurchasedToday, isMember } = usePurchasedToday();
   const { view } = useViewStore((state) => state);
 
   const getAvailableHoursLabel = useAvailableHoursLabel();
@@ -192,7 +197,11 @@ const ActionAreaCard = ({
     availability === "SoldOut" ||
     availability === "Discontinued" ||
     hasUnsatisfiableModifierGroup(menuItem.modifierGroups, apiMode);
-  const showLowStock = !isItemOutOfStock && isLowStock(offer);
+  const showStockLeft = !isItemOutOfStock && isStockLeftShown(offer);
+  const purchaseLimit = getOfferPurchaseLimit(
+    offer,
+    getPurchasedToday(menuItem.id),
+  );
   const availableHoursLabel = getAvailableHoursLabel(offer.availableHours);
 
   const soldOutLabel =
@@ -203,7 +212,9 @@ const ActionAreaCard = ({
         : isOutsideHours
           ? tOrder("menuItem.outsideAvailableHours")
           : isItemOutOfStock
-            ? tCommon("soldOut")
+            ? isDailyLimited && stock === 0
+              ? tOrder("menuItem.soldOutToday")
+              : tCommon("soldOut")
             : "";
 
   const handleDialogClick = () => {
@@ -278,11 +289,31 @@ const ActionAreaCard = ({
                 {`${priceCurrency} ${promoInfo.price}`}
               </WrapTypography>
             )}
-            {showLowStock && (
+            {isDailyLimited && (
               <Typography color="textSecondary" variant="caption">
-                {tOrder("menuItem.stockLeft", {
-                  stock: [stock, stockUnit].filter(Boolean).join(" "),
-                })}
+                {tOrder("menuItem.dailyLimit")}
+              </Typography>
+            )}
+            {showStockLeft && (
+              <Typography color="textSecondary" variant="caption">
+                {tOrder(
+                  isDailyLimited
+                    ? "menuItem.stockLeftToday"
+                    : "menuItem.stockLeft",
+                  { stock: [stock, stockUnit].filter(Boolean).join(" ") },
+                )}
+              </Typography>
+            )}
+            {maxPurchaseQuantity != null && (
+              <Typography color="textSecondary" variant="caption">
+                {purchaseLimit === 0
+                  ? tOrder("menuItem.eligibleQuantity.reachedToday")
+                  : tOrder(
+                      isMember
+                        ? "menuItem.eligibleQuantity.member"
+                        : "menuItem.eligibleQuantity.guest",
+                      { quantity: maxPurchaseQuantity },
+                    )}
               </Typography>
             )}
             {availableHoursLabel && (

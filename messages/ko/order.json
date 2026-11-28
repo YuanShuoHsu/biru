@@ -178,6 +178,7 @@
     "availableHours": "제공 시간 {value}",
     "calories": "{value} kcal",
     "customizationChanged": "지난번 옵션이 변경되었습니다. 확인 후 장바구니에 담아 주세요.",
+    "dailyLimit": "일일 한정",
     "diet": {
       "DiabeticDiet": "당뇨병식",
       "GlutenFreeDiet": "글루텐프리",
@@ -190,6 +191,13 @@
       "LowSaltDiet": "저염",
       "VeganDiet": "비건",
       "VegetarianDiet": "채식"
+    },
+    "eligibleQuantity": {
+      "guest": "주문당 {quantity}개 한정",
+      "left": "구매 제한: {quantity}개 더 구매할 수 있어요",
+      "member": "1인 1일 {quantity}개 한정",
+      "reached": "구매 한도에 도달했어요",
+      "reachedToday": "오늘 구매 한도에 도달했어요"
     },
     "outsideAvailableHours": "제공 시간 외",
     "preparationTime": "준비 시간 약 {value}분",
@@ -214,7 +222,9 @@
       "Iced": "아이스",
       "label": "얼음 양／온도"
     },
+    "soldOutToday": "오늘 품절",
     "stockLeft": "남은 수량 {stock}",
+    "stockLeftToday": "오늘 남은 수량 {stock}",
     "sweetness": {
       "fixed": "당도 고정",
       "label": "당도"

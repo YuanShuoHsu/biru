@@ -38,6 +38,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import useCartHasInvalidItems from "@/hooks/useCartHasInvalidItems";
 import { usePickupLeadMinutes } from "@/hooks/usePickupLeadMinutes";
+import { usePurchasedToday } from "@/hooks/usePurchasedToday";
 import { useSession } from "@/hooks/useSession";
 
 import { usePathname, useRouter } from "@/i18n/navigation";
@@ -161,6 +162,8 @@ const OrderModeOrganizationSlugCheckout = ({
   const { menu } = useMenuStore((state) => state);
 
   const hasInvalidItems = useCartHasInvalidItems();
+
+  const { refreshPurchasedToday } = usePurchasedToday();
 
   const [isRedirecting, setIsRedirecting] = useState(false);
 
@@ -502,6 +505,7 @@ const OrderModeOrganizationSlugCheckout = ({
       });
 
       setLastOrderId(order.id);
+      refreshPurchasedToday();
 
       const completeSearchParams = new URLSearchParams(search);
       completeSearchParams.set("orderId", order.id);
@@ -531,6 +535,7 @@ const OrderModeOrganizationSlugCheckout = ({
     } catch (error) {
       enqueueSnackbar(getErrorMessage(error), { variant: "error" });
       handleRefreshNow();
+      refreshPurchasedToday();
 
       if (completePath) router.replace(completePath);
       else if ((error as FetchError).status === 409) renewCheckoutKey();
