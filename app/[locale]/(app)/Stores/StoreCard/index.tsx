@@ -35,6 +35,11 @@ const StyledCard = styled(Card)({
   height: "100%",
   display: "flex",
   flexDirection: "column",
+
+  "& .MuiCardHeader-action": {
+    margin: 0,
+    alignSelf: "center",
+  },
 });
 
 const StyledCardContent = styled(CardContent)(({ theme }) => ({
