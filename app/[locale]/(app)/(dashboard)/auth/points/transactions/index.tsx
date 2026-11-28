@@ -203,7 +203,8 @@ const Points = ({ page, pageSize, points }: PointsProps) => {
                     `${tOrder("complete.transaction.orderNo")} ${transaction.confirmationNumber || transaction.orderNumber}`
                   : transaction.couponCode &&
                     `${tAuth("coupons.label")} ${transaction.couponCode}`,
-                transaction.expiresAt &&
+                transaction.points > 0 &&
+                  transaction.expiresAt &&
                   tAuth("points.validUntil", {
                     date: format.dateTime(
                       new Date(transaction.expiresAt),
