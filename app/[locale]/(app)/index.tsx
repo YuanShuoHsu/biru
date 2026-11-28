@@ -2,6 +2,8 @@
 
 "use client";
 
+import { Suspense } from "react";
+
 import FAQ from "./FAQ";
 import Hero from "./Hero";
 import Highlights from "./Highlights";
@@ -28,10 +30,10 @@ const Home = ({ banners, organizations }: HomeProps) => (
     <Highlights />
     <Divider />
     {organizations.length > 0 && (
-      <>
+      <Suspense>
         <Stores organizations={organizations} />
         <Divider />
-      </>
+      </Suspense>
     )}
     <FAQ />
     <Divider />

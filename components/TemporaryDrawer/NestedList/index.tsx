@@ -25,7 +25,7 @@ import type { RouteParams } from "@/types/routeParams";
 const useNavGroups = (): NavGroup[] => {
   const { mode, organizationSlug } = useParams<Partial<RouteParams>>();
 
-  const navChildren = useNavChildren();
+  const navChildren = useNavChildren(DividerSlot);
   const navItem = useRoutes();
 
   const tAppBar = useTranslations("appBar");

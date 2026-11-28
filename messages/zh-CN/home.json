@@ -85,6 +85,10 @@
     "open": "营业中",
     "orderBoard": "取餐号码",
     "pickup": "外带自取",
+    "selectOrganization": {
+      "label": "门店",
+      "placeholder": "请选择您的门店"
+    },
     "specialHours": {
       "closed": "休息",
       "hours": "特殊营业时间"

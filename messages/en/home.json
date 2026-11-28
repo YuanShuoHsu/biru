@@ -85,6 +85,10 @@
     "open": "Open now",
     "orderBoard": "Pickup numbers",
     "pickup": "Pickup",
+    "selectOrganization": {
+      "label": "Store",
+      "placeholder": "Please select your store"
+    },
     "specialHours": {
       "closed": "Closed",
       "hours": "Special opening hours"

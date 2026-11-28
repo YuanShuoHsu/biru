@@ -5,10 +5,10 @@ import { ORDER_MODE } from "@/constants/orderMode";
 import { useNavChildren } from "@/hooks/useNavChildren";
 import { useRoutes } from "@/hooks/useRoutes";
 
-import { Grid, Link, Typography } from "@mui/material";
+import { Divider, Grid, Link, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
-import type { NavItem } from "@/types/navItem";
+import type { NavItem, Slot } from "@/types/navItem";
 
 const StyledGrid = styled(Grid)(({ theme }) => ({
   display: "flex",
@@ -17,10 +17,12 @@ const StyledGrid = styled(Grid)(({ theme }) => ({
   alignItems: "flex-start",
 }));
 
+const DividerSlot: Slot = () => <Divider flexItem />;
+
 const useFooterItems = (): NavItem[] => {
   const navItem = useRoutes();
 
-  const navChildren = useNavChildren();
+  const navChildren = useNavChildren(DividerSlot);
 
   return [
     {

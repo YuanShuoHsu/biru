@@ -25,7 +25,7 @@ import {
   Typography,
   type TypographyProps,
 } from "@mui/material";
-import { alpha, styled } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 
 type HighlightKey =
   | "coupons"
@@ -87,9 +87,10 @@ const TitleStack = styled(Stack)(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
+// https://mui.com/material-ui/customization/css-theme-variables/usage/#color-channel-tokens
 const IconBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1),
-  backgroundColor: alpha(theme.palette.primary.main, 0.2),
+  backgroundColor: `rgba(${theme.vars.palette.primary.mainChannel} / 0.2)`,
   borderRadius: theme.shape.borderRadius,
   display: "flex",
   justifyContent: "center",

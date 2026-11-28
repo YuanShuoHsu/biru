@@ -85,6 +85,10 @@
     "open": "營業中",
     "orderBoard": "取餐號碼",
     "pickup": "外帶自取",
+    "selectOrganization": {
+      "label": "門市",
+      "placeholder": "請選擇您的門市"
+    },
     "specialHours": {
       "closed": "公休",
       "hours": "特殊營業時間"

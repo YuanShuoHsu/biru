@@ -85,6 +85,10 @@
     "open": "営業中",
     "orderBoard": "受け取り番号",
     "pickup": "テイクアウト",
+    "selectOrganization": {
+      "label": "店舗",
+      "placeholder": "あなたの店舗を選択してください"
+    },
     "specialHours": {
       "closed": "休業",
       "hours": "特別営業時間"
