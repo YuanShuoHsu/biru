@@ -106,6 +106,7 @@ const Sessions = () => {
                   {tAuth("settings.sessions.notFresh.action")}
                 </Button>
               }
+              role="status"
               severity="info"
             >
               {tAuth("settings.sessions.notFresh.description")}
